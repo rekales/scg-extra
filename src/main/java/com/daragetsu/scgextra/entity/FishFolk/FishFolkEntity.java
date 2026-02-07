@@ -30,7 +30,7 @@ public class FishFolkEntity extends Drowned{
     }
     @Override
     protected void populateDefaultEquipmentSlots(RandomSource pRandom, DifficultyInstance pDifficulty) {
-        int i = pRandom.nextInt(16);
+        int i = pRandom.nextInt(20);
         if (i < 10) {
            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.TRIDENT));
         } else {
