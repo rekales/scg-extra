@@ -14,7 +14,7 @@ public class TurtleManEntity extends Monster {
 
     @Override
     protected void registerGoals() {
-        super.registerGoals();
+
     }
 
     public static AttributeSupplier.Builder createAttributes() {

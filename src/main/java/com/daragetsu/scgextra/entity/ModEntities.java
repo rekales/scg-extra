@@ -6,6 +6,8 @@ import com.daragetsu.scgextra.entity.fishfolk.FishFolkEntity;
 import com.daragetsu.scgextra.entity.fishfolk.FishFolkModel;
 import com.daragetsu.scgextra.entity.fishfolk.FishFolkRenderer;
 import com.daragetsu.scgextra.entity.turtleman.TurtleManEntity;
+import com.daragetsu.scgextra.entity.turtleman.TurtleManModel;
+import com.daragetsu.scgextra.entity.turtleman.TurtleManRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -44,13 +46,16 @@ public class ModEntities {
 
     public static void onClientSetup(FMLClientSetupEvent event) {
         EntityRenderers.register(ModEntities.FISH_FOLK.get(), FishFolkRenderer::new);
+        EntityRenderers.register(ModEntities.TURTLEMAN.get(), TurtleManRenderer::new);
     }
 
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
         event.registerLayerDefinition(FishFolkModel.LAYER_LOCATION, FishFolkModel::createBodyLayer);
+        event.registerLayerDefinition(TurtleManModel.LAYER_LOCATION, TurtleManModel::createBodyLayer);
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event){
         event.put(ModEntities.FISH_FOLK.get(), FishFolkEntity.createAttributes().build());
+        event.put(ModEntities.TURTLEMAN.get(), FishFolkEntity.createAttributes().build());
     }
 }
