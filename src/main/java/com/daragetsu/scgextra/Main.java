@@ -7,6 +7,7 @@ import com.daragetsu.scgextra.entity.FishFolk.FishFolkRenderer;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -22,6 +23,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import org.slf4j.Logger;
 
+@SuppressWarnings("unused")
 @Mod(Main.MOD_ID)
 public class Main
 {
@@ -75,5 +77,10 @@ public class Main
         public static void registerAttributes(EntityAttributeCreationEvent event){
             event.put(ModEntities.FISH_FOLK_ENTITY.get(), FishFolkEntity.createAttributes().build());
         }
+    }
+
+
+    public static ResourceLocation asResource(String path) {
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
 }
