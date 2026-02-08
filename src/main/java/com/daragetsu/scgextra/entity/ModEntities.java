@@ -5,6 +5,9 @@ import com.daragetsu.scgextra.entity.fishfolk.FishFolkEntity;
 
 import com.daragetsu.scgextra.entity.fishfolk.FishFolkModel;
 import com.daragetsu.scgextra.entity.fishfolk.FishFolkRenderer;
+import com.daragetsu.scgextra.entity.salmonsaurs.SalmonsaursEntity;
+import com.daragetsu.scgextra.entity.salmonsaurs.SalmonsaursModel;
+import com.daragetsu.scgextra.entity.salmonsaurs.SalmonsaursRenderer;
 import com.daragetsu.scgextra.entity.turtleman.TurtleManEntity;
 import com.daragetsu.scgextra.entity.turtleman.TurtleManModel;
 import com.daragetsu.scgextra.entity.turtleman.TurtleManRenderer;
@@ -32,6 +35,10 @@ public class ModEntities {
             .register("turtleman", () -> EntityType.Builder.of(TurtleManEntity::new, MobCategory.MONSTER)
                     .sized(0.6F, 1.95F).build("turtleman"));
 
+    public static final RegistryObject<EntityType<SalmonsaursEntity>> SALMONSAURS = ENTITY_TYPES
+            .register("salmonsaurs", () -> EntityType.Builder.of(SalmonsaursEntity::new, MobCategory.MONSTER)
+                    .sized(0.6F, 1.95F).build("salmonsaurs"));
+
 
     public static void register(IEventBus modEventBus){
         ENTITY_TYPES.register(modEventBus);
@@ -47,15 +54,18 @@ public class ModEntities {
     public static void onClientSetup(FMLClientSetupEvent event) {
         EntityRenderers.register(ModEntities.FISH_FOLK.get(), FishFolkRenderer::new);
         EntityRenderers.register(ModEntities.TURTLEMAN.get(), TurtleManRenderer::new);
+        EntityRenderers.register(ModEntities.SALMONSAURS.get(), SalmonsaursRenderer::new);
     }
 
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
         event.registerLayerDefinition(FishFolkModel.LAYER_LOCATION, FishFolkModel::createBodyLayer);
         event.registerLayerDefinition(TurtleManModel.LAYER_LOCATION, TurtleManModel::createBodyLayer);
+        event.registerLayerDefinition(SalmonsaursModel.LAYER_LOCATION, SalmonsaursModel::createBodyLayer);
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event){
         event.put(ModEntities.FISH_FOLK.get(), FishFolkEntity.createAttributes().build());
-        event.put(ModEntities.TURTLEMAN.get(), FishFolkEntity.createAttributes().build());
+        event.put(ModEntities.TURTLEMAN.get(), TurtleManEntity.createAttributes().build());
+        event.put(ModEntities.SALMONSAURS.get(), SalmonsaursEntity.createAttributes().build());
     }
 }
