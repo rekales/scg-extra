@@ -61,7 +61,7 @@ public class SCGExtra
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
-            EntityRenderers.register(ModEntities.FISH_FOLK_ENTITY.get(), FishFolkRenderer::new);
+            EntityRenderers.register(ModEntities.FISH_FOLK.get(), FishFolkRenderer::new);
         }
     }
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -75,7 +75,7 @@ public class SCGExtra
         }
         @SubscribeEvent
         public static void registerAttributes(EntityAttributeCreationEvent event){
-            event.put(ModEntities.FISH_FOLK_ENTITY.get(), FishFolkEntity.createAttributes().build());
+            event.put(ModEntities.FISH_FOLK.get(), FishFolkEntity.createAttributes().build());
         }
     }
 
