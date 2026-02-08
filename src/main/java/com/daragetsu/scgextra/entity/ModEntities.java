@@ -3,10 +3,18 @@ package com.daragetsu.scgextra.entity;
 import com.daragetsu.scgextra.SCGExtra;
 import com.daragetsu.scgextra.entity.fishfolk.FishFolkEntity;
 
+import com.daragetsu.scgextra.entity.fishfolk.FishFolkModel;
+import com.daragetsu.scgextra.entity.fishfolk.FishFolkRenderer;
 import com.daragetsu.scgextra.entity.turtleman.TurtleManEntity;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -23,7 +31,26 @@ public class ModEntities {
                     .sized(0.6F, 1.95F).build("turtleman"));
 
 
-    public static void register(IEventBus eventBus){
-        ENTITY_TYPES.register(eventBus);
+    public static void register(IEventBus modEventBus){
+        ENTITY_TYPES.register(modEventBus);
+
+        modEventBus.addListener(ModEntities::registerLayers);
+        modEventBus.addListener(ModEntities::registerAttributes);
+
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            modEventBus.addListener(ModEntities::onClientSetup);
+        }
+    }
+
+    public static void onClientSetup(FMLClientSetupEvent event) {
+        EntityRenderers.register(ModEntities.FISH_FOLK.get(), FishFolkRenderer::new);
+    }
+
+    public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
+        event.registerLayerDefinition(FishFolkModel.LAYER_LOCATION, FishFolkModel::createBodyLayer);
+    }
+
+    public static void registerAttributes(EntityAttributeCreationEvent event){
+        event.put(ModEntities.FISH_FOLK.get(), FishFolkEntity.createAttributes().build());
     }
 }
