@@ -1,4 +1,4 @@
-package com.daragetsu.scgextra.entity.FishFolk;
+package com.daragetsu.scgextra.entity.fishfolk;
 
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
@@ -14,7 +14,6 @@ import net.minecraft.world.entity.monster.Pillager;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.monster.Witch;
-import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -25,7 +24,7 @@ import top.ribs.scguns.item.animated.AnimatedUnderWaterGunItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 
-import com.daragetsu.scgextra.Main;
+import com.daragetsu.scgextra.SCGExtra;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -35,9 +34,9 @@ public class FishFolkEntity extends Drowned{
     public FishFolkEntity(EntityType<? extends Drowned> entity, Level level) {
         super(entity, level);
         if (new Random().nextInt(0, 2)==1) {
-            texture = new ResourceLocation(Main.MOD_ID, "textures/entity/fishfolk/fishfolk_1.png");
+            texture = SCGExtra.asResource("textures/entity/fishfolk/fishfolk_1.png");
         } else {
-            texture = new ResourceLocation(Main.MOD_ID, "textures/entity/fishfolk/fishfolk_2.png");
+            texture = SCGExtra.asResource("textures/entity/fishfolk/fishfolk_2.png");
         }
     }
     public ResourceLocation getTexture() {

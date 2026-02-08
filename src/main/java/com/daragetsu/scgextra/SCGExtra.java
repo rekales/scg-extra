@@ -1,9 +1,9 @@
 package com.daragetsu.scgextra;
 
 import com.daragetsu.scgextra.entity.ModEntities;
-import com.daragetsu.scgextra.entity.FishFolk.FishFolkEntity;
-import com.daragetsu.scgextra.entity.FishFolk.FishFolkModel;
-import com.daragetsu.scgextra.entity.FishFolk.FishFolkRenderer;
+import com.daragetsu.scgextra.entity.fishfolk.FishFolkEntity;
+import com.daragetsu.scgextra.entity.fishfolk.FishFolkModel;
+import com.daragetsu.scgextra.entity.fishfolk.FishFolkRenderer;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -24,13 +24,13 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
 @SuppressWarnings("unused")
-@Mod(Main.MOD_ID)
-public class Main
+@Mod(SCGExtra.MOD_ID)
+public class SCGExtra
 {
     public static final String MOD_ID = "scgextra";
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public Main(FMLJavaModLoadingContext context)
+    public SCGExtra(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = context.getModEventBus();
 

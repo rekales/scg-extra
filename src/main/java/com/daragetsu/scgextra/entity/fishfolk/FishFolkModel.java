@@ -1,6 +1,6 @@
-package com.daragetsu.scgextra.entity.FishFolk;
+package com.daragetsu.scgextra.entity.fishfolk;
 
-import com.daragetsu.scgextra.Main;
+import com.daragetsu.scgextra.SCGExtra;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
@@ -16,8 +16,9 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
 
 public class FishFolkModel<T extends FishFolkEntity> extends ZombieModel<FishFolkEntity> {
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(Main.MOD_ID, "fish_folk"), "main");
-	private final ModelPart root;
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(SCGExtra.asResource("fish_folk"), "main");
+
+    private final ModelPart root;
 	private final ModelPart body;
 	private final ModelPart head;
 	private final ModelPart hat;

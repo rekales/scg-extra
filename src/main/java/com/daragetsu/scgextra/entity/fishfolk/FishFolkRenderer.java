@@ -1,4 +1,4 @@
-package com.daragetsu.scgextra.entity.FishFolk;
+package com.daragetsu.scgextra.entity.fishfolk;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 
