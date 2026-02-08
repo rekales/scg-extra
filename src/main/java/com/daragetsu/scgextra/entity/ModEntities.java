@@ -67,5 +67,6 @@ public class ModEntities {
         event.put(ModEntities.FISH_FOLK.get(), FishFolkEntity.createAttributes().build());
         event.put(ModEntities.TURTLEMAN.get(), TurtleManEntity.createAttributes().build());
         event.put(ModEntities.SALMONSAURS.get(), SalmonsaursEntity.createAttributes().build());
+        event.put(ModEntities.TURTLEMAN.get(), TurtleManEntity.createAttributes().build());
     }
 }

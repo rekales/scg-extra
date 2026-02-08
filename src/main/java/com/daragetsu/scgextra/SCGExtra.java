@@ -37,6 +37,7 @@ public class SCGExtra
     {
     }
 
+    @SuppressWarnings("removal")
     public static ResourceLocation asResource(String path) {
         return new ResourceLocation(MOD_ID, path);
     }
