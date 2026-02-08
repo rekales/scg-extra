@@ -11,6 +11,9 @@ import com.daragetsu.scgextra.entity.guardian_statue.GuardianStatueRenderer;
 import com.daragetsu.scgextra.entity.salmonsaurs.SalmonsaursEntity;
 import com.daragetsu.scgextra.entity.salmonsaurs.SalmonsaursModel;
 import com.daragetsu.scgextra.entity.salmonsaurs.SalmonsaursRenderer;
+import com.daragetsu.scgextra.entity.tentacliator.TentacliatorEntity;
+import com.daragetsu.scgextra.entity.tentacliator.TentacliatorModel;
+import com.daragetsu.scgextra.entity.tentacliator.TentacliatorRenderer;
 import com.daragetsu.scgextra.entity.turtleman.TurtleManEntity;
 import com.daragetsu.scgextra.entity.turtleman.TurtleManModel;
 import com.daragetsu.scgextra.entity.turtleman.TurtleManRenderer;
@@ -46,6 +49,10 @@ public class ModEntities {
             .register("guardian_statue", () -> EntityType.Builder.of(GuardianStatueEntity::new, MobCategory.MONSTER)
                     .sized(3F, 6.75F).build("guardian_statue"));
 
+    public static final RegistryObject<EntityType<TentacliatorEntity>> TENTACLIATOR = ENTITY_TYPES
+            .register("tentacliator", () -> EntityType.Builder.of(TentacliatorEntity::new, MobCategory.MONSTER)
+                    .sized(3F, 6.75F).build("tentacliator"));
+
 
     public static void register(IEventBus modEventBus){
         ENTITY_TYPES.register(modEventBus);
@@ -63,6 +70,7 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.TURTLEMAN.get(), TurtleManRenderer::new);
         EntityRenderers.register(ModEntities.SALMONSAURS.get(), SalmonsaursRenderer::new);
         EntityRenderers.register(ModEntities.GUARDIAN_STATUE.get(), GuardianStatueRenderer::new);
+        EntityRenderers.register(ModEntities.TENTACLIATOR.get(), TentacliatorRenderer::new);
     }
 
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
@@ -70,6 +78,7 @@ public class ModEntities {
         event.registerLayerDefinition(TurtleManModel.LAYER_LOCATION, TurtleManModel::createBodyLayer);
         event.registerLayerDefinition(SalmonsaursModel.LAYER_LOCATION, SalmonsaursModel::createBodyLayer);
         event.registerLayerDefinition(GuardianStatueModel.LAYER_LOCATION, GuardianStatueModel::createBodyLayer);
+        event.registerLayerDefinition(TentacliatorModel.LAYER_LOCATION, TentacliatorModel::createBodyLayer);
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event){
@@ -77,5 +86,6 @@ public class ModEntities {
         event.put(ModEntities.TURTLEMAN.get(), TurtleManEntity.createAttributes().build());
         event.put(ModEntities.SALMONSAURS.get(), SalmonsaursEntity.createAttributes().build());
         event.put(ModEntities.GUARDIAN_STATUE.get(), GuardianStatueEntity.createAttributes().build());
+        event.put(ModEntities.TENTACLIATOR.get(), TentacliatorEntity.createAttributes().build());
     }
 }

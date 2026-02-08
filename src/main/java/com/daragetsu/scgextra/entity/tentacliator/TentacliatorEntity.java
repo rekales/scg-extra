@@ -5,8 +5,11 @@ import java.util.Random;
 
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -28,6 +31,8 @@ import top.ribs.scguns.init.ModItems;
 import top.ribs.scguns.item.animated.AnimatedUnderWaterGunItem;
 
 public class TentacliatorEntity extends Drowned{
+    public final AnimationState idleAnimationState = new AnimationState();
+    private int idleAnimationTimeout = 0;
     public TentacliatorEntity(EntityType<? extends Drowned> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
@@ -117,5 +122,40 @@ public class TentacliatorEntity extends Drowned{
             false, 
             this::okTarget
         ));
+    }
+    @Override
+    public void startUsingItem(InteractionHand pHand) {
+        int rand = new Random().nextInt(10);
+        if(rand <= 20){
+
+        }else{
+            super.startUsingItem(pHand);
+        }
+    }
+    @Override
+    public void tick() {
+        super.tick();
+        if(this.level().isClientSide()){
+            setupAnimationStates();
+        }
+    }
+    private void setupAnimationStates(){
+        if(this.idleAnimationTimeout <= 0){
+            this.idleAnimationTimeout = this.random.nextInt(40)+80;
+            this.idleAnimationState.start(this.tickCount);
+        }else{
+            --this.idleAnimationTimeout;
+        }
+    }
+    @Override
+    protected void updateWalkAnimation(float pPartialTick) {
+        float f;
+        if(this.getPose() == Pose.STANDING){
+            f = Math.min(pPartialTick * 6F, 1f);
+        }else{
+            f = 0f;
+        }
+
+        this.walkAnimation.update(f, 0.2f);
     }
 }
