@@ -14,6 +14,8 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 public class FishFolkModel<T extends FishFolkEntity> extends HumanoidModel<FishFolkEntity> {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(SCGExtra.asResource("fish_folk"), "main");
@@ -28,6 +30,7 @@ public class FishFolkModel<T extends FishFolkEntity> extends HumanoidModel<FishF
 	private final ModelPart right_arm;
 	private final ModelPart left_leg;
 	private final ModelPart right_leg;
+	private ItemStack itemInHand = null;
 
 	public FishFolkModel(ModelPart root) {
 		super(root);
@@ -75,7 +78,7 @@ public class FishFolkModel<T extends FishFolkEntity> extends HumanoidModel<FishF
 
 	@Override
 	public void setupAnim(FishFolkEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
+		itemInHand = entity.getMainHandItem();
 	}
 	
 	@Override
@@ -87,10 +90,9 @@ public class FishFolkModel<T extends FishFolkEntity> extends HumanoidModel<FishF
 	public void translateToHand(HumanoidArm pSide, PoseStack pPoseStack) 
 	{
 		super.translateToHand(pSide, pPoseStack);
-		if (pSide == HumanoidArm.LEFT) {
-            left_arm.translateAndRotate(pPoseStack);
-        } else {
-            right_arm.translateAndRotate(pPoseStack);
-        }
+		if(itemInHand!=null && !itemInHand.is(Items.TRIDENT)){
+			pPoseStack.translate(0F, -0.2F, 0F);
+			right_arm.xRot = (float)Math.toRadians(-90);
+		}
 	}
 }
