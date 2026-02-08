@@ -67,57 +67,44 @@ public class FishFolkEntity extends Drowned{
         .add(Attributes.ARMOR, 4.0D)
         .add(Attributes.MAX_HEALTH, 20.0D)
         .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE);
-   }
-   @Override
-   protected void addBehaviourGoals() {
-        super.addBehaviourGoals();
+    }
+    @Override
+    protected void addBehaviourGoals() {
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(
             this, 
             Skeleton.class, 
-            10, 
             true, 
-            false, 
-            this::okTarget
+            false 
         ));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(
             this, 
             Creeper.class, 
-            10, 
             true, 
-            false, 
-            this::okTarget
+            false
         ));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(
             this, 
             Spider.class, 
-            10, 
             true, 
-            false, 
-            this::okTarget
+            false
         ));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(
             this, 
             Witch.class, 
-            10, 
             true, 
-            false, 
-            this::okTarget
+            false
         ));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(
             this, 
             Pillager.class, 
-            10, 
             true, 
-            false, 
-            this::okTarget
+            false
         ));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(
             this, 
             Animal.class, 
-            10, 
             true, 
-            false, 
-            this::okTarget
+            false
         ));
     }
 }

@@ -4,6 +4,7 @@ import com.daragetsu.scgextra.SCGExtra;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.ZombieModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -15,7 +16,7 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
 
-public class FishFolkModel<T extends FishFolkEntity> extends ZombieModel<FishFolkEntity> {
+public class FishFolkModel<T extends FishFolkEntity> extends HumanoidModel<FishFolkEntity> {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(SCGExtra.asResource("fish_folk"), "main");
 
     private final ModelPart root;
