@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraft.client.model.HierarchicalModel;
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -15,6 +14,7 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.HumanoidArm;
 
 public class TentacliatorModel <T extends TentacliatorEntity> extends HierarchicalModel<TentacliatorEntity>{
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(SCGExtra.asResource("tentacliator"), "main");
@@ -125,12 +125,21 @@ public class TentacliatorModel <T extends TentacliatorEntity> extends Hierarchic
         pNetHeadYaw = Mth.clamp(pNetHeadYaw, -30.0F, 30.0F);
         pHeadPitch = Mth.clamp(pHeadPitch, -25.0F, 45.0F);
 
-        this.head.yRot = pNetHeadYaw + ((float)Math.PI / 180F);
-        this.head.xRot = pHeadPitch + ((float)Math.PI / 180F);
+        this.head.yRot = pNetHeadYaw * ((float)Math.PI / 180F);
+        this.head.xRot = pHeadPitch * ((float)Math.PI / 180F);
     }
 
     @Override
     public ModelPart root() {
         return this.root;
     }
+
+	public void translateToHand(HumanoidArm arm, PoseStack poseStack) {
+		this.left_arm.translateAndRotate(poseStack);
+		// if (arm == HumanoidArm.LEFT) {
+		// } else {
+		// 	this.right_arm.translateAndRotate(poseStack);
+		// }
+	}
+
 }

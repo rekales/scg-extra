@@ -51,7 +51,7 @@ public class ModEntities {
 
     public static final RegistryObject<EntityType<TentacliatorEntity>> TENTACLIATOR = ENTITY_TYPES
             .register("tentacliator", () -> EntityType.Builder.of(TentacliatorEntity::new, MobCategory.MONSTER)
-                    .sized(3F, 6.75F).build("tentacliator"));
+                    .sized(0.6F, 1.95F).build("tentacliator"));
 
 
     public static void register(IEventBus modEventBus){
