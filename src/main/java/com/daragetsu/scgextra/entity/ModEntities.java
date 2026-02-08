@@ -5,6 +5,9 @@ import com.daragetsu.scgextra.entity.fishfolk.FishFolkEntity;
 
 import com.daragetsu.scgextra.entity.fishfolk.FishFolkModel;
 import com.daragetsu.scgextra.entity.fishfolk.FishFolkRenderer;
+import com.daragetsu.scgextra.entity.guardian_statue.GuardianStatueEntity;
+import com.daragetsu.scgextra.entity.guardian_statue.GuardianStatueModel;
+import com.daragetsu.scgextra.entity.guardian_statue.GuardianStatueRenderer;
 import com.daragetsu.scgextra.entity.salmonsaurs.SalmonsaursEntity;
 import com.daragetsu.scgextra.entity.salmonsaurs.SalmonsaursModel;
 import com.daragetsu.scgextra.entity.salmonsaurs.SalmonsaursRenderer;
@@ -39,6 +42,10 @@ public class ModEntities {
             .register("salmonsaurs", () -> EntityType.Builder.of(SalmonsaursEntity::new, MobCategory.MONSTER)
                     .sized(1.5F, 2F).build("salmonsaurs"));
 
+    public static final RegistryObject<EntityType<GuardianStatueEntity>> GUARDIAN_STATUE = ENTITY_TYPES
+            .register("guardian_statue", () -> EntityType.Builder.of(GuardianStatueEntity::new, MobCategory.MONSTER)
+                    .sized(3F, 6.75F).build("guardian_statue"));
+
 
     public static void register(IEventBus modEventBus){
         ENTITY_TYPES.register(modEventBus);
@@ -55,18 +62,20 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.FISH_FOLK.get(), FishFolkRenderer::new);
         EntityRenderers.register(ModEntities.TURTLEMAN.get(), TurtleManRenderer::new);
         EntityRenderers.register(ModEntities.SALMONSAURS.get(), SalmonsaursRenderer::new);
+        EntityRenderers.register(ModEntities.GUARDIAN_STATUE.get(), GuardianStatueRenderer::new);
     }
 
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
         event.registerLayerDefinition(FishFolkModel.LAYER_LOCATION, FishFolkModel::createBodyLayer);
         event.registerLayerDefinition(TurtleManModel.LAYER_LOCATION, TurtleManModel::createBodyLayer);
         event.registerLayerDefinition(SalmonsaursModel.LAYER_LOCATION, SalmonsaursModel::createBodyLayer);
+        event.registerLayerDefinition(GuardianStatueModel.LAYER_LOCATION, GuardianStatueModel::createBodyLayer);
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event){
         event.put(ModEntities.FISH_FOLK.get(), FishFolkEntity.createAttributes().build());
         event.put(ModEntities.TURTLEMAN.get(), TurtleManEntity.createAttributes().build());
         event.put(ModEntities.SALMONSAURS.get(), SalmonsaursEntity.createAttributes().build());
-        event.put(ModEntities.TURTLEMAN.get(), TurtleManEntity.createAttributes().build());
+        event.put(ModEntities.GUARDIAN_STATUE.get(), GuardianStatueEntity.createAttributes().build());
     }
 }
