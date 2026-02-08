@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.ZombieModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -14,7 +13,7 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.HumanoidArm;
 
 public class FishFolkModel<T extends FishFolkEntity> extends HumanoidModel<FishFolkEntity> {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(SCGExtra.asResource("fish_folk"), "main");
@@ -83,5 +82,15 @@ public class FishFolkModel<T extends FishFolkEntity> extends HumanoidModel<FishF
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay,
 		float red, float green, float blue, float alpha) {
 			root.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+	}
+	@Override
+	public void translateToHand(HumanoidArm pSide, PoseStack pPoseStack) 
+	{
+		super.translateToHand(pSide, pPoseStack);
+		if (pSide == HumanoidArm.LEFT) {
+            left_arm.translateAndRotate(pPoseStack);
+        } else {
+            right_arm.translateAndRotate(pPoseStack);
+        }
 	}
 }
