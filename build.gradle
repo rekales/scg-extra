@@ -75,7 +75,6 @@ dependencies {
     implementation fg.deobf("curse.maven:framework-549225:5692398")
     implementation fg.deobf("curse.maven:curios-309927:5367944")
     implementation fg.deobf("curse.maven:geckolib-388172:7020955")
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 tasks.named('processResources', ProcessResources).configure {
