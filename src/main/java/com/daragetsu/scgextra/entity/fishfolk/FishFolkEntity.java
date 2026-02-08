@@ -73,38 +73,50 @@ public class FishFolkEntity extends Drowned{
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(
             this, 
             Skeleton.class, 
+            10,
             true, 
-            false 
+            false, 
+            this::okTarget 
         ));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(
             this, 
             Creeper.class, 
+            10,
             true, 
-            false
+            false, 
+            this::okTarget 
         ));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(
             this, 
             Spider.class, 
+            10,
             true, 
-            false
+            false, 
+            this::okTarget 
         ));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(
             this, 
             Witch.class, 
+            10,
             true, 
-            false
+            false, 
+            this::okTarget 
         ));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(
             this, 
             Pillager.class, 
+            10,
             true, 
-            false
+            false, 
+            this::okTarget 
         ));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(
             this, 
             Animal.class, 
+            10,
             true, 
-            false
+            false, 
+            this::okTarget 
         ));
     }
 }
