@@ -35,11 +35,17 @@ public class ScreenRenderer {
 
         RenderSystem.enableBlend();
 
-        g.blit(INK,
-                x, y,
-                0, 0,
-                imgW, imgH,
-                imgW, imgH);
+        g.blit(
+            INK,
+            x, 
+            y,
+            0, 
+            0,
+            imgW, 
+            imgH,
+            imgW, 
+            imgH
+        );
 
         RenderSystem.disableBlend();
     }
