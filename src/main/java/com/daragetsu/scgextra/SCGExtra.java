@@ -1,5 +1,6 @@
 package com.daragetsu.scgextra;
 
+import com.daragetsu.scgextra.effects.ModEffects;
 import com.daragetsu.scgextra.entity.ModEntities;
 import com.mojang.logging.LogUtils;
 
@@ -25,6 +26,7 @@ public class SCGExtra
 
         modEventBus.addListener(this::commonSetup);
         ModEntities.register(modEventBus);
+        ModEffects.register(modEventBus);
 
         modEventBus.addListener(this::addCreative);
     }

@@ -1,10 +1,12 @@
 package com.daragetsu.scgextra.entity.tentacliator;
 
+import com.daragetsu.scgextra.effects.ModEffects;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.Level;
 
 public class InkAttackGoal extends Goal{
     private final TentacliatorEntity entity;
@@ -26,7 +28,7 @@ public class InkAttackGoal extends Goal{
     public void start() {
         entity.triggerAnim("special", "special_attack"); 
         cooldown = 200;
-        entity.getTarget().addEffect(new MobEffectInstance(MobEffects.DARKNESS, 100));
+        entity.getTarget().addEffect(new MobEffectInstance(ModEffects.INK_EFFECT.get(), 100));
     }
     
     @Override
@@ -60,7 +62,7 @@ public class InkAttackGoal extends Goal{
                 double px = startX + stepX * i;
                 double py = startY + stepY * i;
                 double pz = startZ + stepZ * i;
-                entity.level().addParticle(ParticleTypes.SMOKE, px, py, pz, 0, 0, 0);
+                entity.level().getServer().getLevel(Level.OVERWORLD).sendParticles(ParticleTypes.SMOKE, px, py, pz,1,0,0,0,0);
             }
         }
     }
