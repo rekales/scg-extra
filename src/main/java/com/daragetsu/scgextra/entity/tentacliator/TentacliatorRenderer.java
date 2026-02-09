@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import top.ribs.scguns.init.ModItems;
 
 public class TentacliatorRenderer extends GeoEntityRenderer<TentacliatorEntity>{
 
@@ -60,10 +61,26 @@ public class TentacliatorRenderer extends GeoEntityRenderer<TentacliatorEntity>{
                             animatable.level(),
                             0
                     );
+                }else if(itemStack.is(ModItems.HULLBREAKER.get())){
+                    poseStack.translate(-0.45F, 1.5F, -0.7F);
+                    poseStack.mulPose(new Quaternionf().rotateX((float) Math.toRadians(300)));
+                    poseStack.mulPose(new Quaternionf().rotateY((float) Math.toRadians(360)));
+    
+                    // Render the item in left hand
+                    Minecraft.getInstance().getItemRenderer().renderStatic(
+                            itemStack,
+                            ItemDisplayContext.THIRD_PERSON_LEFT_HAND,
+                            packedLight,
+                            packedOverlay,
+                            poseStack,
+                            bufferSource,
+                            animatable.level(),
+                            0
+                    );
                 }else{
-                    poseStack.translate(-0.5F, 0.9F, 0.0F);
-                    poseStack.mulPose(new Quaternionf().rotateX((float) Math.toRadians(180)));
-                    poseStack.mulPose(new Quaternionf().rotateY((float) Math.toRadians(180)));
+                    poseStack.translate(-0.45F, 1.5F, -0.7F);
+                    poseStack.mulPose(new Quaternionf().rotateX((float) Math.toRadians(360)));
+                    poseStack.mulPose(new Quaternionf().rotateY((float) Math.toRadians(360)));
     
                     // Render the item in left hand
                     Minecraft.getInstance().getItemRenderer().renderStatic(
