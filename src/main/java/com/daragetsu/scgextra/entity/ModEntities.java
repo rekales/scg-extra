@@ -3,7 +3,6 @@ package com.daragetsu.scgextra.entity;
 import com.daragetsu.scgextra.SCGExtra;
 import com.daragetsu.scgextra.entity.fishfolk.FishFolkEntity;
 
-import com.daragetsu.scgextra.entity.fishfolk.FishFolkModel;
 import com.daragetsu.scgextra.entity.fishfolk.FishFolkRenderer;
 import com.daragetsu.scgextra.entity.guardian_statue.GuardianStatueEntity;
 import com.daragetsu.scgextra.entity.guardian_statue.GuardianStatueModel;
@@ -73,7 +72,7 @@ public class ModEntities {
     }
 
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
-        event.registerLayerDefinition(FishFolkModel.LAYER_LOCATION, FishFolkModel::createBodyLayer);
+        // event.registerLayerDefinition(FishFolkModel.LAYER_LOCATION, FishFolkModel::createBodyLayer);
         event.registerLayerDefinition(TurtleManModel.LAYER_LOCATION, TurtleManModel::createBodyLayer);
         event.registerLayerDefinition(SalmonsaursModel.LAYER_LOCATION, SalmonsaursModel::createBodyLayer);
         event.registerLayerDefinition(GuardianStatueModel.LAYER_LOCATION, GuardianStatueModel::createBodyLayer);

@@ -20,6 +20,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.RegistryObject;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 import top.ribs.scguns.init.ModItems;
 import top.ribs.scguns.item.animated.AnimatedUnderWaterGunItem;
 import net.minecraft.resources.ResourceLocation;
@@ -30,8 +37,9 @@ import com.daragetsu.scgextra.SCGExtra;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class FishFolkEntity extends Drowned{
+public class FishFolkEntity extends Drowned implements GeoEntity{
     private final ResourceLocation texture;
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public FishFolkEntity(EntityType<? extends Drowned> entity, Level level) {
         super(entity, level);
         if (new Random().nextInt(0, 2)==1) {
@@ -136,4 +144,19 @@ public class FishFolkEntity extends Drowned{
            return super.canContinueToUse() && this.fish_folk.okTarget(this.fish_folk.getTarget());
         }
    }
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return cache;
+    }
+    @Override
+    public void registerControllers(ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "controller", 0, state -> {
+            if (state.isMoving()) {
+                state.setAndContinue(RawAnimation.begin().thenLoop("walk"));
+            } else {
+                state.setAndContinue(RawAnimation.begin().thenLoop("idle"));
+            }
+            return PlayState.CONTINUE;
+        }));
+    }
 }
