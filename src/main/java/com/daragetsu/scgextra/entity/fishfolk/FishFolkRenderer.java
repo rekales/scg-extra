@@ -2,7 +2,6 @@ package com.daragetsu.scgextra.entity.fishfolk;
 
 import org.joml.Quaternionf;
 
-import com.daragetsu.scgextra.entity.tentacliator.TentacliatorEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
@@ -42,7 +41,6 @@ public class FishFolkRenderer extends GeoEntityRenderer<FishFolkEntity> {
             if (!itemStack.isEmpty()) {
                 poseStack.pushPose();
                 if(itemStack.is(Items.TRIDENT)){
-                    // Adjust item position: tweak these values based on your arm pivot
                     poseStack.translate(-0.9F, 0F, 0.0F); // Y = up/down, Z = forward/back
                     poseStack.mulPose(new Quaternionf().rotateX((float) Math.toRadians(90)));
                     poseStack.mulPose(new Quaternionf().rotateY((float) Math.toRadians(180)));

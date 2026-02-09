@@ -41,7 +41,7 @@ public class ModEntities {
 
     public static final RegistryObject<EntityType<SalmonsaursEntity>> SALMONSAURS = ENTITY_TYPES
             .register("salmonsaurs", () -> EntityType.Builder.of(SalmonsaursEntity::new, MobCategory.MONSTER)
-                    .sized(1.5F, 2F).build("salmonsaurs"));
+                    .sized(2F, 2.5F).build("salmonsaurs"));
 
     public static final RegistryObject<EntityType<GuardianStatueEntity>> GUARDIAN_STATUE = ENTITY_TYPES
             .register("guardian_statue", () -> EntityType.Builder.of(GuardianStatueEntity::new, MobCategory.MONSTER)

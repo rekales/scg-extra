@@ -39,7 +39,7 @@ public class SalmonsaursEntity extends Hoglin{
     @Override
     public void tick() {
         super.tick();
-        if (!this.level().isClientSide() && !riderSpawned) {
+        if (!this.level().isClientSide() && !riderSpawned && this.getPassengers().isEmpty()) {
             FishFolkEntity rider = new FishFolkEntity(ModEntities.FISH_FOLK.get(), this.level());
             int i = new Random().nextInt(20);
             if (i < 10) {
@@ -69,5 +69,9 @@ public class SalmonsaursEntity extends Hoglin{
     protected void registerGoals() {
         super.registerGoals();
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
+    }
+    @Override
+    public boolean canBeLeashed(Player pPlayer) {
+        return false;
     }
 }

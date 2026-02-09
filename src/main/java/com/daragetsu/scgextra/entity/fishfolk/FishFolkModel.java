@@ -11,6 +11,8 @@ public class FishFolkModel<T extends FishFolkEntity> extends GeoModel<FishFolkEn
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(SCGExtra.asResource("fish_folk"), "main");
 	private static final ResourceLocation GEO_TRIDENT = SCGExtra.asResource("geo/fish_folk_trident.geo.json");
 	private static final ResourceLocation GEO_GUN = SCGExtra.asResource("geo/fish_folk_gun.geo.json");
+	private static final ResourceLocation GEO_SITTING = SCGExtra.asResource("geo/fish_folk_sitting.geo.json");
+	private static final ResourceLocation ANIM_SITTING = SCGExtra.asResource("animations/fish_folk_sitting.animation.json");
 	private static final ResourceLocation ANIM_TRIDENT = SCGExtra.asResource("animations/fish_folk_trident.animation.json");
 	private static final ResourceLocation ANIM_GUN = SCGExtra.asResource("animations/fish_folk_gun.animation.json");
 
@@ -19,6 +21,9 @@ public class FishFolkModel<T extends FishFolkEntity> extends GeoModel<FishFolkEn
 
 	@Override
 	public ResourceLocation getAnimationResource(FishFolkEntity entity) {
+		if(entity.isPassenger()){
+			return ANIM_SITTING;
+		}
 		if(entity.getMainHandItem().is(Items.TRIDENT)){
 			return ANIM_TRIDENT;
 		}else{
@@ -28,6 +33,9 @@ public class FishFolkModel<T extends FishFolkEntity> extends GeoModel<FishFolkEn
 
 	@Override
 	public ResourceLocation getModelResource(FishFolkEntity entity) {
+		if(entity.isPassenger()){
+			return GEO_SITTING;
+		}
 		if(entity.getMainHandItem().is(Items.TRIDENT)){
 			return GEO_TRIDENT;
 		}else{
