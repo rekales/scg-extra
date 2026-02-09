@@ -5,7 +5,6 @@ import java.util.Random;
 
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
@@ -38,6 +37,7 @@ import top.ribs.scguns.item.animated.AnimatedUnderWaterGunItem;
 
 public class TentacliatorEntity extends Drowned implements GeoEntity{
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    public Random random = new Random();
     public TentacliatorEntity(EntityType<? extends Drowned> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
@@ -53,7 +53,7 @@ public class TentacliatorEntity extends Drowned implements GeoEntity{
                     guns.add(item.get());
                 }
             }
-            ItemStack gun = new ItemStack(guns.get(new Random().nextInt(guns.size())));
+            ItemStack gun = new ItemStack(guns.get(random.nextInt(guns.size())));
             gun.getOrCreateTag().putBoolean("IgnoreAmmo", true);
             this.setItemSlot(EquipmentSlot.MAINHAND, gun);
         }
@@ -132,15 +132,9 @@ public class TentacliatorEntity extends Drowned implements GeoEntity{
             false, 
             this::okTarget
         ));
-    }
-    @Override
-    public void startUsingItem(InteractionHand pHand) {
-        int rand = new Random().nextInt(10);
-        if(rand <= 20){
-
-        }else{
-            super.startUsingItem(pHand);
-        }
+        this.targetSelector.addGoal(3, new InkAttackGoal(
+            this
+        ));
     }
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
@@ -156,5 +150,7 @@ public class TentacliatorEntity extends Drowned implements GeoEntity{
             }
             return PlayState.CONTINUE;
         }));
+        controllers.add(new AnimationController<>(this, "special", 0, state -> PlayState.CONTINUE)
+        .triggerableAnim("special_attack", RawAnimation.begin().thenPlay("special_attack")));
     }
 }
