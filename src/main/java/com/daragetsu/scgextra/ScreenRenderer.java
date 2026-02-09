@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = SCGExtra.MOD_ID, value = Dist.CLIENT)
 public class ScreenRenderer {
+    private static float alpha = 1;
     private static final ResourceLocation INK =
             SCGExtra.asResource("textures/ink_splat/model.png");
     @SubscribeEvent
@@ -20,8 +21,7 @@ public class ScreenRenderer {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
 
-        if (!mc.player.hasEffect(ModEffects.INK_EFFECT.get())) return;
-
+        if (!mc.player.hasEffect(ModEffects.INK_EFFECT.get())){ alpha = 1; return;}
         GuiGraphics g = event.getGuiGraphics();
 
         int screenW = event.getWindow().getGuiScaledWidth();
@@ -32,9 +32,14 @@ public class ScreenRenderer {
 
         int x = (screenW - imgW) / 2;
         int y = (screenH - imgH) / 2;
+        
+        if(mc.player.getEffect(ModEffects.INK_EFFECT.get()).getDuration() <= 20){
+            alpha = Math.min(1f, alpha - 0.01f);
+        }
 
         RenderSystem.enableBlend();
-
+        RenderSystem.setShaderColor(1f, 1f, 1f, alpha);
+        
         g.blit(
             INK,
             x, 
@@ -46,7 +51,9 @@ public class ScreenRenderer {
             imgW, 
             imgH
         );
-
+        
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+        
         RenderSystem.disableBlend();
     }
 }
