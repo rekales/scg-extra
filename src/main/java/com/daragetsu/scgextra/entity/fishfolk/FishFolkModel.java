@@ -4,27 +4,39 @@ import com.daragetsu.scgextra.SCGExtra;
 
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Items;
 import software.bernie.geckolib.model.GeoModel;
 
 public class FishFolkModel<T extends FishFolkEntity> extends GeoModel<FishFolkEntity> {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(SCGExtra.asResource("fish_folk"), "main");
-
+	private static final ResourceLocation GEO_TRIDENT = SCGExtra.asResource("geo/fish_folk_trident.geo.json");
+	private static final ResourceLocation GEO_GUN = SCGExtra.asResource("geo/fish_folk_gun.geo.json");
+	private static final ResourceLocation ANIM_TRIDENT = SCGExtra.asResource("animations/fish_folk_trident.animation.json");
+	private static final ResourceLocation ANIM_GUN = SCGExtra.asResource("animations/fish_folk_gun.animation.json");
 
 	public FishFolkModel() {
 	}
 
 	@Override
-	public ResourceLocation getAnimationResource(FishFolkEntity arg0) {
-		return SCGExtra.asResource("animations/fish_folk.animation.json");
+	public ResourceLocation getAnimationResource(FishFolkEntity entity) {
+		if(entity.getMainHandItem().is(Items.TRIDENT)){
+			return ANIM_TRIDENT;
+		}else{
+			return ANIM_GUN;
+		}
 	}
 
 	@Override
-	public ResourceLocation getModelResource(FishFolkEntity arg0) {
-		return SCGExtra.asResource("geo/fish_folk.geo.json");
+	public ResourceLocation getModelResource(FishFolkEntity entity) {
+		if(entity.getMainHandItem().is(Items.TRIDENT)){
+			return GEO_TRIDENT;
+		}else{
+			return GEO_GUN;
+		}
 	}
 
 	@Override
-	public ResourceLocation getTextureResource(FishFolkEntity arg0) {
-		return arg0.getTexture();
+	public ResourceLocation getTextureResource(FishFolkEntity entity) {
+		return entity.getTexture();
 	}
 }

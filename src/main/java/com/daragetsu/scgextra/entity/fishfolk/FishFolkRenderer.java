@@ -42,7 +42,7 @@ public class FishFolkRenderer extends GeoEntityRenderer<FishFolkEntity> {
                 poseStack.pushPose();
                 if(itemStack.is(Items.TRIDENT)){
                     // Adjust item position: tweak these values based on your arm pivot
-                    poseStack.translate(-1F, -0.2F, 0.0F); // Y = up/down, Z = forward/back
+                    poseStack.translate(-0.9F, 0F, 0.0F); // Y = up/down, Z = forward/back
                     poseStack.mulPose(new Quaternionf().rotateX((float) Math.toRadians(90)));
                     poseStack.mulPose(new Quaternionf().rotateY((float) Math.toRadians(180)));
     
@@ -58,9 +58,9 @@ public class FishFolkRenderer extends GeoEntityRenderer<FishFolkEntity> {
                             0
                     );
                 }else{
-                    poseStack.translate(0.5F, 0.9F, 0.0F);
-                    poseStack.mulPose(new Quaternionf().rotateX((float) Math.toRadians(180)));
-                    poseStack.mulPose(new Quaternionf().rotateY((float) Math.toRadians(180)));
+                    poseStack.translate(0.3F, 1.5F, -0.7F);
+                    poseStack.mulPose(new Quaternionf().rotateX((float) Math.toRadians(360)));
+                    poseStack.mulPose(new Quaternionf().rotateY((float) Math.toRadians(360)));
     
                     // Render the item in left hand
                     Minecraft.getInstance().getItemRenderer().renderStatic(
