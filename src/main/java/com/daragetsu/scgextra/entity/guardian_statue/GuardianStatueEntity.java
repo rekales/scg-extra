@@ -1,5 +1,8 @@
 package com.daragetsu.scgextra.entity.guardian_statue;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -7,8 +10,14 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.phys.Vec3;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 // NOTE: check Shulker
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class GuardianStatueEntity extends Monster {
 
     public GuardianStatueEntity(EntityType<? extends Monster> entityType, Level level) {
@@ -34,8 +43,41 @@ public class GuardianStatueEntity extends Monster {
     }
 
 
+    @Override
+    public boolean isPushable() {
+        return false;
+    }
 
-//    static class GuardianAttackGoal extends Goal {
+    @Override
+    protected void doPush(Entity entity) {
+    }
+
+    @Override
+    public boolean canBeCollidedWith() {
+        return this.isAlive();
+    }
+
+    @Override
+    public PushReaction getPistonPushReaction() {
+        return PushReaction.IGNORE;
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (!this.level().isClientSide) {
+            // Centering the entity to the block
+            Vec3 oldPos = this.position();
+            Vec3 newPos = BlockPos.containing(oldPos).getCenter();
+            newPos = new Vec3(newPos.x, oldPos.y, newPos.z);
+            if (!oldPos.equals(newPos)) {
+                this.setPos(newPos);
+            }
+        }
+    }
+
+    //    static class GuardianAttackGoal extends Goal {
 //        private final Guardian guardian;
 //        private int attackTime;
 //        private final boolean elder;
