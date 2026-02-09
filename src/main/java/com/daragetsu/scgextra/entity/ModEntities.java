@@ -12,7 +12,6 @@ import com.daragetsu.scgextra.entity.salmonsaurs.SalmonsaursEntity;
 import com.daragetsu.scgextra.entity.salmonsaurs.SalmonsaursModel;
 import com.daragetsu.scgextra.entity.salmonsaurs.SalmonsaursRenderer;
 import com.daragetsu.scgextra.entity.tentacliator.TentacliatorEntity;
-import com.daragetsu.scgextra.entity.tentacliator.TentacliatorModel;
 import com.daragetsu.scgextra.entity.tentacliator.TentacliatorRenderer;
 import com.daragetsu.scgextra.entity.turtleman.TurtleManEntity;
 import com.daragetsu.scgextra.entity.turtleman.TurtleManModel;
@@ -78,7 +77,7 @@ public class ModEntities {
         event.registerLayerDefinition(TurtleManModel.LAYER_LOCATION, TurtleManModel::createBodyLayer);
         event.registerLayerDefinition(SalmonsaursModel.LAYER_LOCATION, SalmonsaursModel::createBodyLayer);
         event.registerLayerDefinition(GuardianStatueModel.LAYER_LOCATION, GuardianStatueModel::createBodyLayer);
-        event.registerLayerDefinition(TentacliatorModel.LAYER_LOCATION, TentacliatorModel::createBodyLayer);
+        // event.registerLayerDefinition(TentacliatorModel.LAYER_LOCATION, TentacliatorModel::createBodyLayer);
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event){

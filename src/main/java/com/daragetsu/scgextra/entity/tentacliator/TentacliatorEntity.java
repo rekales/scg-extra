@@ -6,10 +6,9 @@ import java.util.Random;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -27,12 +26,18 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.RegistryObject;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 import top.ribs.scguns.init.ModItems;
 import top.ribs.scguns.item.animated.AnimatedUnderWaterGunItem;
 
-public class TentacliatorEntity extends Drowned{
-    public final AnimationState idleAnimationState = new AnimationState();
-    private int idleAnimationTimeout = 0;
+public class TentacliatorEntity extends Drowned implements GeoEntity{
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public TentacliatorEntity(EntityType<? extends Drowned> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
@@ -52,6 +57,11 @@ public class TentacliatorEntity extends Drowned{
             gun.getOrCreateTag().putBoolean("IgnoreAmmo", true);
             this.setItemSlot(EquipmentSlot.MAINHAND, gun);
         }
+    }
+
+    @Override
+    public HumanoidArm getMainArm() {
+        return HumanoidArm.LEFT;
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -133,29 +143,18 @@ public class TentacliatorEntity extends Drowned{
         }
     }
     @Override
-    public void tick() {
-        super.tick();
-        if(this.level().isClientSide()){
-            setupAnimationStates();
-        }
-    }
-    private void setupAnimationStates(){
-        if(this.idleAnimationTimeout <= 0){
-            this.idleAnimationTimeout = this.random.nextInt(40)+80;
-            this.idleAnimationState.start(this.tickCount);
-        }else{
-            --this.idleAnimationTimeout;
-        }
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return cache;
     }
     @Override
-    protected void updateWalkAnimation(float pPartialTick) {
-        float f;
-        if(this.getPose() == Pose.STANDING){
-            f = Math.min(pPartialTick * 6F, 1f);
-        }else{
-            f = 0f;
-        }
-
-        this.walkAnimation.update(f, 0.2f);
+    public void registerControllers(ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "controller", 0, state -> {
+            if (state.isMoving()) {
+                state.setAndContinue(RawAnimation.begin().thenLoop("walk"));
+            } else {
+                state.setAndContinue(RawAnimation.begin().thenLoop("idle"));
+            }
+            return PlayState.CONTINUE;
+        }));
     }
 }
