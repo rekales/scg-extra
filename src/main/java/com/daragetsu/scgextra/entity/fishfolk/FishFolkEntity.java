@@ -3,6 +3,7 @@ package com.daragetsu.scgextra.entity.fishfolk;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
@@ -178,6 +179,13 @@ public class FishFolkEntity extends Drowned implements GeoEntity{
                 state.setAndContinue(RawAnimation.begin().thenLoop("idle"));
             }
             return PlayState.CONTINUE;
-        }));
+        }).triggerableAnim("attack", RawAnimation.begin().thenPlay("attack")));
+        controllers.add(new AnimationController<>(this, "special", 0, state -> PlayState.CONTINUE)
+        .triggerableAnim("attack", RawAnimation.begin().thenPlay("attack")));
+    }
+    @Override
+    public void performRangedAttack(LivingEntity pTarget, float pDistanceFactor) {
+        super.performRangedAttack(pTarget, pDistanceFactor);
+        this.triggerAnim("special", "attack");
     }
 }
