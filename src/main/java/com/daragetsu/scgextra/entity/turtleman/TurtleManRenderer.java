@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+// TODO: render held item
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class TurtleManRenderer extends MobRenderer<TurtleManEntity, TurtleManModel<TurtleManEntity>> {

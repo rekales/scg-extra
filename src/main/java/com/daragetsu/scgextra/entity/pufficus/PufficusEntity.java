@@ -20,6 +20,12 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 import top.ribs.scguns.config.EntityEquipmentConfig;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+// TODO: add net projectile
+// TODO: add datas
+// should there be a separate effect for ensared or just use slowness?
+@ParametersAreNonnullByDefault
 public class PufficusEntity extends Monster {
 
     public PufficusEntity(EntityType<? extends Monster> entityType, Level level) {
@@ -28,6 +34,7 @@ public class PufficusEntity extends Monster {
 
     @Override
     protected void registerGoals() {
+        // TODO: add throw net behaviour
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0F, false));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 0.9));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -45,7 +52,6 @@ public class PufficusEntity extends Monster {
         });
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
-
     }
 
     // NOTE: maybe just use populateDefaultEquipmentSlots to avoid using this deprecated methods after figuring out EntityEquipmentConfig

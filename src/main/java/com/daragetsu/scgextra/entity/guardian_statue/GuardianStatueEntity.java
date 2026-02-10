@@ -23,7 +23,7 @@ import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-// NOTE: check Shulker
+// TODO: add datas
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class GuardianStatueEntity extends Monster {
@@ -36,12 +36,11 @@ public class GuardianStatueEntity extends Monster {
 
     public GuardianStatueEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
+        this.setPersistenceRequired();
     }
 
     @Override
     protected void registerGoals() {
-        // TODO: no body rotations
-        // ok maybe yes body rotations
         // TODO: no body rotation when idle
         // TODO: rotate slowly towards target?
 
@@ -58,7 +57,6 @@ public class GuardianStatueEntity extends Monster {
                 .add(Attributes.MAX_HEALTH, 1000)
                 .add(Attributes.ARMOR, 12);
     }
-
 
     @Override
     public boolean isPushable() {
@@ -147,6 +145,11 @@ public class GuardianStatueEntity extends Monster {
 
     public float getAttackAnimationScale(float partialTick) {
         return ((float)this.clientSideAttackTime + partialTick) / (float)this.getAttackDuration();
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
     }
 
     @Nullable

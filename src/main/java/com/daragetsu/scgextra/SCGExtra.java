@@ -18,7 +18,7 @@ import org.slf4j.Logger;
 public class SCGExtra
 {
     public static final String MOD_ID = "scgextra";
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public SCGExtra(FMLJavaModLoadingContext context)
     {
@@ -43,4 +43,6 @@ public class SCGExtra
     public static ResourceLocation asResource(String path) {
         return new ResourceLocation(MOD_ID, path);
     }
+
+    // TODO: setup dataloader for factions
 }
