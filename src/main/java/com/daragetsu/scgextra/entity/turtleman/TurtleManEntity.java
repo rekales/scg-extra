@@ -19,6 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import org.jetbrains.annotations.Nullable;
@@ -97,30 +98,50 @@ public class TurtleManEntity extends Monster implements RangedAttackMob {
         super.tick();
 
         if (this.getTarget() instanceof Player p) {
+            //minimum AABB that's basically a 10 by 10 box centered on the turtleman
+            AABB min = new AABB(
+                this.getX()-5,
+                this.getY()-5,
+                this.getZ()-5,
+                this.getX()+5,
+                this.getY()+5,
+                this.getZ()+5
+            );
+            //only do the custom movement if the player isn't in the box
+            if(!min.contains(p.getEyePosition())){
+                //----------------Rotation------------
+                // Direction from turtleman to player
+                double dx = p.getX() - this.getX();
+                double dz = p.getZ() - this.getZ();
 
-            // Direction from entity to player (horizontal only)
-            double dx = p.getX() - this.getX();
-            double dz = p.getZ() - this.getZ();
-
-            // Compute yaw toward player
-            float yawToPlayer = (float)(Math.toDegrees(Math.atan2(-dx, dz)));
-
-            // Turn 180° so BACK faces the player
-            float yawAwayFromPlayer = yawToPlayer + 180f;
-
-            // Apply rotation
-            this.setYRot(yawAwayFromPlayer);
-            this.yBodyRot = yawAwayFromPlayer;
-            this.yHeadRot = yawAwayFromPlayer;
-
-            Vec3 forward = new Vec3(this.getForward().x, 0, this.getForward().z).normalize();
-            Vec3 toPlayer = p.position().subtract(this.position()).normalize();
-            double dot = forward.dot(toPlayer);
-
-            if (dot > -0.6) {
-                p.sendSystemMessage(Component.literal("Looking at player"));
-            }else{
-                p.sendSystemMessage(Component.literal("Looking away from player"));
+                // yaw toward player, i just copied this from chatgpt cause i can't do maths lol
+                float yawToPlayer = (float)(Math.toDegrees(Math.atan2(-dx, dz)));
+                
+                // back faces the player
+                float yawFromPlayer = yawToPlayer + 180f;
+                
+                // Apply rotation
+                this.setYRot(yawFromPlayer);
+                this.yBodyRot = yawFromPlayer;
+                this.yHeadRot = yawFromPlayer;
+                //----------------Rotation------------
+                
+                //----------------movement-------------
+                //check if the player is looking at the back of the turtleman
+                Vec3 forward = new Vec3(this.getForward().x, 0, this.getForward().z).normalize();
+                Vec3 toPlayer = p.position().subtract(this.position()).normalize();
+                double dot = forward.dot(toPlayer);
+                
+                //-0.5 is basically a mid point cone so it's a average
+                if (dot < -0.5) {
+                    Vec3 toPlayerXZ = new Vec3(toPlayer.x, 0, toPlayer.z).normalize();
+                    Vec3 awayFromPlayer = toPlayerXZ.scale(-1);
+                    Vec3 backward = awayFromPlayer.scale(-0.1);
+                    backward = new Vec3(backward.x, this.getDeltaMovement().y, backward.z);
+                    this.setDeltaMovement(backward);
+                    this.move(MoverType.SELF, backward);
+                }
+                //----------------movement-------------
             }
         }
     }
