@@ -1,0 +1,14 @@
+{
+  "id": "scgextra:pufficus",
+  "equipment_chance": 1.0,
+  "items": [
+    {
+      "item": "scguns:cog_mace",
+      "weight": 10.0,
+      "drop_chance": 0.05,
+      "min_durability": 0.4,
+      "max_durability": 0.8,
+      "slot": "mainhand"
+    }
+  ]
+}

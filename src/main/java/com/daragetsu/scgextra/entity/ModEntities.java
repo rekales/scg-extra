@@ -7,6 +7,9 @@ import com.daragetsu.scgextra.entity.fishfolk.FishFolkRenderer;
 import com.daragetsu.scgextra.entity.guardian_statue.GuardianStatueEntity;
 import com.daragetsu.scgextra.entity.guardian_statue.GuardianStatueModel;
 import com.daragetsu.scgextra.entity.guardian_statue.GuardianStatueRenderer;
+import com.daragetsu.scgextra.entity.pufficus.PufficusEntity;
+import com.daragetsu.scgextra.entity.pufficus.PufficusModel;
+import com.daragetsu.scgextra.entity.pufficus.PufficusRenderer;
 import com.daragetsu.scgextra.entity.salmonsaurs.SalmonsaursEntity;
 import com.daragetsu.scgextra.entity.salmonsaurs.SalmonsaursModel;
 import com.daragetsu.scgextra.entity.salmonsaurs.SalmonsaursRenderer;
@@ -51,6 +54,10 @@ public class ModEntities {
             .register("tentacliator", () -> EntityType.Builder.of(TentacliatorEntity::new, MobCategory.MONSTER)
                     .sized(0.6F, 1.95F).build("tentacliator"));
 
+    public static final RegistryObject<EntityType<PufficusEntity>> PUFFICUS = ENTITY_TYPES
+            .register("pufficus", () -> EntityType.Builder.of(PufficusEntity::new, MobCategory.MONSTER)
+                    .sized(1F, 3F).build("pufficus"));
+
 
     public static void register(IEventBus modEventBus){
         ENTITY_TYPES.register(modEventBus);
@@ -69,6 +76,7 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.SALMONSAURS.get(), SalmonsaursRenderer::new);
         EntityRenderers.register(ModEntities.GUARDIAN_STATUE.get(), GuardianStatueRenderer::new);
         EntityRenderers.register(ModEntities.TENTACLIATOR.get(), TentacliatorRenderer::new);
+        EntityRenderers.register(ModEntities.PUFFICUS.get(), PufficusRenderer::new);
     }
 
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
@@ -77,6 +85,7 @@ public class ModEntities {
         event.registerLayerDefinition(SalmonsaursModel.LAYER_LOCATION, SalmonsaursModel::createBodyLayer);
         event.registerLayerDefinition(GuardianStatueModel.LAYER_LOCATION, GuardianStatueModel::createBodyLayer);
         // event.registerLayerDefinition(TentacliatorModel.LAYER_LOCATION, TentacliatorModel::createBodyLayer);
+        event.registerLayerDefinition(PufficusModel.LAYER_LOCATION, PufficusModel::createBodyLayer);
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event){
@@ -85,5 +94,6 @@ public class ModEntities {
         event.put(ModEntities.SALMONSAURS.get(), SalmonsaursEntity.createAttributes().build());
         event.put(ModEntities.GUARDIAN_STATUE.get(), GuardianStatueEntity.createAttributes().build());
         event.put(ModEntities.TENTACLIATOR.get(), TentacliatorEntity.createAttributes().build());
+        event.put(ModEntities.PUFFICUS.get(), PufficusEntity.createAttributes().build());
     }
 }
