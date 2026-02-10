@@ -10,6 +10,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Creeper;
@@ -147,6 +148,13 @@ public class TentacliatorEntity extends Drowned implements GeoEntity{
         this.targetSelector.addGoal(3, new InkAttackGoal(
             this
         ));
+        this.targetSelector.addGoal(3, 
+            new LookAtPlayerGoal(
+                this, 
+                Player.class, 
+                3.0F
+            )
+        );
     }
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {

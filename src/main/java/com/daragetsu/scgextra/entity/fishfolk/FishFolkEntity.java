@@ -5,6 +5,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.ZombieAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
@@ -15,6 +16,7 @@ import net.minecraft.world.entity.monster.Pillager;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.monster.Witch;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -142,6 +144,13 @@ public class FishFolkEntity extends Drowned implements GeoEntity{
             false, 
             this::okTarget
         ));
+        this.targetSelector.addGoal(3, 
+            new LookAtPlayerGoal(
+                this, 
+                Player.class, 
+                3.0F
+            )
+        );
     }
     static class FishFolkAttackGoal extends ZombieAttackGoal {
         private final FishFolkEntity fish_folk;
