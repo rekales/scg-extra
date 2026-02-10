@@ -44,6 +44,18 @@ public class TentacliatorEntity extends Drowned implements GeoEntity{
     @Override
     protected void populateDefaultEquipmentSlots(RandomSource pRandom, DifficultyInstance pDifficulty) {
         int i = pRandom.nextInt(20);
+        if (pRandom.nextFloat() < 0.5F) {
+            this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+        }
+        if (pRandom.nextFloat() < 0.5F) {
+            this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
+        }
+        if (pRandom.nextFloat() < 0.5F) {
+            this.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
+        }
+        if (pRandom.nextFloat() < 0.5F) {
+            this.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
+        }
         if (i < 10) {
            this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.TRIDENT));
         } else {
