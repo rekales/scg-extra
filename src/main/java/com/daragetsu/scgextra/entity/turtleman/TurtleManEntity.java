@@ -3,6 +3,7 @@ package com.daragetsu.scgextra.entity.turtleman;
 import com.daragetsu.scgextra.entity.ModEntities;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -111,6 +112,16 @@ public class TurtleManEntity extends Monster implements RangedAttackMob {
             this.setYRot(yawAwayFromPlayer);
             this.yBodyRot = yawAwayFromPlayer;
             this.yHeadRot = yawAwayFromPlayer;
+
+            Vec3 forward = new Vec3(this.getForward().x, 0, this.getForward().z).normalize();
+            Vec3 toPlayer = p.position().subtract(this.position()).normalize();
+            double dot = forward.dot(toPlayer);
+
+            if (dot > -0.6) {
+                p.sendSystemMessage(Component.literal("Looking at player"));
+            }else{
+                p.sendSystemMessage(Component.literal("Looking away from player"));
+            }
         }
     }
 }
