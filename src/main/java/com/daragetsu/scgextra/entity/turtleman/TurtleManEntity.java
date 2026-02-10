@@ -1,6 +1,7 @@
 package com.daragetsu.scgextra.entity.turtleman;
 
 import com.daragetsu.scgextra.entity.ModEntities;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
@@ -17,6 +18,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.Vec3;
+
 import org.jetbrains.annotations.Nullable;
 import top.ribs.scguns.config.EntityEquipmentConfig;
 import top.ribs.scguns.entity.ai.AIType;
@@ -37,7 +40,7 @@ public class TurtleManEntity extends Monster implements RangedAttackMob {
         ItemStack mainHandItem = this.getMainHandItem();
 
         // TODO: approach enemy while walking backwards behaviour goal
-        this.goalSelector.addGoal(1, new GunAttackGoal<>(this, mainHandItem, 1.0F, AIType.TACTICAL, 3));
+        this.goalSelector.addGoal(1, new GunAttackGoal<>(this, mainHandItem, 1.0F, AIType.RECKLESS, 3));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 0.9));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
@@ -85,5 +88,29 @@ public class TurtleManEntity extends Monster implements RangedAttackMob {
     @Override
     public void performRangedAttack(LivingEntity livingEntity, float v) {
         this.doHurtTarget(livingEntity);
+    }
+    //somewhat moon walks towards the player
+    //leaving comments just in case
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (this.getTarget() instanceof Player p) {
+
+            // Direction from entity to player (horizontal only)
+            double dx = p.getX() - this.getX();
+            double dz = p.getZ() - this.getZ();
+
+            // Compute yaw toward player
+            float yawToPlayer = (float)(Math.toDegrees(Math.atan2(-dx, dz)));
+
+            // Turn 180° so BACK faces the player
+            float yawAwayFromPlayer = yawToPlayer + 180f;
+
+            // Apply rotation
+            this.setYRot(yawAwayFromPlayer);
+            this.yBodyRot = yawAwayFromPlayer;
+            this.yHeadRot = yawAwayFromPlayer;
+        }
     }
 }
