@@ -40,7 +40,23 @@ public class FishFolkRenderer extends GeoEntityRenderer<FishFolkEntity> {
             ItemStack itemStack = animatable.getMainHandItem();
             if (!itemStack.isEmpty()) {
                 poseStack.pushPose();
-                if(itemStack.is(Items.TRIDENT)){
+                if(animatable.isPassenger() && itemStack.is(Items.TRIDENT)){
+                    poseStack.translate(0.85F, 1.5F, -1.5F); // Y = up/down, Z = forward/back
+                    poseStack.mulPose(new Quaternionf().rotateX((float) Math.toRadians(0)));
+                    poseStack.mulPose(new Quaternionf().rotateY((float) Math.toRadians(0)));
+    
+                    // Render the item in left hand
+                    Minecraft.getInstance().getItemRenderer().renderStatic(
+                            itemStack,
+                            ItemDisplayContext.THIRD_PERSON_LEFT_HAND,
+                            packedLight,
+                            packedOverlay,
+                            poseStack,
+                            bufferSource,
+                            animatable.level(),
+                            0
+                    );
+                }else if(itemStack.is(Items.TRIDENT)){
                     poseStack.translate(0.85F, 0F, 0.0F); // Y = up/down, Z = forward/back
                     poseStack.mulPose(new Quaternionf().rotateX((float) Math.toRadians(-90)));
                     poseStack.mulPose(new Quaternionf().rotateY((float) Math.toRadians(0)));
