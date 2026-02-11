@@ -55,9 +55,6 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
 
     @Override
     protected void registerGoals() {
-        // TODO: no body rotation when idle
-        // TODO: rotate slowly towards target?
-
         this.goalSelector.addGoal(4, new LaserAttackGoal(this));
         this.goalSelector.addGoal(8, new ResetLookToDirection(this, ()->this.prefferedDirection, 1.0F));
 
