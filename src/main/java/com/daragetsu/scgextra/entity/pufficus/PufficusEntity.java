@@ -18,6 +18,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.util.GeckoLibUtil;
 import top.ribs.scguns.config.EntityEquipmentConfig;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -26,7 +30,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 // TODO: add datas
 // should there be a separate effect for ensared or just use slowness?
 @ParametersAreNonnullByDefault
-public class PufficusEntity extends Monster {
+public class PufficusEntity extends Monster implements GeoEntity {
+
+    private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
     public PufficusEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -70,4 +76,13 @@ public class PufficusEntity extends Monster {
     }
 
 
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
+
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.geoCache;
+    }
 }

@@ -84,7 +84,7 @@ public class ModEntities {
         event.registerLayerDefinition(SalmonsaursModel.LAYER_LOCATION, SalmonsaursModel::createBodyLayer);
         event.registerLayerDefinition(GuardianStatueModel.LAYER_LOCATION, GuardianStatueModel::createBodyLayer);
 //        event.registerLayerDefinition(TentacliatorModel.LAYER_LOCATION, TentacliatorModel::createBodyLayer);
-        event.registerLayerDefinition(PufficusModel.LAYER_LOCATION, PufficusModel::createBodyLayer);
+//        event.registerLayerDefinition(PufficusModel.LAYER_LOCATION, PufficusModel::createBodyLayer);
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event){
