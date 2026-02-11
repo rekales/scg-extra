@@ -8,6 +8,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
@@ -156,10 +157,18 @@ public class TentacliatorEntity extends Drowned implements GeoEntity{
             )
         );
     }
+
+    @Override
+    public void performRangedAttack(LivingEntity pTarget, float pDistanceFactor) {
+        super.performRangedAttack(pTarget, pDistanceFactor);
+        this.triggerAnim("special", "attack");
+    }
+    
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return cache;
     }
+
     @Override
     public void registerControllers(ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "controller", 0, state -> {
@@ -171,6 +180,6 @@ public class TentacliatorEntity extends Drowned implements GeoEntity{
             return PlayState.CONTINUE;
         }));
         controllers.add(new AnimationController<>(this, "special", 0, state -> PlayState.CONTINUE)
-        .triggerableAnim("special_attack", RawAnimation.begin().thenPlay("special_attack")));
+        .triggerableAnim("special_attack", RawAnimation.begin().thenPlay("special_attack")).triggerableAnim("attack", RawAnimation.begin().thenPlay("attack")));
     }
 }

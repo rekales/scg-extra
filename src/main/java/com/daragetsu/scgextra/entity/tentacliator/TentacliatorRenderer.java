@@ -45,7 +45,7 @@ public class TentacliatorRenderer extends GeoEntityRenderer<TentacliatorEntity>{
                 poseStack.pushPose();
 
                 if(itemStack.is(Items.TRIDENT)){
-                    poseStack.translate(-1F, 1.7F, 0.0F); // Y = up/down, Z = forward/back
+                    poseStack.translate(-0.9F, 3F, 0.0F); // Y = up/down, Z = forward/back
                     poseStack.mulPose(new Quaternionf().rotateX((float) Math.toRadians(-90)));
                     poseStack.mulPose(new Quaternionf().rotateY((float) Math.toRadians(180)));
     
