@@ -1,14 +1,11 @@
 package com.daragetsu.scgextra.entity.guardian_statue;
 
-import com.daragetsu.scgextra.SCGExtra;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -16,23 +13,24 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+@SuppressWarnings("removal")
 @ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
-public class GuardianStatueRenderer extends MobRenderer<GuardianStatueEntity, GuardianStatueModel<GuardianStatueEntity>> {
+//@MethodsReturnNonnullByDefault
+public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoEntityRenderer<T> {
 
-    @SuppressWarnings("removal")
     private static final ResourceLocation GUARDIAN_BEAM_LOCATION = new ResourceLocation("textures/entity/guardian_beam.png");
     private static final RenderType BEAM_RENDER_TYPE;
 
-    public GuardianStatueRenderer(EntityRendererProvider.Context context) {
-        super(context, new GuardianStatueModel<>(context.bakeLayer(GuardianStatueModel.LAYER_LOCATION)), 1);
+    public GuardianStatueRenderer(EntityRendererProvider.Context renderManager) {
+        super(renderManager, new GuardianStatueModel<>());
     }
 
     @Override
-    public void render(GuardianStatueEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+    public void render(T entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
 
         // TODO: cleanup
@@ -116,11 +114,6 @@ public class GuardianStatueRenderer extends MobRenderer<GuardianStatueEntity, Gu
 
     private static void vertex(VertexConsumer consumer, Matrix4f pose, Matrix3f normal, float x, float y, float z, int red, int green, int blue, float u, float v) {
         consumer.vertex(pose, x, y, z).color(red, green, blue, 255).uv(u, v).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(normal, 0.0F, 1.0F, 0.0F).endVertex();
-    }
-
-    @Override
-    public ResourceLocation getTextureLocation(GuardianStatueEntity entity) {
-        return SCGExtra.asResource("textures/entity/guardian_statue/guardian_statue.png");
     }
 
     static {

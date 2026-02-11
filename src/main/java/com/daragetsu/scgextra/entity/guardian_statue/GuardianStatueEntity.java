@@ -19,6 +19,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.Vec3;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -26,7 +30,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 // TODO: add datas
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class GuardianStatueEntity extends Monster {
+public class GuardianStatueEntity extends Monster implements GeoEntity {
+
+    private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
     private static final EntityDataAccessor<Integer> DATA_ID_ATTACK_TARGET;
 
@@ -189,6 +195,16 @@ public class GuardianStatueEntity extends Monster {
 
     static {
         DATA_ID_ATTACK_TARGET = SynchedEntityData.defineId(GuardianStatueEntity.class, EntityDataSerializers.INT);
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
+
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.geoCache;
     }
 
     protected static class LaserAttackGoal extends Goal {
