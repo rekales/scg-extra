@@ -145,7 +145,7 @@ public class FishFolkEntity extends Drowned implements GeoEntity{
             false, 
             this::okTarget
         ));
-        this.targetSelector.addGoal(3, 
+        this.targetSelector.addGoal(2, 
             new LookAtPlayerGoal(
                 this, 
                 Player.class, 

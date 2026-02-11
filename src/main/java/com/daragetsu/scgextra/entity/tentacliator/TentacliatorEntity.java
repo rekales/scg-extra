@@ -149,7 +149,7 @@ public class TentacliatorEntity extends Drowned implements GeoEntity{
         this.targetSelector.addGoal(3, new InkAttackGoal(
             this
         ));
-        this.targetSelector.addGoal(3, 
+        this.targetSelector.addGoal(2, 
             new LookAtPlayerGoal(
                 this, 
                 Player.class, 
