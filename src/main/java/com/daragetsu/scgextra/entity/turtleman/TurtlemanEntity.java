@@ -1,9 +1,7 @@
 package com.daragetsu.scgextra.entity.turtleman;
 
-import com.daragetsu.scgextra.entity.ModEntities;
-
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -23,6 +21,10 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.util.GeckoLibUtil;
 import top.ribs.scguns.config.EntityEquipmentConfig;
 import top.ribs.scguns.entity.ai.AIType;
 import top.ribs.scguns.entity.ai.GunAttackGoal;
@@ -30,10 +32,12 @@ import top.ribs.scguns.entity.ai.GunAttackGoal;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEntity {
 
-public class TurtleManEntity extends Monster implements RangedAttackMob {
+    private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
-    public TurtleManEntity(EntityType<? extends Monster> entityType, Level level) {
+    public TurtlemanEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
     }
 
@@ -51,7 +55,7 @@ public class TurtleManEntity extends Monster implements RangedAttackMob {
             @Override
             public boolean canUse() {
                 // TODO: broaden to the entire whaler faction
-                if (this.mob.getLastHurtByMob() instanceof TurtleManEntity) {
+                if (this.mob.getLastHurtByMob() instanceof TurtlemanEntity) {
                     return false;
                 }
                 return super.canUse();
@@ -144,5 +148,15 @@ public class TurtleManEntity extends Monster implements RangedAttackMob {
                 //----------------movement-------------
             }
         }
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
+
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.geoCache;
     }
 }

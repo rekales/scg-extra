@@ -1,0 +1,31 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"walk": {
+			"loop": true,
+			"bones": {
+				"head": {
+					"rotation": {
+						"vector": [0, -17.5, 0]
+					}
+				},
+				"right_arm": {
+					"rotation": {
+						"vector": [-39.10406, -18.17696, -20.99692]
+					}
+				},
+				"left_arm": {
+					"rotation": {
+						"vector": [-39.70889, 16.58974, 18.97287]
+					}
+				},
+				"tail": {
+					"rotation": {
+						"vector": [35, 0, 0]
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}
