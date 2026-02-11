@@ -2,21 +2,23 @@ package com.daragetsu.scgextra.entity.guardian_statue;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -24,17 +26,23 @@ import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.EnumSet;
+import java.util.function.Supplier;
 
 // TODO: add datas
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class GuardianStatueEntity extends Monster implements GeoEntity {
 
+    private static final EntityDataAccessor<Integer> DATA_ID_ATTACK_TARGET;
+
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
-    private static final EntityDataAccessor<Integer> DATA_ID_ATTACK_TARGET;
+    @Nonnull
+    private Direction prefferedDirection = Direction.NORTH;
 
     @Nullable
     private LivingEntity clientSideCachedAttackTarget;
@@ -51,11 +59,18 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
         // TODO: rotate slowly towards target?
 
         this.goalSelector.addGoal(4, new LaserAttackGoal(this));
-        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(8, new ResetLookToDirection(this, ()->this.prefferedDirection, 1.0F));
 
         // TODO: broaden to target everything but whaler faction mobs
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
+        this.prefferedDirection = Direction.fromYRot(this.getYRot());
+        return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -207,6 +222,7 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
         return this.geoCache;
     }
 
+
     protected static class LaserAttackGoal extends Goal {
         private final GuardianStatueEntity self;
         private int attackTime;
@@ -276,6 +292,45 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
                 }
             }
 
+        }
+    }
+
+    public static class ResetLookToDirection extends Goal {
+
+        protected final Mob mob;
+        protected final float turnSpeed;
+        private final Supplier<Direction> dirSupplier;
+
+        public ResetLookToDirection(Mob mob, Supplier<Direction> dirSupplier, float turnSpeed) {
+            this.mob = mob;
+            this.dirSupplier = dirSupplier;
+            this.turnSpeed = turnSpeed;
+            this.setFlags(EnumSet.of(Flag.LOOK));
+        }
+
+        @Override
+        public boolean canUse() {
+            return true;
+        }
+
+        @Override
+        public void tick() {
+            this.mob.setYRot(Mth.approachDegrees(
+                    this.mob.getYRot(),
+                    getPreferredDirection().toYRot(),
+                    this.turnSpeed
+            ));
+
+            // TODO: force updates to client or override look control to have a slower turn rate
+
+            this.mob.yHeadRot = this.mob.getYRot();
+            this.mob.yBodyRot = this.mob.getYRot();
+        }
+
+        public Direction getPreferredDirection() {
+            Direction dir = this.dirSupplier.get();
+            if (dir == Direction.UP || dir == Direction.DOWN) return Direction.NORTH;
+            return dir;
         }
     }
 }
