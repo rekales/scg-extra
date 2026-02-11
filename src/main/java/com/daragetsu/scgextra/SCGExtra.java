@@ -1,10 +1,12 @@
 package com.daragetsu.scgextra;
 
+import com.daragetsu.scgextra.data.FactionDataLoader;
 import com.daragetsu.scgextra.effects.ModEffects;
 import com.daragetsu.scgextra.entity.ModEntities;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -29,6 +31,8 @@ public class SCGExtra
         ModEffects.register(modEventBus);
 
         modEventBus.addListener(this::addCreative);
+
+        MinecraftForge.EVENT_BUS.addListener(FactionDataLoader::onAddReloadListeners);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)

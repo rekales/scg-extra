@@ -1,0 +1,11 @@
+{
+  "id": "whaler",
+  "entities": [
+    "scgextra:fish_folk",
+    "scgextra:turtleman",
+    "scgextra:salmonsaurs",
+    "scgextra:tentacliator",
+    "scgextra:pufficus",
+    "scgextra:guardian_statue"
+  ]
+}
