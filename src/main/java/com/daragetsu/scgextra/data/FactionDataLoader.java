@@ -2,7 +2,6 @@ package com.daragetsu.scgextra.data;
 
 
 import com.daragetsu.scgextra.Faction;
-import com.daragetsu.scgextra.Factions;
 import com.daragetsu.scgextra.SCGExtra;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -32,7 +31,7 @@ public class FactionDataLoader extends SimpleJsonResourceReloadListener {
 
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> jsonMap, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
-        Factions.clearData();
+        Faction.clearData();
 
         jsonMap.forEach((id, json) -> {
             if (!id.getPath().equals(SCGExtra.MOD_ID)) return;
@@ -48,7 +47,7 @@ public class FactionDataLoader extends SimpleJsonResourceReloadListener {
                         .filter(Objects::nonNull)
                         .collect(Collectors.toList());
 
-                Factions.addFaction(new Faction(factionEntry.id, entityTypes));
+                Faction.addFaction(new Faction(factionEntry.id, entityTypes));
             } catch (Exception e) {
                 SCGExtra.LOGGER.warn("Failed to load for some reason: " + id);
             }
