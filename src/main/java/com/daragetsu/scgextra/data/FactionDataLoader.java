@@ -34,7 +34,7 @@ public class FactionDataLoader extends SimpleJsonResourceReloadListener {
         Faction.clearData();
 
         jsonMap.forEach((id, json) -> {
-            if (!id.getPath().equals(SCGExtra.MOD_ID)) return;
+            if (!id.getNamespace().equals(SCGExtra.MOD_ID)) return;
 
             try {
                 TempFaction factionEntry = GSON.fromJson(json, TempFaction.class);

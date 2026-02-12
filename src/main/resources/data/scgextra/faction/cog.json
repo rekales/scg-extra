@@ -1,0 +1,8 @@
+{
+  "id": "cog",
+  "entities": [
+    "scguns:cog_knight",
+    "scguns:trauma_unit",
+    "scguns:cog_minion"
+  ]
+}

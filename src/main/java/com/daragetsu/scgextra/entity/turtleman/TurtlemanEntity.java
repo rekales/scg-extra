@@ -1,5 +1,6 @@
 package com.daragetsu.scgextra.entity.turtleman;
 
+import com.daragetsu.scgextra.Faction;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
@@ -54,16 +55,17 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
             @Override
             public boolean canUse() {
-                // TODO: broaden to the entire whaler faction
-                if (this.mob.getLastHurtByMob() instanceof TurtlemanEntity) {
+                // Avoid retaliation from friendly fire
+                if (this.mob.getLastHurtByMob() != null && Faction.isFriendlies(this.mob, this.mob.getLastHurtByMob())) {
                     return false;
                 }
                 return super.canUse();
             }
-        }.setAlertOthers());
-
+        });
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
+                entity -> Faction.isEnemies(this, entity)));
     }
 
     // NOTE: maybe just use populateDefaultEquipmentSlots to avoid using this deprecated methods after figuring out EntityEquipmentConfig

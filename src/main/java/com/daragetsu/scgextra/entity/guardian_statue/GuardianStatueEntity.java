@@ -1,5 +1,6 @@
 package com.daragetsu.scgextra.entity.guardian_statue;
 
+import com.daragetsu.scgextra.Faction;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -14,6 +15,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
@@ -58,9 +60,21 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
         this.goalSelector.addGoal(4, new LaserAttackGoal(this));
         this.goalSelector.addGoal(8, new ResetLookToDirection(this, ()->this.prefferedDirection, 1.0F));
 
-        // TODO: broaden to target everything but whaler faction mobs
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false,
+        // Bosses will prioritize players and does not require line of sight to maintain targeting to avoid cheese
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, false,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
+        this.targetSelector.addGoal(2, new HurtByTargetGoal(this) {
+            @Override
+            public boolean canUse() {
+                // Avoid retaliation from friendly fire
+                if (this.mob.getLastHurtByMob() != null && Faction.isFriendlies(this.mob, this.mob.getLastHurtByMob())) {
+                    return false;
+                }
+                return super.canUse();
+            }
+        });
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
+                entity -> Faction.isEnemies(this, entity)));
     }
 
     @SuppressWarnings("deprecation")
