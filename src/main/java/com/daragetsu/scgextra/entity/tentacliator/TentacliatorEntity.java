@@ -3,6 +3,8 @@ package com.daragetsu.scgextra.entity.tentacliator;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.daragetsu.scgextra.Faction;
+
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
@@ -12,15 +14,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Drowned;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Pillager;
-import net.minecraft.world.entity.monster.Skeleton;
-import net.minecraft.world.entity.monster.Spider;
-import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -34,6 +33,8 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import top.ribs.scguns.entity.ai.AIType;
+import top.ribs.scguns.entity.ai.GunAttackGoal;
 import top.ribs.scguns.init.ModItems;
 import top.ribs.scguns.item.animated.AnimatedUnderWaterGunItem;
 
@@ -90,72 +91,24 @@ public class TentacliatorEntity extends Drowned implements GeoEntity{
    @Override
    protected void addBehaviourGoals() {
         super.addBehaviourGoals();
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(
-            this, 
-            Skeleton.class, 
-            10, 
-            true, 
-            false, 
-            this::okTarget
-        ));
-        this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(
-            this, 
-            Player.class, 
-            10, 
-            true, 
-            false, 
-            this::okTarget
-        ));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(
-            this, 
-            Creeper.class, 
-            10, 
-            true, 
-            false, 
-            this::okTarget
-        ));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(
-            this, 
-            Spider.class, 
-            10, 
-            true, 
-            false, 
-            this::okTarget
-        ));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(
-            this, 
-            Witch.class, 
-            10, 
-            true, 
-            false, 
-            this::okTarget
-        ));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(
-            this, 
-            Pillager.class, 
-            10, 
-            true, 
-            false, 
-            this::okTarget
-        ));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(
-            this, 
-            Animal.class, 
-            10, 
-            true, 
-            false, 
-            this::okTarget
-        ));
-        this.targetSelector.addGoal(3, new InkAttackGoal(
-            this
-        ));
-        this.targetSelector.addGoal(2, 
-            new LookAtPlayerGoal(
-                this, 
-                Player.class, 
-                3.0F
-            )
-        );
+        this.goalSelector.addGoal(1, new GunAttackGoal<>(this, this.getMainHandItem(), 1.0F, AIType.RECKLESS, 3));
+        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 0.9));
+        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
+            @Override
+            public boolean canUse() {
+                // Avoid retaliation from friendly fire
+                if (this.mob.getLastHurtByMob() != null && Faction.isFriendlies(this.mob, this.mob.getLastHurtByMob())) {
+                    return false;
+                }
+                return super.canUse();
+            }
+        });
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true,
+                player -> !((Player) player).isCreative() && !player.isSpectator()));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
+                entity -> Faction.isEnemies(this, entity)));
     }
 
     @Override

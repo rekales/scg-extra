@@ -4,11 +4,13 @@ package com.daragetsu.scgextra.entity.salmonsaurs;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.daragetsu.scgextra.Faction;
 import com.daragetsu.scgextra.entity.ModEntities;
 import com.daragetsu.scgextra.entity.fishfolk.FishFolkEntity;
 
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -27,6 +29,7 @@ public class SalmonsaursEntity extends Hoglin{
     private boolean riderSpawned = false;
     public SalmonsaursEntity(EntityType<? extends SalmonsaursEntity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
+        
     }
     public static AttributeSupplier.Builder createAttributes() {
       return Monster.createMonsterAttributes()
@@ -60,6 +63,10 @@ public class SalmonsaursEntity extends Hoglin{
             rider.startRiding(this, true);
             riderSpawned = true;
         }
+        if (this.getLastHurtByMob() != null &&
+            !Faction.isFriendlies(this, this.getLastHurtByMob())) {
+            this.setTarget((LivingEntity)this.getLastHurtByMob());
+        }
     }
     @Override
     public boolean isConverting() {
@@ -73,5 +80,11 @@ public class SalmonsaursEntity extends Hoglin{
     @Override
     public boolean canBeLeashed(Player pPlayer) {
         return false;
+    }
+    @Override
+    public void setTarget(LivingEntity pTarget) {
+        if(pTarget==null || !Faction.isFriendlies(this, pTarget)){
+            super.setTarget(pTarget);
+        }
     }
 }
