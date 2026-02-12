@@ -21,6 +21,6 @@ public class PufficusModel<T extends PufficusEntity> extends GeoModel<T> {
 
     @Override
     public ResourceLocation getAnimationResource(T t) {
-        return SCGExtra.asResource("animation/pufficus.geo.json");
+        return SCGExtra.asResource("animations/pufficus.animation.json");
     }
 }

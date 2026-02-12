@@ -23,6 +23,7 @@ import net.minecraft.world.phys.Vec3;
 
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.util.GeckoLibUtil;
@@ -76,22 +77,11 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
         return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
     }
 
-    public HumanoidArm getMainArm() {
-        return HumanoidArm.RIGHT;
-    }
-
 //    @Override
 //    protected void populateDefaultEquipmentSlots(RandomSource random, DifficultyInstance difficulty) {
 //        super.populateDefaultEquipmentSlots(random, difficulty);
 //        int i = random.nextInt(20);
 //    }
-
-    public static AttributeSupplier.Builder createAttributes() {
-        return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 30)
-                .add(Attributes.ARMOR, 12)
-                .add(Attributes.MOVEMENT_SPEED, 0.3);
-    }
 
     @Override
     public void performRangedAttack(LivingEntity livingEntity, float v) {
@@ -153,12 +143,21 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
     }
 
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(DefaultAnimations.genericWalkIdleController(this));
+        controllers.add(DefaultAnimations.genericAttackAnimation(this, DefaultAnimations.ATTACK_SWING));
     }
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.geoCache;
+    }
+
+
+    public static AttributeSupplier.Builder createAttributes() {
+        return Monster.createMonsterAttributes()
+                .add(Attributes.MAX_HEALTH, 30)
+                .add(Attributes.ARMOR, 12)
+                .add(Attributes.MOVEMENT_SPEED, 0.3);
     }
 }
