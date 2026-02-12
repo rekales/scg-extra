@@ -21,6 +21,6 @@ public class TurtlemanModel<T extends TurtlemanEntity> extends GeoModel<T> {
 
     @Override
     public ResourceLocation getAnimationResource(T t) {
-        return SCGExtra.asResource("animation/turtleman.geo.json");
+        return SCGExtra.asResource("animations/turtleman.animation.json");
     }
 }
