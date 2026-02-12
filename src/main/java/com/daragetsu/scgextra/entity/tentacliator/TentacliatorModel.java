@@ -37,6 +37,6 @@ public class TentacliatorModel <T extends TentacliatorEntity> extends GeoModel<T
 
 	@Override
 	public ResourceLocation getTextureResource(TentacliatorEntity entity) {
-		return SCGExtra.asResource("textures/entity/tentacliator/tentacliator.png");
+		return entity.getLocation();
 	}
 }

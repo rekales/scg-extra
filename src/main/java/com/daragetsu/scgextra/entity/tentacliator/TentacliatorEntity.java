@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.daragetsu.scgextra.Faction;
+import com.daragetsu.scgextra.SCGExtra;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
@@ -40,9 +43,22 @@ import top.ribs.scguns.item.animated.AnimatedUnderWaterGunItem;
 
 public class TentacliatorEntity extends Drowned implements GeoEntity{
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    private final ResourceLocation texture;
+    private int type = 0;
     public Random random = new Random();
     public TentacliatorEntity(EntityType<? extends Drowned> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
+        if (new Random().nextInt(0, 2)==1) {
+            texture = SCGExtra.asResource("textures/entity/tentacliator/tentacliator.png");
+            type = 1;
+        } else {
+            //TODO: change to the other texture
+            texture = SCGExtra.asResource("textures/entity/tentacliator/tentacliator.png");
+            type = 0;
+        }
+    }
+    public ResourceLocation getLocation(){
+        return texture;
     }
     @Override
     protected void populateDefaultEquipmentSlots(RandomSource pRandom, DifficultyInstance pDifficulty) {
@@ -134,5 +150,28 @@ public class TentacliatorEntity extends Drowned implements GeoEntity{
         }));
         controllers.add(new AnimationController<>(this, "special", 0, state -> PlayState.CONTINUE)
         .triggerableAnim("special_attack", RawAnimation.begin().thenPlay("special_attack")).triggerableAnim("attack", RawAnimation.begin().thenPlay("attack")));
+    }
+    @Override
+    protected void dropCustomDeathLoot(DamageSource pSource, int pLooting, boolean pRecentlyHit) {
+        int frogDartsCount = random.nextInt(1,4);
+        int advancedRoundsCount = random.nextInt(1,4);
+        int sacCount = random.nextInt(1,4);
+        for(int i = 0; i < frogDartsCount; i++){
+            this.spawnAtLocation(new ItemStack(ModItems.FROG_DART.get()));
+        }
+        for(int i = 0; i < advancedRoundsCount; i++){
+            this.spawnAtLocation(new ItemStack(ModItems.ADVANCED_ROUND.get()));
+        }
+        for(int i = 0; i < sacCount; i++){
+            if(type==0){
+                this.spawnAtLocation(new ItemStack(Items.INK_SAC));
+            }else if(type==1){
+                this.spawnAtLocation(new ItemStack(Items.GLOW_INK_SAC));
+            }
+        }
+    }
+    @Override
+    public boolean isBaby() {
+        return false;
     }
 }

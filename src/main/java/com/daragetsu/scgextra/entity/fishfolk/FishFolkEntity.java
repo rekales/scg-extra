@@ -152,4 +152,8 @@ public class FishFolkEntity extends Drowned implements GeoEntity{
         super.performRangedAttack(pTarget, pDistanceFactor);
         this.triggerAnim("special", "attack");
     }
+    @Override
+    public boolean isBaby() {
+        return false;
+    }
 }

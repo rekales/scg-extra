@@ -87,4 +87,8 @@ public class SalmonsaursEntity extends Hoglin{
             super.setTarget(pTarget);
         }
     }
+    @Override
+    public boolean isBaby() {
+        return false;
+    }
 }
