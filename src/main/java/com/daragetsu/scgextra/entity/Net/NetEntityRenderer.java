@@ -32,7 +32,7 @@ public class NetEntityRenderer extends ArrowRenderer<NetEntity>{
         pose.pushPose();
 
         pose.mulPose(Axis.YP.rotationDegrees(
-                Mth.lerp(partialTicks, entity.yRotO, entity.getYRot()) - 90));
+                Mth.lerp(partialTicks, entity.yRotO, entity.getYRot())));
         pose.mulPose(Axis.ZP.rotationDegrees(
                 Mth.lerp(partialTicks, entity.xRotO, entity.getXRot()) - 10));
 
