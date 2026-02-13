@@ -38,6 +38,7 @@ public class PufficusEntity extends Monster implements GeoEntity {
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     public static final RawAnimation ATTACK_SWING_ONCE = RawAnimation.begin().then("attack.swing", Animation.LoopType.PLAY_ONCE);
+    public static final RawAnimation ATTACK_THROW_ONCE = RawAnimation.begin().then("attack.throw", Animation.LoopType.PLAY_ONCE);
 
     public PufficusEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -46,7 +47,7 @@ public class PufficusEntity extends Monster implements GeoEntity {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0F, false));
-        this.goalSelector.addGoal(4, new ThrowNetGoal(this, 200, 8F));
+        this.goalSelector.addGoal(4, new ThrowNetGoal(this, 200, 12F));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 0.9));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
@@ -78,12 +79,16 @@ public class PufficusEntity extends Monster implements GeoEntity {
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(DefaultAnimations.genericWalkIdleController(this));
-        controllers.add(new AnimationController<>(this, "Attack", 0,
+        controllers.add(new AnimationController<>(this, "melee", 0,
                 state -> {
                     if (this.swinging) return state.setAndContinue(ATTACK_SWING_ONCE);
                     state.getController().forceAnimationReset();
                     return PlayState.STOP;
                 }).setAnimationSpeed(1.3)
+        );
+        controllers.add(new AnimationController<>(this, "throw", 0, state -> PlayState.CONTINUE)
+                .triggerableAnim("throw_net", ATTACK_THROW_ONCE)
+                .setAnimationSpeed(1.3)
         );
     }
 
@@ -125,10 +130,13 @@ public class PufficusEntity extends Monster implements GeoEntity {
                     double d1 = target.getY(0.3333333333333333) - net.getY();
                     double d2 = target.getZ() - this.mob.getZ();
                     double d3 = Math.sqrt(d0 * d0 + d2 * d2);
-                    net.shoot(d0, d1 + d3 * (double)0.2F, d2, 0.8F, (float)(14 - this.mob.level().getDifficulty().getId() * 4));
+                    net.shoot(d0, d1 + d3 * (double)0.2F, d2, 1F, (float)(14 - this.mob.level().getDifficulty().getId() * 4));
                     this.mob.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.mob.getRandom().nextFloat() * 0.4F + 0.8F));
                     this.mob.level().addFreshEntity(net);
                     this.cooldown = maxInterval;
+                    if (this.mob instanceof GeoEntity geoEntity) {
+                        geoEntity.triggerAnim("throw", "throw_net");
+                    }
                 }
             }
         }
