@@ -145,7 +145,6 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(DefaultAnimations.genericWalkIdleController(this));
-        controllers.add(DefaultAnimations.genericAttackAnimation(this, DefaultAnimations.ATTACK_SWING));
     }
 
     @Override
