@@ -2,6 +2,7 @@ package com.daragetsu.scgextra.entity.Net;
 
 import java.util.List;
 
+import com.daragetsu.scgextra.entity.ModEntities;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
@@ -20,9 +21,10 @@ public class NetEntity extends AbstractArrow{
         super(pEntityType, pLevel);
     }
 
-    public NetEntity(EntityType<? extends NetEntity> pEntityType, LivingEntity pShooter, Level pLevel) {
-        super(pEntityType, pShooter, pLevel);
+    public NetEntity(LivingEntity pShooter, Level pLevel) {
+        super(ModEntities.NET.get(), pShooter, pLevel);
     }
+
     @Override
     protected void onHitEntity(EntityHitResult entityHitResult) {
         if(entityHitResult.getEntity() instanceof Player p){

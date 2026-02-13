@@ -1,22 +1,20 @@
 package com.daragetsu.scgextra.entity.pufficus;
 
 import com.daragetsu.scgextra.Faction;
+import com.daragetsu.scgextra.SCGExtra;
+import com.daragetsu.scgextra.entity.Net.NetEntity;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
@@ -33,7 +31,6 @@ import top.ribs.scguns.config.EntityEquipmentConfig;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-// TODO: add net projectile
 // TODO: add datas
 // should there be a separate effect for ensared or just use slowness?
 @ParametersAreNonnullByDefault
@@ -48,8 +45,8 @@ public class PufficusEntity extends Monster implements GeoEntity {
 
     @Override
     protected void registerGoals() {
-        // TODO: add throw net behaviour
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0F, false));
+        this.goalSelector.addGoal(4, new ThrowNetGoal(this, 200, 8F));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 0.9));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
@@ -93,6 +90,48 @@ public class PufficusEntity extends Monster implements GeoEntity {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.geoCache;
+    }
+
+    public static class ThrowNetGoal extends Goal {
+
+        protected final PathfinderMob mob;
+        protected final int maxInterval;
+        protected final float minThrowDistance;
+        protected int cooldown;
+
+        public ThrowNetGoal(PathfinderMob mob, int maxInterval, float minThrowDistance) {
+            this.mob = mob;
+            this.maxInterval = maxInterval;
+            this.minThrowDistance = minThrowDistance;
+            this.cooldown = 0;
+        }
+
+        @Override
+        public boolean canUse() {
+            return this.mob.getTarget() != null;
+        }
+
+        @Override
+        public void tick() {
+            SCGExtra.LOGGER.debug(this.cooldown+"");
+
+            if (this.cooldown > 0) {
+                this.cooldown--;
+            } else {
+                LivingEntity target = this.mob.getTarget();
+                if (target != null && this.mob.closerThan(target, minThrowDistance)) {
+                    AbstractArrow net = new NetEntity(this.mob, this.mob.level());
+                    double d0 = target.getX() - this.mob.getX();
+                    double d1 = target.getY(0.3333333333333333) - net.getY();
+                    double d2 = target.getZ() - this.mob.getZ();
+                    double d3 = Math.sqrt(d0 * d0 + d2 * d2);
+                    net.shoot(d0, d1 + d3 * (double)0.2F, d2, 0.8F, (float)(14 - this.mob.level().getDifficulty().getId() * 4));
+                    this.mob.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.mob.getRandom().nextFloat() * 0.4F + 0.8F));
+                    this.mob.level().addFreshEntity(net);
+                    this.cooldown = maxInterval;
+                }
+            }
+        }
     }
 
 
