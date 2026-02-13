@@ -40,7 +40,7 @@ public class NetEntityRenderer extends ArrowRenderer<NetEntity>{
 
         pose.scale(2F, 2F, 2F);
 
-        VertexConsumer vc = buffer.getBuffer(RenderType.entityCutout(TEXTURE));
+        VertexConsumer vc = buffer.getBuffer(RenderType.entityCutoutNoCull(TEXTURE));
         model.renderToBuffer(pose, vc, light, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, 1f);
 
         pose.popPose();
