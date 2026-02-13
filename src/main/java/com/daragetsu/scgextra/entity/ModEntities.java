@@ -1,6 +1,9 @@
 package com.daragetsu.scgextra.entity;
 
 import com.daragetsu.scgextra.SCGExtra;
+import com.daragetsu.scgextra.entity.Net.NetEntity;
+import com.daragetsu.scgextra.entity.Net.NetEntityModel;
+import com.daragetsu.scgextra.entity.Net.NetEntityRenderer;
 import com.daragetsu.scgextra.entity.fishfolk.FishFolkEntity;
 
 import com.daragetsu.scgextra.entity.fishfolk.FishFolkRenderer;
@@ -55,6 +58,9 @@ public class ModEntities {
             .register("pufficus", () -> EntityType.Builder.of(PufficusEntity::new, MobCategory.MONSTER)
                     .sized(1F, 3F).build("pufficus"));
 
+    public static final RegistryObject<EntityType<NetEntity>> NET = ENTITY_TYPES
+            .register("net", () -> EntityType.Builder.<NetEntity>of(NetEntity::new, MobCategory.MISC).sized(4F, 1F).clientTrackingRange(4).updateInterval(20).build("net"));
+
 
     public static void register(IEventBus modEventBus){
         ENTITY_TYPES.register(modEventBus);
@@ -74,12 +80,14 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.GUARDIAN_STATUE.get(), GuardianStatueRenderer::new);
         EntityRenderers.register(ModEntities.TENTACLIATOR.get(), TentacliatorRenderer::new);
         EntityRenderers.register(ModEntities.PUFFICUS.get(), PufficusRenderer::new);
+        EntityRenderers.register(ModEntities.NET.get(), NetEntityRenderer::new);
     }
 
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
 //        event.registerLayerDefinition(FishFolkModel.LAYER_LOCATION, FishFolkModel::createBodyLayer);
 //        event.registerLayerDefinition(TurtlemanModel.LAYER_LOCATION, TurtlemanModel::createBodyLayer);
         event.registerLayerDefinition(SalmonsaursModel.LAYER_LOCATION, SalmonsaursModel::createBodyLayer);
+        event.registerLayerDefinition(NetEntityModel.LAYER_LOCATION, NetEntityModel::createBodyLayer);
 //        event.registerLayerDefinition(GuardianStatueModel.LAYER_LOCATION, GuardianStatueModel::createBodyLayer);
 //        event.registerLayerDefinition(TentacliatorModel.LAYER_LOCATION, TentacliatorModel::createBodyLayer);
 //        event.registerLayerDefinition(PufficusModel.LAYER_LOCATION, PufficusModel::createBodyLayer);
