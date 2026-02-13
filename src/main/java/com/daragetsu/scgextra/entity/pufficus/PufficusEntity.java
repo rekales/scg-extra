@@ -24,6 +24,7 @@ import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.Animation;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
@@ -39,6 +40,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class PufficusEntity extends Monster implements GeoEntity {
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+    public static final RawAnimation ATTACK_SWING_ONCE = RawAnimation.begin().then("attack.swing", Animation.LoopType.PLAY_ONCE);
 
     public PufficusEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -79,7 +81,13 @@ public class PufficusEntity extends Monster implements GeoEntity {
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(DefaultAnimations.genericWalkIdleController(this));
-        controllers.add(DefaultAnimations.genericAttackAnimation(this, DefaultAnimations.ATTACK_SWING));
+        controllers.add(new AnimationController<>(this, "Attack", 0,
+                state -> {
+                    if (this.swinging) return state.setAndContinue(ATTACK_SWING_ONCE);
+                    state.getController().forceAnimationReset();
+                    return PlayState.STOP;
+                }).setAnimationSpeed(1.3)
+        );
     }
 
     @Override
@@ -92,6 +100,6 @@ public class PufficusEntity extends Monster implements GeoEntity {
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 60)
                 .add(Attributes.ARMOR, 2)
-                .add(Attributes.MOVEMENT_SPEED, 0.3);
+                .add(Attributes.MOVEMENT_SPEED, 0.25);
     }
 }
