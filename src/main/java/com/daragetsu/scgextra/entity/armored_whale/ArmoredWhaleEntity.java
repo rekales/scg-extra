@@ -31,5 +31,14 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
                 .add(Attributes.MAX_HEALTH, 1000)
                 .add(Attributes.ARMOR, 6);
     }
+
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(
+            2, 
+            new SlamAttackGoal(this)
+        );
+    }
     
 }
