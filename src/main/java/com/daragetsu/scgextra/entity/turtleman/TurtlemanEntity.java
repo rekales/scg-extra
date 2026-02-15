@@ -23,6 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.constant.DefaultAnimations;
@@ -64,7 +65,7 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
 
         // TODO: approach enemy while walking backwards behaviour goal
         // Stunned Goal added on finalizeSpawn
-        this.goalSelector.addGoal(2, new TurtlemanGunAttackGoal<>(this, mainHandItem, 1.0F, AIType.RECKLESS, 3));
+        this.goalSelector.addGoal(2, new TurtlemanGunAttackGoal<>(this, mainHandItem, 1.0F, AIType.RECKLESS, 3, 10F));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 0.9));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
@@ -105,53 +106,49 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
     public void tick() {
         super.tick();
 
-//        if (this.getTarget() instanceof Player p) {
-//            //minimum AABB that's basically a 10 by 10 box centered on the turtleman
-//            AABB min = new AABB(
-//                this.getX()-5,
-//                this.getY()-5,
-//                this.getZ()-5,
-//                this.getX()+5,
-//                this.getY()+5,
-//                this.getZ()+5
-//            );
-//            //only do the custom movement if the player isn't in the box
-//            if(!min.contains(p.getEyePosition())){
-//                //----------------Rotation------------
-//                // Direction from turtleman to player
-//                double dx = p.getX() - this.getX();
-//                double dz = p.getZ() - this.getZ();
-//
-//                // yaw toward player, i just copied this from chatgpt cause i can't do maths lol
-//                float yawToPlayer = (float)(Math.toDegrees(Math.atan2(-dx, dz)));
-//
-//                // back faces the player
-//                float yawFromPlayer = yawToPlayer + 180f;
-//
-//                // Apply rotation
-//                this.setYRot(yawFromPlayer);
-//                this.yBodyRot = yawFromPlayer;
-//                this.yHeadRot = yawFromPlayer;
-//                //----------------Rotation------------
-//
-//                //----------------movement-------------
-//                //check if the player is looking at the back of the turtleman
-//                Vec3 forward = new Vec3(this.getForward().x, 0, this.getForward().z).normalize();
-//                Vec3 toPlayer = p.position().subtract(this.position()).normalize();
-//                double dot = forward.dot(toPlayer);
-//
-//                //-0.5 is basically a mid point cone so it's a average
-//                if (dot < -0.5) {
-//                    Vec3 toPlayerXZ = new Vec3(toPlayer.x, 0, toPlayer.z).normalize();
-//                    Vec3 awayFromPlayer = toPlayerXZ.scale(-1);
-//                    Vec3 backward = awayFromPlayer.scale(-0.1);
-//                    backward = new Vec3(backward.x, this.getDeltaMovement().y, backward.z);
-//                    this.setDeltaMovement(backward);
-//                    this.move(MoverType.SELF, backward);
-//                }
-//                //----------------movement-------------
-//            }
-//        }
+        this.goalSelector.getRunningGoals()
+                .filter(wrappedGoal -> wrappedGoal.getGoal() instanceof TurtlemanGunAttackGoal<?>)
+                .findFirst()
+                .ifPresent(wrappedGoal -> {
+
+                    // TODO: rewrite to put logic in the goal tick
+                    // TODO: override move control or something I dunno. I'm tired of dealing with this.
+                    if (wrappedGoal.getGoal() instanceof TurtlemanGunAttackGoal<?> goal && goal.active) {
+                        LivingEntity target = this.getTarget();
+                        if (target == null) return;
+
+                        // Direction from turtleman to player
+                        double dx = target.getX() - this.getX();
+                        double dz = target.getZ() - this.getZ();
+
+                        // yaw toward player, i just copied this from chatgpt cause i can't do maths lol
+                        float yawToPlayer = (float)(Math.toDegrees(Math.atan2(-dx, dz)));
+
+                        // back faces the player
+                        float yawFromPlayer = yawToPlayer + 180f;
+
+                        // Apply rotation
+                        this.setYRot(yawFromPlayer);
+                        this.yBodyRot = yawFromPlayer;
+                        this.yHeadRot = yawFromPlayer;
+
+                        //check if the player is looking at the back of the turtleman
+                        Vec3 forward = new Vec3(this.getForward().x, 0, this.getForward().z).normalize();
+                        Vec3 toPlayer = target.position().subtract(this.position()).normalize();
+                        double dot = forward.dot(toPlayer);
+
+                        //-0.5 is basically a mid point cone so it's a average
+                        if (dot < -0.5) {
+                            Vec3 toPlayerXZ = new Vec3(toPlayer.x, 0, toPlayer.z).normalize();
+                            Vec3 awayFromPlayer = toPlayerXZ.scale(-1);
+                            Vec3 backward = awayFromPlayer.scale(-0.1);
+                            backward = new Vec3(backward.x, this.getDeltaMovement().y, backward.z);
+                            this.setDeltaMovement(backward);
+                            this.move(MoverType.SELF, backward);
+                        }
+                    }
+
+                });
     }
 
     public @Nullable StunnedGoal getStunnedGoal() {
@@ -215,10 +212,14 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
                 .add(Attributes.MOVEMENT_SPEED, 0.3);
     }
 
-    public static class TurtlemanGunAttackGoal <T extends TurtlemanEntity> extends GunAttackGoal<T> {
+    private static class TurtlemanGunAttackGoal <T extends TurtlemanEntity> extends GunAttackGoal<T> {
 
-        public TurtlemanGunAttackGoal(T shooter, ItemStack gunStack, float speedModifier, AIType aiType, int difficulty) {
+        private final float minApproachDist;
+        public boolean active = false;
+
+        public TurtlemanGunAttackGoal(T shooter, ItemStack gunStack, float speedModifier, AIType aiType, int difficulty, float minApproachDist) {
             super(shooter, gunStack, speedModifier, aiType, difficulty);
+            this.minApproachDist = minApproachDist;
         }
 
         @Override
@@ -227,7 +228,19 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
                 return;
             }
 
-            super.tick();
+            LivingEntity target = this.shooter.getTarget();
+            if (target == null) return;
+
+            if (!this.shooter.closerThan(target, minApproachDist)
+                    && !this.isReloading
+                    && this.aimingStabilityTimer < 10) {  // Started aiming
+
+                this.active = true;
+
+            } else {
+                active = false;
+                super.tick();
+            }
         }
     }
 
