@@ -42,7 +42,9 @@ public class ModEntities {
 
     public static final RegistryObject<EntityType<TurtlemanEntity>> TURTLEMAN = ENTITY_TYPES
             .register("turtleman", () -> EntityType.Builder.of(TurtlemanEntity::new, MobCategory.MONSTER)
-                    .sized(0.6F, 1.95F).build("turtleman"));
+                    .updateInterval(1)
+                    .sized(0.6F, 1.95F)
+                    .build("turtleman"));
 
     public static final RegistryObject<EntityType<SalmonsaursEntity>> SALMONSAURS = ENTITY_TYPES
             .register("salmonsaurs", () -> EntityType.Builder.of(SalmonsaursEntity::new, MobCategory.MONSTER)
