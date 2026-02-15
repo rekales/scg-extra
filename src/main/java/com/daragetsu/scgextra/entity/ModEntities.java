@@ -64,7 +64,7 @@ public class ModEntities {
 
     public static final RegistryObject<EntityType<ArmoredWhaleEntity>> ARMORED_WHALE = ENTITY_TYPES
             .register("armored_whale", () -> EntityType.Builder.of(ArmoredWhaleEntity::new, MobCategory.MONSTER)
-                    .sized(10F, 5F)//armored whale should be huge right?
+                    .sized(5F, 5F)//i think we should use child elements like enderdragon but not sure
                     .build("armored_whale"));
 
     public static final RegistryObject<EntityType<NetEntity>> NET = ENTITY_TYPES
