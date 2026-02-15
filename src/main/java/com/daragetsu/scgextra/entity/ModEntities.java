@@ -4,6 +4,8 @@ import com.daragetsu.scgextra.SCGExtra;
 import com.daragetsu.scgextra.entity.Net.NetEntity;
 import com.daragetsu.scgextra.entity.Net.NetEntityModel;
 import com.daragetsu.scgextra.entity.Net.NetEntityRenderer;
+import com.daragetsu.scgextra.entity.armored_whale.ArmoredWhaleEntity;
+import com.daragetsu.scgextra.entity.armored_whale.ArmoredWhaleRenderer;
 import com.daragetsu.scgextra.entity.fishfolk.FishFolkEntity;
 
 import com.daragetsu.scgextra.entity.fishfolk.FishFolkRenderer;
@@ -58,6 +60,11 @@ public class ModEntities {
             .register("pufficus", () -> EntityType.Builder.of(PufficusEntity::new, MobCategory.MONSTER)
                     .sized(1F, 3F).build("pufficus"));
 
+    public static final RegistryObject<EntityType<ArmoredWhaleEntity>> ARMORED_WHALE = ENTITY_TYPES
+            .register("armored_whale", () -> EntityType.Builder.of(ArmoredWhaleEntity::new, MobCategory.MONSTER)
+                    .sized(10F, 5F)//armored whale should be huge right?
+                    .build("armored_whale"));
+
     public static final RegistryObject<EntityType<NetEntity>> NET = ENTITY_TYPES
             .register("net", () -> EntityType.Builder.<NetEntity>of(NetEntity::new, MobCategory.MISC).sized(4F, 1F).clientTrackingRange(4).updateInterval(20).build("net"));
 
@@ -81,6 +88,7 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.TENTACLIATOR.get(), TentacliatorRenderer::new);
         EntityRenderers.register(ModEntities.PUFFICUS.get(), PufficusRenderer::new);
         EntityRenderers.register(ModEntities.NET.get(), NetEntityRenderer::new);
+        EntityRenderers.register(ModEntities.ARMORED_WHALE.get(), ArmoredWhaleRenderer::new);
     }
 
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
@@ -100,5 +108,6 @@ public class ModEntities {
         event.put(ModEntities.GUARDIAN_STATUE.get(), GuardianStatueEntity.createAttributes().build());
         event.put(ModEntities.TENTACLIATOR.get(), TentacliatorEntity.createAttributes().build());
         event.put(ModEntities.PUFFICUS.get(), PufficusEntity.createAttributes().build());
+        event.put(ModEntities.ARMORED_WHALE.get(), ArmoredWhaleEntity.createAttributes().build());
     }
 }

@@ -1,0 +1,45 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation": {
+			"loop": true,
+			"bones": {
+				"mouth": {
+					"rotation": {
+						"vector": [-15, 0, 0]
+					}
+				},
+				"bone3": {
+					"rotation": {
+						"vector": [-7.5, 0, 0]
+					}
+				},
+				"tail": {
+					"rotation": {
+						"vector": [-5, 0, 0]
+					}
+				},
+				"tail_fins": {
+					"rotation": {
+						"vector": [-10, 0, 0]
+					}
+				},
+				"l_fin": {
+					"rotation": {
+						"vector": [-12.5, 0, 0]
+					}
+				},
+				"r_fin": {
+					"rotation": {
+						"vector": [-12.5, 0, 0]
+					}
+				},
+				"bone5": {
+					"rotation": {
+						"vector": [0, 0, 37.5]
+					}
+				}
+			}
+		}
+	}
+}
