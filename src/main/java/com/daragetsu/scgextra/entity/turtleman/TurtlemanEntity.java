@@ -22,8 +22,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -46,6 +44,10 @@ import java.util.EnumSet;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEntity {
+
+    public static final RawAnimation TRANSITION_IDLE_STUNNED = RawAnimation.begin().then("transition.idle_stunned", Animation.LoopType.PLAY_ONCE);
+    public static final RawAnimation STUNNED = RawAnimation.begin().then("misc.stunned", Animation.LoopType.LOOP);
+    public static final RawAnimation TRANSITION_STUNNED_IDLE = RawAnimation.begin().then("transition.stunned_idle", Animation.LoopType.PLAY_ONCE);
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
@@ -175,12 +177,6 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
         return result;
     }
 
-    public static final RawAnimation TRANSITION_IDLE_STUNNED = RawAnimation.begin().then("transition.idle_stunned", Animation.LoopType.PLAY_ONCE);
-    public static final RawAnimation STUNNED = RawAnimation.begin().then("misc.stunned", Animation.LoopType.LOOP);
-    public static final RawAnimation TRANSITION_STUNNED_IDLE = RawAnimation.begin().then("transition.stunned_idle", Animation.LoopType.PLAY_ONCE);
-
-
-
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "Walk/Idle", 0,
@@ -228,7 +224,6 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
         @Override
         public void tick() {
             if (this.shooter.stunnedGoal != null && this.shooter.stunnedGoal.isStunned()) {
-                SCGExtra.LOGGER.debug("stopping");
                 return;
             }
 
@@ -289,8 +284,6 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
             } else if (this.stunTimer == 10) {
                 this.mob.triggerAnim("stunned", "end_stun");
             }
-
-            SCGExtra.LOGGER.debug("stunned: " + this.stunTimer);
         }
     }
 }
