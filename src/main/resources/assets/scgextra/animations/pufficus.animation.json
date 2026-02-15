@@ -190,17 +190,44 @@
 			}
 		},
 		"attack.throw": {
-			"animation_length": 0.5,
+			"animation_length": 1.25,
 			"bones": {
 				"left_arm": {
 					"rotation": {
 						"0.0": {
 							"vector": [0, 0, 0]
 						},
-						"0.25": {
-							"vector": [-110, 0, 0]
+						"0.1667": {
+							"vector": [25, 0, 0]
+						},
+						"0.3333": {
+							"pre": {
+								"vector": [25, -15, 15]
+							},
+							"post": {
+								"vector": [25, -15, 15]
+							},
+							"lerp_mode": "catmullrom"
 						},
 						"0.5": {
+							"vector": [25, 0, 0]
+						},
+						"0.75": {
+							"pre": {
+								"vector": [25, 0, 0]
+							},
+							"post": {
+								"vector": [25, 0, 0]
+							},
+							"lerp_mode": "catmullrom"
+						},
+						"0.9167": {
+							"post": {
+								"vector": [-160, 0, 0]
+							},
+							"lerp_mode": "catmullrom"
+						},
+						"1.25": {
 							"vector": [0, 0, 0]
 						}
 					}
