@@ -16,6 +16,16 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 public class ArmoredWhaleEntity extends Monster implements GeoEntity {
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private boolean didSlam = false;
+    //commented out cause i was saving
+    // private final ArmoredWhalePart[] subEntities;
+    // public final ArmoredWhalePart head;
+    // private final ArmoredWhalePart neck;
+    // private final ArmoredWhalePart body;
+    // private final ArmoredWhalePart tail1;
+    // private final ArmoredWhalePart tail2;
+    // private final ArmoredWhalePart tail3;
+    // private final ArmoredWhalePart wing1;
+    // private final ArmoredWhalePart wing2;
     //gonna leave the entity as is, change to whatever you need
     public ArmoredWhaleEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
