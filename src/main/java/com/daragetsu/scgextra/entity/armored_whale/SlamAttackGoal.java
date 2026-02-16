@@ -5,11 +5,8 @@ import java.util.Random;
 
 import com.daragetsu.scgextra.Faction;
 
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 
 public class SlamAttackGoal extends Goal{
