@@ -30,6 +30,7 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
     private final ArmoredWhalePart body;
     private final ArmoredWhalePart tail1;
     private final ArmoredWhalePart tail2;
+    private boolean shouldFlash = false;
     //gonna leave the entity as is, change to whatever you need
     public ArmoredWhaleEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -134,5 +135,11 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
     }
     public boolean isPickable() {
         return false;
+    }
+    public boolean getShouldFlash(){
+        return this.shouldFlash;
+    }
+    public void setShouldFlash(boolean flash){
+        this.shouldFlash = flash;
     }
 }

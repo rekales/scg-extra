@@ -42,14 +42,17 @@ public class SlamAttackGoal extends Goal{
     public void tick() {
         super.tick();
         ticks++;
-        if(ticks<=20){
+        if(ticks <= 10){
+            entity.setShouldFlash(true);
+        }if(ticks > 10 && ticks<=30){
+            entity.setShouldFlash(false);
             entity.setDeltaMovement(
                 entity.getDeltaMovement().x(), 
                 0.3, 
                 entity.getDeltaMovement().z()
             );
             entity.setDidSlam(true);
-        }else if(ticks > 20 && entity.onGround()){//only runs after the jump and once it's on the ground
+        }else if(ticks > 30 && entity.onGround()){//only runs after the jump and once it's on the ground
             AABB fiveBlockRangeAABB = new AABB(
                 entity.getX()-5,
                 entity.getY()-5,
