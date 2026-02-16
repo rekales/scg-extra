@@ -11,6 +11,8 @@ import com.daragetsu.scgextra.entity.fishfolk.FishFolkEntity;
 import com.daragetsu.scgextra.entity.fishfolk.FishFolkRenderer;
 import com.daragetsu.scgextra.entity.guardian_statue.GuardianStatueEntity;
 import com.daragetsu.scgextra.entity.guardian_statue.GuardianStatueRenderer;
+import com.daragetsu.scgextra.entity.projectile.DeployedMineEntity;
+import com.daragetsu.scgextra.entity.projectile.DeployedMineRenderer;
 import com.daragetsu.scgextra.entity.pufficus.PufficusEntity;
 import com.daragetsu.scgextra.entity.pufficus.PufficusRenderer;
 import com.daragetsu.scgextra.entity.salmonsaurs.SalmonsaursEntity;
@@ -70,6 +72,10 @@ public class ModEntities {
     public static final RegistryObject<EntityType<NetEntity>> NET = ENTITY_TYPES
             .register("net", () -> EntityType.Builder.<NetEntity>of(NetEntity::new, MobCategory.MISC).sized(4F, 1F).clientTrackingRange(4).updateInterval(20).build("net"));
 
+    public static final RegistryObject<EntityType<DeployedMineEntity>> DEPLOYED_MINE = ENTITY_TYPES
+            .register("deployed_mine", () -> EntityType.Builder.of(DeployedMineEntity::new, MobCategory.MISC)
+                    .sized(1F, .5F)
+                    .build("deployed_mine"));
 
     public static void register(IEventBus modEventBus){
         ENTITY_TYPES.register(modEventBus);
@@ -91,6 +97,7 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.PUFFICUS.get(), PufficusRenderer::new);
         EntityRenderers.register(ModEntities.NET.get(), NetEntityRenderer::new);
         EntityRenderers.register(ModEntities.ARMORED_WHALE.get(), ArmoredWhaleRenderer::new);
+        EntityRenderers.register(ModEntities.DEPLOYED_MINE.get(), DeployedMineRenderer::new);
     }
 
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
