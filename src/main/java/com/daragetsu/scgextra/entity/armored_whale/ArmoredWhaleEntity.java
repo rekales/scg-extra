@@ -49,14 +49,14 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
         );
     }
 
-    public void setDidAlam(boolean slam){
+    public void setDidSlam(boolean slam){
         this.didSlam = slam;
     }
 
     @Override
     public boolean hurt(DamageSource pSource, float pAmount) {
         if(this.didSlam){
-            setDidAlam(false);
+            setDidSlam(false);
             return false;
         }
         return super.hurt(pSource, pAmount);

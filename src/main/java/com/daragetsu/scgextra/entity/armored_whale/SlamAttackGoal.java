@@ -48,7 +48,7 @@ public class SlamAttackGoal extends Goal{
                 0.3, 
                 entity.getDeltaMovement().z()
             );
-            entity.setDidAlam(true);
+            entity.setDidSlam(true);
         }else if(ticks > 20 && entity.onGround()){//only runs after the jump and once it's on the ground
             AABB fiveBlockRangeAABB = new AABB(
                 entity.getX()-5,
