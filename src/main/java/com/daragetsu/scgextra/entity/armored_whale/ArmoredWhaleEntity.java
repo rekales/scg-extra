@@ -11,6 +11,8 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+// import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+// import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
@@ -23,18 +25,22 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private boolean didSlam = false;
     //commented out cause i was saving
-    // private final ArmoredWhalePart[] subEntities;
-    // public final ArmoredWhalePart head;
-    // private final ArmoredWhalePart neck;
-    // private final ArmoredWhalePart body;
-    // private final ArmoredWhalePart tail1;
-    // private final ArmoredWhalePart tail2;
-    // private final ArmoredWhalePart tail3;
-    // private final ArmoredWhalePart wing1;
-    // private final ArmoredWhalePart wing2;
+    private final ArmoredWhalePart[] subEntities;
+    public final ArmoredWhalePart head;
+    private final ArmoredWhalePart body;
+    private final ArmoredWhalePart tail1;
+    private final ArmoredWhalePart tail2;
     //gonna leave the entity as is, change to whatever you need
     public ArmoredWhaleEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
+        this.head = new ArmoredWhalePart(this, "head", this.getBbWidth(), this.getBbHeight());
+        this.body = new ArmoredWhalePart(this, "body", this.getBbWidth(), this.getBbHeight());
+        this.tail1 = new ArmoredWhalePart(this, "tail1", this.getBbWidth(), this.getBbHeight());
+        this.tail2 = new ArmoredWhalePart(this, "tail2", this.getBbWidth(), this.getBbHeight());
+        this.subEntities = new ArmoredWhalePart[]{this.head, this.body, this.tail1, this.tail2};
+        this.setHealth(this.getMaxHealth());
+        this.noCulling = true;
+        this.setId(ENTITY_COUNTER.getAndAdd(this.subEntities.length + 1) + 1); 
     }
 
     @Override
@@ -86,5 +92,47 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
             return false;
         }
         return super.hurt(pSource, pAmount);
+    }
+    @Override
+    public void setId(int pId) {
+        super.setId(pId);
+        for (int i = 0; i < this.subEntities.length; i++)
+            this.subEntities[i].setId(pId + i + 1);
+    }
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        for (int i = 0; i < this.subEntities.length; i++) {
+            ArmoredWhalePart part = this.subEntities[i];
+            part.xo = part.getX();
+            part.yo = part.getY();
+            part.zo = part.getZ();
+            part.xOld = part.getX();
+            part.yOld = part.getY();
+            part.zOld = part.getZ();
+        }
+        this.head.setPos(this.getX(), this.getY(), this.getZ());
+        this.body.setPos(this.getX(), this.getY(), head.getZ() + this.getBbWidth());
+        this.tail1.setPos(this.getX(), this.getY(), body.getZ() + this.getBbWidth());
+        this.tail2.setPos(this.getX(), this.getY(), tail1.getZ() + this.getBbWidth());
+        
+        this.head.refreshDimensions();
+        this.body.refreshDimensions();
+        this.tail1.refreshDimensions();
+        this.tail2.refreshDimensions();
+    }
+    public ArmoredWhalePart[] getSubEntities() {
+        return this.subEntities;
+    }
+    @Override
+    public net.minecraftforge.entity.PartEntity<?>[] getParts() {
+        return this.subEntities;
+    }
+    @Override
+    public boolean isMultipartEntity() {
+        return true;
+    }
+    public boolean isPickable() {
+        return false;
     }
 }
