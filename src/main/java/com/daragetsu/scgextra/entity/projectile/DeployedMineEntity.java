@@ -18,11 +18,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class DeployedMineEntity extends ThrowableProjectile {
 
-
     public DeployedMineEntity(EntityType<? extends DeployedMineEntity> entityType, Level level) {
         super(entityType, level);
     }
-
     @Override
     protected void onHitBlock(BlockHitResult result) {
         super.onHitBlock(result);
