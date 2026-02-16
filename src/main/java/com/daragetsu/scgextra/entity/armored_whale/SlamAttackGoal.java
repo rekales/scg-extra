@@ -5,8 +5,11 @@ import java.util.Random;
 
 import com.daragetsu.scgextra.Faction;
 
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 
 public class SlamAttackGoal extends Goal{
@@ -48,6 +51,7 @@ public class SlamAttackGoal extends Goal{
                 0.3, 
                 entity.getDeltaMovement().z()
             );
+            entity.setDidAlam(true);
         }else if(ticks > 20 && entity.onGround()){//only runs after the jump and once it's on the ground
             AABB fiveBlockRangeAABB = new AABB(
                 entity.getX()-5,
@@ -65,8 +69,8 @@ public class SlamAttackGoal extends Goal{
                 entity.getY()+12,
                 entity.getZ()+12
             );
-            List<LivingEntity> entitiesInFiveBlocks = entity.level().getEntitiesOfClass(LivingEntity.class, fiveBlockRangeAABB, e -> !Faction.isFriendlies(entity, e));
-            List<LivingEntity> entitiesInTwelveBlocks = entity.level().getEntitiesOfClass(LivingEntity.class, twelveBlockRangeAABB, e -> !Faction.isFriendlies(entity, e));
+            List<LivingEntity> entitiesInFiveBlocks = entity.level().getEntitiesOfClass(LivingEntity.class, fiveBlockRangeAABB, e -> !Faction.isFriendlies(entity, e) && !e.is(entity));
+            List<LivingEntity> entitiesInTwelveBlocks = entity.level().getEntitiesOfClass(LivingEntity.class, twelveBlockRangeAABB, e -> !Faction.isFriendlies(entity, e) && !e.is(entity));
             // entities within 5 blocks get 30 damage,
             // entities within 12 blocks get 10 damage,
 

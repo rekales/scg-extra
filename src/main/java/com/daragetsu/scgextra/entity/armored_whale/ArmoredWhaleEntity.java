@@ -1,5 +1,6 @@
 package com.daragetsu.scgextra.entity.armored_whale;
 
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -14,6 +15,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class ArmoredWhaleEntity extends Monster implements GeoEntity {
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+    private boolean didSlam = false;
     //gonna leave the entity as is, change to whatever you need
     public ArmoredWhaleEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -45,6 +47,19 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
             2, 
             new NearestAttackableTargetGoal<>(this, Player.class, true, false)
         );
+    }
+
+    public void setDidAlam(boolean slam){
+        this.didSlam = slam;
+    }
+
+    @Override
+    public boolean hurt(DamageSource pSource, float pAmount) {
+        if(this.didSlam){
+            setDidAlam(false);
+            return false;
+        }
+        return super.hurt(pSource, pAmount);
     }
     
 }
