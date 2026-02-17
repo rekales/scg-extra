@@ -1,5 +1,8 @@
 package com.daragetsu.scgextra.entity.armored_whale;
 
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.damagesource.DamageSource;
 import com.daragetsu.scgextra.Faction;
 import net.minecraft.world.entity.EntityType;
@@ -22,6 +25,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public class ArmoredWhaleEntity extends Monster implements GeoEntity {
+
+    private static final EntityDataAccessor<Boolean> EYE_FLASH =
+            SynchedEntityData.defineId(ArmoredWhaleEntity.class, EntityDataSerializers.BOOLEAN);
+
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private boolean didSlam = false;
     //commented out cause i was saving
@@ -30,8 +37,7 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
     private final ArmoredWhalePart body;
     private final ArmoredWhalePart tail1;
     private final ArmoredWhalePart tail2;
-    private boolean shouldFlash = false;
-    //gonna leave the entity as is, change to whatever you need
+
     public ArmoredWhaleEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         this.head = new ArmoredWhalePart(this, "head", this.getBbWidth(), this.getBbHeight());
@@ -136,10 +142,18 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
     public boolean isPickable() {
         return false;
     }
-    public boolean getShouldFlash(){
-        return this.shouldFlash;
+
+    public boolean getEyeFlash(){
+        return this.entityData.get(EYE_FLASH);
     }
-    public void setShouldFlash(boolean flash){
-        this.shouldFlash = flash;
+
+    public void setEyeFlash(boolean flash){
+        this.entityData.set(EYE_FLASH, flash);
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(EYE_FLASH, false);
     }
 }

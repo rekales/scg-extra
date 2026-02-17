@@ -5,8 +5,6 @@ import java.util.Random;
 
 import com.daragetsu.scgextra.Faction;
 
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.AABB;
@@ -45,10 +43,9 @@ public class SlamAttackGoal extends Goal{
         super.tick();
         ticks++;
         if(ticks <= 10){
-            entity.setShouldFlash(true);
-            entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 10, 255));
+            entity.setEyeFlash(true);
         }if(ticks > 10 && ticks<=30){
-            entity.setShouldFlash(false);
+            entity.setEyeFlash(false);
             entity.setDeltaMovement(
                 entity.getDeltaMovement().x(), 
                 0.3, 
