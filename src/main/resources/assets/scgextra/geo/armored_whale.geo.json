@@ -7,8 +7,8 @@
 				"texture_width": 1024,
 				"texture_height": 1024,
 				"visible_bounds_width": 40,
-				"visible_bounds_height": 9.5,
-				"visible_bounds_offset": [0, 4.25, 0]
+				"visible_bounds_height": 11.5,
+				"visible_bounds_offset": [0, 5.25, 0]
 			},
 			"bones": [
 				{
@@ -23,6 +23,7 @@
 						{"origin": [-22, 30, -55], "size": [44, 28, 89], "inflate": 0.1, "uv": [0, 256]},
 						{"origin": [-21, 57, -55], "size": [42, 9, 87], "uv": [266, 256]},
 						{"origin": [-14, 71, -3], "size": [28, 41, 29], "pivot": [0, 78, 12], "rotation": [0, -45, 0], "uv": [422, 531]},
+						{"origin": [-9, 106, 2], "size": [18, 16, 19], "pivot": [0, 83, 12], "rotation": [0, -45, 0], "uv": [526, 651]},
 						{"origin": [-9, 106, 2], "size": [18, 16, 19], "pivot": [0, 83, 12], "rotation": [0, -45, 0], "uv": [526, 651]},
 						{"origin": [-22, 64, -12], "size": [2, 34, 46], "inflate": 0.1, "uv": [540, 0]},
 						{"origin": [-22, 64, -41], "size": [2, 22, 29], "inflate": 0.1, "uv": [402, 650]},
@@ -46,6 +47,15 @@
 						{"origin": [-20, 96, 32], "size": [40, 3, 2], "inflate": 0.1499, "uv": [146, 444]},
 						{"origin": [-10, 71.8, 34], "size": [20, 23, 2], "uv": [510, 184]},
 						{"origin": [-8, 73.8, 36], "size": [16, 19, 8], "uv": [236, 586]}
+					]
+				},
+				{
+					"name": "water_splash",
+					"parent": "head",
+					"pivot": [0, 111, 12],
+					"cubes": [
+						{"origin": [-5, 122, 6], "size": [10, 33, 11], "pivot": [0, 111, 12], "rotation": [0, -45, 0], "uv": [616, 733]},
+						{"origin": [-6, 122, 5], "size": [12, 16, 13], "pivot": [0, 99, 12], "rotation": [0, -45, 0], "uv": [560, 687]}
 					]
 				},
 				{

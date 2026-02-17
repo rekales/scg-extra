@@ -36,6 +36,7 @@ public class SlamAttackGoal extends Goal{
 
     @Override
     public boolean canContinueToUse() {
+        if(entity.getTarget()==null)entity.setEyeFlash(false);
         return ticks <= 60 && entity.getTarget() != null && cooldown<=0;//~22 ticks for going up, ~22 ticks coming down and then apply the damage,the few ticks extra are just to be sure
     }
     @Override

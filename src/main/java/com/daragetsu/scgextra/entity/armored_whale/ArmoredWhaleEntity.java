@@ -28,6 +28,9 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
 
     private static final EntityDataAccessor<Boolean> EYE_FLASH =
             SynchedEntityData.defineId(ArmoredWhaleEntity.class, EntityDataSerializers.BOOLEAN);
+    
+            private static final EntityDataAccessor<Boolean> WATER_SPLASH =
+            SynchedEntityData.defineId(ArmoredWhaleEntity.class, EntityDataSerializers.BOOLEAN);
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private boolean didSlam = false;
@@ -69,6 +72,7 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(4, new SlamAttackGoal(this));
+        this.goalSelector.addGoal(4, new SplashWaterGoal(this));
         this.goalSelector.addGoal(3, new DeployMinesGoal(this, 800, 1.1F, 4, 6));
 
         // Bosses will prioritize players and does not require line of sight to maintain targeting to avoid cheese
@@ -161,9 +165,18 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
         this.entityData.set(EYE_FLASH, flash);
     }
 
+    public boolean getWaterSplash(){
+        return this.entityData.get(WATER_SPLASH);
+    }
+
+    public void setWaterSplash(boolean splash){
+        this.entityData.set(WATER_SPLASH, splash);
+    }
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(EYE_FLASH, false);
+        this.entityData.define(WATER_SPLASH, false);
     }
 }
