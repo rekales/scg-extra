@@ -42,8 +42,6 @@ public class DeployMinesGoal extends Goal {
 
     @Override
     public void tick() {
-        SCGExtra.LOGGER.debug("tick");
-
         if (this.throwTicks > 0) {
             this.throwTicks--;
         }
