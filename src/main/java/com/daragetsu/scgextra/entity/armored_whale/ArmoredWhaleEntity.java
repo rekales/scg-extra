@@ -109,8 +109,8 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
     @Override
     public void aiStep() {
         super.aiStep();
-        for (int i = 0; i < this.subEntities.length; i++) {
-            ArmoredWhalePart part = this.subEntities[i];
+
+        for (ArmoredWhalePart part : this.subEntities) {
             part.xo = part.getX();
             part.yo = part.getY();
             part.zo = part.getZ();
@@ -118,15 +118,25 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
             part.yOld = part.getY();
             part.zOld = part.getZ();
         }
-        this.head.setPos(this.getX(), this.getY(), this.getZ());
-        this.body.setPos(this.getX(), this.getY(), head.getZ() + this.getBbWidth());
-        this.tail1.setPos(this.getX(), this.getY(), body.getZ() + this.getBbWidth());
-        this.tail2.setPos(this.getX(), this.getY(), tail1.getZ() + this.getBbWidth());
-        
-        this.head.refreshDimensions();
-        this.body.refreshDimensions();
-        this.tail1.refreshDimensions();
-        this.tail2.refreshDimensions();
+
+        double x = this.getX();
+        double y = this.getY();
+        double z = this.getZ();
+
+        float[] offsets = new float[] { 0f, this.getBbWidth(), this.getBbWidth() * 2, this.getBbWidth() * 3 };
+
+        double yawRad = Math.toRadians(this.getYRot());
+
+        for (int i = 0; i < this.subEntities.length; i++) {
+            ArmoredWhalePart part = this.subEntities[i];
+            float distance = offsets[i];
+
+            double offsetX = -Math.sin(yawRad) * distance;
+            double offsetZ = Math.cos(yawRad) * distance;
+
+            part.setPos(x + offsetX, y, z + offsetZ);
+            part.refreshDimensions();
+        }
     }
     public ArmoredWhalePart[] getSubEntities() {
         return this.subEntities;
