@@ -60,7 +60,7 @@ public class SplashWaterGoal extends Goal{
                 
                 if (distSq <= radius * radius) {                    
                     if(!entities.contains(e) && Faction.isFriendlies(this.mob, e)){
-                        e.addEffect(new MobEffectInstance(ModEffects.WHALER_REGEN_EFFECT.get(), random.nextInt(40, 101)));
+                        e.addEffect(new MobEffectInstance(ModEffects.WHALER_REGEN_EFFECT.get(), 100));
                         entities.add(e);
                     }
                 }

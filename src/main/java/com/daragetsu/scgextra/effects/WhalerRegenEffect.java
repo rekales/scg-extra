@@ -12,7 +12,7 @@ public class WhalerRegenEffect extends MobEffect{
     @Override
     public void applyEffectTick(LivingEntity pLivingEntity, int pAmplifier) {
         super.applyEffectTick(pLivingEntity, pAmplifier);
-        pLivingEntity.heal(0.5F);
+        pLivingEntity.heal(0.04F);
     }
     @Override
     public boolean isDurationEffectTick(int pDuration, int pAmplifier) {
