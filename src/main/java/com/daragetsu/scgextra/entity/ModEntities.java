@@ -11,6 +11,7 @@ import com.daragetsu.scgextra.entity.fishfolk.FishFolkEntity;
 import com.daragetsu.scgextra.entity.fishfolk.FishFolkRenderer;
 import com.daragetsu.scgextra.entity.guardian_statue.GuardianStatueEntity;
 import com.daragetsu.scgextra.entity.guardian_statue.GuardianStatueRenderer;
+import com.daragetsu.scgextra.entity.projectile.ArmoredWhaleProjectileEntity;
 import com.daragetsu.scgextra.entity.projectile.DeployedMineEntity;
 import com.daragetsu.scgextra.entity.projectile.DeployedMineRenderer;
 import com.daragetsu.scgextra.entity.pufficus.PufficusEntity;
@@ -34,6 +35,7 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import top.ribs.scguns.entity.client.EnemyProjectileRenderer;
 
 public class ModEntities {
     private static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, SCGExtra.MOD_ID);
@@ -78,6 +80,16 @@ public class ModEntities {
                     .sized(1F, .5F)
                     .build("deployed_mine"));
 
+    // Copied from SCGuns ModEntities.ENEMY_PROJECTILE
+    public static final RegistryObject<EntityType<ArmoredWhaleProjectileEntity>> WHALE_PROJECTILE = ENTITY_TYPES
+            .register("whale_tank_projectile", () -> EntityType.Builder.of(ArmoredWhaleProjectileEntity::create, MobCategory.MISC)
+                    .sized(0.5F, 0.5F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(1)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build("whale_tank_projectile"));
+
+
     public static void register(IEventBus modEventBus){
         ENTITY_TYPES.register(modEventBus);
 
@@ -99,16 +111,12 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.NET.get(), NetEntityRenderer::new);
         EntityRenderers.register(ModEntities.ARMORED_WHALE.get(), ArmoredWhaleRenderer::new);
         EntityRenderers.register(ModEntities.DEPLOYED_MINE.get(), DeployedMineRenderer::new);
+        EntityRenderers.register(ModEntities.WHALE_PROJECTILE.get(), EnemyProjectileRenderer::new);
     }
 
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
-//        event.registerLayerDefinition(FishFolkModel.LAYER_LOCATION, FishFolkModel::createBodyLayer);
-//        event.registerLayerDefinition(TurtlemanModel.LAYER_LOCATION, TurtlemanModel::createBodyLayer);
         event.registerLayerDefinition(SalmonsaursModel.LAYER_LOCATION, SalmonsaursModel::createBodyLayer);
         event.registerLayerDefinition(NetEntityModel.LAYER_LOCATION, NetEntityModel::createBodyLayer);
-//        event.registerLayerDefinition(GuardianStatueModel.LAYER_LOCATION, GuardianStatueModel::createBodyLayer);
-//        event.registerLayerDefinition(TentacliatorModel.LAYER_LOCATION, TentacliatorModel::createBodyLayer);
-//        event.registerLayerDefinition(PufficusModel.LAYER_LOCATION, PufficusModel::createBodyLayer);
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event){
