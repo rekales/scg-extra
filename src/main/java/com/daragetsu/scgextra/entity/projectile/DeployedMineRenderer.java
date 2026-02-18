@@ -22,6 +22,7 @@ public class DeployedMineRenderer extends EntityRenderer<DeployedMineEntity> {
         this.blockRenderer = context.getBlockRenderDispatcher();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void render(DeployedMineEntity entity, float entityYaw, float partialTick,
                        PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
@@ -32,7 +33,6 @@ public class DeployedMineRenderer extends EntityRenderer<DeployedMineEntity> {
         poseStack.translate(-0.5, 0, -0.5);
 
         BlockState state = ModBlocks.MINE_UNIT.get().defaultBlockState();
-        //noinspection deprecation
         this.blockRenderer.renderSingleBlock(
                 state,
                 poseStack,

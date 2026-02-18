@@ -29,6 +29,12 @@ public class DeployMinesGoal extends Goal {
     }
 
     @Override
+    public void start() {
+        super.start();
+        this.cooldown = maxInterval;
+    }
+
+    @Override
     public void stop() {
         super.stop();
         this.throwTicks = 0;
