@@ -5,6 +5,8 @@ import java.util.Random;
 
 import com.daragetsu.scgextra.Faction;
 
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.AABB;
@@ -91,5 +93,28 @@ public class SlamAttackGoal extends Goal{
     public void stop() {
         cooldown=600;//start cooldown after the whole attack finishes
         ticks = 0;
+        if(!this.entity.level().isClientSide){
+            double radius = 0.0;
+            for(int i = 0; i < 12; i++){
+                for (int j = 0; j < 360; j += 10) {
+                    double rad = Math.toRadians(j);
+                    double x = this.entity.getX() + Math.cos(rad) * radius;
+                    double z = this.entity.getZ() + Math.sin(rad) * radius;
+                    ServerLevel level = (ServerLevel) this.entity.level();
+                    level.sendParticles(
+                        ParticleTypes.SMOKE, 
+                        x, 
+                        this.entity.getY()+1,
+                        z,
+                        20,
+                        0.4,
+                        0.4,
+                        0.4,
+                        0
+                    );
+                }
+                radius+=1;
+            }
+        }
     }
 }

@@ -76,10 +76,10 @@ public class SplashWaterGoal extends Goal{
                         x, 
                         this.mob.getY()+j, 
                         z,
-                        1,
-                        0,
-                        0,
-                        0,
+                        20,
+                        0.4,
+                        0.4,
+                        0.4,
                         0
                     );
                 }
