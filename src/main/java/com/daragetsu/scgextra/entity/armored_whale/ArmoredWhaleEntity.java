@@ -11,6 +11,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
@@ -74,6 +75,9 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(4, new SlamAttackGoal(this));
+
+        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 1.0));
+
         this.goalSelector.addGoal(4, new SplashWaterGoal(this));
         this.goalSelector.addGoal(3, new DeployMinesGoal(this, 800, 1.1F, 4, 6));
 
@@ -115,6 +119,7 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
     @Override
     public void aiStep() {
         super.aiStep();
+        updateSubentities();
     }
     public ArmoredWhalePart[] getSubEntities() {
         return this.subEntities;
@@ -170,6 +175,11 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
         float[] offsets = new float[] { 0f, this.getBbWidth(), this.getBbWidth() * 2, this.getBbWidth() * 3 };
 
         double yawRad = Math.toRadians(this.getYRot());
+        if(this.yHeadRotO!=this.yHeadRot){
+            yawRad = Math.toRadians(this.getYHeadRot());
+        }else if(this.yBodyRotO!=this.yBodyRot){
+            yawRad = Math.toRadians(this.yBodyRot);
+        }
 
         for (int i = 0; i < this.subEntities.length; i++) {
             ArmoredWhalePart part = this.subEntities[i];
@@ -178,8 +188,8 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
             double offsetX = -Math.sin(yawRad) * distance;
             double offsetZ = Math.cos(yawRad) * distance;
 
-            part.setPosRaw(x + offsetX, y, z + offsetZ);  // no interpolation
-            part.setOldPosAndRot();                       // sync prev pos instantly
+            part.setPosRaw(x + offsetX, y, z + offsetZ);
+            part.setOldPosAndRot();
             part.setBoundingBox(part.getBoundingBox());
             part.refreshDimensions();
         }
@@ -188,9 +198,9 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
     public void tick() {
         super.tick();
         SCGExtra.LOGGER.debug(this.getYRot()+"");
-        this.setYHeadRot((this.getYHeadRot()+1)%360);
-        this.setYBodyRot((this.getYHeadRot()+1)%360);
-        this.setYRot((this.getYRot()+2)%360);//double the speed cause the visual model rotates faster
+        // this.setYHeadRot((this.getYHeadRot()+1)%360);
+        // this.setYBodyRot((this.getYHeadRot()+1)%360);
+        // this.setYRot((this.getYRot()+2)%360);
         updateSubentities();
     }
 }
