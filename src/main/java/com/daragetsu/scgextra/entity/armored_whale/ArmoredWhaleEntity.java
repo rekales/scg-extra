@@ -5,7 +5,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.damagesource.DamageSource;
 import com.daragetsu.scgextra.Faction;
-import com.daragetsu.scgextra.SCGExtra;
 
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,8 +16,6 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-// import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
-// import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
@@ -68,18 +65,26 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 1000)
-                .add(Attributes.ARMOR, 6);
+                .add(Attributes.ARMOR, 6)
+                .add(Attributes.FOLLOW_RANGE, 48);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        updateSubentities();
     }
 
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(4, new SlamAttackGoal(this));
-
-        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 1.0));
-
-        this.goalSelector.addGoal(4, new SplashWaterGoal(this));
         this.goalSelector.addGoal(3, new DeployMinesGoal(this, 800, 1.1F, 4, 6));
+        this.goalSelector.addGoal(4, new SlamAttackGoal(this));
+        this.goalSelector.addGoal(4, new SplashWaterGoal(this));
+        // range 24 to compensate for the whale's size
+        this.goalSelector.addGoal(5, new MountedGunAttackGoal.Left(this, 2, 24));
+        this.goalSelector.addGoal(5, new MountedGunAttackGoal.Right(this, 2, 24));
+        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0));
 
         // Bosses will prioritize players and does not require line of sight to maintain targeting to avoid cheese
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, false,
@@ -158,6 +163,7 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
         this.entityData.define(EYE_FLASH, false);
         this.entityData.define(WATER_SPLASH, false);
     }
+
     public void updateSubentities(){
         for (ArmoredWhalePart part : this.subEntities) {
             part.xo = part.getX();
@@ -193,14 +199,5 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
             part.setBoundingBox(part.getBoundingBox());
             part.refreshDimensions();
         }
-    }
-    @Override
-    public void tick() {
-        super.tick();
-        SCGExtra.LOGGER.debug(this.getYRot()+"");
-        // this.setYHeadRot((this.getYHeadRot()+1)%360);
-        // this.setYBodyRot((this.getYHeadRot()+1)%360);
-        // this.setYRot((this.getYRot()+2)%360);
-        updateSubentities();
     }
 }
