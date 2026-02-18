@@ -5,6 +5,8 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.damagesource.DamageSource;
 import com.daragetsu.scgextra.Faction;
+import com.daragetsu.scgextra.SCGExtra;
+
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -113,34 +115,6 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
     @Override
     public void aiStep() {
         super.aiStep();
-
-        for (ArmoredWhalePart part : this.subEntities) {
-            part.xo = part.getX();
-            part.yo = part.getY();
-            part.zo = part.getZ();
-            part.xOld = part.getX();
-            part.yOld = part.getY();
-            part.zOld = part.getZ();
-        }
-
-        double x = this.getX();
-        double y = this.getY();
-        double z = this.getZ();
-
-        float[] offsets = new float[] { 0f, this.getBbWidth(), this.getBbWidth() * 2, this.getBbWidth() * 3 };
-
-        double yawRad = Math.toRadians(this.getYRot());
-
-        for (int i = 0; i < this.subEntities.length; i++) {
-            ArmoredWhalePart part = this.subEntities[i];
-            float distance = offsets[i];
-
-            double offsetX = -Math.sin(yawRad) * distance;
-            double offsetZ = Math.cos(yawRad) * distance;
-
-            part.setPos(x + offsetX, y, z + offsetZ);
-            part.refreshDimensions();
-        }
     }
     public ArmoredWhalePart[] getSubEntities() {
         return this.subEntities;
@@ -178,5 +152,45 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
         super.defineSynchedData();
         this.entityData.define(EYE_FLASH, false);
         this.entityData.define(WATER_SPLASH, false);
+    }
+    public void updateSubentities(){
+        for (ArmoredWhalePart part : this.subEntities) {
+            part.xo = part.getX();
+            part.yo = part.getY();
+            part.zo = part.getZ();
+            part.xOld = part.getX();
+            part.yOld = part.getY();
+            part.zOld = part.getZ();
+        }
+
+        double x = this.getX();
+        double y = this.getY();
+        double z = this.getZ();
+
+        float[] offsets = new float[] { 0f, this.getBbWidth(), this.getBbWidth() * 2, this.getBbWidth() * 3 };
+
+        double yawRad = Math.toRadians(this.getYRot());
+
+        for (int i = 0; i < this.subEntities.length; i++) {
+            ArmoredWhalePart part = this.subEntities[i];
+            float distance = offsets[i];
+
+            double offsetX = -Math.sin(yawRad) * distance;
+            double offsetZ = Math.cos(yawRad) * distance;
+
+            part.setPosRaw(x + offsetX, y, z + offsetZ);  // no interpolation
+            part.setOldPosAndRot();                       // sync prev pos instantly
+            part.setBoundingBox(part.getBoundingBox());
+            part.refreshDimensions();
+        }
+    }
+    @Override
+    public void tick() {
+        super.tick();
+        SCGExtra.LOGGER.debug(this.getYRot()+"");
+        this.setYHeadRot((this.getYHeadRot()+1)%360);
+        this.setYBodyRot((this.getYHeadRot()+1)%360);
+        this.setYRot((this.getYRot()+2)%360);//double the speed cause the visual model rotates faster
+        updateSubentities();
     }
 }
