@@ -5,46 +5,52 @@ import com.daragetsu.scgextra.SCGExtra;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
+import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
+import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.model.GeoModel;
 
 public class FishFolkModel<T extends FishFolkEntity> extends GeoModel<FishFolkEntity> {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(SCGExtra.asResource("fish_folk"), "main");
-	private static final ResourceLocation GEO_TRIDENT = SCGExtra.asResource("geo/fish_folk_trident.geo.json");
-	private static final ResourceLocation GEO_GUN = SCGExtra.asResource("geo/fish_folk_gun.geo.json");
-	private static final ResourceLocation GEO_SITTING = SCGExtra.asResource("geo/fish_folk_sitting.geo.json");
-	private static final ResourceLocation ANIM_SITTING = SCGExtra.asResource("animations/fish_folk_sitting.animation.json");
-	private static final ResourceLocation ANIM_TRIDENT = SCGExtra.asResource("animations/fish_folk_trident.animation.json");
-	private static final ResourceLocation ANIM_GUN = SCGExtra.asResource("animations/fish_folk_gun.animation.json");
+	private static final ResourceLocation GEO = SCGExtra.asResource("geo/fish_folk.geo.json");
+	private static final ResourceLocation ANIM = SCGExtra.asResource("animations/fish_folk.animation.json");
 
 	public FishFolkModel() {
 	}
 
 	@Override
 	public ResourceLocation getAnimationResource(FishFolkEntity entity) {
-		if(entity.isPassenger()){
-			return ANIM_SITTING;
-		}
-		if(entity.getMainHandItem().is(Items.TRIDENT)){
-			return ANIM_TRIDENT;
-		}else{
-			return ANIM_GUN;
-		}
+		return ANIM;
 	}
 
 	@Override
 	public ResourceLocation getModelResource(FishFolkEntity entity) {
-		if(entity.isPassenger()){
-			return GEO_SITTING;
-		}
-		if(entity.getMainHandItem().is(Items.TRIDENT)){
-			return GEO_TRIDENT;
-		}else{
-			return GEO_GUN;
-		}
+		return GEO;
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(FishFolkEntity entity) {
 		return entity.getTexture();
+	}
+	@Override
+	public void setCustomAnimations(FishFolkEntity animatable, long instanceId,
+			AnimationState<FishFolkEntity> animationState) {
+		super.setCustomAnimations(animatable, instanceId, animationState);
+		CoreGeoBone rightArm = this.getAnimationProcessor().getBone("right_arm");
+		CoreGeoBone rightLeg = this.getAnimationProcessor().getBone("right_leg");
+		CoreGeoBone leftLeg = this.getAnimationProcessor().getBone("left_leg");
+		if(rightArm != null) {
+			if(!animatable.getMainHandItem().is(Items.TRIDENT)) {
+				rightArm.setRotX((float)Math.toRadians(90));
+			}
+		}
+		if(animatable.isPassenger()){
+			rightArm.setRotX((float)Math.toRadians(90));
+			if(rightLeg!=null){
+				rightLeg.setRotX(-80F);
+			}
+			if(leftLeg!=null){
+				leftLeg.setRotX(-80F);
+			}
+		}
 	}
 }
