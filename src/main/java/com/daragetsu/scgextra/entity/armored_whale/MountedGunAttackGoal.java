@@ -12,7 +12,6 @@ import top.ribs.scguns.init.ModSounds;
 public abstract class MountedGunAttackGoal extends Goal {
 
     private final int fireInterval;
-    protected final Vec3 fireOriginOffset;
     protected final float range;
     protected final ArmoredWhaleEntity mob;
 
@@ -24,13 +23,14 @@ public abstract class MountedGunAttackGoal extends Goal {
     public MountedGunAttackGoal(ArmoredWhaleEntity mob, int fireInterval, Vec3 fireOriginOffset, float range) {
         this.mob = mob;
         this.fireInterval = fireInterval;
-        this.fireOriginOffset = fireOriginOffset;
         this.range = range;
     }
 
     public abstract boolean canShootTarget(LivingEntity target);
 
     public abstract void triggerGunFlash();
+
+    public abstract Vec3 getProjectileSpawnPos();
 
     @Override
     public boolean canUse() {
@@ -68,7 +68,7 @@ public abstract class MountedGunAttackGoal extends Goal {
     }
 
     private void fireGun(LivingEntity target) {
-        Vec3 spawnVec = this.fireOriginOffset.yRot(-this.mob.getYRot() * Mth.DEG_TO_RAD).add(this.mob.position());
+        Vec3 spawnVec = this.getProjectileSpawnPos();
         EnemyProjectileEntity bolt = new ArmoredWhaleProjectileEntity(this.mob.level(), this.mob);
         bolt.setPos(spawnVec);
         double dx = target.getX() - spawnVec.x;
@@ -79,7 +79,6 @@ public abstract class MountedGunAttackGoal extends Goal {
         this.mob.level().playSound(null, spawnVec.x, spawnVec.y, spawnVec.z, ModSounds.BRUISER_SILENCED_FIRE.get(), SoundSource.HOSTILE, 0.8F, 1.2F);
         this.triggerGunFlash();
     }
-
 
     public static class Left extends MountedGunAttackGoal {
 
@@ -94,8 +93,13 @@ public abstract class MountedGunAttackGoal extends Goal {
                             target.getZ() - this.mob.getZ(),
                             target.getX() - this.mob.getX()
                     ) * Mth.RAD_TO_DEG) + 810 - this.mob.getYRot()) % 360;
-            Vec3 spawnVec = this.fireOriginOffset.yRot(-this.mob.getYRot() * Mth.DEG_TO_RAD).add(this.mob.position());
+            Vec3 spawnVec = this.getProjectileSpawnPos();
             return 180<=targetYRot && targetYRot<360 && spawnVec.closerThan(target.position(), this.range);
+        }
+
+        @Override
+        public Vec3 getProjectileSpawnPos() {
+            return this.mob.getLeftGunPos();
         }
 
         @Override
@@ -117,8 +121,13 @@ public abstract class MountedGunAttackGoal extends Goal {
                             target.getZ() - this.mob.getZ(),
                             target.getX() - this.mob.getX()
                     ) * Mth.RAD_TO_DEG) + 810 - this.mob.getYRot()) % 360;
-            Vec3 spawnVec = this.fireOriginOffset.yRot(-this.mob.getYRot() * Mth.DEG_TO_RAD).add(this.mob.position());
+            Vec3 spawnVec = this.getProjectileSpawnPos();
             return 0<=targetYRot && targetYRot<180 && spawnVec.closerThan(target.position(), this.range);
+        }
+
+        @Override
+        public Vec3 getProjectileSpawnPos() {
+            return this.mob.getRightGunPos();
         }
 
         @Override
