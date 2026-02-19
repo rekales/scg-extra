@@ -9,7 +9,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -57,7 +56,7 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(4, new LaserAttackGoal(this));
+        this.goalSelector.addGoal(4, new GuardianLaserAttackGoal(this));
         this.goalSelector.addGoal(8, new ResetLookToDirection(this, ()->this.prefferedDirection, 1.0F));
 
         // Bosses will prioritize players and does not require line of sight to maintain targeting to avoid cheese
@@ -233,78 +232,6 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
         return this.geoCache;
     }
 
-
-    protected static class LaserAttackGoal extends Goal {
-        private final GuardianStatueEntity self;
-        private int attackTime;
-
-        public LaserAttackGoal(GuardianStatueEntity self) {
-            this.self = self;
-        }
-
-        @Override
-        public boolean canUse() {
-            LivingEntity livingentity = this.self.getTarget();
-            return livingentity != null && livingentity.isAlive();
-        }
-
-        public boolean canContinueToUse() {
-            return super.canContinueToUse()
-                    && this.self.getTarget() != null
-                    && this.self.distanceToSqr(this.self.getTarget()) > 9.0F;
-        }
-
-        @Override
-        public void start() {
-            this.attackTime = -10;
-            LivingEntity target = this.self.getTarget();
-            if (target != null) {
-                this.self.getLookControl().setLookAt(target, 90.0F, 90.0F);
-            }
-            this.self.hasImpulse = true;  // TODO: figure out what impulse is
-        }
-
-        @Override
-        public void stop() {
-            this.self.setActiveAttackTarget(0);
-            this.self.setTarget(null);
-        }
-
-        public boolean requiresUpdateEveryTick() {
-            return true;
-        }
-
-        public void tick() {
-            LivingEntity livingentity = this.self.getTarget();
-            if (livingentity != null) {
-                this.self.getNavigation().stop();
-                this.self.getLookControl().setLookAt(livingentity, 90.0F, 90.0F);
-                if (!this.self.hasLineOfSight(livingentity)) {
-                    this.self.setTarget(null);
-                } else {
-                    ++this.attackTime;
-                    if (this.attackTime == 0) {
-                        this.self.setActiveAttackTarget(livingentity.getId());
-                        if (!this.self.isSilent()) {
-                            this.self.level().broadcastEntityEvent(this.self, (byte)21);
-                        }
-                    } else if (this.attackTime >= this.self.getAttackDuration()) {
-                        float f = 1.0F;
-                        if (this.self.level().getDifficulty() == Difficulty.HARD) {
-                            f += 2.0F;
-                        }
-
-                        livingentity.hurt(this.self.damageSources().indirectMagic(this.self, this.self), f);
-                        livingentity.hurt(this.self.damageSources().mobAttack(this.self), (float)this.self.getAttributeValue(Attributes.ATTACK_DAMAGE));
-                        this.self.setTarget(null);
-                    }
-
-                    super.tick();
-                }
-            }
-
-        }
-    }
 
     public static class ResetLookToDirection extends Goal {
 
