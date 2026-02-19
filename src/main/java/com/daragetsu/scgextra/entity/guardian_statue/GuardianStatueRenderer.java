@@ -5,6 +5,8 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BeaconRenderer;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
@@ -23,16 +25,95 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoEntityRenderer<T> {
 
     private static final ResourceLocation GUARDIAN_BEAM_LOCATION = new ResourceLocation("textures/entity/guardian_beam.png");
-    private static final RenderType BEAM_RENDER_TYPE;
+    private static final RenderType GUARDIAN_BEAM_RENDER_TYPE;
+
+    public static final ResourceLocation BEACON_BEAM_LOCATION = new ResourceLocation("textures/entity/beacon_beam.png");
+    private static final RenderType BEACON_BEAM_RENDER_TYPE;
 
     public GuardianStatueRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new GuardianStatueModel<>());
     }
 
     @Override
+    public boolean shouldRender(T livingEntity, Frustum camera, double camX, double camY, double camZ) {
+        return true;
+    }
+
+    @Override
     public void render(T entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
 
+        renderGuardianBeam(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
+        renderLaserBeam(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
+
+    }
+
+    private void renderLaserBeam(GuardianStatueEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+        LivingEntity target = entity.getActiveAttackTarget();
+        if (target == null) return;
+
+        poseStack.pushPose();
+
+
+
+
+
+//        poseStack.translate(-0.5,entity.getEyeHeight()+0.15,-0.5);
+//        Vec3 eyePosOffset = new Vec3(0, 0, 0.5).yRot((-entityYaw + 720)%360 * Mth.DEG_TO_RAD);
+//        poseStack.translate(eyePosOffset.x, eyePosOffset.y, eyePosOffset.z);
+
+        poseStack.translate(-0.5,entity.getEyeHeight(),-0.5);
+
+        Vec3 sourceVec = new Vec3(0,entity.getEyeHeight()+0.15,0.5)
+                .yRot((-entityYaw + 720)%360 * Mth.DEG_TO_RAD);
+        sourceVec = sourceVec.add(entity.position());
+
+        Vec3 targetVec = target.position().add(0, target.getBbHeight()/2, 0);
+
+        Vec3 direction = targetVec.subtract(sourceVec);
+        double distance = direction.length();
+        direction = direction.normalize();
+
+        float yaw = (float)Math.atan2(direction.x, direction.z);
+        float pitch = (float)Math.asin(-direction.y);
+
+//        poseStack.pushPose();
+
+        poseStack.mulPose(Axis.YP.rotation(yaw));
+        poseStack.mulPose(Axis.XP.rotation(pitch + (90 * Mth.DEG_TO_RAD)));
+
+//        poseStack.popPose();
+
+
+
+
+
+//        entity.level().addParticle(
+//                ParticleTypes.FLAME,
+//                targetVec.x, targetVec.y, targetVec.z,
+//                0, 0, 0
+//        );
+
+        BeaconRenderer.renderBeaconBeam(
+                poseStack,
+                buffer,
+                BEACON_BEAM_LOCATION,
+                partialTicks,
+                1.0F, // beam height scale
+                entity.level().getGameTime(),
+                0,
+                (int)Math.ceil(20),
+                new float[]{0.85F, 0.2F, 0.2F}, // RGB color
+                0.08F, // inner radius
+                0.1F // outer radius
+        );
+
+        poseStack.popPose();
+    }
+
+
+
+    private void renderGuardianBeam(GuardianStatueEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         // TODO: cleanup
         LivingEntity livingentity = entity.getActiveAttackTarget();
         if (livingentity != null) {
@@ -79,7 +160,7 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
             float f28 = 0.4999F;
             float f29 = -1.0F + f2;
             float f30 = f4 * 2.5F + f29;
-            VertexConsumer vertexconsumer = buffer.getBuffer(BEAM_RENDER_TYPE);
+            VertexConsumer vertexconsumer = buffer.getBuffer(GUARDIAN_BEAM_RENDER_TYPE);
             PoseStack.Pose posestack$pose = poseStack.last();
             Matrix4f matrix4f = posestack$pose.pose();
             Matrix3f matrix3f = posestack$pose.normal();
@@ -102,7 +183,6 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
             vertex(vertexconsumer, matrix4f, matrix3f, f15, f4, f16, j, k, l, 0.5F, f31);
             poseStack.popPose();
         }
-
     }
 
     private Vec3 getPosition(LivingEntity livingEntity, double yOffset, float partialTick) {
@@ -117,6 +197,7 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
     }
 
     static {
-        BEAM_RENDER_TYPE = RenderType.entityCutoutNoCull(GUARDIAN_BEAM_LOCATION);
+        GUARDIAN_BEAM_RENDER_TYPE = RenderType.entityCutoutNoCull(GUARDIAN_BEAM_LOCATION);
+        BEACON_BEAM_RENDER_TYPE = RenderType.entityCutoutNoCull(BEACON_BEAM_LOCATION);
     }
 }
