@@ -137,7 +137,7 @@
 					]
 				},
 				{
-					"name": "bone",
+					"name": "left_gun",
 					"parent": "bone2",
 					"pivot": [-32, 46, -94],
 					"cubes": [
@@ -146,7 +146,7 @@
 				},
 				{
 					"name": "bone10",
-					"parent": "bone",
+					"parent": "left_gun",
 					"pivot": [-32, 58, -86],
 					"cubes": [
 						{"origin": [-34, 56, -87], "size": [4, 4, 12], "uv": [680, 221]},
@@ -154,7 +154,7 @@
 					]
 				},
 				{
-					"name": "bone4",
+					"name": "right_gun",
 					"parent": "bone2",
 					"pivot": [32, 46, -94],
 					"cubes": [
@@ -163,7 +163,7 @@
 				},
 				{
 					"name": "bone11",
-					"parent": "bone4",
+					"parent": "right_gun",
 					"pivot": [32, 58, -87],
 					"cubes": [
 						{"origin": [30, 56, -87], "size": [4, 4, 12], "uv": [626, 117]},

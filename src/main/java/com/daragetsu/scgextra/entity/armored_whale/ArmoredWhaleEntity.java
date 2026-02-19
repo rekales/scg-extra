@@ -32,6 +32,10 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
             SynchedEntityData.defineId(ArmoredWhaleEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> WATER_SPLASH =
             SynchedEntityData.defineId(ArmoredWhaleEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Float> LEFT_GUN_Y_ROT =
+            SynchedEntityData.defineId(ArmoredWhaleEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> RIGHT_GUN_Y_ROT =
+            SynchedEntityData.defineId(ArmoredWhaleEntity.class, EntityDataSerializers.FLOAT);
     public static Vec3 LEFT_GUN_OFFSET = new Vec3(-2,3.75,5.85);
     public static Vec3 RIGHT_GUN_OFFSET = new Vec3(1.9,3.75,5.85);
 
@@ -160,11 +164,30 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
         this.entityData.set(WATER_SPLASH, splash);
     }
 
+    // relative rotation to body in radians
+    public float getLeftGunYRot() {
+        return this.entityData.get(LEFT_GUN_Y_ROT);
+    }
+
+    public void setLeftGunYRot(float rot) {
+        this.entityData.set(LEFT_GUN_Y_ROT, rot);
+    }
+
+    public float getRightGunYRot() {
+        return this.entityData.get(RIGHT_GUN_Y_ROT);
+    }
+
+    public void setRightGunYRot(float rot) {
+        this.entityData.set(RIGHT_GUN_Y_ROT, rot);
+    }
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(EYE_FLASH, false);
         this.entityData.define(WATER_SPLASH, false);
+        this.entityData.define(LEFT_GUN_Y_ROT, 0F);
+        this.entityData.define(RIGHT_GUN_Y_ROT, 0F);
     }
 
     public void updateSubentities(){

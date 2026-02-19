@@ -9,7 +9,7 @@ import java.util.List;
 public class ArmoredWhaleRenderer extends GeoEntityRenderer<ArmoredWhaleEntity>{
 
     public ArmoredWhaleRenderer(Context renderManager) {
-        super(renderManager, new ArmoredWhaleModel<>());
+        super(renderManager, new ArmoredWhaleModel());
 
         addRenderLayer(new FastBoneFilterGeoLayer<>(this, () -> List.of("eye_flash"),
                 (bone, entity, partialTick) ->  bone.setHidden(!entity.getEyeFlash())));
