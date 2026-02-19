@@ -16,13 +16,9 @@ public class GuardianLaserAttackGoal extends Goal {
     @Override
     public boolean canUse() {
         LivingEntity livingentity = this.mob.getTarget();
-        return livingentity != null && livingentity.isAlive();
-    }
-
-    public boolean canContinueToUse() {
-        return super.canContinueToUse()
-                && this.mob.getTarget() != null
-                && this.mob.distanceToSqr(this.mob.getTarget()) > 9.0F;
+        return livingentity != null
+                && livingentity.isAlive()
+                && this.mob.getBeamActiveTimer() <= 0;
     }
 
     @Override
