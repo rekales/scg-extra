@@ -109,6 +109,7 @@ public class TentacliatorEntity extends Drowned implements GeoEntity{
         this.goalSelector.addGoal(1, new GunAttackGoal<>(this, this.getMainHandItem(), 1.0F, AIType.RECKLESS, 3));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(2, new InkAttackGoal(this));
         this.goalSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
             @Override
@@ -124,12 +125,6 @@ public class TentacliatorEntity extends Drowned implements GeoEntity{
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
                 entity -> Faction.isEnemies(this, entity)));
-    }
-
-    @Override
-    public void performRangedAttack(LivingEntity pTarget, float pDistanceFactor) {
-        super.performRangedAttack(pTarget, pDistanceFactor);
-        this.triggerAnim("special", "attack");
     }
     
     @Override
@@ -147,8 +142,6 @@ public class TentacliatorEntity extends Drowned implements GeoEntity{
             }
             return PlayState.CONTINUE;
         }));
-        controllers.add(new AnimationController<>(this, "special", 0, state -> PlayState.CONTINUE)
-        .triggerableAnim("special_attack", RawAnimation.begin().thenPlay("special_attack")).triggerableAnim("attack", RawAnimation.begin().thenPlay("attack")));
     }
     @Override
     protected void dropCustomDeathLoot(DamageSource pSource, int pLooting, boolean pRecentlyHit) {

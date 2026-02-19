@@ -5,27 +5,14 @@ import com.mojang.math.Axis;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 
-// import org.joml.Quaternionf;
-
-// import com.mojang.blaze3d.vertex.PoseStack;
-// import com.mojang.blaze3d.vertex.VertexConsumer;
-
-// import net.minecraft.client.Minecraft;
-// import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
-// import net.minecraft.client.renderer.RenderType;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import software.bernie.geckolib.cache.object.GeoBone;
-// import net.minecraft.world.item.ItemDisplayContext;
-// import net.minecraft.world.item.ItemStack;
-// import net.minecraft.world.item.Items;
-// import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
-// import top.ribs.scguns.init.ModItems;
 import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer;
 import top.ribs.scguns.init.ModItems;
 
@@ -45,8 +32,10 @@ public class FishFolkRenderer extends GeoEntityRenderer<FishFolkEntity> {
             @Override
             protected ItemDisplayContext getTransformTypeForStack(GeoBone bone, ItemStack stack,
                     FishFolkEntity animatable) {
-                if (bone.getName().equals("right_arm")) {
-                    return ItemDisplayContext.THIRD_PERSON_RIGHT_HAND;
+                if(!animatable.getMainHandItem().is(Items.TRIDENT)){
+                    if (bone.getName().equals("right_arm")) {
+                        return ItemDisplayContext.THIRD_PERSON_RIGHT_HAND;
+                    }
                 }
                 return ItemDisplayContext.NONE;
             }
@@ -57,14 +46,13 @@ public class FishFolkRenderer extends GeoEntityRenderer<FishFolkEntity> {
                 if (bone.getName().equals("right_arm")) {
                     if(animatable.getMainHandItem().is(Items.TRIDENT)){
                         if(!animatable.isPassenger()){
-                            poseStack.translate(0.05, -0.5, 0);
+                            poseStack.translate(0.5, 0, -1);
                             poseStack.mulPose(Axis.XP.rotationDegrees(-90));
                         }else{
-                            poseStack.translate(0.05, -0.5, 0.5);
+                            poseStack.translate(0.5, -1, 0);
                             poseStack.mulPose(Axis.XP.rotationDegrees(180));
                         }
                     }else{
-                        // bone.setRotX(90F);
                         poseStack.translate(0.05, 0, 0.5);
                         if(animatable.getMainHandItem().is(ModItems.HULLBREAKER.get())){
                             poseStack.mulPose(Axis.XP.rotationDegrees(90));

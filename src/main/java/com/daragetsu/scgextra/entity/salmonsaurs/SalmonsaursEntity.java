@@ -8,9 +8,11 @@ import com.daragetsu.scgextra.Faction;
 import com.daragetsu.scgextra.entity.ModEntities;
 import com.daragetsu.scgextra.entity.fishfolk.FishFolkEntity;
 
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -27,6 +29,8 @@ import top.ribs.scguns.item.animated.AnimatedUnderWaterGunItem;
 
 public class SalmonsaursEntity extends Hoglin{
     private boolean riderSpawned = false;
+    public final AnimationState idleAnimationState = new AnimationState();
+    private int idleAnimationTimeout = 0;
     public SalmonsaursEntity(EntityType<? extends SalmonsaursEntity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         
@@ -67,7 +71,31 @@ public class SalmonsaursEntity extends Hoglin{
             !Faction.isFriendlies(this, this.getLastHurtByMob())) {
             this.setTarget((LivingEntity)this.getLastHurtByMob());
         }
+        if(this.level().isClientSide){
+            setupAnimationStates();
+        }
     }
+
+    private void setupAnimationStates(){
+        if(this.idleAnimationTimeout <=0 ){
+            this.idleAnimationTimeout = this.random.nextInt(40)+80;
+            this.idleAnimationState.start(this.tickCount);
+        }else{
+            --this.idleAnimationTimeout;
+        }
+    }
+
+    @Override
+    protected void updateWalkAnimation(float pPartialTick) {
+        float f = 0;
+        if(this.getPose() == Pose.STANDING){
+            f = Math.min(pPartialTick * 6F, 1f);
+        }else {
+            f = 0f;
+        }
+        this.walkAnimation.update(f, 0.2F);
+    }
+
     @Override
     public boolean isConverting() {
         return false;

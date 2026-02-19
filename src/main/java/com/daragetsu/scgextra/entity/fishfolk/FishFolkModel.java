@@ -36,6 +36,7 @@ public class FishFolkModel<T extends FishFolkEntity> extends GeoModel<FishFolkEn
 			AnimationState<FishFolkEntity> animationState) {
 		super.setCustomAnimations(animatable, instanceId, animationState);
 		CoreGeoBone rightArm = this.getAnimationProcessor().getBone("right_arm");
+		CoreGeoBone leftArm = this.getAnimationProcessor().getBone("left_arm");
 		CoreGeoBone rightLeg = this.getAnimationProcessor().getBone("right_leg");
 		CoreGeoBone leftLeg = this.getAnimationProcessor().getBone("left_leg");
 		if(rightArm != null) {
@@ -44,13 +45,10 @@ public class FishFolkModel<T extends FishFolkEntity> extends GeoModel<FishFolkEn
 			}
 		}
 		if(animatable.isPassenger()){
-			rightArm.setRotX((float)Math.toRadians(90));
-			if(rightLeg!=null){
-				rightLeg.setRotX(-80F);
-			}
-			if(leftLeg!=null){
-				leftLeg.setRotX(-80F);
-			}
+			if(rightArm!=null)rightArm.setRotX((float)Math.toRadians(90));
+			if(leftArm!=null)leftArm.setRotX((float)Math.toRadians(90));
+			if(rightLeg!=null)rightLeg.setRotX(-80F);
+			if(leftLeg!=null)leftLeg.setRotX(-80F);
 		}
 	}
 }
