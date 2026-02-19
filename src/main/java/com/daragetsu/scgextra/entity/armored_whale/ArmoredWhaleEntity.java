@@ -3,6 +3,7 @@ package com.daragetsu.scgextra.entity.armored_whale;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import com.daragetsu.scgextra.Faction;
 
@@ -16,6 +17,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
@@ -28,9 +30,14 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
 
     private static final EntityDataAccessor<Boolean> EYE_FLASH =
             SynchedEntityData.defineId(ArmoredWhaleEntity.class, EntityDataSerializers.BOOLEAN);
-    
-            private static final EntityDataAccessor<Boolean> WATER_SPLASH =
+    private static final EntityDataAccessor<Boolean> WATER_SPLASH =
             SynchedEntityData.defineId(ArmoredWhaleEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Float> LEFT_GUN_Y_ROT =
+            SynchedEntityData.defineId(ArmoredWhaleEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> RIGHT_GUN_Y_ROT =
+            SynchedEntityData.defineId(ArmoredWhaleEntity.class, EntityDataSerializers.FLOAT);
+    public static Vec3 LEFT_GUN_OFFSET = new Vec3(-2,3.75,5.85);
+    public static Vec3 RIGHT_GUN_OFFSET = new Vec3(1.9,3.75,5.85);
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private boolean didSlam = false;
@@ -157,11 +164,30 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
         this.entityData.set(WATER_SPLASH, splash);
     }
 
+    // relative rotation to body in radians
+    public float getLeftGunYRot() {
+        return this.entityData.get(LEFT_GUN_Y_ROT);
+    }
+
+    public void setLeftGunYRot(float rot) {
+        this.entityData.set(LEFT_GUN_Y_ROT, rot);
+    }
+
+    public float getRightGunYRot() {
+        return this.entityData.get(RIGHT_GUN_Y_ROT);
+    }
+
+    public void setRightGunYRot(float rot) {
+        this.entityData.set(RIGHT_GUN_Y_ROT, rot);
+    }
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(EYE_FLASH, false);
         this.entityData.define(WATER_SPLASH, false);
+        this.entityData.define(LEFT_GUN_Y_ROT, 0F);
+        this.entityData.define(RIGHT_GUN_Y_ROT, 0F);
     }
 
     public void updateSubentities(){
@@ -199,5 +225,13 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
             part.setBoundingBox(part.getBoundingBox());
             part.refreshDimensions();
         }
+    }
+
+    public Vec3 getLeftGunPos() {
+        return LEFT_GUN_OFFSET.yRot(-this.getYRot() * Mth.DEG_TO_RAD).add(this.position());
+    }
+
+    public Vec3 getRightGunPos() {
+        return RIGHT_GUN_OFFSET.yRot(-this.getYRot() * Mth.DEG_TO_RAD).add(this.position());
     }
 }

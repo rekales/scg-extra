@@ -12,25 +12,24 @@ import top.ribs.scguns.init.ModSounds;
 public abstract class MountedGunAttackGoal extends Goal {
 
     private final int fireInterval;
-    protected final Vec3 fireOriginOffset;
     protected final float range;
     protected final ArmoredWhaleEntity mob;
 
     private int cooldown = 0;
 
-    /**
-     * @param fireOriginOffset where projectile will spawn relative to the mob's position
-     */
-    public MountedGunAttackGoal(ArmoredWhaleEntity mob, int fireInterval, Vec3 fireOriginOffset, float range) {
+    public MountedGunAttackGoal(ArmoredWhaleEntity mob, int fireInterval, float range) {
         this.mob = mob;
         this.fireInterval = fireInterval;
-        this.fireOriginOffset = fireOriginOffset;
         this.range = range;
     }
 
     public abstract boolean canShootTarget(LivingEntity target);
 
     public abstract void triggerGunFlash();
+
+    public abstract Vec3 getProjectileSpawnPos();
+
+    public abstract void updateGunAnimations(LivingEntity target);
 
     @Override
     public boolean canUse() {
@@ -56,8 +55,9 @@ public abstract class MountedGunAttackGoal extends Goal {
 
     @Override
     public void tick() {
+        LivingEntity target = this.mob.getTarget();
+
         if (this.cooldown <= 0) {
-            LivingEntity target = this.mob.getTarget();
             if (target != null && canShootTarget(target)) {
                 fireGun(target);
             }
@@ -65,10 +65,14 @@ public abstract class MountedGunAttackGoal extends Goal {
         } else {
             this.cooldown--;
         }
+
+        if (target != null) {
+            updateGunAnimations(target);
+        }
     }
 
     private void fireGun(LivingEntity target) {
-        Vec3 spawnVec = this.fireOriginOffset.yRot(-this.mob.getYRot() * Mth.DEG_TO_RAD).add(this.mob.position());
+        Vec3 spawnVec = this.getProjectileSpawnPos();
         EnemyProjectileEntity bolt = new ArmoredWhaleProjectileEntity(this.mob.level(), this.mob);
         bolt.setPos(spawnVec);
         double dx = target.getX() - spawnVec.x;
@@ -80,22 +84,36 @@ public abstract class MountedGunAttackGoal extends Goal {
         this.triggerGunFlash();
     }
 
-
     public static class Left extends MountedGunAttackGoal {
 
         public Left(ArmoredWhaleEntity mob, int fireInterval, float range) {
-            super(mob, fireInterval, new Vec3(-2,3.75,5.85), range);
+            super(mob, fireInterval, range);
         }
 
         @Override
         public boolean canShootTarget(LivingEntity target) {
+            Vec3 spawnVec = this.getProjectileSpawnPos();
             float targetYRot = (Mth.wrapDegrees(
                     (float)Mth.atan2(
-                            target.getZ() - this.mob.getZ(),
-                            target.getX() - this.mob.getX()
+                            target.getZ() - spawnVec.z,
+                            target.getX() - spawnVec.x
                     ) * Mth.RAD_TO_DEG) + 810 - this.mob.getYRot()) % 360;
-            Vec3 spawnVec = this.fireOriginOffset.yRot(-this.mob.getYRot() * Mth.DEG_TO_RAD).add(this.mob.position());
             return 180<=targetYRot && targetYRot<360 && spawnVec.closerThan(target.position(), this.range);
+        }
+
+        @Override
+        public Vec3 getProjectileSpawnPos() {
+            return this.mob.getLeftGunPos();
+        }
+
+        @Override
+        public void updateGunAnimations(LivingEntity target) {
+            Vec3 spawnVec = this.getProjectileSpawnPos();
+            float relativeYRot = (float)Mth.atan2(
+                    target.getZ() - spawnVec.z,
+                    target.getX() - spawnVec.x
+            );
+            this.mob.setLeftGunYRot(relativeYRot);
         }
 
         @Override
@@ -107,18 +125,33 @@ public abstract class MountedGunAttackGoal extends Goal {
     public static class Right extends MountedGunAttackGoal {
 
         public Right(ArmoredWhaleEntity mob, int fireInterval, float range) {
-            super(mob, fireInterval, new Vec3(1.9,3.75,5.85), range);
+            super(mob, fireInterval, range);
         }
 
         @Override
         public boolean canShootTarget(LivingEntity target) {
+            Vec3 spawnVec = this.getProjectileSpawnPos();
             float targetYRot = (Mth.wrapDegrees(
                     (float)Mth.atan2(
-                            target.getZ() - this.mob.getZ(),
-                            target.getX() - this.mob.getX()
+                            target.getZ() - spawnVec.z,
+                            target.getX() - spawnVec.x
                     ) * Mth.RAD_TO_DEG) + 810 - this.mob.getYRot()) % 360;
-            Vec3 spawnVec = this.fireOriginOffset.yRot(-this.mob.getYRot() * Mth.DEG_TO_RAD).add(this.mob.position());
             return 0<=targetYRot && targetYRot<180 && spawnVec.closerThan(target.position(), this.range);
+        }
+
+        @Override
+        public Vec3 getProjectileSpawnPos() {
+            return this.mob.getRightGunPos();
+        }
+
+        @Override
+        public void updateGunAnimations(LivingEntity target) {
+            Vec3 spawnVec = this.getProjectileSpawnPos();
+            float relativeYRot = (float)Mth.atan2(
+                    target.getZ() - spawnVec.z,
+                    target.getX() - spawnVec.x
+            );
+            this.mob.setRightGunYRot(relativeYRot);
         }
 
         @Override
