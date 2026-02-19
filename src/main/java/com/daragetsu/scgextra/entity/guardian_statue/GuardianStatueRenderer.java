@@ -45,7 +45,6 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
 
         renderGuardianBeam(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
         renderLaserBeam(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
-
     }
 
     private void renderLaserBeam(GuardianStatueEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
@@ -54,15 +53,9 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
 
         poseStack.pushPose();
 
-
-
-
-
-//        poseStack.translate(-0.5,entity.getEyeHeight()+0.15,-0.5);
-//        Vec3 eyePosOffset = new Vec3(0, 0, 0.5).yRot((-entityYaw + 720)%360 * Mth.DEG_TO_RAD);
-//        poseStack.translate(eyePosOffset.x, eyePosOffset.y, eyePosOffset.z);
-
-        poseStack.translate(-0.5,entity.getEyeHeight(),-0.5);
+        poseStack.translate(0,entity.getEyeHeight()+0.15,0);
+        Vec3 eyePosOffset = new Vec3(0, 0, 0.5).yRot((-entityYaw + 720)%360 * Mth.DEG_TO_RAD);
+        poseStack.translate(eyePosOffset.x, eyePosOffset.y, eyePosOffset.z);
 
         Vec3 sourceVec = new Vec3(0,entity.getEyeHeight()+0.15,0.5)
                 .yRot((-entityYaw + 720)%360 * Mth.DEG_TO_RAD);
@@ -74,25 +67,11 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
         double distance = direction.length();
         direction = direction.normalize();
 
-        float yaw = (float)Math.atan2(direction.x, direction.z);
-        float pitch = (float)Math.asin(-direction.y);
+        poseStack.mulPose(Axis.YP.rotation((float)Math.atan2(direction.x, direction.z)));
+        poseStack.mulPose(Axis.XP.rotation((float)Math.asin(-direction.y) + Mth.PI/2));
 
-//        poseStack.pushPose();
-
-        poseStack.mulPose(Axis.YP.rotation(yaw));
-        poseStack.mulPose(Axis.XP.rotation(pitch + (90 * Mth.DEG_TO_RAD)));
-
-//        poseStack.popPose();
-
-
-
-
-
-//        entity.level().addParticle(
-//                ParticleTypes.FLAME,
-//                targetVec.x, targetVec.y, targetVec.z,
-//                0, 0, 0
-//        );
+        // Compensate for renderBeaconBeam() translating the goddamn thing by 0.5,0,0.5
+        poseStack.translate(-0.5,0,-0.5);
 
         BeaconRenderer.renderBeaconBeam(
                 poseStack,
@@ -102,7 +81,7 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
                 1.0F, // beam height scale
                 entity.level().getGameTime(),
                 0,
-                (int)Math.ceil(20),
+                (int)Math.ceil(distance),
                 new float[]{0.85F, 0.2F, 0.2F}, // RGB color
                 0.08F, // inner radius
                 0.1F // outer radius
@@ -110,8 +89,6 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
 
         poseStack.popPose();
     }
-
-
 
     private void renderGuardianBeam(GuardianStatueEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         // TODO: cleanup
