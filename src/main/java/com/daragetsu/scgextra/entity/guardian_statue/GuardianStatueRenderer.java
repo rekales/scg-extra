@@ -1,5 +1,6 @@
 package com.daragetsu.scgextra.entity.guardian_statue;
 
+import com.daragetsu.scgextra.SCGExtra;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -47,9 +48,10 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
         renderLaserBeam(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
     }
 
+    // TODO: redo activeTimer to save timestamp instead
     private void renderLaserBeam(GuardianStatueEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
-        LivingEntity target = entity.getActiveAttackTarget();
-        if (target == null) return;
+        int activeTimer = entity.getBeamActiveTimer();
+        if (!(40 > activeTimer && activeTimer > 0)) return;
 
         poseStack.pushPose();
 
@@ -61,7 +63,7 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
                 .yRot((-entityYaw + 720)%360 * Mth.DEG_TO_RAD);
         sourceVec = sourceVec.add(entity.position());
 
-        Vec3 targetVec = target.position().add(0, target.getBbHeight()/2, 0);
+        Vec3 targetVec = entity.getBeamLookPos();  // TODO: lerp
 
         Vec3 direction = targetVec.subtract(sourceVec);
         double distance = direction.length();
@@ -73,6 +75,14 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
         // Compensate for renderBeaconBeam() translating the goddamn thing by 0.5,0,0.5
         poseStack.translate(-0.5,0,-0.5);
 
+        float radiusMult = activeTimer > 15 ? 1 : activeTimer/15F;
+        radiusMult = activeTimer < 37 ? radiusMult : (40-activeTimer+partialTicks)/4F;
+
+//        if (activeTimer >= 37) {
+//            SCGExtra.LOGGER.debug("render: " + (50-activeTimer+partialTicks));
+//            SCGExtra.LOGGER.debug("partial: " + partialTicks);
+//        }
+
         BeaconRenderer.renderBeaconBeam(
                 poseStack,
                 buffer,
@@ -83,8 +93,8 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
                 0,
                 (int)Math.ceil(distance),
                 new float[]{0.85F, 0.2F, 0.2F}, // RGB color
-                0.08F, // inner radius
-                0.1F // outer radius
+                0.1F * radiusMult, // inner radius
+                0.13F * radiusMult // outer radius
         );
 
         poseStack.popPose();

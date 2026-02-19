@@ -22,6 +22,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -38,7 +39,12 @@ import java.util.function.Supplier;
 @MethodsReturnNonnullByDefault
 public class GuardianStatueEntity extends Monster implements GeoEntity {
 
-    private static final EntityDataAccessor<Integer> DATA_ID_ATTACK_TARGET;
+    private static final EntityDataAccessor<Integer> DATA_ID_ATTACK_TARGET =
+            SynchedEntityData.defineId(GuardianStatueEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> BEAM_ACTIVE_TIMER =
+            SynchedEntityData.defineId(GuardianStatueEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Vector3f> BEAM_LOOK_POS =
+            SynchedEntityData.defineId(GuardianStatueEntity.class, EntityDataSerializers.VECTOR3);
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
@@ -56,7 +62,8 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(4, new GuardianLaserAttackGoal(this));
+        this.goalSelector.addGoal(4, new BeamLaserAttackGoal(this, 200, 32));
+//        this.goalSelector.addGoal(4, new GuardianLaserAttackGoal(this));
         this.goalSelector.addGoal(8, new ResetLookToDirection(this, ()->this.prefferedDirection, 1.0F));
 
         // Bosses will prioritize players and does not require line of sight to maintain targeting to avoid cheese
@@ -87,6 +94,7 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 1000)
                 .add(Attributes.ARMOR, 12)
+                .add(Attributes.FOLLOW_RANGE, 36)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1);
     }
 
@@ -192,7 +200,7 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
             if (this.clientSideCachedAttackTarget != null) {
                 return this.clientSideCachedAttackTarget;
             } else {
-                Entity entity = this.level().getEntity((Integer)this.entityData.get(DATA_ID_ATTACK_TARGET));
+                Entity entity = this.level().getEntity(this.entityData.get(DATA_ID_ATTACK_TARGET));
                 if (entity instanceof LivingEntity) {
                     this.clientSideCachedAttackTarget = (LivingEntity)entity;
                     return this.clientSideCachedAttackTarget;
@@ -217,10 +225,24 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_ID_ATTACK_TARGET, 0);
+        this.entityData.define(BEAM_ACTIVE_TIMER, 0);
+        this.entityData.define(BEAM_LOOK_POS, this.position().add(this.getLookAngle()).toVector3f());
     }
 
-    static {
-        DATA_ID_ATTACK_TARGET = SynchedEntityData.defineId(GuardianStatueEntity.class, EntityDataSerializers.INT);
+    public void setBeamActiveTimer(int timer) {
+        this.entityData.set(BEAM_ACTIVE_TIMER, timer);
+    }
+
+    public int getBeamActiveTimer() {
+        return this.entityData.get(BEAM_ACTIVE_TIMER);
+    }
+
+    public void setBeamLookPos(Vec3 pos) {
+        this.entityData.set(BEAM_LOOK_POS, pos.toVector3f());
+    }
+
+    public Vec3 getBeamLookPos() {
+        return new Vec3(this.entityData.get(BEAM_LOOK_POS));
     }
 
     @Override
