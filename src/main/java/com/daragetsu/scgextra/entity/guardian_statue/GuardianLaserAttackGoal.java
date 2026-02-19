@@ -9,8 +9,8 @@ public class GuardianLaserAttackGoal extends Goal {
     private final GuardianStatueEntity mob;
     private int attackTime;
 
-    public GuardianLaserAttackGoal(GuardianStatueEntity self) {
-        this.mob = self;
+    public GuardianLaserAttackGoal(GuardianStatueEntity mob) {
+        this.mob = mob;
     }
 
     @Override
@@ -41,6 +41,7 @@ public class GuardianLaserAttackGoal extends Goal {
         this.mob.setTarget(null);
     }
 
+    @Override
     public boolean requiresUpdateEveryTick() {
         return true;
     }
@@ -73,6 +74,5 @@ public class GuardianLaserAttackGoal extends Goal {
                 super.tick();
             }
         }
-
     }
 }
