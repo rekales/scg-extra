@@ -41,8 +41,8 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
 
     private static final EntityDataAccessor<Integer> DATA_ID_ATTACK_TARGET =
             SynchedEntityData.defineId(GuardianStatueEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> BEAM_ACTIVE_TIMER =
-            SynchedEntityData.defineId(GuardianStatueEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Long> BEAM_ACTIVE_TIMER =
+            SynchedEntityData.defineId(GuardianStatueEntity.class, EntityDataSerializers.LONG);
     private static final EntityDataAccessor<Vector3f> BEAM_LOOK_POS =
             SynchedEntityData.defineId(GuardianStatueEntity.class, EntityDataSerializers.VECTOR3);
 
@@ -225,16 +225,17 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_ID_ATTACK_TARGET, 0);
-        this.entityData.define(BEAM_ACTIVE_TIMER, 0);
+        this.entityData.define(BEAM_ACTIVE_TIMER, 0L);
         this.entityData.define(BEAM_LOOK_POS, this.position().add(this.getLookAngle()).toVector3f());
     }
 
-    public void setBeamActiveTimer(int timer) {
-        this.entityData.set(BEAM_ACTIVE_TIMER, timer);
+    public void startBeamActiveTimer(int ticks) {
+        this.entityData.set(BEAM_ACTIVE_TIMER, this.level().getGameTime() + ticks);
     }
 
     public int getBeamActiveTimer() {
-        return this.entityData.get(BEAM_ACTIVE_TIMER);
+        int timer = (int) (this.entityData.get(BEAM_ACTIVE_TIMER) - this.level().getGameTime());
+        return Math.max(timer, 0);
     }
 
     public void setBeamLookPos(Vec3 pos) {
@@ -281,8 +282,6 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
                     getPreferredDirection().toYRot(),
                     this.turnSpeed
             ));
-
-            // TODO: force updates to client or override look control to have a slower turn rate
 
             this.mob.yHeadRot = this.mob.getYRot();
             this.mob.yBodyRot = this.mob.getYRot();

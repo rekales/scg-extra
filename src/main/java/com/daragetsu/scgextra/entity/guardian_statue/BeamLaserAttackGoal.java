@@ -56,7 +56,6 @@ public class BeamLaserAttackGoal extends Goal {
         LivingEntity target = this.mob.getTarget();
         if (target == null) return;
 
-        this.mob.setBeamActiveTimer(this.activeTicks);
         if (this.activeTicks > 0) {
             SCGExtra.LOGGER.debug("active: " + this.activeTicks);
             if (this.activeTicks == 35 && this.mob.hasLineOfSight(target) && target.isAlive()) {
@@ -68,6 +67,8 @@ public class BeamLaserAttackGoal extends Goal {
             if (cooldown%10 == 0) SCGExtra.LOGGER.debug("cooldown: " + this.cooldown);
         } else {
             this.cooldown = maxInterval;
+            // NOTE: maybe just use the entity data and remove this.activeTicks?
+            this.mob.startBeamActiveTimer(120);
             this.activeTicks = 120;
         }
 

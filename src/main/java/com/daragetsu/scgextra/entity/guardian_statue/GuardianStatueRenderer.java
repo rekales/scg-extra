@@ -1,6 +1,5 @@
 package com.daragetsu.scgextra.entity.guardian_statue;
 
-import com.daragetsu.scgextra.SCGExtra;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -48,7 +47,6 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
         renderLaserBeam(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
     }
 
-    // TODO: redo activeTimer to save timestamp instead
     private void renderLaserBeam(GuardianStatueEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         int activeTimer = entity.getBeamActiveTimer();
         if (!(40 > activeTimer && activeTimer > 0)) return;
@@ -77,11 +75,6 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
 
         float radiusMult = activeTimer > 15 ? 1 : activeTimer/15F;
         radiusMult = activeTimer < 37 ? radiusMult : (40-activeTimer+partialTicks)/4F;
-
-//        if (activeTimer >= 37) {
-//            SCGExtra.LOGGER.debug("render: " + (50-activeTimer+partialTicks));
-//            SCGExtra.LOGGER.debug("partial: " + partialTicks);
-//        }
 
         BeaconRenderer.renderBeaconBeam(
                 poseStack,
