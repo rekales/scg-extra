@@ -31,16 +31,18 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.EnumSet;
 import java.util.function.Supplier;
 
 // TODO: add datas
+// NOTE: maybe make an abstract class that automatically gives access to the target entity in client if it gets common enough
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class GuardianStatueEntity extends Monster implements GeoEntity {
 
-    private static final EntityDataAccessor<Integer> DATA_ID_ATTACK_TARGET =
+    private static final EntityDataAccessor<Integer> TARGET_ID =
             SynchedEntityData.defineId(GuardianStatueEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Long> GUARDIAN_LASER_ACTIVE_TIMER =
+            SynchedEntityData.defineId(GuardianStatueEntity.class, EntityDataSerializers.LONG);
     private static final EntityDataAccessor<Long> BEAM_ACTIVE_TIMER =
             SynchedEntityData.defineId(GuardianStatueEntity.class, EntityDataSerializers.LONG);
     private static final EntityDataAccessor<Vector3f> BEAM_LOOK_POS =
@@ -52,8 +54,7 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
     private Direction prefferedDirection = Direction.NORTH;
 
     @Nullable
-    private LivingEntity clientSideCachedAttackTarget;
-    private int clientSideAttackTime;
+    private LivingEntity clientSideCachedTarget;
 
     public GuardianStatueEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -62,8 +63,8 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(4, new BeamLaserAttackGoal(this, 200, 32));
-//        this.goalSelector.addGoal(4, new GuardianLaserAttackGoal(this));
+        this.goalSelector.addGoal(4, new BeamLaserAttackGoal(this, 400, 32));
+        this.goalSelector.addGoal(4, new GuardianLaserAttackGoal(this));
         this.goalSelector.addGoal(8, new ResetLookToDirection(this, ()->this.prefferedDirection, 1.0F));
 
         // Bosses will prioritize players and does not require line of sight to maintain targeting to avoid cheese
@@ -135,56 +136,26 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
     @Override
     public void aiStep() {
         if (this.isAlive()) {
-            if (this.level().isClientSide) {
+            LivingEntity target = this.getTarget();
 
-                if (this.hasActiveAttackTarget()) {
-                    if (this.clientSideAttackTime < this.getAttackDuration()) {
-                        ++this.clientSideAttackTime;
-                    }
-
-                    LivingEntity livingentity = this.getActiveAttackTarget();
-                    if (livingentity != null) {
-                        this.getLookControl().setLookAt(livingentity, 90.0F, 90.0F);
-                        this.getLookControl().tick();
-                        double d5 = this.getAttackAnimationScale(0.0F);
-                        double d0 = livingentity.getX() - this.getX();
-                        double d1 = livingentity.getY(0.5F) - this.getEyeY();
-                        double d2 = livingentity.getZ() - this.getZ();
-                        double d3 = Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-                        d0 /= d3;
-                        d1 /= d3;
-                        d2 /= d3;
-                        double d4 = this.random.nextDouble();
-                    }
+            if (target != null) {
+                if (this.hasLineOfSight(target)) {
+                    this.getLookControl().setLookAt(target, 90.0F, 90.0F);
                 }
-            }
-
-            if (this.hasActiveAttackTarget()) {
-                this.setYRot(this.yHeadRot);
+                this.setYRot(this.getYHeadRot());
+                this.setYBodyRot(this.getYHeadRot());
             }
         }
 
         super.aiStep();
     }
 
-    public void setActiveAttackTarget(int activeAttackTargetId) {
-        this.entityData.set(DATA_ID_ATTACK_TARGET, activeAttackTargetId);
-    }
-
-    public float getClientSideAttackTime() {
-        return (float)this.clientSideAttackTime;
-    }
-
     public int getAttackDuration() {
         return 80;
     }
 
-    public boolean hasActiveAttackTarget() {
-        return this.entityData.get(DATA_ID_ATTACK_TARGET) != 0;
-    }
-
     public float getAttackAnimationScale(float partialTick) {
-        return ((float)this.clientSideAttackTime + partialTick) / (float)this.getAttackDuration();
+        return (this.getAttackDuration() - getGuardianLaserAttackTimer() + partialTick) / (float) this.getAttackDuration();
     }
 
     @Override
@@ -192,39 +163,43 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
         return false;
     }
 
-    @Nullable
-    public LivingEntity getActiveAttackTarget() {
-        if (!this.hasActiveAttackTarget()) {
-            return null;
-        } else if (this.level().isClientSide) {
-            if (this.clientSideCachedAttackTarget != null) {
-                return this.clientSideCachedAttackTarget;
+    @Override
+    public void setTarget(@Nullable LivingEntity target) {
+        super.setTarget(target);
+        this.entityData.set(TARGET_ID, target == null ? 0 : target.getId());
+    }
+
+    @Override
+    public @Nullable LivingEntity getTarget() {
+        if (this.level().isClientSide()) {
+            if (this.clientSideCachedTarget != null) {
+                return this.clientSideCachedTarget;
             } else {
-                Entity entity = this.level().getEntity(this.entityData.get(DATA_ID_ATTACK_TARGET));
-                if (entity instanceof LivingEntity) {
-                    this.clientSideCachedAttackTarget = (LivingEntity)entity;
-                    return this.clientSideCachedAttackTarget;
+                Entity entity = this.level().getEntity(this.entityData.get(TARGET_ID));
+                if (entity instanceof LivingEntity livingEntity) {
+                    this.clientSideCachedTarget = livingEntity;
+                    return this.clientSideCachedTarget;
                 } else {
                     return null;
                 }
             }
         } else {
-            return this.getTarget();
+            return super.getTarget();
         }
     }
 
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
-        if (DATA_ID_ATTACK_TARGET.equals(key)) {
-            this.clientSideAttackTime = 0;
-            this.clientSideCachedAttackTarget = null;
+        if (TARGET_ID.equals(key)) {
+            this.clientSideCachedTarget = null;
         }
     }
 
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(DATA_ID_ATTACK_TARGET, 0);
+        this.entityData.define(TARGET_ID, 0);
+        this.entityData.define(GUARDIAN_LASER_ACTIVE_TIMER, 0L);
         this.entityData.define(BEAM_ACTIVE_TIMER, 0L);
         this.entityData.define(BEAM_LOOK_POS, this.position().add(this.getLookAngle()).toVector3f());
     }
@@ -235,6 +210,15 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
 
     public int getBeamActiveTimer() {
         int timer = (int) (this.entityData.get(BEAM_ACTIVE_TIMER) - this.level().getGameTime());
+        return Math.max(timer, 0);
+    }
+
+    public void startGuardianLaserActiveTimer(int ticks) {
+        this.entityData.set(GUARDIAN_LASER_ACTIVE_TIMER, this.level().getGameTime() + ticks);
+    }
+
+    public int getGuardianLaserAttackTimer() {
+        int timer = (int) (this.entityData.get(GUARDIAN_LASER_ACTIVE_TIMER) - this.level().getGameTime());
         return Math.max(timer, 0);
     }
 
@@ -257,6 +241,7 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
     }
 
 
+    // NOTE: Uses no flags, checks if there's a target instead
     public static class ResetLookToDirection extends Goal {
 
         protected final Mob mob;
@@ -267,12 +252,11 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
             this.mob = mob;
             this.dirSupplier = dirSupplier;
             this.turnSpeed = turnSpeed;
-            this.setFlags(EnumSet.of(Flag.LOOK));
         }
 
         @Override
         public boolean canUse() {
-            return true;
+            return this.mob.getTarget() == null;
         }
 
         @Override

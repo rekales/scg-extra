@@ -12,7 +12,6 @@ public class BeamLaserAttackGoal extends Goal {
     protected final int maxInterval;
     protected final float range;
     protected int cooldown = 0;
-    protected int activeTicks = 0;
     private Vec3 lastPos;
 
     public BeamLaserAttackGoal(GuardianStatueEntity mob, int maxInterval, float range) {
@@ -32,12 +31,8 @@ public class BeamLaserAttackGoal extends Goal {
     public void start() {
         super.start();
         this.cooldown = this.maxInterval;
-    }
-
-    @Override
-    public void stop() {
-        super.start();
-        this.activeTicks = 0;
+        this.mob.startBeamActiveTimer(0);
+        SCGExtra.LOGGER.debug("restarted");
     }
 
     @Override
@@ -56,26 +51,22 @@ public class BeamLaserAttackGoal extends Goal {
         LivingEntity target = this.mob.getTarget();
         if (target == null) return;
 
-        if (this.activeTicks > 0) {
-            SCGExtra.LOGGER.debug("active: " + this.activeTicks);
-            if (this.activeTicks == 35 && this.mob.hasLineOfSight(target) && target.isAlive()) {
+        int timer = this.mob.getBeamActiveTimer();
+        if (timer > 0) {
+            if (timer == 35 && this.mob.hasLineOfSight(target) && target.isAlive()) {
                 target.hurt(this.mob.damageSources().mobAttack(this.mob), 40F);
             }
-            this.activeTicks--;
-        } else if (this.cooldown > 0) {
+        } else if (this.cooldown > 0 && this.mob.hasLineOfSight(target)) {
             this.cooldown--;
-            if (cooldown%10 == 0) SCGExtra.LOGGER.debug("cooldown: " + this.cooldown);
-        } else {
+        } else if (this.cooldown == 0 && this.mob.getGuardianLaserAttackTimer() <= 0) {  // Don't start when guardian laser is active
             this.cooldown = maxInterval;
-            // NOTE: maybe just use the entity data and remove this.activeTicks?
             this.mob.startBeamActiveTimer(120);
-            this.activeTicks = 120;
+            timer = 120;
         }
 
-        if (this.mob.hasLineOfSight(target) && !(0 < activeTicks && activeTicks < 25)) {
+        if (this.mob.hasLineOfSight(target) && !(0 < timer && timer < 25)) {
             this.lastPos = target.position().add(0,target.getBbHeight()/2,0);
         }
         this.mob.setBeamLookPos(this.lastPos);
-        this.mob.getLookControl().setLookAt(this.lastPos.x, this.lastPos.y, this.lastPos.z, 90F, 90F);
     }
 }

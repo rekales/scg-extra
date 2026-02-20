@@ -28,7 +28,6 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
     private static final RenderType GUARDIAN_BEAM_RENDER_TYPE;
 
     public static final ResourceLocation BEACON_BEAM_LOCATION = new ResourceLocation("textures/entity/beacon_beam.png");
-    private static final RenderType BEACON_BEAM_RENDER_TYPE;
 
     public GuardianStatueRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new GuardianStatueModel<>());
@@ -95,10 +94,13 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
 
     private void renderGuardianBeam(GuardianStatueEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         // TODO: cleanup
-        LivingEntity livingentity = entity.getActiveAttackTarget();
-        if (livingentity != null) {
+        LivingEntity livingentity = entity.getTarget();
+        if (livingentity == null) return;
+
+        int timer = entity.getGuardianLaserAttackTimer();
+        if (0 < timer && timer <= entity.getAttackDuration()) {
             float f = entity.getAttackAnimationScale(partialTicks);
-            float f1 = entity.getClientSideAttackTime() + partialTicks;
+            float f1 = entity.getAttackDuration() - timer + partialTicks;
             float f2 = f1 * 0.5F % 1.0F;
             float f3 = entity.getEyeHeight();
             poseStack.pushPose();
@@ -178,6 +180,5 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
 
     static {
         GUARDIAN_BEAM_RENDER_TYPE = RenderType.entityCutoutNoCull(GUARDIAN_BEAM_LOCATION);
-        BEACON_BEAM_RENDER_TYPE = RenderType.entityCutoutNoCull(BEACON_BEAM_LOCATION);
     }
 }

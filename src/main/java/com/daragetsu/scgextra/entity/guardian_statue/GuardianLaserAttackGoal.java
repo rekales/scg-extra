@@ -5,9 +5,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 
+// NOTE: Look control will be handled on the entity itself
 public class GuardianLaserAttackGoal extends Goal {
-    private final GuardianStatueEntity mob;
-    private int attackTime;
+
+    protected final GuardianStatueEntity mob;
+    protected int cooldown = 0;
 
     public GuardianLaserAttackGoal(GuardianStatueEntity mob) {
         this.mob = mob;
@@ -23,18 +25,17 @@ public class GuardianLaserAttackGoal extends Goal {
 
     @Override
     public void start() {
-        this.attackTime = -10;
         LivingEntity target = this.mob.getTarget();
+        this.cooldown = 30;
+        this.mob.startGuardianLaserActiveTimer(0);
         if (target != null) {
             this.mob.getLookControl().setLookAt(target, 90.0F, 90.0F);
         }
-        this.mob.hasImpulse = true;  // TODO: figure out what impulse is
     }
 
     @Override
     public void stop() {
-        this.mob.setActiveAttackTarget(0);
-        this.mob.setTarget(null);
+        this.mob.startGuardianLaserActiveTimer(0);
     }
 
     @Override
@@ -43,31 +44,30 @@ public class GuardianLaserAttackGoal extends Goal {
     }
 
     public void tick() {
-        LivingEntity livingentity = this.mob.getTarget();
-        if (livingentity != null) {
-            this.mob.getNavigation().stop();
-            this.mob.getLookControl().setLookAt(livingentity, 90.0F, 90.0F);
-            if (!this.mob.hasLineOfSight(livingentity)) {
-                this.mob.setTarget(null);
-            } else {
-                ++this.attackTime;
-                if (this.attackTime == 0) {
-                    this.mob.setActiveAttackTarget(livingentity.getId());
-                    if (!this.mob.isSilent()) {
-                        this.mob.level().broadcastEntityEvent(this.mob, (byte)21);
-                    }
-                } else if (this.attackTime >= this.mob.getAttackDuration()) {
-                    float f = 1.0F;
-                    if (this.mob.level().getDifficulty() == Difficulty.HARD) {
-                        f += 2.0F;
-                    }
+        LivingEntity target = this.mob.getTarget();
+        if (target == null) return;
 
-                    livingentity.hurt(this.mob.damageSources().indirectMagic(this.mob, this.mob), f);
-                    livingentity.hurt(this.mob.damageSources().mobAttack(this.mob), (float)this.mob.getAttributeValue(Attributes.ATTACK_DAMAGE));
-                    this.mob.setTarget(null);
+        if (this.cooldown > 0) {
+            this.cooldown--;
+        } else {
+            int timer = this.mob.getGuardianLaserAttackTimer();
+            if (!this.mob.hasLineOfSight(target)) {
+                if (timer > 0) {
+                    this.mob.startGuardianLaserActiveTimer(0);
+                    timer = 0;
                 }
+            } else {
+                if (timer <= 0) {
+                    this.mob.startGuardianLaserActiveTimer(this.mob.getAttackDuration());
+                    timer = this.mob.getAttackDuration();
+                }
+            }
 
-                super.tick();
+            if (timer == 1) {
+                float mult = this.mob.level().getDifficulty() == Difficulty.HARD ? 3.0F : 1.0F;
+                target.hurt(this.mob.damageSources().indirectMagic(this.mob, this.mob), mult);
+                target.hurt(this.mob.damageSources().mobAttack(this.mob), (float)this.mob.getAttributeValue(Attributes.ATTACK_DAMAGE));
+                this.cooldown = 30;
             }
         }
     }
