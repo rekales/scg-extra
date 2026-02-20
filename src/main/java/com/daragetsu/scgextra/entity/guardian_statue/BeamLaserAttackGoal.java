@@ -40,8 +40,8 @@ public class BeamLaserAttackGoal extends Goal {
         return true;
     }
 
-    // activeTicks 120-101: silence
-    // activeTicks 100-61: eye starts glowing
+    // activeTicks 100-86: silence
+    // activeTicks 85-61: eye starts glowing
     // activeTicks 60: eye flashes
     // activeTicks 40: beam renders
     // activeTicks 35: beam hits
@@ -60,8 +60,8 @@ public class BeamLaserAttackGoal extends Goal {
             this.cooldown--;
         } else if (this.cooldown == 0 && this.mob.getGuardianLaserAttackTimer() <= 0) {  // Don't start when guardian laser is active
             this.cooldown = maxInterval;
-            this.mob.startBeamActiveTimer(120);
-            timer = 120;
+            this.mob.startBeamActiveTimer(100);
+            timer = 100;
         }
 
         if (this.mob.hasLineOfSight(target) && !(0 < timer && timer < 25)) {
