@@ -19,7 +19,7 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-@SuppressWarnings("removal")
+@SuppressWarnings({"removal", "unused"})
 @ParametersAreNonnullByDefault
 //@MethodsReturnNonnullByDefault
 public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoEntityRenderer<T> {
@@ -93,7 +93,6 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
     }
 
     private void renderGuardianBeam(GuardianStatueEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
-        // TODO: cleanup
         LivingEntity livingentity = entity.getTarget();
         if (livingentity == null) return;
 
@@ -102,26 +101,28 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
             float f = entity.getAttackAnimationScale(partialTicks);
             float f1 = entity.getAttackDuration() - timer + partialTicks;
             float f2 = f1 * 0.5F % 1.0F;
-            float f3 = entity.getEyeHeight();
             poseStack.pushPose();
-            poseStack.translate(0.0F, f3, 0.0F);
+            poseStack.translate(0,entity.getEyeHeight()+0.15,0);
+            Vec3 eyePosOffset = new Vec3(0, 0, 0.5).yRot((-entityYaw + 720)%360 * Mth.DEG_TO_RAD);
+            poseStack.translate(eyePosOffset.x, eyePosOffset.y, eyePosOffset.z);
+
+            Vec3 sourceVec = new Vec3(0,entity.getEyeHeight()+0.15,0.5)
+                    .yRot((-entityYaw + 720)%360 * Mth.DEG_TO_RAD);
+            sourceVec = sourceVec.add(entity.position());
+
             Vec3 vec3 = this.getPosition(livingentity, (double)livingentity.getBbHeight() * (double)0.5F, partialTicks);
-            Vec3 vec31 = this.getPosition(entity, (double)f3, partialTicks);
-            Vec3 vec32 = vec3.subtract(vec31);
+            Vec3 vec32 = vec3.subtract(sourceVec);
             float f4 = (float)(vec32.length() + (double)1.0F);
             vec32 = vec32.normalize();
             float f5 = (float)Math.acos(vec32.y);
             float f6 = (float)Math.atan2(vec32.z, vec32.x);
             poseStack.mulPose(Axis.YP.rotationDegrees((((float)Math.PI / 2F) - f6) * (180F / (float)Math.PI)));
             poseStack.mulPose(Axis.XP.rotationDegrees(f5 * (180F / (float)Math.PI)));
-            int i = 1;
             float f7 = f1 * 0.05F * -1.5F;
             float f8 = f * f;
             int j = 64 + (int)(f8 * 191.0F);
             int k = 32 + (int)(f8 * 191.0F);
             int l = 128 - (int)(f8 * 64.0F);
-            float f9 = 0.2F;
-            float f10 = 0.282F;
             float f11 = Mth.cos(f7 + 2.3561945F) * 0.282F;
             float f12 = Mth.sin(f7 + 2.3561945F) * 0.282F;
             float f13 = Mth.cos(f7 + ((float)Math.PI / 4F)) * 0.282F;
@@ -138,8 +139,6 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
             float f24 = Mth.sin(f7 + ((float)Math.PI / 2F)) * 0.2F;
             float f25 = Mth.cos(f7 + ((float)Math.PI * 1.5F)) * 0.2F;
             float f26 = Mth.sin(f7 + ((float)Math.PI * 1.5F)) * 0.2F;
-            float f27 = 0.0F;
-            float f28 = 0.4999F;
             float f29 = -1.0F + f2;
             float f30 = f4 * 2.5F + f29;
             VertexConsumer vertexconsumer = buffer.getBuffer(GUARDIAN_BEAM_RENDER_TYPE);
