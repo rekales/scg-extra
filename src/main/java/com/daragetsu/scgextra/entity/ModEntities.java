@@ -41,7 +41,7 @@ public class ModEntities {
     private static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, SCGExtra.MOD_ID);
 
     public static final RegistryObject<EntityType<FishFolkEntity>> FISH_FOLK = ENTITY_TYPES
-            .register("fish_folk", () -> EntityType.Builder.of(FishFolkEntity::new, MobCategory.MISC)
+            .register("fish_folk", () -> EntityType.Builder.of(FishFolkEntity::new, MobCategory.MONSTER)
                     .sized(0.6F, 1.95F).build("fish_folk"));
 
     public static final RegistryObject<EntityType<TurtlemanEntity>> TURTLEMAN = ENTITY_TYPES

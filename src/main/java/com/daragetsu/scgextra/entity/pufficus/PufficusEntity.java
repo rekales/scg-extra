@@ -2,8 +2,15 @@ package com.daragetsu.scgextra.entity.pufficus;
 
 import com.daragetsu.scgextra.Faction;
 import com.daragetsu.scgextra.entity.Net.NetEntity;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -15,7 +22,12 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraftforge.fluids.FluidType;
+
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.constant.DefaultAnimations;
@@ -163,5 +175,36 @@ public class PufficusEntity extends Monster implements GeoEntity {
                 .add(Attributes.MAX_HEALTH, 60)
                 .add(Attributes.ARMOR, 2)
                 .add(Attributes.MOVEMENT_SPEED, 0.25);
+    }
+    @Override
+    public boolean checkSpawnRules(LevelAccessor pLevel, MobSpawnType pSpawnReason) {
+        if(!pLevel.isClientSide()){
+            ServerLevel pServerLevel = (ServerLevel) pLevel;
+            BlockPos pPos = this.blockPosition();
+            if (!pServerLevel.getFluidState(pPos.below()).is(FluidTags.WATER)) {
+                return false;
+            } else {
+                Holder<Biome> holder = pServerLevel.getBiome(pPos);
+                boolean flag = pServerLevel.getDifficulty() != Difficulty.PEACEFUL && isDarkEnoughToSpawn(pServerLevel, pPos, this.random) && (pSpawnReason == MobSpawnType.SPAWNER || pServerLevel.getFluidState(pPos).is(FluidTags.WATER));
+                if (holder.is(BiomeTags.MORE_FREQUENT_DROWNED_SPAWNS)) {
+                    return this.random.nextInt(15) == 0 && flag;
+                } else {
+                    return this.random.nextInt(40) == 0 && isDeepEnoughToSpawn(pServerLevel, pPos) && flag;
+                }
+            }
+        }else{
+            return false;
+        }
+    }
+    private static boolean isDeepEnoughToSpawn(LevelAccessor pLevel, BlockPos pPos) {
+        return pPos.getY() < pLevel.getSeaLevel() - 5;
+    }
+    @Override
+    public boolean checkSpawnObstruction(LevelReader pLevel) {
+        return pLevel.isUnobstructed(this);
+    }
+    @Override
+    public boolean canDrownInFluidType(FluidType type) {
+        return false;
     }
 }
