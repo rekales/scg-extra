@@ -24,3 +24,10 @@ mandatory=true
 versionRange="${minecraft_version_range}"
 ordering="NONE"
 side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="scguns"
+mandatory=true
+versionRange="[0.5.5,)"
+ordering="NONE"
+side="BOTH"
