@@ -63,7 +63,7 @@
   "henchmen": {
     "types": [
       {
-        "entity_type": "minecraft:drowned",
+        "entity_type": "scgextra:fish_folk",
         "weight": 5.0,
         "health_multiplier": 1.4,
         "weapons": [
@@ -104,7 +104,7 @@
         "ai_type": "DEFAULT"
       },
       {
-        "entity_type": "scguns:finforcer",
+        "entity_type": "scgextra:salmonsaurs",
         "weight": 3.0,
         "fixed_health": 35.0,
         "weapons": [
@@ -149,7 +149,77 @@
         "ai_type": "TACTICAL"
       },
       {
-        "entity_type": "minecraft:zombie",
+        "entity_type": "scgextra:turtleman",
+        "weight": 3.0,
+        "health_multiplier": 1.2,
+        "weapons": [
+          "scguns:marlin",
+          "scguns:floundergat",
+          "scguns:hyperbaria",
+          "minecraft:iron_sword",
+          "minecraft:iron_axe"
+        ],
+        "armor": [
+          {
+            "item": "scguns:redcoat_hat",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "minecraft:leather_chestplate",
+            "slot": "chest",
+            "chance": 0.5
+          }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": false,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 2,
+        "ai_type": "RECKLESS"
+      },
+      {
+        "entity_type": "scgextra:tentacliator",
+        "weight": 2.0,
+        "health_multiplier": 1.2,
+        "weapons": [
+          "scguns:marlin",
+          "scguns:floundergat",
+          "scguns:hyperbaria",
+          "minecraft:iron_sword",
+          "minecraft:iron_axe"
+        ],
+        "armor": [
+          {
+            "item": "scguns:redcoat_hat",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "minecraft:leather_chestplate",
+            "slot": "chest",
+            "chance": 0.5
+          }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": false,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 2,
+        "ai_type": "RECKLESS"
+      },
+      {
+        "entity_type": "scgextra:pufficus",
         "weight": 2.0,
         "health_multiplier": 1.2,
         "weapons": [
