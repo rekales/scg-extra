@@ -19,6 +19,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.material.PushReaction;
@@ -132,6 +133,10 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
             newPos = new Vec3(newPos.x, oldPos.y, newPos.z);
             if (!oldPos.equals(newPos)) {
                 this.setPos(newPos);
+            }
+            //make gaurdian statue fall faster
+            if (!this.onGround()) {
+                this.setDeltaMovement(this.getDeltaMovement().x, this.getDeltaMovement().y - 0.08 * 3, this.getDeltaMovement().z);
             }
         }
     }
@@ -251,6 +256,12 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
     @Override
     public boolean checkSpawnObstruction(LevelReader pLevel) {
         return pLevel.isUnobstructed(this);
+    }
+
+
+    @Override
+    public boolean checkSpawnRules(LevelAccessor pLevel, MobSpawnType pSpawnReason) {
+        return this.level().getEntitiesOfClass(GuardianStatueEntity.class, this.getBoundingBox().inflate(100)).size()<1;
     }
 
 
