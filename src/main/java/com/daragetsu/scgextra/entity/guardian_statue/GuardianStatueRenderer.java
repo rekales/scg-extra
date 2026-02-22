@@ -72,7 +72,7 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
         // Compensate for renderBeaconBeam() translating the goddamn thing by 0.5,0,0.5
         poseStack.translate(-0.5,0,-0.5);
 
-        float partialTimer = activeTimer+partialTicks;
+        float partialTimer = activeTimer-partialTicks;
 
         float outerRadiusMult = 0;
         if (85 >= partialTimer) {
