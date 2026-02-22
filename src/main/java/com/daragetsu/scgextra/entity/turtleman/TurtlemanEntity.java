@@ -1,7 +1,6 @@
 package com.daragetsu.scgextra.entity.turtleman;
 
 import com.daragetsu.scgextra.Faction;
-import com.daragetsu.scgextra.SCGExtra;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -25,7 +24,6 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -126,7 +124,7 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
                     // TODO: override move control or something I dunno. I'm tired of dealing with this.
                     if (wrappedGoal.getGoal() instanceof TurtlemanGunAttackGoal<?> goal && goal.active) {
                         LivingEntity target = this.getTarget();
-                        if (target == null) return;
+                        if (target == null || this.stunnedGoal.isStunned()) return;
 
                         // Direction from turtleman to player
                         double dx = target.getX() - this.getX();
@@ -170,7 +168,7 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
     public boolean hurt(DamageSource source, float amount) {
         Vec3 attackVector = source.getSourcePosition();
         if (!this.stunnedGoal.isStunned() && attackVector != null) {
-            attackVector = source.getSourcePosition().subtract(this.position()).normalize();
+            attackVector = attackVector.subtract(this.position()).normalize();
             Vec3 lookVector = this.getLookAngle();
 
             double dotProduct = attackVector.dot(lookVector);
