@@ -1,0 +1,36 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"effect.eye_flash": {
+			"animation_length": 0.8,
+			"bones": {
+				"eye_flash": {
+					"scale": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.4": {
+							"vector": [1.2, 1.2, 1.2],
+							"easing": "easeInQuad"
+						},
+						"0.8": {
+							"vector": [0, 0, 0],
+							"easing": "easeOutQuad"
+						}
+					}
+				}
+			}
+		},
+		"misc.living": {
+			"animation_length": 1,
+			"bones": {
+				"eye_flash": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

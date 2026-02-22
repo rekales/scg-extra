@@ -1,6 +1,7 @@
 package com.daragetsu.scgextra.entity.guardian_statue;
 
 import com.daragetsu.scgextra.Faction;
+import com.daragetsu.scgextra.SCGExtra;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -28,8 +29,13 @@ import net.minecraftforge.fluids.FluidType;
 
 import org.joml.Vector3f;
 import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.Animation;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nonnull;
@@ -52,6 +58,8 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
     private static final EntityDataAccessor<Vector3f> BEAM_LOOK_POS =
             SynchedEntityData.defineId(GuardianStatueEntity.class, EntityDataSerializers.VECTOR3);
 
+    public static final RawAnimation EYE_FLASH = RawAnimation.begin().then("effect.eye_flash", Animation.LoopType.PLAY_ONCE);
+
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
     @Nonnull
@@ -67,9 +75,8 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(4, new BeamLaserAttackGoal(this, 400, 32));
+        this.goalSelector.addGoal(4, new BeamLaserAttackGoal(this, 100, 32));
         this.goalSelector.addGoal(4, new GuardianLaserAttackGoal(this));
-        this.goalSelector.addGoal(8, new ResetLookToDirection(this, ()->this.prefferedDirection, 1.0F));
 
         // Bosses will prioritize players and does not require line of sight to maintain targeting to avoid cheese
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, false,
@@ -150,9 +157,16 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
                 if (this.hasLineOfSight(target)) {
                     this.getLookControl().setLookAt(target, 90.0F, 90.0F);
                 }
-                this.setYRot(this.getYHeadRot());
-                this.setYBodyRot(this.getYHeadRot());
+            } else if (getBeamActiveTimer() <= 0) {
+                Vec3 lookPos = new Vec3(
+                        this.position().x + this.prefferedDirection.getNormal().getX()*8,
+                        this.position().y,
+                        this.position().z + this.prefferedDirection.getNormal().getZ()*8
+                );
+                this.getLookControl().setLookAt(lookPos.x, lookPos.y, lookPos.z, 1.0F, 1.0F);
             }
+            this.setYRot(this.getYHeadRot());
+            this.setYBodyRot(this.getYHeadRot());
         }
 
         super.aiStep();
@@ -239,8 +253,11 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
     }
 
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(DefaultAnimations.genericLivingController(this));
+        controllers.add(new AnimationController<>(this, "effects", 0, state -> PlayState.STOP)
+                .triggerableAnim("eye_flash", EYE_FLASH)
+        );
     }
 
     @Override
