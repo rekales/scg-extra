@@ -21,6 +21,6 @@ public class GuardianStatueModel<T extends GuardianStatueEntity> extends GeoMode
 
     @Override
     public ResourceLocation getAnimationResource(T t) {
-        return SCGExtra.asResource("animation/guardian_statue.geo.json");
+        return SCGExtra.asResource("animations/guardian_statue.animation.json");
     }
 }

@@ -13,8 +13,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
+import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -44,6 +46,40 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
 
         renderGuardianBeam(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
         renderLaserBeam(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
+    }
+
+    // NOTE: might be heavy, use fast bone custom render layer to make it more efficient
+    @Override
+    public void renderRecursively(PoseStack poseStack, T animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource,
+                                  VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay,
+                                  float red, float green, float blue, float alpha) {
+
+        if (bone.getName().equals("overlay")) {
+            renderType = RenderType.entityTranslucent(getTextureLocation(animatable));
+            float partialTimer = animatable.getBeamActiveTimer();
+            if (100 > partialTimer && partialTimer > 0) {
+                partialTimer += partialTick;
+                buffer = bufferSource.getBuffer(renderType);
+
+                float outerRadiusMult = 0;
+                if (partialTimer <= 15) {
+                    outerRadiusMult = partialTimer/15F;
+                } else if (85 >= partialTimer) {
+                    outerRadiusMult = Math.min((85 - partialTimer) / 35, 1);
+                }
+                alpha = outerRadiusMult;
+            } else {
+                alpha = 0;
+            }
+        }
+
+        super.renderRecursively(poseStack, animatable, bone, renderType, bufferSource, buffer, isReRender, partialTick,
+                packedLight, packedOverlay, red, green, blue, alpha);
+    }
+
+    @Override
+    public RenderType getRenderType(T animatable, ResourceLocation texture, @Nullable MultiBufferSource bufferSource, float partialTick) {
+        return RenderType.entityTranslucent(texture);
     }
 
     private void renderLaserBeam(GuardianStatueEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {

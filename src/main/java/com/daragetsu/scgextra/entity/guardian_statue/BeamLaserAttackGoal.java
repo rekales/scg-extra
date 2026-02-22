@@ -53,7 +53,9 @@ public class BeamLaserAttackGoal extends Goal {
 
         int timer = this.mob.getBeamActiveTimer();
         if (timer > 0) {
-            if (timer == 35 && this.mob.hasLineOfSight(target) && target.isAlive()) {
+            if (timer == 60) {
+                this.mob.triggerAnim("effects", "eye_flash");
+            } else if (timer == 35 && this.mob.hasLineOfSight(target) && target.isAlive()) {
                 target.hurt(this.mob.damageSources().mobAttack(this.mob), 40F);
             }
         } else if (this.cooldown > 0 && this.mob.hasLineOfSight(target)) {

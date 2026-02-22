@@ -1,7 +1,6 @@
 package com.daragetsu.scgextra.entity.turtleman;
 
 import com.daragetsu.scgextra.Faction;
-import com.daragetsu.scgextra.SCGExtra;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -125,7 +124,7 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
                     // TODO: override move control or something I dunno. I'm tired of dealing with this.
                     if (wrappedGoal.getGoal() instanceof TurtlemanGunAttackGoal<?> goal && goal.active) {
                         LivingEntity target = this.getTarget();
-                        if (target == null) return;
+                        if (target == null || this.stunnedGoal.isStunned()) return;
 
                         // Direction from turtleman to player
                         double dx = target.getX() - this.getX();
@@ -167,6 +166,17 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
+        Vec3 attackVector = source.getSourcePosition();
+        if (!this.stunnedGoal.isStunned() && attackVector != null) {
+            attackVector = attackVector.subtract(this.position()).normalize();
+            Vec3 lookVector = this.getLookAngle();
+
+            double dotProduct = attackVector.dot(lookVector);
+            if (dotProduct < 0) {
+                return false;
+            }
+        }
+
         return super.hurt(source, amount);
     }
 
