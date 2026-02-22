@@ -25,6 +25,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -167,6 +168,17 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
+        Vec3 attackVector = source.getSourcePosition();
+        if (!this.stunnedGoal.isStunned() && attackVector != null) {
+            attackVector = source.getSourcePosition().subtract(this.position()).normalize();
+            Vec3 lookVector = this.getLookAngle();
+
+            double dotProduct = attackVector.dot(lookVector);
+            if (dotProduct < 0) {
+                return false;
+            }
+        }
+
         return super.hurt(source, amount);
     }
 
