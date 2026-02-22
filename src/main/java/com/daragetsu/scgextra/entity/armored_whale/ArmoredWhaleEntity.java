@@ -88,6 +88,7 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
         this.goalSelector.addGoal(3, new DeployMinesGoal(this, 800, 1.1F, 4, 6));
         this.goalSelector.addGoal(4, new SlamAttackGoal(this));
         this.goalSelector.addGoal(4, new SplashWaterGoal(this));
+        this.goalSelector.addGoal(4, new SpawnReinforcementsGoal(this));
         // range 24 to compensate for the whale's size
         this.goalSelector.addGoal(5, new MountedGunAttackGoal.Left(this, 2, 24));
         this.goalSelector.addGoal(5, new MountedGunAttackGoal.Right(this, 2, 24));
