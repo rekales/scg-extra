@@ -5,9 +5,11 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
@@ -22,7 +24,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidType;
 
@@ -35,6 +41,9 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Supplier;
 
 // TODO: add datas
@@ -42,7 +51,7 @@ import java.util.function.Supplier;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class GuardianStatueEntity extends Monster implements GeoEntity {
-
+    boolean triedRemove = false;
     private static final EntityDataAccessor<Integer> TARGET_ID =
             SynchedEntityData.defineId(GuardianStatueEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Long> GUARDIAN_LASER_ACTIVE_TIMER =
@@ -137,6 +146,10 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
             //make gaurdian statue fall faster
             if (!this.onGround()) {
                 this.setDeltaMovement(this.getDeltaMovement().x, this.getDeltaMovement().y - 0.08 * 3, this.getDeltaMovement().z);
+            }
+            //remove self if it's in ocean monument but not at the entrance
+            if(this.tickCount%5==0){
+                checkShouldDeleteSelf();
             }
         }
     }
@@ -262,6 +275,83 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
     @Override
     public boolean checkSpawnRules(LevelAccessor pLevel, MobSpawnType pSpawnReason) {
         return this.level().getEntitiesOfClass(GuardianStatueEntity.class, this.getBoundingBox().inflate(100)).size()<1;
+    }
+
+    private void checkShouldDeleteSelf(){
+        Map<BlockState, BlockPos> blocks = new HashMap<>();
+        if(this.isInWater() && this.onGround()){
+            if(triedRemove){
+                return;
+            }
+            triedRemove=true;
+            AABB box = this.getBoundingBox().inflate(5 ,0 ,5);
+            for(double i = box.minX; i < box.maxX; i++){
+                for(double j = box.minZ; j < box.maxZ; j++){
+                    for(double k = box.minY; k < box.maxY; k++){
+                        BlockPos pos = new BlockPos((int)i,(int)k,(int)j);
+                        BlockState state = this.level().getBlockState(pos);
+                        if(state.is(Blocks.WATER) && state.is(Blocks.AIR)){
+                            continue;
+                        }
+                        if(state.is(Blocks.SEA_LANTERN)){
+                            Block[] list = {
+                                Blocks.PRISMARINE,
+                                Blocks.PRISMARINE_BRICKS
+                            };
+                            ServerLevel level = (ServerLevel)this.level();
+                            BlockState[] blockstatesAround = {
+                                level.getBlockState(pos.north(1)),
+                                level.getBlockState(pos.north(2)),
+                                level.getBlockState(pos.south(1)),
+                                level.getBlockState(pos.south(2)),
+                                level.getBlockState(pos.east(1)),
+                                level.getBlockState(pos.east(2)),
+                                level.getBlockState(pos.west(1)),
+                                level.getBlockState(pos.west(2))
+                            };
+                            int prismarineNum = 0;
+                            int prismarineBricksNum = 0;
+                            for(int l = 0; l < blockstatesAround.length; l++){
+                                for(int m = 0; m < list.length; m++){
+                                    if(blockstatesAround[l].is(list[m])){
+                                        if(m==0){
+                                            prismarineNum++;
+                                        }else if(m==1){
+                                            prismarineBricksNum++;
+                                        }
+                                    }
+                                }
+                            }
+                            if(!(prismarineNum==0 && prismarineBricksNum==1)){
+                                continue;
+                            }
+                            if(prismarineNum==1 && prismarineBricksNum==0){
+                                continue;
+                            }
+                            if(prismarineNum==1 && prismarineBricksNum==1){
+                                continue;
+                            }
+                        }
+                        blocks.put(state, new BlockPos((int)i,(int)k,(int)j));
+                    }
+                }
+            }
+            boolean prismarineBricks = false;
+            boolean prismarine = false;
+            boolean sea_lantern = false;
+            for(BlockState state : blocks.keySet()){
+                if(state.is(Blocks.PRISMARINE_BRICKS)){
+                    prismarineBricks = true;
+                }else if(state.is(Blocks.PRISMARINE)){
+                    prismarine = true;
+                }else if(state.is(Blocks.SEA_LANTERN)){
+                    sea_lantern = true;
+                }
+            }
+            if(!prismarineBricks || !prismarine || !sea_lantern){
+                this.remove(RemovalReason.DISCARDED);
+            }
+        }
     }
 
 
