@@ -48,7 +48,7 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
 
     private void renderLaserBeam(GuardianStatueEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         int activeTimer = entity.getBeamActiveTimer();
-        if (!(40 > activeTimer && activeTimer > 0)) return;
+        if (!(100 > activeTimer && activeTimer > 0)) return;
 
         poseStack.pushPose();
 
@@ -72,8 +72,22 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
         // Compensate for renderBeaconBeam() translating the goddamn thing by 0.5,0,0.5
         poseStack.translate(-0.5,0,-0.5);
 
-        float radiusMult = activeTimer > 15 ? 1 : activeTimer/15F;
-        radiusMult = activeTimer < 37 ? radiusMult : (40-activeTimer+partialTicks)/4F;
+        float partialTimer = activeTimer+partialTicks;
+
+        float outerRadiusMult = 0;
+        if (85 >= partialTimer) {
+            outerRadiusMult = Math.min((85 - partialTimer) / 35, 1);
+        }
+
+        float radiusMult = 0;
+        if (partialTimer <= 15) {
+            radiusMult = partialTimer/15F;
+            outerRadiusMult = radiusMult;
+        } else if (partialTimer <= 37) {
+            radiusMult = 1;
+        } else if (partialTimer <= 40) {
+            radiusMult = (41-partialTimer)/4F;
+        }
 
         BeaconRenderer.renderBeaconBeam(
                 poseStack,
@@ -86,7 +100,7 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
                 (int)Math.ceil(distance),
                 new float[]{0.85F, 0.2F, 0.2F}, // RGB color
                 0.1F * radiusMult, // inner radius
-                0.13F * radiusMult // outer radius
+                0.13F * outerRadiusMult // outer radius
         );
 
         poseStack.popPose();
