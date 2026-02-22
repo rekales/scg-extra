@@ -1,7 +1,5 @@
 package com.daragetsu.scgextra.mixin;
 
-import java.util.ArrayList;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,16 +16,18 @@ import net.minecraft.world.level.levelgen.structure.structures.OceanMonumentPiec
 
 @Mixin(value = MonumentBuilding.class)
 public class OceanMonumentEntryRoomMixin {
-    //TODO: this spawns 2 at one place, force it to only spawn 1
-    ArrayList<BlockPos> spawnedAt = new ArrayList<>();
+    boolean spawned = false;
+    // ArrayList<BlockPos> spawnedAt = new ArrayList<>();
     @Inject(method = "generateWing", at=@At("TAIL"))
     private void onGenerateWing(boolean pWing, int pX, WorldGenLevel pLevel, RandomSource pRandom, BoundingBox pBox, CallbackInfo ci){
-        BlockPos pos = pBox.getCenter();
-        if(!spawnedAt.contains(pos)){
+        if(!spawned){
+            BlockPos pos = pBox.getCenter();
             GuardianStatueEntity entity = new GuardianStatueEntity(ModEntities.GUARDIAN_STATUE.get(), pLevel.getLevel());
             entity.moveTo(pos.below(60), 0, 0);
             pLevel.addFreshEntity(entity);
-            spawnedAt.add(pos.below(60));
+            spawned = true;
+        }else{
+            spawned = false;
         }
     }
 }
