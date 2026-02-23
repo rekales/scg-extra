@@ -23,7 +23,7 @@ public class OceanMonumentEntryRoomMixin {
         if(!spawned){
             BlockPos pos = pBox.getCenter();
             GuardianStatueEntity entity = new GuardianStatueEntity(ModEntities.GUARDIAN_STATUE.get(), pLevel.getLevel());
-            entity.moveTo(pos.below(60), 0, 0);
+            entity.moveTo(pos.below(70), 0, 0);
             pLevel.addFreshEntity(entity);
             spawned = true;
         }else{

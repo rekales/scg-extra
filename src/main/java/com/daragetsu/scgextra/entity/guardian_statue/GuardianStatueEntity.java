@@ -49,7 +49,9 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Supplier;
 
 // TODO: add datas
@@ -296,11 +298,57 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
 
     private void checkShouldDeleteSelf(){
         Map<BlockState, BlockPos> blocks = new HashMap<>();
+        //ocean monuments sometimes spawn under ice, so when the guardian statue spawns and falls, it might land on ice instead, so remove self if it's on ice
+        if(this.onGround() && !this.isInWater()){
+            BlockPos temp = this.getOnPos();
+            Set<BlockState> tempStates = new HashSet<>();
+            for (int x = temp.getX() - 1; x <= temp.getX() + 1; x++) {
+                for (int z = temp.getZ() - 1; z <= temp.getZ() + 1; z++) {
+                    int y = temp.getY();
+                    BlockPos pos = new BlockPos(x, y, z);
+                    tempStates.add(level().getBlockState(pos));
+                }
+            }
+            boolean foundIce = false;
+            for(BlockState state : tempStates){
+                if(state.is(Blocks.ICE) || state.is(Blocks.PACKED_ICE) || state.is(Blocks.BLUE_ICE)){
+                    foundIce = true;
+                    break;
+                }
+            }
+            if(foundIce){
+                this.remove(RemovalReason.DISCARDED);
+                return;
+            }
+        }
         if(this.isInWater() && this.onGround()){
             if(triedRemove){
                 return;
             }
             triedRemove=true;
+            BlockPos temp = this.getOnPos();
+            Set<BlockState> tempStates = new HashSet<>();
+            for (int x = temp.getX() - 1; x <= temp.getX() + 1; x++) {
+                for (int z = temp.getZ() - 1; z <= temp.getZ() + 1; z++) {
+                    int y = temp.getY();
+                    BlockPos pos = new BlockPos(x, y, z);
+                    tempStates.add(level().getBlockState(pos));
+                }
+            }
+            boolean foundBricks = false;
+            boolean foundPrismarine = false;
+            for(BlockState state : tempStates){
+                if(state.is(Blocks.PRISMARINE_BRICKS)){
+                    foundBricks = true;
+                }else if(state.is(Blocks.PRISMARINE)){
+                    foundPrismarine = true;
+                }
+            }
+            if(!foundBricks || !foundPrismarine){
+                this.remove(RemovalReason.DISCARDED);
+                return;
+            }
+            //idk what i was on when i wrote this, and I'm too scared to try to refactor it, but the code above should be good enough to remove entity and stop the function so this shouldn't run
             AABB box = this.getBoundingBox().inflate(5 ,0 ,5);
             for(double i = box.minX; i < box.maxX; i++){
                 for(double j = box.minZ; j < box.maxZ; j++){
