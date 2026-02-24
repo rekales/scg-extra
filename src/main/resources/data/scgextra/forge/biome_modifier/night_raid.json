@@ -18,7 +18,7 @@
             "type": "scgextra:salmonsaurs",
             "weight": 3,
             "minCount": 1,
-            "maxCount": 3,
+            "maxCount": 1,
             "conditions": [
                 {
                     "type": "minecraft:light_level",
@@ -54,7 +54,7 @@
             "type": "scgextra:turtleman",
             "weight": 4,
             "minCount": 1,
-            "maxCount": 4,
+            "maxCount": 2,
             "conditions": [
                 {
                     "type": "minecraft:light_level",
