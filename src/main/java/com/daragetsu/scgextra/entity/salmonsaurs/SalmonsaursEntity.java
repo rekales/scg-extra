@@ -111,7 +111,7 @@ public class SalmonsaursEntity extends Hoglin{
     }
     @Override
     public void setTarget(LivingEntity pTarget) {
-        if(pTarget==null || !Faction.isFriendlies(this, pTarget)){
+        if(pTarget!=null && !Faction.isFriendlies(this, pTarget)){
             super.setTarget(pTarget);
         }
     }
