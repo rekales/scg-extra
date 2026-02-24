@@ -4,6 +4,8 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
@@ -18,6 +20,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraftforge.registries.RegistryObject;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -30,6 +33,10 @@ import top.ribs.scguns.entity.ai.AIType;
 import top.ribs.scguns.entity.ai.GunAttackGoal;
 import top.ribs.scguns.init.ModItems;
 import top.ribs.scguns.item.animated.AnimatedUnderWaterGunItem;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 
@@ -40,18 +47,26 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class FishFolkEntity extends Drowned implements GeoEntity{
-    private final ResourceLocation texture;
+    private static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(FishFolkEntity.class, EntityDataSerializers.STRING);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public FishFolkEntity(EntityType<? extends Drowned> entity, Level level) {
         super(entity, level);
-        if (new Random().nextInt(0, 2)==1) {
-            texture = SCGExtra.asResource("textures/entity/fishfolk/fishfolk_1.png");
+    }
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty,
+            MobSpawnType pReason, SpawnGroupData pSpawnData, CompoundTag pDataTag) {
+        if (this.getRandom().nextBoolean()) {
+            this.entityData.set(TEXTURE, "textures/entity/fishfolk/fishfolk_1.png");
         } else {
-            texture = SCGExtra.asResource("textures/entity/fishfolk/fishfolk_2.png");
+            this.entityData.set(TEXTURE, "textures/entity/fishfolk/fishfolk_2.png");
         }
+        return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
     }
     public ResourceLocation getTexture() {
-        return texture;
+        if(this.entityData!=null){
+            return SCGExtra.asResource(this.entityData.get(TEXTURE));
+        }
+        return SCGExtra.asResource("textures/entity/fishfolk/fishfolk_1.png");
     }
     @Override
     protected void populateDefaultEquipmentSlots(RandomSource pRandom, DifficultyInstance pDifficulty) {
@@ -154,5 +169,24 @@ public class FishFolkEntity extends Drowned implements GeoEntity{
     @Override
     public boolean isBaby() {
         return false;
+    }
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(TEXTURE, "textures/entity/fishfolk/fishfolk_1.png");
+    }
+    @Override
+    public void addAdditionalSaveData(CompoundTag pCompound) {
+        super.addAdditionalSaveData(pCompound);
+        if(this.entityData!=null){
+            pCompound.putString("texture", this.entityData.get(TEXTURE));
+        }
+    }
+    @Override
+    public void readAdditionalSaveData(CompoundTag pCompound) {
+        super.readAdditionalSaveData(pCompound);
+        if(this.entityData!=null){
+            this.entityData.set(TEXTURE, pCompound.getString("texture"));
+        }
     }
 }
