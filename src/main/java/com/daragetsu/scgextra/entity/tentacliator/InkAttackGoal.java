@@ -27,7 +27,7 @@ public class InkAttackGoal extends Goal{
     @Override
     public void start() {
         entity.triggerAnim("special", "special_attack"); 
-        cooldown = 200;
+        cooldown = 600;
         entity.getTarget().addEffect(new MobEffectInstance(ModEffects.INK_EFFECT.get(), 100));
         BlockPos start = entity.blockPosition();
         BlockPos end = entity.getTarget().blockPosition();
@@ -63,6 +63,6 @@ public class InkAttackGoal extends Goal{
 
     @Override
     public void stop() {
-        cooldown = 200;
+        super.stop();
     }
 }
