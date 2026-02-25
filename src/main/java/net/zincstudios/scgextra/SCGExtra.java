@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import net.zincstudios.scgextra.item.ModItems;
 import org.slf4j.Logger;
 
 @SuppressWarnings("unused")
@@ -29,6 +30,7 @@ public class SCGExtra
         modEventBus.addListener(this::commonSetup);
         ModEntities.register(modEventBus);
         ModEffects.register(modEventBus);
+        ModItems.register(modEventBus);
 
         modEventBus.addListener(this::addCreative);
 
