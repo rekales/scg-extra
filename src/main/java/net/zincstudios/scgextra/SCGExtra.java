@@ -1,6 +1,7 @@
 package net.zincstudios.scgextra;
 
 import net.zincstudios.scgextra.data.FactionDataLoader;
+import net.zincstudios.scgextra.datagen.DataGenerators;
 import net.zincstudios.scgextra.effects.ModEffects;
 import net.zincstudios.scgextra.entity.ModEntities;
 import com.mojang.logging.LogUtils;
@@ -35,6 +36,8 @@ public class SCGExtra
         modEventBus.addListener(this::addCreative);
 
         MinecraftForge.EVENT_BUS.addListener(FactionDataLoader::onAddReloadListeners);
+
+        modEventBus.addListener(DataGenerators::gatherData);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
