@@ -1,4 +1,4 @@
-package com.daragetsu.scgextra.entity.armored_whale;
+package com.daragetsu.scgextra.entity.armoredwhale;
 
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -137,9 +137,12 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
         super.aiStep();
         updateSubentities();
     }
+
+    @SuppressWarnings("unused")
     public ArmoredWhalePart[] getSubEntities() {
         return this.subEntities;
     }
+
     @Override
     public net.minecraftforge.entity.PartEntity<?>[] getParts() {
         return this.subEntities;

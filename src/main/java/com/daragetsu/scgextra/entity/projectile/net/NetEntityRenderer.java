@@ -1,4 +1,4 @@
-package com.daragetsu.scgextra.entity.Net;
+package com.daragetsu.scgextra.entity.projectile.net;
 
 import com.daragetsu.scgextra.SCGExtra;
 import com.mojang.blaze3d.vertex.PoseStack;

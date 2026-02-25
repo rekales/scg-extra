@@ -1,8 +1,7 @@
-package com.daragetsu.scgextra.entity.armored_whale;
+package com.daragetsu.scgextra.entity.armoredwhale;
 
-import com.daragetsu.scgextra.SCGExtra;
 import com.daragetsu.scgextra.entity.ModEntities;
-import com.daragetsu.scgextra.entity.projectile.DeployedMineEntity;
+import com.daragetsu.scgextra.entity.projectile.deployedmine.DeployedMineEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 
 public class DeployMinesGoal extends Goal {

@@ -1,7 +1,7 @@
 package com.daragetsu.scgextra.entity.pufficus;
 
 import com.daragetsu.scgextra.Faction;
-import com.daragetsu.scgextra.entity.Net.NetEntity;
+import com.daragetsu.scgextra.entity.projectile.net.NetEntity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;

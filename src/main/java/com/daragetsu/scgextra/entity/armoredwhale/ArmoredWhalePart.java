@@ -1,4 +1,4 @@
-package com.daragetsu.scgextra.entity.armored_whale;
+package com.daragetsu.scgextra.entity.armoredwhale;
 
 import com.mojang.blaze3d.vertex.PoseStack.Pose;
 

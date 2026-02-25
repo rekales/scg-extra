@@ -1,4 +1,4 @@
-package com.daragetsu.scgextra.entity.projectile;
+package com.daragetsu.scgextra.entity.projectile.deployedmine;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntityType;

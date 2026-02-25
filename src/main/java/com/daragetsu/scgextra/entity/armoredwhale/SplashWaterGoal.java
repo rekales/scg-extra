@@ -1,4 +1,4 @@
-package com.daragetsu.scgextra.entity.armored_whale;
+package com.daragetsu.scgextra.entity.armoredwhale;
 
 import java.util.HashSet;
 import java.util.Random;

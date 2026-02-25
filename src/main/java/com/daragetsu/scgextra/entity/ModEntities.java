@@ -1,19 +1,19 @@
 package com.daragetsu.scgextra.entity;
 
 import com.daragetsu.scgextra.SCGExtra;
-import com.daragetsu.scgextra.entity.Net.NetEntity;
-import com.daragetsu.scgextra.entity.Net.NetEntityModel;
-import com.daragetsu.scgextra.entity.Net.NetEntityRenderer;
-import com.daragetsu.scgextra.entity.armored_whale.ArmoredWhaleEntity;
-import com.daragetsu.scgextra.entity.armored_whale.ArmoredWhaleRenderer;
+import com.daragetsu.scgextra.entity.projectile.net.NetEntity;
+import com.daragetsu.scgextra.entity.projectile.net.NetEntityModel;
+import com.daragetsu.scgextra.entity.projectile.net.NetEntityRenderer;
+import com.daragetsu.scgextra.entity.armoredwhale.ArmoredWhaleEntity;
+import com.daragetsu.scgextra.entity.armoredwhale.ArmoredWhaleRenderer;
 import com.daragetsu.scgextra.entity.fishfolk.FishFolkEntity;
 
 import com.daragetsu.scgextra.entity.fishfolk.FishFolkRenderer;
 import com.daragetsu.scgextra.entity.guardian_statue.GuardianStatueEntity;
 import com.daragetsu.scgextra.entity.guardian_statue.GuardianStatueRenderer;
 import com.daragetsu.scgextra.entity.projectile.ArmoredWhaleProjectileEntity;
-import com.daragetsu.scgextra.entity.projectile.DeployedMineEntity;
-import com.daragetsu.scgextra.entity.projectile.DeployedMineRenderer;
+import com.daragetsu.scgextra.entity.projectile.deployedmine.DeployedMineEntity;
+import com.daragetsu.scgextra.entity.projectile.deployedmine.DeployedMineRenderer;
 import com.daragetsu.scgextra.entity.pufficus.PufficusEntity;
 import com.daragetsu.scgextra.entity.pufficus.PufficusRenderer;
 import com.daragetsu.scgextra.entity.salmonsaur.SalmonsaurEntity;

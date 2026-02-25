@@ -1,4 +1,4 @@
-package com.daragetsu.scgextra.entity.projectile;
+package com.daragetsu.scgextra.entity.projectile.deployedmine;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;

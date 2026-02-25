@@ -1,4 +1,4 @@
-package com.daragetsu.scgextra.entity.Net;
+package com.daragetsu.scgextra.entity.projectile.net;
 
 import java.util.List;
 

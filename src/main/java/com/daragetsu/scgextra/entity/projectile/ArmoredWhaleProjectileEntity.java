@@ -1,7 +1,7 @@
 package com.daragetsu.scgextra.entity.projectile;
 
-import com.daragetsu.scgextra.entity.armored_whale.ArmoredWhaleEntity;
-import com.daragetsu.scgextra.entity.armored_whale.ArmoredWhalePart;
+import com.daragetsu.scgextra.entity.armoredwhale.ArmoredWhaleEntity;
+import com.daragetsu.scgextra.entity.armoredwhale.ArmoredWhalePart;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;

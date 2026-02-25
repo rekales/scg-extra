@@ -1,4 +1,4 @@
-package com.daragetsu.scgextra.entity.armored_whale;
+package com.daragetsu.scgextra.entity.armoredwhale;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
@@ -9,7 +9,7 @@ import java.util.List;
 public class ArmoredWhaleRenderer extends GeoEntityRenderer<ArmoredWhaleEntity>{
 
     public ArmoredWhaleRenderer(Context renderManager) {
-        super(renderManager, new ArmoredWhaleModel());
+        super(renderManager, new ArmoredWhaleModel<>());
 
         addRenderLayer(new FastBoneFilterGeoLayer<>(this, () -> List.of("eye_flash"),
                 (bone, entity, partialTick) ->  bone.setHidden(!entity.getEyeFlash())));
