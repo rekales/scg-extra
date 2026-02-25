@@ -48,19 +48,3 @@ public class SCGExtra
         return new ResourceLocation(MOD_ID, path);
     }
 }
-
-/* Refactoring Notes:
-- Following recommendations for asset paths
-- Adding subdirectories per faction for scalability when adding more entities
-- Using DefaultedEntityGeoModel which also provides automatic head rotation control
-- Adding a way for quick entity models with texture variations, suing vanilla's system
-- Duplicated Tentacliator's texture as placeholder for the glow squid variant
-- I think "salmonsaurus" is the correct spelling? based on other dinosaur names at least.
-- Decided to use that "salmonsaur" internally, or maybe "salmonsaurus" is more apt?
-- I think you forgor to change the salmonsaurus to a geomodel
-- Changing entity equipment to be data based
-- (Changes) Ended up changing the gun equipment to match with requirements.
-- (Changes) Ended up removing the armor equipment, not sure why that's there
-- I'm not sure if there's a drop-only whaler guns, only checked guns that uses the whaler blueprint.
-- TODO: We'll need to prepare a two-handed pose for the fishfolk
- */
