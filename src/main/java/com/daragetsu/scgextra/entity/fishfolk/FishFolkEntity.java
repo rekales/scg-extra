@@ -13,12 +13,8 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Drowned;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraftforge.registries.RegistryObject;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
@@ -26,22 +22,18 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import top.ribs.scguns.config.EntityEquipmentConfig;
 import top.ribs.scguns.entity.ai.AIType;
 import top.ribs.scguns.entity.ai.GunAttackGoal;
-import top.ribs.scguns.init.ModItems;
-import top.ribs.scguns.item.animated.AnimatedUnderWaterGunItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.util.RandomSource;
 
 import com.daragetsu.scgextra.Faction;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
-import java.util.Random;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -54,41 +46,13 @@ public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<
     public FishFolkEntity(EntityType<? extends Drowned> entity, Level level) {
         super(entity, level);
     }
+
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty,
                                         MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
         this.setVariant(this.getRandom().nextIntBetweenInclusive(1,2));
+        EntityEquipmentConfig.equipEntity(this, "scgextra:fish_folk");  // NOTE: using raw string
         return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
-    }
-
-    @Override
-    protected void populateDefaultEquipmentSlots(RandomSource pRandom, DifficultyInstance pDifficulty) {
-        int i = pRandom.nextInt(20);
-        if (pRandom.nextFloat() < 0.5F) {
-            this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
-        }
-        if (pRandom.nextFloat() < 0.5F) {
-            this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
-        }
-        if (pRandom.nextFloat() < 0.5F) {
-            this.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
-        }
-        if (pRandom.nextFloat() < 0.5F) {
-            this.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
-        }
-        if (i < 10) {
-           this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.TRIDENT));
-        } else {
-            ArrayList<Item> guns = new ArrayList<>();
-            for(RegistryObject<Item> item : ModItems.REGISTER.getEntries()){
-                if(item.get() instanceof AnimatedUnderWaterGunItem){
-                    guns.add(item.get());
-                }
-            }
-            ItemStack gun = new ItemStack(guns.get(new Random().nextInt(guns.size())));
-            gun.getOrCreateTag().putBoolean("IgnoreAmmo", true);
-            this.setItemSlot(EquipmentSlot.MAINHAND, gun);
-        }
     }
 
     public static AttributeSupplier.Builder createAttributes() {
