@@ -57,7 +57,7 @@ public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty,
                                         MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
-        this.entityData.set(TEXTURE_VARIANT, this.getRandom().nextIntBetweenInclusive(1,2));
+        this.setVariant(this.getRandom().nextIntBetweenInclusive(1,2));
         return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
     }
 
