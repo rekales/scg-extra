@@ -31,6 +31,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 
 import net.zincstudios.scgextra.Faction;
+import net.zincstudios.scgextra.entity.salmonsaur.SalmonsaurEntity;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -157,5 +158,13 @@ public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.entityData.set(TEXTURE_VARIANT, tag.getInt("variant"));
+    }
+    @Override
+    protected boolean canRide(Entity pVehicle) {
+        return pVehicle instanceof SalmonsaurEntity && super.canRide(pVehicle);
+    }
+    @Override
+    public boolean isPassenger() {
+        return this.getVehicle() instanceof SalmonsaurEntity;
     }
 }

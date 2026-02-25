@@ -3,58 +3,10 @@
   "biomes": "#forge:is_general",
   "spawners": [
         {
-            "type": "scgextra:fish_folk",
-            "weight": 5,
-            "minCount": 2,
-            "maxCount": 8,
-            "conditions": [
-                {
-                    "type": "minecraft:light_level",
-                    "max": 7
-                }
-            ]
-        },
-        {
-            "type": "scgextra:salmonsaur",
+            "type": "scgextra:raid_summoner",
             "weight": 3,
             "minCount": 1,
             "maxCount": 1,
-            "conditions": [
-                {
-                    "type": "minecraft:light_level",
-                    "max": 7
-                }
-            ]
-        },
-        {
-            "type": "scgextra:tentacliator",
-            "weight": 2,
-            "minCount": 1,
-            "maxCount": 2,
-            "conditions": [
-                {
-                    "type": "minecraft:light_level",
-                    "max": 7
-                }
-            ]
-        },
-        {
-            "type": "scgextra:pufficus",
-            "weight": 2,
-            "minCount": 1,
-            "maxCount": 2,
-            "conditions": [
-                {
-                    "type": "minecraft:light_level",
-                    "max": 7
-                }
-            ]
-        },
-        {
-            "type": "scgextra:turtleman",
-            "weight": 4,
-            "minCount": 1,
-            "maxCount": 2,
             "conditions": [
                 {
                     "type": "minecraft:light_level",

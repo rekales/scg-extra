@@ -16,6 +16,8 @@ import net.zincstudios.scgextra.entity.projectile.deployedmine.DeployedMineEntit
 import net.zincstudios.scgextra.entity.projectile.deployedmine.DeployedMineRenderer;
 import net.zincstudios.scgextra.entity.pufficus.PufficusEntity;
 import net.zincstudios.scgextra.entity.pufficus.PufficusRenderer;
+import net.zincstudios.scgextra.entity.raid_summoner.RaidSummonerEntity;
+import net.zincstudios.scgextra.entity.raid_summoner.RaidSummonerRenderer;
 import net.zincstudios.scgextra.entity.salmonsaur.SalmonsaurEntity;
 import net.zincstudios.scgextra.entity.salmonsaur.SalmonsaurRenderer;
 import net.zincstudios.scgextra.entity.tentacliator.TentacliatorEntity;
@@ -73,6 +75,12 @@ public class ModEntities {
                     .sized(5.5F, 6F)//i think we should use child elements like enderdragon but not sure
                     .build("armored_whale"));
 
+    public static final RegistryObject<EntityType<RaidSummonerEntity>> RAID_SUMMONER = ENTITY_TYPES
+            .register("raid_summoner", () -> EntityType.Builder.of(RaidSummonerEntity::new, MobCategory.MONSTER)
+                    .updateInterval(1)
+                    .sized(0.5F, 0.5F)
+                    .build("raid_summoner"));
+
     public static final RegistryObject<EntityType<NetEntity>> NET = ENTITY_TYPES
             .register("net", () -> EntityType.Builder.<NetEntity>of(NetEntity::new, MobCategory.MISC).sized(4F, 1F).clientTrackingRange(4).updateInterval(20).build("net"));
 
@@ -113,6 +121,7 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.ARMORED_WHALE.get(), ArmoredWhaleRenderer::new);
         EntityRenderers.register(ModEntities.DEPLOYED_MINE.get(), DeployedMineRenderer::new);
         EntityRenderers.register(ModEntities.WHALE_PROJECTILE.get(), EnemyProjectileRenderer::new);
+        EntityRenderers.register(ModEntities.RAID_SUMMONER.get(), RaidSummonerRenderer::new);
     }
 
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
@@ -127,5 +136,6 @@ public class ModEntities {
         event.put(ModEntities.TENTACLIATOR.get(), TentacliatorEntity.createAttributes().build());
         event.put(ModEntities.PUFFICUS.get(), PufficusEntity.createAttributes().build());
         event.put(ModEntities.ARMORED_WHALE.get(), ArmoredWhaleEntity.createAttributes().build());
+        event.put(ModEntities.RAID_SUMMONER.get(), RaidSummonerEntity.createAttributes().build());
     }
 }
