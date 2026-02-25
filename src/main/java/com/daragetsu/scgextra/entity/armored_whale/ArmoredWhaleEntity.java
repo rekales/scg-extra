@@ -44,8 +44,11 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
     //commented out cause i was saving
     private final ArmoredWhalePart[] subEntities;
     public final ArmoredWhalePart head;
+    @SuppressWarnings("FieldCanBeLocal")
     private final ArmoredWhalePart body;
+    @SuppressWarnings("FieldCanBeLocal")
     private final ArmoredWhalePart tail1;
+    @SuppressWarnings("FieldCanBeLocal")
     private final ArmoredWhalePart tail2;
 
     public ArmoredWhaleEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
