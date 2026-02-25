@@ -47,4 +47,12 @@ public class SCGExtra
     public static ResourceLocation asResource(String path) {
         return new ResourceLocation(MOD_ID, path);
     }
+
+    /* Refactoring Notes:
+    - Following recommendations for asset paths
+    - Adding subdirectories per faction for scalability when adding more entities
+    - Using DefaultedEntityGeoModel which also provides automatic head rotation control
+    - Adding a way for quick entity models with texture variations, suing vanilla's system
+
+     */
 }
