@@ -36,6 +36,7 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import top.ribs.scguns.config.EntityEquipmentConfig;
 import top.ribs.scguns.entity.ai.AIType;
 import top.ribs.scguns.entity.ai.GunAttackGoal;
 import top.ribs.scguns.init.ModItems;
@@ -62,37 +63,8 @@ public class TentacliatorEntity extends Drowned implements GeoEntity, VariantHol
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty,
         MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
         this.setVariant(this.getRandom().nextIntBetweenInclusive(1,2));
+        EntityEquipmentConfig.equipEntity(this, "scgextra:tentacliator");  // NOTE: using raw string
         return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
-    }
-
-    @Override
-    protected void populateDefaultEquipmentSlots(RandomSource pRandom, DifficultyInstance pDifficulty) {
-        int i = pRandom.nextInt(20);
-        if (pRandom.nextFloat() < 0.5F) {
-            this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
-        }
-        if (pRandom.nextFloat() < 0.5F) {
-            this.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
-        }
-        if (pRandom.nextFloat() < 0.5F) {
-            this.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.IRON_LEGGINGS));
-        }
-        if (pRandom.nextFloat() < 0.5F) {
-            this.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.IRON_BOOTS));
-        }
-        if (i < 10) {
-           this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.TRIDENT));
-        } else {
-            ArrayList<Item> guns = new ArrayList<>();
-            for(RegistryObject<Item> item : ModItems.REGISTER.getEntries()){
-                if(item.get() instanceof AnimatedUnderWaterGunItem){
-                    guns.add(item.get());
-                }
-            }
-            ItemStack gun = new ItemStack(guns.get(random.nextInt(guns.size())));
-            gun.getOrCreateTag().putBoolean("IgnoreAmmo", true);
-            this.setItemSlot(EquipmentSlot.MAINHAND, gun);
-        }
     }
 
     @Override
@@ -103,7 +75,7 @@ public class TentacliatorEntity extends Drowned implements GeoEntity, VariantHol
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
         .add(Attributes.FOLLOW_RANGE, 35.0D)
-        .add(Attributes.MOVEMENT_SPEED, (double)0.23F)
+        .add(Attributes.MOVEMENT_SPEED, 0.23F)
         .add(Attributes.ATTACK_DAMAGE, 3.0D)
         .add(Attributes.ARMOR, 6.0D)
         .add(Attributes.MAX_HEALTH, 40.0D)

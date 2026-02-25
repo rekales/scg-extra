@@ -5,7 +5,7 @@
     {
       "item": "scguns:hullbreaker",
       "weight": 10.0,
-      "drop_chance": 0.2,
+      "drop_chance": 0.1,
       "min_durability": 0.2,
       "max_durability": 0.6,
       "slot": "mainhand"
@@ -13,7 +13,7 @@
     {
       "item": "scguns:bomb_lance",
       "weight": 10.0,
-      "drop_chance": 0.2,
+      "drop_chance": 0.1,
       "min_durability": 0.2,
       "max_durability": 0.6,
       "slot": "mainhand"
