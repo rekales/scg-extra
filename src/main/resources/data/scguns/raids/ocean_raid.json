@@ -104,7 +104,7 @@
         "ai_type": "DEFAULT"
       },
       {
-        "entity_type": "scgextra:salmonsaurs",
+        "entity_type": "scgextra:salmonsaur",
         "weight": 3.0,
         "fixed_health": 35.0,
         "weapons": [

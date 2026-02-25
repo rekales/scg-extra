@@ -1,5 +1,4 @@
-package com.daragetsu.scgextra.entity.salmonsaurs;
-
+package com.daragetsu.scgextra.entity.salmonsaur;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -8,6 +7,7 @@ import com.daragetsu.scgextra.Faction;
 import com.daragetsu.scgextra.entity.ModEntities;
 import com.daragetsu.scgextra.entity.fishfolk.FishFolkEntity;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -27,21 +27,34 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraftforge.registries.RegistryObject;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.constant.DefaultAnimations;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.util.GeckoLibUtil;
 import top.ribs.scguns.init.ModItems;
 import top.ribs.scguns.item.animated.AnimatedUnderWaterGunItem;
 
-public class SalmonsaursEntity extends Hoglin{
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class SalmonsaurEntity extends Hoglin implements GeoEntity {
+
+    private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+
     private boolean riderSpawned = false;
     public final AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
-    public SalmonsaursEntity(EntityType<? extends SalmonsaursEntity> pEntityType, Level pLevel) {
+    public SalmonsaurEntity(EntityType<? extends SalmonsaurEntity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         
     }
     public static AttributeSupplier.Builder createAttributes() {
       return Monster.createMonsterAttributes()
-      .add(Attributes.MOVEMENT_SPEED, (double)0.5F)
-      .add(Attributes.KNOCKBACK_RESISTANCE, (double)0.6F)
+      .add(Attributes.MOVEMENT_SPEED, 0.5F)
+      .add(Attributes.KNOCKBACK_RESISTANCE, 0.6F)
       .add(Attributes.ATTACK_KNOCKBACK, 1.0D)
       .add(Attributes.ATTACK_DAMAGE, 8.0D)
       .add(Attributes.MAX_HEALTH, 30.0D);
@@ -113,7 +126,7 @@ public class SalmonsaursEntity extends Hoglin{
         return false;
     }
     @Override
-    public void setTarget(LivingEntity pTarget) {
+    public void setTarget(@Nullable LivingEntity pTarget) {
         if(pTarget!=null && !Faction.isFriendlies(this, pTarget)){
             super.setTarget(pTarget);
         }
@@ -130,5 +143,15 @@ public class SalmonsaursEntity extends Hoglin{
     @Override
     public boolean checkSpawnObstruction(LevelReader pLevel) {
         return pLevel.isUnobstructed(this);
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(DefaultAnimations.genericWalkIdleController(this));
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.geoCache;
     }
 }

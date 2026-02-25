@@ -15,7 +15,7 @@
             ]
         },
         {
-            "type": "scgextra:salmonsaurs",
+            "type": "scgextra:salmonsaur",
             "weight": 3,
             "minCount": 1,
             "maxCount": 1,

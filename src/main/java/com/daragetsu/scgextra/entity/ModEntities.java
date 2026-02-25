@@ -16,9 +16,8 @@ import com.daragetsu.scgextra.entity.projectile.DeployedMineEntity;
 import com.daragetsu.scgextra.entity.projectile.DeployedMineRenderer;
 import com.daragetsu.scgextra.entity.pufficus.PufficusEntity;
 import com.daragetsu.scgextra.entity.pufficus.PufficusRenderer;
-import com.daragetsu.scgextra.entity.salmonsaurs.SalmonsaursEntity;
-import com.daragetsu.scgextra.entity.salmonsaurs.SalmonsaursModel;
-import com.daragetsu.scgextra.entity.salmonsaurs.SalmonsaursRenderer;
+import com.daragetsu.scgextra.entity.salmonsaur.SalmonsaurEntity;
+import com.daragetsu.scgextra.entity.salmonsaur.SalmonsaurRenderer;
 import com.daragetsu.scgextra.entity.tentacliator.TentacliatorEntity;
 import com.daragetsu.scgextra.entity.tentacliator.TentacliatorRenderer;
 import com.daragetsu.scgextra.entity.turtleman.TurtlemanEntity;
@@ -50,9 +49,9 @@ public class ModEntities {
                     .sized(0.6F, 1.95F)
                     .build("turtleman"));
 
-    public static final RegistryObject<EntityType<SalmonsaursEntity>> SALMONSAURS = ENTITY_TYPES
-            .register("salmonsaurs", () -> EntityType.Builder.of(SalmonsaursEntity::new, MobCategory.MONSTER)
-                    .sized(2F, 2.5F).build("salmonsaurs"));
+    public static final RegistryObject<EntityType<SalmonsaurEntity>> SALMONSAUR = ENTITY_TYPES
+            .register("salmonsaur", () -> EntityType.Builder.of(SalmonsaurEntity::new, MobCategory.MONSTER)
+                    .sized(2F, 2.5F).build("salmonsaur"));
 
     public static final RegistryObject<EntityType<GuardianStatueEntity>> GUARDIAN_STATUE = ENTITY_TYPES
             .register("guardian_statue", () -> EntityType.Builder.of(GuardianStatueEntity::new, MobCategory.MONSTER)
@@ -106,7 +105,7 @@ public class ModEntities {
     public static void onClientSetup(FMLClientSetupEvent event) {
         EntityRenderers.register(ModEntities.FISH_FOLK.get(), FishFolkRenderer::new);
         EntityRenderers.register(ModEntities.TURTLEMAN.get(), TurtlemanRenderer::new);
-        EntityRenderers.register(ModEntities.SALMONSAURS.get(), SalmonsaursRenderer::new);
+        EntityRenderers.register(ModEntities.SALMONSAUR.get(), SalmonsaurRenderer::new);
         EntityRenderers.register(ModEntities.GUARDIAN_STATUE.get(), GuardianStatueRenderer::new);
         EntityRenderers.register(ModEntities.TENTACLIATOR.get(), TentacliatorRenderer::new);
         EntityRenderers.register(ModEntities.PUFFICUS.get(), PufficusRenderer::new);
@@ -117,14 +116,13 @@ public class ModEntities {
     }
 
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
-        event.registerLayerDefinition(SalmonsaursModel.LAYER_LOCATION, SalmonsaursModel::createBodyLayer);
         event.registerLayerDefinition(NetEntityModel.LAYER_LOCATION, NetEntityModel::createBodyLayer);
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event){
         event.put(ModEntities.FISH_FOLK.get(), FishFolkEntity.createAttributes().build());
         event.put(ModEntities.TURTLEMAN.get(), TurtlemanEntity.createAttributes().build());
-        event.put(ModEntities.SALMONSAURS.get(), SalmonsaursEntity.createAttributes().build());
+        event.put(ModEntities.SALMONSAUR.get(), SalmonsaurEntity.createAttributes().build());
         event.put(ModEntities.GUARDIAN_STATUE.get(), GuardianStatueEntity.createAttributes().build());
         event.put(ModEntities.TENTACLIATOR.get(), TentacliatorEntity.createAttributes().build());
         event.put(ModEntities.PUFFICUS.get(), PufficusEntity.createAttributes().build());
