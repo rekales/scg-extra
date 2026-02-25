@@ -4,22 +4,16 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.daragetsu.scgextra.Faction;
-import com.daragetsu.scgextra.SCGExtra;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
@@ -47,33 +41,30 @@ import top.ribs.scguns.entity.ai.GunAttackGoal;
 import top.ribs.scguns.init.ModItems;
 import top.ribs.scguns.item.animated.AnimatedUnderWaterGunItem;
 
-public class TentacliatorEntity extends Drowned implements GeoEntity{
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class TentacliatorEntity extends Drowned implements GeoEntity, VariantHolder<Integer> {
+
+    // VARIANT 1: normal squid, 2: glow squid
+    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData
+            .defineId(TentacliatorEntity.class, EntityDataSerializers.INT);
+
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    private static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(TentacliatorEntity.class, EntityDataSerializers.STRING);
-    private static final EntityDataAccessor<Integer> TYPE = SynchedEntityData.defineId(TentacliatorEntity.class, EntityDataSerializers.INT);
     public Random random = new Random();
     public TentacliatorEntity(EntityType<? extends Drowned> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
+
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty,
-        MobSpawnType pReason, SpawnGroupData pSpawnData, CompoundTag pDataTag) {
-        if (this.getRandom().nextBoolean()) {
-            this.entityData.set(TEXTURE, "textures/entity/tentacliator/tentacliator.png");
-            this.entityData.set(TYPE, 1);
-        } else {
-            //TODO: change to the other texture
-            this.entityData.set(TEXTURE, "textures/entity/tentacliator/tentacliator.png");
-            this.entityData.set(TYPE, 0);
-        }
+        MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
+        this.setVariant(this.getRandom().nextIntBetweenInclusive(1,2));
         return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
     }
-    public ResourceLocation getLocation(){
-        if(this.entityData!=null){
-            return SCGExtra.asResource(this.entityData.get(TEXTURE));
-        }
-        return SCGExtra.asResource("textures/entity/tentacliator/tentacliator.png");
-    }
+
     @Override
     protected void populateDefaultEquipmentSlots(RandomSource pRandom, DifficultyInstance pDifficulty) {
         int i = pRandom.nextInt(20);
@@ -158,6 +149,7 @@ public class TentacliatorEntity extends Drowned implements GeoEntity{
             return PlayState.CONTINUE;
         }));
     }
+
     @Override
     protected void dropCustomDeathLoot(DamageSource pSource, int pLooting, boolean pRecentlyHit) {
         int frogDartsCount = random.nextInt(1,4);
@@ -170,40 +162,45 @@ public class TentacliatorEntity extends Drowned implements GeoEntity{
             this.spawnAtLocation(new ItemStack(ModItems.ADVANCED_ROUND.get()));
         }
         for(int i = 0; i < sacCount; i++){
-            if(this.entityData!=null){
-                int type = this.entityData.get(TYPE);
-                if(type==0){
-                    this.spawnAtLocation(new ItemStack(Items.INK_SAC));
-                }else if(type==1){
-                    this.spawnAtLocation(new ItemStack(Items.GLOW_INK_SAC));
-                }
+            if(this.getVariant()==1){
+                this.spawnAtLocation(new ItemStack(Items.INK_SAC));
+            }else if(this.getVariant()==2){
+                this.spawnAtLocation(new ItemStack(Items.GLOW_INK_SAC));
             }
         }
+        // TODO: replace with data
     }
+
     @Override
     public boolean isBaby() {
         return false;
     }
+
+    @Override
+    public void setVariant(Integer variant) {
+        this.entityData.set(VARIANT, variant);
+    }
+
+    @Override
+    public Integer getVariant() {
+        return this.entityData.get(VARIANT);
+    }
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(TEXTURE, "textures/entity/tentacliator/tentacliator.png");
-        this.entityData.define(TYPE, 1);
+        this.entityData.define(VARIANT, 1);
     }
+
     @Override
-    public void addAdditionalSaveData(CompoundTag pCompound) {
-        super.addAdditionalSaveData(pCompound);
-        if(this.entityData!=null){
-            pCompound.putString("texture", this.entityData.get(TEXTURE));
-            pCompound.putInt("type", this.entityData.get(TYPE));
-        }
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putInt("variant", this.entityData.get(VARIANT));
     }
+
     @Override
-    public void readAdditionalSaveData(CompoundTag pCompound) {
-        super.readAdditionalSaveData(pCompound);
-        if(this.entityData!=null){
-            this.entityData.set(TEXTURE, pCompound.getString("texture"));
-            this.entityData.set(TYPE, pCompound.getInt("type"));
-        }
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.entityData.set(VARIANT, tag.getInt("variant"));
     }
 }

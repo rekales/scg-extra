@@ -17,10 +17,8 @@ import top.ribs.scguns.init.ModItems;
 
 public class TentacliatorRenderer extends GeoEntityRenderer<TentacliatorEntity>{
 
-    TentacliatorEntity entity = null;
-
     public TentacliatorRenderer(Context context) {
-        super(context, new TentacliatorModel<TentacliatorEntity>());
+        super(context, new TentacliatorModel<>());
         this.shadowRadius = 0.5f;
         addRenderLayer(new BlockAndItemGeoLayer<>(this){
             @Override
@@ -61,11 +59,5 @@ public class TentacliatorRenderer extends GeoEntityRenderer<TentacliatorEntity>{
                 super.renderStackForBone(poseStack, bone, stack, animatable, bufferSource, partialTick, packedLight, packedOverlay);
             }
         });
-    }
-
-    @Override
-    public ResourceLocation getTextureLocation(TentacliatorEntity pEntity) {
-        entity = pEntity;
-        return SCGExtra.asResource("textures/entity/tentacliator/tentacliator.png");
     }
 }
