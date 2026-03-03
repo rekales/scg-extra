@@ -45,6 +45,9 @@ public class SlamAttackGoal extends Goal{
     public void tick() {
         super.tick();
         ticks++;
+        if(ticks==1){
+            entity.triggerAnim("special", "slam");
+        }
         if(ticks <= 10){
             entity.setEyeFlash(true);
         }if(ticks > 10 && ticks<=30){
