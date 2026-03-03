@@ -21,6 +21,9 @@ import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -70,6 +73,14 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
 
     @Override
     public void registerControllers(ControllerRegistrar controller) {
+        controller.add(new AnimationController<>(this, "controller", 0, state -> {
+            if (state.isMoving()) {
+                state.setAndContinue(RawAnimation.begin().thenLoop("movement"));
+            } else {
+                state.setAndContinue(RawAnimation.begin().thenLoop("idle"));
+            }
+            return PlayState.CONTINUE;
+        }));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
