@@ -80,7 +80,7 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(4, new BeamLaserAttackGoal(this, 100, 32));
+        this.goalSelector.addGoal(4, new BeamLaserAttackGoal(this, 400, 32));
         this.goalSelector.addGoal(4, new GuardianLaserAttackGoal(this));
 
         // Bosses will prioritize players and does not require line of sight to maintain targeting to avoid cheese
