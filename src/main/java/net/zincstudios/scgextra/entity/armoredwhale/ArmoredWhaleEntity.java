@@ -39,8 +39,6 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
     private static final EntityDataAccessor<Float> RIGHT_GUN_Y_ROT =
             SynchedEntityData.defineId(ArmoredWhaleEntity.class, EntityDataSerializers.FLOAT);
 
-    public static final RawAnimation EYE_FLASH_ANIM = RawAnimation.begin().then("effect.eye_flash", Animation.LoopType.PLAY_ONCE);
-
     public static Vec3 LEFT_GUN_OFFSET = new Vec3(-2,3.75,5.85);
     public static Vec3 RIGHT_GUN_OFFSET = new Vec3(1.9,3.75,5.85);
 
