@@ -11,7 +11,6 @@ import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer;
 
-// TODO: render held item
 public class TurtlemanRenderer<T extends TurtlemanEntity> extends GeoEntityRenderer<T> {
 
     public TurtlemanRenderer(EntityRendererProvider.Context renderManager) {

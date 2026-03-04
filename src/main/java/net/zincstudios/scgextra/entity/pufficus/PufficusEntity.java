@@ -42,8 +42,6 @@ import top.ribs.scguns.config.EntityEquipmentConfig;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-// TODO: add datas
-// should there be a separate effect for ensared or just use slowness?
 @ParametersAreNonnullByDefault
 public class PufficusEntity extends Monster implements GeoEntity {
 
@@ -196,9 +194,12 @@ public class PufficusEntity extends Monster implements GeoEntity {
             return false;
         }
     }
+
+    @SuppressWarnings("deprecation")
     private static boolean isDeepEnoughToSpawn(LevelAccessor pLevel, BlockPos pPos) {
         return pPos.getY() < pLevel.getSeaLevel() - 5;
     }
+
     @Override
     public boolean checkSpawnObstruction(LevelReader pLevel) {
         return pLevel.isUnobstructed(this);
