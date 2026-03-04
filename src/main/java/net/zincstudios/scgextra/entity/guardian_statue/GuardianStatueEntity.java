@@ -49,7 +49,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 
-// TODO: add datas
 // NOTE: maybe make an abstract class that automatically gives access to the target entity in client if it gets common enough
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault

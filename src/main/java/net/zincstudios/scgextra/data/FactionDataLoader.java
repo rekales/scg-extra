@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+// TODO: replace with entity tags
 @ParametersAreNonnullByDefault
 public class FactionDataLoader extends SimpleJsonResourceReloadListener {
 
@@ -59,6 +60,5 @@ public class FactionDataLoader extends SimpleJsonResourceReloadListener {
     }
 
     // Interim record for loading strings from json
-    // TODO: replace with custom type adapters
     private record TempFaction(String id, List<String> entities) { }
 }
