@@ -17,6 +17,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -58,8 +59,8 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
         super(pEntityType, pLevel);
         this.head = new ArmoredWhalePart(this, "head", this.getBbWidth(), this.getBbHeight());
         this.body = new ArmoredWhalePart(this, "body", this.getBbWidth(), this.getBbHeight());
-        this.tail1 = new ArmoredWhalePart(this, "tail1", this.getBbWidth(), this.getBbHeight());
-        this.tail2 = new ArmoredWhalePart(this, "tail2", this.getBbWidth(), this.getBbHeight());
+        this.tail1 = new ArmoredWhalePart(this, "tail1", 2, 2);
+        this.tail2 = new ArmoredWhalePart(this, "tail2", 2, 2);
         this.subEntities = new ArmoredWhalePart[]{this.head, this.body, this.tail1, this.tail2};
         this.setHealth(this.getMaxHealth());
         this.noCulling = true;
@@ -220,6 +221,12 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
         double z = this.getZ();
 
         float[] offsets = new float[] { -4f, this.getBbWidth(), this.getBbWidth() * 2, this.getBbWidth() * 3 };
+        AABB[] bbs = {
+            this.getBoundingBox(),
+            this.getBoundingBox(),
+            this.getBoundingBox().setMaxX(2).setMaxY(2).setMaxZ(2),
+            this.getBoundingBox().setMaxX(2).setMaxY(2).setMaxZ(2),
+        };
 
         double yawRad = Math.toRadians(this.getYRot());
         if(this.yHeadRotO!=this.yHeadRot){
@@ -242,7 +249,7 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
 
             part.setPosRaw(x + offsetX, y, z + offsetZ);
             part.setOldPosAndRot();
-            part.setBoundingBox(part.getBoundingBox());
+            part.setBoundingBox(bbs[i]);
             part.refreshDimensions();
         }
     }

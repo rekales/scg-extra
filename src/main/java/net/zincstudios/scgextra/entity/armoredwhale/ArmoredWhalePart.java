@@ -17,9 +17,8 @@ public class ArmoredWhalePart extends PartEntity<ArmoredWhaleEntity>{
     private final EntityDimensions size;
     public ArmoredWhalePart(ArmoredWhaleEntity parent, String pName, float pWidth, float pHeight) {
         super(parent);
-        this.size = EntityDimensions.fixed(pWidth, pHeight);
+        this.size = EntityDimensions.scalable(pWidth, pHeight);
         this.refreshDimensions();
-        this.setBoundingBox(this.size.makeBoundingBox(pWidth, pHeight, pWidth));
         this.parentMob = parent;
         this.name = pName;
     }
@@ -68,15 +67,8 @@ public class ArmoredWhalePart extends PartEntity<ArmoredWhaleEntity>{
     }
 
     @Override
-    public void setPos(double p_20210_, double p_20211_, double p_20212_) {
-        super.setPos(p_20210_, p_20211_, p_20212_);
-        this.setBoundingBox(this.getDimensions(this.getPose()).makeBoundingBox(p_20210_, p_20211_, p_20212_));
-    }
-
-    @Override
     public void tick() {
         super.tick();
-        this.refreshDimensions();
     }
     
 }
