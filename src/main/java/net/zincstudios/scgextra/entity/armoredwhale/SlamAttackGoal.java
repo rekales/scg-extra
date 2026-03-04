@@ -46,7 +46,6 @@ public class SlamAttackGoal extends Goal{
         ticks++;
         if(ticks==1){
             entity.triggerAnim("special", "slam");
-            entity.triggerAnim("effects", "eye_flash");
         }
         if(ticks > 10 && ticks<=30){
             entity.setDeltaMovement(

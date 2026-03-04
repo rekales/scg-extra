@@ -83,12 +83,12 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
             }
             return PlayState.CONTINUE;
         }));
-        controllers.add(new AnimationController<>(this, "special", 0, state -> PlayState.CONTINUE)
-        .triggerableAnim("slam", RawAnimation.begin().thenPlay("slam")));
 
-        controllers.add(new AnimationController<>(this, "effects", 0, state -> PlayState.STOP)
-                .triggerableAnim("eye_flash", EYE_FLASH_ANIM)
-        );
+        controllers.add(new AnimationController<>(this, "special", 0, state -> PlayState.CONTINUE)
+                .triggerableAnim("slam", RawAnimation.begin()
+                        .thenPlay("effect.eye_flash")
+                        .thenPlay("slam")
+                ));
     }
 
     public static AttributeSupplier.Builder createAttributes() {

@@ -233,6 +233,11 @@
 							"vector": [7.5, 0, 0]
 						}
 					}
+				},
+				"eye_flash": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
 				}
 			}
 		},
@@ -346,6 +351,11 @@
 				"bone5": {
 					"rotation": {
 						"vector": [0, 0, -45]
+					}
+				},
+				"eye_flash": {
+					"scale": {
+						"vector": [0, 0, 0]
 					}
 				}
 			}
@@ -520,10 +530,15 @@
 							"lerp_mode": "catmullrom"
 						}
 					}
+				},
+				"eye_flash": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
 				}
 			}
 		},
-		"effects.eye_flash": {
+		"effect.eye_flash": {
 			"animation_length": 0.8,
 			"bones": {
 				"eye_flash": {
