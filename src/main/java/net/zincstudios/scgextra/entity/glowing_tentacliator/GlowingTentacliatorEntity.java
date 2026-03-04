@@ -38,6 +38,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
+// i know there were better methods, but this was the easiest
 public class GlowingTentacliatorEntity extends Drowned implements GeoEntity, VariantHolder<Integer> {
 
     // VARIANT 1: normal squid, 2: glow squid
