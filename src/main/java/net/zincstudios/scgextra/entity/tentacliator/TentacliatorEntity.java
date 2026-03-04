@@ -10,7 +10,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -21,8 +20,6 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Drowned;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -35,7 +32,6 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import top.ribs.scguns.config.EntityEquipmentConfig;
 import top.ribs.scguns.entity.ai.AIType;
 import top.ribs.scguns.entity.ai.GunAttackGoal;
-import top.ribs.scguns.init.ModItems;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -75,9 +71,9 @@ public class TentacliatorEntity extends Drowned implements GeoEntity, VariantHol
         .add(Attributes.ARMOR, 6.0D)
         .add(Attributes.MAX_HEALTH, 40.0D)
         .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE);
-   }
-   @Override
-   protected void addBehaviourGoals() {
+    }
+    @Override
+    protected void addBehaviourGoals() {
         super.addBehaviourGoals();
         this.goalSelector.addGoal(1, new GunAttackGoal<>(this, this.getMainHandItem(), 1.0F, AIType.RECKLESS, 3));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -115,27 +111,6 @@ public class TentacliatorEntity extends Drowned implements GeoEntity, VariantHol
             }
             return PlayState.CONTINUE;
         }));
-    }
-
-    @Override
-    protected void dropCustomDeathLoot(DamageSource pSource, int pLooting, boolean pRecentlyHit) {
-        int frogDartsCount = random.nextInt(1,4);
-        int advancedRoundsCount = random.nextInt(1,4);
-        int sacCount = random.nextInt(1,4);
-        for(int i = 0; i < frogDartsCount; i++){
-            this.spawnAtLocation(new ItemStack(ModItems.FROG_DART.get()));
-        }
-        for(int i = 0; i < advancedRoundsCount; i++){
-            this.spawnAtLocation(new ItemStack(ModItems.ADVANCED_ROUND.get()));
-        }
-        for(int i = 0; i < sacCount; i++){
-            if(this.getVariant()==1){
-                this.spawnAtLocation(new ItemStack(Items.INK_SAC));
-            }else if(this.getVariant()==2){
-                this.spawnAtLocation(new ItemStack(Items.GLOW_INK_SAC));
-            }
-        }
-        // TODO: replace with data
     }
 
     @Override
