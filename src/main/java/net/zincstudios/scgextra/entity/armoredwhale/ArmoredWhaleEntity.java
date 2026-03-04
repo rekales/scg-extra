@@ -219,7 +219,7 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
         double y = this.getY();
         double z = this.getZ();
 
-        float[] offsets = new float[] { 0f, this.getBbWidth(), this.getBbWidth() * 2, this.getBbWidth() * 3 };
+        float[] offsets = new float[] { -4f, this.getBbWidth(), this.getBbWidth() * 2, this.getBbWidth() * 3 };
 
         double yawRad = Math.toRadians(this.getYRot());
         if(this.yHeadRotO!=this.yHeadRot){
@@ -229,6 +229,11 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
         }
 
         for (int i = 0; i < this.subEntities.length; i++) {
+            if(i!=0){
+                x = this.subEntities[0].getX();
+                y = this.subEntities[0].getY();
+                z = this.subEntities[0].getZ();
+            }
             ArmoredWhalePart part = this.subEntities[i];
             float distance = offsets[i];
 
