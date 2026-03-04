@@ -167,4 +167,8 @@ public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<
     public boolean isPassenger() {
         return this.getVehicle() instanceof SalmonsaurEntity;
     }
+    @Override
+    protected boolean isSunSensitive() {
+        return false;
+    }
 }

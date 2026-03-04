@@ -145,4 +145,8 @@ public class TentacliatorEntity extends Drowned implements GeoEntity, VariantHol
         super.readAdditionalSaveData(tag);
         this.entityData.set(VARIANT, tag.getInt("variant"));
     }
+    @Override
+    protected boolean isSunSensitive() {
+        return false;
+    }
 }
