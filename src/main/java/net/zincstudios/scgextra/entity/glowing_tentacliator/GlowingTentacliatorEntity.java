@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.tentacliator;
+package net.zincstudios.scgextra.entity.glowing_tentacliator;
 
 import java.util.Random;
 
@@ -38,22 +38,22 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TentacliatorEntity extends Drowned implements GeoEntity, VariantHolder<Integer> {
+public class GlowingTentacliatorEntity extends Drowned implements GeoEntity, VariantHolder<Integer> {
 
     // VARIANT 1: normal squid, 2: glow squid
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData
-            .defineId(TentacliatorEntity.class, EntityDataSerializers.INT);
+            .defineId(GlowingTentacliatorEntity.class, EntityDataSerializers.INT);
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public Random random = new Random();
-    public TentacliatorEntity(EntityType<? extends Drowned> pEntityType, Level pLevel) {
+    public GlowingTentacliatorEntity(EntityType<? extends Drowned> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty,
         MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
-        this.setVariant(1);
+        this.setVariant(2);
         EntityEquipmentConfig.equipEntity(this, "scgextra:tentacliator");  // NOTE: using raw string
         return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
     }
@@ -78,7 +78,7 @@ public class TentacliatorEntity extends Drowned implements GeoEntity, VariantHol
         this.goalSelector.addGoal(1, new GunAttackGoal<>(this, this.getMainHandItem(), 1.0F, AIType.RECKLESS, 3));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(2, new InkAttackGoal(this));
+        this.goalSelector.addGoal(2, new GlowingInkAttackGoal(this));
         this.goalSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
             @Override

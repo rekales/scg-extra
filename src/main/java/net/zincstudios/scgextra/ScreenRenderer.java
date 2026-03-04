@@ -16,12 +16,14 @@ public class ScreenRenderer {
     private static float alpha = 1;
     private static final ResourceLocation INK =
             SCGExtra.asResource("textures/ink_splat/model.png");
+    private static final ResourceLocation INK_GLOWING =
+            SCGExtra.asResource("textures/ink_splat/model_glowing.png");
     @SubscribeEvent
     public static void onRenderOverlay(RenderGuiEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
 
-        if (!mc.player.hasEffect(ModEffects.INK_EFFECT.get())){ alpha = 1; return;}
+        if (!mc.player.hasEffect(ModEffects.INK_EFFECT.get()) && !mc.player.hasEffect(ModEffects.GLOWING_INK_EFFECT.get())){ alpha = 1; return;}
         GuiGraphics g = event.getGuiGraphics();
 
         int screenW = event.getWindow().getGuiScaledWidth();
@@ -33,24 +35,44 @@ public class ScreenRenderer {
         int x = (screenW - imgW) / 2;
         int y = (screenH - imgH) / 2;
         
-        if(mc.player.getEffect(ModEffects.INK_EFFECT.get()).getDuration() <= 20){
-            alpha = Math.min(1f, alpha - 0.01f);
+        if(mc.player.hasEffect(ModEffects.INK_EFFECT.get())){
+            if(mc.player.getEffect(ModEffects.INK_EFFECT.get()).getDuration() <= 20){
+                alpha = Math.min(1f, alpha - 0.01f);
+            }
+        }else{
+            if(mc.player.getEffect(ModEffects.GLOWING_INK_EFFECT.get()).getDuration() <= 20){
+                alpha = Math.min(1f, alpha - 0.01f);
+            }
         }
 
         RenderSystem.enableBlend();
         RenderSystem.setShaderColor(1f, 1f, 1f, alpha);
         
-        g.blit(
-            INK,
-            x, 
-            y,
-            0, 
-            0,
-            imgW, 
-            imgH,
-            imgW, 
-            imgH
-        );
+        if(mc.player.hasEffect(ModEffects.INK_EFFECT.get())){
+            g.blit(
+                INK,
+                x, 
+                y,
+                0, 
+                0,
+                imgW, 
+                imgH,
+                imgW, 
+                imgH
+            );
+        }else{
+            g.blit(
+                INK_GLOWING,
+                x, 
+                y,
+                0, 
+                0,
+                imgW, 
+                imgH,
+                imgW, 
+                imgH
+            );
+        }
         
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         

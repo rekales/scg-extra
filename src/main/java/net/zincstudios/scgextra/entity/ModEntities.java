@@ -9,6 +9,8 @@ import net.zincstudios.scgextra.entity.armoredwhale.ArmoredWhaleRenderer;
 import net.zincstudios.scgextra.entity.fishfolk.FishFolkEntity;
 
 import net.zincstudios.scgextra.entity.fishfolk.FishFolkRenderer;
+import net.zincstudios.scgextra.entity.glowing_tentacliator.GlowingTentacliatorEntity;
+import net.zincstudios.scgextra.entity.glowing_tentacliator.GlowingTentacliatorRenderer;
 import net.zincstudios.scgextra.entity.guardian_statue.GuardianStatueEntity;
 import net.zincstudios.scgextra.entity.guardian_statue.GuardianStatueRenderer;
 import net.zincstudios.scgextra.entity.projectile.ArmoredWhaleProjectileEntity;
@@ -64,6 +66,10 @@ public class ModEntities {
     public static final RegistryObject<EntityType<TentacliatorEntity>> TENTACLIATOR = ENTITY_TYPES
             .register("tentacliator", () -> EntityType.Builder.of(TentacliatorEntity::new, MobCategory.MONSTER)
                     .sized(0.6F, 1.95F).build("tentacliator"));
+    
+                    public static final RegistryObject<EntityType<GlowingTentacliatorEntity>> GLOWING_TENTACLIATOR = ENTITY_TYPES
+            .register("glowing_tentacliator", () -> EntityType.Builder.of(GlowingTentacliatorEntity::new, MobCategory.MONSTER)
+                    .sized(0.6F, 1.95F).build("glowing_tentacliator"));
 
     public static final RegistryObject<EntityType<PufficusEntity>> PUFFICUS = ENTITY_TYPES
             .register("pufficus", () -> EntityType.Builder.of(PufficusEntity::new, MobCategory.MONSTER)
@@ -116,6 +122,7 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.SALMONSAUR.get(), SalmonsaurRenderer::new);
         EntityRenderers.register(ModEntities.GUARDIAN_STATUE.get(), GuardianStatueRenderer::new);
         EntityRenderers.register(ModEntities.TENTACLIATOR.get(), TentacliatorRenderer::new);
+        EntityRenderers.register(ModEntities.GLOWING_TENTACLIATOR.get(), GlowingTentacliatorRenderer::new);
         EntityRenderers.register(ModEntities.PUFFICUS.get(), PufficusRenderer::new);
         EntityRenderers.register(ModEntities.NET.get(), NetEntityRenderer::new);
         EntityRenderers.register(ModEntities.ARMORED_WHALE.get(), ArmoredWhaleRenderer::new);
@@ -134,6 +141,7 @@ public class ModEntities {
         event.put(ModEntities.SALMONSAUR.get(), SalmonsaurEntity.createAttributes().build());
         event.put(ModEntities.GUARDIAN_STATUE.get(), GuardianStatueEntity.createAttributes().build());
         event.put(ModEntities.TENTACLIATOR.get(), TentacliatorEntity.createAttributes().build());
+        event.put(ModEntities.GLOWING_TENTACLIATOR.get(), GlowingTentacliatorEntity.createAttributes().build());
         event.put(ModEntities.PUFFICUS.get(), PufficusEntity.createAttributes().build());
         event.put(ModEntities.ARMORED_WHALE.get(), ArmoredWhaleEntity.createAttributes().build());
         event.put(ModEntities.RAID_SUMMONER.get(), RaidSummonerEntity.createAttributes().build());

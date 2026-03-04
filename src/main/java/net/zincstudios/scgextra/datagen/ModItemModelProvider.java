@@ -22,6 +22,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         spawnEgg(ModItems.SALMONSAUR_SPAWN_EGG);
         spawnEgg(ModItems.GUARDIAN_STATUE_SPAWN_EGG);
         spawnEgg(ModItems.TENTACLIATOR_SPAWN_EGG);
+        spawnEgg(ModItems.GLOWING_TENTACLIATOR_SPAWN_EGG);
         spawnEgg(ModItems.PUFFICUS_SPAWN_EGG);
         spawnEgg(ModItems.ARMORED_WHALE_SPAWN_EGG);
     }
