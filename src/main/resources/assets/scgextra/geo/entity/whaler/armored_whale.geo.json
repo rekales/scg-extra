@@ -109,6 +109,15 @@
 					]
 				},
 				{
+					"name": "eye_flash",
+					"parent": "head",
+					"pivot": [-23, 24, 40.5],
+					"cubes": [
+						{"origin": [-23, 8, 28.5], "size": [0, 32, 24], "uv": [721, -24]},
+						{"origin": [23.1, 8, 28.5], "size": [0, 32, 24], "uv": [721, -24]}
+					]
+				},
+				{
 					"name": "bone2",
 					"parent": "body",
 					"pivot": [0, 36, -29],

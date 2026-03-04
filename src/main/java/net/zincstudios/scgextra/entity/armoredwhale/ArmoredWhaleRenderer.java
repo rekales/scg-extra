@@ -11,8 +11,6 @@ public class ArmoredWhaleRenderer extends GeoEntityRenderer<ArmoredWhaleEntity>{
     public ArmoredWhaleRenderer(Context renderManager) {
         super(renderManager, new ArmoredWhaleModel<>());
 
-        addRenderLayer(new FastBoneFilterGeoLayer<>(this, () -> List.of("eye_flash"),
-                (bone, entity, partialTick) ->  bone.setHidden(!entity.getEyeFlash())));
         addRenderLayer(new FastBoneFilterGeoLayer<>(this, () -> List.of("water_splash"),
                 (bone, entity, partialTick) ->  bone.setHidden(!entity.getWaterSplash())));
     }

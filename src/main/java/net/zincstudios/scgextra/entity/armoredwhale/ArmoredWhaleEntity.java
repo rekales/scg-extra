@@ -21,6 +21,7 @@ import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
+import software.bernie.geckolib.core.animation.Animation;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
@@ -31,14 +32,15 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class ArmoredWhaleEntity extends Monster implements GeoEntity {
 
-    private static final EntityDataAccessor<Boolean> EYE_FLASH =
-            SynchedEntityData.defineId(ArmoredWhaleEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> WATER_SPLASH =
             SynchedEntityData.defineId(ArmoredWhaleEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Float> LEFT_GUN_Y_ROT =
             SynchedEntityData.defineId(ArmoredWhaleEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> RIGHT_GUN_Y_ROT =
             SynchedEntityData.defineId(ArmoredWhaleEntity.class, EntityDataSerializers.FLOAT);
+
+    public static final RawAnimation EYE_FLASH_ANIM = RawAnimation.begin().then("effect.eye_flash", Animation.LoopType.PLAY_ONCE);
+
     public static Vec3 LEFT_GUN_OFFSET = new Vec3(-2,3.75,5.85);
     public static Vec3 RIGHT_GUN_OFFSET = new Vec3(1.9,3.75,5.85);
 
@@ -72,8 +74,8 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
     }
 
     @Override
-    public void registerControllers(ControllerRegistrar controller) {
-        controller.add(new AnimationController<>(this, "controller", 0, state -> {
+    public void registerControllers(ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "controller", 0, state -> {
             if (state.isMoving()) {
                 state.setAndContinue(RawAnimation.begin().thenLoop("movement"));
             } else {
@@ -81,8 +83,12 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
             }
             return PlayState.CONTINUE;
         }));
-        controller.add(new AnimationController<>(this, "special", 0, state -> PlayState.CONTINUE)
+        controllers.add(new AnimationController<>(this, "special", 0, state -> PlayState.CONTINUE)
         .triggerableAnim("slam", RawAnimation.begin().thenPlay("slam")));
+
+        controllers.add(new AnimationController<>(this, "effects", 0, state -> PlayState.STOP)
+                .triggerableAnim("eye_flash", EYE_FLASH_ANIM)
+        );
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -168,14 +174,6 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
         return false;
     }
 
-    public boolean getEyeFlash(){
-        return this.entityData.get(EYE_FLASH);
-    }
-
-    public void setEyeFlash(boolean flash){
-        this.entityData.set(EYE_FLASH, flash);
-    }
-
     public boolean getWaterSplash(){
         return this.entityData.get(WATER_SPLASH);
     }
@@ -204,7 +202,6 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(EYE_FLASH, false);
         this.entityData.define(WATER_SPLASH, false);
         this.entityData.define(LEFT_GUN_Y_ROT, 0F);
         this.entityData.define(RIGHT_GUN_Y_ROT, 0F);
