@@ -343,6 +343,8 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
             return false;
         }
     }
+
+    @SuppressWarnings("deprecation")
     private static boolean isDeepEnoughToSpawn(LevelAccessor pLevel, BlockPos pPos) {
         return pPos.getY() < pLevel.getSeaLevel() - 5;
     }

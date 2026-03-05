@@ -22,7 +22,6 @@ import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
-import software.bernie.geckolib.core.animation.Animation;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
@@ -40,8 +39,8 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
     private static final EntityDataAccessor<Float> RIGHT_GUN_Y_ROT =
             SynchedEntityData.defineId(ArmoredWhaleEntity.class, EntityDataSerializers.FLOAT);
 
-    public static Vec3 LEFT_GUN_OFFSET = new Vec3(-2,3.75,5.85);
-    public static Vec3 RIGHT_GUN_OFFSET = new Vec3(1.9,3.75,5.85);
+    public static Vec3 LEFT_GUN_OFFSET = new Vec3(-2,2.9,2);
+    public static Vec3 RIGHT_GUN_OFFSET = new Vec3(2,2.9,2);
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private boolean didSlam = false;
@@ -94,6 +93,7 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 1000)
                 .add(Attributes.ARMOR, 6)
+                .add(Attributes.MOVEMENT_SPEED, 0.3)
                 .add(Attributes.FOLLOW_RANGE, 48);
     }
 
@@ -105,7 +105,6 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
 
     @Override
     protected void registerGoals() {
-        super.registerGoals();
         this.goalSelector.addGoal(3, new DeployMinesGoal(this, 800, 1.1F, 4, 6));
         this.goalSelector.addGoal(4, new SlamAttackGoal(this));
         this.goalSelector.addGoal(4, new SplashWaterGoal(this));
