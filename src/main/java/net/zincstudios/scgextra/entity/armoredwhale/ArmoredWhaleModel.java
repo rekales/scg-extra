@@ -1,7 +1,7 @@
 package net.zincstudios.scgextra.entity.armoredwhale;
 
+import net.minecraft.util.Mth;
 import net.zincstudios.scgextra.SCGExtra;
-
 import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
@@ -21,10 +21,10 @@ public class ArmoredWhaleModel <T extends ArmoredWhaleEntity> extends DefaultedE
         CoreGeoBone rightGunBone = getAnimationProcessor().getBone("right_gun");
 
         if (leftGunBone != null) {
-            leftGunBone.setRotY(0.15f-animatable.getLeftGunYRot());  // Not sure why I need this weird offset
+            leftGunBone.setRotY(-Mth.PI/2-animatable.getLeftGunYRot());
         }
         if (rightGunBone != null) {
-            rightGunBone.setRotY(0.15f-animatable.getRightGunYRot());
+            rightGunBone.setRotY(-Mth.PI/2-animatable.getRightGunYRot());
         }
     }
 }
