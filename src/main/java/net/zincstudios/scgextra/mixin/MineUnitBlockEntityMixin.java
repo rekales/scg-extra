@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import top.ribs.scguns.blockentity.MineUnitBlockEntity;
 
-// Needs at least an empty mixin class to generate refmap files
 @Mixin(value = MineUnitBlockEntity.class)
 public class MineUnitBlockEntityMixin {
 
