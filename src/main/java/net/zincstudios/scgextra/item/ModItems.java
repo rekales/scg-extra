@@ -69,8 +69,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> GLOWING_TENTACLIATOR_SPAWN_EGG = ITEMS.register("glowing_tentacliator_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.GLOWING_TENTACLIATOR,
-                    0x123456,
-                    0x789ABC,
+                    0x123654,
+                    0x789CBA,
                     new Item.Properties()
             )
     );

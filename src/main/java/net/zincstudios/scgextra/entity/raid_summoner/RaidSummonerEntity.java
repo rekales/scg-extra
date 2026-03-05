@@ -21,6 +21,7 @@ public class RaidSummonerEntity extends Mob {
         elite.add(ModEntities.SALMONSAUR.get());
         elite.add(ModEntities.TURTLEMAN.get());
         elite.add(ModEntities.TENTACLIATOR.get());
+        elite.add(ModEntities.GLOWING_TENTACLIATOR.get());
         elite.add(ModEntities.PUFFICUS.get());
     }
 

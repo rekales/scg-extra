@@ -26,6 +26,7 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
                 .add(ModEntities.SALMONSAUR.get())
                 .add(ModEntities.GUARDIAN_STATUE.get())
                 .add(ModEntities.TENTACLIATOR.get())
+                .add(ModEntities.GLOWING_TENTACLIATOR.get())
                 .add(ModEntities.PUFFICUS.get())
                 .add(ModEntities.ARMORED_WHALE.get());
 
