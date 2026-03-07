@@ -1,7 +1,6 @@
 package net.zincstudios.scgextra.entity.armoredwhale;
 
-import net.zincstudios.scgextra.entity.ModEntities;
-import net.zincstudios.scgextra.entity.projectile.deployedmine.DeployedMineEntity;
+import top.ribs.scguns.entity.throwable.ThrowableGrenadeEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 
 public class DeployMinesGoal extends Goal {
@@ -55,11 +54,10 @@ public class DeployMinesGoal extends Goal {
             int amount = this.mob.getRandom().nextIntBetweenInclusive(this.minCount, this.maxCount);
 
             for (int i = 0; i < amount; i++) {
-                DeployedMineEntity mine = new DeployedMineEntity(ModEntities.DEPLOYED_MINE.get(), this.mob.level());
-                mine.setPos(this.mob.getEyePosition());
-                mine.setOwner(this.mob);
-                mine.shoot(0 , 1, 0, this.throwVelocity, 30);
-                this.mob.level().addFreshEntity(mine);
+                ThrowableGrenadeEntity en = new ThrowableGrenadeEntity(top.ribs.scguns.init.ModEntities.THROWABLE_GRENADE.get(), this.mob.level());
+                en.setPos(this.mob.getEyePosition());
+                en.shoot(0, 1, 0, this.throwVelocity, 30);
+                this.mob.level().addFreshEntity(en);
             }
         }
 
