@@ -94,7 +94,7 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 1000)
+                .add(Attributes.MAX_HEALTH, 700)
                 .add(Attributes.ARMOR, 6)
                 .add(Attributes.MOVEMENT_SPEED, 0.3)
                 .add(Attributes.FOLLOW_RANGE, 48);

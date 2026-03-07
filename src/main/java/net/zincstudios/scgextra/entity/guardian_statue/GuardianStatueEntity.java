@@ -109,7 +109,7 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 1000)
+                .add(Attributes.MAX_HEALTH, 700)
                 .add(Attributes.ARMOR, 12)
                 .add(Attributes.FOLLOW_RANGE, 36)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1);
