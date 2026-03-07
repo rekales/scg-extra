@@ -1,7 +1,6 @@
 package net.zincstudios.scgextra.entity.fishfolk;
 
 import net.zincstudios.scgextra.SCGExtra;
-import net.zincstudios.scgextra.entity.ModEntities;
 import net.zincstudios.scgextra.entity.TextureVarEntityGeoModel;
 import net.zincstudios.scgextra.entity.salmonsaur.SalmonsaurEntity;
 import net.minecraft.world.item.Items;

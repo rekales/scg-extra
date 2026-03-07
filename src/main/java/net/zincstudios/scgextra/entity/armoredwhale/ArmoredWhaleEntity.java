@@ -19,6 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fluids.FluidType;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
@@ -38,6 +39,8 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
             SynchedEntityData.defineId(ArmoredWhaleEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> RIGHT_GUN_Y_ROT =
             SynchedEntityData.defineId(ArmoredWhaleEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Integer> WATER_LEVEL =
+            SynchedEntityData.defineId(ArmoredWhaleEntity.class, EntityDataSerializers.INT);
 
     public static Vec3 LEFT_GUN_OFFSET = new Vec3(-2,2.9,2);
     public static Vec3 RIGHT_GUN_OFFSET = new Vec3(2,2.9,2);
@@ -203,6 +206,7 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
         this.entityData.define(WATER_SPLASH, false);
         this.entityData.define(LEFT_GUN_Y_ROT, 0F);
         this.entityData.define(RIGHT_GUN_Y_ROT, 0F);
+        this.entityData.define(WATER_LEVEL, 1);
     }
 
     public void updateSubentities(){
@@ -259,5 +263,15 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
 
     public Vec3 getRightGunPos() {
         return RIGHT_GUN_OFFSET.yRot(-this.getYRot() * Mth.DEG_TO_RAD).add(this.position());
+    }
+    @Override
+    public boolean canDrownInFluidType(FluidType type) {
+        return false;
+    }
+    public void setLayerN(int n){
+        this.entityData.set(WATER_LEVEL, n);
+    }
+    public int getLayerN(){
+        return this.entityData.get(WATER_LEVEL);
     }
 }

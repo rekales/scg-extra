@@ -27,6 +27,7 @@ public class SplashWaterGoal extends Goal{
 
     @Override
     public void start() {
+        mob.setLayerN(0);
         radius = 0.0;
         entities.clear();
         ticks = 0;
@@ -49,6 +50,9 @@ public class SplashWaterGoal extends Goal{
     public void tick() {
         super.tick();
         ticks++;
+        if(ticks % 20 == 0){
+            this.mob.setLayerN(this.mob.getLayerN()+1);
+        }
         if(!this.mob.level().isClientSide){
             this.radius = this.radius+0.16;
             for (LivingEntity e : this.mob.level().getEntitiesOfClass(LivingEntity.class, this.mob.getBoundingBox().inflate(radius))) {
@@ -89,6 +93,7 @@ public class SplashWaterGoal extends Goal{
 
     @Override
     public void stop() {
+        mob.setLayerN(0);
         cooldown = 600;
         this.mob.setWaterSplash(false);
         super.stop();

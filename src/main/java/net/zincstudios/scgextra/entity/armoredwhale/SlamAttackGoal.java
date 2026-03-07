@@ -9,6 +9,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 
 public class SlamAttackGoal extends Goal{
@@ -17,6 +18,7 @@ public class SlamAttackGoal extends Goal{
     private int cooldown = 0;
     private int ticks = 0;
     private Random random = new Random();
+    private int startTick = 0;
 
     public SlamAttackGoal(ArmoredWhaleEntity entity){
         this.entity = entity;
@@ -32,29 +34,44 @@ public class SlamAttackGoal extends Goal{
 
     @Override
     public void start() {
+        startTick = 60;//ticks to give entity time to move towards the player
         ticks = 0;
         super.start();
     }
 
     @Override
     public boolean canContinueToUse() {
-        return ticks <= 60 && entity.getTarget() != null && cooldown<=0;//~22 ticks for going up, ~22 ticks coming down and then apply the damage,the few ticks extra are just to be sure
+        return ticks <= startTick+60 && entity.getTarget() != null && entity.getTarget() instanceof Player && cooldown<=0;//~22 ticks for going up, ~22 ticks coming down and then apply the damage,the few ticks extra are just to be sure
     }
     @Override
     public void tick() {
         super.tick();
         ticks++;
-        if(ticks==1){
+        if(!entity.level().isClientSide){
+            LivingEntity target = entity.getTarget();
+            double dx = target.getX() - entity.getX();
+            double dz = target.getZ() - entity.getZ();
+            double dist = Math.sqrt(dx*dx + dz*dz);
+            if(dist > 0){
+                double speed = 0.3;
+                entity.setDeltaMovement(
+                    dx / dist * speed,
+                    entity.getDeltaMovement().y(),
+                    dz / dist * speed
+                );
+            }
+        }
+        if(ticks==startTick+1){
             entity.triggerAnim("special", "slam");
         }
-        if(ticks > 10 && ticks<=30){
+        if(ticks > startTick+10 && ticks<=startTick+30){
             entity.setDeltaMovement(
                 entity.getDeltaMovement().x(), 
                 0.3, 
                 entity.getDeltaMovement().z()
             );
             entity.setDidSlam(true);
-        }else if(ticks > 30 && entity.onGround()){//only runs after the jump and once it's on the ground
+        }else if(ticks > startTick+30 && entity.onGround()){//only runs after the jump and once it's on the ground
             AABB fiveBlockRangeAABB = new AABB(
                 entity.getX()-5,
                 entity.getY()-5,
@@ -92,27 +109,25 @@ public class SlamAttackGoal extends Goal{
     public void stop() {
         cooldown=600;//start cooldown after the whole attack finishes
         ticks = 0;
+        startTick = 0;
         if(!this.entity.level().isClientSide){
-            double radius = 0.0;
-            for(int i = 0; i < 12; i++){
-                for (int j = 0; j < 360; j += 10) {
-                    double rad = Math.toRadians(j);
-                    double x = this.entity.getX() + Math.cos(rad) * radius;
-                    double z = this.entity.getZ() + Math.sin(rad) * radius;
-                    ServerLevel level = (ServerLevel) this.entity.level();
-                    level.sendParticles(
-                        ParticleTypes.SMOKE, 
-                        x, 
-                        this.entity.getY()+1,
-                        z,
-                        20,
-                        0.4,
-                        0.4,
-                        0.4,
-                        0
-                    );
-                }
-                radius+=1;
+            double radius = 12;
+            for (int j = 0; j < 360; j += 10) {
+                double rad = Math.toRadians(j);
+                double x = this.entity.getX() + Math.cos(rad) * radius;
+                double z = this.entity.getZ() + Math.sin(rad) * radius;
+                ServerLevel level = (ServerLevel) this.entity.level();
+                level.sendParticles(
+                    ParticleTypes.SMOKE, 
+                    x, 
+                    this.entity.getY()+1,
+                    z,
+                    20,
+                    0.4,
+                    0.4,
+                    0.4,
+                    0
+                );
             }
         }
     }

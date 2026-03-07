@@ -95,50 +95,45 @@
 					]
 				},
 				{
-					"name": "water_splash",
+					"name": "water_layer1",
 					"parent": "head",
-					"pivot": [0, 94, 73]
-				},
-				{
-					"name": "layer1",
-					"parent": "water_splash",
-					"pivot": [0, 101, 73],
+					"pivot": [0, 101, 74],
 					"cubes": [
-						{"origin": [-8, 112, 64], "size": [16, 20, 17], "pivot": [0, 101, 73], "rotation": [0, -45, 0], "uv": [617, 753]},
-						{"origin": [-6, 105, 66], "size": [12, 16, 13], "pivot": [0, 82, 73], "rotation": [0, -45, 0], "uv": [568, 705]}
+						{"origin": [-8, 112, 65], "size": [16, 20, 17], "pivot": [0, 101, 74], "rotation": [0, -45, 0], "uv": [617, 753]},
+						{"origin": [-6, 105, 67], "size": [12, 16, 13], "pivot": [0, 82, 74], "rotation": [0, -45, 0], "uv": [568, 705]}
 					]
 				},
 				{
-					"name": "layer2",
-					"parent": "water_splash",
-					"pivot": [0, 105, 73],
+					"name": "water_layer2",
+					"parent": "head",
+					"pivot": [0, 105, 74],
 					"cubes": [
-						{"origin": [-11, 116, 61], "size": [22, 16, 23], "pivot": [0, 105, 73], "rotation": [0, -45, 0], "uv": [599, 753]}
+						{"origin": [-11, 116, 62], "size": [22, 16, 23], "pivot": [0, 105, 74], "rotation": [0, -45, 0], "uv": [599, 753]}
 					]
 				},
 				{
-					"name": "layer3",
-					"parent": "water_splash",
-					"pivot": [0, 110, 73],
+					"name": "water_layer3",
+					"parent": "head",
+					"pivot": [0, 110, 74],
 					"cubes": [
-						{"origin": [-14, 121, 58], "size": [28, 11, 29], "pivot": [0, 110, 73], "rotation": [0, -45, 0], "uv": [590, 752]}
+						{"origin": [-14, 121, 59], "size": [28, 11, 29], "pivot": [0, 110, 74], "rotation": [0, -45, 0], "uv": [590, 752]}
 					]
 				},
 				{
-					"name": "layer4",
-					"parent": "water_splash",
-					"pivot": [0, 114, 73],
+					"name": "water_layer4",
+					"parent": "head",
+					"pivot": [0, 114, 74],
 					"cubes": [
-						{"origin": [-17, 125, 55], "size": [34, 7, 35], "pivot": [0, 114, 73], "rotation": [0, -45, 0], "uv": [576, 752]},
-						{"origin": [-25, 125, 50], "size": [40, 7, 40], "pivot": [-5, 114, 77], "rotation": [0, -45, 0], "uv": [556, 771]}
+						{"origin": [-17, 125, 56], "size": [34, 7, 35], "pivot": [0, 114, 74], "rotation": [0, -45, 0], "uv": [576, 752]},
+						{"origin": [-25, 125, 51], "size": [40, 7, 40], "pivot": [-5, 114, 78], "rotation": [0, -45, 0], "uv": [556, 771]}
 					]
 				},
 				{
-					"name": "layer5",
-					"parent": "water_splash",
-					"pivot": [-5, 119, 77],
+					"name": "water_layer5",
+					"parent": "head",
+					"pivot": [-5, 119, 78],
 					"cubes": [
-						{"origin": [-30, 130, 44], "size": [50, 7, 50], "pivot": [-5, 119, 77], "rotation": [0, -45, 0], "uv": [541, 761]}
+						{"origin": [-30, 130, 45], "size": [50, 7, 50], "pivot": [-5, 119, 78], "rotation": [0, -45, 0], "uv": [541, 761]}
 					]
 				},
 				{

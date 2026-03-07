@@ -31,6 +31,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 
 import net.zincstudios.scgextra.Faction;
+import net.zincstudios.scgextra.entity.armoredwhale.ArmoredWhaleEntity;
 import net.zincstudios.scgextra.entity.salmonsaur.SalmonsaurEntity;
 
 import javax.annotation.Nullable;
@@ -170,5 +171,11 @@ public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<
     @Override
     protected boolean isSunSensitive() {
         return false;
+    }
+    @Override
+    public void setTarget(LivingEntity pTarget) {
+        if(!(pTarget instanceof ArmoredWhaleEntity)){//should never attack the boss
+            super.setTarget(pTarget);
+        }
     }
 }
