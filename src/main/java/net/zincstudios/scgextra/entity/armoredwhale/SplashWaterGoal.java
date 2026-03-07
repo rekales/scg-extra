@@ -5,7 +5,6 @@ import java.util.Random;
 
 import net.zincstudios.scgextra.Faction;
 import net.zincstudios.scgextra.effects.ModEffects;
-
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -43,18 +42,18 @@ public class SplashWaterGoal extends Goal{
     
     @Override
     public boolean canContinueToUse() {
-        return ticks <= 100;
+        return ticks <= 33;
     }
 
     @Override
     public void tick() {
         super.tick();
         ticks++;
-        if(ticks % 20 == 0){
+        if(ticks % 6 == 0){
             this.mob.setLayerN(this.mob.getLayerN()+1);
         }
         if(!this.mob.level().isClientSide){
-            this.radius = this.radius+0.16;
+            this.radius = this.radius+0.48;
             for (LivingEntity e : this.mob.level().getEntitiesOfClass(LivingEntity.class, this.mob.getBoundingBox().inflate(radius))) {
                 if (e == mob) continue;
                 double dx = e.getX() - this.mob.getX();
@@ -80,7 +79,7 @@ public class SplashWaterGoal extends Goal{
                         x, 
                         this.mob.getY()+j, 
                         z,
-                        20,
+                        10,
                         0.4,
                         0.4,
                         0.4,

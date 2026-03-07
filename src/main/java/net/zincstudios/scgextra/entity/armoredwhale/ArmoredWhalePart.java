@@ -70,5 +70,15 @@ public class ArmoredWhalePart extends PartEntity<ArmoredWhaleEntity>{
     public void tick() {
         super.tick();
     }
+
+    @Override
+    public ArmoredWhaleEntity getParent() {
+        return this.parentMob;
+    }
+
+    @Override
+    public Entity getVehicle() {
+        return this.parentMob;
+    }
     
 }

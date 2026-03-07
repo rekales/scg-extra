@@ -1,5 +1,6 @@
 package net.zincstudios.scgextra.entity.armoredwhale;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -140,6 +141,8 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
 
     @Override
     public boolean hurt(DamageSource pSource, float pAmount) {
+        Player pl = level().getNearestPlayer(this, 30);
+        if(pl!=null)pl.sendSystemMessage(Component.literal("Hurt!!!!!!!!"));
         if(this.didSlam){
             setDidSlam(false);
             return false;

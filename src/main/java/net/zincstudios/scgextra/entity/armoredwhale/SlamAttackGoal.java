@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Random;
 
 import net.zincstudios.scgextra.Faction;
-
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
