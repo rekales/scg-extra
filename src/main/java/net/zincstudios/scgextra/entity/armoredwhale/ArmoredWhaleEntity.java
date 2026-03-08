@@ -59,6 +59,7 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
     private final ArmoredWhalePart tail4;
     private final ArmoredWhalePart tail5;
     private final ArmoredWhalePart tail6;
+    private final ArmoredWhalePart gem;
 
     public ArmoredWhaleEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -70,7 +71,8 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
         this.tail4 = new ArmoredWhalePart(this, "tail4", 1.5F, 2F);
         this.tail5 = new ArmoredWhalePart(this, "tail5", 1.5F, 2F);
         this.tail6 = new ArmoredWhalePart(this, "tail6", 4.5F, 0.5F);
-        this.subEntities = new ArmoredWhalePart[]{this.head, this.body, this.tail1, this.tail2, this.tail3, this.tail4, this.tail5, this.tail6};
+        this.gem = new ArmoredWhalePart(this, "gem", 1F, 1.1F);
+        this.subEntities = new ArmoredWhalePart[]{this.head, this.body, this.tail1, this.tail2, this.tail3, this.tail4, this.tail5, this.tail6, this.gem};
         this.setHealth(this.getMaxHealth());
         this.noCulling = true;
         this.setId(ENTITY_COUNTER.getAndAdd(this.subEntities.length + 1) + 1); 
@@ -230,7 +232,7 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
         double y = this.getY();
         double z = this.getZ();
 
-        float[] offsets = new float[] { -4f, this.getBbWidth(), (float)(this.getBbWidth() * 1.65), (float)(this.getBbWidth() * 2), (float)(this.getBbWidth() * 2.2), (float)(this.getBbWidth() * 2.55), (float)(this.getBbWidth() * 2.85), (float)(this.getBbWidth() * 3.2) };
+        float[] offsets = new float[] { -4f, this.getBbWidth(), (float)(this.getBbWidth() * 1.65), (float)(this.getBbWidth() * 2), (float)(this.getBbWidth() * 2.2), (float)(this.getBbWidth() * 2.55), (float)(this.getBbWidth() * 2.85), (float)(this.getBbWidth() * 3.2), -2.6F };
 
         double yawRad = Math.toRadians(this.getYRot());
         if(this.yHeadRotO!=this.yHeadRot){
@@ -254,6 +256,8 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
                 part.setPosRaw(x + offsetX, y+1, z + offsetZ);
             }else if(i==7){   
                 part.setPosRaw(x + offsetX, y+2, z + offsetZ);
+            }else if(i==8){   
+                part.setPosRaw(x + offsetX, y+3.8, z + offsetZ);
             }else{
                 part.setPosRaw(x + offsetX, y, z + offsetZ);
             }

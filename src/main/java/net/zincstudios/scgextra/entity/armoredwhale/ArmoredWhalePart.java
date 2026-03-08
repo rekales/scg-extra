@@ -24,30 +24,27 @@ public class ArmoredWhalePart extends PartEntity<ArmoredWhaleEntity>{
         this.name = pName;
     }
 
-
     protected void defineSynchedData() {
     }
-
 
     protected void readAdditionalSaveData(CompoundTag pCompound) {
     }
 
-
     protected void addAdditionalSaveData(CompoundTag pCompound) {
     }
-
 
     public boolean isPickable() {
         return true;
     }
 
-
     public ItemStack getPickResult() {
         return this.parentMob.getPickResult();
     }
-    
 
     public boolean hurt(DamageSource pSource, float pAmount) {
+        if(this.name.equals("gem")){
+            return this.isInvulnerableTo(pSource) ? false : this.parentMob.hurt(pSource, pAmount*2);
+        }
         return this.isInvulnerableTo(pSource) ? false : this.parentMob.hurt(pSource, pAmount);
     }
 
