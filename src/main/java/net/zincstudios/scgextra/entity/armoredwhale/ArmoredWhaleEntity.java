@@ -17,7 +17,6 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidType;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -56,14 +55,22 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
     private final ArmoredWhalePart tail1;
     @SuppressWarnings("FieldCanBeLocal")
     private final ArmoredWhalePart tail2;
+    private final ArmoredWhalePart tail3;
+    private final ArmoredWhalePart tail4;
+    private final ArmoredWhalePart tail5;
+    private final ArmoredWhalePart tail6;
 
     public ArmoredWhaleEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         this.head = new ArmoredWhalePart(this, "head", this.getBbWidth(), this.getBbHeight());
         this.body = new ArmoredWhalePart(this, "body", this.getBbWidth(), this.getBbHeight());
-        this.tail1 = new ArmoredWhalePart(this, "tail1", 2, 2);
-        this.tail2 = new ArmoredWhalePart(this, "tail2", 2, 2);
-        this.subEntities = new ArmoredWhalePart[]{this.head, this.body, this.tail1, this.tail2};
+        this.tail1 = new ArmoredWhalePart(this, "tail1", 1.5F, 3F);
+        this.tail2 = new ArmoredWhalePart(this, "tail2", 2.5F, 3F);
+        this.tail3 = new ArmoredWhalePart(this, "tail3", 2.5F, 3F);
+        this.tail4 = new ArmoredWhalePart(this, "tail4", 1.5F, 2F);
+        this.tail5 = new ArmoredWhalePart(this, "tail5", 1.5F, 2F);
+        this.tail6 = new ArmoredWhalePart(this, "tail6", 4.5F, 0.5F);
+        this.subEntities = new ArmoredWhalePart[]{this.head, this.body, this.tail1, this.tail2, this.tail3, this.tail4, this.tail5, this.tail6};
         this.setHealth(this.getMaxHealth());
         this.noCulling = true;
         this.setId(ENTITY_COUNTER.getAndAdd(this.subEntities.length + 1) + 1); 
@@ -223,13 +230,7 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
         double y = this.getY();
         double z = this.getZ();
 
-        float[] offsets = new float[] { -4f, this.getBbWidth(), this.getBbWidth() * 2, this.getBbWidth() * 3 };
-        AABB[] bbs = {
-            this.getBoundingBox(),
-            this.getBoundingBox(),
-            this.getBoundingBox().setMaxX(2).setMaxY(2).setMaxZ(2),
-            this.getBoundingBox().setMaxX(2).setMaxY(2).setMaxZ(2),
-        };
+        float[] offsets = new float[] { -4f, this.getBbWidth(), (float)(this.getBbWidth() * 1.65), (float)(this.getBbWidth() * 2), (float)(this.getBbWidth() * 2.2), (float)(this.getBbWidth() * 2.55), (float)(this.getBbWidth() * 2.85), (float)(this.getBbWidth() * 3.2) };
 
         double yawRad = Math.toRadians(this.getYRot());
         if(this.yHeadRotO!=this.yHeadRot){
@@ -249,10 +250,14 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
 
             double offsetX = -Math.sin(yawRad) * distance;
             double offsetZ = Math.cos(yawRad) * distance;
-
-            part.setPosRaw(x + offsetX, y, z + offsetZ);
+            if(i==5 || i==6){
+                part.setPosRaw(x + offsetX, y+1, z + offsetZ);
+            }else if(i==7){   
+                part.setPosRaw(x + offsetX, y+2, z + offsetZ);
+            }else{
+                part.setPosRaw(x + offsetX, y, z + offsetZ);
+            }
             part.setOldPosAndRot();
-            part.setBoundingBox(bbs[i]);
             part.refreshDimensions();
         }
     }
