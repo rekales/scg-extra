@@ -1,6 +1,7 @@
 package net.zincstudios.scgextra.entity.guardian_statue;
 
 import net.zincstudios.scgextra.Faction;
+import net.zincstudios.scgextra.entity.armoredwhale.ArmoredWhalePart;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -73,9 +74,13 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
     @Nullable
     private LivingEntity clientSideCachedTarget;
 
+    private final GuardianStatuePart eye;
+    private final GuardianStatuePart[] subEntities;
     public GuardianStatueEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
         this.setPersistenceRequired();
+        this.eye = new GuardianStatuePart(this, "eye", 1F, 0.5F);
+        this.subEntities = new GuardianStatuePart[]{this.eye};
     }
 
     @Override
@@ -155,6 +160,7 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
                 checkShouldDeleteSelf();
             }
         }
+        updateSubentities();
     }
 
     @Override
@@ -342,6 +348,51 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
                 this.remove(RemovalReason.DISCARDED);
                 return;
             }
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public GuardianStatuePart[] getSubEntities() {
+        return this.subEntities;
+    }
+
+    @Override
+    public net.minecraftforge.entity.PartEntity<?>[] getParts() {
+        return this.subEntities;
+    }
+    @Override
+    public boolean isMultipartEntity() {
+        return true;
+    }
+    public void updateSubentities(){
+        for (GuardianStatuePart part : this.subEntities) {
+            part.xo = part.getX();
+            part.yo = part.getY();
+            part.zo = part.getZ();
+            part.xOld = part.getX();
+            part.yOld = part.getY();
+            part.zOld = part.getZ();
+        }
+        double x = this.getX();
+        double y = this.getY();
+        double z = this.getZ();
+        float[] offsets = new float[] { 1.2f };
+        double yawRad = Math.toRadians(this.getYRot());
+        if(this.yHeadRotO!=this.yHeadRot){
+            yawRad = Math.toRadians(this.getYHeadRot());
+        }else if(this.yBodyRotO!=this.yBodyRot){
+            yawRad = Math.toRadians(this.yBodyRot);
+        }
+        for (int i = 0; i < this.subEntities.length; i++) {
+            GuardianStatuePart part = this.subEntities[i];
+            float distance = offsets[i];
+
+            double offsetX = -Math.sin(yawRad) * distance;
+            double offsetZ = Math.cos(yawRad) * distance;
+            
+            part.setPosRaw(x + offsetX, y+5.7, z + offsetZ);
+            part.setOldPosAndRot();
+            part.refreshDimensions();
         }
     }
 
