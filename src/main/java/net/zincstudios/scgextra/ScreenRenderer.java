@@ -29,11 +29,11 @@ public class ScreenRenderer {
         int screenW = event.getWindow().getGuiScaledWidth();
         int screenH = event.getWindow().getGuiScaledHeight();
 
-        int imgW = 512;
-        int imgH = 512;
+        // int imgW = 512;
+        // int imgH = 512;
 
-        int x = (screenW - imgW) / 2;
-        int y = (screenH - imgH) / 2;
+        // int x = (screenW - imgW) / 2;
+        // int y = (screenH - imgH) / 2;
         
         if(mc.player.hasEffect(ModEffects.INK_EFFECT.get())){
             if(mc.player.getEffect(ModEffects.INK_EFFECT.get()).getDuration() <= 20){
@@ -50,27 +50,27 @@ public class ScreenRenderer {
         
         if(mc.player.hasEffect(ModEffects.INK_EFFECT.get())){
             g.blit(
-                INK,
-                x, 
-                y,
+                INK, 
+                0, 
                 0, 
                 0,
-                imgW, 
-                imgH,
-                imgW, 
-                imgH
+                0, 
+                screenW, 
+                screenH, 
+                screenW, 
+                screenH
             );
         }else{
             g.blit(
                 INK_GLOWING,
-                x, 
-                y,
+                0, 
                 0, 
                 0,
-                imgW, 
-                imgH,
-                imgW, 
-                imgH
+                0, 
+                screenW, 
+                screenH, 
+                screenW, 
+                screenH
             );
         }
         

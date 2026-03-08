@@ -42,18 +42,18 @@ public class SplashWaterGoal extends Goal{
     
     @Override
     public boolean canContinueToUse() {
-        return ticks <= 33;
+        return ticks <= 16;
     }
 
     @Override
     public void tick() {
         super.tick();
         ticks++;
-        if(ticks % 6 == 0){
+        if(ticks % 3 == 0){
             this.mob.setLayerN(this.mob.getLayerN()+1);
         }
         if(!this.mob.level().isClientSide){
-            this.radius = this.radius+0.48;
+            this.radius = this.radius+0.96;
             for (LivingEntity e : this.mob.level().getEntitiesOfClass(LivingEntity.class, this.mob.getBoundingBox().inflate(radius))) {
                 if (e == mob) continue;
                 double dx = e.getX() - this.mob.getX();
