@@ -14,8 +14,6 @@ import net.zincstudios.scgextra.entity.glowing_tentacliator.GlowingTentacliatorR
 import net.zincstudios.scgextra.entity.guardian_statue.GuardianStatueEntity;
 import net.zincstudios.scgextra.entity.guardian_statue.GuardianStatueRenderer;
 import net.zincstudios.scgextra.entity.projectile.ArmoredWhaleProjectileEntity;
-import net.zincstudios.scgextra.entity.projectile.deployedmine.DeployedMineEntity;
-import net.zincstudios.scgextra.entity.projectile.deployedmine.DeployedMineRenderer;
 import net.zincstudios.scgextra.entity.pufficus.PufficusEntity;
 import net.zincstudios.scgextra.entity.pufficus.PufficusRenderer;
 import net.zincstudios.scgextra.entity.raid_summoner.RaidSummonerEntity;
@@ -90,11 +88,6 @@ public class ModEntities {
     public static final RegistryObject<EntityType<NetEntity>> NET = ENTITY_TYPES
             .register("net", () -> EntityType.Builder.<NetEntity>of(NetEntity::new, MobCategory.MISC).sized(4F, 1F).clientTrackingRange(4).updateInterval(20).build("net"));
 
-    public static final RegistryObject<EntityType<DeployedMineEntity>> DEPLOYED_MINE = ENTITY_TYPES
-            .register("deployed_mine", () -> EntityType.Builder.of(DeployedMineEntity::new, MobCategory.MISC)
-                    .sized(1F, .5F)
-                    .build("deployed_mine"));
-
     // Copied from SCGuns ModEntities.ENEMY_PROJECTILE
     public static final RegistryObject<EntityType<ArmoredWhaleProjectileEntity>> WHALE_PROJECTILE = ENTITY_TYPES
             .register("whale_tank_projectile", () -> EntityType.Builder.of(ArmoredWhaleProjectileEntity::create, MobCategory.MISC)
@@ -126,7 +119,6 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.PUFFICUS.get(), PufficusRenderer::new);
         EntityRenderers.register(ModEntities.NET.get(), NetEntityRenderer::new);
         EntityRenderers.register(ModEntities.ARMORED_WHALE.get(), ArmoredWhaleRenderer::new);
-        EntityRenderers.register(ModEntities.DEPLOYED_MINE.get(), DeployedMineRenderer::new);
         EntityRenderers.register(ModEntities.WHALE_PROJECTILE.get(), EnemyProjectileRenderer::new);
         EntityRenderers.register(ModEntities.RAID_SUMMONER.get(), RaidSummonerRenderer::new);
     }
