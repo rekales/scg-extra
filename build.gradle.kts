@@ -15,8 +15,8 @@ repositories {
     maven("https://www.cursemaven.com")
     maven("https://api.modrinth.com/maven")
     maven("https://modmaven.dev") // JEI
-    maven("https://maven.theillusivec4.top/") // GeckoLib
-    maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/") // Curios
+    maven("https://maven.theillusivec4.top/") // Curios
+    maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/") // GeckoLib
 }
 
 dependencies {
