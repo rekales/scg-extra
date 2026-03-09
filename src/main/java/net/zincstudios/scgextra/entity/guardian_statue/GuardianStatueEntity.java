@@ -74,13 +74,30 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
     @Nullable
     private LivingEntity clientSideCachedTarget;
 
-    private final GuardianStatuePart eye;
     private final GuardianStatuePart[] subEntities;
+    private final GuardianStatuePart eye;
+    private final GuardianStatuePart body;
+    private final GuardianStatuePart l_fin;
+    private final GuardianStatuePart r_fin;
+    private final GuardianStatuePart base;
+    private final GuardianStatuePart head;
     public GuardianStatueEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
         this.setPersistenceRequired();
         this.eye = new GuardianStatuePart(this, "eye", 1F, 0.5F);
-        this.subEntities = new GuardianStatuePart[]{this.eye};
+        this.body = new GuardianStatuePart(this, "body", 1.6F, 4.15F);
+        this.l_fin = new GuardianStatuePart(this, "l_fin", 1F, 0.8F);
+        this.r_fin = new GuardianStatuePart(this, "r_fin", 1F, 0.8F);
+        this.base = new GuardianStatuePart(this, "base", 3F, 2F);
+        this.head = new GuardianStatuePart(this, "head", 1.3F, 1.5F);
+        this.subEntities = new GuardianStatuePart[]{
+            this.eye,
+            this.body,
+            this.l_fin,
+            this.r_fin,
+            this.base,
+            this.head
+        };
     }
 
     @Override
@@ -131,7 +148,7 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
 
     @Override
     public boolean canBeCollidedWith() {
-        return this.isAlive();
+        return false;
     }
 
     @Override
@@ -376,7 +393,8 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        float[] offsets = new float[] { 1.2f };
+        float[] offsets = new float[] { 0.4f, 0F, 0F, 0F, 0F, 0F };
+        float[] lateralOffsets = new float[] { 0F, 0F, 1.5f, -1.3F, 0F, 0F };
         double yawRad = Math.toRadians(this.getYRot());
         if(this.yHeadRotO!=this.yHeadRot){
             yawRad = Math.toRadians(this.getYHeadRot());
@@ -385,12 +403,30 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
         }
         for (int i = 0; i < this.subEntities.length; i++) {
             GuardianStatuePart part = this.subEntities[i];
-            float distance = offsets[i];
+            float fDistance = offsets[i];
+            float lateral = lateralOffsets[i];
 
-            double offsetX = -Math.sin(yawRad) * distance;
-            double offsetZ = Math.cos(yawRad) * distance;
-            
-            part.setPosRaw(x + offsetX, y+5.7, z + offsetZ);
+            double offsetX = -Math.sin(yawRad) * fDistance + Math.cos(yawRad) * lateral;
+            double offsetZ =  Math.cos(yawRad) * fDistance + Math.sin(yawRad) * lateral;
+            //eye
+            if(i==0){
+                part.setPosRaw(x + offsetX, y+5.7, z + offsetZ);
+            }
+            //body
+            else if(i == 1){
+                part.setPosRaw(x + offsetX, y+1, z + offsetZ);
+            }
+            //l_fin && r_fin
+            else if(i == 2 || i == 3){
+                part.setPosRaw(x + offsetX, y+4.33, z + offsetZ);
+            }
+            //head
+            else if(i == 5){
+                part.setPosRaw(x + offsetX, y+5, z + offsetZ);
+            }
+            else{
+                part.setPosRaw(x + offsetX, y, z + offsetZ);
+            }
             part.setOldPosAndRot();
             part.refreshDimensions();
         }

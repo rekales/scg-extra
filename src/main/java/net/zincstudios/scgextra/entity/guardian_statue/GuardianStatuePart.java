@@ -7,6 +7,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.entity.PartEntity;
 import net.minecraft.world.entity.Pose;
@@ -91,5 +92,17 @@ public class GuardianStatuePart extends PartEntity<GuardianStatueEntity>{
     @Override
     public EntityDimensions getDimensions(Pose pPose) {
         return this.size;
+    }
+    @Override
+    public boolean isPushable() {
+        return false;
+    }
+    @Override
+    public boolean canBeCollidedWith() {
+        return this.isAlive();
+    }
+    @Override
+    public PushReaction getPistonPushReaction() {
+        return PushReaction.IGNORE;
     }
 }
