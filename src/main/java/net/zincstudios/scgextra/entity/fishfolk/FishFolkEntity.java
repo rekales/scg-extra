@@ -1,9 +1,7 @@
 package net.zincstudios.scgextra.entity.fishfolk;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -15,8 +13,6 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Drowned;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -33,21 +29,12 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.util.RandomSource;
 import net.zincstudios.scgextra.Faction;
-import net.zincstudios.scgextra.data.InfantryEquipmentDataLoader;
-import net.zincstudios.scgextra.data.InfantryEquipmentItemLoader;
-import net.zincstudios.scgextra.entity.armoredwhale.ArmoredWhaleEntity;
 import net.zincstudios.scgextra.entity.salmonsaur.SalmonsaurEntity;
-
-import java.io.InputStreamReader;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-
-import com.google.gson.Gson;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -55,7 +42,6 @@ public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<
 
     private static final EntityDataAccessor<Integer> TEXTURE_VARIANT =
             SynchedEntityData.defineId(FishFolkEntity.class, EntityDataSerializers.INT);
-    private static InfantryEquipmentDataLoader FISH_FOLK_DATA;
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public FishFolkEntity(EntityType<? extends Drowned> entity, Level level) {
@@ -70,30 +56,7 @@ public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<
     }
 
     @Override
-    protected void populateDefaultEquipmentSlots(RandomSource pRandom, DifficultyInstance pDifficulty) {
-        super.populateDefaultEquipmentSlots(pRandom, pDifficulty);
-        if(this.getMainHandItem().is(Items.FISHING_ROD)){
-            if (FISH_FOLK_DATA == null || FISH_FOLK_DATA.items == null) {
-                try {
-                    ResourceLocation loc = new ResourceLocation("scguns", "entity/equipment/fish_folk.json");
-    
-                    Resource resource = level().getServer()
-                            .getResourceManager()
-                            .getResourceOrThrow(loc);
-    
-                    try (InputStreamReader reader = new InputStreamReader(resource.open())) {
-                        FISH_FOLK_DATA = new Gson().fromJson(reader, InfantryEquipmentDataLoader.class);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            InfantryEquipmentItemLoader[] items = FISH_FOLK_DATA.items;
-            InfantryEquipmentItemLoader itemEq = items[this.random.nextInt(items.length)];
-            Item item = BuiltInRegistries.ITEM.get(new ResourceLocation(itemEq.item));
-            this.setItemInHand(InteractionHand.MAIN_HAND, item.getDefaultInstance());
-        }
-    }
+    protected void populateDefaultEquipmentSlots(RandomSource pRandom, DifficultyInstance pDifficulty) {}
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
@@ -106,13 +69,11 @@ public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<
     }
     @Override
     protected void addBehaviourGoals() {
-        super.addBehaviourGoals();
         this.goalSelector.addGoal(2, new FishFolkAttackGoal(this, 1.0D, false));
-        
         this.goalSelector.addGoal(1, new GunAttackGoal<>(this, this.getMainHandItem(), 1.0F, AIType.RECKLESS, 3));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
+
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
             @Override
             public boolean canUse() {
@@ -209,11 +170,5 @@ public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<
     @Override
     protected boolean isSunSensitive() {
         return false;
-    }
-    @Override
-    public void setTarget(LivingEntity pTarget) {
-        if(!(pTarget instanceof ArmoredWhaleEntity)){//should never attack the boss
-            super.setTarget(pTarget);
-        }
     }
 }

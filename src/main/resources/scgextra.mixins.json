@@ -6,6 +6,7 @@
   "refmap": "scgextra.refmap.json",
   "mixins": [
     "EnemyProjectileEntityMixin",
+    "LightningProjectileEntityMixin",
     "MineUnitBlockEntityMixin",
     "OceanMonumentEntryRoomMixin"
   ],
