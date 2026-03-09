@@ -113,7 +113,7 @@ public abstract class MountedGunAttackGoal extends Goal {
                     target.getZ() - spawnVec.z,
                     target.getX() - spawnVec.x
             );
-            this.mob.setLeftGunYRot(relativeYRot);
+            this.mob.setLeftGunYRot(relativeYRot - this.mob.getYRot() * Mth.DEG_TO_RAD);
         }
 
         @Override
@@ -151,7 +151,7 @@ public abstract class MountedGunAttackGoal extends Goal {
                     target.getZ() - spawnVec.z,
                     target.getX() - spawnVec.x
             );
-            this.mob.setRightGunYRot(relativeYRot);
+            this.mob.setRightGunYRot(relativeYRot - this.mob.getYRot() * Mth.DEG_TO_RAD);
         }
 
         @Override
