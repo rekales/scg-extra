@@ -16,9 +16,13 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,6 +35,9 @@ import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import top.ribs.scguns.init.ModItems;
 import top.ribs.scguns.item.animated.AnimatedUnderWaterGunItem;
@@ -40,7 +47,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class SalmonsaurEntity extends Hoglin implements GeoEntity {
+public class SalmonsaurEntity extends Monster implements GeoEntity {
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
@@ -49,7 +56,6 @@ public class SalmonsaurEntity extends Hoglin implements GeoEntity {
     private int idleAnimationTimeout = 0;
     public SalmonsaurEntity(EntityType<? extends SalmonsaurEntity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
-        
     }
     public static AttributeSupplier.Builder createAttributes() {
       return Monster.createMonsterAttributes()
@@ -113,13 +119,31 @@ public class SalmonsaurEntity extends Hoglin implements GeoEntity {
     }
 
     @Override
-    public boolean isConverting() {
-        return false;
-    }
-    @Override
     protected void registerGoals() {
-        super.registerGoals();
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
+        this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 1));
+        this.goalSelector.addGoal(2, new SalmonsaurMeleeAttackGoal(
+            this, 
+            1, 
+            true
+        ));
+
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
+            @Override
+            public boolean canUse() {
+                // Avoid retaliation from friendly fire
+                if (this.mob.getLastHurtByMob() != null && Faction.isFriendlies(this.mob, this.mob.getLastHurtByMob())) {
+                    return false;
+                }
+                return super.canUse();
+            }
+        });
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true,
+                player -> !((Player) player).isCreative() && !player.isSpectator()));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
+                entity -> Faction.isEnemies(this, entity)));
     }
     @Override
     public boolean canBeLeashed(Player pPlayer) {
@@ -148,6 +172,10 @@ public class SalmonsaurEntity extends Hoglin implements GeoEntity {
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(DefaultAnimations.genericWalkIdleController(this));
+        controllers.add(new AnimationController<>(this, "attack", 2, state -> PlayState.CONTINUE)
+                .triggerableAnim("bite", RawAnimation.begin()
+                        .thenPlay("bite")
+                ));
     }
 
     @Override
