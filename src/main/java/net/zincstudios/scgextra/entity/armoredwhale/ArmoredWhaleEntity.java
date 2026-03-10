@@ -11,6 +11,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -48,7 +49,8 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
     private boolean didSlam = false;
     //commented out cause i was saving
     private final ArmoredWhalePart[] subEntities;
-    public final ArmoredWhalePart head;
+    public final ArmoredWhalePart head1;
+    public final ArmoredWhalePart head2;
     @SuppressWarnings("FieldCanBeLocal")
     private final ArmoredWhalePart body;
     @SuppressWarnings("FieldCanBeLocal")
@@ -63,7 +65,8 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
 
     public ArmoredWhaleEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
-        this.head = new ArmoredWhalePart(this, "head", this.getBbWidth(), this.getBbHeight());
+        this.head1 = new ArmoredWhalePart(this, "head1", this.getBbWidth()/2, this.getBbHeight());
+        this.head2 = new ArmoredWhalePart(this, "head2", this.getBbWidth()/2, this.getBbHeight());
         this.body = new ArmoredWhalePart(this, "body", this.getBbWidth(), this.getBbHeight());
         this.tail1 = new ArmoredWhalePart(this, "tail1", 1.5F, 3F);
         this.tail2 = new ArmoredWhalePart(this, "tail2", 2.5F, 3F);
@@ -72,7 +75,18 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
         this.tail5 = new ArmoredWhalePart(this, "tail5", 1.5F, 2F);
         this.tail6 = new ArmoredWhalePart(this, "tail6", 4.5F, 0.5F);
         this.gem = new ArmoredWhalePart(this, "gem", 1F, 1.1F);
-        this.subEntities = new ArmoredWhalePart[]{this.head, this.body, this.tail1, this.tail2, this.tail3, this.tail4, this.tail5, this.tail6, this.gem};
+        this.subEntities = new ArmoredWhalePart[]{
+            this.head1, 
+            this.head2, 
+            this.body, 
+            this.tail1, 
+            this.tail2, 
+            this.tail3, 
+            this.tail4, 
+            this.tail5, 
+            this.tail6, 
+            this.gem
+        };
         this.setHealth(this.getMaxHealth());
         this.noCulling = true;
         this.setId(ENTITY_COUNTER.getAndAdd(this.subEntities.length + 1) + 1); 
@@ -141,6 +155,7 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
         });
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
                 entity -> Faction.isEnemies(this, entity)));
+        this.goalSelector.addGoal(3, new RandomLookAroundGoal(this));
     }
 
     public void setDidSlam(boolean slam){
@@ -232,31 +247,39 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
         double y = this.getY();
         double z = this.getZ();
 
-        float[] offsets = new float[] { -4f, this.getBbWidth(), (float)(this.getBbWidth() * 1.65), (float)(this.getBbWidth() * 2), (float)(this.getBbWidth() * 2.2), (float)(this.getBbWidth() * 2.55), (float)(this.getBbWidth() * 2.85), (float)(this.getBbWidth() * 3.2), -2.6F };
+        float bbWidth = this.getBbWidth();
 
-        double yawRad = Math.toRadians(this.getYRot());
-        if(this.yHeadRotO!=this.yHeadRot){
-            yawRad = Math.toRadians(this.getYHeadRot());
-        }else if(this.yBodyRotO!=this.yBodyRot){
-            yawRad = Math.toRadians(this.yBodyRot);
-        }
+        float[] offsets = new float[] { 
+            -4.5f, 
+            -2.5f, 
+            1.5F, 
+            (bbWidth*1.65F)-bbWidth, 
+            (bbWidth*2F)-bbWidth, 
+            (bbWidth*2.2F)-bbWidth, 
+            (bbWidth*2.55F)-bbWidth,
+            (bbWidth*2.85F)-bbWidth,
+            (bbWidth*3.2F)-bbWidth,
+            -7.6F
+        };
+
+        double yawRad = Math.toRadians(this.yBodyRot);
 
         for (int i = 0; i < this.subEntities.length; i++) {
-            if(i!=0){
-                x = this.subEntities[0].getX();
-                y = this.subEntities[0].getY();
-                z = this.subEntities[0].getZ();
+            if(i > 2){
+                x = this.subEntities[2].getX();
+                y = this.subEntities[2].getY();
+                z = this.subEntities[2].getZ();
             }
             ArmoredWhalePart part = this.subEntities[i];
             float distance = offsets[i];
 
             double offsetX = -Math.sin(yawRad) * distance;
             double offsetZ = Math.cos(yawRad) * distance;
-            if(i==5 || i==6){
+            if(i==6 || i==7){
                 part.setPosRaw(x + offsetX, y+1, z + offsetZ);
-            }else if(i==7){   
-                part.setPosRaw(x + offsetX, y+2, z + offsetZ);
             }else if(i==8){   
+                part.setPosRaw(x + offsetX, y+2, z + offsetZ);
+            }else if(i==9){   
                 part.setPosRaw(x + offsetX, y+3.8, z + offsetZ);
             }else{
                 part.setPosRaw(x + offsetX, y, z + offsetZ);
