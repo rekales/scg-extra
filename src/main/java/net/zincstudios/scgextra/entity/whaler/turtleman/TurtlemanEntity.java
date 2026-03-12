@@ -15,7 +15,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
@@ -49,14 +48,13 @@ import top.ribs.scguns.entity.ai.GunAttackGoal;
 import top.ribs.scguns.init.ModEffects;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.EnumSet;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEntity {
 
     public static final RawAnimation TRANSITION_IDLE_STUNNED = RawAnimation.begin().then("transition.idle_stunned", Animation.LoopType.PLAY_ONCE);
-    public static final RawAnimation STUNNED = RawAnimation.begin().then("misc.stunned", Animation.LoopType.LOOP);
+    public static final RawAnimation STUNNED_ANIM = RawAnimation.begin().then("misc.stunned", Animation.LoopType.LOOP);
     public static final RawAnimation TRANSITION_STUNNED_IDLE = RawAnimation.begin().then("transition.stunned_idle", Animation.LoopType.PLAY_ONCE);
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
@@ -86,7 +84,6 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
                 entity -> Faction.isEnemies(this, entity)));
     }
 
-    // NOTE: maybe just use populateDefaultEquipmentSlots to avoid using this deprecated methods after figuring out EntityEquipmentConfig
     @SuppressWarnings("deprecation")
     @Override
     public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
@@ -100,8 +97,6 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
         this.doHurtTarget(livingEntity);
     }
 
-    //somewhat moon walks towards the player
-    //leaving comments just in case
     @Override
     public void tick() {
         super.tick();
@@ -115,7 +110,7 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
                     // TODO: override move control or something I dunno. I'm tired of dealing with this.
                     if (wrappedGoal.getGoal() instanceof TurtlemanGunAttackGoal<?> goal && goal.active) {
                         LivingEntity target = this.getTarget();
-                        if (target == null || this.stunnedGoal.isStunned()) return;
+                        if (target == null || this.isStunned()) return;
 
                         // Direction from turtleman to player
                         double dx = target.getX() - this.getX();
@@ -151,14 +146,10 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
                 });
     }
 
-    public @Nullable StunnedGoal getStunnedGoal() {
-        return this.stunnedGoal;
-    }
-
     @Override
     public boolean hurt(DamageSource source, float amount) {
         Vec3 attackVector = source.getSourcePosition();
-        if (!this.stunnedGoal.isStunned() && attackVector != null) {
+        if (!this.isStunned() && attackVector != null) {
             attackVector = attackVector.subtract(this.position()).normalize();
             Vec3 lookVector = this.getLookAngle();
 
@@ -174,12 +165,10 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
     @Override
     public boolean addEffect(MobEffectInstance effectInstance, @Nullable Entity entity) {
         boolean result = super.addEffect(effectInstance, entity);
-
         if (result
                 && (effectInstance.getEffect() == ModEffects.BLINDED.get()
-                || effectInstance.getEffect() == ModEffects.DEAFENED.get())
-                && this.getStunnedGoal() != null) {
-            this.getStunnedGoal().stun(60);
+                || effectInstance.getEffect() == ModEffects.DEAFENED.get())) {
+            this.stun(60);
         }
 
         return result;
@@ -189,7 +178,7 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "Walk/Idle", 0,
                 state -> {
-                    if (this.stunnedGoal != null && this.stunnedGoal.isStunned()) {
+                    if (this.isStunned()) {
                         return PlayState.STOP;
                     }
                     return state.setAndContinue(state.isMoving() ? DefaultAnimations.WALK : DefaultAnimations.IDLE);
@@ -198,13 +187,13 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
 
         controllers.add(new AnimationController<>(this, "stunned", 0,
                 state -> {
-                    if (this.stunnedGoal != null && this.stunnedGoal.isStunned()) {
+                    if (this.isStunned()) {
                         return PlayState.STOP;
                     }
                     return PlayState.CONTINUE;
                 })
                 .triggerableAnim("start_stun", TRANSITION_IDLE_STUNNED)
-                .triggerableAnim("stunned", STUNNED)
+                .triggerableAnim("stunned", STUNNED_ANIM)
                 .triggerableAnim("end_stun", TRANSITION_STUNNED_IDLE)
         );
     }
@@ -235,7 +224,7 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
 
         @Override
         public void tick() {
-            if (this.shooter.stunnedGoal != null && this.shooter.stunnedGoal.isStunned()) {
+            if (this.shooter.isStunned()) {
                 return;
             }
 
@@ -255,65 +244,11 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
         }
     }
 
-    public static class StunnedGoal extends Goal {
-
-        protected TurtlemanEntity mob;
-        protected int stunTimer = 0;
-        protected int stunDuration = 0;
-
-        public StunnedGoal(TurtlemanEntity mob) {
-            this.mob = mob;
-            this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
-        }
-
-        public void stun(int ticks) {
-            this.stunDuration = ticks;
-            this.stunTimer = ticks;
-        }
-
-        public boolean isStunned() {
-            return this.stunTimer > 0;
-        }
-
-        @Override
-        public boolean canUse() {
-            return this.stunTimer > 0;
-        }
-
-        @Override
-        public void start() {
-            this.mob.getNavigation().stop();
-            this.mob.triggerAnim("stunned", "start_stun");
-        }
-
-        @Override
-        public void stop() {
-            this.stunTimer = 0;
-            this.mob.removeEffect(ModEffects.DEAFENED.get());
-            this.mob.removeEffect(ModEffects.BLINDED.get());  // No panic
-        }
-
-        @Override
-        public boolean requiresUpdateEveryTick() {
-            return true;
-        }
-
-        @Override
-        public void tick() {
-            this.stunTimer--;
-            this.mob.getNavigation().stop();
-
-            if (this.stunTimer == stunDuration - 10) {
-                this.mob.triggerAnim("stunned", "stunned");
-            } else if (this.stunTimer == 10) {
-                this.mob.triggerAnim("stunned", "end_stun");
-            }
-        }
-    }
     @Override
     public boolean canDrownInFluidType(FluidType type) {
         return false;
     }
+
     @Override
     public boolean checkSpawnRules(LevelAccessor pLevel, MobSpawnType pSpawnReason) {
         if(!pLevel.isClientSide()){
@@ -333,6 +268,14 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
         }else{
             return false;
         }
+    }
+
+    public boolean isStunned() {
+        return this.stunnedGoal != null && this.stunnedGoal.isStunned();
+    }
+
+    public void stun(int ticks) {
+        if (this.stunnedGoal != null) this.stunnedGoal.stun(ticks);
     }
 
     @SuppressWarnings("deprecation")
