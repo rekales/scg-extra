@@ -68,7 +68,6 @@ public class PufficusEntity extends Monster implements GeoEntity {
                 entity -> Faction.isEnemies(this, entity)));
     }
 
-    // NOTE: maybe just use populateDefaultEquipmentSlots to avoid using this deprecated methods after figuring out EntityEquipmentConfig
     @SuppressWarnings("deprecation")
     @Override
     public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
