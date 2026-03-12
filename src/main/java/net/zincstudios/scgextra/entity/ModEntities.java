@@ -5,6 +5,7 @@ import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntity;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntityModel;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntityRenderer;
+import net.zincstudios.scgextra.entity.rrc.tallman.TallmanEntity;
 import net.zincstudios.scgextra.entity.whaler.armoredwhale.ArmoredWhaleEntity;
 import net.zincstudios.scgextra.entity.whaler.armoredwhale.ArmoredWhaleRenderer;
 import net.zincstudios.scgextra.entity.whaler.fishfolk.FishFolkEntity;
@@ -97,6 +98,11 @@ public class ModEntities {
                     .setUpdateInterval(1)
                     .setShouldReceiveVelocityUpdates(true)
                     .build("whale_tank_projectile"));
+
+//    public static final RegistryObject<EntityType<TallmanEntity>> TALLMAN = ENTITY_TYPES
+//            .register("tallman", () -> EntityType.Builder.of(TallmanEntity::new, MobCategory.MONSTER)
+//                    .sized(1F, 2F)
+//                    .build("tallman"));
 
 
     public static void register(IEventBus modEventBus){
