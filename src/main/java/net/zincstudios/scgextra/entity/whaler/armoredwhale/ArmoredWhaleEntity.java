@@ -13,13 +13,13 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidType;
+import net.zincstudios.scgextra.entity.HurtByNonFactionGoal;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
@@ -119,16 +119,7 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
         // Bosses will prioritize players and does not require line of sight to maintain targeting to avoid cheese
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, false,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.targetSelector.addGoal(2, new HurtByTargetGoal(this) {
-            @Override
-            public boolean canUse() {
-                // Avoid retaliation from friendly fire
-                if (this.mob.getLastHurtByMob() != null && Faction.isFriendlies(this.mob, this.mob.getLastHurtByMob())) {
-                    return false;
-                }
-                return super.canUse();
-            }
-        });
+        this.targetSelector.addGoal(2, new HurtByNonFactionGoal(this));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
                 entity -> Faction.isEnemies(this, entity)));
         this.goalSelector.addGoal(3, new RandomLookAroundGoal(this));

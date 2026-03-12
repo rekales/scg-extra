@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import net.zincstudios.scgextra.Faction;
+import net.zincstudios.scgextra.entity.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.ModEntities;
 import net.zincstudios.scgextra.entity.whaler.fishfolk.FishFolkEntity;
 
@@ -20,7 +21,6 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
@@ -130,16 +130,7 @@ public class SalmonsaurEntity extends Monster implements GeoEntity {
             true
         ));
 
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
-            @Override
-            public boolean canUse() {
-                // Avoid retaliation from friendly fire
-                if (this.mob.getLastHurtByMob() != null && Faction.isFriendlies(this.mob, this.mob.getLastHurtByMob())) {
-                    return false;
-                }
-                return super.canUse();
-            }
-        });
+        this.targetSelector.addGoal(2, new HurtByNonFactionGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
@@ -155,10 +146,7 @@ public class SalmonsaurEntity extends Monster implements GeoEntity {
             super.setTarget(pTarget);
         }
     }
-    @Override
-    public boolean isBaby() {
-        return false;
-    }
+
     @Override
     public boolean checkSpawnRules(LevelAccessor pLevel, MobSpawnType pSpawnReason) {
         long time = pLevel.dayTime() % 24000;
