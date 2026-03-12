@@ -24,8 +24,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> FISH_FOLK_SPAWN_EGG = ITEMS.register("fish_folk_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.FISH_FOLK,
-                    0x123456,
-                    0x789ABC,
+                    0xB34141,
+                    0x72BF9C,
                     new Item.Properties()
             )
     );
@@ -33,8 +33,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> TURTLEMAN_SPAWN_EGG = ITEMS.register("turtleman_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.TURTLEMAN,
-                    0x123456,
-                    0x789ABC,
+                    0x49C24F,
+                    0xD6CFAA,
                     new Item.Properties()
             )
     );
@@ -42,8 +42,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> SALMONSAUR_SPAWN_EGG = ITEMS.register("salmonsaur_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.SALMONSAUR,
-                    0x123456,
-                    0x789ABC,
+                    0x973637,
+                    0x888240,
                     new Item.Properties()
             )
     );
@@ -51,8 +51,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> GUARDIAN_STATUE_SPAWN_EGG = ITEMS.register("guardian_statue_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.GUARDIAN_STATUE,
-                    0x123456,
-                    0x789ABC,
+                    0xDFDDD7,
+                    0x9A9BAF,
                     new Item.Properties()
             )
     );
@@ -60,8 +60,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> TENTACLIATOR_SPAWN_EGG = ITEMS.register("tentacliator_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.TENTACLIATOR,
-                    0x123456,
-                    0x789ABC,
+                    0x3B5C71,
+                    0xDBC373,
                     new Item.Properties()
             )
     );
@@ -69,8 +69,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> GLOWING_TENTACLIATOR_SPAWN_EGG = ITEMS.register("glowing_tentacliator_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.GLOWING_TENTACLIATOR,
-                    0x123654,
-                    0x789CBA,
+                    0x419D9E,
+                    0x84CDA6,
                     new Item.Properties()
             )
     );
@@ -78,8 +78,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> PUFFICUS_SPAWN_EGG = ITEMS.register("pufficus_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.PUFFICUS,
-                    0x123456,
-                    0x789ABC,
+                    0xC58A2E,
+                    0xF2E9D0,
                     new Item.Properties()
             )
     );
@@ -87,8 +87,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> ARMORED_WHALE_SPAWN_EGG = ITEMS.register("armored_whale_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.ARMORED_WHALE,
-                    0x123456,
-                    0x789ABC,
+                    0x692831,
+                    0x567076,
                     new Item.Properties()
             )
     );
