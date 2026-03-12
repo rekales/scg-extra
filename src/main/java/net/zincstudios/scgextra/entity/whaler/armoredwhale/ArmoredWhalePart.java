@@ -2,6 +2,7 @@ package net.zincstudios.scgextra.entity.whaler.armoredwhale;
 
 import com.mojang.blaze3d.vertex.PoseStack.Pose;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -12,6 +13,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.entity.PartEntity;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Objects;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class ArmoredWhalePart extends PartEntity<ArmoredWhaleEntity>{
     public final ArmoredWhaleEntity parentMob;
     public final String name;
@@ -38,14 +45,14 @@ public class ArmoredWhalePart extends PartEntity<ArmoredWhaleEntity>{
     }
 
     public ItemStack getPickResult() {
-        return this.parentMob.getPickResult();
+        return Objects.requireNonNull(this.parentMob.getPickResult());
     }
 
     public boolean hurt(DamageSource pSource, float pAmount) {
         if(this.name.equals("gem")){
-            return this.isInvulnerableTo(pSource) ? false : this.parentMob.hurt(pSource, pAmount*2);
+            return !this.isInvulnerableTo(pSource) && this.parentMob.hurt(pSource, pAmount * 2);
         }
-        return this.isInvulnerableTo(pSource) ? false : this.parentMob.hurt(pSource, pAmount);
+        return !this.isInvulnerableTo(pSource) && this.parentMob.hurt(pSource, pAmount);
     }
 
     public boolean is(Entity pEntity) {
@@ -56,6 +63,7 @@ public class ArmoredWhalePart extends PartEntity<ArmoredWhaleEntity>{
         return super.getAddEntityPacket();
     }
 
+    @SuppressWarnings("unused")
     public EntityDimensions getDimensions(Pose pPose) {
         return this.size;
     }
@@ -79,20 +87,26 @@ public class ArmoredWhalePart extends PartEntity<ArmoredWhaleEntity>{
     public Entity getVehicle() {
         return this.parentMob;
     }
+
     @Override
     protected AABB getBoundingBoxForPose(net.minecraft.world.entity.Pose pPose) {
         return this.size.makeBoundingBox(this.getX(), this.getY(), this.getZ());
     }
+
     @Override
     public AABB getBoundingBoxForCulling() {
         return this.size.makeBoundingBox(this.getX(), this.getY(), this.getZ());
     }
+
     public EntityDimensions getSize() {
         return this.size;
     }
+
+    @SuppressWarnings("unused")
     public ArmoredWhaleEntity getParentMob() {
         return this.parentMob;
     }
+
     @Override
     public EntityDimensions getDimensions(net.minecraft.world.entity.Pose pPose) {
         return this.size;

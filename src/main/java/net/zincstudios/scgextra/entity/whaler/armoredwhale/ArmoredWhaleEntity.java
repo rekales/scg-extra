@@ -33,6 +33,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class ArmoredWhaleEntity extends Monster implements GeoEntity {
 
+    public static final Vec3 LEFT_GUN_OFFSET = new Vec3(-2,2.9,2);
+    public static final Vec3 RIGHT_GUN_OFFSET = new Vec3(2,2.9,2);
+
     private static final EntityDataAccessor<Boolean> WATER_SPLASH =
             SynchedEntityData.defineId(ArmoredWhaleEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Float> LEFT_GUN_Y_ROT =
@@ -42,13 +45,10 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
     private static final EntityDataAccessor<Integer> WATER_LEVEL =
             SynchedEntityData.defineId(ArmoredWhaleEntity.class, EntityDataSerializers.INT);
 
-    public static Vec3 LEFT_GUN_OFFSET = new Vec3(-2,2.9,2);
-    public static Vec3 RIGHT_GUN_OFFSET = new Vec3(2,2.9,2);
-
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
-    private boolean didSlam = false;
-
     private final ArmoredWhalePart[] subEntities;
+
+    private boolean didSlam = false;
 
     public ArmoredWhaleEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -137,12 +137,14 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
         }
         return super.hurt(pSource, pAmount);
     }
+
     @Override
     public void setId(int pId) {
         super.setId(pId);
         for (int i = 0; i < this.subEntities.length; i++)
             this.subEntities[i].setId(pId + i + 1);
     }
+
     @Override
     public void aiStep() {
         super.aiStep();
@@ -158,10 +160,12 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
     public net.minecraftforge.entity.PartEntity<?>[] getParts() {
         return this.subEntities;
     }
+
     @Override
     public boolean isMultipartEntity() {
         return true;
     }
+
     public boolean isPickable() {
         return false;
     }
@@ -263,13 +267,16 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
     public Vec3 getRightGunPos() {
         return RIGHT_GUN_OFFSET.yRot(-this.getYRot() * Mth.DEG_TO_RAD).add(this.position());
     }
+
     @Override
     public boolean canDrownInFluidType(FluidType type) {
         return false;
     }
+
     public void setLayerN(int n){
         this.entityData.set(WATER_LEVEL, n);
     }
+
     public int getLayerN(){
         return this.entityData.get(WATER_LEVEL);
     }

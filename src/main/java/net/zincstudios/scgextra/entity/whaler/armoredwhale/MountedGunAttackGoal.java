@@ -25,11 +25,11 @@ public abstract class MountedGunAttackGoal extends Goal {
 
     public abstract boolean canShootTarget(LivingEntity target);
 
-    public abstract void triggerGunFlash();
-
     public abstract Vec3 getProjectileSpawnPos();
 
     public abstract void updateGunAnimations(LivingEntity target);
+
+    public void triggerGunFlash() {}
 
     @Override
     public boolean canUse() {
@@ -115,11 +115,6 @@ public abstract class MountedGunAttackGoal extends Goal {
             );
             this.mob.setLeftGunYRot(relativeYRot - this.mob.getYRot() * Mth.DEG_TO_RAD);
         }
-
-        @Override
-        public void triggerGunFlash() {
-
-        }
     }
 
     public static class Right extends MountedGunAttackGoal {
@@ -144,6 +139,7 @@ public abstract class MountedGunAttackGoal extends Goal {
             return this.mob.getRightGunPos();
         }
 
+        // TODO: move logic to model
         @Override
         public void updateGunAnimations(LivingEntity target) {
             Vec3 spawnVec = this.getProjectileSpawnPos();
@@ -152,11 +148,6 @@ public abstract class MountedGunAttackGoal extends Goal {
                     target.getX() - spawnVec.x
             );
             this.mob.setRightGunYRot(relativeYRot - this.mob.getYRot() * Mth.DEG_TO_RAD);
-        }
-
-        @Override
-        public void triggerGunFlash() {
-
         }
     }
 }

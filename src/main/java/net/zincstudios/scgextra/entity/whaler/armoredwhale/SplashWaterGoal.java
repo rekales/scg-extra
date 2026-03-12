@@ -1,7 +1,6 @@
 package net.zincstudios.scgextra.entity.whaler.armoredwhale;
 
 import java.util.HashSet;
-import java.util.Random;
 
 import net.zincstudios.scgextra.Faction;
 import net.zincstudios.scgextra.effects.ModEffects;
@@ -16,9 +15,8 @@ public class SplashWaterGoal extends Goal{
     private final ArmoredWhaleEntity mob;
     private int cooldown = 0;
     private int ticks = 0;
-    private Random random = new Random();
     private double radius = 0.0;
-    private HashSet<LivingEntity> entities = new HashSet<>();
+    private final HashSet<LivingEntity> entities = new HashSet<>();
 
     public SplashWaterGoal(ArmoredWhaleEntity entity){
         mob = entity;
@@ -37,7 +35,7 @@ public class SplashWaterGoal extends Goal{
     @Override
     public boolean canUse() {
         if(cooldown>0)--cooldown;
-        return cooldown <= 0 && random.nextInt(100) < 20;
+        return cooldown <= 0 && this.mob.getRandom().nextInt(100) < 20;
     }
     
     @Override

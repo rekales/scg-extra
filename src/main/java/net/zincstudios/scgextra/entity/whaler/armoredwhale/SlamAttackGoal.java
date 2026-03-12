@@ -1,8 +1,6 @@
 package net.zincstudios.scgextra.entity.whaler.armoredwhale;
 
 import java.util.List;
-import java.util.Random;
-
 import net.zincstudios.scgextra.Faction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -16,7 +14,6 @@ public class SlamAttackGoal extends Goal{
     public ArmoredWhaleEntity entity;
     private int cooldown = 0;
     private int ticks = 0;
-    private Random random = new Random();
     private int startTick = 0;
 
     public SlamAttackGoal(ArmoredWhaleEntity entity){
@@ -28,7 +25,7 @@ public class SlamAttackGoal extends Goal{
         if(cooldown>0){
             --cooldown;
         }
-        return cooldown <= 0 && entity.getTarget() != null && random.nextInt(100)<10;
+        return cooldown <= 0 && entity.getTarget() != null && entity.getRandom().nextInt(100)<10;
     }
 
     @Override
@@ -42,12 +39,14 @@ public class SlamAttackGoal extends Goal{
     public boolean canContinueToUse() {
         return ticks <= startTick+60 && entity.getTarget() != null && entity.getTarget() instanceof Player && cooldown<=0;//~22 ticks for going up, ~22 ticks coming down and then apply the damage,the few ticks extra are just to be sure
     }
+
     @Override
     public void tick() {
         super.tick();
         ticks++;
         if(!entity.level().isClientSide){
             LivingEntity target = entity.getTarget();
+            if (target == null) return;
             double dx = target.getX() - entity.getX();
             double dz = target.getZ() - entity.getZ();
             double dist = Math.sqrt(dx*dx + dz*dz);
