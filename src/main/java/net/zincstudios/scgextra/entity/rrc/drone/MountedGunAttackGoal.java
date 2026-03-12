@@ -57,6 +57,7 @@ public class MountedGunAttackGoal extends Goal{
     @Override
     public void tick() {
         if(this.tick <= 1200){
+            this.mob.lookAt(this.mob.getTarget(), 20, 20);
             this.mob.setDeltaMovement(0, this.mob.getDeltaMovement().y, 0);
         }
         LivingEntity target = this.mob.getTarget();
