@@ -34,8 +34,8 @@
 				}
 			}
 		},
-		"misc.living": {
-			"animation_length": 1,
+		"effect.none": {
+			"loop": "hold_on_last_frame",
 			"bones": {
 				"eye_flash": {
 					"scale": {

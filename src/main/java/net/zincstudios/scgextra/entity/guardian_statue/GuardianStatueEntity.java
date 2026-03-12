@@ -1,7 +1,6 @@
 package net.zincstudios.scgextra.entity.guardian_statue;
 
 import net.zincstudios.scgextra.Faction;
-import net.zincstudios.scgextra.entity.armoredwhale.ArmoredWhalePart;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -64,6 +63,7 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
     private static final EntityDataAccessor<Vector3f> BEAM_LOOK_POS =
             SynchedEntityData.defineId(GuardianStatueEntity.class, EntityDataSerializers.VECTOR3);
 
+    public static final RawAnimation EFFECTS_BASE = RawAnimation.begin().then("effect.none", Animation.LoopType.HOLD_ON_LAST_FRAME);
     public static final RawAnimation EYE_FLASH = RawAnimation.begin().then("effect.eye_flash", Animation.LoopType.PLAY_ONCE);
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
@@ -286,9 +286,9 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(DefaultAnimations.genericLivingController(this));
-        controllers.add(new AnimationController<>(this, "effects", 0, state -> PlayState.STOP)
-                .triggerableAnim("eye_flash", EYE_FLASH)
+        controllers.add(new AnimationController<>(this, "effects", 0,
+                state -> state.setAndContinue(EFFECTS_BASE))
+                        .triggerableAnim("eye_flash", EYE_FLASH)
         );
     }
 
