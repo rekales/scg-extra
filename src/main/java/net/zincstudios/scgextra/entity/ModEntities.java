@@ -9,6 +9,7 @@ import net.zincstudios.scgextra.entity.rrc.tallman.TallmanEntity;
 import net.zincstudios.scgextra.entity.whaler.armoredwhale.ArmoredWhaleEntity;
 import net.zincstudios.scgextra.entity.whaler.armoredwhale.ArmoredWhaleRenderer;
 import net.zincstudios.scgextra.entity.whaler.fishfolk.FishFolkEntity;
+import net.zincstudios.scgextra.entity.rrc.drone.DroneEntity;
 
 import net.zincstudios.scgextra.entity.whaler.fishfolk.FishFolkRenderer;
 import net.zincstudios.scgextra.entity.whaler.tentacliator.GlowingTentacliatorEntity;
@@ -26,6 +27,7 @@ import net.zincstudios.scgextra.entity.whaler.tentacliator.TentacliatorEntity;
 import net.zincstudios.scgextra.entity.whaler.tentacliator.TentacliatorRenderer;
 import net.zincstudios.scgextra.entity.whaler.turtleman.TurtlemanEntity;
 import net.zincstudios.scgextra.entity.whaler.turtleman.TurtlemanRenderer;
+import net.zincstudios.scgextra.entity.rrc.drone.DroneEntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -104,6 +106,11 @@ public class ModEntities {
 //                    .sized(1F, 2F)
 //                    .build("tallman"));
 
+    //RRC
+    public static final RegistryObject<EntityType<DroneEntity>> DRONE = ENTITY_TYPES
+            .register("drone", () -> EntityType.Builder.of(DroneEntity::new, MobCategory.MONSTER)
+                    .sized(2F, 3.9F).build("drone"));
+
 
     public static void register(IEventBus modEventBus){
         ENTITY_TYPES.register(modEventBus);
@@ -129,6 +136,7 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.ARMORED_WHALE.get(), ArmoredWhaleRenderer::new);
         EntityRenderers.register(ModEntities.WHALE_PROJECTILE.get(), EnemyProjectileRenderer::new);
         EntityRenderers.register(ModEntities.RAID_SUMMONER.get(), RaidSummonerRenderer::new);
+        EntityRenderers.register(ModEntities.DRONE.get(), DroneEntityRenderer::new);
     }
 
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
@@ -145,5 +153,6 @@ public class ModEntities {
         event.put(ModEntities.PUFFICUS.get(), PufficusEntity.createAttributes().build());
         event.put(ModEntities.ARMORED_WHALE.get(), ArmoredWhaleEntity.createAttributes().build());
         event.put(ModEntities.RAID_SUMMONER.get(), RaidSummonerEntity.createAttributes().build());
+        event.put(ModEntities.DRONE.get(), DroneEntity.createAttributes().build());
     }
 }
