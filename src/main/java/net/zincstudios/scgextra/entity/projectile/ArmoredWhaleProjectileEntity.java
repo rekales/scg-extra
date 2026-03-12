@@ -1,7 +1,7 @@
 package net.zincstudios.scgextra.entity.projectile;
 
-import net.zincstudios.scgextra.entity.armoredwhale.ArmoredWhaleEntity;
-import net.zincstudios.scgextra.entity.armoredwhale.ArmoredWhalePart;
+import net.zincstudios.scgextra.entity.whaler.armoredwhale.ArmoredWhaleEntity;
+import net.zincstudios.scgextra.entity.whaler.armoredwhale.ArmoredWhalePart;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;

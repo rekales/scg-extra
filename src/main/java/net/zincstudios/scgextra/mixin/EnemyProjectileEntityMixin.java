@@ -4,8 +4,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.Level;
-import net.zincstudios.scgextra.entity.armoredwhale.ArmoredWhaleEntity;
-import net.zincstudios.scgextra.entity.armoredwhale.ArmoredWhalePart;
+import net.zincstudios.scgextra.entity.whaler.armoredwhale.ArmoredWhaleEntity;
+import net.zincstudios.scgextra.entity.whaler.armoredwhale.ArmoredWhalePart;
 import org.spongepowered.asm.mixin.Mixin;
 import top.ribs.scguns.entity.projectile.EnemyProjectileEntity;
 

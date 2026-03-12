@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.zincstudios.scgextra.entity.ModEntities;
-import net.zincstudios.scgextra.entity.guardian_statue.GuardianStatueEntity;
+import net.zincstudios.scgextra.entity.whaler.guardian_statue.GuardianStatueEntity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
