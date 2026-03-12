@@ -67,6 +67,7 @@ public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<
         .add(Attributes.MAX_HEALTH, 20.0D)
         .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE);
     }
+
     @Override
     protected void addBehaviourGoals() {
         this.goalSelector.addGoal(2, new FishFolkAttackGoal(this, 1.0D, false));
@@ -81,6 +82,7 @@ public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<
                 entity -> Faction.isEnemies(this, entity)));
 
     }
+
     static class FishFolkAttackGoal extends ZombieAttackGoal {
         private final FishFolkEntity fish_folk;
         public FishFolkAttackGoal(FishFolkEntity pFishFolk, double pSpeedModifier, boolean pFollowingTargetEvenIfNotSeen) {
@@ -96,10 +98,12 @@ public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<
            return super.canContinueToUse() && this.fish_folk.okTarget(this.fish_folk.getTarget());
         }
     }
+
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return cache;
     }
+
     @Override
     public void registerControllers(ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "controller", 0, state -> {
@@ -113,11 +117,13 @@ public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<
         controllers.add(new AnimationController<>(this, "special", 0, state -> PlayState.CONTINUE)
         .triggerableAnim("attack", RawAnimation.begin().thenPlay("attack")));
     }
+
     @Override
     public void performRangedAttack(LivingEntity pTarget, float pDistanceFactor) {
         super.performRangedAttack(pTarget, pDistanceFactor);
         this.triggerAnim("special", "attack");
     }
+
     @Override
     public boolean isBaby() {
         return false;
@@ -150,14 +156,17 @@ public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<
         super.readAdditionalSaveData(tag);
         this.entityData.set(TEXTURE_VARIANT, tag.getInt("variant"));
     }
+
     @Override
     protected boolean canRide(Entity pVehicle) {
         return pVehicle instanceof SalmonsaurEntity && super.canRide(pVehicle);
     }
+
     @Override
     public boolean isPassenger() {
         return this.getVehicle() instanceof SalmonsaurEntity;
     }
+
     @Override
     protected boolean isSunSensitive() {
         return false;
