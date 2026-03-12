@@ -101,16 +101,16 @@ public class ModEntities {
                     .setShouldReceiveVelocityUpdates(true)
                     .build("whale_tank_projectile"));
 
-//    public static final RegistryObject<EntityType<TallmanEntity>> TALLMAN = ENTITY_TYPES
-//            .register("tallman", () -> EntityType.Builder.of(TallmanEntity::new, MobCategory.MONSTER)
-//                    .sized(1F, 2F)
-//                    .build("tallman"));
 
     //RRC
     public static final RegistryObject<EntityType<DroneEntity>> DRONE = ENTITY_TYPES
             .register("drone", () -> EntityType.Builder.of(DroneEntity::new, MobCategory.MONSTER)
                     .sized(2F, 3.9F).build("drone"));
 
+    public static final RegistryObject<EntityType<TallmanEntity>> TALLMAN = ENTITY_TYPES
+            .register("tallman", () -> EntityType.Builder.of(TallmanEntity::new, MobCategory.MONSTER)
+                    .sized(1F, 2F)
+                    .build("tallman"));
 
     public static void register(IEventBus modEventBus){
         ENTITY_TYPES.register(modEventBus);
@@ -137,6 +137,7 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.WHALE_PROJECTILE.get(), EnemyProjectileRenderer::new);
         EntityRenderers.register(ModEntities.RAID_SUMMONER.get(), RaidSummonerRenderer::new);
         EntityRenderers.register(ModEntities.DRONE.get(), DroneEntityRenderer::new);
+        EntityRenderers.register(ModEntities.TALLMAN.get(), PlaceholderEntityRenderer::new);
     }
 
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
@@ -154,5 +155,6 @@ public class ModEntities {
         event.put(ModEntities.ARMORED_WHALE.get(), ArmoredWhaleEntity.createAttributes().build());
         event.put(ModEntities.RAID_SUMMONER.get(), RaidSummonerEntity.createAttributes().build());
         event.put(ModEntities.DRONE.get(), DroneEntity.createAttributes().build());
+        event.put(ModEntities.TALLMAN.get(), TallmanEntity.createAttributes().build());
     }
 }
