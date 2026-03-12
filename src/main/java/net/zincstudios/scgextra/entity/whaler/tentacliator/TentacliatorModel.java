@@ -6,8 +6,9 @@ import net.zincstudios.scgextra.entity.TextureVarEntityGeoModel;
 import net.minecraft.world.item.Items;
 import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
 import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 
-public class TentacliatorModel <T extends TentacliatorEntity> extends TextureVarEntityGeoModel<T> {
+public class TentacliatorModel <T extends TentacliatorEntity> extends DefaultedEntityGeoModel<T> {
 
 	public TentacliatorModel() {
         super(SCGExtra.asResource("whaler/tentacliator"));

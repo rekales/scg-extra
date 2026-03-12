@@ -1,12 +1,12 @@
 package net.zincstudios.scgextra.entity.whaler.tentacliator;
 
+import net.minecraft.server.level.ServerLevel;
 import net.zincstudios.scgextra.effects.ModEffects;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.level.Level;
 
 public class InkAttackGoal extends Goal{
     private final TentacliatorEntity entity;
@@ -21,13 +21,14 @@ public class InkAttackGoal extends Goal{
         if(cooldown>0){
             --cooldown;
         }
-        return cooldown <= 0 && entity.getTarget() != null && entity.random.nextInt(50) < 3;
+        return cooldown <= 0 && entity.getTarget() != null && entity.getRandom().nextInt(50) < 3;
     }
     
     @Override
     public void start() {
         entity.triggerAnim("special", "special_attack"); 
         cooldown = 600;
+        if (entity.getTarget() == null) return;
         entity.getTarget().addEffect(new MobEffectInstance(ModEffects.INK_EFFECT.get(), 100));
         BlockPos start = entity.blockPosition();
         BlockPos end = entity.getTarget().blockPosition();
@@ -52,8 +53,8 @@ public class InkAttackGoal extends Goal{
             double px = startX + stepX * i;
             double py = startY + stepY * i;
             double pz = startZ + stepZ * i;
-            entity.level().getServer().getLevel(Level.OVERWORLD).sendParticles(ParticleTypes.SMOKE, px, py, pz,1,0,0,0,0);
-        }
+            if (entity.level() instanceof ServerLevel serverLevel)
+                serverLevel.sendParticles(ParticleTypes.FALLING_WATER, px, py, pz,1,0,0,0,0);        }
     }
     
     @Override

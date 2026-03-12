@@ -1,14 +1,9 @@
 package net.zincstudios.scgextra.entity.whaler.tentacliator;
 
-import java.util.Random;
-
 import net.zincstudios.scgextra.Faction;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -38,14 +33,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TentacliatorEntity extends Drowned implements GeoEntity, VariantHolder<Integer> {
-
-    // VARIANT 1: normal squid, 2: glow squid
-    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData
-            .defineId(TentacliatorEntity.class, EntityDataSerializers.INT);
+public class TentacliatorEntity extends Drowned implements GeoEntity {
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    public Random random = new Random();
     public TentacliatorEntity(EntityType<? extends Drowned> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
@@ -53,7 +43,6 @@ public class TentacliatorEntity extends Drowned implements GeoEntity, VariantHol
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty,
         MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
-        this.setVariant(1);
         EntityEquipmentConfig.equipEntity(this, "scgextra:tentacliator");  // NOTE: using raw string
         return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
     }
@@ -72,14 +61,15 @@ public class TentacliatorEntity extends Drowned implements GeoEntity, VariantHol
         .add(Attributes.MAX_HEALTH, 40.0D)
         .add(Attributes.SPAWN_REINFORCEMENTS_CHANCE);
     }
+
     @Override
     protected void addBehaviourGoals() {
-        super.addBehaviourGoals();
         this.goalSelector.addGoal(1, new GunAttackGoal<>(this, this.getMainHandItem(), 1.0F, AIType.RECKLESS, 3));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(2, new InkAttackGoal(this));
         this.goalSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
+
         this.targetSelector.addGoal(2, new HurtByNonFactionGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
@@ -109,33 +99,6 @@ public class TentacliatorEntity extends Drowned implements GeoEntity, VariantHol
         return false;
     }
 
-    @Override
-    public void setVariant(Integer variant) {
-        this.entityData.set(VARIANT, variant);
-    }
-
-    @Override
-    public Integer getVariant() {
-        return this.entityData.get(VARIANT);
-    }
-
-    @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(VARIANT, 1);
-    }
-
-    @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
-        super.addAdditionalSaveData(tag);
-        tag.putInt("variant", this.entityData.get(VARIANT));
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
-        super.readAdditionalSaveData(tag);
-        this.entityData.set(VARIANT, tag.getInt("variant"));
-    }
     @Override
     protected boolean isSunSensitive() {
         return false;

@@ -9,8 +9,8 @@ import net.zincstudios.scgextra.entity.whaler.armoredwhale.ArmoredWhaleRenderer;
 import net.zincstudios.scgextra.entity.whaler.fishfolk.FishFolkEntity;
 
 import net.zincstudios.scgextra.entity.whaler.fishfolk.FishFolkRenderer;
-import net.zincstudios.scgextra.entity.whaler.glowing_tentacliator.GlowingTentacliatorEntity;
-import net.zincstudios.scgextra.entity.whaler.glowing_tentacliator.GlowingTentacliatorRenderer;
+import net.zincstudios.scgextra.entity.whaler.tentacliator.GlowingTentacliatorEntity;
+import net.zincstudios.scgextra.entity.whaler.tentacliator.GlowingTentacliatorRenderer;
 import net.zincstudios.scgextra.entity.whaler.guardian_statue.GuardianStatueEntity;
 import net.zincstudios.scgextra.entity.whaler.guardian_statue.GuardianStatueRenderer;
 import net.zincstudios.scgextra.entity.projectile.ArmoredWhaleProjectileEntity;
@@ -65,7 +65,7 @@ public class ModEntities {
             .register("tentacliator", () -> EntityType.Builder.of(TentacliatorEntity::new, MobCategory.MONSTER)
                     .sized(0.6F, 1.95F).build("tentacliator"));
     
-                    public static final RegistryObject<EntityType<GlowingTentacliatorEntity>> GLOWING_TENTACLIATOR = ENTITY_TYPES
+    public static final RegistryObject<EntityType<GlowingTentacliatorEntity>> GLOWING_TENTACLIATOR = ENTITY_TYPES
             .register("glowing_tentacliator", () -> EntityType.Builder.of(GlowingTentacliatorEntity::new, MobCategory.MONSTER)
                     .sized(0.6F, 1.95F).build("glowing_tentacliator"));
 
