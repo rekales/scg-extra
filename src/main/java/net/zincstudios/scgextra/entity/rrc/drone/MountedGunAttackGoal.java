@@ -1,6 +1,8 @@
 package net.zincstudios.scgextra.entity.rrc.drone;
 
+import net.minecraft.commands.arguments.EntityAnchorArgument.Anchor;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
@@ -21,7 +23,7 @@ public class MountedGunAttackGoal extends Goal{
     }
 
     public Vec3 getProjectileSpawnPos() {
-        return this.mob.position().add(0, 1, 0);
+        return new Vec3(-1.5,1.7,0).yRot(-this.mob.getYRot() * Mth.DEG_TO_RAD).add(this.mob.position());
     }
 
     public void triggerGunFlash() {}
@@ -46,6 +48,7 @@ public class MountedGunAttackGoal extends Goal{
     
     @Override
     public void stop() {
+        this.mob.setDeltaMovement(this.mob.getDeltaMovement());
         super.stop();
     }
 
@@ -57,18 +60,18 @@ public class MountedGunAttackGoal extends Goal{
     @Override
     public void tick() {
         LivingEntity target = this.mob.getTarget();
-        if(this.tick <= 1200){
-            if(target != null){
-                this.mob.lookAt(this.mob.getTarget(), 40, 40);
-            }
+        if(target != null){
             this.mob.setDeltaMovement(0, this.mob.getDeltaMovement().y, 0);
-        }
-        
-        if (this.tick <= 1200 && this.tick%2==0) {
-            if (target != null) {
+            this.mob.lookAt(Anchor.EYES, this.mob.getTarget().position());
+            this.mob.yHeadRot = this.mob.getYRot();
+            this.mob.yBodyRot = this.mob.getYRot();
+            if (this.tick%2==0) {
                 fireGun(target);
             }
-        }
+            if(tick % 20 == 0){
+                this.mob.triggerAnim("attack", "gun_firing");
+            }
+        }else{this.stop();}
         this.tick++;
     }
 
