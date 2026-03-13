@@ -1,5 +1,6 @@
 package net.zincstudios.scgextra.entity;
 
+import net.minecraftforge.common.MinecraftForge;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntity;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntityModel;
@@ -103,6 +104,7 @@ public class ModEntities {
 
         modEventBus.addListener(ModEntities::registerLayers);
         modEventBus.addListener(ModEntities::registerAttributes);
+        MinecraftForge.EVENT_BUS.addListener(EntityAdjustments::onEntityJoin);
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
             modEventBus.addListener(ModEntities::onClientSetup);
