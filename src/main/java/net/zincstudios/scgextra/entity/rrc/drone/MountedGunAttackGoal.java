@@ -1,6 +1,5 @@
 package net.zincstudios.scgextra.entity.rrc.drone;
 
-import net.minecraft.commands.arguments.EntityAnchorArgument.Anchor;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -41,14 +40,14 @@ public class MountedGunAttackGoal extends Goal{
 
     @Override
     public void start() {
+        this.mob.getNavigation().stop();
         this.tick = 0;
-        super.start();
         this.cooldown = 100;
+        super.start();
     }
     
     @Override
     public void stop() {
-        this.mob.setDeltaMovement(this.mob.getDeltaMovement());
         super.stop();
     }
 
@@ -61,10 +60,12 @@ public class MountedGunAttackGoal extends Goal{
     public void tick() {
         LivingEntity target = this.mob.getTarget();
         if(target != null){
-            this.mob.setDeltaMovement(0, this.mob.getDeltaMovement().y, 0);
-            this.mob.lookAt(Anchor.EYES, this.mob.getTarget().position());
-            this.mob.yHeadRot = this.mob.getYRot();
-            this.mob.yBodyRot = this.mob.getYRot();
+            this.mob.getNavigation().stop();
+            this.mob.getLookControl().setLookAt(
+                this.mob.getTarget().getX(), 
+                this.mob.getTarget().getY(), 
+                this.mob.getTarget().getZ()
+            );
             if (this.tick%2==0) {
                 fireGun(target);
             }
