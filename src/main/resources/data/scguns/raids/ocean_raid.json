@@ -287,6 +287,41 @@
         ],
         "ai_difficulty": 2,
         "ai_type": "RECKLESS"
+      },
+      {
+        "entity_type": "scguns:finforcer",
+        "weight": 3.0,
+        "health_multiplier": 1.2,
+        "weapons": [
+          "scguns:marlin",
+          "scguns:floundergat",
+          "scguns:hyperbaria",
+          "minecraft:iron_sword",
+          "minecraft:iron_axe"
+        ],
+        "armor": [
+          {
+            "item": "scguns:redcoat_hat",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "minecraft:leather_chestplate",
+            "slot": "chest",
+            "chance": 0.5
+          }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": false,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 2,
+        "ai_type": "TACTICAL"
       }
     ],
     "spawn_interval_ticks": 600,
