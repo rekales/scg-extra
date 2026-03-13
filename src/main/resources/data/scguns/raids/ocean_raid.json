@@ -290,7 +290,7 @@
       },
       {
         "entity_type": "scguns:finforcer",
-        "weight": 3.0,
+        "weight": 4.0,
         "health_multiplier": 1.2,
         "weapons": [
           "scguns:marlin",
