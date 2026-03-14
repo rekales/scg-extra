@@ -59,8 +59,7 @@ public class ModEntities {
     public static final RegistryObject<EntityType<GuardianStatueEntity>> GUARDIAN_STATUE = ENTITY_TYPES
             .register("guardian_statue", () -> EntityType.Builder.of(GuardianStatueEntity::new, MobCategory.MONSTER)
                     .setUpdateInterval(1)
-                //     .sized(3F, 6.75F)
-                    .sized(3F, 2F)
+                    .sized(3F, 6.75F)
                     .build("guardian_statue"));
 
     public static final RegistryObject<EntityType<TentacliatorEntity>> TENTACLIATOR = ENTITY_TYPES
