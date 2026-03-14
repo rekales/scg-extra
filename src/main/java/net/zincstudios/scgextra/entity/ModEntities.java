@@ -105,7 +105,7 @@ public class ModEntities {
     //RRC
     public static final RegistryObject<EntityType<DroneEntity>> DRONE = ENTITY_TYPES
             .register("drone", () -> EntityType.Builder.of(DroneEntity::new, MobCategory.MONSTER)
-                    .sized(2.5F, 3.9F).build("drone"));
+                    .sized(2.7F, 3.9F).build("drone"));
 
     public static final RegistryObject<EntityType<TallmanEntity>> TALLMAN = ENTITY_TYPES
             .register("tallman", () -> EntityType.Builder.of(TallmanEntity::new, MobCategory.MONSTER)

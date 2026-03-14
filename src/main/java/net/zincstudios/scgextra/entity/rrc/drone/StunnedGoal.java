@@ -3,11 +3,16 @@ package net.zincstudios.scgextra.entity.rrc.drone;
 import java.util.EnumSet;
 import java.util.Set;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.Scoreboard;
 import top.ribs.scguns.init.ModEffects;
 
 public class StunnedGoal extends Goal{
@@ -69,6 +74,14 @@ public class StunnedGoal extends Goal{
                 0.3, 
                 0.05
             );
+            Scoreboard scoreboard = sLevel.getScoreboard();
+            PlayerTeam team = scoreboard.getPlayerTeam("red");
+            if (team == null) {
+                team = scoreboard.addPlayerTeam("red");
+            }
+            team.setColor(ChatFormatting.RED);
+            scoreboard.addPlayerToTeam(this.mob.getStringUUID(), team);
+            this.mob.addEffect(new MobEffectInstance(MobEffects.GLOWING, 60));
         }
         this.tick++;
     }

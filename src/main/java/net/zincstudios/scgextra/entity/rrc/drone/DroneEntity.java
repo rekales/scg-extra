@@ -2,7 +2,6 @@ package net.zincstudios.scgextra.entity.rrc.drone;
 
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -37,8 +36,10 @@ public class DroneEntity extends Monster implements GeoEntity{
         super(pEntityType, pLevel);
         DronePart pipe = new DronePart(this, "pipe", 0.5F, 2F);
         DronePart back = new DronePart(this, "back", 2F, 2F);
-        DronePart body = new DronePart(this, "body", 2F, 2F);
-        this.subEntities = new DronePart[]{pipe, back, body};
+        DronePart body = new DronePart(this, "body", 2.5F, 2F);
+        DronePart leg1 = new DronePart(this, "leg1", 0.5F, 1.3F);
+        DronePart leg2 = new DronePart(this, "leg2", 0.5F, 1.3F);
+        this.subEntities = new DronePart[]{pipe, back, body, leg1, leg2};
     }
     @Override
     public boolean isMultipartEntity() {
@@ -54,16 +55,16 @@ public class DroneEntity extends Monster implements GeoEntity{
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        // this.goalSelector.addGoal(0, new FloatGoal(this));
-        // this.goalSelector.addGoal(1, new StunnedGoal(this));
-        // this.targetSelector.addGoal(2, new HurtByNonFactionGoal(this));
-        // this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true, player -> !((Player) player).isCreative() && !player.isSpectator()));
-        // this.goalSelector.addGoal(2, new ClawAttackGoal(this, 1, true));
-        // this.goalSelector.addGoal(3, new MountedGunAttackGoal(this, 20));
-        // this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 20));
-        // this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 1));
-        // this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
-        // this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true, entity -> Faction.isEnemies(this, entity)));
+        this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(1, new StunnedGoal(this));
+        this.targetSelector.addGoal(2, new HurtByNonFactionGoal(this));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true, player -> !((Player) player).isCreative() && !player.isSpectator()));
+        this.goalSelector.addGoal(2, new ClawAttackGoal(this, 1, true));
+        this.goalSelector.addGoal(3, new MountedGunAttackGoal(this, 20));
+        this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 20));
+        this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 1));
+        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true, entity -> Faction.isEnemies(this, entity)));
     }
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
@@ -138,8 +139,8 @@ public class DroneEntity extends Monster implements GeoEntity{
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        float[] offsets = new float[] { 0f, -0.5F, 0.0F };
-        float[] lateralOffsets = new float[] { 0F, 0F, 0.0F };
+        float[] offsets = new float[] { -0.5f, -0.5F, 0.0F, 0.0F, 0.0F };
+        float[] lateralOffsets = new float[] { -1F, 0F, 0.0F, -0.5F, 0.5F };
         double yawRad = Math.toRadians(this.getYRot());
         for (int i = 0; i < this.subEntities.length; i++) {
             DronePart part = this.subEntities[i];
@@ -150,7 +151,7 @@ public class DroneEntity extends Monster implements GeoEntity{
             double offsetZ =  Math.cos(yawRad) * fDistance + Math.sin(yawRad) * lateral;
             //pipe
             if(i==0){
-                part.setPosRaw(x + offsetX, y+2, z + offsetZ);
+                part.setPosRaw(x + offsetX, y+2.8, z + offsetZ);
             }
             //back
             else if(i == 1){
