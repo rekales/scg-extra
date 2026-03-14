@@ -1,5 +1,8 @@
 package net.zincstudios.scgextra.entity.rrc.drone;
 
+import org.jetbrains.annotations.Nullable;
+
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,6 +17,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.minecraftforge.entity.PartEntity;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
@@ -28,22 +32,37 @@ public class DroneEntity extends Monster implements GeoEntity{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private boolean deathAnimDone = false;
     private int deathTick = 0;
+    private final DronePart[] subEntities;
     public DroneEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
+        DronePart pipe = new DronePart(this, "pipe", 0.5F, 2F);
+        DronePart body = new DronePart(this, "body", 2F, 2F);
+        this.subEntities = new DronePart[]{pipe, body};
+    }
+    @Override
+    public boolean isMultipartEntity() {
+        return true;
+    }
+    public DronePart[] getSubEntities() {
+        return this.subEntities;
+    }
+    @Override
+    public @Nullable PartEntity<?>[] getParts() {
+        return this.subEntities;
     }
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new StunnedGoal(this));
-        this.targetSelector.addGoal(2, new HurtByNonFactionGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true, player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.goalSelector.addGoal(2, new ClawAttackGoal(this, 1, true));
-        this.goalSelector.addGoal(3, new MountedGunAttackGoal(this, 20));
-        this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 20));
-        this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 1));
-        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true, entity -> Faction.isEnemies(this, entity)));
+        // this.goalSelector.addGoal(0, new FloatGoal(this));
+        // this.goalSelector.addGoal(1, new StunnedGoal(this));
+        // this.targetSelector.addGoal(2, new HurtByNonFactionGoal(this));
+        // this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true, player -> !((Player) player).isCreative() && !player.isSpectator()));
+        // this.goalSelector.addGoal(2, new ClawAttackGoal(this, 1, true));
+        // this.goalSelector.addGoal(3, new MountedGunAttackGoal(this, 20));
+        // this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 20));
+        // this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 1));
+        // this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
+        // this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true, entity -> Faction.isEnemies(this, entity)));
     }
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
@@ -90,6 +109,7 @@ public class DroneEntity extends Monster implements GeoEntity{
             this.setHealth(0);
             this.die(this.getLastDamageSource());
         }
+        updateSubentities();
     }
     @Override
     public void die(DamageSource pDamageSource) {
@@ -104,5 +124,47 @@ public class DroneEntity extends Monster implements GeoEntity{
             return super.hurt(pSource, pAmount*2);
         }
         return super.hurt(pSource, pAmount);
+    }
+    public void updateSubentities(){
+        for (DronePart part : this.subEntities) {
+            part.xo = part.getX();
+            part.yo = part.getY();
+            part.zo = part.getZ();
+            part.xOld = part.getX();
+            part.yOld = part.getY();
+            part.zOld = part.getZ();
+        }
+        double x = this.getX();
+        double y = this.getY();
+        double z = this.getZ();
+        float[] offsets = new float[] { 0f, -0.5F };
+        float[] lateralOffsets = new float[] { 0F, 0F };
+        double yawRad = Math.toRadians(this.getYRot());
+
+        for (int i = 0; i < this.subEntities.length; i++) {
+            DronePart part = this.subEntities[i];
+            float fDistance = offsets[i];
+            float lateral = lateralOffsets[i];
+
+            double offsetX = -Math.sin(yawRad) * fDistance + Math.cos(yawRad) * lateral;
+            double offsetZ =  Math.cos(yawRad) * fDistance + Math.sin(yawRad) * lateral;
+            //pipe
+            if(i==0){
+                part.setPosRaw(x + offsetX, y+2, z + offsetZ);
+            }
+            //body
+            else if(i == 1){
+                part.setPosRaw(x + offsetX, y+1.7, z + offsetZ);
+            }
+            else{
+                part.setPosRaw(x + offsetX, y, z + offsetZ);
+            }
+            part.setOldPosAndRot();
+            part.refreshDimensions();
+        }
+    }
+    @Override
+    public boolean isPickable() {
+        return true;
     }
 }
