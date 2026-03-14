@@ -36,8 +36,9 @@ public class DroneEntity extends Monster implements GeoEntity{
     public DroneEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         DronePart pipe = new DronePart(this, "pipe", 0.5F, 2F);
+        DronePart back = new DronePart(this, "back", 2F, 2F);
         DronePart body = new DronePart(this, "body", 2F, 2F);
-        this.subEntities = new DronePart[]{pipe, body};
+        this.subEntities = new DronePart[]{pipe, back, body};
     }
     @Override
     public boolean isMultipartEntity() {
@@ -137,10 +138,9 @@ public class DroneEntity extends Monster implements GeoEntity{
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        float[] offsets = new float[] { 0f, -0.5F };
-        float[] lateralOffsets = new float[] { 0F, 0F };
+        float[] offsets = new float[] { 0f, -0.5F, 0.0F };
+        float[] lateralOffsets = new float[] { 0F, 0F, 0.0F };
         double yawRad = Math.toRadians(this.getYRot());
-
         for (int i = 0; i < this.subEntities.length; i++) {
             DronePart part = this.subEntities[i];
             float fDistance = offsets[i];
@@ -152,8 +152,12 @@ public class DroneEntity extends Monster implements GeoEntity{
             if(i==0){
                 part.setPosRaw(x + offsetX, y+2, z + offsetZ);
             }
-            //body
+            //back
             else if(i == 1){
+                part.setPosRaw(x + offsetX, y+1.7, z + offsetZ);
+            }
+            //body
+            else if(i == 2){
                 part.setPosRaw(x + offsetX, y+1.7, z + offsetZ);
             }
             else{
@@ -162,9 +166,5 @@ public class DroneEntity extends Monster implements GeoEntity{
             part.setOldPosAndRot();
             part.refreshDimensions();
         }
-    }
-    @Override
-    public boolean isPickable() {
-        return true;
     }
 }

@@ -42,6 +42,9 @@ public class DronePart extends PartEntity<DroneEntity>{
     }
 
     public boolean hurt(DamageSource pSource, float pAmount) {
+        if(this.name.equals("back") || this.name.equals("pipe")){
+            return this.isInvulnerableTo(pSource) ? false : this.parentMob.hurt(pSource, pAmount*1.5F);
+        }
         return this.isInvulnerableTo(pSource) ? false : this.parentMob.hurt(pSource, pAmount);
     }
 
