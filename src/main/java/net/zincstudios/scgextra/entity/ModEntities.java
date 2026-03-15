@@ -10,6 +10,7 @@ import net.zincstudios.scgextra.entity.whaler.armoredwhale.ArmoredWhaleEntity;
 import net.zincstudios.scgextra.entity.whaler.armoredwhale.ArmoredWhaleRenderer;
 import net.zincstudios.scgextra.entity.whaler.fishfolk.FishFolkEntity;
 import net.zincstudios.scgextra.entity.rrc.drone.DroneEntity;
+import net.zincstudios.scgextra.entity.rrc.scout.ScoutEntity;
 
 import net.zincstudios.scgextra.entity.whaler.fishfolk.FishFolkRenderer;
 import net.zincstudios.scgextra.entity.whaler.tentacliator.GlowingTentacliatorEntity;
@@ -28,6 +29,7 @@ import net.zincstudios.scgextra.entity.whaler.tentacliator.TentacliatorRenderer;
 import net.zincstudios.scgextra.entity.whaler.turtleman.TurtlemanEntity;
 import net.zincstudios.scgextra.entity.whaler.turtleman.TurtlemanRenderer;
 import net.zincstudios.scgextra.entity.rrc.drone.DroneEntityRenderer;
+import net.zincstudios.scgextra.entity.rrc.scout.ScoutRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -100,8 +102,7 @@ public class ModEntities {
                     .setUpdateInterval(1)
                     .setShouldReceiveVelocityUpdates(true)
                     .build("whale_tank_projectile"));
-
-
+                    
     //RRC
     public static final RegistryObject<EntityType<DroneEntity>> DRONE = ENTITY_TYPES
             .register("drone", () -> EntityType.Builder.of(DroneEntity::new, MobCategory.MONSTER)
@@ -111,6 +112,11 @@ public class ModEntities {
             .register("tallman", () -> EntityType.Builder.of(TallmanEntity::new, MobCategory.MONSTER)
                     .sized(1F, 2F)
                     .build("tallman"));
+
+    public static final RegistryObject<EntityType<ScoutEntity>> SCOUT = ENTITY_TYPES
+            .register("scout", () -> EntityType.Builder.of(ScoutEntity::new, MobCategory.MONSTER)
+                    .sized(0.6F, 1.95F).build("scout"));
+
 
     public static void register(IEventBus modEventBus){
         ENTITY_TYPES.register(modEventBus);
@@ -138,6 +144,7 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.RAID_SUMMONER.get(), RaidSummonerRenderer::new);
         EntityRenderers.register(ModEntities.DRONE.get(), DroneEntityRenderer::new);
         EntityRenderers.register(ModEntities.TALLMAN.get(), PlaceholderEntityRenderer::new);
+        EntityRenderers.register(ModEntities.SCOUT.get(), ScoutRenderer::new);
     }
 
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
@@ -156,5 +163,6 @@ public class ModEntities {
         event.put(ModEntities.RAID_SUMMONER.get(), RaidSummonerEntity.createAttributes().build());
         event.put(ModEntities.DRONE.get(), DroneEntity.createAttributes().build());
         event.put(ModEntities.TALLMAN.get(), TallmanEntity.createAttributes().build());
+        event.put(ModEntities.SCOUT.get(), ScoutEntity.createAttributes().build());
     }
 }

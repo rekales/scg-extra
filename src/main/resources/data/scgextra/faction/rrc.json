@@ -2,6 +2,7 @@
     "id": "rrc",
     "entities": [
         "scgextra:drone",
-        "scgextra:tallman"
+        "scgextra:tallman",
+        "scgextra:scout"
     ]
 }

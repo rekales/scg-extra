@@ -9,6 +9,7 @@ public class DroneEntityRenderer extends GeoEntityRenderer<DroneEntity> {
     
     public DroneEntityRenderer(Context context) {
         super(context, new DroneModel());
+        this.shadowRadius = 1F;
     }
 
     @Override
