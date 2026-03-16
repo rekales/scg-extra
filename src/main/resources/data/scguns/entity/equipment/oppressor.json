@@ -1,0 +1,30 @@
+{
+  "id": "scgextra:oppressor",
+  "equipment_chance": 1.0,
+  "items": [
+    {
+      "item": "scguns:scrapper",
+      "weight": 10.0,
+      "drop_chance": 0.1,
+      "min_durability": 0.2,
+      "max_durability": 0.6,
+      "slot": "mainhand"
+    },
+    {
+      "item": "scguns:umax_pistol",
+      "weight": 10.0,
+      "drop_chance": 0.1,
+      "min_durability": 0.2,
+      "max_durability": 0.5,
+      "slot": "mainhand"
+    },
+    {
+      "item": "scguns:bruiser",
+      "weight": 10.0,
+      "drop_chance": 0.1,
+      "min_durability": 0.2,
+      "max_durability": 0.5,
+      "slot": "mainhand"
+    }
+  ]
+}

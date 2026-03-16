@@ -3,6 +3,7 @@
     "entities": [
         "scgextra:drone",
         "scgextra:tallman",
-        "scgextra:scout"
+        "scgextra:scout",
+        "scgextra:oppressor"
     ]
 }
