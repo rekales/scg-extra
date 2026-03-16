@@ -365,7 +365,7 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        float[] offsets = new float[] { 0.4f, 0F, 0F, 0F, 0F, 0F };
+        float[] offsets = new float[] { 0.6f, 0F, 0F, 0F, 0F, 0F };
         float[] lateralOffsets = new float[] { 0F, 0F, 1.5f, -1.3F, 0F, 0F };
         double yawRad = Math.toRadians(this.getYRot());
         if(this.yHeadRotO!=this.yHeadRot){
