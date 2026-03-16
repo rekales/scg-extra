@@ -4,8 +4,10 @@ import java.util.HashSet;
 
 import net.zincstudios.scgextra.Faction;
 import net.zincstudios.scgextra.effects.ModEffects;
+import net.zincstudios.scgextra.sounds.ModSounds;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -30,6 +32,14 @@ public class SplashWaterGoal extends Goal{
         ticks = 0;
         this.mob.setWaterSplash(true);
         super.start();
+        this.mob.level().playSound(
+            this.mob, 
+            this.mob.blockPosition(), 
+            this.mob.getRandom().nextBoolean() ? ModSounds.WHALE_SPLASH_1.get() : ModSounds.WHALE_SPLASH_2.get(), 
+            SoundSource.MASTER, 
+            2.0F, 
+            1.0F
+        );
     }
 
     @Override

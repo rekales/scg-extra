@@ -1,6 +1,8 @@
 package net.zincstudios.scgextra.entity.whaler.guardian_statue;
 
 import net.zincstudios.scgextra.SCGExtra;
+import net.zincstudios.scgextra.sounds.ModSounds;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
@@ -64,8 +66,16 @@ public class BeamLaserAttackGoal extends Goal {
             this.cooldown = maxInterval;
             this.mob.startBeamActiveTimer(100);
             timer = 100;
+            this.mob.level().playSound(
+                this.mob, 
+                this.mob.blockPosition(), 
+                ModSounds.GUARDIAN_STATUE_CHARGE.get(), 
+                SoundSource.MASTER, 
+                2.0F, 
+                1.0F
+            );
         }
-
+        
         if (this.mob.hasLineOfSight(target) && !(0 < timer && timer < 25)) {
             this.lastPos = target.position().add(0,target.getBbHeight()/2,0);
         }

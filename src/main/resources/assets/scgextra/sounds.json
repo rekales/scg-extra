@@ -1,0 +1,32 @@
+{
+    "armored_whale_slam_1": {
+        "category": "master",
+        "sounds": [
+            "scgextra:armored_whale_slam_1"
+        ]
+    },
+    "armored_whale_slam_2": {
+        "category": "master",
+        "sounds": [
+            "scgextra:armored_whale_slam_2"
+        ]
+    },
+    "armored_whale_splash_1": {
+        "category": "master",
+        "sounds": [
+            "scgextra:armored_whale_splash_1"
+        ]
+    },
+    "armored_whale_splash_2": {
+        "category": "master",
+        "sounds": [
+            "scgextra:armored_whale_splash_2"
+        ]
+    },
+    "guardian_statue_charge": {
+        "category": "master",
+        "sounds": [
+            "scgextra:guardian_statue_charge"
+        ]
+    }
+}
