@@ -5,6 +5,7 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.zincstudios.scgextra.Faction;
+import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import top.ribs.scguns.entity.monster.FinforcerEntity;
 
 public class EntityAdjustments {

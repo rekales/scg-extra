@@ -1,7 +1,7 @@
 package net.zincstudios.scgextra.entity.whaler.pufficus;
 
 import net.zincstudios.scgextra.Faction;
-import net.zincstudios.scgextra.entity.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntity;
 
 import net.minecraft.core.BlockPos;

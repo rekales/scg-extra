@@ -31,7 +31,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidType;
 
-import net.zincstudios.scgextra.entity.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.constant.DefaultAnimations;

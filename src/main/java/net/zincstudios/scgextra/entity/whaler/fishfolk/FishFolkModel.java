@@ -1,7 +1,7 @@
 package net.zincstudios.scgextra.entity.whaler.fishfolk;
 
 import net.zincstudios.scgextra.SCGExtra;
-import net.zincstudios.scgextra.entity.TextureVarEntityGeoModel;
+import net.zincstudios.scgextra.entity.common.TextureVarEntityGeoModel;
 import net.zincstudios.scgextra.entity.whaler.salmonsaur.SalmonsaurEntity;
 import net.minecraft.world.item.Items;
 import software.bernie.geckolib.core.animatable.model.CoreGeoBone;

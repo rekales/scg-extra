@@ -9,7 +9,7 @@ import net.minecraft.world.entity.monster.Drowned;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.zincstudios.scgextra.Faction;
-import net.zincstudios.scgextra.entity.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import top.ribs.scguns.entity.ai.AIType;
 import top.ribs.scguns.entity.ai.GunAttackGoal;
 

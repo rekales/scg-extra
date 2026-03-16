@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity;
+package net.zincstudios.scgextra.entity.common;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.VariantHolder;

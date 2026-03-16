@@ -2,7 +2,6 @@ package net.zincstudios.scgextra.entity.whaler.tentacliator;
 
 import net.zincstudios.scgextra.SCGExtra;
 
-import net.zincstudios.scgextra.entity.TextureVarEntityGeoModel;
 import net.minecraft.world.item.Items;
 import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
 import software.bernie.geckolib.core.animation.AnimationState;
