@@ -6,6 +6,7 @@ import net.zincstudios.scgextra.entity.projectile.net.NetEntity;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntityModel;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntityRenderer;
 import net.zincstudios.scgextra.entity.rrc.tallman.TallmanEntity;
+import net.zincstudios.scgextra.entity.rrc.tallman.TallmanRenderer;
 import net.zincstudios.scgextra.entity.whaler.armoredwhale.ArmoredWhaleEntity;
 import net.zincstudios.scgextra.entity.whaler.armoredwhale.ArmoredWhaleRenderer;
 import net.zincstudios.scgextra.entity.whaler.fishfolk.FishFolkEntity;
@@ -110,7 +111,7 @@ public class ModEntities {
 
     public static final RegistryObject<EntityType<TallmanEntity>> TALLMAN = ENTITY_TYPES
             .register("tallman", () -> EntityType.Builder.of(TallmanEntity::new, MobCategory.MONSTER)
-                    .sized(1F, 2F)
+                    .sized(1F, 4.5F)
                     .build("tallman"));
 
     public static final RegistryObject<EntityType<ScoutEntity>> SCOUT = ENTITY_TYPES
@@ -143,7 +144,7 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.WHALE_PROJECTILE.get(), EnemyProjectileRenderer::new);
         EntityRenderers.register(ModEntities.RAID_SUMMONER.get(), RaidSummonerRenderer::new);
         EntityRenderers.register(ModEntities.DRONE.get(), DroneEntityRenderer::new);
-        EntityRenderers.register(ModEntities.TALLMAN.get(), PlaceholderEntityRenderer::new);
+        EntityRenderers.register(ModEntities.TALLMAN.get(), TallmanRenderer::new);
         EntityRenderers.register(ModEntities.SCOUT.get(), ScoutRenderer::new);
     }
 
