@@ -2,6 +2,9 @@ package net.zincstudios.scgextra.entity.rrc.drone;
 
 import org.jetbrains.annotations.Nullable;
 
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,6 +32,7 @@ import net.zincstudios.scgextra.Faction;
 
 public class DroneEntity extends Monster implements GeoEntity{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+    private static final EntityDataAccessor<Float> INACCURACY = SynchedEntityData.defineId(DroneEntity.class, EntityDataSerializers.FLOAT);
     private boolean deathAnimDone = false;
     private int deathTick = 0;
     private final DronePart[] subEntities;
@@ -167,5 +171,19 @@ public class DroneEntity extends Monster implements GeoEntity{
             part.setOldPosAndRot();
             part.refreshDimensions();
         }
+    }
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(INACCURACY, 8F);
+    }
+    public void lowerInaccuracy(){
+        float inaccuracy = getInaccuracy();
+        if(inaccuracy>0){
+            this.entityData.set(INACCURACY, getInaccuracy()-0.2F);
+        }
+    }
+    public float getInaccuracy(){
+        return this.entityData.get(INACCURACY);
     }
 }

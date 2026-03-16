@@ -35,7 +35,7 @@ public class MountedGunAttackGoal extends Goal{
 
     @Override
     public boolean canContinueToUse() {
-        return this.tick<=1200;
+        return this.tick<=80;
     }
 
     @Override
@@ -69,8 +69,11 @@ public class MountedGunAttackGoal extends Goal{
             if (this.tick%2==0) {
                 fireGun(target);
             }
-            if(tick % 20 == 0){
+            if(tick == 0){
                 this.mob.triggerAnim("attack", "gun_firing");
+            }
+            if(tick % 20 == 0){
+                this.mob.lowerInaccuracy();
             }
         }else{this.stop();}
         this.tick++;
@@ -83,7 +86,7 @@ public class MountedGunAttackGoal extends Goal{
         double dx = target.getX() - spawnVec.x;
         double dy = target.getEyeY() - spawnVec.y;
         double dz = target.getZ() - spawnVec.z;
-        bolt.shoot(dx, dy, dz, 3.0F, 1.5F);
+        bolt.shoot(dx, dy, dz, 3.0F, this.mob.getInaccuracy());
         this.mob.level().addFreshEntity(bolt);
         this.mob.level().playSound(null, spawnVec.x, spawnVec.y, spawnVec.z, ModSounds.BRUISER_SILENCED_FIRE.get(), SoundSource.HOSTILE, 0.8F, 1.2F);
         this.triggerGunFlash();
