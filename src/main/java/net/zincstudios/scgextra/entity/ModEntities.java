@@ -5,6 +5,8 @@ import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntity;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntityModel;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntityRenderer;
+import net.zincstudios.scgextra.entity.rrc.oppressor.OppressorEntity;
+import net.zincstudios.scgextra.entity.rrc.oppressor.OppressorRenderer;
 import net.zincstudios.scgextra.entity.rrc.tallman.TallmanEntity;
 import net.zincstudios.scgextra.entity.rrc.tallman.TallmanRenderer;
 import net.zincstudios.scgextra.entity.whaler.armoredwhale.ArmoredWhaleEntity;
@@ -116,7 +118,13 @@ public class ModEntities {
 
     public static final RegistryObject<EntityType<ScoutEntity>> SCOUT = ENTITY_TYPES
             .register("scout", () -> EntityType.Builder.of(ScoutEntity::new, MobCategory.MONSTER)
-                    .sized(0.6F, 1.95F).build("scout"));
+                    .sized(0.6F, 1.95F)
+                    .build("scout"));
+
+    public static final RegistryObject<EntityType<OppressorEntity>> OPPRESSOR = ENTITY_TYPES
+            .register("oppressor", () -> EntityType.Builder.of(OppressorEntity::new, MobCategory.MONSTER)
+                    .sized(2.5F, 5F)
+                    .build("oppressor"));
 
 
     public static void register(IEventBus modEventBus){
@@ -143,9 +151,11 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.ARMORED_WHALE.get(), ArmoredWhaleRenderer::new);
         EntityRenderers.register(ModEntities.WHALE_PROJECTILE.get(), EnemyProjectileRenderer::new);
         EntityRenderers.register(ModEntities.RAID_SUMMONER.get(), RaidSummonerRenderer::new);
+
         EntityRenderers.register(ModEntities.DRONE.get(), DroneEntityRenderer::new);
         EntityRenderers.register(ModEntities.TALLMAN.get(), TallmanRenderer::new);
         EntityRenderers.register(ModEntities.SCOUT.get(), ScoutRenderer::new);
+        EntityRenderers.register(ModEntities.OPPRESSOR.get(), OppressorRenderer::new);
     }
 
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
@@ -162,8 +172,10 @@ public class ModEntities {
         event.put(ModEntities.PUFFICUS.get(), PufficusEntity.createAttributes().build());
         event.put(ModEntities.ARMORED_WHALE.get(), ArmoredWhaleEntity.createAttributes().build());
         event.put(ModEntities.RAID_SUMMONER.get(), RaidSummonerEntity.createAttributes().build());
+
         event.put(ModEntities.DRONE.get(), DroneEntity.createAttributes().build());
         event.put(ModEntities.TALLMAN.get(), TallmanEntity.createAttributes().build());
         event.put(ModEntities.SCOUT.get(), ScoutEntity.createAttributes().build());
+        event.put(ModEntities.OPPRESSOR.get(), OppressorEntity.createAttributes().build());
     }
 }
