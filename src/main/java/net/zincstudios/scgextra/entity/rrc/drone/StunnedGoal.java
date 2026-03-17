@@ -60,6 +60,14 @@ public class StunnedGoal extends Goal{
             this.mob.removeEffect(ModEffects.DEAFENED.get());
             this.mob.removeEffect(ModEffects.BLINDED.get());
         }
+        stunVisuals();
+        this.tick++;
+    }
+    @Override
+    public boolean canContinueToUse() {
+        return this.mob.isStunned();
+    }
+    private void stunVisuals(){
         Level level = this.mob.level();
         if(!level.isClientSide){
             ServerLevel sLevel = (ServerLevel) level;
@@ -83,10 +91,5 @@ public class StunnedGoal extends Goal{
             scoreboard.addPlayerToTeam(this.mob.getStringUUID(), team);
             this.mob.addEffect(new MobEffectInstance(MobEffects.GLOWING, 60));
         }
-        this.tick++;
-    }
-    @Override
-    public boolean canContinueToUse() {
-        return this.mob.isStunned();
     }
 }
