@@ -15,6 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.entity.common.ai.TridentAttackGoal;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
@@ -83,7 +84,7 @@ public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
                 entity -> Faction.isEnemies(this, entity)));
-
+        this.goalSelector.addGoal(2, new TridentAttackGoal(this, 1.0D, 40, 10.0F));
     }
 
     static class FishFolkAttackGoal extends ZombieAttackGoal {
@@ -110,7 +111,9 @@ public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<
     @Override
     public void registerControllers(ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "controller", 0, state -> {
-            if (state.isMoving()) {
+            if(state.getAnimatable().isSitting()){
+                state.setAndContinue(RawAnimation.begin().thenLoop("sitting"));
+            }else if (state.isMoving()) {
                 state.setAndContinue(RawAnimation.begin().thenLoop("walk"));
             } else {
                 state.setAndContinue(RawAnimation.begin().thenLoop("idle"));
@@ -179,6 +182,11 @@ public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<
     public void tick() {
         super.tick();
         this.entityData.set(SITTING, this.isPassenger());
+        if(tickCount%20==0){
+            if(this.entityData.get(SITTING)){
+                this.triggerAnim("sit", "sitting");
+            }
+        }
     }
     public boolean isSitting(){
         return this.entityData.get(SITTING);
