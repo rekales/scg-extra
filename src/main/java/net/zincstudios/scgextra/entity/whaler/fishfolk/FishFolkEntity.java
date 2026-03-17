@@ -42,6 +42,9 @@ public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<
 
     private static final EntityDataAccessor<Integer> TEXTURE_VARIANT =
             SynchedEntityData.defineId(FishFolkEntity.class, EntityDataSerializers.INT);
+    
+            private static final EntityDataAccessor<Boolean> SITTING =
+            SynchedEntityData.defineId(FishFolkEntity.class, EntityDataSerializers.BOOLEAN);
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public FishFolkEntity(EntityType<? extends Drowned> entity, Level level) {
@@ -143,6 +146,7 @@ public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(TEXTURE_VARIANT, 1);
+        this.entityData.define(SITTING, false);
     }
 
     @Override
@@ -164,11 +168,19 @@ public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<
 
     @Override
     public boolean isPassenger() {
+        if(this.getVehicle()==null)return false;
         return this.getVehicle() instanceof SalmonsaurEntity;
     }
-
     @Override
     protected boolean isSunSensitive() {
         return false;
+    }
+    @Override
+    public void tick() {
+        super.tick();
+        this.entityData.set(SITTING, this.isPassenger());
+    }
+    public boolean isSitting(){
+        return this.entityData.get(SITTING);
     }
 }

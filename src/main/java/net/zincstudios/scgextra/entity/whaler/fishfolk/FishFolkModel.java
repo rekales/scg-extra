@@ -2,7 +2,6 @@ package net.zincstudios.scgextra.entity.whaler.fishfolk;
 
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.common.TextureVarEntityGeoModel;
-import net.zincstudios.scgextra.entity.whaler.salmonsaur.SalmonsaurEntity;
 import net.minecraft.world.item.Items;
 import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
 import software.bernie.geckolib.core.animation.AnimationState;
@@ -26,13 +25,11 @@ public class FishFolkModel<T extends FishFolkEntity> extends TextureVarEntityGeo
 				rightArm.setRotX((float)Math.toRadians(90));
 			}
 		}
-		if(animatable.isPassenger()){
-			if(animatable.getVehicle() instanceof SalmonsaurEntity){
-				if(rightArm!=null)rightArm.setRotX((float)Math.toRadians(90));
-				if(leftArm!=null)leftArm.setRotX((float)Math.toRadians(90));
-				if(rightLeg!=null)rightLeg.setRotX(-80F);
-				if(leftLeg!=null)leftLeg.setRotX(-80F);
-			}
+		if(animatable.isSitting()){
+			if(rightArm!=null)rightArm.setRotX((float)Math.toRadians(90));
+			if(leftArm!=null)leftArm.setRotX((float)Math.toRadians(90));
+			if(rightLeg!=null)rightLeg.setRotX(-80F);
+			if(leftLeg!=null)leftLeg.setRotX(-80F);
 		}
 	}
 }
