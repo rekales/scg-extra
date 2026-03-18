@@ -19,8 +19,10 @@ public interface Stunnable {
     /**
      * Provide the StunnedGoal here by returning it, it will be used by the default methods for handling logic.
      * Provide it by however you like, saving as a variable or maybe filtering through the behaviour goals.
+     * <p>
+     * Nullable handling added if for some fucking reason it gets a null object.
      */
-    StunnedGoal<?> getStunnedGoal();
+    @Nullable StunnedGoal<?> getStunnedGoal();
 
     /**
      * @return the duration of the stun when called by the checks.
@@ -31,7 +33,8 @@ public interface Stunnable {
     }
 
     default boolean isStunned() {
-        return getStunnedGoal().getStunTicksLeft() <= 0;
+        StunnedGoal<?> stunnedGoal = this.getStunnedGoal();
+        return stunnedGoal != null && stunnedGoal.getStunTicksLeft() <= 0;
     }
 
     /**
@@ -61,7 +64,8 @@ public interface Stunnable {
      */
     default void stun(int stunTicks) {
         // TODO: configs if can stun
-        getStunnedGoal().stun(stunTicks);
+        StunnedGoal<?> stunnedGoal = this.getStunnedGoal();
+        if (stunnedGoal == null) return;
+        stunnedGoal.stun(stunTicks);
     }
-
 }

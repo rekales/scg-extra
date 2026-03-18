@@ -2,12 +2,14 @@ package net.zincstudios.scgextra.entity.common.ai;
 
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import top.ribs.scguns.init.ModEffects;
 
 import java.util.EnumSet;
 
+// NOTE: should we add a synced data for stun timer?
 public class StunnedGoal<T extends PathfinderMob & Stunnable> extends Goal {
 
     protected T mob;
@@ -15,13 +17,13 @@ public class StunnedGoal<T extends PathfinderMob & Stunnable> extends Goal {
     // Only relevant for GeoEntities that has recovery triggers anims.
     private final int endAnimDuration;
 
-    StunnedGoal(T mob) {
+    public StunnedGoal(T mob) {
         this.mob = mob;
         this.endAnimDuration = -1;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
-    StunnedGoal(T mob, int endAnimDuration) {
+    public StunnedGoal(T mob, int endAnimDuration) {
         this.mob = mob;
         this.endAnimDuration = endAnimDuration;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
