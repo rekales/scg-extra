@@ -34,7 +34,7 @@ public interface Stunnable {
 
     default boolean isStunned() {
         StunnedGoal<?> stunnedGoal = this.getStunnedGoal();
-        return stunnedGoal != null && stunnedGoal.getStunTicksLeft() <= 0;
+        return stunnedGoal != null && stunnedGoal.getStunTicksLeft() > 0;
     }
 
     /**
