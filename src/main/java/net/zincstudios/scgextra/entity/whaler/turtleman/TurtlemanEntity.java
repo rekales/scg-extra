@@ -261,4 +261,8 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
     public boolean checkSpawnObstruction(LevelReader pLevel) {
         return pLevel.isUnobstructed(this);
     }
+    @Override
+    public int getDefaultStunDuration() {
+        return 100;
+    }
 }

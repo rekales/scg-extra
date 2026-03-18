@@ -32,6 +32,14 @@ public interface Stunnable {
         return 60;  // TODO: configs
     }
 
+    /**
+     * @return the duration of the cooldown between stuns.
+     * Override as you see fit.
+     */
+    default int getDefaultCooldownDuration() {
+        return 200;  // TODO: configs
+    }
+
     default boolean isStunned() {
         StunnedGoal<?> stunnedGoal = this.getStunnedGoal();
         return stunnedGoal != null && stunnedGoal.getStunTicksLeft() > 0;
@@ -66,6 +74,6 @@ public interface Stunnable {
         // TODO: configs if can stun
         StunnedGoal<?> stunnedGoal = this.getStunnedGoal();
         if (stunnedGoal == null) return;
-        stunnedGoal.stun(stunTicks);
+        stunnedGoal.stun(stunTicks, getDefaultCooldownDuration());
     }
 }
