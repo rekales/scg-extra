@@ -18,6 +18,8 @@ public class StunnedGoal<T extends PathfinderMob & Stunnable> extends Goal {
     protected T mob;
     private int stunTimer = 0;
     private int headshotCounter = 0;
+    private int cooldown = 0;
+    private int cooldownDuration = -1;
 
     public StunnedGoal(T mob) {
         this.mob = mob;
@@ -39,6 +41,7 @@ public class StunnedGoal<T extends PathfinderMob & Stunnable> extends Goal {
     @Override
     public void start() {
         this.mob.getNavigation().stop();
+        this.cooldown = this.cooldownDuration;
         if (this.mob instanceof GeoEntity geoEntity) {
             geoEntity.triggerAnim("behaviour", "stun");
         }
@@ -54,11 +57,19 @@ public class StunnedGoal<T extends PathfinderMob & Stunnable> extends Goal {
 
     @Override
     public boolean canUse() {
+        if(this.stunTimer == 0 && this.cooldown>0)this.cooldown--;
+        return this.stunTimer > 0 && this.cooldown == 0;
+    }
+    @Override
+    public boolean canContinueToUse() {
         return this.stunTimer > 0;
     }
 
-    public void stun(int stunTicks) {
-        this.stunTimer = stunTicks;
+    public void stun(int stunTicks, int pCooldown) {
+        if(!(this.cooldown>0)){
+            this.stunTimer = stunTicks;
+            this.cooldownDuration = pCooldown;
+        }
     }
 
     public int getStunTicksLeft() {
