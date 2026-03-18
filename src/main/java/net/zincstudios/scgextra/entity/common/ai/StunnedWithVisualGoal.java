@@ -12,7 +12,7 @@ import net.minecraft.world.scores.Scoreboard;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 
 public class StunnedWithVisualGoal <T extends PathfinderMob & Stunnable> extends StunnedGoal<T> {
-
+    private boolean stunOut = false;
     public StunnedWithVisualGoal(T mob) {
         super(mob);
     }
@@ -25,6 +25,13 @@ public class StunnedWithVisualGoal <T extends PathfinderMob & Stunnable> extends
     public void tick() {
         super.tick();
         stunVisuals();
+        stunOut = true;
+    }
+
+    @Override
+    public void start() {
+        stunOut = false;
+        super.start();
     }
 
     protected void stunVisuals(){
@@ -49,7 +56,9 @@ public class StunnedWithVisualGoal <T extends PathfinderMob & Stunnable> extends
             }
             team.setColor(ChatFormatting.RED);
             scoreboard.addPlayerToTeam(this.mob.getStringUUID(), team);
-            this.mob.addEffect(new MobEffectInstance(MobEffects.GLOWING, 60));
+            if(!stunOut){
+                this.mob.addEffect(new MobEffectInstance(MobEffects.GLOWING, this.mob.getDefaultStunDuration()));
+            }
         }
     }
 }

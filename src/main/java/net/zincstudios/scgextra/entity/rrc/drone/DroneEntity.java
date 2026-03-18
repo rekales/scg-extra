@@ -6,6 +6,8 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -14,11 +16,15 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.entity.common.ai.StunnedGoal;
+import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
 import net.minecraftforge.entity.PartEntity;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -30,7 +36,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import top.ribs.scguns.init.ModEffects;
 import net.zincstudios.scgextra.Faction;
 
-public class DroneEntity extends Monster implements GeoEntity{
+public class DroneEntity extends Monster implements GeoEntity, Stunnable{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private static final EntityDataAccessor<Float> INACCURACY = SynchedEntityData.defineId(DroneEntity.class, EntityDataSerializers.FLOAT);
     private boolean deathAnimDone = false;
@@ -60,7 +66,7 @@ public class DroneEntity extends Monster implements GeoEntity{
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new StunnedGoal(this));
+        this.goalSelector.addGoal(1, new StunnedWithVisualGoal<>(this));
         this.targetSelector.addGoal(2, new HurtByNonFactionGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true, player -> !((Player) player).isCreative() && !player.isSpectator()));
         this.goalSelector.addGoal(2, new ClawAttackGoal(this, 1, true));
@@ -185,5 +191,23 @@ public class DroneEntity extends Monster implements GeoEntity{
     }
     public float getInaccuracy(){
         return this.entityData.get(INACCURACY);
+    }
+    @Override
+    public @Nullable StunnedGoal<?> getStunnedGoal() {
+        for(WrappedGoal goal : this.goalSelector.getAvailableGoals()){
+            if(goal.getGoal() instanceof StunnedGoal<?> stunnedGoal){
+                return stunnedGoal;
+            }
+        }
+        return null;
+    }
+    @Override
+    public int getDefaultStunDuration() {
+        return 100;
+    }
+    @Override
+    public boolean addEffect(MobEffectInstance effectInstance, @Nullable Entity entity) {
+        return super.addEffect(effectInstance, entity)
+                && this.handleAddEffectStun(effectInstance, entity);
     }
 }
