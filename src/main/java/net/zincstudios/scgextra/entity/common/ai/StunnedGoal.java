@@ -2,7 +2,6 @@ package net.zincstudios.scgextra.entity.common.ai;
 
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import top.ribs.scguns.init.ModEffects;
