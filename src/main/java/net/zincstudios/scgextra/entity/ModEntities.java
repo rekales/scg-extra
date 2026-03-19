@@ -14,6 +14,8 @@ import net.zincstudios.scgextra.entity.whaler.armoredwhale.ArmoredWhaleRenderer;
 import net.zincstudios.scgextra.entity.whaler.fishfolk.FishFolkEntity;
 import net.zincstudios.scgextra.entity.rrc.drone.DroneEntity;
 import net.zincstudios.scgextra.entity.rrc.scout.ScoutEntity;
+import net.zincstudios.scgextra.entity.rrc.spring_junkie.SpringJunkieEntity;
+import net.zincstudios.scgextra.entity.rrc.spring_junkie.SpringJunkieRenderer;
 
 import net.zincstudios.scgextra.entity.whaler.fishfolk.FishFolkRenderer;
 import net.zincstudios.scgextra.entity.whaler.tentacliator.GlowingTentacliatorEntity;
@@ -126,6 +128,11 @@ public class ModEntities {
                     .sized(2.5F, 5F)
                     .build("oppressor"));
 
+    public static final RegistryObject<EntityType<SpringJunkieEntity>> SPRING_JUNKIE = ENTITY_TYPES
+            .register("spring_junkie", () -> EntityType.Builder.of(SpringJunkieEntity::new, MobCategory.MONSTER)
+                    .sized(1.4F, 4F)
+                    .build("spring_junkie"));
+
 
     public static void register(IEventBus modEventBus){
         ENTITY_TYPES.register(modEventBus);
@@ -156,6 +163,7 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.TALLMAN.get(), TallmanRenderer::new);
         EntityRenderers.register(ModEntities.SCOUT.get(), ScoutRenderer::new);
         EntityRenderers.register(ModEntities.OPPRESSOR.get(), OppressorRenderer::new);
+        EntityRenderers.register(ModEntities.SPRING_JUNKIE.get(), SpringJunkieRenderer::new);
     }
 
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
@@ -177,5 +185,6 @@ public class ModEntities {
         event.put(ModEntities.TALLMAN.get(), TallmanEntity.createAttributes().build());
         event.put(ModEntities.SCOUT.get(), ScoutEntity.createAttributes().build());
         event.put(ModEntities.OPPRESSOR.get(), OppressorEntity.createAttributes().build());
+        event.put(ModEntities.SPRING_JUNKIE.get(), SpringJunkieEntity.createAttributes().build());
     }
 }
