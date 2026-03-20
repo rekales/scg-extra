@@ -69,10 +69,10 @@ public interface Stunnable {
     }
 
     /**
-     * Invoked when the entity gets headshotted. Called before the hurt method.
-     * @see top.ribs.scguns.entity.projectile.ProjectileEntity
+     * Invoked when the entity gets headshot. Called before the hurt method.
+     * @see net.zincstudios.scgextra.mixin.ProjectileEntityMixin
      */
-    default void handleHeadshot(DamageSource source, float amount) {
+    default void handleHeadshotStun(DamageSource source, float amount) {
         StunnedGoal<?> stunnedGoal = this.getStunnedGoal();
         if (stunnedGoal != null) {
             stunnedGoal.handleHeadshot(source, amount);

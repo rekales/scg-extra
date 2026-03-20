@@ -8,7 +8,8 @@
     "EnemyProjectileEntityMixin",
     "LightningProjectileEntityMixin",
     "MineUnitBlockEntityMixin",
-    "OceanMonumentEntryRoomMixin"
+    "OceanMonumentEntryRoomMixin",
+    "ProjectileEntityMixin"
   ],
   "minVersion": "0.8.5"
 }
