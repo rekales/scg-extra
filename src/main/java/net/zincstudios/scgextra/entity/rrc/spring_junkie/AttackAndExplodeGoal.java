@@ -24,6 +24,8 @@ public class AttackAndExplodeGoal extends Goal{
     private final float speedModifier;
     private final double explodeDistance;
     private int explodeTimer = -1;
+    private int fuseTimer = -1;
+    private boolean exploding = false;
 
     public AttackAndExplodeGoal(SpringJunkieEntity mob, float speed, double distance){
         parent = mob;
@@ -44,6 +46,8 @@ public class AttackAndExplodeGoal extends Goal{
     public void start() {
         super.start();
         explodeTimer = -1;
+        fuseTimer = -1;
+        exploding = false;
         this.parent.setAttacking(true);
     }
     @Override
@@ -113,11 +117,21 @@ public class AttackAndExplodeGoal extends Goal{
                         target.getZ(),
                         speedModifier
                     );
+                    exploding = false;
                 }else{
-                    this.parent.triggerAnim("behaviour", "death");
-                    this.explodeTimer = 8;
+                    if(!exploding){
+                        fuseTimer = 60;
+                    }
+                    exploding = true;
                 }
             }
+        }
+        if(this.fuseTimer>0){
+            this.fuseTimer--;
+        }else if(this.fuseTimer==0){
+            this.parent.triggerAnim("behaviour", "death");
+            this.explodeTimer = 8;
+            fuseTimer--;
         }
     }
     @Override
