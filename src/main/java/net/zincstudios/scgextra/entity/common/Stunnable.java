@@ -14,6 +14,7 @@ import top.ribs.scguns.init.ModEffects;
  * Feel free to override the default methods if custom functionality is needed.
  * @see StunnedGoal
  */
+@SuppressWarnings("unused")
 public interface Stunnable {
 
     /**
@@ -65,6 +66,17 @@ public interface Stunnable {
             stun(getDefaultStunDuration());
         }
         return true;
+    }
+
+    /**
+     * Invoked when the entity gets headshot. Called before the hurt method.
+     * @see net.zincstudios.scgextra.mixin.ProjectileEntityMixin
+     */
+    default void handleHeadshotStun(DamageSource source, float amount) {
+        StunnedGoal<?> stunnedGoal = this.getStunnedGoal();
+        if (stunnedGoal != null) {
+            stunnedGoal.handleHeadshot(source, amount);
+        }
     }
 
     /**
