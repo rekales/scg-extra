@@ -75,6 +75,7 @@ public class StunnedGoal<T extends PathfinderMob & Stunnable> extends Goal {
         }
     }
 
+    @SuppressWarnings("unused")
     public void handleHeadshot(DamageSource source, float amount) {
         this.headshotCounter++;
 

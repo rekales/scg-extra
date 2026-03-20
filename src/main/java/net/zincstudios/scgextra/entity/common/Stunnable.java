@@ -14,6 +14,7 @@ import top.ribs.scguns.init.ModEffects;
  * Feel free to override the default methods if custom functionality is needed.
  * @see StunnedGoal
  */
+@SuppressWarnings("unused")
 public interface Stunnable {
 
     /**
