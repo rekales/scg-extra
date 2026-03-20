@@ -47,6 +47,8 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import top.ribs.scguns.common.BoundingBoxManager;
+import top.ribs.scguns.common.headshot.BasicHeadshotBox;
 import top.ribs.scguns.entity.client.EnemyProjectileRenderer;
 
 public class ModEntities {
@@ -59,7 +61,7 @@ public class ModEntities {
     public static final RegistryObject<EntityType<TurtlemanEntity>> TURTLEMAN = ENTITY_TYPES
             .register("turtleman", () -> EntityType.Builder.of(TurtlemanEntity::new, MobCategory.MONSTER)
                     .updateInterval(1)
-                    .sized(0.6F, 1.95F)
+                    .sized(1F, 2.3F)
                     .build("turtleman"));
 
     public static final RegistryObject<EntityType<SalmonsaurEntity>> SALMONSAUR = ENTITY_TYPES
@@ -186,5 +188,9 @@ public class ModEntities {
         event.put(ModEntities.SCOUT.get(), ScoutEntity.createAttributes().build());
         event.put(ModEntities.OPPRESSOR.get(), OppressorEntity.createAttributes().build());
         event.put(ModEntities.SPRING_JUNKIE.get(), SpringJunkieEntity.createAttributes().build());
+    }
+
+    public static void registerHeadshotBoxes() {
+        BoundingBoxManager.registerHeadshotBox(ModEntities.TURTLEMAN.get(), new BasicHeadshotBox<>(10.0F, 20.0F));
     }
 }

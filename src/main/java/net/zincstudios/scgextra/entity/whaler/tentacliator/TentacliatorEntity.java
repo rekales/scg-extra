@@ -17,6 +17,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.entity.common.ai.TridentAttackGoal;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
@@ -75,6 +76,7 @@ public class TentacliatorEntity extends Drowned implements GeoEntity {
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
                 entity -> Faction.isEnemies(this, entity)));
+        this.goalSelector.addGoal(2, new TridentAttackGoal(this, 1.0D, 40, 10.0F));
     }
     
     @Override
@@ -102,5 +104,5 @@ public class TentacliatorEntity extends Drowned implements GeoEntity {
     @Override
     protected boolean isSunSensitive() {
         return false;
-    }
+    }        
 }

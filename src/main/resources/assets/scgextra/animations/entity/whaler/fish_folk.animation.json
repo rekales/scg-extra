@@ -124,6 +124,21 @@
 					}
 				}
 			}
+		},
+		"sitting": {
+			"loop": true,
+			"animation_length": 1,
+			"bones": {
+				"left_leg": {
+					"rotation": [-87.5, 0, 0]
+				},
+				"right_leg": {
+					"rotation": [-87.5, 0, 0]
+				},
+				"right_arm": {
+					"rotation": [-90, 0, 0]
+				}
+			}
 		}
 	}
 }
