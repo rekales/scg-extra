@@ -3,6 +3,9 @@ package net.zincstudios.scgextra.entity.rrc.spring_junkie;
 import java.util.EnumSet;
 import java.util.List;
 
+import org.joml.Vector3f;
+
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -85,15 +88,11 @@ public class AttackAndExplodeGoal extends Goal{
                         Vec3 current = start;
                         for (double i = 0; i < length; i += 0.3) {
                             l.sendParticles(
-                                ParticleTypes.FLAME,
-                                current.x,
-                                current.y,
-                                current.z,
+                                new DustParticleOptions(new Vector3f(1.0F, 1.0F, 0.0F), 0.8F),
+                                current.x, current.y, current.z,
                                 1,
-                                0,
-                                0,
-                                0,
-                                0
+                                0, 0, 0,
+                                0.0D
                             );
                             current = current.add(step);
                         }
