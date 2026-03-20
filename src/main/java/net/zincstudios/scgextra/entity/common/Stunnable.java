@@ -60,6 +60,17 @@ public interface Stunnable {
     }
 
     /**
+     * Invoked when the entity gets headshotted. Called before the hurt method.
+     * @see top.ribs.scguns.entity.projectile.ProjectileEntity
+     */
+    default void handleHeadshot(DamageSource source, float amount) {
+        StunnedGoal<?> stunnedGoal = this.getStunnedGoal();
+        if (stunnedGoal != null) {
+            stunnedGoal.handleHeadshot(source, amount);
+        }
+    }
+
+    /**
      * The method to be called for stunning the mob. Normally called by checks but can also be invoked manually.
      */
     default void stun(int stunTicks) {

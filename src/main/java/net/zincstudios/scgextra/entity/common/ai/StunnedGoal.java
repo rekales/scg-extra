@@ -1,5 +1,6 @@
 package net.zincstudios.scgextra.entity.common.ai;
 
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.zincstudios.scgextra.entity.common.Stunnable;
@@ -8,13 +9,15 @@ import top.ribs.scguns.init.ModEffects;
 
 import java.util.EnumSet;
 
-// NOTE: should we add a synced data for stun timer?
+// NOTE: should we transfer the logic to this goal instead and only use the interface for hooks?
 public class StunnedGoal<T extends PathfinderMob & Stunnable> extends Goal {
+
+    // Only relevant for GeoEntities that has recovery triggers anims.
+    private final int endAnimDuration;
 
     protected T mob;
     private int stunTimer = 0;
-    // Only relevant for GeoEntities that has recovery triggers anims.
-    private final int endAnimDuration;
+    private int headshotCounter = 0;
 
     public StunnedGoal(T mob) {
         this.mob = mob;
@@ -69,6 +72,16 @@ public class StunnedGoal<T extends PathfinderMob & Stunnable> extends Goal {
 
         if (this.endAnimDuration >= 0 && this.stunTimer == endAnimDuration && this.mob instanceof GeoEntity geoEntity) {
             geoEntity.triggerAnim("behaviour", "end_stun");
+        }
+    }
+
+    public void handleHeadshot(DamageSource source, float amount) {
+        this.headshotCounter++;
+
+        // TODO: config headshot count
+        if (this.headshotCounter >= 5) {
+            this.mob.stun(this.mob.getDefaultStunDuration());
+            this.headshotCounter = 0;
         }
     }
 }
