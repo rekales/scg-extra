@@ -17,6 +17,8 @@ import net.zincstudios.scgextra.entity.rrc.drone.DroneEntity;
 import net.zincstudios.scgextra.entity.rrc.scout.ScoutEntity;
 import net.zincstudios.scgextra.entity.rrc.spring_junkie.SpringJunkieEntity;
 import net.zincstudios.scgextra.entity.rrc.spring_junkie.SpringJunkieRenderer;
+import net.zincstudios.scgextra.entity.rrc.arc_psycho.ArcPsychoEntity;
+import net.zincstudios.scgextra.entity.rrc.arc_psycho.ArcPsychoEntityRenderer;
 
 import net.zincstudios.scgextra.entity.whaler.fishfolk.FishFolkRenderer;
 import net.zincstudios.scgextra.entity.whaler.tentacliator.GlowingTentacliatorEntity;
@@ -137,6 +139,11 @@ public class ModEntities {
                     .sized(1.4F, 4F)
                     .build("spring_junkie"));
 
+    public static final RegistryObject<EntityType<ArcPsychoEntity>> ARC_PSYCHO = ENTITY_TYPES
+            .register("arc_psycho", () -> EntityType.Builder.of(ArcPsychoEntity::new, MobCategory.MONSTER)
+                    .sized(0.6F, 2F)
+                    .build("arc_psycho"));
+
 
     public static void register(IEventBus modEventBus){
         ENTITY_TYPES.register(modEventBus);
@@ -169,6 +176,7 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.SCOUT.get(), ScoutRenderer::new);
         EntityRenderers.register(ModEntities.OPPRESSOR.get(), OppressorRenderer::new);
         EntityRenderers.register(ModEntities.SPRING_JUNKIE.get(), SpringJunkieRenderer::new);
+        EntityRenderers.register(ModEntities.ARC_PSYCHO.get(), ArcPsychoEntityRenderer::new);
     }
 
     private static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
@@ -191,6 +199,7 @@ public class ModEntities {
         event.put(ModEntities.SCOUT.get(), ScoutEntity.createAttributes().build());
         event.put(ModEntities.OPPRESSOR.get(), OppressorEntity.createAttributes().build());
         event.put(ModEntities.SPRING_JUNKIE.get(), SpringJunkieEntity.createAttributes().build());
+        event.put(ModEntities.ARC_PSYCHO.get(), ArcPsychoEntity.createAttributes().build());
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
