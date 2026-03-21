@@ -1,6 +1,7 @@
 package net.zincstudios.scgextra.entity;
 
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntity;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntityModel;
@@ -141,6 +142,7 @@ public class ModEntities {
 
         modEventBus.addListener(ModEntities::registerLayers);
         modEventBus.addListener(ModEntities::registerAttributes);
+        modEventBus.addListener(ModEntities::onCommonSetup);
         MinecraftForge.EVENT_BUS.addListener(EntityAdjustments::onEntityJoin);
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
@@ -148,7 +150,7 @@ public class ModEntities {
         }
     }
 
-    public static void onClientSetup(FMLClientSetupEvent event) {
+    private static void onClientSetup(FMLClientSetupEvent event) {
         EntityRenderers.register(ModEntities.FISH_FOLK.get(), FishFolkRenderer::new);
         EntityRenderers.register(ModEntities.TURTLEMAN.get(), TurtlemanRenderer::new);
         EntityRenderers.register(ModEntities.SALMONSAUR.get(), SalmonsaurRenderer::new);
@@ -168,11 +170,11 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.SPRING_JUNKIE.get(), SpringJunkieRenderer::new);
     }
 
-    public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
+    private static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
         event.registerLayerDefinition(NetEntityModel.LAYER_LOCATION, NetEntityModel::createBodyLayer);
     }
 
-    public static void registerAttributes(EntityAttributeCreationEvent event){
+    private static void registerAttributes(EntityAttributeCreationEvent event){
         event.put(ModEntities.FISH_FOLK.get(), FishFolkEntity.createAttributes().build());
         event.put(ModEntities.TURTLEMAN.get(), TurtlemanEntity.createAttributes().build());
         event.put(ModEntities.SALMONSAUR.get(), SalmonsaurEntity.createAttributes().build());
@@ -190,7 +192,7 @@ public class ModEntities {
         event.put(ModEntities.SPRING_JUNKIE.get(), SpringJunkieEntity.createAttributes().build());
     }
 
-    public static void registerHeadshotBoxes() {
-        BoundingBoxManager.registerHeadshotBox(ModEntities.TURTLEMAN.get(), new BasicHeadshotBox<>(10.0F, 20.0F));
+    private static void onCommonSetup(FMLCommonSetupEvent event) {
+        BoundingBoxManager.registerHeadshotBox(ModEntities.TURTLEMAN.get(), new BasicHeadshotBox<>(11.0F, 28.0F));
     }
 }
