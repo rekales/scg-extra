@@ -109,7 +109,7 @@ public class TentacliatorEntity extends Drowned implements GeoEntity {
     @Override
     public void tick() {
         super.tick();
-        if(this.getMainHandItem().getItem().equals(Items.FISHING_ROD)){
+        if(this.getMainHandItem().is(Items.FISHING_ROD)){
             EntityEquipmentConfig.equipEntity(this, "scgextra:tentacliator");
         }
     }
