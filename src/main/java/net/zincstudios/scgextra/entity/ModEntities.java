@@ -50,6 +50,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import top.ribs.scguns.common.BoundingBoxManager;
 import top.ribs.scguns.common.headshot.BasicHeadshotBox;
+import top.ribs.scguns.common.headshot.RotatedHeadshotBox;
 import top.ribs.scguns.entity.client.EnemyProjectileRenderer;
 
 public class ModEntities {
@@ -194,5 +195,6 @@ public class ModEntities {
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
         BoundingBoxManager.registerHeadshotBox(ModEntities.TURTLEMAN.get(), new BasicHeadshotBox<>(11.0F, 28.0F));
+        BoundingBoxManager.registerHeadshotBox(ModEntities.DRONE.get(), new RotatedHeadshotBox<>(15.0, 28.0, 20, true, true));
     }
 }
