@@ -8,6 +8,8 @@ import net.zincstudios.scgextra.entity.projectile.net.NetEntityModel;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntityRenderer;
 import net.zincstudios.scgextra.entity.rrc.oppressor.OppressorEntity;
 import net.zincstudios.scgextra.entity.rrc.oppressor.OppressorRenderer;
+import net.zincstudios.scgextra.entity.rrc.scrapguard.ScrapGuardEntity;
+import net.zincstudios.scgextra.entity.rrc.scrapguard.ScrapGuardRenderer;
 import net.zincstudios.scgextra.entity.rrc.tallman.TallmanEntity;
 import net.zincstudios.scgextra.entity.rrc.tallman.TallmanRenderer;
 import net.zincstudios.scgextra.entity.whaler.armoredwhale.ArmoredWhaleEntity;
@@ -139,6 +141,11 @@ public class ModEntities {
                     .sized(1.4F, 4F)
                     .build("spring_junkie"));
 
+    public static final RegistryObject<EntityType<ScrapGuardEntity>> SCRAP_GUARD = ENTITY_TYPES
+            .register("scrap_guard", () -> EntityType.Builder.of(ScrapGuardEntity::new, MobCategory.MONSTER)
+                    .sized(1.4F, 3F)
+                    .build("scrap_guard"));
+
     public static final RegistryObject<EntityType<ArcPsychoEntity>> ARC_PSYCHO = ENTITY_TYPES
             .register("arc_psycho", () -> EntityType.Builder.of(ArcPsychoEntity::new, MobCategory.MONSTER)
                     .sized(0.6F, 2F)
@@ -176,6 +183,7 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.SCOUT.get(), ScoutRenderer::new);
         EntityRenderers.register(ModEntities.OPPRESSOR.get(), OppressorRenderer::new);
         EntityRenderers.register(ModEntities.SPRING_JUNKIE.get(), SpringJunkieRenderer::new);
+        EntityRenderers.register(ModEntities.SCRAP_GUARD.get(), ScrapGuardRenderer::new);
         EntityRenderers.register(ModEntities.ARC_PSYCHO.get(), ArcPsychoEntityRenderer::new);
     }
 
@@ -199,6 +207,7 @@ public class ModEntities {
         event.put(ModEntities.SCOUT.get(), ScoutEntity.createAttributes().build());
         event.put(ModEntities.OPPRESSOR.get(), OppressorEntity.createAttributes().build());
         event.put(ModEntities.SPRING_JUNKIE.get(), SpringJunkieEntity.createAttributes().build());
+        event.put(ModEntities.SCRAP_GUARD.get(), ScrapGuardEntity.createAttributes().build());
         event.put(ModEntities.ARC_PSYCHO.get(), ArcPsychoEntity.createAttributes().build());
     }
 

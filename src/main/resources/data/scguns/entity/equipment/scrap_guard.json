@@ -1,0 +1,22 @@
+{
+  "id": "scgextra:scrap_guard",
+  "equipment_chance": 1.0,
+  "items": [
+    {
+      "item": "scguns:bruiser",
+      "weight": 10.0,
+      "drop_chance": 0.05,
+      "min_durability": 0.2,
+      "max_durability": 0.5,
+      "slot": "mainhand"
+    },
+    {
+      "item": "scguns:boomstick",
+      "weight": 10.0,
+      "drop_chance": 0.05,
+      "min_durability": 0.2,
+      "max_durability": 0.5,
+      "slot": "mainhand"
+    }
+  ]
+}
