@@ -30,12 +30,12 @@ public class MountedGunAttackGoal extends Goal{
     @Override
     public boolean canUse() {
         if(this.cooldown>0)this.cooldown--;
-        return this.mob.getTarget() != null && this.cooldown==0;
+        return this.mob.getTarget() != null && this.cooldown==0 && !this.mob.isStunned();
     }
 
     @Override
     public boolean canContinueToUse() {
-        return this.tick<=80;
+        return this.tick<=80 && !this.mob.isStunned();
     }
 
     @Override

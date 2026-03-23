@@ -33,7 +33,6 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import top.ribs.scguns.init.ModEffects;
 import net.zincstudios.scgextra.Faction;
 
 public class DroneEntity extends Monster implements GeoEntity, Stunnable{
@@ -129,7 +128,6 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable{
             super.die(pDamageSource);
         }else{this.setHealth(1);}
     }
-    public boolean isStunned(){return this.hasEffect(ModEffects.DEAFENED.get()) && this.hasEffect(ModEffects.BLINDED.get());};
     @Override
     public boolean hurt(DamageSource pSource, float pAmount) {
         if(this.isStunned()){
