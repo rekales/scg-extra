@@ -54,6 +54,10 @@ public class SpringJunkieEntity extends Monster implements GeoEntity{
         }));
         controllers.add(new AnimationController<>(this, "behaviour", 0, state -> PlayState.CONTINUE)
         .triggerableAnim("death", RawAnimation.begin().thenPlay("death")));
+        controllers.add(new AnimationController<>(this, "anim", 0, state -> PlayState.CONTINUE)
+        .triggerableAnim("aggroed", RawAnimation.begin().thenPlay("aggroed")));
+        controllers.add(new AnimationController<>(this, "anim1", 0, state -> PlayState.CONTINUE)
+        .triggerableAnim("aggroed_long", RawAnimation.begin().thenPlay("aggroed_long")));
     }
 
     public static AttributeSupplier.Builder createAttributes() {

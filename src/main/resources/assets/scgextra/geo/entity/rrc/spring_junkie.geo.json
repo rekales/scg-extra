@@ -20,14 +20,16 @@
 					"parent": "root",
 					"pivot": [3.5, 14, 0],
 					"cubes": [
-						{"origin": [0.75, 0, -2.5], "size": [5, 14, 5], "uv": [44, 45]},
-						{"origin": [-5.75, 0, -2.5], "size": [5, 14, 5], "uv": [44, 45], "mirror": true}
+						{"origin": [0.75, 0, -2.5], "size": [5, 14, 5], "uv": [44, 45]}
 					]
 				},
 				{
 					"name": "right_leg",
 					"parent": "root",
-					"pivot": [-3.5, 14, 0]
+					"pivot": [-3.5, 14, 0],
+					"cubes": [
+						{"origin": [-5.75, 0, -2.5], "size": [5, 14, 5], "uv": [44, 45], "mirror": true}
+					]
 				},
 				{
 					"name": "body",

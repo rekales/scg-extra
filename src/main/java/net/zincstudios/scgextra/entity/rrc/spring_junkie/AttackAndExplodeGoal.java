@@ -26,6 +26,7 @@ public class AttackAndExplodeGoal extends Goal{
     private int explodeTimer = -1;
     private int fuseTimer = -1;
     private boolean exploding = false;
+    private int agroAnimTimer = 0;
 
     public AttackAndExplodeGoal(SpringJunkieEntity mob, float speed, double distance){
         parent = mob;
@@ -45,14 +46,34 @@ public class AttackAndExplodeGoal extends Goal{
     @Override
     public void start() {
         super.start();
-        explodeTimer = -1;
-        fuseTimer = -1;
-        exploding = false;
+        this.explodeTimer = -1;
+        this.fuseTimer = -1;
+        this.exploding = false;
+        this.agroAnimTimer = 40;
         this.parent.setAttacking(true);
+        this.parent.triggerAnim("anim", "aggroed");
     }
     @Override
     public void tick() {
         super.tick();
+        if(this.agroAnimTimer > 0){
+            this.agroAnimTimer--;
+            if(!this.parent.level().isClientSide()){
+                ServerLevel sl = (ServerLevel) this.parent.level();
+                sl.sendParticles(
+                        ParticleTypes.SMOKE,
+                        this.parent.getX(),
+                        this.parent.getY()+1,
+                        this.parent.getZ(),
+                        30,
+                        0.3,
+                        0.1,
+                        0.3,
+                        0.05
+                );
+            }
+            return;
+        }
         LivingEntity target = this.parent.getTarget();
         if(this.explodeTimer>0){
             this.explodeTimer--;
@@ -127,6 +148,9 @@ public class AttackAndExplodeGoal extends Goal{
             }
         }
         if(this.fuseTimer>0){
+            if(this.fuseTimer==60){
+                this.parent.triggerAnim("anim1", "aggroed_long");
+            }
             this.fuseTimer--;
         }else if(this.fuseTimer==0){
             this.parent.triggerAnim("behaviour", "death");

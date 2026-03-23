@@ -109,13 +109,13 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable{
     @Override
     public void tick() {
         super.tick();
-        if(this.getHealth()<=1 && deathTick <= 29){
+        if(this.getHealth()<=1 && deathTick <= 15){
             if(this.deathTick==0){
                 this.triggerAnim("dBehaviour", "death");
                 this.setNoAi(true);
             }
             deathTick++;
-        }else if(deathTick > 29){
+        }else if(deathTick > 15){
             this.deathAnimDone = true;
             this.setHealth(0);
             this.die(this.getLastDamageSource());
