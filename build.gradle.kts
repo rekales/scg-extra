@@ -38,6 +38,7 @@ dependencies {
     // Dev QOL
     modRuntimeOnly("curse.maven:jei-238222:7270446")
     modRuntimeOnly("curse.maven:neat-238372:5838485")
+    modRuntimeOnly("curse.maven:configured-457570:5180900")
 }
 
 legacyForge {

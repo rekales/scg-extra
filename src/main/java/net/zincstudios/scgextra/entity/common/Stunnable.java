@@ -3,6 +3,7 @@ package net.zincstudios.scgextra.entity.common;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.entity.common.ai.StunnedGoal;
 import org.jetbrains.annotations.Nullable;
 import top.ribs.scguns.init.ModEffects;
@@ -14,7 +15,7 @@ import top.ribs.scguns.init.ModEffects;
  * Feel free to override the default methods if custom functionality is needed.
  * @see StunnedGoal
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "UnusedReturnValue"})
 public interface Stunnable {
 
     /**
@@ -30,7 +31,7 @@ public interface Stunnable {
      * Override as you see fit.
      */
     default int getDefaultStunDuration() {
-        return 60;  // TODO: configs
+        return CommonConfig.abilityWeaknessDuration;
     }
 
     /**
@@ -38,7 +39,7 @@ public interface Stunnable {
      * Override as you see fit.
      */
     default int getDefaultCooldownDuration() {
-        return 200;  // TODO: configs
+        return CommonConfig.abilityWeaknessCooldown;
     }
 
     default boolean isStunned() {
@@ -51,7 +52,6 @@ public interface Stunnable {
      * @return if damage should be applied.
      */
     default boolean handleHurtStun(DamageSource source, float amount) {
-        // TODO: shock cells and headshot checks.
         return true;
     }
 
@@ -83,7 +83,7 @@ public interface Stunnable {
      * The method to be called for stunning the mob. Normally called by checks but can also be invoked manually.
      */
     default void stun(int stunTicks) {
-        // TODO: configs if can stun
+        if (!CommonConfig.enableAbilityWeakness) return;
         StunnedGoal<?> stunnedGoal = this.getStunnedGoal();
         if (stunnedGoal == null) return;
         stunnedGoal.stun(stunTicks, getDefaultCooldownDuration());
