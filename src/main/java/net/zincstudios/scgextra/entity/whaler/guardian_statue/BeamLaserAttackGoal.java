@@ -1,5 +1,6 @@
 package net.zincstudios.scgextra.entity.whaler.guardian_statue;
 
+import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.sounds.ModSounds;
 import net.minecraft.sounds.SoundSource;
@@ -55,7 +56,7 @@ public class BeamLaserAttackGoal extends Goal {
 
         int timer = this.mob.getBeamActiveTimer();
         if (timer > 0) {
-            if (timer == 60) {
+            if (timer == 60 && CommonConfig.enableAbilityWarning) {
                 this.mob.triggerAnim("effects", "eye_flash");
             } else if (timer == 35 && this.mob.hasLineOfSight(target) && target.isAlive()) {
                 target.hurt(this.mob.damageSources().mobAttack(this.mob), 40F);
