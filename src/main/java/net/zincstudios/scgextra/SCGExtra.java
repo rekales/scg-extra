@@ -1,5 +1,6 @@
 package net.zincstudios.scgextra;
 
+import net.minecraftforge.fml.config.ModConfig;
 import net.zincstudios.scgextra.data.FactionDataLoader;
 import net.zincstudios.scgextra.datagen.DataGenerators;
 import net.zincstudios.scgextra.debug.EntityHeadBoxDebug;
@@ -38,6 +39,10 @@ public class SCGExtra
         ModSounds.register(modEventBus);
 
         modEventBus.addListener(this::addCreative);
+
+        context.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
+        modEventBus.addListener(CommonConfig::onLoad);
+        modEventBus.addListener(CommonConfig::onReload);
 
         MinecraftForge.EVENT_BUS.addListener(FactionDataLoader::onAddReloadListeners);
 

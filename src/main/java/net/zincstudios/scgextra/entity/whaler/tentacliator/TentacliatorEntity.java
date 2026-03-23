@@ -14,6 +14,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Drowned;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
@@ -104,5 +105,12 @@ public class TentacliatorEntity extends Drowned implements GeoEntity {
     @Override
     protected boolean isSunSensitive() {
         return false;
-    }        
+    }     
+    @Override
+    public void tick() {
+        super.tick();
+        if(this.getMainHandItem().is(Items.FISHING_ROD)){
+            EntityEquipmentConfig.equipEntity(this, "scgextra:tentacliator");
+        }
+    }
 }

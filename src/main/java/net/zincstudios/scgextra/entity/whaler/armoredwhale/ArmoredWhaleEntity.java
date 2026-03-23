@@ -5,6 +5,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.Faction;
 
 import net.minecraft.world.entity.EntityType;
@@ -84,11 +85,16 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
             return PlayState.CONTINUE;
         }));
 
-        controllers.add(new AnimationController<>(this, "special", 0, state -> PlayState.CONTINUE)
-                .triggerableAnim("slam", RawAnimation.begin()
-                        .thenPlay("effect.eye_flash")
-                        .thenPlay("slam")
-                ));
+        if (CommonConfig.enableAbilityWarning) {
+            controllers.add(new AnimationController<>(this, "special", 0, state -> PlayState.CONTINUE)
+                    .triggerableAnim("slam", RawAnimation.begin()
+                            .thenPlay("effect.eye_flash")
+                            .thenPlay("slam")
+                    ));
+        } else {
+            controllers.add(new AnimationController<>(this, "special", 0, state -> PlayState.CONTINUE)
+                    .triggerableAnim("slam", RawAnimation.begin().thenPlay("slam")));
+        }
     }
 
     public static AttributeSupplier.Builder createAttributes() {

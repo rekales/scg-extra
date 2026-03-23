@@ -1,6 +1,7 @@
 package net.zincstudios.scgextra.entity.whaler.turtleman;
 
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
+import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.Faction;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -142,14 +143,17 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
     @Override
     public boolean hurt(DamageSource source, float amount) {
         this.handleHurtStun(source, amount);
-        Vec3 attackVector = source.getSourcePosition();
-        if (!this.isStunned() && attackVector != null) {
-            attackVector = attackVector.subtract(this.position()).normalize();
-            Vec3 lookVector = this.getLookAngle();
 
-            double dotProduct = attackVector.dot(lookVector);
-            if (dotProduct < 0) {
-                return false;
+        if (CommonConfig.enableAbilityBulletproof) {
+            Vec3 attackVector = source.getSourcePosition();
+            if (!this.isStunned() && attackVector != null) {
+                attackVector = attackVector.subtract(this.position()).normalize();
+                Vec3 lookVector = this.getLookAngle();
+
+                double dotProduct = attackVector.dot(lookVector);
+                if (dotProduct < 0) {
+                    return false;
+                }
             }
         }
 
