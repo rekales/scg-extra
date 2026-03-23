@@ -57,6 +57,14 @@ public class CommonConfig {
             .defineInRange("abilityFlareCooldown", 10, 1, 1000);
 
 
+    private static final ForgeConfigSpec.IntValue ABILITY_WEAKNESS_DURATION = BUILDER
+            .comment("weakness exposed state duration in ticks")
+            .defineInRange("abilityWeaknessDuration", 100, 1, 10000);
+
+    private static final ForgeConfigSpec.IntValue ABILITY_WEAKNESS_COOLDOWN = BUILDER
+            .comment("weakness exposed state cooldown in ticks")
+            .defineInRange("abilityWeaknessCooldown", 200, 1, 10000);
+
     private static final ForgeConfigSpec.IntValue ABILITY_WEAKNESS_HEADSHOTS = BUILDER
             .comment("amount of headshots needed to trigger weakness exposed state")
             .defineInRange("abilityWeaknessHeadshots", 5, 1, 100);
@@ -92,6 +100,8 @@ public class CommonConfig {
     public static int abilityFlareCharge;
     public static int abilityFlareCooldown;
 
+    public static int abilityWeaknessDuration;
+    public static int abilityWeaknessCooldown;
     public static int abilityWeaknessHeadshots;
     public static double abilityWeaknessDamageMult;
     public static double abilityWeaknessMinHealth;
@@ -111,6 +121,8 @@ public class CommonConfig {
         abilityFlareCharge = ABILITY_FLARE_CHARGE.get();
         abilityFlareCooldown = ABILITY_FLARE_COOLDOWN.get();
 
+        abilityWeaknessDuration = ABILITY_WEAKNESS_DURATION.get();
+        abilityWeaknessCooldown = ABILITY_WEAKNESS_COOLDOWN.get();
         abilityWeaknessHeadshots = ABILITY_WEAKNESS_HEADSHOTS.get();
         abilityWeaknessDamageMult = ABILITY_WEAKNESS_DAMAGE_MULT.get();
         abilityWeaknessMinHealth = ABILITY_WEAKNESS_MIN.get();

@@ -3,6 +3,7 @@ package net.zincstudios.scgextra.entity.common.ai;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import top.ribs.scguns.init.ModEffects;
@@ -10,6 +11,7 @@ import top.ribs.scguns.init.ModEffects;
 import java.util.EnumSet;
 
 // NOTE: should we transfer the logic to this goal instead and only use the interface for hooks?
+// NOTE: weakness exposed state == stunned goal
 public class StunnedGoal<T extends PathfinderMob & Stunnable> extends Goal {
 
     // Only relevant for GeoEntities that has recovery triggers anims.
@@ -90,8 +92,8 @@ public class StunnedGoal<T extends PathfinderMob & Stunnable> extends Goal {
     public void handleHeadshot(DamageSource source, float amount) {
         this.headshotCounter++;
 
-        // TODO: config headshot count
-        if (this.headshotCounter >= 5) {
+        if (CommonConfig.abilityWeaknessMinHealth/100 <= this.mob.getHealth() / this.mob.getMaxHealth()
+               && this.headshotCounter >= CommonConfig.abilityWeaknessHeadshots) {
             this.mob.stun(this.mob.getDefaultStunDuration());
             this.headshotCounter = 0;
         }
