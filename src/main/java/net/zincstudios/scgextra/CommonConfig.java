@@ -36,6 +36,7 @@ public class CommonConfig {
 
     private static final ForgeConfigSpec.BooleanValue ENABLE_ABILITY_WARNING = BUILDER
             .comment("enables warning state, flash of light appears before a massive attack. disabling would just remove the flash.")
+            .comment("REQUIRES GAME RESTART")
             .define("enableAbilityWarning", true);
 
 

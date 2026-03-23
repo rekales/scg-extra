@@ -92,7 +92,7 @@ public class StunnedGoal<T extends PathfinderMob & Stunnable> extends Goal {
     public void handleHeadshot(DamageSource source, float amount) {
         this.headshotCounter++;
 
-        if (CommonConfig.abilityWeaknessMinHealth/100 <= this.mob.getHealth() / this.mob.getMaxHealth()
+        if (CommonConfig.abilityWeaknessMinHealth/100 >= this.mob.getHealth() / this.mob.getMaxHealth()
                && this.headshotCounter >= CommonConfig.abilityWeaknessHeadshots) {
             this.mob.stun(this.mob.getDefaultStunDuration());
             this.headshotCounter = 0;
