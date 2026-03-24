@@ -16,11 +16,13 @@ public class ArcPsychoEntityFloatGoal extends Goal{
     private final int height;
     private final float fSpeed;
     private final float mSpeed;
-    public ArcPsychoEntityFloatGoal(ArcPsychoEntity mob, int floatHeight, float floatSpeed, float movementSpeed){
+    private final int distance;
+    public ArcPsychoEntityFloatGoal(ArcPsychoEntity mob, int floatHeight, float floatSpeed, float movementSpeed, int distance){
         this.parent = mob;
         this.height = floatHeight;
         this.fSpeed = floatSpeed;
         this.mSpeed = movementSpeed;
+        this.distance = distance;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
     @Override
@@ -49,7 +51,7 @@ public class ArcPsychoEntityFloatGoal extends Goal{
             double dx = target.getX() - this.parent.getX();
             double dz = target.getZ() - this.parent.getZ();
             double dist = Math.sqrt(dx*dx + dz*dz);
-            if(dist > 8){
+            if(dist > this.distance){
                 this.parent.setDeltaMovement(
                     dx / dist * mSpeed,
                     this.parent.getDeltaMovement().y(),

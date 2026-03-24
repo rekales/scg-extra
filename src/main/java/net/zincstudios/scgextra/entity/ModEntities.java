@@ -213,6 +213,6 @@ public class ModEntities {
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
         BoundingBoxManager.registerHeadshotBox(ModEntities.TURTLEMAN.get(), new BasicHeadshotBox<>(11.0F, 28.0F));
-        BoundingBoxManager.registerHeadshotBox(ModEntities.DRONE.get(), new RotatedHeadshotBox<>(15.0, 28.0, 20, true, true));
+        BoundingBoxManager.registerHeadshotBox(ModEntities.DRONE.get(), new RotatedHeadshotBox<>(15.0, 28.0, 20, false, true));
     }
 }

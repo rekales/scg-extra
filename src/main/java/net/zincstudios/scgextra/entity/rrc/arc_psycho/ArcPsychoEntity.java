@@ -38,8 +38,8 @@ public class ArcPsychoEntity extends Monster implements GeoEntity{
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.targetSelector.addGoal(1, new HurtByNonFactionGoal(this));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true, player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.goalSelector.addGoal(2, new ArcPsychoEntityFloatGoal(this, 5, 0.2F, 0.3F));
-        this.goalSelector.addGoal(2, new ArcPsychoEntityAttackGoal(this, 40));
+        this.goalSelector.addGoal(2, new ArcPsychoEntityFloatGoal(this, 7, 0.2F, 0.3F, 10));
+        this.goalSelector.addGoal(2, new ArcPsychoEntityAttackGoal(this, 40, 10, 1F));
         this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 20));
         this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 1));
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));

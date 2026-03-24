@@ -15,14 +15,18 @@ public class ArcPsychoEntityAttackGoal extends Goal{
     private final ArcPsychoEntity parent;
     private int cooldown = 0;
     private final int cooldownDur;
-    public ArcPsychoEntityAttackGoal(ArcPsychoEntity mob, int cooldown){
+    private final int dist;
+    private final float shootingSpeed;
+    public ArcPsychoEntityAttackGoal(ArcPsychoEntity mob, int cooldown, int dist, float shootingSpeed){
         this.parent = mob;
         this.cooldownDur = cooldown;
+        this.dist = dist;
+        this.shootingSpeed = shootingSpeed;
     }
     @Override
     public boolean canUse() {
         if(this.cooldown>0)this.cooldown--;
-        return this.parent.getTarget()!=null && this.cooldown==0 && this.parent.distanceToSqr(this.parent.getTarget().getX(), this.parent.getY(), this.parent.getTarget().getZ())<16*16;
+        return this.parent.getTarget()!=null && this.cooldown==0 && this.parent.distanceToSqr(this.parent.getTarget().getX(), this.parent.getY(), this.parent.getTarget().getZ())<this.dist*this.dist;
     }
     @Override
     public boolean canContinueToUse() {
@@ -49,9 +53,9 @@ public class ArcPsychoEntityAttackGoal extends Goal{
         );
         en.setPos(this.parent.position().add(0, 3, 0));
         en.setDeltaMovement(
-            dx / dist * 1F,
-            dy / dist * 1F,
-            dz / dist * 1F
+            dx / dist * this.shootingSpeed,
+            dy / dist * this.shootingSpeed,
+            dz / dist * this.shootingSpeed
         );
         this.parent.level().addFreshEntity(en);
         this.parent.level().playSound(null, this.parent.getX(), this.parent.getY(), this.parent.getZ(), ModSounds.SHOCK_FIRE.get(), SoundSource.HOSTILE, 0.8F, 1.2F);
