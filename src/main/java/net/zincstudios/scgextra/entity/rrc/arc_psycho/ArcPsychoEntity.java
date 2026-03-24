@@ -1,6 +1,7 @@
 package net.zincstudios.scgextra.entity.rrc.arc_psycho;
 
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -38,7 +39,7 @@ public class ArcPsychoEntity extends Monster implements GeoEntity{
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.targetSelector.addGoal(1, new HurtByNonFactionGoal(this));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true, player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.goalSelector.addGoal(2, new ArcPsychoEntityFloatGoal(this, 7, 0.2F, 0.3F, 10));
+        this.goalSelector.addGoal(2, new ArcPsychoEntityFloatGoal(this, 7, 0.2F, 0.3F, 10, 100));
         this.goalSelector.addGoal(2, new ArcPsychoEntityAttackGoal(this, 40, 10, 1F));
         this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 20));
         this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 1));
@@ -92,5 +93,12 @@ public class ArcPsychoEntity extends Monster implements GeoEntity{
         if(deathAnimDone){
             super.die(pDamageSource);
         }else{this.setHealth(1);}
+    }
+    @Override
+    public boolean hurt(DamageSource pSource, float pAmount) {
+        if(pSource.is(DamageTypes.FALL) || pSource.is(DamageTypes.LIGHTNING_BOLT)){
+            return false;
+        }
+        return super.hurt(pSource, pAmount);
     }
 }

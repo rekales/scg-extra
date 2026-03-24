@@ -17,12 +17,15 @@ public class ArcPsychoEntityFloatGoal extends Goal{
     private final float fSpeed;
     private final float mSpeed;
     private final int distance;
-    public ArcPsychoEntityFloatGoal(ArcPsychoEntity mob, int floatHeight, float floatSpeed, float movementSpeed, int distance){
+    private int floatTime = 0;
+    private int floatDuration = 0;
+    public ArcPsychoEntityFloatGoal(ArcPsychoEntity mob, int floatHeight, float floatSpeed, float movementSpeed, int distance, int extraFloatTime){
         this.parent = mob;
         this.height = floatHeight;
         this.fSpeed = floatSpeed;
         this.mSpeed = movementSpeed;
         this.distance = distance;
+        this.floatDuration = extraFloatTime;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
     @Override
@@ -31,13 +34,20 @@ public class ArcPsychoEntityFloatGoal extends Goal{
     }
     @Override
     public boolean canContinueToUse() {
-        return this.parent.getTarget()!=null;
+        if(this.parent.getTarget()==null && this.floatTime>0){
+            this.floatTime--;
+        }
+        return this.parent.getTarget()!=null || this.floatTime>0;
+    }
+    @Override
+    public void start() {
+        super.start();
+        this.floatTime = floatDuration;
     }
     @Override
     public void tick() {
         super.tick();
         if(!this.parent.level().isClientSide()){
-            if(this.parent.getTarget()==null)return;
             BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(this.parent.getX(), this.parent.getY(), this.parent.getZ());
             while (this.parent.level().getBlockState(pos).isAir()) {
                 pos.move(Direction.DOWN);
@@ -75,6 +85,6 @@ public class ArcPsychoEntityFloatGoal extends Goal{
                 sec++;
             }
         }
-        this.parent.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, sec*20));
+        this.parent.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, sec*20, 1, true, false));
     }
 }
