@@ -2,6 +2,7 @@ package net.zincstudios.scgextra.entity.rrc.scout;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
@@ -21,6 +22,9 @@ import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import top.ribs.scguns.config.EntityEquipmentConfig;
 
@@ -28,6 +32,8 @@ import javax.annotation.Nullable;
 
 public class ScoutEntity extends Zombie implements GeoEntity{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+    private boolean deathAnimDone = false;
+    private int deathTick = 0;
     public ScoutEntity(EntityType<? extends Zombie> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
@@ -39,6 +45,16 @@ public class ScoutEntity extends Zombie implements GeoEntity{
 
     @Override
     public void registerControllers(ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "controller", 0, state -> {
+            if (((this.getX() - this.xo)*(this.getX() - this.xo))+((this.getZ() - this.zo)*(this.getZ() - this.zo))>0.0002) {
+                state.setAndContinue(RawAnimation.begin().thenLoop("walk"));
+            } else {
+                state.setAndContinue(RawAnimation.begin().thenLoop("idle_2"));
+            }
+            return PlayState.CONTINUE;
+        }));
+        controllers.add(new AnimationController<>(this, "behaviour", 0, state -> PlayState.CONTINUE)
+        .triggerableAnim("death", RawAnimation.begin().thenPlay("death")));
     }
     public static AttributeSupplier.Builder createAttributes() {
         return Zombie.createAttributes()
@@ -73,5 +89,26 @@ public class ScoutEntity extends Zombie implements GeoEntity{
     @Override
     public boolean isBaby() {
         return false;
+    }
+    @Override
+    public void tick() {
+        super.tick();
+        if(this.getHealth()<=1 && deathTick <= 20){
+            if(this.deathTick==0){
+                this.triggerAnim("behaviour", "death");
+                this.setNoAi(true);
+            }
+            deathTick++;
+        }else if(deathTick > 20){
+            this.deathAnimDone = true;
+            this.setHealth(0);
+            this.die(this.getLastDamageSource());
+        }
+    }
+    @Override
+    public void die(DamageSource pDamageSource) {
+        if(deathAnimDone){
+            super.die(pDamageSource);
+        }else{this.setHealth(1);}
     }
 }

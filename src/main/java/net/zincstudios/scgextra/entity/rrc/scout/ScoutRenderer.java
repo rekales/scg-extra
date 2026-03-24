@@ -7,7 +7,6 @@ import net.zincstudios.scgextra.SCGExtra;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer;
-import top.ribs.scguns.init.ModItems;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -37,13 +36,8 @@ public class ScoutRenderer extends GeoEntityRenderer<ScoutEntity>{
             @Override
             protected void renderStackForBone(PoseStack poseStack, GeoBone bone, ItemStack stack, ScoutEntity animatable, MultiBufferSource bufferSource, float partialTick, int packedLight, int packedOverlay) {
                 if (bone.getName().equals("RightArm")) {
-                    bone.setRotX(-80);
-                    poseStack.translate(0.05, 0, 0.5);
-                    if(animatable.getMainHandItem().is(ModItems.HULLBREAKER.get())){
-                        poseStack.mulPose(Axis.XP.rotationDegrees(90));
-                    }else{
-                        poseStack.mulPose(Axis.XP.rotationDegrees(175));
-                    }
+                    poseStack.translate(-0.1, -0.4, 0.0);
+                    poseStack.mulPose(Axis.XP.rotationDegrees(-90));
                 }
 
                 super.renderStackForBone(poseStack, bone, stack, animatable, bufferSource, partialTick, packedLight, packedOverlay);
