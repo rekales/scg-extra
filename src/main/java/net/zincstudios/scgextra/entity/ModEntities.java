@@ -145,7 +145,7 @@ public class ModEntities {
 
     public static final RegistryObject<EntityType<FlamingHeadEntity>> FLAMING_HEAD = ENTITY_TYPES
             .register("flaming_head", () -> EntityType.Builder.of(FlamingHeadEntity::new, MobCategory.MONSTER)
-                    .sized(1.4F, 3F)
+                    .sized(3.5F, 6F)
                     .build("flaming_head"));
 
     public static final RegistryObject<EntityType<ScrapGuardEntity>> SCRAP_GUARD = ENTITY_TYPES
