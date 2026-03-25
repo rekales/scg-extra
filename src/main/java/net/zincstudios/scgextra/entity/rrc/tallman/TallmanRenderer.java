@@ -40,7 +40,7 @@ public class TallmanRenderer <T extends TallmanEntity> extends GeoEntityRenderer
             @Override
             protected void renderStackForBone(PoseStack poseStack, GeoBone bone, ItemStack stack, T animatable, MultiBufferSource bufferSource, float partialTick, int packedLight, int packedOverlay) {
                 if (bone.getName().equals("left_hand")) {
-                    poseStack.mulPose(Axis.XP.rotationDegrees(-90)); // Rotate X
+                    poseStack.mulPose(Axis.XP.rotationDegrees(-90));
                 }
 
                 super.renderStackForBone(poseStack, bone, stack, animatable, bufferSource, partialTick, packedLight, packedOverlay);

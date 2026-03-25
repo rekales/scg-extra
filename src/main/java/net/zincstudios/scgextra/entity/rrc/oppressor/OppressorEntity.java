@@ -27,6 +27,9 @@ import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import top.ribs.scguns.config.EntityEquipmentConfig;
 
@@ -70,7 +73,7 @@ public class OppressorEntity extends Monster implements GeoEntity {
                 .add(Attributes.MAX_HEALTH, 120D)
                 .add(Attributes.ARMOR, 6D)
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.18F);
+                .add(Attributes.MOVEMENT_SPEED, 0.2F);
     }
 
     @Override
@@ -80,7 +83,22 @@ public class OppressorEntity extends Monster implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "walk/idle", 2, state -> {
+            if (state.isMoving()) {
+                return state.setAndContinue(RawAnimation.begin().thenLoop("walk"));
+            } else {
+                // TODO: better looping
+                return state.setAndContinue(RawAnimation.begin()
+                        .thenPlayXTimes("idle", state.getAnimatable().random.nextIntBetweenInclusive(2,4))
+                        .thenLoop("idle_2")
+                );
+            }
+        }));
 
+        controllers.add(new AnimationController<>(this, "behaviour", 0, state -> PlayState.STOP)
+                .triggerableAnim("flare", RawAnimation.begin().thenPlay("flare"))
+                .triggerableAnim("alert", RawAnimation.begin().thenPlay("alert"))
+        );
     }
 
     @Override
