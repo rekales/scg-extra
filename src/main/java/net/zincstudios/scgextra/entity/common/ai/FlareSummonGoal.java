@@ -10,20 +10,20 @@ import software.bernie.geckolib.animatable.GeoEntity;
 public class FlareSummonGoal extends Goal {
 
     protected final PathfinderMob mob;
-    protected final int cooldownTime;
-    protected final int chargeTime;
-    protected final EntityType<? extends Mob>[] summonTypes;
-    protected int activeTicks = 0;
-    protected int cooldownTicks = 0;
+    private final int cooldownDuration;
+    private final int summonDelay;  // match with animation
+    private final EntityType<? extends Mob>[] summonTypes;
+
+    private long summonTrigger = -1;  // level timestamp
+    private long cooldownEnd = 0;  // level timestamp
 
     @SafeVarargs
-    public FlareSummonGoal(PathfinderMob mob, int cooldownTime, int chargeTime, EntityType<? extends Mob>... summonTypes) {
+    public FlareSummonGoal(PathfinderMob mob, int cooldownDuration, int summonDelay, EntityType<? extends Mob>... summonTypes) {
         this.mob = mob;
-        this.cooldownTime = cooldownTime;
-        this.chargeTime = chargeTime;
+        this.cooldownDuration = cooldownDuration;
+        this.summonDelay = summonDelay;
         this.summonTypes = summonTypes;
     }
-
 
     @Override
     public boolean canUse() {
@@ -32,50 +32,43 @@ public class FlareSummonGoal extends Goal {
     }
 
     @Override
-    public void stop() {
-        super.stop();
-        this.activeTicks = 0;
-        this.cooldownTicks = 0;
+    public void start() {
+        this.cooldownEnd = this.mob.level().getGameTime() + this.cooldownDuration;
     }
 
-    @Override
-    public boolean requiresUpdateEveryTick() {
-        return true;
-    }
-
-    @SuppressWarnings({"deprecation", "OverrideOnly"})  // TODO: figure out a solution later
     @Override
     public void tick() {
-        if (this.activeTicks > 0) {
-            this.activeTicks--;
-        }
-        if (this.activeTicks == 1) {
-            LivingEntity target = this.mob.getTarget();
-            if (target != null && this.mob.level() instanceof ServerLevel level) {
-
-                for(int i = 0; i < 3; ++i) {
-                    EntityType<? extends Mob> summonType = summonTypes[this.mob.getRandom().nextInt(summonTypes.length)];
-                    BlockPos blockpos = this.mob.blockPosition().offset(-2 + this.mob.getRandom().nextInt(5), 1, -2 + this.mob.getRandom().nextInt(5));
-                    Mob summonedMob = summonType.create(level);
-                    if (summonedMob != null) {
-                        summonedMob.moveTo(blockpos, 0.0F, 0.0F);
-                        summonedMob.finalizeSpawn(level, level.getCurrentDifficultyAt(blockpos), MobSpawnType.MOB_SUMMONED, null, null);
-//                        summonedMob.setOwner(this.mob);
-//                        summonedMob.setBoundOrigin(blockpos);
-//                        summonedMob.setLimitedLife(20 * (30 + this.mob.getRandom().nextInt(90)));
-                        level.addFreshEntityWithPassengers(summonedMob);
-                    }
-                }
+        if (this.mob.level().getGameTime() > this.cooldownEnd) {
+            this.cooldownEnd = this.mob.level().getGameTime() + this.cooldownDuration;
+            this.summonTrigger = this.mob.level().getGameTime() + this.summonDelay;
+            if (this.mob instanceof GeoEntity geoEntity) {
+                geoEntity.triggerAnim("behaviour", "flare");
             }
         }
 
-        if (this.cooldownTicks > 0) {
-            this.cooldownTicks--;
-        } else {
-            this.cooldownTicks = cooldownTime + this.chargeTime;
-            this.activeTicks = this.chargeTime;  // match with animation frames
-            if (this.mob instanceof GeoEntity geoEntity) {
-                geoEntity.triggerAnim("throw", "action");
+        if (this.summonTrigger != -1 && this.mob.level().getGameTime() > this.cooldownEnd) {
+            this.summonTrigger = -1;
+            summonMobs();
+        }
+    }
+
+    @SuppressWarnings({"deprecation", "OverrideOnly"})  // TODO: figure out a solution later
+    public void summonMobs() {
+        LivingEntity target = this.mob.getTarget();
+        if (target != null && this.mob.level() instanceof ServerLevel level) {
+
+            for(int i = 0; i < 3; ++i) {
+                EntityType<? extends Mob> summonType = summonTypes[this.mob.getRandom().nextInt(summonTypes.length)];
+                BlockPos blockpos = this.mob.blockPosition().offset(-2 + this.mob.getRandom().nextInt(5), 1, -2 + this.mob.getRandom().nextInt(5));
+                Mob summonedMob = summonType.create(level);
+                if (summonedMob != null) {
+                    summonedMob.moveTo(blockpos, 0.0F, 0.0F);
+                    summonedMob.finalizeSpawn(level, level.getCurrentDifficultyAt(blockpos), MobSpawnType.MOB_SUMMONED, null, null);
+//                        summonedMob.setOwner(this.mob);
+//                        summonedMob.setBoundOrigin(blockpos);
+//                        summonedMob.setLimitedLife(20 * (30 + this.mob.getRandom().nextInt(90)));
+                    level.addFreshEntityWithPassengers(summonedMob);
+                }
             }
         }
     }

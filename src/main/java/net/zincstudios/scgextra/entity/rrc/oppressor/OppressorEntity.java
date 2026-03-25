@@ -19,7 +19,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.zincstudios.scgextra.Faction;
+import net.zincstudios.scgextra.entity.ModEntities;
 import net.zincstudios.scgextra.entity.common.ai.AlertFactionGoal;
+import net.zincstudios.scgextra.entity.common.ai.FlareSummonGoal;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -49,14 +51,13 @@ public class OppressorEntity extends Monster implements GeoEntity {
 
     @Override
     protected void registerGoals() {
-        // gun attack goal to be automatically added on finalizeSpawn
+        // TODO: custom gun attack goal
         this.goalSelector.addGoal(3, new AlertFactionGoal(this, 200));
+        this.goalSelector.addGoal(4, new FlareSummonGoal(this, 600, 30, ModEntities.SCOUT.get()));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
 
-        // TODO: alert mechanic
-        // TODO: flare behaviour
         this.targetSelector.addGoal(1, new HurtByNonFactionGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));

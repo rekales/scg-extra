@@ -4,7 +4,6 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.AABB;
 import net.zincstudios.scgextra.Faction;
-import net.zincstudios.scgextra.SCGExtra;
 import software.bernie.geckolib.animatable.GeoEntity;
 
 import java.util.List;
@@ -14,8 +13,7 @@ public class AlertFactionGoal extends Goal {
 
     private final PathfinderMob mob;
     private final int cooldownDuration;
-    long cooldownEnd = 0;  // level timestamp
-
+    private long cooldownEnd = 0;  // level timestamp
 
     public AlertFactionGoal(PathfinderMob mob, int cooldownDuration) {
         this.mob = mob;
@@ -35,7 +33,6 @@ public class AlertFactionGoal extends Goal {
 
     @Override
     public void tick() {
-        SCGExtra.LOGGER.debug((this.cooldownEnd - this.mob.level().getGameTime()) + "");
         if (this.mob.level().getGameTime() > this.cooldownEnd) {
             alertFaction();
             this.cooldownEnd = this.mob.level().getGameTime() + this.cooldownDuration;
