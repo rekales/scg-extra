@@ -23,6 +23,8 @@ import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import top.ribs.scguns.config.EntityEquipmentConfig;
 import top.ribs.scguns.entity.ai.AIType;
@@ -72,7 +74,13 @@ public class ScrapGuardEntity extends Monster implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-
+        controllers.add(new AnimationController<>(this, "walk/idle", 2, state -> {
+            if (state.isMoving()) {
+                return state.setAndContinue(RawAnimation.begin().thenLoop("walk"));
+            } else {
+                return state.setAndContinue(RawAnimation.begin().thenLoop("idle"));
+            }
+        }));
     }
 
     @Override

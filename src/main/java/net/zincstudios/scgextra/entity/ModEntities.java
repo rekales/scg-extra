@@ -150,7 +150,7 @@ public class ModEntities {
 
     public static final RegistryObject<EntityType<ScrapGuardEntity>> SCRAP_GUARD = ENTITY_TYPES
             .register("scrap_guard", () -> EntityType.Builder.of(ScrapGuardEntity::new, MobCategory.MONSTER)
-                    .sized(1.4F, 3F)
+                    .sized(1.3F, 3F)
                     .build("scrap_guard"));
 
     public static final RegistryObject<EntityType<ArcPsychoEntity>> ARC_PSYCHO = ENTITY_TYPES
