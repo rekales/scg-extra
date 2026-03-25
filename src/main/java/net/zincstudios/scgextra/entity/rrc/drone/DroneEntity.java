@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -25,6 +26,7 @@ import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.StunnedGoal;
 import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
+import net.zincstudios.scgextra.sounds.ModSounds;
 import net.minecraftforge.entity.PartEntity;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -35,12 +37,23 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import net.zincstudios.scgextra.Faction;
 
+//The health checks in the play sound is just to have it not play any extra sounds while it's about to die
 public class DroneEntity extends Monster implements GeoEntity, Stunnable{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private static final EntityDataAccessor<Float> INACCURACY = SynchedEntityData.defineId(DroneEntity.class, EntityDataSerializers.FLOAT);
     private boolean deathAnimDone = false;
     private int deathTick = 0;
     private final DronePart[] subEntities;
+    private SoundEvent[] hurtSounds = {
+        ModSounds.RRC_DRONE_HURT_1.get(),
+        ModSounds.RRC_DRONE_HURT_2.get(),
+        ModSounds.RRC_DRONE_HURT_3.get(),
+        ModSounds.RRC_DRONE_HURT_4.get(),
+        ModSounds.RRC_DRONE_HURT_5.get(),
+        ModSounds.RRC_DRONE_HURT_6.get(),
+        ModSounds.RRC_DRONE_HURT_7.get(),
+        ModSounds.RRC_DRONE_HURT_8.get(),
+    };
     public DroneEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         DronePart pipe = new DronePart(this, "pipe", 0.5F, 2F);
@@ -121,6 +134,11 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable{
             this.die(this.getLastDamageSource());
         }
         updateSubentities();
+        if(tickCount%60==0 && this.getHealth()>this.getMaxHealth()/8){
+            if(this.random.nextBoolean()){
+                this.playSound(ModSounds.RRC_DRONE_IDLE.get(), 1.5F, this.getVoicePitch());
+            }
+        }
     }
     @Override
     public void die(DamageSource pDamageSource) {
@@ -208,4 +226,21 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable{
         return super.addEffect(effectInstance, entity)
                 && this.handleAddEffectStun(effectInstance, entity);
     }
+    @Override
+    protected void playHurtSound(DamageSource pSource) {
+        this.ambientSoundTime = -this.getAmbientSoundInterval();
+        SoundEvent soundevent = hurtSounds[this.random.nextInt(hurtSounds.length)];
+        if (soundevent != null) {
+            this.playSound(soundevent, 1.5F, this.getVoicePitch());
+        }
+    }
+    protected SoundEvent getDeathSound() {
+        return this.random.nextBoolean() ? ModSounds.RRC_DRONE_DEATH_1.get() : ModSounds.RRC_DRONE_DEATH_2.get();
+    };
+    protected void playStepSound(net.minecraft.core.BlockPos pPos, net.minecraft.world.level.block.state.BlockState pState) {
+        super.playStepSound(pPos, pState);
+        if(this.random.nextFloat() < 0.3f  && this.getHealth()>this.getMaxHealth()/8){
+            this.playSound(ModSounds.RRC_DRONE_WALK.get(), 1.5F, this.getVoicePitch());
+        }
+    };
 }

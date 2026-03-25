@@ -8,14 +8,17 @@ import org.joml.Vector3f;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.Goal.Flag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.zincstudios.scgextra.sounds.ModSounds;
 import top.ribs.scguns.init.ModEffects;
 
 public class AttackAndExplodeGoal extends Goal{
@@ -27,6 +30,11 @@ public class AttackAndExplodeGoal extends Goal{
     private int fuseTimer = -1;
     private boolean exploding = false;
     private int agroAnimTimer = 0;
+    private SoundEvent[] deathSounds = {
+        ModSounds.RRC_SPRING_JUNKIE_DEATH_1.get(),
+        ModSounds.RRC_SPRING_JUNKIE_DEATH_2.get(),
+        ModSounds.RRC_SPRING_JUNKIE_DEATH_3.get()
+    };
 
     public AttackAndExplodeGoal(SpringJunkieEntity mob, float speed, double distance){
         parent = mob;
@@ -52,6 +60,7 @@ public class AttackAndExplodeGoal extends Goal{
         this.agroAnimTimer = 40;
         this.parent.setAttacking(true);
         this.parent.triggerAnim("anim", "aggroed");
+        this.parent.playSound(ModSounds.RRC_SPRING_JUNKIE_SCREAM.get(), 1.5F, this.parent.getVoicePitch());
     }
     @Override
     public void tick() {
@@ -138,7 +147,6 @@ public class AttackAndExplodeGoal extends Goal{
                         target.getZ(),
                         speedModifier
                     );
-                    exploding = false;
                 }else{
                     if(!exploding){
                         fuseTimer = 60;
@@ -150,10 +158,20 @@ public class AttackAndExplodeGoal extends Goal{
         if(this.fuseTimer>0){
             if(this.fuseTimer==60){
                 this.parent.triggerAnim("anim1", "aggroed_long");
+                this.parent.playSound(
+                    this.parent.getRandom().nextBoolean() ? ModSounds.RRC_SPRING_JUNKIE_LAUGH_1.get() : ModSounds.RRC_SPRING_JUNKIE_LAUGH_2.get(), 
+                    1.5F, 
+                    this.parent.getVoicePitch()
+                );
             }
             this.fuseTimer--;
         }else if(this.fuseTimer==0){
             this.parent.triggerAnim("behaviour", "death");
+            this.parent.playSound(
+                    deathSounds[this.parent.getRandom().nextInt(deathSounds.length)],
+                    1.5F, 
+                    this.parent.getVoicePitch()
+                );
             this.explodeTimer = 8;
             fuseTimer--;
         }

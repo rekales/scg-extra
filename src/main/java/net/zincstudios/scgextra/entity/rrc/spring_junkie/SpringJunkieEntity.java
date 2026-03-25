@@ -3,6 +3,8 @@ package net.zincstudios.scgextra.entity.rrc.spring_junkie;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -17,6 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.zincstudios.scgextra.Faction;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.sounds.ModSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
@@ -28,6 +31,12 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 public class SpringJunkieEntity extends Monster implements GeoEntity{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private static final EntityDataAccessor<Boolean> ATTACKING = SynchedEntityData.defineId(SpringJunkieEntity.class, EntityDataSerializers.BOOLEAN);
+    private SoundEvent[] walkingSounds = {
+        ModSounds.RRC_SPRING_JUNKIE_WALK_1.get(),
+        ModSounds.RRC_SPRING_JUNKIE_WALK_2.get(),
+        ModSounds.RRC_SPRING_JUNKIE_WALK_3.get(),
+        ModSounds.RRC_SPRING_JUNKIE_WALK_4.get()
+    };
 
     public SpringJunkieEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -90,4 +99,26 @@ public class SpringJunkieEntity extends Monster implements GeoEntity{
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true, entity -> Faction.isEnemies(this, entity)));
     }
+    @Override
+    protected void playHurtSound(DamageSource pSource) {
+        this.ambientSoundTime = -this.getAmbientSoundInterval();
+        SoundEvent soundevent = ModSounds.RRC_SPRING_JUNKIE_DEATH_1.get();
+        if (soundevent != null) {
+            this.playSound(soundevent, 0.5F, this.getVoicePitch());
+        }
+    }
+    protected void playStepSound(net.minecraft.core.BlockPos pPos, net.minecraft.world.level.block.state.BlockState pState) {
+        super.playStepSound(pPos, pState);
+        if(this.random.nextFloat() < 0.3f  && this.getHealth()>this.getMaxHealth()/8){
+            this.playSound(
+                this.getAttacking() ?
+                walkingSounds[this.random.nextInt(walkingSounds.length)] : 
+                this.random.nextBoolean() ? 
+                ModSounds.RRC_SPRING_JUNKIE_RUN_1.get() : 
+                ModSounds.RRC_SPRING_JUNKIE_RUN_2.get(), 
+                1.5F, 
+                this.getVoicePitch()
+            );
+        }
+    };
 }
