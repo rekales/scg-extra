@@ -32,6 +32,7 @@ import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import top.ribs.scguns.config.EntityEquipmentConfig;
 import top.ribs.scguns.entity.ai.AIType;
@@ -91,6 +92,14 @@ public class ScrapGuardEntity extends Monster implements GeoEntity {
                 return state.setAndContinue(RawAnimation.begin().thenLoop("walk"));
             } else {
                 return state.setAndContinue(RawAnimation.begin().thenLoop("idle"));
+            }
+        }));
+
+        controllers.add(new AnimationController<>(this, "death", 2, state -> {
+            if (state.getAnimatable().isDeadOrDying()) {
+                return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("death"));
+            } else {
+                return PlayState.STOP;
             }
         }));
     }
