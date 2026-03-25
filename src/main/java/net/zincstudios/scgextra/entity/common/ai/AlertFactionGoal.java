@@ -41,7 +41,7 @@ public class AlertFactionGoal extends Goal {
 
     // Copied and heavily modified from HurtByTargetGoal.alertOthers
     public void alertFaction() {
-        double range = 32;
+        double range = 32; //TODO: config
         AABB aabb = AABB.unitCubeFromLowerCorner(this.mob.position()).inflate(range, 20.0D, range);
 
         List<? extends Mob> list = this.mob.level().getEntities(this.mob, aabb,

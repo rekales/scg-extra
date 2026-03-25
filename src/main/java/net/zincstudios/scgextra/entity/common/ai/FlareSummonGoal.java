@@ -46,7 +46,7 @@ public class FlareSummonGoal extends Goal {
             }
         }
 
-        if (this.summonTrigger != -1 && this.mob.level().getGameTime() > this.cooldownEnd) {
+        if (this.summonTrigger != -1 && this.mob.level().getGameTime() > this.summonTrigger) {
             this.summonTrigger = -1;
             summonMobs();
         }
@@ -64,8 +64,6 @@ public class FlareSummonGoal extends Goal {
                 if (summonedMob != null) {
                     summonedMob.moveTo(blockpos, 0.0F, 0.0F);
                     summonedMob.finalizeSpawn(level, level.getCurrentDifficultyAt(blockpos), MobSpawnType.MOB_SUMMONED, null, null);
-//                        summonedMob.setOwner(this.mob);
-//                        summonedMob.setBoundOrigin(blockpos);
 //                        summonedMob.setLimitedLife(20 * (30 + this.mob.getRandom().nextInt(90)));
                     level.addFreshEntityWithPassengers(summonedMob);
                 }
