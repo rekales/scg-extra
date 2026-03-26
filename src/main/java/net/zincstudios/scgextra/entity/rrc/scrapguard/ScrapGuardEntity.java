@@ -65,7 +65,7 @@ public class ScrapGuardEntity extends Monster implements GeoEntity {
     @Override
     protected void registerGoals() {
         // TODO: GunAttackMeleeCombined goal
-        this.goalSelector.addGoal(2, new GunAttackGoal<>(this, this.getMainHandItem(), 1.0F, AIType.RECKLESS, 3));
+        this.goalSelector.addGoal(2, new MeleeGunAttackGoal<>(this, this.getMainHandItem(), 1.0F, AIType.RECKLESS, 3));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
@@ -102,6 +102,10 @@ public class ScrapGuardEntity extends Monster implements GeoEntity {
                 return PlayState.STOP;
             }
         }));
+
+        controllers.add(new AnimationController<>(this, "behaviour", 0, state -> PlayState.STOP)
+                .triggerableAnim("melee", RawAnimation.begin().thenPlay("melee_attack"))
+        );
     }
 
     @Override
