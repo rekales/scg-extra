@@ -1,6 +1,7 @@
 package net.zincstudios.scgextra.entity.rrc.scout;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -19,6 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.zincstudios.scgextra.Faction;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.sounds.ModSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
@@ -34,6 +36,13 @@ public class ScoutEntity extends Zombie implements GeoEntity{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private boolean deathAnimDone = false;
     private int deathTick = 0;
+    private SoundEvent[] hurtSounds = {
+        ModSounds.RRC_SCOUT_HURT_1.get(),
+        ModSounds.RRC_SCOUT_HURT_2.get(),
+        ModSounds.RRC_SCOUT_HURT_3.get(),
+        ModSounds.RRC_SCOUT_HURT_4.get(),
+        ModSounds.RRC_SCOUT_HURT_5.get()
+    };
     public ScoutEntity(EntityType<? extends Zombie> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
@@ -49,7 +58,9 @@ public class ScoutEntity extends Zombie implements GeoEntity{
             if (((this.getX() - this.xo)*(this.getX() - this.xo))+((this.getZ() - this.zo)*(this.getZ() - this.zo))>0.0002) {
                 state.setAndContinue(RawAnimation.begin().thenLoop("walk"));
             } else {
-                state.setAndContinue(RawAnimation.begin().thenLoop("idle_2"));
+                return state.setAndContinue(RawAnimation.begin()
+                    .thenPlayXTimes("idle", state.getAnimatable().random.nextIntBetweenInclusive(2,4))
+                    .thenLoop("idle_2"));
             }
             return PlayState.CONTINUE;
         }));
@@ -111,4 +122,20 @@ public class ScoutEntity extends Zombie implements GeoEntity{
             super.die(pDamageSource);
         }else{this.setHealth(1);}
     }
+    protected SoundEvent getHurtSound(DamageSource pDamageSource) {
+        return hurtSounds[this.random.nextInt(hurtSounds.length)];
+    };
+    protected SoundEvent getAmbientSound() {
+        return this.random.nextBoolean() ? ModSounds.RRC_SCOUT_IDLE_1.get() : ModSounds.RRC_SCOUT_IDLE_2.get();
+    };
+    protected SoundEvent getStepSound() {
+        return this.random.nextBoolean() ?
+            ModSounds.RRC_SCOUT_WALK_1.get() :
+            ModSounds.RRC_SCOUT_WALK_2.get();
+    };
+    protected SoundEvent getDeathSound() {
+        return this.random.nextBoolean() ?
+            ModSounds.RRC_SCOUT_DEATH_1.get() :
+            ModSounds.RRC_SCOUT_DEATH_2.get();
+    };
 }

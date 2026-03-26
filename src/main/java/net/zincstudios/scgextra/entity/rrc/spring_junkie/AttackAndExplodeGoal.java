@@ -14,7 +14,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -60,7 +59,7 @@ public class AttackAndExplodeGoal extends Goal{
         this.agroAnimTimer = 40;
         this.parent.setAttacking(true);
         this.parent.triggerAnim("anim", "aggroed");
-        this.parent.playSound(ModSounds.RRC_SPRING_JUNKIE_SCREAM.get(), 1.5F, this.parent.getVoicePitch());
+        this.parent.playSound(ModSounds.RRC_SPRING_JUNKIE_SCREAM.get(), this.parent.getSoundVolume()*3F, this.parent.getVoicePitch());
     }
     @Override
     public void tick() {
@@ -160,7 +159,7 @@ public class AttackAndExplodeGoal extends Goal{
                 this.parent.triggerAnim("anim1", "aggroed_long");
                 this.parent.playSound(
                     this.parent.getRandom().nextBoolean() ? ModSounds.RRC_SPRING_JUNKIE_LAUGH_1.get() : ModSounds.RRC_SPRING_JUNKIE_LAUGH_2.get(), 
-                    1.5F, 
+                    this.parent.getSoundVolume(), 
                     this.parent.getVoicePitch()
                 );
             }
@@ -169,7 +168,7 @@ public class AttackAndExplodeGoal extends Goal{
             this.parent.triggerAnim("behaviour", "death");
             this.parent.playSound(
                     deathSounds[this.parent.getRandom().nextInt(deathSounds.length)],
-                    1.5F, 
+                    this.parent.getSoundVolume(), 
                     this.parent.getVoicePitch()
                 );
             this.explodeTimer = 8;

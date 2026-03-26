@@ -2,6 +2,7 @@ package net.zincstudios.scgextra.entity.rrc.drone;
 
 import org.jetbrains.annotations.Nullable;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -22,6 +23,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.StunnedGoal;
@@ -134,11 +136,6 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable{
             this.die(this.getLastDamageSource());
         }
         updateSubentities();
-        if(tickCount%60==0 && this.getHealth()>this.getMaxHealth()/8){
-            if(this.random.nextBoolean()){
-                this.playSound(ModSounds.RRC_DRONE_IDLE.get(), 1.5F, this.getVoicePitch());
-            }
-        }
     }
     @Override
     public void die(DamageSource pDamageSource) {
@@ -226,21 +223,22 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable{
         return super.addEffect(effectInstance, entity)
                 && this.handleAddEffectStun(effectInstance, entity);
     }
-    @Override
-    protected void playHurtSound(DamageSource pSource) {
-        this.ambientSoundTime = -this.getAmbientSoundInterval();
-        SoundEvent soundevent = hurtSounds[this.random.nextInt(hurtSounds.length)];
-        if (soundevent != null) {
-            this.playSound(soundevent, 1.5F, this.getVoicePitch());
-        }
-    }
     protected SoundEvent getDeathSound() {
         return this.random.nextBoolean() ? ModSounds.RRC_DRONE_DEATH_1.get() : ModSounds.RRC_DRONE_DEATH_2.get();
     };
-    protected void playStepSound(net.minecraft.core.BlockPos pPos, net.minecraft.world.level.block.state.BlockState pState) {
-        super.playStepSound(pPos, pState);
-        if(this.random.nextFloat() < 0.3f  && this.getHealth()>this.getMaxHealth()/8){
-            this.playSound(ModSounds.RRC_DRONE_WALK.get(), 1.5F, this.getVoicePitch());
-        }
+    protected SoundEvent getAmbientSound() {
+        return ModSounds.RRC_DRONE_IDLE.get();
+    };
+    protected SoundEvent getHurtSound(DamageSource pDamageSource) {
+        return hurtSounds[this.random.nextInt(hurtSounds.length)];
+    };
+    protected SoundEvent getStepSound() {
+      return ModSounds.RRC_DRONE_WALK.get();
+    }
+    protected void playStepSound(BlockPos pPos, BlockState pBlock) {
+        this.playSound(this.getStepSound(), this.getSoundVolume(), 1.0F);
+    }
+    protected float getSoundVolume() {
+        return 2F;
     };
 }

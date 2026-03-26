@@ -1,9 +1,11 @@
 package net.zincstudios.scgextra.entity.rrc.spring_junkie;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,6 +19,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.zincstudios.scgextra.Faction;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.sounds.ModSounds;
@@ -71,7 +74,7 @@ public class SpringJunkieEntity extends Monster implements GeoEntity{
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-        .add(Attributes.FOLLOW_RANGE, 35.0D)
+        .add(Attributes.FOLLOW_RANGE, 60.0D)
         .add(Attributes.MOVEMENT_SPEED, 0.3F)
         .add(Attributes.ARMOR, 6.0D)
         .add(Attributes.MAX_HEALTH, 30.0D);
@@ -99,26 +102,27 @@ public class SpringJunkieEntity extends Monster implements GeoEntity{
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true, entity -> Faction.isEnemies(this, entity)));
     }
-    @Override
-    protected void playHurtSound(DamageSource pSource) {
-        this.ambientSoundTime = -this.getAmbientSoundInterval();
-        SoundEvent soundevent = ModSounds.RRC_SPRING_JUNKIE_DEATH_1.get();
-        if (soundevent != null) {
-            this.playSound(soundevent, 0.5F, this.getVoicePitch());
+    protected SoundEvent getHurtSound(DamageSource pDamageSource) {
+        return ModSounds.RRC_SPRING_JUNKIE_DEATH_1.get();
+    };
+    protected SoundEvent getStepSound() {
+        if(this.getAttacking()){
+            if(this.tickCount%20==0){
+                return this.random.nextBoolean() ? 
+                ModSounds.RRC_SPRING_JUNKIE_RUN_1.get() : 
+                ModSounds.RRC_SPRING_JUNKIE_RUN_2.get();
+            }
+        }
+        if(this.tickCount%20==0){
+            return walkingSounds[this.random.nextInt(walkingSounds.length)];
+        }else{
+            return SoundEvents.IRON_GOLEM_STEP;
         }
     }
-    protected void playStepSound(net.minecraft.core.BlockPos pPos, net.minecraft.world.level.block.state.BlockState pState) {
-        super.playStepSound(pPos, pState);
-        if(this.random.nextFloat() < 0.3f  && this.getHealth()>this.getMaxHealth()/8){
-            this.playSound(
-                this.getAttacking() ?
-                walkingSounds[this.random.nextInt(walkingSounds.length)] : 
-                this.random.nextBoolean() ? 
-                ModSounds.RRC_SPRING_JUNKIE_RUN_1.get() : 
-                ModSounds.RRC_SPRING_JUNKIE_RUN_2.get(), 
-                1.5F, 
-                this.getVoicePitch()
-            );
-        }
+    protected void playStepSound(BlockPos pPos, BlockState pBlock) {
+        this.playSound(this.getStepSound(), this.getSoundVolume(), 1.0F);
+    }
+    protected float getSoundVolume() {
+        return 2F;
     };
 }

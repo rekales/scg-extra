@@ -1,8 +1,11 @@
 package net.zincstudios.scgextra.entity.rrc.tallman;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
@@ -15,8 +18,11 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
 import net.zincstudios.scgextra.Faction;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.sounds.ModSounds;
+
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -33,7 +39,14 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class TallmanEntity extends Monster implements GeoEntity {
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
-
+    private SoundEvent[] hurtSounds = {
+        ModSounds.RRC_TALLMAN_HURT_1.get(),
+        ModSounds.RRC_TALLMAN_HURT_2.get(),
+        ModSounds.RRC_TALLMAN_HURT_3.get(),
+        ModSounds.RRC_TALLMAN_HURT_4.get(),
+        ModSounds.RRC_TALLMAN_HURT_5.get(),
+        ModSounds.RRC_TALLMAN_HURT_6.get()
+    };
     public TallmanEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
     }
@@ -88,4 +101,26 @@ public class TallmanEntity extends Monster implements GeoEntity {
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return geoCache;
     }
+    protected SoundEvent getHurtSound(DamageSource pDamageSource) {
+        return hurtSounds[this.random.nextInt(hurtSounds.length)];
+    };
+    protected SoundEvent getAmbientSound() {
+        return this.random.nextBoolean() ? ModSounds.RRC_TALLMAN_IDLE_1.get() : ModSounds.RRC_TALLMAN_IDLE_2.get();
+    };
+    protected SoundEvent getStepSound() {
+        return this.random.nextBoolean() ?
+            ModSounds.RRC_TALLMAN_WALK_1.get() :
+            ModSounds.RRC_TALLMAN_WALK_2.get();
+    };
+    protected SoundEvent getDeathSound() {
+        return this.random.nextBoolean() ?
+            ModSounds.RRC_TALLMAN_DEATH_1.get() :
+            ModSounds.RRC_TALLMAN_DEATH_2.get();
+    };
+    protected void playStepSound(BlockPos pPos, BlockState pBlock) {
+        this.playSound(this.getStepSound(), this.getSoundVolume(), 1.0F);
+    }
+    protected float getSoundVolume() {
+        return 2F;
+    };
 }
