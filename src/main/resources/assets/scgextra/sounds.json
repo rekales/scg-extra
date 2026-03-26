@@ -310,5 +310,59 @@
         "sounds": [
             "scgextra:rrc/tallman/walk2"
         ]
+    },
+    "oppressor.alert": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/oppressor/alert"
+        ]
+    },
+    "oppressor.death_1": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/oppressor/death_1"
+        ]
+    },
+    "oppressor.death_2": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/oppressor/death_2"
+        ]
+    },
+    "oppressor.hurt_1": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/oppressor/hurt_1"
+        ]
+    },
+    "oppressor.hurt_2": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/oppressor/hurt_2"
+        ]
+    },
+    "oppressor.idle_1": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/oppressor/hurt_1"
+        ]
+    },
+    "oppressor.idle_2": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/oppressor/hurt_2"
+        ]
+    },
+    "oppressor.idle_3": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/oppressor/hurt_3"
+        ]
+    },
+    "scrapguard.punch": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/oppressor/punch"
+        ]
     }
 }

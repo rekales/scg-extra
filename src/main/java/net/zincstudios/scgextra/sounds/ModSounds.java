@@ -129,7 +129,29 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> RRC_TALLMAN_WALK_2 = SOUND_EVENTS.register("tallman.walk2", 
         () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("tallman.walk2")));
     
+    //Oppressor
+    public static final RegistryObject<SoundEvent> RRC_OPPRESSOR_ALERT = SOUND_EVENTS.register("oppressor.alert", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("oppressor.alert")));
+    public static final RegistryObject<SoundEvent> RRC_OPPRESSOR_DEATH_1 = SOUND_EVENTS.register("oppressor.death_1", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("oppressor.death_1")));
+    public static final RegistryObject<SoundEvent> RRC_OPPRESSOR_DEATH_2 = SOUND_EVENTS.register("oppressor.death_2", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("oppressor.death_2")));
+    public static final RegistryObject<SoundEvent> RRC_OPPRESSOR_HURT_1 = SOUND_EVENTS.register("oppressor.hurt_1", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("oppressor.hurt_1")));
+    public static final RegistryObject<SoundEvent> RRC_OPPRESSOR_HURT_2 = SOUND_EVENTS.register("oppressor.hurt_2", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("oppressor.hurt_2")));
+    public static final RegistryObject<SoundEvent> RRC_OPPRESSOR_IDLE_1 = SOUND_EVENTS.register("oppressor.idle_1", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("oppressor.idle_1")));
+    public static final RegistryObject<SoundEvent> RRC_OPPRESSOR_IDLE_2 = SOUND_EVENTS.register("oppressor.idle_2", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("oppressor.idle_2")));
+    public static final RegistryObject<SoundEvent> RRC_OPPRESSOR_IDLE_3 = SOUND_EVENTS.register("oppressor.idle_3", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("oppressor.idle_3")));
     
+    //Scrapguard
+    public static final RegistryObject<SoundEvent> RRC_SCRAPGUARD_PUNCH = SOUND_EVENTS.register("scrapguard.punch", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("scrapguard.punch")));
+
+
     public static void register(IEventBus eventbus){
         SOUND_EVENTS.register(eventbus);
     }

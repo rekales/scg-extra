@@ -7,6 +7,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -233,7 +234,11 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable{
         return hurtSounds[this.random.nextInt(hurtSounds.length)];
     };
     protected SoundEvent getStepSound() {
-      return ModSounds.RRC_DRONE_WALK.get();
+        if(this.random.nextFloat() < 0.4F){
+            return ModSounds.RRC_DRONE_WALK.get();
+        }else{
+            return SoundEvents.IRON_GOLEM_STEP;
+        }
     }
     protected void playStepSound(BlockPos pPos, BlockState pBlock) {
         this.playSound(this.getStepSound(), this.getSoundVolume(), 1.0F);

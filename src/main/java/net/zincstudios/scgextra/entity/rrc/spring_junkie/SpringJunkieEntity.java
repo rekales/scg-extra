@@ -107,13 +107,13 @@ public class SpringJunkieEntity extends Monster implements GeoEntity{
     };
     protected SoundEvent getStepSound() {
         if(this.getAttacking()){
-            if(this.tickCount%20==0){
+            if(this.random.nextFloat() < 0.4F){
                 return this.random.nextBoolean() ? 
                 ModSounds.RRC_SPRING_JUNKIE_RUN_1.get() : 
                 ModSounds.RRC_SPRING_JUNKIE_RUN_2.get();
             }
         }
-        if(this.tickCount%20==0){
+        if(this.random.nextFloat() < 0.4F){
             return walkingSounds[this.random.nextInt(walkingSounds.length)];
         }else{
             return SoundEvents.IRON_GOLEM_STEP;
