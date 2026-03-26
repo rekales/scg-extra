@@ -44,8 +44,6 @@ import net.zincstudios.scgextra.Faction;
 public class DroneEntity extends Monster implements GeoEntity, Stunnable{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private static final EntityDataAccessor<Float> INACCURACY = SynchedEntityData.defineId(DroneEntity.class, EntityDataSerializers.FLOAT);
-    private boolean deathAnimDone = false;
-    private int deathTick = 0;
     private final DronePart[] subEntities;
     private SoundEvent[] hurtSounds = {
         ModSounds.RRC_DRONE_HURT_1.get(),
@@ -111,8 +109,13 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable{
         .triggerableAnim("gun_firing", RawAnimation.begin().thenPlay("gun_firing")));
         controllers.add(new AnimationController<>(this, "behaviour", 0, state -> PlayState.CONTINUE)
         .triggerableAnim("stun", RawAnimation.begin().thenPlay("stun")));
-        controllers.add(new AnimationController<>(this, "dBehaviour", 0, state -> PlayState.CONTINUE)
-        .triggerableAnim("death", RawAnimation.begin().thenPlay("death")));
+        controllers.add(new AnimationController<>(this, "death", 2, state -> {
+            if (state.getAnimatable().isDeadOrDying()) {
+                return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("death"));
+            } else {
+                return PlayState.STOP;
+            }
+        }));
     }
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
@@ -125,24 +128,7 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable{
     @Override
     public void tick() {
         super.tick();
-        if(this.getHealth()<=1 && deathTick <= 15){
-            if(this.deathTick==0){
-                this.triggerAnim("dBehaviour", "death");
-                this.setNoAi(true);
-            }
-            deathTick++;
-        }else if(deathTick > 15){
-            this.deathAnimDone = true;
-            this.setHealth(0);
-            this.die(this.getLastDamageSource());
-        }
         updateSubentities();
-    }
-    @Override
-    public void die(DamageSource pDamageSource) {
-        if(deathAnimDone){
-            super.die(pDamageSource);
-        }else{this.setHealth(1);}
     }
     @Override
     public boolean hurt(DamageSource pSource, float pAmount) {
@@ -245,5 +231,12 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable{
     }
     protected float getSoundVolume() {
         return 2F;
+    };
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime >= 18 && !this.level().isClientSide() && !this.isRemoved()) {
+            this.level().broadcastEntityEvent(this, (byte)60);
+            this.remove(RemovalReason.KILLED);
+        }
     };
 }

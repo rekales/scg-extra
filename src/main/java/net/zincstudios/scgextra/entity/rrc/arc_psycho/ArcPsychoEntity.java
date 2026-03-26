@@ -28,8 +28,6 @@ import net.zincstudios.scgextra.Faction;
 
 public class ArcPsychoEntity extends Monster implements GeoEntity{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
-    private int deathTick = 0;
-    private boolean deathAnimDone = false;
     public ArcPsychoEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
@@ -62,8 +60,13 @@ public class ArcPsychoEntity extends Monster implements GeoEntity{
         }));
         controllers.add(new AnimationController<>(this, "attack", 0, state -> PlayState.CONTINUE)
         .triggerableAnim("attack", RawAnimation.begin().thenPlay("attack")));
-        controllers.add(new AnimationController<>(this, "behaviour", 0, state -> PlayState.CONTINUE)
-        .triggerableAnim("death", RawAnimation.begin().thenPlay("death")));
+        controllers.add(new AnimationController<>(this, "death", 2, state -> {
+            if (state.getAnimatable().isDeadOrDying()) {
+                return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("death"));
+            } else {
+                return PlayState.STOP;
+            }
+        }));
     }
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
@@ -74,31 +77,18 @@ public class ArcPsychoEntity extends Monster implements GeoEntity{
         .add(Attributes.MAX_HEALTH, 40.0D);
     }
     @Override
-    public void tick() {
-        super.tick();
-        if(this.getHealth()<=1 && deathTick <= 9){
-            if(this.deathTick==0){
-                this.triggerAnim("behaviour", "death");
-                this.setNoAi(true);
-            }
-            deathTick++;
-        }else if(deathTick > 9){
-            this.deathAnimDone = true;
-            this.setHealth(0);
-            this.die(this.getLastDamageSource());
-        }
-    }
-    @Override
-    public void die(DamageSource pDamageSource) {
-        if(deathAnimDone){
-            super.die(pDamageSource);
-        }else{this.setHealth(1);}
-    }
-    @Override
     public boolean hurt(DamageSource pSource, float pAmount) {
         if(pSource.is(DamageTypes.FALL) || pSource.is(DamageTypes.LIGHTNING_BOLT)){
             return false;
         }
         return super.hurt(pSource, pAmount);
+    }
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime >= 12 && !this.level().isClientSide() && !this.isRemoved()) {
+            this.level().broadcastEntityEvent(this, (byte)60);
+            this.remove(RemovalReason.KILLED);
+        }
     }
 }

@@ -34,8 +34,6 @@ import javax.annotation.Nullable;
 
 public class ScoutEntity extends Zombie implements GeoEntity{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
-    private boolean deathAnimDone = false;
-    private int deathTick = 0;
     private SoundEvent[] hurtSounds = {
         ModSounds.RRC_SCOUT_HURT_1.get(),
         ModSounds.RRC_SCOUT_HURT_2.get(),
@@ -64,8 +62,13 @@ public class ScoutEntity extends Zombie implements GeoEntity{
             }
             return PlayState.CONTINUE;
         }));
-        controllers.add(new AnimationController<>(this, "behaviour", 0, state -> PlayState.CONTINUE)
-        .triggerableAnim("death", RawAnimation.begin().thenPlay("death")));
+        controllers.add(new AnimationController<>(this, "death", 2, state -> {
+            if (state.getAnimatable().isDeadOrDying()) {
+                return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("death"));
+            } else {
+                return PlayState.STOP;
+            }
+        }));
     }
     public static AttributeSupplier.Builder createAttributes() {
         return Zombie.createAttributes()
@@ -102,25 +105,13 @@ public class ScoutEntity extends Zombie implements GeoEntity{
         return false;
     }
     @Override
-    public void tick() {
-        super.tick();
-        if(this.getHealth()<=1 && deathTick <= 20){
-            if(this.deathTick==0){
-                this.triggerAnim("behaviour", "death");
-                this.setNoAi(true);
-            }
-            deathTick++;
-        }else if(deathTick > 20){
-            this.deathAnimDone = true;
-            this.setHealth(0);
-            this.die(this.getLastDamageSource());
+    protected void tickDeath() {
+        // Override to only extend death time
+        ++this.deathTime;
+        if (this.deathTime >= 20 && !this.level().isClientSide() && !this.isRemoved()) {
+            this.level().broadcastEntityEvent(this, (byte)60);
+            this.remove(RemovalReason.KILLED);
         }
-    }
-    @Override
-    public void die(DamageSource pDamageSource) {
-        if(deathAnimDone){
-            super.die(pDamageSource);
-        }else{this.setHealth(1);}
     }
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
         return hurtSounds[this.random.nextInt(hurtSounds.length)];

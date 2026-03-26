@@ -1,6 +1,7 @@
 package net.zincstudios.scgextra.entity.rrc.scout;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.zincstudios.scgextra.SCGExtra;
@@ -14,7 +15,7 @@ import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 
-public class ScoutRenderer extends GeoEntityRenderer<ScoutEntity>{
+public class ScoutRenderer<T extends ScoutEntity> extends GeoEntityRenderer<ScoutEntity>{
     public ScoutRenderer(EntityRendererProvider.Context context) {
         super(context, new ScoutModel());
         this.shadowRadius = 0.5F;
@@ -48,5 +49,14 @@ public class ScoutRenderer extends GeoEntityRenderer<ScoutEntity>{
     @Override
     public ResourceLocation getTextureLocation(ScoutEntity pEntity) {
         return SCGExtra.asResource("textures/entity/rrc/scout.png");
+    }
+    @Override
+    protected void applyRotations(ScoutEntity animatable, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTick) {
+        super.applyRotations(animatable, poseStack, ageInTicks, rotationYaw, partialTick);
+
+        if (animatable != null && animatable.deathTime > 0) {
+            float deathRotation = (animatable.deathTime + partialTick - 1f) / 20f * 1.6f;
+            poseStack.mulPose(Axis.ZP.rotationDegrees(-Math.min(Mth.sqrt(deathRotation), 1) * getDeathMaxRotation(animatable)));
+        }
     }
 }

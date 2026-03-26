@@ -28,8 +28,6 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 public class FlamingHeadEntity extends Monster implements GeoEntity {
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
-    private int deathTick = 0;
-    private boolean deathAnimDone = false;
     public FlamingHeadEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
     }
@@ -53,8 +51,13 @@ public class FlamingHeadEntity extends Monster implements GeoEntity {
             return PlayState.CONTINUE;
         }));
         controllers.add(new AnimationController<>(this, "fAttack", 0, state -> PlayState.CONTINUE).triggerableAnim("fire_attack", RawAnimation.begin().thenPlay("fire_attack")));
-        controllers.add(new AnimationController<>(this, "behaviour", 0, state -> PlayState.CONTINUE)
-        .triggerableAnim("death", RawAnimation.begin().thenPlay("death")));
+        controllers.add(new AnimationController<>(this, "death", 2, state -> {
+            if (state.getAnimatable().isDeadOrDying()) {
+                return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("death"));
+            } else {
+                return PlayState.STOP;
+            }
+        }));
     }
 
     @Override
@@ -87,24 +90,11 @@ public class FlamingHeadEntity extends Monster implements GeoEntity {
         return false;
     }
     @Override
-    public void tick() {
-        super.tick();
-        if(this.getHealth()<=1 && deathTick <= 20){
-            if(this.deathTick==0){
-                this.triggerAnim("behaviour", "death");
-                this.setNoAi(true);
-            }
-            deathTick++;
-        }else if(deathTick > 20){
-            this.deathAnimDone = true;
-            this.setHealth(0);
-            this.die(this.getLastDamageSource());
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime >= 20 && !this.level().isClientSide() && !this.isRemoved()) {
+            this.level().broadcastEntityEvent(this, (byte)60);
+            this.remove(RemovalReason.KILLED);
         }
-    }
-    @Override
-    public void die(DamageSource pDamageSource) {
-        if(deathAnimDone){
-            super.die(pDamageSource);
-        }else{this.setHealth(1);}
     }
 }
