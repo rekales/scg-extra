@@ -11,11 +11,19 @@ import top.ribs.scguns.entity.ai.GunAttackGoal;
 // Much copied from MeleeAttackGoal
 public class MeleeGunAttackGoal<T extends PathfinderMob> extends GunAttackGoal<T> {
 
+    private final int damageDelay;
     private int ticksUntilNextAttack;
+    private int ticksUntilDamage;
 
     public MeleeGunAttackGoal(T shooter, ItemStack gunStack, float speedModifier, AIType aiType, int difficulty) {
-        super(shooter, gunStack, speedModifier, aiType, difficulty);
+        this(shooter, gunStack, speedModifier, aiType, difficulty, 0);
     }
+
+    public MeleeGunAttackGoal(T shooter, ItemStack gunStack, float speedModifier, AIType aiType, int difficulty, int damageDelay) {
+        super(shooter, gunStack, speedModifier, aiType, difficulty);
+        this.damageDelay = damageDelay;
+    }
+
 
     @Override
     public void start() {
@@ -29,13 +37,24 @@ public class MeleeGunAttackGoal<T extends PathfinderMob> extends GunAttackGoal<T
 
         LivingEntity target = this.shooter.getTarget();
         if (target != null) {
-            double d0 = this.shooter.getPerceivedTargetDistanceSquareForMeleeAttack(target);
+            double distToEnemySqr = this.shooter.getPerceivedTargetDistanceSquareForMeleeAttack(target);
             this.ticksUntilNextAttack = Math.max(this.ticksUntilNextAttack - 1, 0);
-            checkAndPerformAttack(target, d0);
-        }
+            checkAndPerformAttack(target, distToEnemySqr);
 
-        if (this.ticksUntilNextAttack > 10) {
-            this.attackTime++;  // delay shooting
+            if (this.ticksUntilNextAttack > 10) {
+                this.attackTime++;  // delay shooting
+            }
+
+            if (this.ticksUntilDamage != -1000) {
+                if (this.ticksUntilDamage > 0) {
+                    this.ticksUntilDamage--;
+                } else {
+                    if (distToEnemySqr <= this.getAttackReachSqr(target)) {
+                        this.shooter.doHurtTarget(target);
+                        this.ticksUntilDamage = -1000;
+                    }
+                }
+            }
         }
     }
 
@@ -44,12 +63,18 @@ public class MeleeGunAttackGoal<T extends PathfinderMob> extends GunAttackGoal<T
         if (distToEnemySqr <= d0 && this.ticksUntilNextAttack <= 0) {
             this.resetAttackCooldown();
             this.shooter.swing(InteractionHand.MAIN_HAND);
-            this.shooter.doHurtTarget(enemy);
+            this.ticksUntilDamage = this.damageDelay;
             if (this.shooter instanceof GeoEntity geoEntity) {
                 geoEntity.triggerAnim("behaviour", "melee");
             }
         }
+    }
 
+    protected void checkAndDamageTarget(LivingEntity enemy, double distToEnemySqr) {
+        double d0 = this.getAttackReachSqr(enemy);
+        if (distToEnemySqr <= this.getAttackReachSqr(enemy)) {
+            this.shooter.doHurtTarget(enemy);
+        }
     }
 
     // From MeleeAttackGoal
