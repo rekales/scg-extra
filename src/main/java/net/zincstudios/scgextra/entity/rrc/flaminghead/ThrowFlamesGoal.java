@@ -2,9 +2,7 @@ package net.zincstudios.scgextra.entity.rrc.flaminghead;
 
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.ai.goal.Goal;
-import top.ribs.scguns.entity.projectile.FireRoundEntity;
-import top.ribs.scguns.init.ModEntities;
-import top.ribs.scguns.init.ModItems;
+import net.zincstudios.scgextra.entity.projectile.FireProjectile;
 import top.ribs.scguns.init.ModSounds;
 
 public class ThrowFlamesGoal extends Goal{
@@ -30,28 +28,25 @@ public class ThrowFlamesGoal extends Goal{
     public void tick() {
         super.tick();
         this.ticks++;
-        if(!(this.ticks%15==0))return;
+        if(!(this.ticks%8==0))return;
         for (int i = 0; i < 360; i += 10) {
             double rad = Math.toRadians(i);
-            double x = this.parent.getX() + Math.cos(rad) * 6;
-            double z = this.parent.getZ() + Math.sin(rad) * 6;
-            FireRoundEntity en = new FireRoundEntity(
-                ModEntities.FIRE_ROUND_PROJECTILE.get(), 
-                this.parent.level(), 
-                this.parent, 
-                ModItems.BASKER.get().getDefaultInstance(), 
-                ModItems.BASKER.get(),
-                ModItems.BASKER.get().getGun()
-            );
-            en.setPos(this.parent.position().add(0, 2, 0));
+            double x = this.parent.getX() + Math.cos(rad) * 4;
+            double z = this.parent.getZ() + Math.sin(rad) * 4;
+            FireProjectile en = new FireProjectile(
+                    this.parent.level(),
+                    this.parent
+                );
+            en.setPos(this.parent.position().add(0, 3, 0));
             double dx = x - this.parent.getX();
-            double dy = this.parent.getY() - (this.parent.getY()+2);
+            double dy = this.parent.getY() - (this.parent.getY()+3);
             double dz = z - this.parent.getZ();
-            double dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
-            en.setDeltaMovement(
-                dx / dist * 1F,
-                dy / dist * 1F,
-                dz / dist * 1F
+            en.shoot(
+                dx,
+                dy,
+                dz,
+                2.5F,
+                0F
             );
             this.parent.level().addFreshEntity(en);
             this.parent.level().playSound(null, this.parent.getX(), this.parent.getY(), this.parent.getZ(), ModSounds.FLAMETHROWER_FIRE_2.get(), SoundSource.HOSTILE, 0.2F, 1.2F);

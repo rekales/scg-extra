@@ -30,6 +30,7 @@ import net.zincstudios.scgextra.entity.whaler.tentacliator.GlowingTentacliatorRe
 import net.zincstudios.scgextra.entity.whaler.guardian_statue.GuardianStatueEntity;
 import net.zincstudios.scgextra.entity.whaler.guardian_statue.GuardianStatueRenderer;
 import net.zincstudios.scgextra.entity.projectile.ArmoredWhaleProjectileEntity;
+import net.zincstudios.scgextra.entity.projectile.FireProjectile;
 import net.zincstudios.scgextra.entity.whaler.pufficus.PufficusEntity;
 import net.zincstudios.scgextra.entity.whaler.pufficus.PufficusRenderer;
 import net.zincstudios.scgextra.entity.whaler.raid_summoner.RaidSummonerEntity;
@@ -58,6 +59,7 @@ import top.ribs.scguns.common.BoundingBoxManager;
 import top.ribs.scguns.common.headshot.BasicHeadshotBox;
 import top.ribs.scguns.common.headshot.RotatedHeadshotBox;
 import top.ribs.scguns.entity.client.EnemyProjectileRenderer;
+import net.minecraft.client.renderer.entity.EntityRenderer;
 
 public class ModEntities {
     private static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, SCGExtra.MOD_ID);
@@ -158,6 +160,14 @@ public class ModEntities {
                     .sized(0.6F, 2F)
                     .build("arc_psycho"));
 
+    public static final RegistryObject<EntityType<FireProjectile>> FIRE_PROJECTILE = ENTITY_TYPES
+            .register("fire_projectile", () -> EntityType.Builder.of(FireProjectile::create, MobCategory.MISC)
+                    .sized(0.5F, 0.5F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(1)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build("fire_projectile"));
+
 
     public static void register(IEventBus modEventBus){
         ENTITY_TYPES.register(modEventBus);
@@ -183,6 +193,7 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.NET.get(), NetEntityRenderer::new);
         EntityRenderers.register(ModEntities.ARMORED_WHALE.get(), ArmoredWhaleRenderer::new);
         EntityRenderers.register(ModEntities.WHALE_PROJECTILE.get(), EnemyProjectileRenderer::new);
+        EntityRenderers.register(ModEntities.FIRE_PROJECTILE.get(), EnemyProjectileRenderer::new);
         EntityRenderers.register(ModEntities.RAID_SUMMONER.get(), RaidSummonerRenderer::new);
 
         EntityRenderers.register(ModEntities.DRONE.get(), DroneEntityRenderer::new);
