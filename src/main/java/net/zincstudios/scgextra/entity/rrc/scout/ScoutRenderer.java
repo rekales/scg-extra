@@ -5,6 +5,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.zincstudios.scgextra.SCGExtra;
+import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer;
@@ -37,8 +38,13 @@ public class ScoutRenderer<T extends ScoutEntity> extends GeoEntityRenderer<Scou
             @Override
             protected void renderStackForBone(PoseStack poseStack, GeoBone bone, ItemStack stack, ScoutEntity animatable, MultiBufferSource bufferSource, float partialTick, int packedLight, int packedOverlay) {
                 if (bone.getName().equals("RightArm")) {
-                    poseStack.translate(-0.1, -0.4, 0.0);
-                    poseStack.mulPose(Axis.XP.rotationDegrees(-90));
+                    if(animatable.isAiming()){
+                        poseStack.translate(0.0, -0.1, 0.2);
+                        poseStack.mulPose(Axis.XP.rotationDegrees(-145));
+                    }else{
+                        poseStack.translate(-0.1, -0.4, 0.0);
+                        poseStack.mulPose(Axis.XP.rotationDegrees(-45));
+                    }
                 }
 
                 super.renderStackForBone(poseStack, bone, stack, animatable, bufferSource, partialTick, packedLight, packedOverlay);
