@@ -22,6 +22,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.zincstudios.scgextra.Faction;
+import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.sounds.ModSounds;
 
@@ -39,10 +40,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TallmanEntity extends Monster implements GeoEntity {
+public class TallmanEntity extends GunnerEntity implements GeoEntity {
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
-    private SoundEvent[] hurtSounds = {
+    private final SoundEvent[] hurtSounds = {
         ModSounds.RRC_TALLMAN_HURT_1.get(),
         ModSounds.RRC_TALLMAN_HURT_2.get(),
         ModSounds.RRC_TALLMAN_HURT_3.get(),
@@ -99,6 +100,14 @@ public class TallmanEntity extends Monster implements GeoEntity {
             }
         }).setAnimationSpeed(1.3));
 
+        controllers.add(new AnimationController<>(this, "shoot", 2, state -> {
+            if (state.getAnimatable().isAiming()) {
+                return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("idle_aim"));
+            } else {
+                return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("aim_idle"));
+            }
+        }).setAnimationSpeed(1.5));
+
         controllers.add(new AnimationController<>(this, "death", 2, state -> {
             if (state.getAnimatable().isDeadOrDying()) {
                 return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("death"));
@@ -124,10 +133,12 @@ public class TallmanEntity extends Monster implements GeoEntity {
     }
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
         return hurtSounds[this.random.nextInt(hurtSounds.length)];
-    };
+    }
+
     protected SoundEvent getAmbientSound() {
         return this.random.nextBoolean() ? ModSounds.RRC_TALLMAN_IDLE_1.get() : ModSounds.RRC_TALLMAN_IDLE_2.get();
-    };
+    }
+
     protected SoundEvent getStepSound() {
         if(this.random.nextFloat() < 0.4F){
             return this.random.nextBoolean() ?
@@ -136,16 +147,19 @@ public class TallmanEntity extends Monster implements GeoEntity {
         }else{
             return SoundEvents.IRON_GOLEM_STEP;
         }
-    };
+    }
+
     protected SoundEvent getDeathSound() {
         return this.random.nextBoolean() ?
             ModSounds.RRC_TALLMAN_DEATH_1.get() :
             ModSounds.RRC_TALLMAN_DEATH_2.get();
-    };
+    }
+
     protected void playStepSound(BlockPos pPos, BlockState pBlock) {
         this.playSound(this.getStepSound(), this.getSoundVolume(), 3.0F);
     }
+
     protected float getSoundVolume() {
         return 2F;
-    };
+    }
 }

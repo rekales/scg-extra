@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import top.ribs.scguns.entity.ai.GunAttackGoal;
 
 // TODO: consider synced data for target entity too.
+// If so, consider updating client-side rotation to look at the target to mitigate minecraft's shitty ai look controls.
 
 /**
  * Base class for entities that uses guns and the GunAttackGoal goal.
