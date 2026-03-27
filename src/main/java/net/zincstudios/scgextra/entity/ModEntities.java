@@ -23,6 +23,8 @@ import net.zincstudios.scgextra.entity.rrc.spring_junkie.SpringJunkieEntity;
 import net.zincstudios.scgextra.entity.rrc.spring_junkie.SpringJunkieRenderer;
 import net.zincstudios.scgextra.entity.rrc.arc_psycho.ArcPsychoEntity;
 import net.zincstudios.scgextra.entity.rrc.arc_psycho.ArcPsychoEntityRenderer;
+import net.zincstudios.scgextra.entity.rrc.copper_knight.CopperKnightEntity;
+import net.zincstudios.scgextra.entity.rrc.copper_knight.CopperKnightRenderer;
 
 import net.zincstudios.scgextra.entity.whaler.fishfolk.FishFolkRenderer;
 import net.zincstudios.scgextra.entity.whaler.tentacliator.GlowingTentacliatorEntity;
@@ -160,6 +162,11 @@ public class ModEntities {
                     .sized(0.6F, 2F)
                     .build("arc_psycho"));
 
+    public static final RegistryObject<EntityType<CopperKnightEntity>> COPPER_KNIGHT = ENTITY_TYPES
+            .register("copper_knight", () -> EntityType.Builder.of(CopperKnightEntity::new, MobCategory.MONSTER)
+                    .sized(0.6F, 2F)
+                    .build("copper_knight"));
+
     public static final RegistryObject<EntityType<FireProjectile>> FIRE_PROJECTILE = ENTITY_TYPES
             .register("fire_projectile", () -> EntityType.Builder.of(FireProjectile::create, MobCategory.MISC)
                     .sized(0.5F, 0.5F)
@@ -204,6 +211,7 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.FLAMING_HEAD.get(), FlamingHeadRenderer::new);
         EntityRenderers.register(ModEntities.SCRAP_GUARD.get(), ScrapGuardRenderer::new);
         EntityRenderers.register(ModEntities.ARC_PSYCHO.get(), ArcPsychoEntityRenderer::new);
+        EntityRenderers.register(ModEntities.COPPER_KNIGHT.get(), CopperKnightRenderer::new);
     }
 
     private static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
@@ -229,6 +237,7 @@ public class ModEntities {
         event.put(ModEntities.FLAMING_HEAD.get(), FlamingHeadEntity.createAttributes().build());
         event.put(ModEntities.SCRAP_GUARD.get(), ScrapGuardEntity.createAttributes().build());
         event.put(ModEntities.ARC_PSYCHO.get(), ArcPsychoEntity.createAttributes().build());
+        event.put(ModEntities.COPPER_KNIGHT.get(), CopperKnightEntity.createAttributes().build());
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
