@@ -23,6 +23,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.zincstudios.scgextra.Faction;
+import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.sounds.ModSounds;
 
@@ -41,7 +42,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class ScrapGuardEntity extends Monster implements GeoEntity {
+public class ScrapGuardEntity extends GunnerEntity implements GeoEntity {
+
+    private static final RawAnimation AIMING = RawAnimation.begin().thenPlayAndHold("idle_aim");
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private SoundEvent[] idleSounds = {
@@ -86,25 +89,36 @@ public class ScrapGuardEntity extends Monster implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "walk/idle", 2, state -> {
-            if (state.isMoving()) {
-                return state.setAndContinue(RawAnimation.begin().thenLoop("walk"));
-            } else {
-                return state.setAndContinue(RawAnimation.begin().thenLoop("idle"));
-            }
-        }));
+        controllers.add(new AnimationController<>(this, "walk/idle/aim", 4,
+                state -> {
+                    if (state.getAnimatable().isAiming()) {
+                        return state.setAndContinue(AIMING);
+                    } else {
+                        RawAnimation anim = RawAnimation.begin();
+                        if (state.isCurrentAnimation(AIMING)) {
+                            anim = anim.thenPlay("aim_idle");
+                        }
+                        if (state.isMoving()) {
+                            return state.setAndContinue(anim.thenLoop("walk"));
+                        } else {
+                            return state.setAndContinue(anim.thenLoop("idle"));
+                            // TODO: idle variation switching
+                        }
+                    }
+                }
+        ).setAnimationSpeed(1.3));
 
-        controllers.add(new AnimationController<>(this, "death", 2, state -> {
+        controllers.add(new AnimationController<>(this, "behaviour", 2, state -> PlayState.STOP)
+                .triggerableAnim("melee", RawAnimation.begin().thenPlay("melee_attack"))
+        );
+
+        controllers.add(new AnimationController<>(this, "death", 4, state -> {
             if (state.getAnimatable().isDeadOrDying()) {
                 return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("death"));
             } else {
                 return PlayState.STOP;
             }
         }));
-
-        controllers.add(new AnimationController<>(this, "behaviour", 0, state -> PlayState.STOP)
-                .triggerableAnim("melee", RawAnimation.begin().thenPlay("melee_attack"))
-        );
     }
 
     @Override
