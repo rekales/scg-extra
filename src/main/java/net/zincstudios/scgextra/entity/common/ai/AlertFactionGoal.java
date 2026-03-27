@@ -12,12 +12,18 @@ import java.util.List;
 public class AlertFactionGoal extends Goal {
 
     private final PathfinderMob mob;
+    private final boolean instantAlert;
     private final int cooldownDuration;
     private long cooldownEnd = 0;  // level timestamp
 
     public AlertFactionGoal(PathfinderMob mob, int cooldownDuration) {
+        this(mob, cooldownDuration, false);
+    }
+
+    public AlertFactionGoal(PathfinderMob mob, int cooldownDuration, boolean instantAlert) {
         this.mob = mob;
         this.cooldownDuration = cooldownDuration;
+        this.instantAlert = instantAlert;
     }
 
     @Override
@@ -28,7 +34,12 @@ public class AlertFactionGoal extends Goal {
 
     @Override
     public void start() {
-        this.cooldownEnd = this.mob.level().getGameTime() + this.cooldownDuration/2;  // Half cooldown at start
+        if (this.instantAlert) {
+            alertFaction();
+            this.cooldownEnd = this.mob.level().getGameTime() + this.cooldownDuration;
+        } else {
+            this.cooldownEnd = this.mob.level().getGameTime() + this.cooldownDuration/2;  // Half cooldown at start
+        }
     }
 
     @Override

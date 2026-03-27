@@ -33,7 +33,7 @@ public class FlareSummonGoal extends Goal {
 
     @Override
     public void start() {
-        this.cooldownEnd = this.mob.level().getGameTime() + this.cooldownDuration;
+        this.cooldownEnd = this.mob.level().getGameTime() + this.cooldownDuration/2;  // Half cooldown at start
     }
 
     @Override

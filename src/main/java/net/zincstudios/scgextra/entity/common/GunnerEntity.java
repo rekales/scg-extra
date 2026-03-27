@@ -14,6 +14,8 @@ import top.ribs.scguns.entity.ai.GunAttackGoal;
 // TODO: consider synced data for target entity too.
 // If so, consider updating client-side rotation to look at the target to mitigate minecraft's shitty ai look controls.
 
+// TODO: consider manipulating goal to hold fire.
+
 /**
  * Base class for entities that uses guns and the GunAttackGoal goal.
  * Used for handling and fetching states from the aforementioned goal.
