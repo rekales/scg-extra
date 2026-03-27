@@ -43,6 +43,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 public class TallmanEntity extends GunnerEntity implements GeoEntity {
 
+    private static final RawAnimation AIMING = RawAnimation.begin().thenPlayAndHold("idle_aim");
+
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private final SoundEvent[] hurtSounds = {
         ModSounds.RRC_TALLMAN_HURT_1.get(),
@@ -69,7 +71,7 @@ public class TallmanEntity extends GunnerEntity implements GeoEntity {
         // gun attack goal to be automatically added on finalizeSpawn
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
 
         this.goalSelector.addGoal(3, new AlertFactionGoal(this, 200, true));
         this.targetSelector.addGoal(1, new HurtByNonFactionGoal(this));
@@ -89,25 +91,24 @@ public class TallmanEntity extends GunnerEntity implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "walk/idle", 2, state -> {
-            if (state.isMoving()) {
-                return state.setAndContinue(RawAnimation.begin().thenLoop("walk"));
-            } else {
-                // TODO: better looping
-                return state.setAndContinue(RawAnimation.begin()
-                                .thenPlayXTimes("idle", state.getAnimatable().random.nextIntBetweenInclusive(2,4))
-                                .thenLoop("idle_2")
-                );
-            }
-        }).setAnimationSpeed(1.3));
-
-        controllers.add(new AnimationController<>(this, "shoot", 2, state -> {
-            if (state.getAnimatable().isAiming()) {
-                return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("idle_aim"));
-            } else {
-                return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("aim_idle"));
-            }
-        }).setAnimationSpeed(1.5));
+        controllers.add(new AnimationController<>(this, "walk/idle/aim", 2,
+                state -> {
+                    if (state.getAnimatable().isAiming()) {
+                        return state.setAndContinue(AIMING);
+                    } else {
+                        RawAnimation anim = RawAnimation.begin();
+                        if (state.isCurrentAnimation(AIMING)) {
+                            anim = anim.thenPlay("aim_idle");
+                        }
+                        if (state.isMoving()) {
+                            return state.setAndContinue(anim.thenLoop("walk"));
+                        } else {
+                            return state.setAndContinue(anim.thenLoop("idle_2"));
+                            // TODO: idle variation switching
+                        }
+                    }
+                }
+        ).setAnimationSpeed(1.3));
 
         controllers.add(new AnimationController<>(this, "death", 2, state -> {
             if (state.getAnimatable().isDeadOrDying()) {

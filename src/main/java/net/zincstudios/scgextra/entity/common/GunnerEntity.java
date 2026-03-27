@@ -58,6 +58,7 @@ public abstract class GunnerEntity extends Monster {
         }
     }
 
+    // Can be discarded if we control setAggressive on GunAttackGoalProperly
     public boolean isAiming() {
         return this.entityData.get(AIMING);
     }
