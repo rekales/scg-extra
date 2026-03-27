@@ -1,5 +1,7 @@
 package net.zincstudios.scgextra.entity.projectile;
 
+import java.lang.reflect.Field;
+
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -13,11 +15,18 @@ import top.ribs.scguns.entity.projectile.EnemyProjectileEntity;
 public class FireProjectile extends EnemyProjectileEntity{
     private LivingEntity shooter;
     public FireProjectile(EntityType<? extends EnemyProjectileEntity> type, Level world) {
-      super(type, world);
+        super(type, world);
     }
     public FireProjectile(Level world, LivingEntity pShooter) {
-      super(world, pShooter);
-      this.shooter = pShooter;
+        super(world, pShooter);
+        this.shooter = pShooter;
+        //couldn't get a better idea for now
+        try {
+            Field trailField = EnemyProjectileEntity.class.getDeclaredField("trailSpawned");
+            trailField.setAccessible(true);
+            trailField.setBoolean(this, true);
+        } catch (Exception e) {
+        }
     }
     @Override
     public void tick() {

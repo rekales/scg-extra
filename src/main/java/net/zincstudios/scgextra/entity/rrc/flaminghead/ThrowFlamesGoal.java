@@ -1,9 +1,7 @@
 package net.zincstudios.scgextra.entity.rrc.flaminghead;
 
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.zincstudios.scgextra.entity.projectile.FireProjectile;
-import top.ribs.scguns.init.ModSounds;
 
 public class ThrowFlamesGoal extends Goal{
     private final FlamingHeadEntity parent;
@@ -49,7 +47,6 @@ public class ThrowFlamesGoal extends Goal{
                 0F
             );
             this.parent.level().addFreshEntity(en);
-            this.parent.level().playSound(null, this.parent.getX(), this.parent.getY(), this.parent.getZ(), ModSounds.FLAMETHROWER_FIRE_2.get(), SoundSource.HOSTILE, 0.2F, 1.2F);
         }
     }
 }
