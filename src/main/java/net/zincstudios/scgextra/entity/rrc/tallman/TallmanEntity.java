@@ -50,6 +50,7 @@ public class TallmanEntity extends Monster implements GeoEntity {
         ModSounds.RRC_TALLMAN_HURT_5.get(),
         ModSounds.RRC_TALLMAN_HURT_6.get()
     };
+
     public TallmanEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
     }

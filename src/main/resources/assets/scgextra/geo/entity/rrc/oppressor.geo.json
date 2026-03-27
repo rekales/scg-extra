@@ -95,6 +95,11 @@
 					]
 				},
 				{
+					"name": "right_hand",
+					"parent": "right_lower_arm",
+					"pivot": [-27.5, 26.5, -1]
+				},
+				{
 					"name": "left_arm",
 					"parent": "root",
 					"pivot": [18.25, 57.125, 0.25],
@@ -116,7 +121,7 @@
 				{
 					"name": "left_hand",
 					"parent": "left_lower_arm",
-					"pivot": [27.5, 25.5, -1]
+					"pivot": [27.5, 26.5, -1]
 				}
 			]
 		}

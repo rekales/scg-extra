@@ -3,7 +3,7 @@
 	"minecraft:geometry": [
 		{
 			"description": {
-				"identifier": "geometry.unknown",
+				"identifier": "geometry.scrap_guard",
 				"texture_width": 112,
 				"texture_height": 112,
 				"visible_bounds_width": 4,
@@ -85,7 +85,7 @@
 					]
 				},
 				{
-					"name": "left_hand",
+					"name": "left_lower_arm",
 					"parent": "left_arm",
 					"pivot": [13, 30.87234, 0.5],
 					"cubes": [
@@ -109,7 +109,7 @@
 					]
 				},
 				{
-					"name": "right_forearm",
+					"name": "right_lower_arm",
 					"parent": "right_arm",
 					"pivot": [-13, 31, 0.5],
 					"cubes": [
@@ -118,8 +118,8 @@
 				},
 				{
 					"name": "right_hand",
-					"parent": "right_forearm",
-					"pivot": [-13, 23, -0.5]
+					"parent": "right_lower_arm",
+					"pivot": [-13, 24, 0]
 				}
 			]
 		}

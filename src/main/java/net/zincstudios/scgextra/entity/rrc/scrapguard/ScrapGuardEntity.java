@@ -36,7 +36,6 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import top.ribs.scguns.config.EntityEquipmentConfig;
 import top.ribs.scguns.entity.ai.AIType;
-import top.ribs.scguns.entity.ai.GunAttackGoal;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 

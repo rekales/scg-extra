@@ -11,6 +11,8 @@ import net.zincstudios.scgextra.mixin.GunAttackGoalAccessor;
 import org.jetbrains.annotations.Nullable;
 import top.ribs.scguns.entity.ai.GunAttackGoal;
 
+// TODO: consider synced data for target entity too.
+
 /**
  * Base class for entities that uses guns and the GunAttackGoal goal.
  * Used for handling and fetching states from the aforementioned goal.

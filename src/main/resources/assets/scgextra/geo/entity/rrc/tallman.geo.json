@@ -3,7 +3,7 @@
 	"minecraft:geometry": [
 		{
 			"description": {
-				"identifier": "geometry.unknown",
+				"identifier": "geometry.tallman",
 				"texture_width": 96,
 				"texture_height": 96,
 				"visible_bounds_width": 3,
@@ -34,7 +34,7 @@
 				{
 					"name": "left_hand",
 					"parent": "left_lower_arm",
-					"pivot": [7.5, 44, -1]
+					"pivot": [7.5, 44.5, 0]
 				},
 				{
 					"name": "right_arm",
@@ -51,6 +51,11 @@
 					"cubes": [
 						{"origin": [-9.5, 42.5, -2], "size": [4, 9, 4], "uv": [54, 51], "mirror": true}
 					]
+				},
+				{
+					"name": "right_hand",
+					"parent": "right_lower_arm",
+					"pivot": [-7.5, 44.5, 0]
 				},
 				{
 					"name": "body",
