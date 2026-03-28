@@ -116,7 +116,7 @@ public class OppressorEntity extends GunnerEntity implements GeoEntity {
             );
         }).setAnimationSpeed(1.3));
 
-        controllers.add(new ExpandedAnimationController<>(this, "behaviour", 0,
+        controllers.add(new ExpandedAnimationController<>(this, "aim", 0,
                 state -> {
 
                     if (state.isCurrentAnimation(AIMING) && !state.getAnimatable().isAiming()) {
@@ -128,39 +128,36 @@ public class OppressorEntity extends GunnerEntity implements GeoEntity {
 
                     return PlayState.CONTINUE;
                 })
-                .triggerableAnim("flare",
-                        ctl -> ctl.isCurrentAnimation(AIMING)
-                            ? RawAnimation.begin().thenPlay("aim_idle").thenPlay("flare")
-                            : RawAnimation.begin().thenPlay("flare")
-                )
-                .triggerableAnim("alert",
-                        ctl -> ctl.isCurrentAnimation(AIMING)
-                                ? RawAnimation.begin().thenPlay("aim_idle").thenPlay("alert")
-                                : RawAnimation.begin().thenPlay("alert")
-                )
         );
 
-        controllers.add(new ExpandedAnimationController<>(this, "behaviour", 0,
-                state -> {
-
-                    if (state.isCurrentAnimation(AIMING) && !state.getAnimatable().isAiming()) {
-                        state.setAnimation(HOLD);
-                    }
-                    if (state.getAnimatable().isAiming()) {
-                        state.setAnimation(AIMING);
-                    }
-
-                    return PlayState.CONTINUE;
-                })
+        controllers.add(new ExpandedAnimationController<>(this, "behaviour", 0, state -> PlayState.STOP)
                 .triggerableAnim("flare",
-                        ctl -> ctl.isCurrentAnimation(AIMING)
-                                ? RawAnimation.begin().thenPlay("aim_idle").thenPlay("flare")
-                                : RawAnimation.begin().thenPlay("flare")
+                        ctl -> {
+                            AnimationController<?> aimController = this.getAnimatableInstanceCache()
+                                    .getManagerForId(this.getId())
+                                    .getAnimationControllers()
+                                    .get("aim");
+
+                            if (Objects.equals(aimController.getCurrentRawAnimation(), AIMING)) {
+                                return RawAnimation.begin().thenPlay("aim_idle").thenPlay("flare").thenPlay("idle_aim");
+                            } else {
+                                return RawAnimation.begin().thenPlay("flare");
+                            }
+                        }
                 )
                 .triggerableAnim("alert",
-                        ctl -> ctl.isCurrentAnimation(AIMING)
-                                ? RawAnimation.begin().thenPlay("aim_idle").thenPlay("alert")
-                                : RawAnimation.begin().thenPlay("alert")
+                        ctl -> {
+                            AnimationController<?> aimController = this.getAnimatableInstanceCache()
+                                    .getManagerForId(this.getId())
+                                    .getAnimationControllers()
+                                    .get("aim");
+
+                            if (Objects.equals(aimController.getCurrentRawAnimation(), AIMING)) {
+                                return RawAnimation.begin().thenPlay("aim_idle").thenPlay("alert").thenPlay("idle_aim");
+                            } else {
+                                return RawAnimation.begin().thenPlay("alert");
+                            }
+                        }
                 )
         );
 
