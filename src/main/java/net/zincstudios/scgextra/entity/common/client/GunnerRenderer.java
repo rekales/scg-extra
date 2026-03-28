@@ -14,11 +14,12 @@ public class GunnerRenderer <T extends GunnerEntity & GeoEntity> extends GeoEnti
     protected boolean noDeathRedTint = false;
     protected boolean hasCustomShadowRadius = false;
 
-    public GunnerRenderer(EntityRendererProvider.Context renderManager, GeoModel<T> model) {
+    public GunnerRenderer(EntityRendererProvider.Context renderManager, GeoModel<T> model, boolean extend) {
         super(renderManager, model);
         this.shadowRadius = 0;  // no way to get the entity type on construction
-
-        addRenderLayer(new GunGeoLayer<>(this));
+        if(!extend){
+            addRenderLayer(new GunGeoLayer<>(this));
+        }
     }
 
     @Override
