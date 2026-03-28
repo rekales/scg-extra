@@ -47,8 +47,6 @@ public class OppressorEntity extends GunnerEntity implements GeoEntity {
 
     private static final RawAnimation AIMING = RawAnimation.begin().thenPlayAndHold("idle_aim");
     private static final RawAnimation HOLD = RawAnimation.begin().thenPlay("aim_idle");
-    private static final RawAnimation FLARE = RawAnimation.begin().thenPlay("flare");
-    private static final RawAnimation ALERT = RawAnimation.begin().thenPlay("alert");
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
@@ -60,6 +58,11 @@ public class OppressorEntity extends GunnerEntity implements GeoEntity {
     
     public OppressorEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
+    }
+
+    @Override
+    public boolean isLeftHanded() {
+        return true;  // Flagging doesn't seem to work
     }
 
     @SuppressWarnings("deprecation")

@@ -59,6 +59,11 @@ public class TallmanEntity extends GunnerEntity implements GeoEntity {
         super(entityType, level);
     }
 
+    @Override
+    public boolean isLeftHanded() {
+        return true;  // Flagging doesn't seem to work
+    }
+
     @SuppressWarnings("deprecation")
     @Override
     public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {

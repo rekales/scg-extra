@@ -3,17 +3,15 @@ package net.zincstudios.scgextra.entity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.zincstudios.scgextra.SCGExtra;
+import net.zincstudios.scgextra.entity.common.client.GunnerRenderer;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntity;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntityModel;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntityRenderer;
 import net.zincstudios.scgextra.entity.rrc.flaminghead.FlamingHeadEntity;
 import net.zincstudios.scgextra.entity.rrc.flaminghead.FlamingHeadRenderer;
 import net.zincstudios.scgextra.entity.rrc.oppressor.OppressorEntity;
-import net.zincstudios.scgextra.entity.rrc.oppressor.OppressorRenderer;
 import net.zincstudios.scgextra.entity.rrc.scrapguard.ScrapGuardEntity;
-import net.zincstudios.scgextra.entity.rrc.scrapguard.ScrapGuardRenderer;
 import net.zincstudios.scgextra.entity.rrc.tallman.TallmanEntity;
-import net.zincstudios.scgextra.entity.rrc.tallman.TallmanRenderer;
 import net.zincstudios.scgextra.entity.whaler.armoredwhale.ArmoredWhaleEntity;
 import net.zincstudios.scgextra.entity.whaler.armoredwhale.ArmoredWhaleRenderer;
 import net.zincstudios.scgextra.entity.whaler.fishfolk.FishFolkEntity;
@@ -57,11 +55,11 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import top.ribs.scguns.common.BoundingBoxManager;
 import top.ribs.scguns.common.headshot.BasicHeadshotBox;
 import top.ribs.scguns.common.headshot.RotatedHeadshotBox;
 import top.ribs.scguns.entity.client.EnemyProjectileRenderer;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 
 public class ModEntities {
     private static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, SCGExtra.MOD_ID);
@@ -204,12 +202,15 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.RAID_SUMMONER.get(), RaidSummonerRenderer::new);
 
         EntityRenderers.register(ModEntities.DRONE.get(), DroneEntityRenderer::new);
-        EntityRenderers.register(ModEntities.TALLMAN.get(), TallmanRenderer::new);
+        EntityRenderers.register(ModEntities.TALLMAN.get(), (ctx) -> new GunnerRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("rrc/tallman"))).noDeathTilt());
         EntityRenderers.register(ModEntities.SCOUT.get(), ScoutRenderer::new);
-        EntityRenderers.register(ModEntities.OPPRESSOR.get(), OppressorRenderer::new);
+        EntityRenderers.register(ModEntities.OPPRESSOR.get(), (ctx) -> new GunnerRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("rrc/oppressor"))).noDeathTilt());
         EntityRenderers.register(ModEntities.SPRING_JUNKIE.get(), SpringJunkieRenderer::new);
         EntityRenderers.register(ModEntities.FLAMING_HEAD.get(), FlamingHeadRenderer::new);
-        EntityRenderers.register(ModEntities.SCRAP_GUARD.get(), ScrapGuardRenderer::new);
+        EntityRenderers.register(ModEntities.SCRAP_GUARD.get(), (ctx) -> new GunnerRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("rrc/scrap_guard"))).noDeathTilt());
         EntityRenderers.register(ModEntities.ARC_PSYCHO.get(), ArcPsychoEntityRenderer::new);
         EntityRenderers.register(ModEntities.COPPER_KNIGHT.get(), CopperKnightRenderer::new);
     }
@@ -218,7 +219,7 @@ public class ModEntities {
         event.registerLayerDefinition(NetEntityModel.LAYER_LOCATION, NetEntityModel::createBodyLayer);
     }
 
-    private static void registerAttributes(EntityAttributeCreationEvent event){
+    private static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(ModEntities.FISH_FOLK.get(), FishFolkEntity.createAttributes().build());
         event.put(ModEntities.TURTLEMAN.get(), TurtlemanEntity.createAttributes().build());
         event.put(ModEntities.SALMONSAUR.get(), SalmonsaurEntity.createAttributes().build());
@@ -244,4 +245,6 @@ public class ModEntities {
         BoundingBoxManager.registerHeadshotBox(ModEntities.TURTLEMAN.get(), new BasicHeadshotBox<>(11.0F, 28.0F));
         BoundingBoxManager.registerHeadshotBox(ModEntities.DRONE.get(), new RotatedHeadshotBox<>(15.0, 28.0, 20, false, true));
     }
+
+    // TODO: registration helper
 }
