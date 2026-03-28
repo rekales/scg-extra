@@ -3,6 +3,8 @@ package net.zincstudios.scgextra.entity.rrc.flaminghead;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
@@ -20,6 +22,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.zincstudios.scgextra.Faction;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.sounds.ModSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -38,6 +41,14 @@ public class FlamingHeadEntity extends Monster implements GeoEntity {
             SynchedEntityData.defineId(FlamingHeadEntity.class, EntityDataSerializers.INT);
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+
+    private SoundEvent[] idleSounds = {
+        ModSounds.RRC_FLAMING_HEAD_IDLE_1.get(),
+        ModSounds.RRC_FLAMING_HEAD_IDLE_2.get(),
+        ModSounds.RRC_FLAMING_HEAD_IDLE_3.get(),
+        ModSounds.RRC_FLAMING_HEAD_IDLE_4.get(),
+        ModSounds.RRC_FLAMING_HEAD_IDLE_5.get()
+    };
 
     public FlamingHeadEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -131,4 +142,22 @@ public class FlamingHeadEntity extends Monster implements GeoEntity {
             this.remove(RemovalReason.KILLED);
         }
     }
+    protected SoundEvent getHurtSound(DamageSource pDamageSource) {
+        return ModSounds.RRC_FLAMING_HEAD_DEAD_1.get();
+    };
+    protected SoundEvent getAmbientSound() {
+        return idleSounds[this.random.nextInt(idleSounds.length)];
+    };
+    protected SoundEvent getStepSound() {
+        return SoundEvents.IRON_GOLEM_STEP;
+    };
+    protected SoundEvent getDeathSound() {
+        return this.random.nextBoolean() ? ModSounds.RRC_FLAMING_HEAD_DEAD_1.get() : ModSounds.RRC_FLAMING_HEAD_DEAD_2.get();
+    };
+    protected float getSoundVolume() {
+        return 2F;
+    };
+    protected void playStepSound(net.minecraft.core.BlockPos pPos, net.minecraft.world.level.block.state.BlockState pState) {
+      this.playSound(this.getStepSound(), this.getSoundVolume() * 0.15F, 1F);
+    };
 }
