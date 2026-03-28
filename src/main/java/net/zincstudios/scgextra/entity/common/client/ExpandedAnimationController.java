@@ -64,4 +64,13 @@ public class ExpandedAnimationController<T extends GeoAnimatable> extends Animat
     public ExpandedAnimationController<T> triggerableAnim(String name, RawAnimation animation) {
         return (ExpandedAnimationController<T>) super.triggerableAnim(name, animation);
     }
+
+    public T getAnimatable() {
+        return this.animatable;
+    }
+
+    @FunctionalInterface
+    public interface AnimationSupplier {
+        RawAnimation get(ExpandedAnimationController<?> controller);
+    }
 }
