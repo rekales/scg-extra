@@ -94,6 +94,11 @@ public class CopperKnightEntity extends GunnerEntity implements GeoEntity{
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.23F);
     }
+
+    public boolean isLeftHanded() {
+        return true;  // Flagging doesn't seem to work
+    }
+
     @Override
     protected void tickDeath() {
         // Override to only extend death time

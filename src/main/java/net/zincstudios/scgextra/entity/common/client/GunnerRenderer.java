@@ -8,18 +8,28 @@ import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class GunnerRenderer <T extends GunnerEntity & GeoEntity> extends GeoEntityRenderer<T> {
 
     protected boolean noDeathTilt = false;
     protected boolean noDeathRedTint = false;
     protected boolean hasCustomShadowRadius = false;
 
-    public GunnerRenderer(EntityRendererProvider.Context renderManager, GeoModel<T> model, boolean extend) {
+    public GunnerRenderer(EntityRendererProvider.Context renderManager, GeoModel<T> model) {
         super(renderManager, model);
         this.shadowRadius = 0;  // no way to get the entity type on construction
-        if(!extend){
-            addRenderLayer(new GunGeoLayer<>(this));
-        }
+
+        addRenderLayer(new GunGeoLayer<>(this));
+    }
+
+    /**
+     * Constructor for extending and adding a custom gun render layer
+     */
+    protected GunnerRenderer(EntityRendererProvider.Context renderManager, GeoModel<T> model, boolean ignored) {
+        super(renderManager, model);
+        this.shadowRadius = 0;
     }
 
     @Override

@@ -19,6 +19,7 @@ import javax.annotation.Nullable;
 /**
  * For integrating bone checks and caching for performance.
  * Renders the held gun or left_hand or right_hand bones.
+ * Checks Mob#isLefthanded if the gun should be rendered to the left hand
  * <p>
  * Edit in case there's dual wielding mobs, or an alternate geo layer
  *
@@ -27,7 +28,6 @@ import javax.annotation.Nullable;
 public class GunGeoLayer<T extends GunnerEntity & GeoAnimatable> extends BlockAndItemGeoLayer<T> {
 
     private GeoBone cachedBone;
-    private GeoBone rightHandBone;
     private final float gunTilt;
 
     public GunGeoLayer(GeoRenderer<T> renderer, float gunTilt) {
