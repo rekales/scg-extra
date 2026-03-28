@@ -2,24 +2,29 @@ package net.zincstudios.scgextra.item;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.item.*;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.ModEntities;
+import top.ribs.scguns.init.ModTiers;
+import top.ribs.scguns.item.CogMaceItem;
 
 @SuppressWarnings("unused")
 public class ModItems {
 
     private static final DeferredRegister<Item> ITEMS = DeferredRegister
             .create(ForgeRegistries.ITEMS, SCGExtra.MOD_ID);
+
+    // NOTE: custom tier or nah?
+    public static final RegistryObject<AtlanticMaceItem> ATLANTIC_MACE = ITEMS.register("atlantic_mace",
+            () -> new AtlanticMaceItem(Tiers.IRON, 7, -3.2F, new Item.Properties())
+    );
 
     public static final RegistryObject<SpawnEggItem> FISH_FOLK_SPAWN_EGG = ITEMS.register("fish_folk_spawn_egg",
             () -> new ForgeSpawnEggItem(
@@ -109,11 +114,15 @@ public class ModItems {
                     .build()
     );
 
-    public static void buildContents(BuildCreativeModeTabContentsEvent event) {
+    private static void buildContents(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CREATIVE_TAB.getKey()) {
             ITEMS.getEntries().stream()
                     .map(RegistryObject::get)
                     .forEach(event::accept);
         }
+    }
+
+    private static void onClientSetup(FMLClientSetupEvent event) {
+
     }
 }
