@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "0": "scgextra:item/cog_mace",
+    "particle": "scgextra:item/cog_mace"
+  },
+  "loader": "forge:separate_transforms",
+  "base": {
+    "parent": "scgextra:item/atlantic_mace_3d"
+  },
+  "perspectives": {
+    "firstperson_righthand": {
+      "parent": "scgextra:item/atlantic_mace_3d"
+    },
+    "firstperson_lefthand": {
+      "parent": "scgextra:item/atlantic_mace_3d"
+    },
+    "thirdperson_righthand": {
+      "parent": "scgextra:item/atlantic_mace_3d"
+    },
+    "fixed": {
+      "parent": "scgextra:item/atlantic_mace_3d"
+    },
+    "thirdperson_lefthand": {
+      "parent": "scgextra:item/atlantic_mace_3d"
+    },
+    "gui": {
+      "parent": "scgextra:item/atlantic_mace_2d"
+    },
+    "ground": {
+      "parent": "scgextra:item/atlantic_mace_2d"
+    }
+  }
+}
