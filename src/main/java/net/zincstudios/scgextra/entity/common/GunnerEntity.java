@@ -16,6 +16,8 @@ import top.ribs.scguns.entity.ai.GunAttackGoal;
 
 // TODO: consider manipulating goal to hold fire.
 
+// TODO: consider extensions for mobs with non-item guns.
+
 /**
  * Base class for entities that uses guns and the GunAttackGoal goal.
  * Used for handling and fetching states from the aforementioned goal.
