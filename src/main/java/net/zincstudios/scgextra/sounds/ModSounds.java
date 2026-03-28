@@ -151,6 +151,24 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> RRC_SCRAPGUARD_PUNCH = SOUND_EVENTS.register("scrapguard.punch", 
         () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("scrapguard.punch")));
 
+    //Copper Knight
+    public static final RegistryObject<SoundEvent> RRC_COPPER_KNIGHT_DEAD = SOUND_EVENTS.register("knight.dead", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("knight.dead")));
+    public static final RegistryObject<SoundEvent> RRC_COPPER_KNIGHT_HURT_1 = SOUND_EVENTS.register("knight.hurt_1", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("knight.hurt_1")));
+    public static final RegistryObject<SoundEvent> RRC_COPPER_KNIGHT_HURT_2 = SOUND_EVENTS.register("knight.hurt_2", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("knight.hurt_2")));
+    public static final RegistryObject<SoundEvent> RRC_COPPER_KNIGHT_HURT_3 = SOUND_EVENTS.register("knight.hurt_3", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("knight.hurt_3")));
+    public static final RegistryObject<SoundEvent> RRC_COPPER_KNIGHT_IDLE_1 = SOUND_EVENTS.register("knight.idle_1", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("knight.idle_1")));
+    public static final RegistryObject<SoundEvent> RRC_COPPER_KNIGHT_IDLE_2 = SOUND_EVENTS.register("knight.idle_2", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("knight.idle_2")));
+    public static final RegistryObject<SoundEvent> RRC_COPPER_KNIGHT_IDLE_3 = SOUND_EVENTS.register("knight.idle_3", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("knight.idle_3")));
+
+
+
 
     public static void register(IEventBus eventbus){
         SOUND_EVENTS.register(eventbus);

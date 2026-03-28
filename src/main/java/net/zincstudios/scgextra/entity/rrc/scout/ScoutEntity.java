@@ -4,6 +4,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
@@ -140,5 +141,8 @@ public class ScoutEntity extends GunnerEntity implements GeoEntity{
         return this.random.nextBoolean() ?
             ModSounds.RRC_SCOUT_DEATH_1.get() :
             ModSounds.RRC_SCOUT_DEATH_2.get();
+    };
+    protected float getSoundVolume() {
+        return 2F;
     };
 }

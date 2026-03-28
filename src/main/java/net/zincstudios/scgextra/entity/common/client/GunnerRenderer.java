@@ -14,7 +14,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class GunnerRenderer <T extends GunnerEntity & GeoEntity> extends GeoEntityRenderer<T> {
 
     protected boolean noDeathTilt = false;
-    protected boolean noDeathRedTint = false;
+    protected boolean noDeathRedTint = false;  // NOTE: can't be assed to do it since nothing uses it yet.
     protected boolean hasCustomShadowRadius = false;
 
     public GunnerRenderer(EntityRendererProvider.Context renderManager, GeoModel<T> model) {
@@ -51,21 +51,17 @@ public class GunnerRenderer <T extends GunnerEntity & GeoEntity> extends GeoEnti
 
     public GunnerRenderer<T> noDeathTilt() {
         this.noDeathTilt = true;
-
         return this;
     }
 
     public GunnerRenderer<T> noDeathRedTint() {
         this.noDeathRedTint = true;
-        // NOTE: can't be assed to do it since nothing uses it yet.
-
         return this;
     }
 
     public GunnerRenderer<T> customShadowRadius(float shadowRadius) {
         this.hasCustomShadowRadius = true;
         this.shadowRadius = shadowRadius;
-
         return this;
     }
 }
