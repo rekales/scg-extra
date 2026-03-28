@@ -1475,7 +1475,6 @@
 			}
 		},
 		"aim_idle": {
-			"loop": "hold_on_last_frame",
 			"animation_length": 0.6,
 			"override_previous_animation": true,
 			"bones": {

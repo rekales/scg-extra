@@ -20,12 +20,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.zincstudios.scgextra.Faction;
-import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.ModEntities;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.ai.AlertFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.FlareSummonGoal;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.entity.common.client.ExpandedAnimationController;
 import net.zincstudios.scgextra.sounds.ModSounds;
 
 import org.jetbrains.annotations.Nullable;
@@ -119,135 +119,50 @@ public class OppressorEntity extends GunnerEntity implements GeoEntity {
         controllers.add(new ExpandedAnimationController<>(this, "behaviour", 0,
                 state -> {
 
-                    if (!state.getController().isPlayingTriggeredAnimation()) {
-                        if (state.isCurrentAnimation(AIMING) && !state.getAnimatable().isAiming()) {
-                            state.setAnimation(HOLD);
-                        }
-                        if (state.getAnimatable().isAiming()) {
-                            state.setAnimation(AIMING);
-//                            return state.setAndContinue(AIMING);
-                        }
-                    } else {
-//                        SCGExtra.LOGGER.debug("trig");
-//                        if (state.getAnimatable().isAiming() && state.getController() instanceof ExpandedAnimationController<?> controller) {
-//                            if (state.isCurrentAnimation(FLARE)) {
-//                                SCGExtra.LOGGER.debug("altered");
-//                                controller.setTriggeredAnimation(RawAnimation.begin().thenPlay("aim_idle").thenPlay("flare"));
-//                            }
-//                            if (state.isCurrentAnimation(ALERT)) {
-//                                controller.setTriggeredAnimation(RawAnimation.begin().thenPlay("aim_idle").thenPlay("alert"));
-//                            }
-//                        }
-
-//                        if (state.isCurrentAnimation(AIMING)) {
-//                            if (state.getController() instanceof ExpandedAnimationController<?> controller) {
-//                                if (state.isCurrentAnimation(FLARE)) {
-//                                    controller.setTriggeredAnimation(RawAnimation.begin().thenPlay("aim_idle").thenPlay("flare"));
-//                                }
-//                                if (state.isCurrentAnimation(ALERT)) {
-//                                    controller.setTriggeredAnimation(RawAnimation.begin().thenPlay("aim_idle").thenPlay("alert"));
-//                                }
-//                            }
-//
-////                            state.getController().tri
-//
-////                            state.setAnimation(RawAnimation.begin().thenPlayAndHold("aim_idle"));
-//
-////                            SCGExtra.LOGGER.debug("stop");
-////                            return PlayState.STOP;
-////
-////                            state.resetCurrentAnimation();
-////                            state.setAnimation(AIMING);
-////                            return state.setAndContinue(AIMING);
-//                        }
+                    if (state.isCurrentAnimation(AIMING) && !state.getAnimatable().isAiming()) {
+                        state.setAnimation(HOLD);
+                    }
+                    if (state.getAnimatable().isAiming()) {
+                        state.setAnimation(AIMING);
                     }
 
                     return PlayState.CONTINUE;
-
-//                    SCGExtra.LOGGER.debug(state.getController().isPlayingTriggeredAnimation() +"");
-
-//                    if (!state.getController().isPlayingTriggeredAnimation()) {
-//                        if (state.getAnimatable().isAiming()) {
-//                            return state.setAndContinue(AIMING);
-//                        } else {
-//                            return state.setAndContinue(HOLD);
-//                        }
-//                    } else {
-//                        if (state.getAnimatable().isAiming()) {
-//                            state.resetCurrentAnimation();
-//                            return state.setAndContinue(AIMING);
-//                        }
-//                    }
-//
-//
-//                    return PlayState.CONTINUE;
-
                 })
-//                .receiveTriggeredAnimations()
-                .triggerableAnim("flare", FLARE)
-                .triggerableAnim("alert", ALERT)
+                .triggerableAnim("flare",
+                        ctl -> ctl.isCurrentAnimation(AIMING)
+                            ? RawAnimation.begin().thenPlay("aim_idle").thenPlay("flare")
+                            : RawAnimation.begin().thenPlay("flare")
+                )
+                .triggerableAnim("alert",
+                        ctl -> ctl.isCurrentAnimation(AIMING)
+                                ? RawAnimation.begin().thenPlay("aim_idle").thenPlay("alert")
+                                : RawAnimation.begin().thenPlay("alert")
+                )
         );
 
-//        controllers.add(new AnimationController<>(this, "walk/idle/aim", 2,
-//                state -> {
-//                    AnimationController<?> behaviorController = this.getAnimatableInstanceCache()
-//                            .getManagerForId(this.getId())
-//                            .getAnimationControllers()
-//                            .get("behavior");
-//
-//
-//                    if (state.getAnimatable().isAiming()) {
-//                        if (behaviorController != null && behaviorController.isPlayingTriggeredAnimation()) {
-//                            return state.setAndContinue(RawAnimation.begin().thenPlay("aim_idle"));
-//                        } else {
-//                            return state.setAndContinue(AIMING);
-//                        }
-//                    } else {
-//                        RawAnimation anim = RawAnimation.begin();
-//                        if (state.isCurrentAnimation(AIMING)) {
-//                            anim = anim.thenPlay("aim_idle");
-//                        }
-//                        if (state.isMoving()) {
-//                            return state.setAndContinue(anim.thenLoop("walk"));
-//                        } else {
-//                            return state.setAndContinue(anim.thenLoop("idle_2"));
-//                            // TODO: idle variation switching
-//                        }
-//                    }
-//                }
-//        ).setAnimationSpeed(1.4));
-//
-//        // NOTE: maybe add triggerable animations on the main controller instead.
-//        controllers.add(new AnimationController<>(this, "behaviour", 0,
-//                state -> {
-//                    AnimationController<?> aimController = this.getAnimatableInstanceCache()
-//                            .getManagerForId(this.getId())
-//                            .getAnimationControllers()
-//                            .get("walk/idle/aim");
-//
-//
-//                    if (state.getController().isPlayingTriggeredAnimation()) {
-//                        SCGExtra.LOGGER.debug("triggered");
-//                        if (Objects.equals(aimController.getCurrentRawAnimation(), AIMING)) {
-//                            return PlayState.STOP;
-//
-////                            state.resetCurrentAnimation();
-////                            return state.setAndContinue(RawAnimation.begin()
-////                                    .thenPlay("aim_idle")
-////                                    .thenPlay("flare")
-////                                    .thenPlayAndHold("idle_aim"));
-//                        }
-//
-////                        state.getController().getCurrentRawAnimation()
-//                    }
-//
-//                    return PlayState.STOP;
-//                })
-//                .receiveTriggeredAnimations()
-//                .triggerableAnim("flare", RawAnimation.begin().thenPlay("flare"))
-//                .triggerableAnim("alert", RawAnimation.begin().thenPlay("alert"))
-//        );
+        controllers.add(new ExpandedAnimationController<>(this, "behaviour", 0,
+                state -> {
 
+                    if (state.isCurrentAnimation(AIMING) && !state.getAnimatable().isAiming()) {
+                        state.setAnimation(HOLD);
+                    }
+                    if (state.getAnimatable().isAiming()) {
+                        state.setAnimation(AIMING);
+                    }
+
+                    return PlayState.CONTINUE;
+                })
+                .triggerableAnim("flare",
+                        ctl -> ctl.isCurrentAnimation(AIMING)
+                                ? RawAnimation.begin().thenPlay("aim_idle").thenPlay("flare")
+                                : RawAnimation.begin().thenPlay("flare")
+                )
+                .triggerableAnim("alert",
+                        ctl -> ctl.isCurrentAnimation(AIMING)
+                                ? RawAnimation.begin().thenPlay("aim_idle").thenPlay("alert")
+                                : RawAnimation.begin().thenPlay("alert")
+                )
+        );
 
         controllers.add(new AnimationController<>(this, "death", 2, state -> {
             if (state.getAnimatable().isDeadOrDying()) {
