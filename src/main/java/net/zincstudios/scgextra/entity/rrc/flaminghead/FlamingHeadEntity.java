@@ -167,18 +167,12 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable {
                 entity -> Faction.isEnemies(this, entity) || entity.getMobType().equals(MobType.UNDEAD)));
     }
 
-    private static void turnEntityToYaw(LivingEntity entity, float yaw, float turnSpeed) {
-        entity.setYRot(Mth.approachDegrees(entity.getYRot(), yaw, turnSpeed));
-        entity.setYHeadRot(entity.getYRot());
-        entity.setYBodyRot(entity.getYRot());
-    }
-
     @Override
     public void tick() {
         super.tick();
 
         if (this.level().isClientSide && this.hasRamYaw()) {
-            turnEntityToYaw(this, this.getRamYaw(), 10F);
+            MobUtil.turnEntityToYaw(this, this.getRamYaw(), 10F);
         }
     }
 
