@@ -12,18 +12,17 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.MoveTowardsTargetGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.zincstudios.scgextra.Faction;
+import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.entity.common.ai.StunnedGoal;
 import net.zincstudios.scgextra.sounds.ModSounds;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -32,10 +31,10 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class FlamingHeadEntity extends Monster implements GeoEntity {
+public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable {
 
     public enum BehaviorState {
-        NONE, RAMMING, SPINNING
+        NONE, RAMMING, SPINNING, STUNNED
     }
 
     private static final EntityDataAccessor<Integer> BEHAVIOR_STATE =
@@ -53,6 +52,16 @@ public class FlamingHeadEntity extends Monster implements GeoEntity {
 
     public FlamingHeadEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
+    }
+
+    @Override
+    public @Nullable StunnedGoal<?> getStunnedGoal() {
+        for(WrappedGoal goal : this.goalSelector.getAvailableGoals()){
+            if(goal.getGoal() instanceof StunnedGoal<?> stunnedGoal){
+                return stunnedGoal;
+            }
+        }
+        return null;
     }
 
     public BehaviorState getBehaviorState() {
@@ -79,25 +88,25 @@ public class FlamingHeadEntity extends Monster implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "controller", 0,
-                state -> {
-                    if (state.isMoving()) {
-                        state.setAndContinue(RawAnimation.begin().thenLoop("move"));
-                    } else {
-                        state.setAndContinue(RawAnimation.begin().thenLoop("idle"));
-                    }
-                    return PlayState.CONTINUE;
-                }
-        ));
-        controllers.add(new AnimationController<>(this, "fAttack", 0,
-                state -> PlayState.CONTINUE).triggerableAnim("fire_attack", RawAnimation.begin().thenPlay("fire_attack")));
-        controllers.add(new AnimationController<>(this, "death", 2,
+        controllers.add(new AnimationController<>(this, "main", 0,
                 state -> {
                     if (state.getAnimatable().isDeadOrDying()) {
                         return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("death"));
-                    } else {
-                        return PlayState.STOP;
                     }
+
+                    if (state.getAnimatable().getBehaviorState() == BehaviorState.STUNNED) {
+                        state.setAnimation(RawAnimation.begin().thenLoop("stun"));
+                    } else if (state.getAnimatable().getBehaviorState() == BehaviorState.RAMMING) {
+                        state.setAnimation(RawAnimation.begin().thenPlay("ramming_attack"));
+                    } else if (state.getAnimatable().getBehaviorState() == BehaviorState.SPINNING) {
+                        state.setAnimation(RawAnimation.begin().thenPlay("fire_attack"));
+                    } else if (state.isMoving()) {
+                        state.setAnimation(RawAnimation.begin().thenLoop("move"));
+                    } else {
+                        state.setAnimation(RawAnimation.begin().thenLoop("idle"));
+                    }
+
+                    return PlayState.CONTINUE;
                 }
         ));
     }
@@ -112,8 +121,8 @@ public class FlamingHeadEntity extends Monster implements GeoEntity {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
 
-        this.goalSelector.addGoal(2, new RammingAttackGoal(this, 200, 30, 3));
-//        this.goalSelector.addGoal(3, new FireSpinAttackGoal(this, 8));
+        this.goalSelector.addGoal(2, new RammingAttackGoal(this, 600, 30, 3));
+        this.goalSelector.addGoal(3, new FireSpinAttackGoal(this, 200, 30, 8F, 10));
 //        this.goalSelector.addGoal(4, new ThrowFlamesGoal(this));  //TODO: convert to aiStep
 
         this.goalSelector.addGoal(5, new MoveTowardsTargetGoal(this, 1, 40));
