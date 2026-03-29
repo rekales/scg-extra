@@ -11,7 +11,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
@@ -27,6 +26,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.StunnedGoal;
@@ -47,16 +47,6 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private static final EntityDataAccessor<Float> INACCURACY = SynchedEntityData.defineId(DroneEntity.class, EntityDataSerializers.FLOAT);
     private final DronePart[] subEntities;
-    private SoundEvent[] hurtSounds = {
-        ModSounds.RRC_DRONE_HURT_1.get(),
-        ModSounds.RRC_DRONE_HURT_2.get(),
-        ModSounds.RRC_DRONE_HURT_3.get(),
-        ModSounds.RRC_DRONE_HURT_4.get(),
-        ModSounds.RRC_DRONE_HURT_5.get(),
-        ModSounds.RRC_DRONE_HURT_6.get(),
-        ModSounds.RRC_DRONE_HURT_7.get(),
-        ModSounds.RRC_DRONE_HURT_8.get(),
-    };
     public DroneEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         DronePart pipe = new DronePart(this, "pipe", 0.5F, 2F);
@@ -213,13 +203,27 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable{
                 && this.handleAddEffectStun(effectInstance, entity);
     }
     protected SoundEvent getDeathSound() {
-        return this.random.nextBoolean() ? ModSounds.RRC_DRONE_DEATH_1.get() : ModSounds.RRC_DRONE_DEATH_2.get();
+        return MobUtil.getSound(
+            this.random, 
+            ModSounds.RRC_DRONE_DEATH_1.get(), 
+            ModSounds.RRC_DRONE_DEATH_2.get()
+        );
     };
     protected SoundEvent getAmbientSound() {
         return ModSounds.RRC_DRONE_IDLE.get();
     };
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return hurtSounds[this.random.nextInt(hurtSounds.length)];
+        return MobUtil.getSound(
+            this.random, 
+            ModSounds.RRC_DRONE_HURT_1.get(),
+            ModSounds.RRC_DRONE_HURT_2.get(),
+            ModSounds.RRC_DRONE_HURT_3.get(),
+            ModSounds.RRC_DRONE_HURT_4.get(),
+            ModSounds.RRC_DRONE_HURT_5.get(),
+            ModSounds.RRC_DRONE_HURT_6.get(),
+            ModSounds.RRC_DRONE_HURT_7.get(),
+            ModSounds.RRC_DRONE_HURT_8.get()
+        );
     };
     protected SoundEvent getStepSound() {
         if(this.random.nextFloat() < 0.4F){

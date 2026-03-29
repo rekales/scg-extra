@@ -21,6 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.zincstudios.scgextra.Faction;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
+import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.sounds.ModSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -36,13 +37,6 @@ import javax.annotation.Nullable;
 
 public class ScoutEntity extends GunnerEntity implements GeoEntity{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
-    private SoundEvent[] hurtSounds = {
-        ModSounds.RRC_SCOUT_HURT_1.get(),
-        ModSounds.RRC_SCOUT_HURT_2.get(),
-        ModSounds.RRC_SCOUT_HURT_3.get(),
-        ModSounds.RRC_SCOUT_HURT_4.get(),
-        ModSounds.RRC_SCOUT_HURT_5.get()
-    };
     private static final RawAnimation AIMING = RawAnimation.begin().thenPlayAndHold("idle_aim");
     public ScoutEntity(EntityType<? extends GunnerEntity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -127,20 +121,35 @@ public class ScoutEntity extends GunnerEntity implements GeoEntity{
         }
     }
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return hurtSounds[this.random.nextInt(hurtSounds.length)];
+        return MobUtil.getSound(
+            this.random, 
+            ModSounds.RRC_SCOUT_HURT_1.get(),
+            ModSounds.RRC_SCOUT_HURT_2.get(),
+            ModSounds.RRC_SCOUT_HURT_3.get(),
+            ModSounds.RRC_SCOUT_HURT_4.get(),
+            ModSounds.RRC_SCOUT_HURT_5.get()
+        );
     };
     protected SoundEvent getAmbientSound() {
-        return this.random.nextBoolean() ? ModSounds.RRC_SCOUT_IDLE_1.get() : ModSounds.RRC_SCOUT_IDLE_2.get();
+        return MobUtil.getSound(
+            this.random,
+            ModSounds.RRC_SCOUT_IDLE_1.get(),
+            ModSounds.RRC_SCOUT_IDLE_2.get()
+        );
     };
     protected SoundEvent getStepSound() {
-        return this.random.nextBoolean() ?
-            ModSounds.RRC_SCOUT_WALK_1.get() :
-            ModSounds.RRC_SCOUT_WALK_2.get();
+        return MobUtil.getSound(
+            this.random,
+            ModSounds.RRC_SCOUT_WALK_1.get(),
+            ModSounds.RRC_SCOUT_WALK_2.get()
+        );
     };
     protected SoundEvent getDeathSound() {
-        return this.random.nextBoolean() ?
-            ModSounds.RRC_SCOUT_DEATH_1.get() :
-            ModSounds.RRC_SCOUT_DEATH_2.get();
+        return MobUtil.getSound(
+            this.random,
+            ModSounds.RRC_SCOUT_DEATH_1.get(),
+            ModSounds.RRC_SCOUT_DEATH_2.get()
+        );
     };
     protected float getSoundVolume() {
         return 2F;

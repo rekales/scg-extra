@@ -25,6 +25,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.zincstudios.scgextra.Faction;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
+import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.sounds.ModSounds;
 
@@ -48,11 +49,6 @@ public class ScrapGuardEntity extends GunnerEntity implements GeoEntity {
     private static final RawAnimation AIMING = RawAnimation.begin().thenPlayAndHold("idle_aim");
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
-    private SoundEvent[] idleSounds = {
-        ModSounds.RRC_OPPRESSOR_IDLE_1.get(),
-        ModSounds.RRC_OPPRESSOR_IDLE_2.get(),
-        ModSounds.RRC_OPPRESSOR_IDLE_3.get()
-    };
 
     public ScrapGuardEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -127,18 +123,29 @@ public class ScrapGuardEntity extends GunnerEntity implements GeoEntity {
         return geoCache;
     }
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return this.random.nextBoolean() ? ModSounds.RRC_OPPRESSOR_HURT_1.get() : ModSounds.RRC_OPPRESSOR_HURT_2.get();
+        return MobUtil.getSound(
+            this.random,
+            ModSounds.RRC_OPPRESSOR_HURT_1.get(),
+            ModSounds.RRC_OPPRESSOR_HURT_2.get()
+        );
     };
     protected SoundEvent getAmbientSound() {
-        return idleSounds[this.random.nextInt(idleSounds.length)];
+        return MobUtil.getSound(
+            this.random,
+            ModSounds.RRC_OPPRESSOR_IDLE_1.get(),
+            ModSounds.RRC_OPPRESSOR_IDLE_2.get(),
+            ModSounds.RRC_OPPRESSOR_IDLE_3.get()
+        );
     };
     protected SoundEvent getStepSound() {
         return SoundEvents.IRON_GOLEM_STEP;
     };
     protected SoundEvent getDeathSound() {
-        return this.random.nextBoolean() ?
-            ModSounds.RRC_OPPRESSOR_DEATH_1.get() :
-            ModSounds.RRC_OPPRESSOR_DEATH_2.get();
+        return MobUtil.getSound(
+            this.random,
+            ModSounds.RRC_OPPRESSOR_DEATH_1.get(),
+            ModSounds.RRC_OPPRESSOR_DEATH_2.get()
+        );
     };
     protected void playStepSound(BlockPos pPos, BlockState pBlock) {
         this.playSound(this.getStepSound(), this.getSoundVolume(), 1.0F);

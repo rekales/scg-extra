@@ -22,6 +22,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.zincstudios.scgextra.Faction;
+import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.sounds.ModSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -35,12 +36,6 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 public class SpringJunkieEntity extends Monster implements GeoEntity{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private static final EntityDataAccessor<Boolean> ATTACKING = SynchedEntityData.defineId(SpringJunkieEntity.class, EntityDataSerializers.BOOLEAN);
-    private SoundEvent[] walkingSounds = {
-        ModSounds.RRC_SPRING_JUNKIE_WALK_1.get(),
-        ModSounds.RRC_SPRING_JUNKIE_WALK_2.get(),
-        ModSounds.RRC_SPRING_JUNKIE_WALK_3.get(),
-        ModSounds.RRC_SPRING_JUNKIE_WALK_4.get()
-    };
 
     public SpringJunkieEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -109,13 +104,21 @@ public class SpringJunkieEntity extends Monster implements GeoEntity{
     protected SoundEvent getStepSound() {
         if(this.getAttacking()){
             if(this.random.nextFloat() < 0.4F){
-                return this.random.nextBoolean() ? 
-                ModSounds.RRC_SPRING_JUNKIE_RUN_1.get() : 
-                ModSounds.RRC_SPRING_JUNKIE_RUN_2.get();
+                return MobUtil.getSound(
+                    this.random,
+                    ModSounds.RRC_SPRING_JUNKIE_RUN_1.get(), 
+                    ModSounds.RRC_SPRING_JUNKIE_RUN_2.get()
+                );
             }
         }
         if(this.random.nextFloat() < 0.4F){
-            return walkingSounds[this.random.nextInt(walkingSounds.length)];
+            return MobUtil.getSound(
+                    this.random,
+                    ModSounds.RRC_SPRING_JUNKIE_WALK_1.get(),
+                    ModSounds.RRC_SPRING_JUNKIE_WALK_2.get(),
+                    ModSounds.RRC_SPRING_JUNKIE_WALK_3.get(),
+                    ModSounds.RRC_SPRING_JUNKIE_WALK_4.get()
+                );
         }else{
             return SoundEvents.IRON_GOLEM_STEP;
         }

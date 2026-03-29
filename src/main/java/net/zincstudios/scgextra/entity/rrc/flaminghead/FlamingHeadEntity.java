@@ -19,6 +19,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.zincstudios.scgextra.Faction;
+import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.StunnedGoal;
@@ -47,14 +48,6 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable {
             SynchedEntityData.defineId(FlamingHeadEntity.class, EntityDataSerializers.INT);
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
-
-    private SoundEvent[] idleSounds = {
-        ModSounds.RRC_FLAMING_HEAD_IDLE_1.get(),
-        ModSounds.RRC_FLAMING_HEAD_IDLE_2.get(),
-        ModSounds.RRC_FLAMING_HEAD_IDLE_3.get(),
-        ModSounds.RRC_FLAMING_HEAD_IDLE_4.get(),
-        ModSounds.RRC_FLAMING_HEAD_IDLE_5.get()
-    };
 
     public FlamingHeadEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -197,13 +190,24 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable {
         return ModSounds.RRC_FLAMING_HEAD_DEAD_1.get();
     };
     protected SoundEvent getAmbientSound() {
-        return idleSounds[this.random.nextInt(idleSounds.length)];
+        return MobUtil.getSound(
+            this.random, 
+            ModSounds.RRC_FLAMING_HEAD_IDLE_1.get(),
+            ModSounds.RRC_FLAMING_HEAD_IDLE_2.get(),
+            ModSounds.RRC_FLAMING_HEAD_IDLE_3.get(),
+            ModSounds.RRC_FLAMING_HEAD_IDLE_4.get(),
+            ModSounds.RRC_FLAMING_HEAD_IDLE_5.get()
+        );
     };
     protected SoundEvent getStepSound() {
         return SoundEvents.IRON_GOLEM_STEP;
     };
     protected SoundEvent getDeathSound() {
-        return this.random.nextBoolean() ? ModSounds.RRC_FLAMING_HEAD_DEAD_1.get() : ModSounds.RRC_FLAMING_HEAD_DEAD_2.get();
+        return MobUtil.getSound(
+            this.random,
+            ModSounds.RRC_FLAMING_HEAD_DEAD_1.get(),
+            ModSounds.RRC_FLAMING_HEAD_DEAD_2.get()
+        );
     };
     protected float getSoundVolume() {
         return 2F;

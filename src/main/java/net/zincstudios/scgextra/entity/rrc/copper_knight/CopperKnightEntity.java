@@ -22,6 +22,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.zincstudios.scgextra.Faction;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
+import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.AlertFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.sounds.ModSounds;
@@ -37,16 +38,6 @@ import top.ribs.scguns.config.EntityEquipmentConfig;
 public class CopperKnightEntity extends GunnerEntity implements GeoEntity{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private static final RawAnimation AIMING = RawAnimation.begin().thenPlayAndHold("idle_aim");
-    private SoundEvent[] hurtSounds = {
-        ModSounds.RRC_COPPER_KNIGHT_HURT_1.get(),
-        ModSounds.RRC_COPPER_KNIGHT_HURT_2.get(),
-        ModSounds.RRC_COPPER_KNIGHT_HURT_3.get()
-    };
-    private SoundEvent[] idleSounds = {
-        ModSounds.RRC_COPPER_KNIGHT_IDLE_1.get(),
-        ModSounds.RRC_COPPER_KNIGHT_IDLE_2.get(),
-        ModSounds.RRC_COPPER_KNIGHT_IDLE_3.get()
-    };
     public CopperKnightEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
     }
@@ -130,10 +121,20 @@ public class CopperKnightEntity extends GunnerEntity implements GeoEntity{
         return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
     }
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return hurtSounds[this.random.nextInt(hurtSounds.length)];
+        return MobUtil.getSound(
+            this.random, 
+            ModSounds.RRC_COPPER_KNIGHT_HURT_1.get(),
+            ModSounds.RRC_COPPER_KNIGHT_HURT_2.get(),
+            ModSounds.RRC_COPPER_KNIGHT_HURT_3.get()
+        );
     };
     protected SoundEvent getAmbientSound() {
-        return idleSounds[this.random.nextInt(idleSounds.length)];
+        return MobUtil.getSound(
+            this.random,
+            ModSounds.RRC_COPPER_KNIGHT_IDLE_1.get(),
+            ModSounds.RRC_COPPER_KNIGHT_IDLE_2.get(),
+            ModSounds.RRC_COPPER_KNIGHT_IDLE_3.get() 
+        );
     };
     protected SoundEvent getStepSound() {
         return SoundEvents.IRON_GOLEM_STEP;

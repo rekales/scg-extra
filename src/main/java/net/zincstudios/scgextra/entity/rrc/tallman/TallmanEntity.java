@@ -19,6 +19,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.zincstudios.scgextra.Faction;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
+import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.AlertFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.sounds.ModSounds;
@@ -42,14 +43,6 @@ public class TallmanEntity extends GunnerEntity implements GeoEntity {
     private static final RawAnimation AIMING = RawAnimation.begin().thenPlayAndHold("idle_aim");
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
-    private final SoundEvent[] hurtSounds = {
-        ModSounds.RRC_TALLMAN_HURT_1.get(),
-        ModSounds.RRC_TALLMAN_HURT_2.get(),
-        ModSounds.RRC_TALLMAN_HURT_3.get(),
-        ModSounds.RRC_TALLMAN_HURT_4.get(),
-        ModSounds.RRC_TALLMAN_HURT_5.get(),
-        ModSounds.RRC_TALLMAN_HURT_6.get()
-    };
 
     public TallmanEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -135,27 +128,43 @@ public class TallmanEntity extends GunnerEntity implements GeoEntity {
         return geoCache;
     }
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return hurtSounds[this.random.nextInt(hurtSounds.length)];
+        return MobUtil.getSound(
+            this.random,
+            ModSounds.RRC_TALLMAN_HURT_1.get(),
+            ModSounds.RRC_TALLMAN_HURT_2.get(),
+            ModSounds.RRC_TALLMAN_HURT_3.get(),
+            ModSounds.RRC_TALLMAN_HURT_4.get(),
+            ModSounds.RRC_TALLMAN_HURT_5.get(),
+            ModSounds.RRC_TALLMAN_HURT_6.get()
+        );
     }
 
     protected SoundEvent getAmbientSound() {
-        return this.random.nextBoolean() ? ModSounds.RRC_TALLMAN_IDLE_1.get() : ModSounds.RRC_TALLMAN_IDLE_2.get();
+        return MobUtil.getSound(
+            this.random,
+            ModSounds.RRC_TALLMAN_IDLE_1.get(),
+            ModSounds.RRC_TALLMAN_IDLE_2.get()
+        );
     }
 
     protected SoundEvent getStepSound() {
         if(this.random.nextFloat() < 0.4F){
-            return this.random.nextBoolean() ?
-            ModSounds.RRC_TALLMAN_WALK_1.get() :
-            ModSounds.RRC_TALLMAN_WALK_2.get();
+            return MobUtil.getSound(
+                this.random,
+                ModSounds.RRC_TALLMAN_WALK_1.get(),
+                ModSounds.RRC_TALLMAN_WALK_2.get()
+            );
         }else{
             return SoundEvents.IRON_GOLEM_STEP;
         }
     }
 
     protected SoundEvent getDeathSound() {
-        return this.random.nextBoolean() ?
-            ModSounds.RRC_TALLMAN_DEATH_1.get() :
-            ModSounds.RRC_TALLMAN_DEATH_2.get();
+        return MobUtil.getSound(
+            this.random,
+            ModSounds.RRC_TALLMAN_DEATH_1.get(),
+            ModSounds.RRC_TALLMAN_DEATH_2.get()
+        );
     }
 
     protected void playStepSound(BlockPos pPos, BlockState pBlock) {
