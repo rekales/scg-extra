@@ -1,5 +1,6 @@
 package net.zincstudios.scgextra.entity.rrc.arc_psycho;
 
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
@@ -25,10 +26,21 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.sounds.ModSounds;
 import net.zincstudios.scgextra.Faction;
 
 public class ArcPsychoEntity extends Monster implements GeoEntity{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+    private SoundEvent[] hurtSounds = {
+        ModSounds.RRC_ARC_PSYCHO_HURT_1.get(),
+        ModSounds.RRC_ARC_PSYCHO_HURT_2.get(),
+        ModSounds.RRC_ARC_PSYCHO_HURT_3.get()
+    };
+    private SoundEvent[] idleSounds = {
+        ModSounds.RRC_ARC_PSYCHO_IDLE_1.get(),
+        ModSounds.RRC_ARC_PSYCHO_IDLE_2.get(),
+        ModSounds.RRC_ARC_PSYCHO_IDLE_3.get()
+    };
     public ArcPsychoEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
@@ -92,4 +104,18 @@ public class ArcPsychoEntity extends Monster implements GeoEntity{
             this.remove(RemovalReason.KILLED);
         }
     }
+    protected SoundEvent getHurtSound(DamageSource pDamageSource) {
+        return hurtSounds[this.random.nextInt(hurtSounds.length)];
+    };
+    protected SoundEvent getAmbientSound() {
+        return idleSounds[this.random.nextInt(idleSounds.length)];
+    };
+    protected SoundEvent getDeathSound() {
+        return this.random.nextBoolean() ? ModSounds.RRC_ARC_PSYCHO_DEAD_1.get() : ModSounds.RRC_ARC_PSYCHO_DEAD_2.get();
+    };
+    protected float getSoundVolume() {
+        return 0.3F;
+    };
+    protected void playStepSound(net.minecraft.core.BlockPos pPos, net.minecraft.world.level.block.state.BlockState pState) {
+    };
 }

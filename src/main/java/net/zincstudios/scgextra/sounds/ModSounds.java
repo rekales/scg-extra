@@ -192,7 +192,24 @@ public class ModSounds {
         () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("flaming_head.stun_1")));
     public static final RegistryObject<SoundEvent> RRC_FLAMING_HEAD_STUN_2 = SOUND_EVENTS.register("flaming_head.stun_2", 
         () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("flaming_head.stun_2")));
-
+       
+    //Arc Psycho
+    public static final RegistryObject<SoundEvent> RRC_ARC_PSYCHO_DEAD_1 = SOUND_EVENTS.register("arc_psycho.dead_1", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("arc_psycho.dead_1")));
+    public static final RegistryObject<SoundEvent> RRC_ARC_PSYCHO_DEAD_2 = SOUND_EVENTS.register("arc_psycho.dead_2", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("arc_psycho.dead_2")));
+    public static final RegistryObject<SoundEvent> RRC_ARC_PSYCHO_HURT_1 = SOUND_EVENTS.register("arc_psycho.hurt_1", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("arc_psycho.hurt_1")));
+    public static final RegistryObject<SoundEvent> RRC_ARC_PSYCHO_HURT_2 = SOUND_EVENTS.register("arc_psycho.hurt_2", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("arc_psycho.hurt_2")));
+    public static final RegistryObject<SoundEvent> RRC_ARC_PSYCHO_HURT_3 = SOUND_EVENTS.register("arc_psycho.hurt_3", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("arc_psycho.hurt_3")));
+    public static final RegistryObject<SoundEvent> RRC_ARC_PSYCHO_IDLE_1 = SOUND_EVENTS.register("arc_psycho.idle_1", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("arc_psycho.idle_1")));
+    public static final RegistryObject<SoundEvent> RRC_ARC_PSYCHO_IDLE_2 = SOUND_EVENTS.register("arc_psycho.idle_2", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("arc_psycho.idle_2")));
+    public static final RegistryObject<SoundEvent> RRC_ARC_PSYCHO_IDLE_3 = SOUND_EVENTS.register("arc_psycho.idle_3", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("arc_psycho.idle_3")));
 
     public static void register(IEventBus eventbus){
         SOUND_EVENTS.register(eventbus);

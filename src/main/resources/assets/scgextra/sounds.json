@@ -478,5 +478,53 @@
         "sounds": [
             "scgextra:rrc/flaming_head/stun_2"
         ]
+    },
+    "arc_psycho.dead_1": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/arc_psycho/dead_1"
+        ]
+    },
+    "arc_psycho.dead_2": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/arc_psycho/dead_2"
+        ]
+    },
+    "arc_psycho.hurt_1": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/arc_psycho/hurt_1"
+        ]
+    },
+    "arc_psycho.hurt_2": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/arc_psycho/hurt_2"
+        ]
+    },
+    "arc_psycho.hurt_3": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/arc_psycho/hurt_3"
+        ]
+    },
+    "arc_psycho.idle_1": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/arc_psycho/idle_1"
+        ]
+    },
+    "arc_psycho.idle_2": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/arc_psycho/idle_2"
+        ]
+    },
+    "arc_psycho.idle_3": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/arc_psycho/idle_3"
+        ]
     }
 }
