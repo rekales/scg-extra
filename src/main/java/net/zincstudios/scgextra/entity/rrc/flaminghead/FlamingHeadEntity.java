@@ -1,5 +1,6 @@
 package net.zincstudios.scgextra.entity.rrc.flaminghead;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -21,8 +22,8 @@ import net.zincstudios.scgextra.Faction;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.StunnedGoal;
+import net.zincstudios.scgextra.entity.projectile.FireProjectile;
 import net.zincstudios.scgextra.sounds.ModSounds;
-import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -31,6 +32,11 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable {
 
     public enum BehaviorState {
@@ -120,10 +126,9 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
-
+        this.goalSelector.addGoal(1, new StunnedGoal<>(this));
         this.goalSelector.addGoal(2, new RammingAttackGoal(this, 600, 30, 3));
         this.goalSelector.addGoal(3, new FireSpinAttackGoal(this, 200, 30, 8F, 10));
-//        this.goalSelector.addGoal(4, new ThrowFlamesGoal(this));  //TODO: convert to aiStep
 
         this.goalSelector.addGoal(5, new MoveTowardsTargetGoal(this, 1, 40));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 20));
@@ -135,6 +140,36 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable {
         this.targetSelector.addGoal(2, new HurtByNonFactionGoal(this));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
                 entity -> Faction.isEnemies(this, entity) || entity.getMobType().equals(MobType.UNDEAD)));
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+
+        if(this.tickCount%8==0) {
+            for (int i = 0; i < 360; i += 10) {
+                double rad = Math.toRadians(i);
+                double x = this.getX() + Math.cos(rad) * 4;
+                double z = this.getZ() + Math.sin(rad) * 4;
+                FireProjectile en = new FireProjectile(
+                        this.level(),
+                        this
+                );
+                en.setPos(this.position().add(0, 3, 0));
+                double dx = x - this.getX();
+                double dy = this.getY() - (this.getY()+3);
+                double dz = z - this.getZ();
+                en.shoot(
+                        dx,
+                        dy,
+                        dz,
+                        2.5F,
+                        0F
+                );
+                this.level().addFreshEntity(en);
+            }
+        }
+
     }
 
     @Override
