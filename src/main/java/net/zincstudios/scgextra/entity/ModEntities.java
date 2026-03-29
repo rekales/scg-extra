@@ -148,6 +148,7 @@ public class ModEntities {
     public static final RegistryObject<EntityType<FlamingHeadEntity>> FLAMING_HEAD = ENTITY_TYPES
             .register("flaming_head", () -> EntityType.Builder.of(FlamingHeadEntity::new, MobCategory.MONSTER)
                     .sized(3.5F, 6F)
+                    .setUpdateInterval(1)
                     .build("flaming_head"));
 
     public static final RegistryObject<EntityType<ScrapGuardEntity>> SCRAP_GUARD = ENTITY_TYPES
@@ -204,7 +205,7 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.DRONE.get(), DroneEntityRenderer::new);
         EntityRenderers.register(ModEntities.TALLMAN.get(), (ctx) -> new GunnerRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("rrc/tallman"))).noDeathTilt());
-        EntityRenderers.register(ModEntities.SCOUT.get(), ScoutRenderer::new);
+        EntityRenderers.register(ModEntities.SCOUT.get(), (ctx) -> new ScoutRenderer<>(ctx).noDeathTilt());
         EntityRenderers.register(ModEntities.OPPRESSOR.get(), (ctx) -> new GunnerRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("rrc/oppressor"))).noDeathTilt());
         EntityRenderers.register(ModEntities.SPRING_JUNKIE.get(), SpringJunkieRenderer::new);
@@ -212,7 +213,7 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.SCRAP_GUARD.get(), (ctx) -> new GunnerRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("rrc/scrap_guard"))).noDeathTilt());
         EntityRenderers.register(ModEntities.ARC_PSYCHO.get(), ArcPsychoEntityRenderer::new);
-        EntityRenderers.register(ModEntities.COPPER_KNIGHT.get(), CopperKnightRenderer::new);
+        EntityRenderers.register(ModEntities.COPPER_KNIGHT.get(), (ctx) -> new CopperKnightRenderer<>(ctx).noDeathTilt());
     }
 
     private static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event){

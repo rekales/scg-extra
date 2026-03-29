@@ -364,5 +364,119 @@
         "sounds": [
             "scgextra:rrc/oppressor/punch"
         ]
+    },
+    "knight.dead": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/copper_knight/dead"
+        ]
+    },
+    "knight.hurt_1": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/copper_knight/hurt_1"
+        ]
+    },
+    "knight.hurt_2": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/copper_knight/hurt_2"
+        ]
+    },
+    "knight.hurt_3": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/copper_knight/hurt_3"
+        ]
+    },
+    "knight.idle_1": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/copper_knight/idle_1"
+        ]
+    },
+    "knight.idle_2": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/copper_knight/idle_2"
+        ]
+    },
+    "knight.idle_3": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/copper_knight/idle_3"
+        ]
+    },
+    "flaming_head.idle_1": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/flaming_head/idle_1"
+        ]
+    },
+    "flaming_head.idle_2": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/flaming_head/idle_2"
+        ]
+    },
+    "flaming_head.idle_3": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/flaming_head/idle_3"
+        ]
+    },
+    "flaming_head.idle_4": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/flaming_head/idle_4"
+        ]
+    },
+    "flaming_head.idle_5": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/flaming_head/idle_5"
+        ]
+    },
+    "flaming_head.dead_1": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/flaming_head/dead_1"
+        ]
+    },
+    "flaming_head.dead_2": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/flaming_head/dead_2"
+        ]
+    },
+    "flaming_head.spin_1": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/flaming_head/spin_1"
+        ]
+    },
+    "flaming_head.spin_2": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/flaming_head/spin_2"
+        ]
+    },
+    "flaming_head.spin_3": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/flaming_head/spin_3"
+        ]
+    },
+    "flaming_head.stun_1": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/flaming_head/stun_1"
+        ]
+    },
+    "flaming_head.stun_2": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:rrc/flaming_head/stun_2"
+        ]
     }
 }

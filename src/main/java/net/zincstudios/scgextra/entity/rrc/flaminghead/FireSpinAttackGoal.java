@@ -1,7 +1,9 @@
 package net.zincstudios.scgextra.entity.rrc.flaminghead;
 
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.zincstudios.scgextra.entity.projectile.FireProjectile;
+import net.zincstudios.scgextra.sounds.ModSounds;
 
 public class FireSpinAttackGoal extends Goal{
     private final FlamingHeadEntity parent;
@@ -9,6 +11,11 @@ public class FireSpinAttackGoal extends Goal{
     private int cooldown = 0;
     private int ticks = 0;
     private int startTicks = 10;
+    private SoundEvent[] spinSounds = {
+        ModSounds.RRC_FLAMING_HEAD_SPIN_1.get(),
+        ModSounds.RRC_FLAMING_HEAD_SPIN_2.get(),
+        ModSounds.RRC_FLAMING_HEAD_SPIN_3.get()
+    };
     public FireSpinAttackGoal(FlamingHeadEntity mob, int pRange){
         this.parent = mob;
         this.range = pRange;
@@ -35,7 +42,12 @@ public class FireSpinAttackGoal extends Goal{
     public void tick() {
         super.tick();
         ticks++;
-        if(ticks<=startTicks)return;
+        if(ticks<=startTicks){
+            if(ticks==startTicks){
+                this.parent.playSound(spinSounds[this.parent.getRandom().nextInt(spinSounds.length)], this.parent.getSoundVolume(), 1F);
+            }
+            return;
+        }
         if(this.ticks%5==0){
             for (int i = 0; i < 360; i += 10) {
                 double rad = Math.toRadians(i);

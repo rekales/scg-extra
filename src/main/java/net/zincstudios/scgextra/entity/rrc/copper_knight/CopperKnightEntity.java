@@ -1,10 +1,14 @@
 package net.zincstudios.scgextra.entity.rrc.copper_knight;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -20,6 +24,7 @@ import net.zincstudios.scgextra.Faction;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.ai.AlertFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.sounds.ModSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -32,6 +37,16 @@ import top.ribs.scguns.config.EntityEquipmentConfig;
 public class CopperKnightEntity extends GunnerEntity implements GeoEntity{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private static final RawAnimation AIMING = RawAnimation.begin().thenPlayAndHold("idle_aim");
+    private SoundEvent[] hurtSounds = {
+        ModSounds.RRC_COPPER_KNIGHT_HURT_1.get(),
+        ModSounds.RRC_COPPER_KNIGHT_HURT_2.get(),
+        ModSounds.RRC_COPPER_KNIGHT_HURT_3.get()
+    };
+    private SoundEvent[] idleSounds = {
+        ModSounds.RRC_COPPER_KNIGHT_IDLE_1.get(),
+        ModSounds.RRC_COPPER_KNIGHT_IDLE_2.get(),
+        ModSounds.RRC_COPPER_KNIGHT_IDLE_3.get()
+    };
     public CopperKnightEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
     }
@@ -84,7 +99,7 @@ public class CopperKnightEntity extends GunnerEntity implements GeoEntity{
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
-                entity -> Faction.isEnemies(this, entity)));
+                entity -> Faction.isEnemies(this, entity) || entity.getMobType().equals(MobType.UNDEAD)));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -92,8 +107,13 @@ public class CopperKnightEntity extends GunnerEntity implements GeoEntity{
                 .add(Attributes.MAX_HEALTH, 40D)
                 .add(Attributes.ARMOR, 6D)
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.23F);
+                .add(Attributes.MOVEMENT_SPEED, 0.15F);
     }
+
+    public boolean isLeftHanded() {
+        return true;  // Flagging doesn't seem to work
+    }
+
     @Override
     protected void tickDeath() {
         // Override to only extend death time
@@ -109,4 +129,22 @@ public class CopperKnightEntity extends GunnerEntity implements GeoEntity{
         EntityEquipmentConfig.equipEntity(this, "scgextra:copper_knight");
         return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
     }
+    protected SoundEvent getHurtSound(DamageSource pDamageSource) {
+        return hurtSounds[this.random.nextInt(hurtSounds.length)];
+    };
+    protected SoundEvent getAmbientSound() {
+        return idleSounds[this.random.nextInt(idleSounds.length)];
+    };
+    protected SoundEvent getStepSound() {
+        return SoundEvents.IRON_GOLEM_STEP;
+    };
+    protected SoundEvent getDeathSound() {
+        return ModSounds.RRC_COPPER_KNIGHT_DEAD.get();
+    };
+    protected float getSoundVolume() {
+        return 2F;
+    };
+    protected void playStepSound(net.minecraft.core.BlockPos pPos, net.minecraft.world.level.block.state.BlockState pState) {
+      this.playSound(this.getStepSound(), this.getSoundVolume() * 0.15F, 1F);
+    };
 }

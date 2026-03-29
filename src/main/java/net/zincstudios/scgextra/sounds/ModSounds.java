@@ -151,6 +151,48 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> RRC_SCRAPGUARD_PUNCH = SOUND_EVENTS.register("scrapguard.punch", 
         () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("scrapguard.punch")));
 
+    //Copper Knight
+    public static final RegistryObject<SoundEvent> RRC_COPPER_KNIGHT_DEAD = SOUND_EVENTS.register("knight.dead", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("knight.dead")));
+    public static final RegistryObject<SoundEvent> RRC_COPPER_KNIGHT_HURT_1 = SOUND_EVENTS.register("knight.hurt_1", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("knight.hurt_1")));
+    public static final RegistryObject<SoundEvent> RRC_COPPER_KNIGHT_HURT_2 = SOUND_EVENTS.register("knight.hurt_2", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("knight.hurt_2")));
+    public static final RegistryObject<SoundEvent> RRC_COPPER_KNIGHT_HURT_3 = SOUND_EVENTS.register("knight.hurt_3", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("knight.hurt_3")));
+    public static final RegistryObject<SoundEvent> RRC_COPPER_KNIGHT_IDLE_1 = SOUND_EVENTS.register("knight.idle_1", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("knight.idle_1")));
+    public static final RegistryObject<SoundEvent> RRC_COPPER_KNIGHT_IDLE_2 = SOUND_EVENTS.register("knight.idle_2", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("knight.idle_2")));
+    public static final RegistryObject<SoundEvent> RRC_COPPER_KNIGHT_IDLE_3 = SOUND_EVENTS.register("knight.idle_3", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("knight.idle_3")));
+
+    //Flaming Head
+    public static final RegistryObject<SoundEvent> RRC_FLAMING_HEAD_IDLE_1 = SOUND_EVENTS.register("flaming_head.idle_1", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("flaming_head.idle_1")));
+    public static final RegistryObject<SoundEvent> RRC_FLAMING_HEAD_IDLE_2 = SOUND_EVENTS.register("flaming_head.idle_2", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("flaming_head.idle_2")));
+    public static final RegistryObject<SoundEvent> RRC_FLAMING_HEAD_IDLE_3 = SOUND_EVENTS.register("flaming_head.idle_3", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("flaming_head.idle_3")));
+    public static final RegistryObject<SoundEvent> RRC_FLAMING_HEAD_IDLE_4 = SOUND_EVENTS.register("flaming_head.idle_4", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("flaming_head.idle_4")));
+    public static final RegistryObject<SoundEvent> RRC_FLAMING_HEAD_IDLE_5 = SOUND_EVENTS.register("flaming_head.idle_5", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("flaming_head.idle_5")));
+    public static final RegistryObject<SoundEvent> RRC_FLAMING_HEAD_DEAD_1 = SOUND_EVENTS.register("flaming_head.dead_1", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("flaming_head.dead_1")));
+    public static final RegistryObject<SoundEvent> RRC_FLAMING_HEAD_DEAD_2 = SOUND_EVENTS.register("flaming_head.dead_2", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("flaming_head.dead_2")));
+    public static final RegistryObject<SoundEvent> RRC_FLAMING_HEAD_SPIN_1 = SOUND_EVENTS.register("flaming_head.spin_1", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("flaming_head.spin_1")));
+    public static final RegistryObject<SoundEvent> RRC_FLAMING_HEAD_SPIN_2 = SOUND_EVENTS.register("flaming_head.spin_2", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("flaming_head.spin_2")));
+    public static final RegistryObject<SoundEvent> RRC_FLAMING_HEAD_SPIN_3 = SOUND_EVENTS.register("flaming_head.spin_3", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("flaming_head.spin_3")));
+    public static final RegistryObject<SoundEvent> RRC_FLAMING_HEAD_STUN_1 = SOUND_EVENTS.register("flaming_head.stun_1", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("flaming_head.stun_1")));
+    public static final RegistryObject<SoundEvent> RRC_FLAMING_HEAD_STUN_2 = SOUND_EVENTS.register("flaming_head.stun_2", 
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("flaming_head.stun_2")));
+
 
     public static void register(IEventBus eventbus){
         SOUND_EVENTS.register(eventbus);
