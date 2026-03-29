@@ -1,31 +1,71 @@
 package net.zincstudios.scgextra.entity.rrc.flaminghead;
 
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.phys.Vec3;
+import net.zincstudios.scgextra.Faction;
+import net.zincstudios.scgextra.SCGExtra;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+
+// TODO: edit the old goals to follow this pattern, make abstract class if possible
 // Designed around FlamingHeadEntity, make generic later if needed using behaviour augmentation
 public class RammingAttackGoal extends Goal {
 
     protected final FlamingHeadEntity mob;
     private final int cooldownDuration;
-    private final float ramMaxDistance;
+    private final int ramMaxDuration;
+    private final float speedMultiplier;
+    private final List<LivingEntity> affectedEntities = new ArrayList<>();
     private long cooldownEnd = 0;  // level timestamp
+    private int ramDuration;
+    private Vec3 ramDirection = new Vec3(1,0,0);
+    private boolean hadTarget = false;
 
-    public RammingAttackGoal(FlamingHeadEntity mob, int cooldownDuration, float ramMaxDistance) {
+    public RammingAttackGoal(FlamingHeadEntity mob, int cooldownDuration, int ramMaxDuration, float speedMultiplier) {
         this.mob = mob;
         this.cooldownDuration = cooldownDuration;
-        this.ramMaxDistance = ramMaxDistance;
+        this.ramMaxDuration = ramMaxDuration;
+        this.speedMultiplier = speedMultiplier;
+        this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
     @Override
     public boolean canUse() {
         LivingEntity livingentity = this.mob.getTarget();
-        return livingentity != null && livingentity.isAlive();
+        if (livingentity == null || !livingentity.isAlive()) {
+            this.hadTarget = false;
+            return false;
+        }
+
+        SCGExtra.LOGGER.debug("with target");
+
+        if (!this.hadTarget) {
+            this.hadTarget = true;
+            this.cooldownEnd = this.mob.level().getGameTime() + this.cooldownDuration/2;  // Half cooldown at start
+        }
+
+        return (this.mob.getBehaviorState() == FlamingHeadEntity.BehaviorState.NONE)
+                && this.mob.level().getGameTime() > this.cooldownEnd;
+    }
+
+    @Override
+    public boolean canContinueToUse() {
+        return this.ramDuration < this.ramMaxDuration;
     }
 
     @Override
     public void start() {
-        this.cooldownEnd = this.mob.level().getGameTime() + this.cooldownDuration/2;  // Half cooldown at start
+        this.mob.setBehaviorState(FlamingHeadEntity.BehaviorState.RAMMING);
+        assert this.mob.getTarget() != null;
+        this.ramDirection = this.mob.getTarget().position().subtract(this.mob.position()).normalize();
+        this.ramDirection = new Vec3(this.ramDirection.x, 0, this.ramDirection.z);
+        this.affectedEntities.clear();
+        this.affectedEntities.add(this.mob);  // don't damage and knockback self
+        this.ramDuration = 0;
     }
 
     @Override
@@ -33,6 +73,7 @@ public class RammingAttackGoal extends Goal {
         if (this.mob.getBehaviorState() == FlamingHeadEntity.BehaviorState.RAMMING) {
             this.mob.setBehaviorState(FlamingHeadEntity.BehaviorState.NONE);
         }
+        this.cooldownEnd = this.mob.level().getGameTime() + this.cooldownDuration;  // Half cooldown at start
     }
 
     @Override
@@ -42,16 +83,38 @@ public class RammingAttackGoal extends Goal {
 
     @Override
     public void tick() {
-        if (this.mob.level().getGameTime() > this.cooldownEnd) {
-            if (this.mob.getBehaviorState() == FlamingHeadEntity.BehaviorState.NONE) {
-                this.cooldownEnd = this.mob.level().getGameTime() + this.cooldownDuration;
-                this.mob.setBehaviorState(FlamingHeadEntity.BehaviorState.RAMMING);
-                ramTarget();
+        this.ramDuration++;
+
+        List<LivingEntity> nearbyTargets = this.mob.level().getEntitiesOfClass(LivingEntity.class, this.mob.getBoundingBox().inflate(0.5));
+        SCGExtra.LOGGER.debug("ramming: " + nearbyTargets);
+        for (LivingEntity entity : nearbyTargets) {
+            if (this.affectedEntities.contains(entity)) continue;
+
+            if (!Faction.isFriendlies(this.mob, entity)) {
+                entity.hurt(this.mob.level().damageSources().noAggroMobAttack(this.mob), 20);
             }
+            entity.knockback(0.8F, this.ramDirection.x, this.ramDirection.z);
+            this.affectedEntities.add(entity);
         }
+
+        turnEntityToVec(this.mob, this.ramDirection, 10);
+
+        this.mob.setDeltaMovement(
+                this.ramDirection.x * this.mob.getSpeed() * this.speedMultiplier,
+                this.mob.getDeltaMovement().y ,
+                this.ramDirection.z * this.mob.getSpeed() * this.speedMultiplier);
+        this.mob.position().add(this.ramDirection.x, 0, this.ramDirection.y);
     }
 
-    public void ramTarget() {
+    // TODO: consider making a util class
+    private static void turnEntityToYaw(LivingEntity entity, float yaw, float turnSpeed) {
+        entity.setYRot(Mth.approachDegrees(entity.getYRot(), yaw, turnSpeed));
+        entity.setYHeadRot(entity.getYRot());
+    }
 
+    @SuppressWarnings("SameParameterValue")
+    private static void turnEntityToVec(LivingEntity entity, Vec3 vec, float turnSpeed) {
+        float yaw = (float) Mth.wrapDegrees(Math.toDegrees(Mth.atan2(vec.z, vec.x)) - 90.0);
+        turnEntityToYaw(entity, yaw, turnSpeed);
     }
 }

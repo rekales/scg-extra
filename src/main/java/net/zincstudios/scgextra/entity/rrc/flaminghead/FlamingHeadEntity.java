@@ -111,15 +111,21 @@ public class FlamingHeadEntity extends Monster implements GeoEntity {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.targetSelector.addGoal(1, new HurtByNonFactionGoal(this));
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true, player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.goalSelector.addGoal(2, new MoveTowardsTargetGoal(this, 1, 40));
-        this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class, 20));
-        this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 1));
-        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true, entity -> Faction.isEnemies(this, entity) || entity.getMobType().equals(MobType.UNDEAD)));
-        this.goalSelector.addGoal(3, new FireSpinAttackGoal(this, 8));
-        this.goalSelector.addGoal(5, new ThrowFlamesGoal(this));
+
+        this.goalSelector.addGoal(2, new RammingAttackGoal(this, 200, 30, 3));
+//        this.goalSelector.addGoal(3, new FireSpinAttackGoal(this, 8));
+//        this.goalSelector.addGoal(4, new ThrowFlamesGoal(this));  //TODO: convert to aiStep
+
+        this.goalSelector.addGoal(5, new MoveTowardsTargetGoal(this, 1, 40));
+        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 20));
+        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1));
+        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
+
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true,
+                player -> !((Player) player).isCreative() && !player.isSpectator()));
+        this.targetSelector.addGoal(2, new HurtByNonFactionGoal(this));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
+                entity -> Faction.isEnemies(this, entity) || entity.getMobType().equals(MobType.UNDEAD)));
     }
 
     @Override
