@@ -6,6 +6,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
@@ -44,6 +45,12 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable {
         NONE, RAMMING, SPINNING, STUNNED
     }
 
+    // For forcing the entity to look to a certain direction because the look control is unresponsive
+    private static final EntityDataAccessor<Float> RAM_YAW =
+            SynchedEntityData.defineId(FlamingHeadEntity.class, EntityDataSerializers.FLOAT);
+    // Ramming has 20 tick charge time to turn to the target direction
+    private static final EntityDataAccessor<Boolean> ANIMATE_RAM =
+            SynchedEntityData.defineId(FlamingHeadEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> BEHAVIOR_STATE =
             SynchedEntityData.defineId(FlamingHeadEntity.class, EntityDataSerializers.INT);
 
@@ -71,10 +78,36 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable {
         this.entityData.set(BEHAVIOR_STATE, state.ordinal());
     }
 
+    public void setRamYaw(float yaw) {
+        this.entityData.set(RAM_YAW, yaw);
+    }
+
+    public float getRamYaw() {
+        return this.entityData.get(RAM_YAW);
+    }
+
+    public boolean hasRamYaw() {
+        return this.entityData.get(RAM_YAW) != -1000;
+    }
+
+    public void resetRamYaw() {
+        this.entityData.set(RAM_YAW, -1000F);
+    }
+
+    public void setAnimateRamming(boolean animateRam) {
+        this.entityData.set(ANIMATE_RAM, animateRam);
+    }
+
+    public boolean isAnimateRamming() {
+        return this.entityData.get(ANIMATE_RAM);
+    }
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(BEHAVIOR_STATE, BehaviorState.NONE.ordinal());
+        this.entityData.define(RAM_YAW, -1000F);
+        this.entityData.define(ANIMATE_RAM, false);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -87,15 +120,14 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "main", 0,
+        controllers.add(new AnimationController<>(this, "main", 4,
                 state -> {
                     if (state.getAnimatable().isDeadOrDying()) {
                         return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("death"));
                     }
-
                     if (state.getAnimatable().getBehaviorState() == BehaviorState.STUNNED) {
                         state.setAnimation(RawAnimation.begin().thenLoop("stun"));
-                    } else if (state.getAnimatable().getBehaviorState() == BehaviorState.RAMMING) {
+                    } else if (state.getAnimatable().isAnimateRamming()) {
                         state.setAnimation(RawAnimation.begin().thenPlay("ramming_attack"));
                     } else if (state.getAnimatable().getBehaviorState() == BehaviorState.SPINNING) {
                         state.setAnimation(RawAnimation.begin().thenPlay("fire_attack"));
@@ -119,8 +151,8 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new StunnedGoal<>(this));
-        this.goalSelector.addGoal(2, new RammingAttackGoal(this, 600, 30, 3));
+        this.goalSelector.addGoal(1, new FlamingHeadStunnedGoal<>(this));
+        this.goalSelector.addGoal(2, new RammingAttackGoal(this, 600, 50, 3));
         this.goalSelector.addGoal(3, new FireSpinAttackGoal(this, 200, 30, 8F, 10));
 
         this.goalSelector.addGoal(5, new MoveTowardsTargetGoal(this, 1, 40));
@@ -133,6 +165,21 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable {
         this.targetSelector.addGoal(2, new HurtByNonFactionGoal(this));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
                 entity -> Faction.isEnemies(this, entity) || entity.getMobType().equals(MobType.UNDEAD)));
+    }
+
+    private static void turnEntityToYaw(LivingEntity entity, float yaw, float turnSpeed) {
+        entity.setYRot(Mth.approachDegrees(entity.getYRot(), yaw, turnSpeed));
+        entity.setYHeadRot(entity.getYRot());
+        entity.setYBodyRot(entity.getYRot());
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (this.level().isClientSide && this.hasRamYaw()) {
+            turnEntityToYaw(this, this.getRamYaw(), 10F);
+        }
     }
 
     @Override

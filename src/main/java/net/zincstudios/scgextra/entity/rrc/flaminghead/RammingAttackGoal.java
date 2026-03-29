@@ -5,7 +5,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.Faction;
-import net.zincstudios.scgextra.SCGExtra;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -21,7 +20,7 @@ public class RammingAttackGoal extends Goal {
     private final float speedMultiplier;
     private final List<LivingEntity> affectedEntities = new ArrayList<>();
     private long cooldownEnd = 0;  // level timestamp
-    private int duration;
+    public int duration;
     private Vec3 ramDirection = new Vec3(1,0,0);
     private boolean hadTarget = false;
 
@@ -61,6 +60,7 @@ public class RammingAttackGoal extends Goal {
         assert this.mob.getTarget() != null;
         this.ramDirection = this.mob.getTarget().position().subtract(this.mob.position()).normalize();
         this.ramDirection = new Vec3(this.ramDirection.x, 0, this.ramDirection.z);
+        this.mob.setRamYaw((float) Mth.wrapDegrees(Math.toDegrees(Mth.atan2(this.ramDirection.z, this.ramDirection.x)) - 90.0));
         this.affectedEntities.clear();
         this.affectedEntities.add(this.mob);  // don't damage and knockback self
         this.duration = 0;
@@ -72,6 +72,8 @@ public class RammingAttackGoal extends Goal {
             this.mob.setBehaviorState(FlamingHeadEntity.BehaviorState.NONE);
         }
         this.cooldownEnd = this.mob.level().getGameTime() + this.cooldownDuration;
+        this.mob.resetRamYaw();
+        this.mob.setAnimateRamming(false);
     }
 
     @Override
@@ -82,6 +84,10 @@ public class RammingAttackGoal extends Goal {
     @Override
     public void tick() {
         this.duration++;
+
+        if (this.duration < 20) return;
+
+        this.mob.setAnimateRamming(true);
 
         List<LivingEntity> nearbyTargets = this.mob.level().getEntitiesOfClass(LivingEntity.class, this.mob.getBoundingBox().inflate(0.5));
         for (LivingEntity entity : nearbyTargets) {
@@ -94,24 +100,10 @@ public class RammingAttackGoal extends Goal {
             this.affectedEntities.add(entity);
         }
 
-        turnEntityToVec(this.mob, this.ramDirection, 10);
-
         this.mob.setDeltaMovement(
                 this.ramDirection.x * this.mob.getSpeed() * this.speedMultiplier,
                 this.mob.getDeltaMovement().y ,
                 this.ramDirection.z * this.mob.getSpeed() * this.speedMultiplier);
         this.mob.position().add(this.ramDirection.x, 0, this.ramDirection.y);
-    }
-
-    // TODO: consider making a util class
-    private static void turnEntityToYaw(LivingEntity entity, float yaw, float turnSpeed) {
-        entity.setYRot(Mth.approachDegrees(entity.getYRot(), yaw, turnSpeed));
-        entity.setYHeadRot(entity.getYRot());
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    private static void turnEntityToVec(LivingEntity entity, Vec3 vec, float turnSpeed) {
-        float yaw = (float) Mth.wrapDegrees(Math.toDegrees(Mth.atan2(vec.z, vec.x)) - 90.0);
-        turnEntityToYaw(entity, yaw, turnSpeed);
     }
 }
