@@ -17,18 +17,18 @@ public class RammingAttackGoal extends Goal {
 
     protected final FlamingHeadEntity mob;
     private final int cooldownDuration;
-    private final int ramMaxDuration;
+    private final int maxDuration;
     private final float speedMultiplier;
     private final List<LivingEntity> affectedEntities = new ArrayList<>();
     private long cooldownEnd = 0;  // level timestamp
-    private int ramDuration;
+    private int duration;
     private Vec3 ramDirection = new Vec3(1,0,0);
     private boolean hadTarget = false;
 
     public RammingAttackGoal(FlamingHeadEntity mob, int cooldownDuration, int ramMaxDuration, float speedMultiplier) {
         this.mob = mob;
         this.cooldownDuration = cooldownDuration;
-        this.ramMaxDuration = ramMaxDuration;
+        this.maxDuration = ramMaxDuration;
         this.speedMultiplier = speedMultiplier;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
@@ -54,7 +54,7 @@ public class RammingAttackGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        return this.ramDuration < this.ramMaxDuration;
+        return this.duration < this.maxDuration;
     }
 
     @Override
@@ -65,7 +65,7 @@ public class RammingAttackGoal extends Goal {
         this.ramDirection = new Vec3(this.ramDirection.x, 0, this.ramDirection.z);
         this.affectedEntities.clear();
         this.affectedEntities.add(this.mob);  // don't damage and knockback self
-        this.ramDuration = 0;
+        this.duration = 0;
     }
 
     @Override
@@ -83,7 +83,7 @@ public class RammingAttackGoal extends Goal {
 
     @Override
     public void tick() {
-        this.ramDuration++;
+        this.duration++;
 
         List<LivingEntity> nearbyTargets = this.mob.level().getEntitiesOfClass(LivingEntity.class, this.mob.getBoundingBox().inflate(0.5));
         SCGExtra.LOGGER.debug("ramming: " + nearbyTargets);
