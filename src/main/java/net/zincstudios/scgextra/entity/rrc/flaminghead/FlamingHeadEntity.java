@@ -29,6 +29,7 @@ import net.zincstudios.scgextra.sounds.ModSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.Animation;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
@@ -44,6 +45,9 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable {
     public enum BehaviorState {
         NONE, RAMMING, SPINNING, STUNNED
     }
+
+    public static final RawAnimation EFFECTS_BASE = RawAnimation.begin().then("effect.none", Animation.LoopType.HOLD_ON_LAST_FRAME);
+    public static final RawAnimation EYE_FLASH = RawAnimation.begin().then("effect.eye_flash", Animation.LoopType.PLAY_ONCE);
 
     // For forcing the entity to look to a certain direction because the look control is unresponsive
     private static final EntityDataAccessor<Float> RAM_YAW =
@@ -140,6 +144,11 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable {
                     return PlayState.CONTINUE;
                 }
         ));
+
+        controllers.add(new AnimationController<>(this, "effects", 0,
+                state -> state.setAndContinue(EFFECTS_BASE))
+                .triggerableAnim("eye_flash", EYE_FLASH)
+        );
     }
 
     @Override

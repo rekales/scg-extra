@@ -85,6 +85,8 @@ public class RammingAttackGoal extends Goal {
     public void tick() {
         this.duration++;
 
+        if (this.duration == 12) this.mob.triggerAnim("effects", "eye_flash");
+
         if (this.duration < 20) return;
 
         this.mob.setAnimateRamming(true);
