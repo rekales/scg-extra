@@ -25,10 +25,10 @@ public class RammingAttackGoal extends Goal {
     private Vec3 ramDirection = new Vec3(1,0,0);
     private boolean hadTarget = false;
 
-    public RammingAttackGoal(FlamingHeadEntity mob, int cooldownDuration, int ramMaxDuration, float speedMultiplier) {
+    public RammingAttackGoal(FlamingHeadEntity mob, int cooldownDuration, int maxDuration, float speedMultiplier) {
         this.mob = mob;
         this.cooldownDuration = cooldownDuration;
-        this.maxDuration = ramMaxDuration;
+        this.maxDuration = maxDuration;
         this.speedMultiplier = speedMultiplier;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
@@ -40,8 +40,6 @@ public class RammingAttackGoal extends Goal {
             this.hadTarget = false;
             return false;
         }
-
-        SCGExtra.LOGGER.debug("with target");
 
         if (!this.hadTarget) {
             this.hadTarget = true;
@@ -73,7 +71,7 @@ public class RammingAttackGoal extends Goal {
         if (this.mob.getBehaviorState() == FlamingHeadEntity.BehaviorState.RAMMING) {
             this.mob.setBehaviorState(FlamingHeadEntity.BehaviorState.NONE);
         }
-        this.cooldownEnd = this.mob.level().getGameTime() + this.cooldownDuration;  // Half cooldown at start
+        this.cooldownEnd = this.mob.level().getGameTime() + this.cooldownDuration;
     }
 
     @Override
@@ -86,7 +84,6 @@ public class RammingAttackGoal extends Goal {
         this.duration++;
 
         List<LivingEntity> nearbyTargets = this.mob.level().getEntitiesOfClass(LivingEntity.class, this.mob.getBoundingBox().inflate(0.5));
-        SCGExtra.LOGGER.debug("ramming: " + nearbyTargets);
         for (LivingEntity entity : nearbyTargets) {
             if (this.affectedEntities.contains(entity)) continue;
 
