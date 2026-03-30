@@ -3,7 +3,7 @@
   "equipment_chance": 1.0,
   "items": [
     {
-      "item": "scguns:cog_mace",
+      "item": "scgextra:atlantic_mace",
       "weight": 10.0,
       "drop_chance": 0.1,
       "min_durability": 0.4,
