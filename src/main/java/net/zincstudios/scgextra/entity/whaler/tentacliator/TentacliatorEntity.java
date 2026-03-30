@@ -15,7 +15,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.monster.Drowned;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
@@ -32,8 +31,6 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import top.ribs.scguns.config.EntityEquipmentConfig;
-import top.ribs.scguns.entity.ai.AIType;
-import top.ribs.scguns.entity.ai.GunAttackGoal;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -71,7 +68,7 @@ public class TentacliatorEntity extends GunnerEntity implements GeoEntity, Range
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new GunAttackGoal<>(this, this.getMainHandItem(), 1.0F, AIType.RECKLESS, 3));
+        // GunAttackGoal added on finalizeSpawn
         this.goalSelector.addGoal(2, new InkAttackGoal(this));
         this.goalSelector.addGoal(3, new TridentAttackGoal<>(this, 1.0D, 40, 10.0F));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -102,6 +99,7 @@ public class TentacliatorEntity extends GunnerEntity implements GeoEntity, Range
     }
 
     public void performRangedAttack(LivingEntity target, float distanceFactor) {
+        this.triggerAnim("special", "attack");
         ThrownTrident throwntrident = new ThrownTrident(this.level(), this, new ItemStack(Items.TRIDENT));
         double d0 = target.getX() - this.getX();
         double d1 = target.getY(0.3333333333333333D) - throwntrident.getY();
