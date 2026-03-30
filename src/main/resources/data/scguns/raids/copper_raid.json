@@ -5,7 +5,7 @@
   "boss": {
     "entity_type": "scgextra:flaming_head",
     "custom_name": "translation:raid.boss.scguns.copper",
-    "fixed_health": 65.0,
+    "fixed_health": 600.0,
     "weapon": {
       "item": "minecraft:air",
       "drop_chance": 0.0
