@@ -14,12 +14,13 @@ import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.model.DefaultedItemGeoModel;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import top.ribs.scguns.item.CogMaceItem;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Consumer;
 
 // Needed to be a geomodel because of multiple rotations with the spikes (1.20 vanilla limitation)
-public class AtlanticMaceItem extends SwordItem implements GeoItem {
+@ParametersAreNonnullByDefault
+public class AtlanticMaceItem extends SwordItem implements GeoItem, HurtEffects {
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
@@ -28,10 +29,15 @@ public class AtlanticMaceItem extends SwordItem implements GeoItem {
     }
 
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        target.addEffect(new MobEffectInstance(MobEffects.POISON, 40, 0));
-        attacker.resetFallDistance();
-        stack.hurtAndBreak(1, attacker, (entity) -> entity.broadcastBreakEvent(entity.getUsedItemHand()));
+        hurtEffect(stack, target, attacker);
         return super.hurtEnemy(stack, target, attacker);
+    }
+
+    @Override
+    public void hurtEffect(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        if (!target.level().isClientSide) {
+            target.addEffect(new MobEffectInstance(MobEffects.POISON, 40, 0));
+        }
     }
 
     @Override

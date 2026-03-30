@@ -2,6 +2,7 @@ package net.zincstudios.scgextra.entity.whaler.pufficus;
 
 import net.zincstudios.scgextra.Faction;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.entity.common.ai.ItemEffectMeleeAttackGoal;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntity;
 
 import net.minecraft.core.BlockPos;
@@ -55,7 +56,7 @@ public class PufficusEntity extends Monster implements GeoEntity {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0F, false));
+        this.goalSelector.addGoal(2, new ItemEffectMeleeAttackGoal(this, 1.0F, false));
         this.goalSelector.addGoal(4, new ThrowNetGoal(this, 200, 12F));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 0.9));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
