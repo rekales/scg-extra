@@ -13,6 +13,7 @@ public class FishFolkModel<T extends FishFolkEntity> extends TextureVarEntityGeo
         super(SCGExtra.asResource("whaler/fish_folk"));
 	}
 
+    // TODO: redo by controller and re-animation
 	@Override
 	public void setCustomAnimations(T animatable, long instanceId,
 			AnimationState<T> animationState) {
