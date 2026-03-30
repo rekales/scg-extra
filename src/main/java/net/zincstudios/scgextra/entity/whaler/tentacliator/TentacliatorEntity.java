@@ -31,6 +31,8 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import top.ribs.scguns.config.EntityEquipmentConfig;
+import top.ribs.scguns.entity.ai.AIType;
+import top.ribs.scguns.entity.ai.GunAttackGoal;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -68,7 +70,7 @@ public class TentacliatorEntity extends GunnerEntity implements GeoEntity, Range
 
     @Override
     protected void registerGoals() {
-        // GunAttackGoal added on finalizeSpawn
+        this.goalSelector.addGoal(1, new GunAttackGoal<>(this, this.getMainHandItem(), 1.0F, AIType.RECKLESS, 3));
         this.goalSelector.addGoal(2, new InkAttackGoal(this));
         this.goalSelector.addGoal(3, new TridentAttackGoal<>(this, 1.0D, 40, 10.0F));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
