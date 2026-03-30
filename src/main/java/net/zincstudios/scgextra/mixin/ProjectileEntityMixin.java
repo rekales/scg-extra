@@ -43,7 +43,8 @@ public class ProjectileEntityMixin {
             at = @At(
                     value = "INVOKE",
                     target = "Ltop/ribs/scguns/common/BoundingBoxManager;getHeadshotBoxes(Lnet/minecraft/world/entity/EntityType;)Ltop/ribs/scguns/interfaces/IHeadshotBox;"
-            )
+            ),
+            remap = false
     )
     private void beforeGetHeadshotBoxes(Entity entity, Vec3 startVec, Vec3 endVec, CallbackInfoReturnable<ProjectileEntity.EntityResult> cir,
                                         @Local(name = "boundingBox") AABB boundingBox, @Local(name = "hitPos") Vec3 hitPos, @Local(name = "headshot") LocalBooleanRef headshot) {
