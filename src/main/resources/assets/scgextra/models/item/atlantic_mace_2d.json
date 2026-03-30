@@ -2,6 +2,6 @@
   "credit": "Made with Blockbench",
   "parent": "item/generated",
   "textures": {
-    "layer0": "scgextra:item/cog_mace_2d"
+    "layer0": "scgextra:item/atlantic_mace_2d"
   }
 }

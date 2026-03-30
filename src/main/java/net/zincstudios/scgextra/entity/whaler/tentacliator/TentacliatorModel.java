@@ -13,6 +13,7 @@ public class TentacliatorModel <T extends TentacliatorEntity> extends DefaultedE
         super(SCGExtra.asResource("whaler/tentacliator"));
 	}
 
+    // TODO: edit model or extend DefaultedEntityGeoModel
     @Override
 	public void setCustomAnimations(T animatable, long instanceId, AnimationState<T> animationState) {
 		super.setCustomAnimations(animatable, instanceId, animationState);

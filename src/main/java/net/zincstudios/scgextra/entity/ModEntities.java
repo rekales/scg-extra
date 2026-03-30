@@ -43,7 +43,6 @@ import net.zincstudios.scgextra.entity.whaler.salmonsaur.SalmonsaurRenderer;
 import net.zincstudios.scgextra.entity.whaler.tentacliator.TentacliatorEntity;
 import net.zincstudios.scgextra.entity.whaler.tentacliator.TentacliatorRenderer;
 import net.zincstudios.scgextra.entity.whaler.turtleman.TurtlemanEntity;
-import net.zincstudios.scgextra.entity.whaler.turtleman.TurtlemanRenderer;
 import net.zincstudios.scgextra.entity.rrc.drone.DroneEntityRenderer;
 import net.zincstudios.scgextra.entity.rrc.scout.ScoutRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -193,7 +192,8 @@ public class ModEntities {
 
     private static void onClientSetup(FMLClientSetupEvent event) {
         EntityRenderers.register(ModEntities.FISH_FOLK.get(), FishFolkRenderer::new);
-        EntityRenderers.register(ModEntities.TURTLEMAN.get(), TurtlemanRenderer::new);
+        EntityRenderers.register(ModEntities.TURTLEMAN.get(), (ctx) -> new GunnerRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("whaler/turtleman")), -10));
         EntityRenderers.register(ModEntities.SALMONSAUR.get(), SalmonsaurRenderer::new);
         EntityRenderers.register(ModEntities.GUARDIAN_STATUE.get(), GuardianStatueRenderer::new);
         EntityRenderers.register(ModEntities.TENTACLIATOR.get(), TentacliatorRenderer::new);

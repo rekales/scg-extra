@@ -12,8 +12,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.ModEntities;
-import top.ribs.scguns.init.ModTiers;
-import top.ribs.scguns.item.CogMaceItem;
 
 @SuppressWarnings("unused")
 public class ModItems {
@@ -120,9 +118,5 @@ public class ModItems {
                     .map(RegistryObject::get)
                     .forEach(event::accept);
         }
-    }
-
-    private static void onClientSetup(FMLClientSetupEvent event) {
-
     }
 }

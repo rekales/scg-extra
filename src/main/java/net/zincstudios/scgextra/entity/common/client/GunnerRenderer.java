@@ -24,6 +24,13 @@ public class GunnerRenderer <T extends GunnerEntity & GeoEntity> extends GeoEnti
         addRenderLayer(new GunGeoLayer<>(this));
     }
 
+    public GunnerRenderer(EntityRendererProvider.Context renderManager, GeoModel<T> model, float gunTilt) {
+        super(renderManager, model);
+        this.shadowRadius = 0;
+
+        addRenderLayer(new GunGeoLayer<>(this, gunTilt));
+    }
+
     /**
      * Constructor for extending and adding a custom gun render layer
      */

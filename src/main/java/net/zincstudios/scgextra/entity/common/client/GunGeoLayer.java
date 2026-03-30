@@ -3,9 +3,9 @@ package net.zincstudios.scgextra.entity.common.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.renderer.GeoRenderer;
@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
  *
  * @param <T>
  */
-public class GunGeoLayer<T extends GunnerEntity & GeoAnimatable> extends BlockAndItemGeoLayer<T> {
+public class GunGeoLayer<T extends Mob & GeoAnimatable> extends BlockAndItemGeoLayer<T> {
 
     private GeoBone cachedBone;
     private final float gunTilt;

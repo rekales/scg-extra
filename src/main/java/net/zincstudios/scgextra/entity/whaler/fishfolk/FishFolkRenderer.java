@@ -18,7 +18,7 @@ import top.ribs.scguns.init.ModItems;
 public class FishFolkRenderer extends GeoEntityRenderer<FishFolkEntity> {
 
     public FishFolkRenderer(Context context) {
-        super(context, new FishFolkModel<FishFolkEntity>());
+        super(context, new FishFolkModel<>());
         this.shadowRadius = 0.5f;
         addRenderLayer(new BlockAndItemGeoLayer<>(this){
             @Override
@@ -57,6 +57,7 @@ public class FishFolkRenderer extends GeoEntityRenderer<FishFolkEntity> {
                             poseStack.mulPose(Axis.XP.rotationDegrees(90));
                         }else{
                             poseStack.mulPose(Axis.XP.rotationDegrees(180));
+                            poseStack.mulPose(Axis.YP.rotationDegrees(-15));
                         }
                     }
                 }

@@ -1,19 +1,23 @@
 package net.zincstudios.scgextra.entity.whaler.fishfolk;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.ZombieAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.monster.Drowned;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ThrownTrident;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.TridentAttackGoal;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -24,43 +28,39 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import top.ribs.scguns.config.EntityEquipmentConfig;
-import top.ribs.scguns.entity.ai.AIType;
-import top.ribs.scguns.entity.ai.GunAttackGoal;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.util.RandomSource;
 import net.zincstudios.scgextra.Faction;
 import net.zincstudios.scgextra.entity.whaler.salmonsaur.SalmonsaurEntity;
+import top.ribs.scguns.entity.ai.AIType;
+import top.ribs.scguns.entity.ai.GunAttackGoal;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<Integer> {
+public class FishFolkEntity extends GunnerEntity implements GeoEntity, RangedAttackMob, VariantHolder<Integer> {
 
     private static final EntityDataAccessor<Integer> TEXTURE_VARIANT =
             SynchedEntityData.defineId(FishFolkEntity.class, EntityDataSerializers.INT);
-    
-            private static final EntityDataAccessor<Boolean> SITTING =
+    private static final EntityDataAccessor<Boolean> SITTING =
             SynchedEntityData.defineId(FishFolkEntity.class, EntityDataSerializers.BOOLEAN);
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    public FishFolkEntity(EntityType<? extends Drowned> entity, Level level) {
+    public FishFolkEntity(EntityType<? extends Monster> entity, Level level) {
         super(entity, level);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
+    public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @org.jetbrains.annotations.Nullable SpawnGroupData spawnData, @org.jetbrains.annotations.Nullable CompoundTag dataTag) {
         this.setVariant(this.getRandom().nextIntBetweenInclusive(1,2));
         EntityEquipmentConfig.equipEntity(this, "scgextra:fish_folk");  // NOTE: using raw string
-        return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
+        return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
     }
-
-    @Override
-    protected void populateDefaultEquipmentSlots(RandomSource pRandom, DifficultyInstance pDifficulty) {}
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
@@ -73,9 +73,9 @@ public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<
     }
 
     @Override
-    protected void addBehaviourGoals() {
-        this.goalSelector.addGoal(2, new FishFolkAttackGoal(this, 1.0D, false));
+    protected void registerGoals() {
         this.goalSelector.addGoal(1, new GunAttackGoal<>(this, this.getMainHandItem(), 1.0F, AIType.RECKLESS, 3));
+        this.goalSelector.addGoal(2, new TridentAttackGoal<>(this, 1.0D, 40, 10.0F));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
 
@@ -84,23 +84,6 @@ public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
                 entity -> Faction.isEnemies(this, entity)));
-        this.goalSelector.addGoal(2, new TridentAttackGoal(this, 1.0D, 40, 10.0F));
-    }
-
-    static class FishFolkAttackGoal extends ZombieAttackGoal {
-        private final FishFolkEntity fish_folk;
-        public FishFolkAttackGoal(FishFolkEntity pFishFolk, double pSpeedModifier, boolean pFollowingTargetEvenIfNotSeen) {
-           super(pFishFolk, pSpeedModifier, pFollowingTargetEvenIfNotSeen);
-           this.fish_folk = pFishFolk;
-        }
-
-        public boolean canUse() {
-           return super.canUse() && this.fish_folk.okTarget(this.fish_folk.getTarget());
-        }
-
-        public boolean canContinueToUse() {
-           return super.canContinueToUse() && this.fish_folk.okTarget(this.fish_folk.getTarget());
-        }
     }
 
     @Override
@@ -125,14 +108,16 @@ public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<
     }
 
     @Override
-    public void performRangedAttack(LivingEntity pTarget, float pDistanceFactor) {
-        super.performRangedAttack(pTarget, pDistanceFactor);
+    public void performRangedAttack(LivingEntity target, float pDistanceFactor) {
         this.triggerAnim("special", "attack");
-    }
-
-    @Override
-    public boolean isBaby() {
-        return false;
+        ThrownTrident throwntrident = new ThrownTrident(this.level(), this, new ItemStack(Items.TRIDENT));
+        double d0 = target.getX() - this.getX();
+        double d1 = target.getY(0.3333333333333333D) - throwntrident.getY();
+        double d2 = target.getZ() - this.getZ();
+        double d3 = Math.sqrt(d0 * d0 + d2 * d2);
+        throwntrident.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - this.level().getDifficulty().getId() * 4));
+        this.playSound(SoundEvents.DROWNED_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.level().addFreshEntity(throwntrident);
     }
 
     @Override
@@ -174,10 +159,7 @@ public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<
         if(this.getVehicle()==null)return false;
         return this.getVehicle() instanceof SalmonsaurEntity;
     }
-    @Override
-    protected boolean isSunSensitive() {
-        return false;
-    }
+
     @Override
     public void tick() {
         super.tick();
@@ -188,6 +170,7 @@ public class FishFolkEntity extends Drowned implements GeoEntity, VariantHolder<
             }
         }
     }
+
     public boolean isSitting(){
         return this.entityData.get(SITTING);
     }

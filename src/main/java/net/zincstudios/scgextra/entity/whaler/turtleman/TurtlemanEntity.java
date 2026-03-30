@@ -33,6 +33,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidType;
 
+import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.StunnedGoal;
@@ -53,7 +54,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEntity, Stunnable {
+public class TurtlemanEntity extends GunnerEntity implements GeoEntity, Stunnable {
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
@@ -84,11 +85,6 @@ public class TurtlemanEntity extends Monster implements RangedAttackMob, GeoEnti
     public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
         EntityEquipmentConfig.equipEntity(this, "scgextra:turtleman");  // NOTE: using raw string
         return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
-    }
-
-    @Override
-    public void performRangedAttack(LivingEntity livingEntity, float v) {
-        this.doHurtTarget(livingEntity);
     }
 
     @Override
