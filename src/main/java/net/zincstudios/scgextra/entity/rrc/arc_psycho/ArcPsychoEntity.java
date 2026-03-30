@@ -119,7 +119,7 @@ public class ArcPsychoEntity extends Monster implements GeoEntity{
         );
     };
     protected float getSoundVolume() {
-        return 2F;
+        return 0.8F;
     };
     protected void playStepSound(net.minecraft.core.BlockPos pPos, net.minecraft.world.level.block.state.BlockState pState) {
     };

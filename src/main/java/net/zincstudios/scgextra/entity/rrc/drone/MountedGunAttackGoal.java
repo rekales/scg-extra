@@ -22,7 +22,7 @@ public class MountedGunAttackGoal extends Goal{
     }
 
     public Vec3 getProjectileSpawnPos() {
-        return new Vec3(-1.5,1.7,0).yRot(-this.mob.getYRot() * Mth.DEG_TO_RAD).add(this.mob.position());
+        return new Vec3(-1.3,1.7,3).yRot(-this.mob.getYRot() * Mth.DEG_TO_RAD).add(this.mob.position());
     }
 
     public void triggerGunFlash() {}

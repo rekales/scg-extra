@@ -9,6 +9,14 @@
       "min_durability": 0.2,
       "max_durability": 0.5,
       "slot": "mainhand"
+    },
+    {
+      "item": "scguns:llr_director",
+      "weight": 10.0,
+      "drop_chance": 0.0,
+      "min_durability": 0.2,
+      "max_durability": 0.5,
+      "slot": "mainhand"
     }
   ]
 }
