@@ -5,6 +5,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
@@ -52,7 +53,11 @@ public class CopperKnightEntity extends GunnerEntity implements GeoEntity{
         controllers.add(new AnimationController<>(this, "walk/idle/aim", 2,
                 state -> {
                     if (state.getAnimatable().isAiming()) {
-                        return state.setAndContinue(AIMING);
+                        if(state.isMoving()){
+                            return state.setAndContinue(RawAnimation.begin().thenLoop("walk_holding_aim"));
+                        }else{
+                            return state.setAndContinue(AIMING);
+                        }
                     } else {
                         RawAnimation anim = RawAnimation.begin();
                         if (state.isCurrentAnimation(AIMING)) {
