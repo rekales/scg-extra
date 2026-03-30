@@ -2,10 +2,13 @@ package net.zincstudios.scgextra.entity.common.ai;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib.animatable.GeoEntity;
+import top.ribs.scguns.init.ModItems;
 
 public class FlareSummonGoal extends Goal {
 
@@ -16,6 +19,8 @@ public class FlareSummonGoal extends Goal {
 
     private long summonTrigger = -1;  // level timestamp
     private long cooldownEnd = 0;  // level timestamp
+
+    private ItemStack itemInHand = null;
 
     @SafeVarargs
     public FlareSummonGoal(PathfinderMob mob, int cooldownDuration, int summonDelay, EntityType<? extends Mob>... summonTypes) {
@@ -34,6 +39,15 @@ public class FlareSummonGoal extends Goal {
     @Override
     public void start() {
         this.cooldownEnd = this.mob.level().getGameTime() + this.cooldownDuration/2;  // Half cooldown at start
+        this.itemInHand = this.mob.getMainHandItem();
+        this.mob.setItemInHand(InteractionHand.MAIN_HAND, ModItems.FLARE_PISTOL.get().getDefaultInstance());
+    }
+
+    @Override
+    public void stop() {
+        super.stop();
+        this.mob.setItemInHand(InteractionHand.MAIN_HAND, this.itemInHand);
+        this.itemInHand = null;
     }
 
     @Override
