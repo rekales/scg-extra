@@ -1,8 +1,8 @@
 package net.zincstudios.scgextra.entity.rrc.flaminghead;
 
-import net.zincstudios.scgextra.entity.common.ai.StunnedGoal;
+import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
 
-public class FlamingHeadStunnedGoal<T extends FlamingHeadEntity> extends StunnedGoal<T> {
+public class FlamingHeadStunnedGoal<T extends FlamingHeadEntity> extends StunnedWithVisualGoal<T> {
 
     public FlamingHeadStunnedGoal(T mob) {
         super(mob);

@@ -6,7 +6,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
@@ -238,7 +237,8 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable {
     }
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
         return ModSounds.RRC_FLAMING_HEAD_DEAD_1.get();
-    };
+    }
+
     protected SoundEvent getAmbientSound() {
         return MobUtil.getSound(
             this.random, 
@@ -248,21 +248,25 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable {
             ModSounds.RRC_FLAMING_HEAD_IDLE_4.get(),
             ModSounds.RRC_FLAMING_HEAD_IDLE_5.get()
         );
-    };
+    }
+
     protected SoundEvent getStepSound() {
         return SoundEvents.IRON_GOLEM_STEP;
-    };
+    }
+
     protected SoundEvent getDeathSound() {
         return MobUtil.getSound(
             this.random,
             ModSounds.RRC_FLAMING_HEAD_DEAD_1.get(),
             ModSounds.RRC_FLAMING_HEAD_DEAD_2.get()
         );
-    };
+    }
+
     protected float getSoundVolume() {
         return 2F;
-    };
+    }
+
     protected void playStepSound(net.minecraft.core.BlockPos pPos, net.minecraft.world.level.block.state.BlockState pState) {
       this.playSound(this.getStepSound(), this.getSoundVolume() * 0.15F, 1F);
-    };
+    }
 }
