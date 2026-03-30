@@ -1,0 +1,207 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": {
+    "type": "forge:and",
+    "values": [
+      "#minecraft:is_overworld",
+      {
+        "type": "forge:not",
+        "value": "minecraft:badlands"
+      },
+      {
+        "type": "forge:not",
+        "value": "minecraft:deep_cold_ocean"
+      },
+      {
+        "type": "forge:not",
+        "value": "minecraft:deep_frozen_ocean"
+      },
+      {
+        "type": "forge:not",
+        "value": "minecraft:deep_lukewarm_ocean"
+      },
+      {
+        "type": "forge:not",
+        "value": "minecraft:deep_ocean"
+      },
+      {
+        "type": "forge:not",
+        "value": "minecraft:desert"
+      },
+      {
+        "type": "forge:not",
+        "value": "minecraft:eroded_badlands"
+      },
+      {
+        "type": "forge:not",
+        "value": "minecraft:frozen_ocean"
+      },
+      {
+        "type": "forge:not",
+        "value": "minecraft:cold_ocean"
+      },
+      {
+        "type": "forge:not",
+        "value": "minecraft:frozen_peaks"
+      },
+      {
+        "type": "forge:not",
+        "value": "minecraft:frozen_river"
+      },
+      {
+        "type": "forge:not",
+        "value": "minecraft:grove"
+      },
+      {
+        "type": "forge:not",
+        "value": "minecraft:ice_spikes"
+      },
+      {
+        "type": "forge:not",
+        "value": "minecraft:jagged_peaks"
+      },
+      {
+        "type": "forge:not",
+        "value": "minecraft:lukewarm_ocean"
+      },
+      {
+        "type": "forge:not",
+        "value": "minecraft:ocean"
+      },
+      {
+        "type": "forge:not",
+        "value": "minecraft:river"
+      },
+      {
+        "type": "forge:not",
+        "value": "minecraft:savanna"
+      },
+      {
+        "type": "forge:not",
+        "value": "minecraft:savanna_plateau"
+      },
+      {
+        "type": "forge:not",
+        "value": "minecraft:snowy_beach"
+      },
+      {
+        "type": "forge:not",
+        "value": "minecraft:snowy_plains"
+      },
+      {
+        "type": "forge:not",
+        "value": "minecraft:snowy_slopes"
+      },
+      {
+        "type": "forge:not",
+        "value": "minecraft:snowy_taiga"
+      },
+      {
+        "type": "forge:not",
+        "value": "minecraft:warm_ocean"
+      },
+      {
+        "type": "forge:not",
+        "value": "minecraft:wooded_badlands"
+      }
+    ]
+  },
+  "spawners": [
+        {
+            "type": "scgextra:scout",
+            "weight": 6,
+            "minCount": 1,
+            "maxCount": 1,
+            "conditions": [
+                {
+                    "type": "minecraft:light_level",
+                    "max": 7
+                }
+            ]
+        },
+        {
+            "type": "scgextra:tallman",
+            "weight": 6,
+            "minCount": 1,
+            "maxCount": 1,
+            "conditions": [
+                {
+                    "type": "minecraft:light_level",
+                    "max": 7
+                }
+            ]
+        },
+        {
+            "type": "scgextra:copper_knight",
+            "weight": 6,
+            "minCount": 1,
+            "maxCount": 1,
+            "conditions": [
+                {
+                    "type": "minecraft:light_level",
+                    "max": 7
+                }
+            ]
+        },
+        {
+            "type": "scgextra:drone",
+            "weight": 1,
+            "minCount": 1,
+            "maxCount": 1,
+            "conditions": [
+                {
+                    "type": "minecraft:light_level",
+                    "max": 7
+                }
+            ]
+        },
+        {
+            "type": "scgextra:oppressor",
+            "weight": 1,
+            "minCount": 1,
+            "maxCount": 1,
+            "conditions": [
+                {
+                    "type": "minecraft:light_level",
+                    "max": 7
+                }
+            ]
+        },
+        {
+            "type": "scgextra:spring_junkie",
+            "weight": 3,
+            "minCount": 1,
+            "maxCount": 1,
+            "conditions": [
+                {
+                    "type": "minecraft:light_level",
+                    "max": 7
+                }
+            ]
+        },
+        {
+            "type": "scgextra:scrap_guard",
+            "weight": 3,
+            "minCount": 1,
+            "maxCount": 1,
+            "conditions": [
+                {
+                    "type": "minecraft:light_level",
+                    "max": 7
+                }
+            ]
+        },
+        {
+            "type": "scgextra:arc_psycho",
+            "weight": 3,
+            "minCount": 1,
+            "maxCount": 1,
+            "conditions": [
+                {
+                    "type": "minecraft:light_level",
+                    "max": 7
+                }
+            ]
+        }
+    ]
+}
