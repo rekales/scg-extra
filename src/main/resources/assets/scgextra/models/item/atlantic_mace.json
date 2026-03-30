@@ -1,9 +1,5 @@
 {
   "parent": "minecraft:item/handheld",
-  "textures": {
-    "0": "scgextra:item/cog_mace",
-    "particle": "scgextra:item/cog_mace"
-  },
   "loader": "forge:separate_transforms",
   "base": {
     "parent": "scgextra:item/atlantic_mace_3d"
