@@ -57,6 +57,7 @@ public class FishFolkRenderer extends GeoEntityRenderer<FishFolkEntity> {
                             poseStack.mulPose(Axis.XP.rotationDegrees(90));
                         }else{
                             poseStack.mulPose(Axis.XP.rotationDegrees(180));
+                            poseStack.mulPose(Axis.YP.rotationDegrees(-15));
                         }
                     }
                 }
