@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.whaler.raid_summoner;
+package net.zincstudios.scgextra.entity.common.raid_summoner;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

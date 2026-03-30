@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.whaler.raid_summoner;
+package net.zincstudios.scgextra.entity.common.raid_summoner;
 
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
