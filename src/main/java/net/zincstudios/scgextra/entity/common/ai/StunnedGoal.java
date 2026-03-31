@@ -68,4 +68,8 @@ public class StunnedGoal<T extends PathfinderMob & Stunnable> extends Goal {
     public boolean canContinueToUse() {
         return this.stunTimer > 0;
     }
+
+    public int getStunTimer() {
+        return stunTimer;
+    }
 }
