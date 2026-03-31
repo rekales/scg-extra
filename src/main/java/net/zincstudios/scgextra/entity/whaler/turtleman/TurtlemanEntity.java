@@ -79,6 +79,7 @@ public class TurtlemanEntity extends GunnerEntity implements GeoEntity, Stunnabl
             this.triggerAnim("behaviour", "stun");
         } else {
             this.shouldStun = false;
+            this.headshotCounter = 0;
         }
     }
 
