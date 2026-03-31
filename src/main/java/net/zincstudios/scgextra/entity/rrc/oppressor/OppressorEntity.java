@@ -60,13 +60,6 @@ public class OppressorEntity extends GunnerEntity implements GeoEntity {
         return true;  // Flagging doesn't seem to work
     }
 
-    @SuppressWarnings("deprecation")
-    @Override
-    public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
-        EntityEquipmentConfig.equipEntity(this, "scgextra:oppressor");  // NOTE: using raw string
-        return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
-    }
-
     @Override
     protected void registerGoals() {
         // TODO: custom gun attack goal

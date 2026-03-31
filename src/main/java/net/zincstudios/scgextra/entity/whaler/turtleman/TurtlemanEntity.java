@@ -80,13 +80,6 @@ public class TurtlemanEntity extends GunnerEntity implements GeoEntity, Stunnabl
                 entity -> Faction.isEnemies(this, entity)));
     }
 
-    @SuppressWarnings("deprecation")
-    @Override
-    public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
-        EntityEquipmentConfig.equipEntity(this, "scgextra:turtleman");  // NOTE: using raw string
-        return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
-    }
-
     @Override
     public void tick() {
         super.tick();

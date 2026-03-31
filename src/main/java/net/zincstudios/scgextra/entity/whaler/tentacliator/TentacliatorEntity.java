@@ -34,7 +34,6 @@ import top.ribs.scguns.config.EntityEquipmentConfig;
 import top.ribs.scguns.entity.ai.AIType;
 import top.ribs.scguns.entity.ai.GunAttackGoal;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
@@ -44,13 +43,6 @@ public class TentacliatorEntity extends GunnerEntity implements GeoEntity, Range
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public TentacliatorEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @org.jetbrains.annotations.Nullable SpawnGroupData spawnData, @org.jetbrains.annotations.Nullable CompoundTag dataTag) {
-        EntityEquipmentConfig.equipEntity(this, "scgextra:tentacliator");  // NOTE: using raw string
-        return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
     }
 
     @Override

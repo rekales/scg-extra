@@ -54,13 +54,6 @@ public class ScrapGuardEntity extends GunnerEntity implements GeoEntity {
         super(entityType, level);
     }
 
-    @SuppressWarnings("deprecation")
-    @Override
-    public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
-        EntityEquipmentConfig.equipEntity(this, "scgextra:scrap_guard");  // NOTE: using raw string
-        return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
-    }
-
     @Override
     protected void registerGoals() {
         // TODO: GunAttackMeleeCombined goal

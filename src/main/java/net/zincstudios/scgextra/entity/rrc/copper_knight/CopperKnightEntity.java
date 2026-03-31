@@ -119,12 +119,7 @@ public class CopperKnightEntity extends GunnerEntity implements GeoEntity{
             this.remove(RemovalReason.KILLED);
         }
     }
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty,
-            MobSpawnType pReason, SpawnGroupData pSpawnData, CompoundTag pDataTag) {
-        EntityEquipmentConfig.equipEntity(this, "scgextra:copper_knight");
-        return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
-    }
+
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
         return MobUtil.getSound(
             this.random, 

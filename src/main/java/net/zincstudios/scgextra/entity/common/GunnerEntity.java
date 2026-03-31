@@ -3,6 +3,7 @@ package net.zincstudios.scgextra.entity.common;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.monster.Monster;
@@ -23,7 +24,8 @@ import top.ribs.scguns.entity.ai.GunAttackGoal;
  * Used for handling and fetching states from the aforementioned goal.
  * @see GunAttackGoal
  */
-public abstract class GunnerEntity extends Monster {
+@SuppressWarnings("unused")
+public abstract class GunnerEntity extends EquippedEntity {
 
     private static final EntityDataAccessor<Boolean> AIMING =
             SynchedEntityData.defineId(GunnerEntity.class, EntityDataSerializers.BOOLEAN);
@@ -34,6 +36,10 @@ public abstract class GunnerEntity extends Monster {
 
     protected GunnerEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
+    }
+
+    protected GunnerEntity(EntityType<? extends Monster> entity, Level level, ResourceLocation equipmentResLoc) {
+        super(entity, level, equipmentResLoc);
     }
 
     public @Nullable GunAttackGoal<?> getGunAttackGoal() {

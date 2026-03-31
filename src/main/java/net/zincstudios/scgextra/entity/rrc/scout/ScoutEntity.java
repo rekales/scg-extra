@@ -94,23 +94,7 @@ public class ScoutEntity extends GunnerEntity implements GeoEntity{
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
                 entity -> Faction.isEnemies(this, entity) || entity.getMobType().equals(MobType.UNDEAD)));
     }
-    // @Override
-    // protected boolean isSunSensitive() {
-    //     return false;
-    // }
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
-        EntityEquipmentConfig.equipEntity(this, "scgextra:scout");  // NOTE: using raw string
-        return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
-    }
-    // @Override
-    // protected boolean convertsInWater() {
-    //     return false;
-    // }
-    @Override
-    public boolean isBaby() {
-        return false;
-    }
+
     @Override
     protected void tickDeath() {
         // Override to only extend death time
