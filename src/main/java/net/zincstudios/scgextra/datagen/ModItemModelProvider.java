@@ -25,7 +25,16 @@ public class ModItemModelProvider extends ItemModelProvider {
         spawnEgg(ModItems.GLOWING_TENTACLIATOR_SPAWN_EGG);
         spawnEgg(ModItems.PUFFICUS_SPAWN_EGG);
         spawnEgg(ModItems.ARMORED_WHALE_SPAWN_EGG);
-    }
+
+        spawnEgg(ModItems.COPPER_KNIGHT_SPAWN_EGG);
+        spawnEgg(ModItems.DRONE_SPAWN_EGG);
+        spawnEgg(ModItems.TALLMAN_SPAWN_EGG);
+        spawnEgg(ModItems.SCOUT_SPAWN_EGG);
+        spawnEgg(ModItems.OPPRESSOR_SPAWN_EGG);
+        spawnEgg(ModItems.SPRING_JUNKIE_SPAWN_EGG);
+        spawnEgg(ModItems.FLAMING_HEAD_SPAWN_EGG);
+        spawnEgg(ModItems.SCRAP_GUARD_SPAWN_EGG);
+        spawnEgg(ModItems.ARC_PSYCHO_SPAWN_EGG);    }
 
     private void spawnEgg(RegistryObject<SpawnEggItem> item) {
         if (item.getId() == null) return;

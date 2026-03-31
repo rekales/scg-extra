@@ -96,6 +96,87 @@ public class ModItems {
             )
     );
 
+    public static final RegistryObject<SpawnEggItem> COPPER_KNIGHT_SPAWN_EGG = ITEMS.register("copper_knight_spawn_egg",
+            () -> new ForgeSpawnEggItem(
+                    ModEntities.COPPER_KNIGHT,
+                    0x692831,
+                    0x567076,
+                    new Item.Properties()
+            )
+    );
+
+    public static final RegistryObject<SpawnEggItem> DRONE_SPAWN_EGG = ITEMS.register("drone_spawn_egg",
+            () -> new ForgeSpawnEggItem(
+                    ModEntities.DRONE,
+                    0x000000, // Replace with primary color
+                    0x000000, // Replace with secondary color
+                    new Item.Properties()
+            )
+    );
+
+    public static final RegistryObject<SpawnEggItem> TALLMAN_SPAWN_EGG = ITEMS.register("tallman_spawn_egg",
+            () -> new ForgeSpawnEggItem(
+                    ModEntities.TALLMAN,
+                    0x000000,
+                    0x000000,
+                    new Item.Properties()
+            )
+    );
+
+    public static final RegistryObject<SpawnEggItem> SCOUT_SPAWN_EGG = ITEMS.register("scout_spawn_egg",
+            () -> new ForgeSpawnEggItem(
+                    ModEntities.SCOUT,
+                    0x000000,
+                    0x000000,
+                    new Item.Properties()
+            )
+    );
+
+    public static final RegistryObject<SpawnEggItem> OPPRESSOR_SPAWN_EGG = ITEMS.register("oppressor_spawn_egg",
+            () -> new ForgeSpawnEggItem(
+                    ModEntities.OPPRESSOR,
+                    0x000000,
+                    0x000000,
+                    new Item.Properties()
+            )
+    );
+
+    public static final RegistryObject<SpawnEggItem> SPRING_JUNKIE_SPAWN_EGG = ITEMS.register("spring_junkie_spawn_egg",
+            () -> new ForgeSpawnEggItem(
+                    ModEntities.SPRING_JUNKIE,
+                    0x000000,
+                    0x000000,
+                    new Item.Properties()
+            )
+    );
+
+    public static final RegistryObject<SpawnEggItem> FLAMING_HEAD_SPAWN_EGG = ITEMS.register("flaming_head_spawn_egg",
+            () -> new ForgeSpawnEggItem(
+                    ModEntities.FLAMING_HEAD,
+                    0x000000,
+                    0x000000,
+                    new Item.Properties()
+            )
+    );
+
+    public static final RegistryObject<SpawnEggItem> SCRAP_GUARD_SPAWN_EGG = ITEMS.register("scrap_guard_spawn_egg",
+            () -> new ForgeSpawnEggItem(
+                    ModEntities.SCRAP_GUARD,
+                    0x000000,
+                    0x000000,
+                    new Item.Properties()
+            )
+    );
+
+    public static final RegistryObject<SpawnEggItem> ARC_PSYCHO_SPAWN_EGG = ITEMS.register("arc_psycho_spawn_egg",
+            () -> new ForgeSpawnEggItem(
+                    ModEntities.ARC_PSYCHO,
+                    0x000000,
+                    0x000000,
+                    new Item.Properties()
+            )
+    );
+
     public static void register(IEventBus modEventBus) {
         ITEMS.register(modEventBus);
         CREATIVE_TABS.register(modEventBus);

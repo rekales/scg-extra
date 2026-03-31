@@ -18,6 +18,7 @@
     "entity.scgextra.scrap_guard": "Scrap Guard",
     "effect.scgextra.ink_effect": "Ink Effect",
     "effect.scgextra.glowing_ink_effect": "Glowing Ink Effect",
+
     "item.scgextra.atlantic_mace": "Atlantic Mace",
     "item.scgextra.fish_folk_spawn_egg": "Fish Folk Spawn Egg",
     "item.scgextra.turtleman_spawn_egg": "Turtleman Spawn Egg",
@@ -27,5 +28,14 @@
     "item.scgextra.glowing_tentacliator_spawn_egg": "Glowing Tentacliator Spawn Egg",
     "item.scgextra.pufficus_spawn_egg": "Pufficus Spawn Egg",
     "item.scgextra.armored_whale_spawn_egg": "Armored Whale Spawn Egg",
+    "item.scgextra.drone_spawn_egg": "Drone Spawn Egg",
+    "item.scgextra.tallman_spawn_egg": "Tallman Spawn Egg",
+    "item.scgextra.scout_spawn_egg": "Scout Spawn Egg",
+    "item.scgextra.oppressor_spawn_egg": "Oppressor Spawn Egg",
+    "item.scgextra.spring_junkie_spawn_egg": "Spring Junkie Spawn Egg",
+    "item.scgextra.flaming_head_spawn_egg": "Flaming Head Spawn Egg",
+    "item.scgextra.scrap_guard_spawn_egg": "Scrap Guard Spawn Egg",
+    "item.scgextra.arc_psycho_spawn_egg": "Arc Psycho Spawn Egg",
+
     "itemGroup.scgextra.tab": "SCG Extra"
 }

@@ -61,6 +61,7 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable {
 
     public FlamingHeadEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
+        this.setMaxUpStep(1.1F);
     }
 
     @Override
