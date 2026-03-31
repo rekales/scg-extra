@@ -1,7 +1,6 @@
 package net.zincstudios.scgextra;
 
 import net.minecraftforge.fml.config.ModConfig;
-import net.zincstudios.scgextra.data.FactionDataLoader;
 import net.zincstudios.scgextra.datagen.DataGenerators;
 import net.zincstudios.scgextra.debug.EntityHeadBoxDebug;
 import net.zincstudios.scgextra.effects.ModEffects;
@@ -9,7 +8,6 @@ import net.zincstudios.scgextra.entity.ModEntities;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -43,8 +41,6 @@ public class SCGExtra
         context.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
         modEventBus.addListener(CommonConfig::onLoad);
         modEventBus.addListener(CommonConfig::onReload);
-
-        MinecraftForge.EVENT_BUS.addListener(FactionDataLoader::onAddReloadListeners);
 
         EntityHeadBoxDebug.register();
 

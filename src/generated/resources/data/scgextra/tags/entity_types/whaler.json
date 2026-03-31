@@ -1,6 +1,5 @@
 {
-  "id": "whaler",
-  "entities": [
+  "values": [
     "scgextra:fish_folk",
     "scgextra:turtleman",
     "scgextra:salmonsaur",

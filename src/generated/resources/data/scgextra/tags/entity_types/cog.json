@@ -1,10 +1,10 @@
 {
-  "id": "cog",
-  "entities": [
+  "values": [
     "scguns:cog_knight",
     "scguns:trauma_unit",
     "scguns:cog_minion",
     "scguns:sky_carrier",
+    "scguns:cog_knight",
     "scguns:signal_beacon",
     "scguns:scampler",
     "scguns:scamp_tank"
