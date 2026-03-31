@@ -3,7 +3,7 @@ package net.zincstudios.scgextra.entity.whaler.salmonsaur;
 import java.util.ArrayList;
 import java.util.Random;
 
-import net.zincstudios.scgextra.Faction;
+import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.ModEntities;
 import net.zincstudios.scgextra.entity.whaler.fishfolk.FishFolkEntity;

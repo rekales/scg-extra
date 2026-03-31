@@ -1,6 +1,6 @@
 package net.zincstudios.scgextra.entity.whaler.pufficus;
 
-import net.zincstudios.scgextra.Faction;
+import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.EquippedEntity;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.ItemEffectMeleeAttackGoal;

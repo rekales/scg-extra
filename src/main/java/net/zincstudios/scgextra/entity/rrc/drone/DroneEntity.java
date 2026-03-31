@@ -40,7 +40,7 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import net.zincstudios.scgextra.Faction;
+import net.zincstudios.scgextra.entity.Faction;
 
 //The health checks in the play sound is just to have it not play any extra sounds while it's about to die
 public class DroneEntity extends Monster implements GeoEntity, Stunnable{

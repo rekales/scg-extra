@@ -1,7 +1,7 @@
 package net.zincstudios.scgextra.data;
 
 
-import net.zincstudios.scgextra.Faction;
+import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.SCGExtra;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
