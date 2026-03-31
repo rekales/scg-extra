@@ -1,0 +1,50 @@
+{
+    "type": "minecraft:entity",
+    "pools": [
+        {
+        "rolls": 1,
+        "entries": [
+            {
+            "type": "minecraft:item",
+            "name": "scguns:rusty_medal",
+            "functions": [
+                {
+                "function": "minecraft:set_count",
+                "count": 1
+                }
+            ]
+            }
+        ]
+        },
+        {
+        "rolls": 1,
+        "entries": [
+            {
+            "type": "minecraft:item",
+            "name": "scguns:blaze_fuel",
+            "functions": [
+                {
+                "function": "minecraft:set_count",
+                "count": { "min": 3, "max": 6 }
+                }
+            ]
+            }
+        ]
+        },
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:copper_block",
+                      "functions": [
+                        {
+                          "function": "minecraft:set_count",
+                          "count": { "min": 1, "max": 3 }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
