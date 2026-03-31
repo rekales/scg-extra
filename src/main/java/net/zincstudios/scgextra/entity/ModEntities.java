@@ -188,6 +188,15 @@ public class ModEntities {
         if (FMLEnvironment.dist == Dist.CLIENT) {
             modEventBus.addListener(ModEntities::onClientSetup);
         }
+
+        registerFactions();
+    }
+
+    private static void registerFactions() {
+        Faction.registerFaction(EntityTypeTags.ASGHARIAN, "asgharian");
+        Faction.registerFaction(EntityTypeTags.COG, "cog");
+        Faction.registerFaction(EntityTypeTags.WHALER, "whaler");
+        Faction.registerFaction(EntityTypeTags.RRC, "rrc");
     }
 
     private static void onClientSetup(FMLClientSetupEvent event) {

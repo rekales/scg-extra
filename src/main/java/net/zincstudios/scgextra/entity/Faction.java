@@ -21,7 +21,6 @@ public record Faction(String name) {
     private static final Map<TagKey<EntityType<?>>, Faction> KEY_FACTION_MAP = new HashMap<>();
     private static final Map<EntityType<?>, Faction> ENTITY_FACTION_CACHE = new HashMap<>();
 
-
     public static void registerFaction(TagKey<EntityType<?>> tag, String name) {
         KEY_FACTION_MAP.put(tag, new Faction(name));
     }
