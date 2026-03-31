@@ -7,6 +7,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.WeakPointBox;
 import net.zincstudios.scgextra.entity.common.WeakPointBoxManager;
@@ -33,8 +34,8 @@ public class ProjectileEntityMixin {
     )
     private void beforeEntityHurt(Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot,
                                   CallbackInfo ci, @Local(name = "source") DamageSource source, @Local(name = "damage") float damage) {
-        if (headshot && entity instanceof Stunnable stunnable) {
-            stunnable.handleHeadshotStun(source, damage);
+        if (headshot && entity instanceof HeadShotHandler headShotHandler) {
+            headShotHandler.headshot(source, damage);
         }
     }
 

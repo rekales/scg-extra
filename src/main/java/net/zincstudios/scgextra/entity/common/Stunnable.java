@@ -8,84 +8,31 @@ import net.zincstudios.scgextra.entity.common.ai.StunnedGoal;
 import org.jetbrains.annotations.Nullable;
 import top.ribs.scguns.init.ModEffects;
 
-
-// I'll coin this "behaviour augmentation pattern" since this idea seems to be unique.
 /**
  * Interface to be paired with the use of StunnedGoal.
- * Feel free to override the default methods if custom functionality is needed.
  * @see StunnedGoal
  */
 @SuppressWarnings({"unused", "UnusedReturnValue"})
 public interface Stunnable {
 
     /**
-     * Provide the StunnedGoal here by returning it, it will be used by the default methods for handling logic.
-     * Provide it by however you like, saving as a variable or maybe filtering through the behaviour goals.
-     * <p>
-     * Nullable handling added if for some fucking reason it gets a null object.
+     * Will be checked by the StunnedGoal every tick while it's not stunned.
+     * @return amount of ticks the entity should be stunned, return 0 or less to not stun.
      */
-    @Nullable StunnedGoal<?> getStunnedGoal();
+    int shouldStun();
 
     /**
-     * @return the duration of the stun when called by the checks.
-     * Override as you see fit.
+     * To be primarily be invoked by the StunnedGoal
      */
-    default int getDefaultStunDuration() {
-        return CommonConfig.abilityWeaknessDuration;
-    }
+    void setStunned(boolean stunned);
 
     /**
-     * @return the duration of the cooldown between stuns.
-     * Override as you see fit.
+     * Will be invoked by the StunnedGoal while the entity is being stunned.
+     * @return true to interrupt the stun
      */
-    default int getDefaultCooldownDuration() {
-        return CommonConfig.abilityWeaknessCooldown;
+    default boolean updateStunned(int ticksLeft) {
+        return false;
     }
 
-    default boolean isStunned() {
-        StunnedGoal<?> stunnedGoal = this.getStunnedGoal();
-        return stunnedGoal != null && stunnedGoal.getStunTicksLeft() > 0;
-    }
-
-    /**
-     * To be called on the mob's hurt() method to check if the damage will cause a stun. Stuns the mob if so.
-     * @return if damage should be applied.
-     */
-    default boolean handleHurtStun(DamageSource source, float amount) {
-        return true;
-    }
-
-    /**
-     * To be called on the mob's addEffect() method to check if the added effects will cause a stun. Stuns the mob if so.
-     * maybe invoked after super so it does it's initial check first.
-     * @return if the effect should be applied.
-     */
-    default boolean handleAddEffectStun(MobEffectInstance effectInstance, @Nullable Entity entity) {
-        if (effectInstance.getEffect() == ModEffects.BLINDED.get()
-                || effectInstance.getEffect() == ModEffects.DEAFENED.get()) {
-            stun(getDefaultStunDuration());
-        }
-        return true;
-    }
-
-    /**
-     * Invoked when the entity gets headshot. Called before the hurt method.
-     * @see net.zincstudios.scgextra.mixin.ProjectileEntityMixin
-     */
-    default void handleHeadshotStun(DamageSource source, float amount) {
-        StunnedGoal<?> stunnedGoal = this.getStunnedGoal();
-        if (stunnedGoal != null) {
-            stunnedGoal.handleHeadshot(source, amount);
-        }
-    }
-
-    /**
-     * The method to be called for stunning the mob. Normally called by checks but can also be invoked manually.
-     */
-    default void stun(int stunTicks) {
-        if (!CommonConfig.enableAbilityWeakness) return;
-        StunnedGoal<?> stunnedGoal = this.getStunnedGoal();
-        if (stunnedGoal == null) return;
-        stunnedGoal.stun(stunTicks, getDefaultCooldownDuration());
-    }
+    boolean isStunned();
 }
