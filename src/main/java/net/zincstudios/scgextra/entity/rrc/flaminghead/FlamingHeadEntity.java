@@ -250,6 +250,10 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable, 
         if(pSource.is(DamageTypes.IN_FIRE) || pSource.is(DamageTypes.ON_FIRE)){
             return false;
         }
+
+        if(this.isStunned()){
+            return super.hurt(pSource, pAmount*2);
+        }
         return super.hurt(pSource, pAmount);
     }
 

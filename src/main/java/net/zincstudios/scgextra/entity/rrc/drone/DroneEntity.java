@@ -1,5 +1,8 @@
 package net.zincstudios.scgextra.entity.rrc.drone;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.zincstudios.scgextra.CommonConfig;
+import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
@@ -9,8 +12,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
@@ -20,7 +21,6 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
@@ -29,7 +29,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
-import net.zincstudios.scgextra.entity.common.ai.StunnedGoal;
 import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
 import net.zincstudios.scgextra.sounds.ModSounds;
 import net.minecraftforge.entity.PartEntity;
@@ -42,11 +41,21 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import net.zincstudios.scgextra.entity.Faction;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 //The health checks in the play sound is just to have it not play any extra sounds while it's about to die
-public class DroneEntity extends Monster implements GeoEntity, Stunnable{
-    private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class DroneEntity extends Monster implements GeoEntity, Stunnable, HeadShotHandler {
+
     private static final EntityDataAccessor<Float> INACCURACY = SynchedEntityData.defineId(DroneEntity.class, EntityDataSerializers.FLOAT);
+    private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private final DronePart[] subEntities;
+
+    // Server-side only for stunnable handling
+    private int headshotCounter = 0;
+    private boolean stunned = false;
+
     public DroneEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         DronePart pipe = new DronePart(this, "pipe", 0.5F, 2F);
@@ -56,17 +65,52 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable{
         DronePart leg2 = new DronePart(this, "leg2", 0.5F, 1.3F);
         this.subEntities = new DronePart[]{pipe, back, body, leg1, leg2};
     }
+
+    @Override
+    public int shouldStun() {
+        if (!CommonConfig.enableAbilityWeakness) return 0;
+
+        if (this.headshotCounter >= CommonConfig.abilityWeaknessHeadshots) {
+//            return CommonConfig.abilityWeaknessDuration;
+            return 100;
+        }
+
+        return 0;
+    }
+
+    @Override
+    public void setStunned(boolean stunned) {
+        this.stunned = stunned;
+        if (stunned) {
+            this.triggerAnim("behaviour", "stun");
+        }
+    }
+
+    @Override
+    public boolean isStunned() {
+        return this.stunned;
+    }
+
+    @Override
+    public boolean headshot(DamageSource source, float amount) {
+        this.headshotCounter++;
+        return false;
+    }
+
     @Override
     public boolean isMultipartEntity() {
         return true;
     }
+
     public DronePart[] getSubEntities() {
         return this.subEntities;
     }
+
     @Override
     public @Nullable PartEntity<?>[] getParts() {
         return this.subEntities;
     }
+
     @Override
     protected void registerGoals() {
         super.registerGoals();
@@ -81,10 +125,12 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable{
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true, entity -> Faction.isEnemies(this, entity) || entity.getMobType().equals(MobType.UNDEAD)));
     }
+
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return geoCache;
     }
+
     @Override
     public void registerControllers(ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "controller", 0, state -> {
@@ -109,6 +155,7 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable{
             }
         }));
     }
+
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
@@ -123,6 +170,7 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable{
         super.tick();
         updateSubentities();
     }
+
     @Override
     public boolean hurt(DamageSource pSource, float pAmount) {
         if(this.isStunned()){
@@ -130,6 +178,7 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable{
         }
         return super.hurt(pSource, pAmount);
     }
+
     public void updateSubentities(){
         for (DronePart part : this.subEntities) {
             part.xo = part.getX();
@@ -185,34 +234,19 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable{
     public float getInaccuracy(){
         return this.entityData.get(INACCURACY);
     }
-    @Override
-    public @Nullable StunnedGoal<?> getStunnedGoal() {
-        for(WrappedGoal goal : this.goalSelector.getAvailableGoals()){
-            if(goal.getGoal() instanceof StunnedGoal<?> stunnedGoal){
-                return stunnedGoal;
-            }
-        }
-        return null;
-    }
-    @Override
-    public int getDefaultStunDuration() {
-        return 100;
-    }
-    @Override
-    public boolean addEffect(MobEffectInstance effectInstance, @Nullable Entity entity) {
-        return super.addEffect(effectInstance, entity)
-                && this.handleAddEffectStun(effectInstance, entity);
-    }
+
     protected SoundEvent getDeathSound() {
         return MobUtil.getSound(
             this.random, 
             ModSounds.RRC_DRONE_DEATH_1.get(), 
             ModSounds.RRC_DRONE_DEATH_2.get()
         );
-    };
+    }
+
     protected SoundEvent getAmbientSound() {
         return ModSounds.RRC_DRONE_IDLE.get();
-    };
+    }
+
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
         return MobUtil.getSound(
             this.random, 
@@ -225,7 +259,8 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable{
             ModSounds.RRC_DRONE_HURT_7.get(),
             ModSounds.RRC_DRONE_HURT_8.get()
         );
-    };
+    }
+
     protected SoundEvent getStepSound() {
         if(this.random.nextFloat() < 0.4F){
             return ModSounds.RRC_DRONE_WALK.get();
@@ -233,17 +268,20 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable{
             return SoundEvents.IRON_GOLEM_STEP;
         }
     }
+
     protected void playStepSound(BlockPos pPos, BlockState pBlock) {
         this.playSound(this.getStepSound(), this.getSoundVolume(), 1.0F);
     }
+
     protected float getSoundVolume() {
         return 2F;
-    };
+    }
+
     protected void tickDeath() {
         ++this.deathTime;
         if (this.deathTime >= 18 && !this.level().isClientSide() && !this.isRemoved()) {
             this.level().broadcastEntityEvent(this, (byte)60);
             this.remove(RemovalReason.KILLED);
         }
-    };
+    }
 }
