@@ -1,19 +1,18 @@
 package net.zincstudios.scgextra.entity.whaler.pufficus;
 
 import net.zincstudios.scgextra.Faction;
+import net.zincstudios.scgextra.entity.common.EquippedEntity;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.ItemEffectMeleeAttackGoal;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -25,11 +24,9 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.fluids.FluidType;
 
-import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -39,12 +36,11 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import top.ribs.scguns.config.EntityEquipmentConfig;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class PufficusEntity extends Monster implements GeoEntity {
+public class PufficusEntity extends EquippedEntity implements GeoEntity {
 
     public static final RawAnimation ATTACK_SWING_ONCE = RawAnimation.begin().then("attack.swing", Animation.LoopType.PLAY_ONCE);
     public static final RawAnimation ATTACK_THROW_ONCE = RawAnimation.begin().then("attack.throw", Animation.LoopType.PLAY_ONCE);
@@ -67,13 +63,6 @@ public class PufficusEntity extends Monster implements GeoEntity {
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
                 entity -> Faction.isEnemies(this, entity)));
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
-        EntityEquipmentConfig.equipEntity(this, "scgextra:pufficus");  // NOTE: using raw string
-        return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
     }
 
     @Override
