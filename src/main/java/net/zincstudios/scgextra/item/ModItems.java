@@ -99,8 +99,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> COPPER_KNIGHT_SPAWN_EGG = ITEMS.register("copper_knight_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.COPPER_KNIGHT,
-                    0x692831,
-                    0x567076,
+                    0xD16624,
+                    0x78D5A6,
                     new Item.Properties()
             )
     );
@@ -108,8 +108,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> DRONE_SPAWN_EGG = ITEMS.register("drone_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.DRONE,
-                    0x000000, // Replace with primary color
-                    0x000000, // Replace with secondary color
+                    0xCB5B24, // Replace with primary color
+                    0x327B5C, // Replace with secondary color
                     new Item.Properties()
             )
     );
@@ -117,8 +117,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> TALLMAN_SPAWN_EGG = ITEMS.register("tallman_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.TALLMAN,
-                    0x000000,
-                    0x000000,
+                    0xB54C24,
+                    0x452926,
                     new Item.Properties()
             )
     );
@@ -126,8 +126,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> SCOUT_SPAWN_EGG = ITEMS.register("scout_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.SCOUT,
-                    0x000000,
-                    0x000000,
+                    0xCB6E35,
+                    0x3E2224,
                     new Item.Properties()
             )
     );
@@ -135,8 +135,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> OPPRESSOR_SPAWN_EGG = ITEMS.register("oppressor_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.OPPRESSOR,
-                    0x000000,
-                    0x000000,
+                    0x3F343D,
+                    0x146B58,
                     new Item.Properties()
             )
     );
@@ -144,8 +144,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> SPRING_JUNKIE_SPAWN_EGG = ITEMS.register("spring_junkie_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.SPRING_JUNKIE,
-                    0x000000,
-                    0x000000,
+                    0xc25724,
+                    0x3b313b,
                     new Item.Properties()
             )
     );
@@ -153,8 +153,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> FLAMING_HEAD_SPAWN_EGG = ITEMS.register("flaming_head_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.FLAMING_HEAD,
-                    0x000000,
-                    0x000000,
+                    0xba5024,
+                    0x7bd7a9,
                     new Item.Properties()
             )
     );
@@ -162,8 +162,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> SCRAP_GUARD_SPAWN_EGG = ITEMS.register("scrap_guard_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.SCRAP_GUARD,
-                    0x000000,
-                    0x000000,
+                    0xc75d24,
+                    0x83404c,
                     new Item.Properties()
             )
     );
@@ -171,8 +171,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> ARC_PSYCHO_SPAWN_EGG = ITEMS.register("arc_psycho_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.ARC_PSYCHO,
-                    0x000000,
-                    0x000000,
+                    0xcb6124,
+                    0xf2bb64,
                     new Item.Properties()
             )
     );
