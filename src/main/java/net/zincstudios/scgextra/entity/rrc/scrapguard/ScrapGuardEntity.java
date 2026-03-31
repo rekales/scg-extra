@@ -81,6 +81,7 @@ public class ScrapGuardEntity extends GunnerEntity implements GeoEntity {
                 .add(Attributes.MAX_HEALTH, 60D)
                 .add(Attributes.ARMOR, 12)
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.5)
                 .add(Attributes.MOVEMENT_SPEED, 0.23F);
     }
 

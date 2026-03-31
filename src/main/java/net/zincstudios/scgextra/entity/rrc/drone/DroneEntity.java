@@ -111,11 +111,12 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable{
     }
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-        .add(Attributes.FOLLOW_RANGE, 35.0D)
-        .add(Attributes.MOVEMENT_SPEED, 0.2F)
-        .add(Attributes.ATTACK_DAMAGE, 5.0D)
-        .add(Attributes.ARMOR, 12.0D)
-        .add(Attributes.MAX_HEALTH, 120.0D);
+                .add(Attributes.FOLLOW_RANGE, 35.0D)
+                .add(Attributes.MOVEMENT_SPEED, 0.2F)
+                .add(Attributes.ATTACK_DAMAGE, 5.0D)
+                .add(Attributes.ARMOR, 12.0D)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.8)
+                .add(Attributes.MAX_HEALTH, 120.0D);
     }
     @Override
     public void tick() {

@@ -88,6 +88,7 @@ public class OppressorEntity extends GunnerEntity implements GeoEntity {
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 120D)
                 .add(Attributes.ARMOR, 6D)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.8)
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.2F);
     }
