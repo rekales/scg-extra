@@ -17,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraftforge.fluids.FluidType;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.TridentAttackGoal;
@@ -173,5 +174,9 @@ public class FishFolkEntity extends GunnerEntity implements GeoEntity, RangedAtt
 
     public boolean isSitting(){
         return this.entityData.get(SITTING);
+    }
+    @Override
+    public boolean canDrownInFluidType(FluidType type) {
+        return false;
     }
 }

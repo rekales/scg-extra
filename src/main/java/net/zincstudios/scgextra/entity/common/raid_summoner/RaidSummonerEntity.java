@@ -36,6 +36,10 @@ public class RaidSummonerEntity extends Mob {
     public void tick() {
         super.tick();
         if(this.level().isClientSide())return;
+        if(this.isInWater()){
+            this.remove(RemovalReason.DISCARDED);
+            return;
+        }
         int rand = this.random.nextInt(2);
         if(rand==0){
             this.spawnWhaler();
