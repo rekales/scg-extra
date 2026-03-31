@@ -30,9 +30,14 @@ public interface Stunnable {
      * Will be invoked by the StunnedGoal while the entity is being stunned.
      * @return true to interrupt the stun
      */
-    default boolean updateStunned(int ticksLeft) {
+    default boolean tickStunned(int ticksLeft) {
         return false;
     }
 
-    boolean isStunned();
+    /**
+     * Mostly just for state checks from other sources, ignore if not needed.
+     */
+    default boolean isStunned() {
+        return false;
+    }
 }

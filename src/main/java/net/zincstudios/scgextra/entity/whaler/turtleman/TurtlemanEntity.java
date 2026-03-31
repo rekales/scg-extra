@@ -1,6 +1,5 @@
 package net.zincstudios.scgextra.entity.whaler.turtleman;
 
-import net.minecraft.world.entity.ai.goal.WrappedGoal;
 import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.entity.Faction;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -30,6 +29,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidType;
 
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
+import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.StunnedGoal;
@@ -44,17 +44,56 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import top.ribs.scguns.entity.ai.AIType;
 import top.ribs.scguns.entity.ai.GunAttackGoal;
+import top.ribs.scguns.init.ModEffects;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TurtlemanEntity extends GunnerEntity implements GeoEntity, Stunnable {
+public class TurtlemanEntity extends GunnerEntity implements GeoEntity, Stunnable, HeadShotHandler {
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
+    // Server-side only for stunnable handling
+    private boolean shouldStun = false;
+    private int headshotCounter = 0;
+
     public TurtlemanEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
+    }
+
+    @Override
+    public int shouldStun() {
+        if (!CommonConfig.enableAbilityWeakness) return 0;
+
+        if (this.shouldStun || this.headshotCounter >= CommonConfig.abilityWeaknessHeadshots) {
+//            return CommonConfig.abilityWeaknessDuration;
+            return 100;
+        }
+        return 0;
+    }
+
+    @Override
+    public void setStunned(boolean stunned) {
+        if (stunned) {
+            this.triggerAnim("behaviour", "stun");
+        } else {
+            this.shouldStun = false;
+        }
+    }
+
+    @Override
+    public boolean tickStunned(int ticksLeft) {
+        if (ticksLeft == 10) {
+            this.triggerAnim("behaviour", "end_stun");
+        }
+        return false;
+    }
+
+    @Override
+    public boolean headshot(DamageSource source, float amount) {
+        this.headshotCounter++;
+        return false;
     }
 
     @Override
@@ -62,7 +101,7 @@ public class TurtlemanEntity extends GunnerEntity implements GeoEntity, Stunnabl
         ItemStack mainHandItem = this.getMainHandItem();
 
         // TODO: approach enemy while walking backwards behaviour goal
-        this.goalSelector.addGoal(1, new StunnedGoal<>(this, 10));
+        this.goalSelector.addGoal(1, new StunnedGoal<>(this));
         this.goalSelector.addGoal(2, new TurtlemanGunAttackGoal<>(this, mainHandItem, 1.0F, AIType.RECKLESS, 3, 10F));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 0.9));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -126,8 +165,6 @@ public class TurtlemanEntity extends GunnerEntity implements GeoEntity, Stunnabl
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        this.handleHurtStun(source, amount);
-
         if (CommonConfig.enableAbilityBulletproof) {
             Vec3 attackVector = source.getSourcePosition();
             if (!this.isStunned() && attackVector != null) {
@@ -146,8 +183,11 @@ public class TurtlemanEntity extends GunnerEntity implements GeoEntity, Stunnabl
 
     @Override
     public boolean addEffect(MobEffectInstance effectInstance, @Nullable Entity entity) {
-        return super.addEffect(effectInstance, entity)
-                && this.handleAddEffectStun(effectInstance, entity);
+        if (effectInstance.getEffect() == ModEffects.BLINDED.get()
+                || effectInstance.getEffect() == ModEffects.DEAFENED.get()) {
+            this.shouldStun = true;
+        }
+        return true;
     }
 
     @Override
@@ -231,26 +271,13 @@ public class TurtlemanEntity extends GunnerEntity implements GeoEntity, Stunnabl
         }
     }
 
-    @Override
-    public @Nullable StunnedGoal<?> getStunnedGoal() {
-        for(WrappedGoal goal : this.goalSelector.getAvailableGoals()){
-            if(goal.getGoal() instanceof StunnedGoal<?> stunnedGoal){
-                return stunnedGoal;
-            }
-        }
-        return null;
-    }
-
     @SuppressWarnings("deprecation")
     private static boolean isDeepEnoughToSpawn(LevelAccessor pLevel, BlockPos pPos) {
         return pPos.getY() < pLevel.getSeaLevel() - 5;
     }
+
     @Override
     public boolean checkSpawnObstruction(LevelReader pLevel) {
         return pLevel.isUnobstructed(this);
-    }
-    @Override
-    public int getDefaultStunDuration() {
-        return 100;
     }
 }
