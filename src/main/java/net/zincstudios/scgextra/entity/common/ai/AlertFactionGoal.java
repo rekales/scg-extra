@@ -3,7 +3,7 @@ package net.zincstudios.scgextra.entity.common.ai;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.AABB;
-import net.zincstudios.scgextra.Faction;
+import net.zincstudios.scgextra.entity.Faction;
 import software.bernie.geckolib.animatable.GeoEntity;
 
 import java.util.List;

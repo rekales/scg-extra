@@ -188,6 +188,7 @@ public class ModEntities {
         if (FMLEnvironment.dist == Dist.CLIENT) {
             modEventBus.addListener(ModEntities::onClientSetup);
         }
+
     }
 
     private static void onClientSetup(FMLClientSetupEvent event) {

@@ -4,6 +4,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.zincstudios.scgextra.entity.EntityTypeTags;
 import net.zincstudios.scgextra.entity.ModEntities;
 import org.jetbrains.annotations.Nullable;
 import top.ribs.scguns.init.ModTags;
@@ -43,5 +44,42 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
 
         tag(ModTags.Entities.CANNOT_BE_LACERATED)
                 .add(ModEntities.GUARDIAN_STATUE.get());
+
+        tag(EntityTypeTags.ASGHARIAN)
+                .add(top.ribs.scguns.init.ModEntities.DISSIDENT.get())
+                .add(top.ribs.scguns.init.ModEntities.PRAETOR.get())
+                .add(top.ribs.scguns.init.ModEntities.ADJUDICATOR.get())
+                .add(top.ribs.scguns.init.ModEntities.SUBJUGATOR.get());
+
+        tag(EntityTypeTags.COG)
+                .add(top.ribs.scguns.init.ModEntities.COG_KNIGHT.get())
+                .add(top.ribs.scguns.init.ModEntities.TRAUMA_UNIT.get())
+                .add(top.ribs.scguns.init.ModEntities.COG_MINION.get())
+                .add(top.ribs.scguns.init.ModEntities.SKY_CARRIER.get())                .add(top.ribs.scguns.init.ModEntities.COG_KNIGHT.get())
+                .add(top.ribs.scguns.init.ModEntities.SIGNAL_BEACON.get())
+                .add(top.ribs.scguns.init.ModEntities.SCAMPLER.get())
+                .add(top.ribs.scguns.init.ModEntities.SCAMP_TANK.get());
+
+        tag(EntityTypeTags.WHALER)
+                .add(ModEntities.FISH_FOLK.get())
+                .add(ModEntities.TURTLEMAN.get())
+                .add(ModEntities.SALMONSAUR.get())
+                .add(ModEntities.TENTACLIATOR.get())
+                .add(ModEntities.GLOWING_TENTACLIATOR.get())
+                .add(ModEntities.PUFFICUS.get())
+                .add(ModEntities.GUARDIAN_STATUE.get())
+                .add(ModEntities.ARMORED_WHALE.get())
+                .add(top.ribs.scguns.init.ModEntities.FINFORCER.get());
+
+        tag(EntityTypeTags.RRC)
+                .add(ModEntities.DRONE.get())
+                .add(ModEntities.TALLMAN.get())
+                .add(ModEntities.SCOUT.get())
+                .add(ModEntities.OPPRESSOR.get())
+                .add(ModEntities.SPRING_JUNKIE.get())
+                .add(ModEntities.SCRAP_GUARD.get())
+                .add(ModEntities.ARC_PSYCHO.get())
+                .add(ModEntities.FLAMING_HEAD.get())
+                .add(ModEntities.COPPER_KNIGHT.get());
     }
 }

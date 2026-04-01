@@ -34,7 +34,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         spawnEgg(ModItems.SPRING_JUNKIE_SPAWN_EGG);
         spawnEgg(ModItems.FLAMING_HEAD_SPAWN_EGG);
         spawnEgg(ModItems.SCRAP_GUARD_SPAWN_EGG);
-        spawnEgg(ModItems.ARC_PSYCHO_SPAWN_EGG);    }
+        spawnEgg(ModItems.ARC_PSYCHO_SPAWN_EGG);
+    }
 
     private void spawnEgg(RegistryObject<SpawnEggItem> item) {
         if (item.getId() == null) return;

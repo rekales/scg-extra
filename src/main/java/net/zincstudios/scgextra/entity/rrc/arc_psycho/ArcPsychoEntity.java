@@ -27,7 +27,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.sounds.ModSounds;
-import net.zincstudios.scgextra.Faction;
+import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 
 public class ArcPsychoEntity extends Monster implements GeoEntity{
