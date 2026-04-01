@@ -17,14 +17,15 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        spawnEgg(ModItems.FISH_FOLK_SPAWN_EGG);
-        spawnEgg(ModItems.TURTLEMAN_SPAWN_EGG);
-        spawnEgg(ModItems.SALMONSAUR_SPAWN_EGG);
-        spawnEgg(ModItems.GUARDIAN_STATUE_SPAWN_EGG);
-        spawnEgg(ModItems.TENTACLIATOR_SPAWN_EGG);
-        spawnEgg(ModItems.GLOWING_TENTACLIATOR_SPAWN_EGG);
-        spawnEgg(ModItems.PUFFICUS_SPAWN_EGG);
-        spawnEgg(ModItems.ARMORED_WHALE_SPAWN_EGG);
+        //don't mind me changing these
+        basicItem(ModItems.FISH_FOLK_SPAWN_EGG.get());
+        basicItem(ModItems.TURTLEMAN_SPAWN_EGG.get());
+        basicItem(ModItems.SALMONSAUR_SPAWN_EGG.get());
+        basicItem(ModItems.GUARDIAN_STATUE_SPAWN_EGG.get());
+        basicItem(ModItems.TENTACLIATOR_SPAWN_EGG.get());
+        basicItem(ModItems.GLOWING_TENTACLIATOR_SPAWN_EGG.get());
+        basicItem(ModItems.PUFFICUS_SPAWN_EGG.get());
+        basicItem(ModItems.ARMORED_WHALE_SPAWN_EGG.get());
 
         spawnEgg(ModItems.COPPER_KNIGHT_SPAWN_EGG);
         spawnEgg(ModItems.DRONE_SPAWN_EGG);
