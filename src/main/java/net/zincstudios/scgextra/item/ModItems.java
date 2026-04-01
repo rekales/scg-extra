@@ -6,7 +6,6 @@ import net.minecraft.world.item.*;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -99,8 +98,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> COPPER_KNIGHT_SPAWN_EGG = ITEMS.register("copper_knight_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.COPPER_KNIGHT,
-                    0xD16624,
-                    0x78D5A6,
+                    0xFFFFFF,
+                    0xFFFFFF,
                     new Item.Properties()
             )
     );
@@ -108,8 +107,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> DRONE_SPAWN_EGG = ITEMS.register("drone_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.DRONE,
-                    0xCB5B24, // Replace with primary color
-                    0x327B5C, // Replace with secondary color
+                    0xFFFFFF,
+                    0xFFFFFF,
                     new Item.Properties()
             )
     );
@@ -117,8 +116,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> TALLMAN_SPAWN_EGG = ITEMS.register("tallman_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.TALLMAN,
-                    0xB54C24,
-                    0x452926,
+                    0xFFFFFF,
+                    0xFFFFFF,
                     new Item.Properties()
             )
     );
@@ -126,8 +125,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> SCOUT_SPAWN_EGG = ITEMS.register("scout_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.SCOUT,
-                    0xCB6E35,
-                    0x3E2224,
+                    0xFFFFFF,
+                    0xFFFFFF,
                     new Item.Properties()
             )
     );
@@ -135,8 +134,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> OPPRESSOR_SPAWN_EGG = ITEMS.register("oppressor_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.OPPRESSOR,
-                    0x3F343D,
-                    0x146B58,
+                    0xFFFFFF,
+                    0xFFFFFF,
                     new Item.Properties()
             )
     );
@@ -144,8 +143,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> SPRING_JUNKIE_SPAWN_EGG = ITEMS.register("spring_junkie_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.SPRING_JUNKIE,
-                    0xc25724,
-                    0x3b313b,
+                    0xFFFFFF,
+                    0xFFFFFF,
                     new Item.Properties()
             )
     );
@@ -153,8 +152,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> FLAMING_HEAD_SPAWN_EGG = ITEMS.register("flaming_head_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.FLAMING_HEAD,
-                    0xba5024,
-                    0x7bd7a9,
+                    0xFFFFFF,
+                    0xFFFFFF,
                     new Item.Properties()
             )
     );
@@ -162,8 +161,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> SCRAP_GUARD_SPAWN_EGG = ITEMS.register("scrap_guard_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.SCRAP_GUARD,
-                    0xc75d24,
-                    0x83404c,
+                    0xFFFFFF,
+                    0xFFFFFF,
                     new Item.Properties()
             )
     );
@@ -171,8 +170,8 @@ public class ModItems {
     public static final RegistryObject<SpawnEggItem> ARC_PSYCHO_SPAWN_EGG = ITEMS.register("arc_psycho_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.ARC_PSYCHO,
-                    0xcb6124,
-                    0xf2bb64,
+                    0xFFFFFF,
+                    0xFFFFFF,
                     new Item.Properties()
             )
     );
