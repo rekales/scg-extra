@@ -149,7 +149,7 @@ public class ModEntities {
 
     public static final RegistryObject<EntityType<FlamingHeadEntity>> FLAMING_HEAD = ENTITY_TYPES
             .register("flaming_head", () -> EntityType.Builder.of(FlamingHeadEntity::new, MobCategory.MONSTER)
-                    .sized(3.5F, 6F)
+                    .sized(2.6F, 5F)
                     .setUpdateInterval(1)
                     .build("flaming_head"));
 
