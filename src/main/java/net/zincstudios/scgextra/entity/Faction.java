@@ -1,28 +1,44 @@
 package net.zincstudios.scgextra.entity;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.event.TagsUpdatedEvent;
+import net.zincstudios.scgextra.SCGExtra;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @SuppressWarnings("unused")
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public record Faction(String name) {
 
+    private static final String FACTION_NAMESPACE = "scgextra";
+    private static final String FACTION_PATH_PREFIX = "factions/";
     public static final Faction NO_FACTION = new Faction("none");
     private static final Map<TagKey<EntityType<?>>, Faction> KEY_FACTION_MAP = new HashMap<>();
     private static final Map<EntityType<?>, Faction> ENTITY_FACTION_CACHE = new HashMap<>();
 
-    public static void registerFaction(TagKey<EntityType<?>> tag, String name) {
-        KEY_FACTION_MAP.put(tag, new Faction(name));
+    public static void onTagsUpdated(TagsUpdatedEvent event) {
+        KEY_FACTION_MAP.clear();
+        ENTITY_FACTION_CACHE.clear();
+
+        Registry<EntityType<?>> registry = event.getRegistryAccess()
+                .registryOrThrow(Registries.ENTITY_TYPE);
+
+        registry.getTagNames().forEach(tagKey -> {
+            ResourceLocation loc = tagKey.location();
+            if (loc.getNamespace().equals(FACTION_NAMESPACE) && loc.getPath().startsWith(FACTION_PATH_PREFIX)) {
+                String name = loc.getPath().substring(FACTION_PATH_PREFIX.length());
+                KEY_FACTION_MAP.put(tagKey, new Faction(name));
+                SCGExtra.LOGGER.info("Added Faction: {}", name);
+            }
+        });
     }
 
     public static void clearFactionCache() {

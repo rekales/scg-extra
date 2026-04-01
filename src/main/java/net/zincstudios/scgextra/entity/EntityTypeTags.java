@@ -12,11 +12,11 @@ public class EntityTypeTags {
     public static final TagKey<EntityType<?>> ELITE = tag("elite");
     public static final TagKey<EntityType<?>> BOSS = tag("boss");
 
-    // Faction, NOTE: don't forget to add
-    public static final TagKey<EntityType<?>> ASGHARIAN = tag("asgharian");
-    public static final TagKey<EntityType<?>> COG = tag("cog");
-    public static final TagKey<EntityType<?>> RRC = tag("rrc");
-    public static final TagKey<EntityType<?>> WHALER = tag("whaler");
+    // Faction
+    public static final TagKey<EntityType<?>> ASGHARIAN = tag("factions/asgharian");
+    public static final TagKey<EntityType<?>> COG = tag("factions/cog");
+    public static final TagKey<EntityType<?>> RRC = tag("factions/rrc");
+    public static final TagKey<EntityType<?>> WHALER = tag("factions/whaler");
 
     public static TagKey<EntityType<?>> tag(String name) {
         return TagKey.create(Registries.ENTITY_TYPE, SCGExtra.asResource(name));
