@@ -18,11 +18,13 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.zincstudios.scgextra.Faction;
+import net.zincstudios.scgextra.CommonConfig;
+import net.zincstudios.scgextra.entity.Faction;
+import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
-import net.zincstudios.scgextra.entity.common.ai.StunnedGoal;
+import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
 import net.zincstudios.scgextra.entity.projectile.FireProjectile;
 import net.zincstudios.scgextra.sounds.ModSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -34,12 +36,14 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable {
+public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable, HeadShotHandler {
+
+    // Server-side only for stunnable handling
+    private int headshotCounter = 0;
 
     public enum BehaviorState {
         NONE, RAMMING, SPINNING, STUNNED
@@ -65,13 +69,38 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable {
     }
 
     @Override
-    public @Nullable StunnedGoal<?> getStunnedGoal() {
-        for(WrappedGoal goal : this.goalSelector.getAvailableGoals()){
-            if(goal.getGoal() instanceof StunnedGoal<?> stunnedGoal){
-                return stunnedGoal;
-            }
+    public int shouldStun() {
+        if (!CommonConfig.enableAbilityWeakness) return 0;
+
+        if (this.headshotCounter >= CommonConfig.abilityWeaknessHeadshots) {
+//            return CommonConfig.abilityWeaknessDuration;
+            return 100;
         }
-        return null;
+
+        return 0;
+    }
+
+    @Override
+    public boolean headshot(DamageSource source, float amount) {
+        this.headshotCounter++;
+        return false;
+    }
+
+    @Override
+    public void setStunned(boolean stunned) {
+        if (stunned) {
+            this.setBehaviorState(FlamingHeadEntity.BehaviorState.STUNNED);
+        } else {
+            if (this.getBehaviorState() == FlamingHeadEntity.BehaviorState.STUNNED) {
+                this.setBehaviorState(FlamingHeadEntity.BehaviorState.NONE);
+            }
+            this.headshotCounter = 0;
+        }
+    }
+
+    @Override
+    public boolean isStunned() {
+        return this.getBehaviorState() == BehaviorState.STUNNED;
     }
 
     public BehaviorState getBehaviorState() {
@@ -161,7 +190,7 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable {
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new FlamingHeadStunnedGoal<>(this));
+        this.goalSelector.addGoal(1, new StunnedWithVisualGoal<>(this));
         this.goalSelector.addGoal(2, new RammingAttackGoal(this, 600, 50, 3));
         this.goalSelector.addGoal(3, new FireSpinAttackGoal(this, 200, 30, 8F, 10));
 
@@ -220,6 +249,10 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable {
     public boolean hurt(DamageSource pSource, float pAmount) {
         if(pSource.is(DamageTypes.IN_FIRE) || pSource.is(DamageTypes.ON_FIRE)){
             return false;
+        }
+
+        if(this.isStunned()){
+            return super.hurt(pSource, pAmount*2);
         }
         return super.hurt(pSource, pAmount);
     }

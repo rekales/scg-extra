@@ -1,6 +1,6 @@
 package net.zincstudios.scgextra.entity.whaler.guardian_statue;
 
-import net.zincstudios.scgextra.Faction;
+import net.zincstudios.scgextra.entity.Faction;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

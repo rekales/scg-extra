@@ -17,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraftforge.fluids.FluidType;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.TridentAttackGoal;
@@ -27,12 +28,11 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import top.ribs.scguns.config.EntityEquipmentConfig;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.zincstudios.scgextra.Faction;
+import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.whaler.salmonsaur.SalmonsaurEntity;
 import top.ribs.scguns.entity.ai.AIType;
 import top.ribs.scguns.entity.ai.GunAttackGoal;
@@ -54,11 +54,9 @@ public class FishFolkEntity extends GunnerEntity implements GeoEntity, RangedAtt
         super(entity, level);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @org.jetbrains.annotations.Nullable SpawnGroupData spawnData, @org.jetbrains.annotations.Nullable CompoundTag dataTag) {
         this.setVariant(this.getRandom().nextIntBetweenInclusive(1,2));
-        EntityEquipmentConfig.equipEntity(this, "scgextra:fish_folk");  // NOTE: using raw string
         return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
     }
 
@@ -173,5 +171,9 @@ public class FishFolkEntity extends GunnerEntity implements GeoEntity, RangedAtt
 
     public boolean isSitting(){
         return this.entityData.get(SITTING);
+    }
+    @Override
+    public boolean canDrownInFluidType(FluidType type) {
+        return false;
     }
 }

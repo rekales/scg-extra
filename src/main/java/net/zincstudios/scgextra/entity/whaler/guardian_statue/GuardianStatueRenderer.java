@@ -13,10 +13,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.Vec3;
+import net.zincstudios.scgextra.SCGExtra;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import software.bernie.geckolib.cache.object.GeoBone;
+import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -32,7 +34,7 @@ public class GuardianStatueRenderer<T extends GuardianStatueEntity> extends GeoE
     public static final ResourceLocation BEACON_BEAM_LOCATION = new ResourceLocation("textures/entity/beacon_beam.png");
 
     public GuardianStatueRenderer(EntityRendererProvider.Context renderManager) {
-        super(renderManager, new GuardianStatueModel<>());
+        super(renderManager, new DefaultedEntityGeoModel<>(SCGExtra.asResource("whaler/guardian_statue"), false));
     }
 
     @Override

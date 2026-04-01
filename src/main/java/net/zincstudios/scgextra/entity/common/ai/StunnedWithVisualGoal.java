@@ -6,39 +6,44 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 
 public class StunnedWithVisualGoal <T extends PathfinderMob & Stunnable> extends StunnedGoal<T> {
-    private boolean stunOut = false;
+
     public StunnedWithVisualGoal(T mob) {
         super(mob);
     }
 
-    public StunnedWithVisualGoal(T mob, int endAnimDuration) {
-        super(mob, endAnimDuration);
+    @Override
+    public void start() {
+        super.start();
+        if (this.mob.level() instanceof ServerLevel level) {
+            Scoreboard scoreboard = level.getScoreboard();
+            PlayerTeam team = scoreboard.getPlayerTeam("red");
+            if (team == null) {
+                team = scoreboard.addPlayerTeam("red");
+            }
+            team.setColor(ChatFormatting.RED);
+            scoreboard.addPlayerToTeam(this.mob.getStringUUID(), team);
+            this.mob.addEffect(new MobEffectInstance(MobEffects.GLOWING, this.getStunTimer()));
+        }
+
+    }
+
+    @Override
+    public void stop() {
+        super.stop();
+        this.mob.removeEffect(MobEffects.GLOWING);
     }
 
     @Override
     public void tick() {
         super.tick();
-        stunVisuals();
-        stunOut = true;
-    }
 
-    @Override
-    public void start() {
-        stunOut = false;
-        super.start();
-    }
-
-    protected void stunVisuals(){
-        Level level = this.mob.level();
-        if(!level.isClientSide){
-            ServerLevel sLevel = (ServerLevel) level;
-            sLevel.sendParticles(
+        if (this.mob.level() instanceof ServerLevel level) {
+            level.sendParticles(
                     ParticleTypes.SMOKE,
                     this.mob.getX(),
                     this.mob.getY()+2.5,
@@ -49,16 +54,6 @@ public class StunnedWithVisualGoal <T extends PathfinderMob & Stunnable> extends
                     0.3,
                     0.05
             );
-            Scoreboard scoreboard = sLevel.getScoreboard();
-            PlayerTeam team = scoreboard.getPlayerTeam("red");
-            if (team == null) {
-                team = scoreboard.addPlayerTeam("red");
-            }
-            team.setColor(ChatFormatting.RED);
-            scoreboard.addPlayerToTeam(this.mob.getStringUUID(), team);
-            if(!stunOut){
-                this.mob.addEffect(new MobEffectInstance(MobEffects.GLOWING, this.mob.getDefaultStunDuration()));
-            }
         }
     }
 }
