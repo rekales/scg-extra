@@ -1,7 +1,10 @@
 package net.zincstudios.scgextra.entity.rrc.oppressor;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -14,6 +17,9 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.zincstudios.scgextra.entity.Faction;
@@ -59,8 +65,8 @@ public class OppressorEntity extends GunnerEntity implements GeoEntity {
     protected void registerGoals() {
         // TODO: custom gun attack goal
         this.goalSelector.addGoal(3, new AlertFactionGoal(this, 200));
-        this.goalSelector.addGoal(4, new FlareSummonGoal(this, 100, 30,
-                ModEntities.SCOUT.get(), ModEntities.TALLMAN.get()));
+        this.goalSelector.addGoal(4, new FlareSummonGoal(this, 100, 60,
+                ModEntities.SCOUT.get(), ModEntities.TALLMAN.get(), ModEntities.COPPER_KNIGHT.get()));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
@@ -96,12 +102,12 @@ public class OppressorEntity extends GunnerEntity implements GeoEntity {
             }
         }));
 
-        controllers.add(new AnimationController<>(this, "idle_head", 2, state -> {
-            return state.setAndContinue(RawAnimation.begin()
-                    .thenWait(50)  // TODO: random time
-                    .thenPlay("idle_head")
-            );
-        }).setAnimationSpeed(1.3));
+//        controllers.add(new AnimationController<>(this, "idle_head", 2, state -> {
+//            return state.setAndContinue(RawAnimation.begin()
+//                    .thenWait(50)  // TODO: random time
+//                    .thenPlay("idle_head")
+//            );
+//        }).setAnimationSpeed(1.3));
 
         controllers.add(new ExpandedAnimationController<>(this, "aim", 0,
                 state -> {
@@ -131,8 +137,7 @@ public class OppressorEntity extends GunnerEntity implements GeoEntity {
                                 return RawAnimation.begin().thenPlay("flare");
                             }
                         }
-                )
-                .triggerableAnim("alert",
+                ).triggerableAnim("alert",
                         ctl -> {
                             AnimationController<?> aimController = this.getAnimatableInstanceCache()
                                     .getManagerForId(this.getId())
@@ -145,7 +150,16 @@ public class OppressorEntity extends GunnerEntity implements GeoEntity {
                                 return RawAnimation.begin().thenPlay("alert");
                             }
                         }
-                )
+                ).setCustomInstructionKeyframeHandler(event -> {
+                    if (event.getKeyframeData().getInstructions().equals("spawn_flare;")) {
+                        OppressorEntity self = event.getAnimatable();
+                        FireworkRocketEntity firework = new FireworkRocketEntity(self.level(),
+                                self.getX(), self.getY()+3, self.getZ(), createFireworkItem());
+                        if (self.level() instanceof ClientLevel level) {
+                            level.putNonPlayerEntity(firework.getId() ,firework);
+                        }
+                    }
+                })
         );
 
         controllers.add(new AnimationController<>(this, "death", 2, state -> {
@@ -155,6 +169,29 @@ public class OppressorEntity extends GunnerEntity implements GeoEntity {
                 return PlayState.STOP;
             }
         }));
+    }
+
+    private ItemStack createFireworkItem() {
+        ItemStack firework = new ItemStack(Items.FIREWORK_ROCKET);
+        CompoundTag tag = firework.getOrCreateTag();
+        CompoundTag fireworks = new CompoundTag();
+
+        // Flight duration (1-3)
+        fireworks.putByte("Flight", (byte) 1);
+
+        // Explosions
+        ListTag explosions = new ListTag();
+        CompoundTag explosion = new CompoundTag();
+        explosion.putByte("Type", (byte) 0); // 0=small, 1=large, 2=star, 3=creeper, 4=burst
+        explosion.putIntArray("Colors", new int[]{0xFFFFFF}); // RGB colors
+        explosion.putBoolean("Flicker", false);
+        explosion.putBoolean("Trail", true);
+        explosions.add(explosion);
+
+        fireworks.put("Explosions", explosions);
+        tag.put("Fireworks", fireworks);
+
+        return firework;
     }
 
     @Override

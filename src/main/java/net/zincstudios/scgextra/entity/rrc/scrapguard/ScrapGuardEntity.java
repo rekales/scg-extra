@@ -50,7 +50,7 @@ public class ScrapGuardEntity extends GunnerEntity implements GeoEntity {
     @Override
     protected void registerGoals() {
         // TODO: GunAttackMeleeCombined goal
-        this.goalSelector.addGoal(2, new MeleeGunAttackGoal<>(this, this.getMainHandItem(), 1.0F, AIType.RECKLESS, 3, 10));
+        this.goalSelector.addGoal(2, new ScrapGuardAttackGoal<>(this, this.getMainHandItem(), 1.0F, AIType.RECKLESS, 3, 10));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
@@ -68,6 +68,7 @@ public class ScrapGuardEntity extends GunnerEntity implements GeoEntity {
                 .add(Attributes.ARMOR, 12)
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.5)
+                .add(Attributes.ATTACK_DAMAGE, 10)
                 .add(Attributes.MOVEMENT_SPEED, 0.23F);
     }
 
@@ -76,7 +77,11 @@ public class ScrapGuardEntity extends GunnerEntity implements GeoEntity {
         controllers.add(new AnimationController<>(this, "walk/idle/aim", 4,
                 state -> {
                     if (state.getAnimatable().isAiming()) {
-                        return state.setAndContinue(AIMING);
+                        if(state.isMoving()){
+                            return state.setAndContinue(RawAnimation.begin().thenLoop("walk_holding_aim"));
+                        }else{
+                            return state.setAndContinue(AIMING);
+                        }
                     } else {
                         RawAnimation anim = RawAnimation.begin();
                         if (state.isCurrentAnimation(AIMING)) {

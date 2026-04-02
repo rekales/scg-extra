@@ -40,6 +40,10 @@ public class RaidSummonerEntity extends Mob {
             this.remove(RemovalReason.DISCARDED);
             return;
         }
+        if(this.level().getNearestPlayer(this, 200)==null){
+            this.remove(RemovalReason.DISCARDED);
+            return;
+        }
         int rand = this.random.nextInt(2);
         if(rand==0){
             this.spawnWhaler();

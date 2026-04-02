@@ -1,25 +1,27 @@
 package net.zincstudios.scgextra.entity.rrc.scrapguard;
 
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.item.ItemStack;
 import software.bernie.geckolib.animatable.GeoEntity;
 import top.ribs.scguns.entity.ai.AIType;
 import top.ribs.scguns.entity.ai.GunAttackGoal;
+import top.ribs.scguns.init.ModEffects;
 
 // Much copied from MeleeAttackGoal
-public class MeleeGunAttackGoal<T extends PathfinderMob> extends GunAttackGoal<T> {
+public class ScrapGuardAttackGoal<T extends PathfinderMob> extends GunAttackGoal<T> {
 
     private final int damageDelay;
     private int ticksUntilNextAttack;
     private int ticksUntilDamage;
 
-    public MeleeGunAttackGoal(T shooter, ItemStack gunStack, float speedModifier, AIType aiType, int difficulty) {
+    public ScrapGuardAttackGoal(T shooter, ItemStack gunStack, float speedModifier, AIType aiType, int difficulty) {
         this(shooter, gunStack, speedModifier, aiType, difficulty, 0);
     }
 
-    public MeleeGunAttackGoal(T shooter, ItemStack gunStack, float speedModifier, AIType aiType, int difficulty, int damageDelay) {
+    public ScrapGuardAttackGoal(T shooter, ItemStack gunStack, float speedModifier, AIType aiType, int difficulty, int damageDelay) {
         super(shooter, gunStack, speedModifier, aiType, difficulty);
         this.damageDelay = damageDelay;
     }
@@ -50,7 +52,7 @@ public class MeleeGunAttackGoal<T extends PathfinderMob> extends GunAttackGoal<T
                     this.ticksUntilDamage--;
                 } else {
                     if (distToEnemySqr <= this.getAttackReachSqr(target)) {
-                        this.shooter.doHurtTarget(target);
+                        this.damageTarget(target);
                         this.ticksUntilDamage = -1000;
                     }
                 }
@@ -70,19 +72,15 @@ public class MeleeGunAttackGoal<T extends PathfinderMob> extends GunAttackGoal<T
         }
     }
 
-    protected void checkAndDamageTarget(LivingEntity enemy, double distToEnemySqr) {
-        double d0 = this.getAttackReachSqr(enemy);
-        if (distToEnemySqr <= this.getAttackReachSqr(enemy)) {
-            this.shooter.doHurtTarget(enemy);
-        }
+    protected void damageTarget(LivingEntity target) {
+        this.shooter.doHurtTarget(target);
+        target.addEffect(new MobEffectInstance(ModEffects.LACERATED.get(), 5));
     }
 
-    // From MeleeAttackGoal
     protected double getAttackReachSqr(LivingEntity attackTarget) {
         return (this.shooter.getBbWidth() * 2.0F * this.shooter.getBbWidth() * 2.0F + attackTarget.getBbWidth());
     }
 
-    // From MeleeAttackGoal
     protected void resetAttackCooldown() {
         this.ticksUntilNextAttack = this.adjustedTickDelay(30);
     }

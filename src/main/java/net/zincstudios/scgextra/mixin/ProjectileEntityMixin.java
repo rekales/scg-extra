@@ -6,6 +6,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.Stunnable;
@@ -18,26 +19,45 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.entity.projectile.ProjectileEntity;
+import top.ribs.scguns.init.ModDamageTypes;
+import top.ribs.scguns.util.math.ExtendedEntityRayTraceResult;
 
 import java.util.List;
 import java.util.Optional;
 
-@Mixin(value = ProjectileEntity.class)
+@Mixin(value = ProjectileEntity.class, remap = false)
 public class ProjectileEntityMixin {
 
     @Inject(
-            method = "onHitEntity",
+            method = "onHit",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"
+                    target = "Ltop/ribs/scguns/entity/projectile/ProjectileEntity;onHitEntity(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/Vec3;Z)V"
             )
     )
-    private void beforeEntityHurt(Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot,
-                                  CallbackInfo ci, @Local(name = "source") DamageSource source, @Local(name = "damage") float damage) {
-        if (headshot && entity instanceof HeadShotHandler headShotHandler) {
-            headShotHandler.headshot(source, damage);
+    private void beforeOnHit(HitResult result, Vec3 startVec, Vec3 endVec, CallbackInfo ci, @Local(name = "entityHitResult") ExtendedEntityRayTraceResult entityHitResult) {
+        ProjectileEntity self = (ProjectileEntity) (Object) this;
+        DamageSource source = ModDamageTypes.Sources.projectile(self.level().registryAccess(), self, self.getShooter());
+
+        if (entityHitResult.isHeadshot() && entityHitResult.getEntity() instanceof HeadShotHandler headShotHandler) {
+            headShotHandler.headshot(source, self.getDamage());
         }
     }
+
+    // TODO: Requires fix on ScorchedGuns to use this proper method
+//    @Inject(
+//            method = "onHitEntity",
+//            at = @At(
+//                    value = "INVOKE",
+//                    target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"
+//            )
+//    )
+//    private void beforeEntityHurt(Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot,
+//                                  CallbackInfo ci, @Local(name = "source") DamageSource source, @Local(name = "damage") float damage) {
+//        if (headshot && entity instanceof HeadShotHandler headShotHandler) {
+//            headShotHandler.headshot(source, damage);
+//        }
+//    }
 
     @Inject(
             method = "getHitResult",

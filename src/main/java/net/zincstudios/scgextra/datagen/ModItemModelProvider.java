@@ -27,15 +27,15 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.PUFFICUS_SPAWN_EGG.get());
         basicItem(ModItems.ARMORED_WHALE_SPAWN_EGG.get());
 
-        spawnEgg(ModItems.COPPER_KNIGHT_SPAWN_EGG);
-        spawnEgg(ModItems.DRONE_SPAWN_EGG);
-        spawnEgg(ModItems.TALLMAN_SPAWN_EGG);
-        spawnEgg(ModItems.SCOUT_SPAWN_EGG);
-        spawnEgg(ModItems.OPPRESSOR_SPAWN_EGG);
-        spawnEgg(ModItems.SPRING_JUNKIE_SPAWN_EGG);
-        spawnEgg(ModItems.FLAMING_HEAD_SPAWN_EGG);
-        spawnEgg(ModItems.SCRAP_GUARD_SPAWN_EGG);
-        spawnEgg(ModItems.ARC_PSYCHO_SPAWN_EGG);
+        basicItem(ModItems.COPPER_KNIGHT_SPAWN_EGG.get());
+        basicItem(ModItems.DRONE_SPAWN_EGG.get());
+        basicItem(ModItems.TALLMAN_SPAWN_EGG.get());
+        basicItem(ModItems.SCOUT_SPAWN_EGG.get());
+        basicItem(ModItems.OPPRESSOR_SPAWN_EGG.get());
+        basicItem(ModItems.SPRING_JUNKIE_SPAWN_EGG.get());
+        basicItem(ModItems.FLAMING_HEAD_SPAWN_EGG.get());
+        basicItem(ModItems.SCRAP_GUARD_SPAWN_EGG.get());
+        basicItem(ModItems.ARC_PSYCHO_SPAWN_EGG.get());
     }
 
     private void spawnEgg(RegistryObject<SpawnEggItem> item) {
