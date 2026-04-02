@@ -27,6 +27,13 @@ dependencies {
     modImplementation("curse.maven:scorchedguns-802940:7232063")  // 0.5.5
     modImplementation("curse.maven:framework-549225:5692398")  // 0.7.8
 
+//    modImplementation("curse.maven:scorched-guns-oregunized-1447333:7540971")  // 1.0.0
+//    modImplementation("curse.maven:oreganized-769203:7707202")  // 4.3.2
+//    modImplementation("curse.maven:blueprint-382216:6408581")  // 7.1.3
+//    modImplementation("curse.maven:scorched-guns-caverns-chasms-compat-1369675:7670670")  // 1.3.1a
+//    modImplementation("curse.maven:caverns-and-chasms-438005:7858512")  // 2.1.0
+//    modImplementation("curse.maven:yungs-api-421850:5769971")  // 4.0.6
+
     modImplementation("software.bernie.geckolib:geckolib-forge-${property("minecraft_version")}:${property("geckolib_version")}")
     modCompileOnly("top.theillusivec4.curios:curios-forge:${property("curios_version")}:api")
     modRuntimeOnly("top.theillusivec4.curios:curios-forge:${property("curios_version")}")
