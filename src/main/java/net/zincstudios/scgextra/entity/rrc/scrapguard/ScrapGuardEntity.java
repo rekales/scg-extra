@@ -77,7 +77,11 @@ public class ScrapGuardEntity extends GunnerEntity implements GeoEntity {
         controllers.add(new AnimationController<>(this, "walk/idle/aim", 4,
                 state -> {
                     if (state.getAnimatable().isAiming()) {
-                        return state.setAndContinue(AIMING);
+                        if(state.isMoving()){
+                            return state.setAndContinue(RawAnimation.begin().thenLoop("walk_holding_aim"));
+                        }else{
+                            return state.setAndContinue(AIMING);
+                        }
                     } else {
                         RawAnimation anim = RawAnimation.begin();
                         if (state.isCurrentAnimation(AIMING)) {
