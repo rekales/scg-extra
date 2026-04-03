@@ -55,6 +55,7 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable, HeadSh
     // Server-side only for stunnable handling
     private int headshotCounter = 0;
     private boolean stunned = false;
+    private boolean stunCooldown = false;
 
     public DroneEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -83,6 +84,8 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable, HeadSh
         this.stunned = stunned;
         if (stunned) {
             this.triggerAnim("behaviour", "stun");
+        } else {
+            this.headshotCounter = 0;
         }
     }
 
@@ -93,8 +96,16 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable, HeadSh
 
     @Override
     public boolean headshot(DamageSource source, float amount) {
-        this.headshotCounter++;
+        if (this.headshotCounter < CommonConfig.abilityWeaknessHeadshots-1 || !this.stunCooldown) {
+            this.headshotCounter++;
+        }
+
         return false;
+    }
+
+    @Override
+    public void setStunCooldown(boolean cooldown) {
+        this.stunCooldown = cooldown;
     }
 
     @Override

@@ -98,6 +98,7 @@ public class TurtlemanEntity extends GunnerEntity implements GeoEntity, Stunnabl
         return this.stunned;
     }
 
+    @Override
     public void setStunCooldown(boolean cooldown) {
         if (cooldown) {
             this.shouldStun = false;

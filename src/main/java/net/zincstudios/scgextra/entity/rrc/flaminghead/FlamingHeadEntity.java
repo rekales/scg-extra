@@ -42,9 +42,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable, HeadShotHandler {
 
-    // Server-side only for stunnable handling
-    private int headshotCounter = 0;
-
     public enum BehaviorState {
         NONE, RAMMING, SPINNING, STUNNED
     }
@@ -62,6 +59,10 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable, 
             SynchedEntityData.defineId(FlamingHeadEntity.class, EntityDataSerializers.INT);
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+
+    // Server-side only for stunnable handling
+    private int headshotCounter = 0;
+    private boolean stunCooldown = false;
 
     public FlamingHeadEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -82,7 +83,9 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable, 
 
     @Override
     public boolean headshot(DamageSource source, float amount) {
-        this.headshotCounter++;
+        if (this.headshotCounter < CommonConfig.abilityWeaknessHeadshots-1 || !this.stunCooldown) {
+            this.headshotCounter++;
+        }
         return false;
     }
 
@@ -133,6 +136,11 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable, 
 
     public boolean isAnimateRamming() {
         return this.entityData.get(ANIMATE_RAM);
+    }
+
+    @Override
+    public void setStunCooldown(boolean cooldown) {
+        this.stunCooldown = cooldown;
     }
 
     @Override
