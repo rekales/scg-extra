@@ -66,6 +66,11 @@ public class MountedGunAttackGoal extends Goal{
                 this.mob.getTarget().getY(), 
                 this.mob.getTarget().getZ()
             );
+            double dx = target.getX() - mob.getX();
+            double dz = target.getZ() - mob.getZ();
+            float yaw = (float)(Math.atan2(dz, dx) * (180F / Math.PI)) - 90F;
+            this.mob.setYBodyRot(yaw);
+            this.mob.setYRot(yaw);
             if (this.tick%2==0) {
                 fireGun(target);
             }
