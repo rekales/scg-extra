@@ -12,8 +12,15 @@ import net.zincstudios.scgextra.entity.common.Stunnable;
 
 public class StunnedWithVisualGoal <T extends PathfinderMob & Stunnable> extends StunnedGoal<T> {
 
+    private boolean smoking = false;
+
     public StunnedWithVisualGoal(T mob) {
         super(mob);
+    }
+
+    public StunnedWithVisualGoal<T> smoking(boolean smoking) {
+        this.smoking = smoking;
+        return this;
     }
 
     @Override
@@ -41,8 +48,7 @@ public class StunnedWithVisualGoal <T extends PathfinderMob & Stunnable> extends
     @Override
     public void tick() {
         super.tick();
-
-        if (this.mob.level() instanceof ServerLevel level) {
+        if (this.smoking && this.mob.level() instanceof ServerLevel level) {
             level.sendParticles(
                     ParticleTypes.SMOKE,
                     this.mob.getX(),

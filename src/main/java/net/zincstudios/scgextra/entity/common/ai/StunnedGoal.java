@@ -33,7 +33,13 @@ public class StunnedGoal<T extends PathfinderMob & Stunnable> extends Goal {
             return this.stunTimer > 0;
         } else {
             this.stunLength = this.mob.shouldStun();
-            return this.stunLength > 0 && this.mob.level().getGameTime() > this.cooldownEnd;
+            if (this.mob.level().getGameTime() <= this.cooldownEnd) {
+                this.mob.setStunCooldown(true);
+                this.stunLength = 0;
+            } else {
+                this.mob.setStunCooldown(false);
+            }
+            return this.stunLength > 0;
         }
     }
 
@@ -45,7 +51,7 @@ public class StunnedGoal<T extends PathfinderMob & Stunnable> extends Goal {
     @Override
     public void start() {
         this.mob.getNavigation().stop();
-        this.mob.setStunned(false);
+        this.mob.setStunned(true);
         this.stunTimer = this.stunLength;
     }
 

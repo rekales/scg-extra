@@ -1,5 +1,6 @@
-package net.zincstudios.scgextra;
+package net.zincstudios.scgextra.client;
 
+import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.effects.ModEffects;
 import com.mojang.blaze3d.systems.RenderSystem;
 
