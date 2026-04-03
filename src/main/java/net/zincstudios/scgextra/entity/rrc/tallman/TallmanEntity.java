@@ -160,10 +160,11 @@ public class TallmanEntity extends GunnerEntity implements GeoEntity {
     }
 
     protected void playStepSound(BlockPos pPos, BlockState pBlock) {
-        if(this.getStepSound().equals(SoundEvents.IRON_GOLEM_STEP)){
-            this.playSound(this.getStepSound(), this.getSoundVolume(), 3.0F);
+        SoundEvent event = this.getStepSound();
+        if(event.equals(SoundEvents.IRON_GOLEM_STEP)){
+            this.playSound(event, this.getSoundVolume(), 3.0F);
         }else{
-            this.playSound(this.getStepSound(), this.getSoundVolume(), this.getVoicePitch());
+            this.playSound(event, this.getSoundVolume(), 1.0F);
         }
     }
 

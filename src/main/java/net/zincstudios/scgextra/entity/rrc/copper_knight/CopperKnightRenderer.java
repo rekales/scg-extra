@@ -21,13 +21,13 @@ public class CopperKnightRenderer<T extends CopperKnightEntity> extends GunnerRe
             protected void renderStackForBone(PoseStack poseStack, GeoBone bone, ItemStack stack, T animatable, MultiBufferSource bufferSource, float partialTick, int packedLight, int packedOverlay) {
                 poseStack.pushPose();
                 if (animatable.isAiming()) {
-                    poseStack.translate(-0.2, -0.3, 0);
+                    poseStack.translate(-0.2, -0.3, -0.2);
                     poseStack.mulPose(Axis.XP.rotationDegrees(135));
                     poseStack.mulPose(Axis.YP.rotationDegrees(170));
                 } else {
-                    poseStack.translate(-0.2, -0.2, 0);
+                    poseStack.translate(-0.45, -0.3, -0.35);
                     poseStack.mulPose(Axis.XP.rotationDegrees(145));
-                    poseStack.mulPose(Axis.YP.rotationDegrees(130));
+                    poseStack.mulPose(Axis.YP.rotationDegrees(125));
                 }
                 poseStack.mulPose(Axis.XP.rotationDegrees(90)); // Compensate for super
                 super.renderStackForBone(poseStack, bone, stack, animatable, bufferSource, partialTick, packedLight, packedOverlay);
