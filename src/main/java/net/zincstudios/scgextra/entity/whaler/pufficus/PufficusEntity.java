@@ -1,5 +1,6 @@
 package net.zincstudios.scgextra.entity.whaler.pufficus;
 
+import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.EquippedEntity;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
@@ -47,7 +48,7 @@ public class PufficusEntity extends EquippedEntity implements GeoEntity {
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
     public PufficusEntity(EntityType<? extends Monster> entityType, Level level) {
-        super(entityType, level);
+        super(entityType, level, SCGExtra.asResource("pufficus"));
     }
 
     @Override

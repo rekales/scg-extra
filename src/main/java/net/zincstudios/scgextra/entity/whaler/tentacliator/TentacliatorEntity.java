@@ -4,6 +4,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.item.ItemStack;
+import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.Faction;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -39,7 +40,7 @@ public class TentacliatorEntity extends GunnerEntity implements GeoEntity, Range
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public TentacliatorEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
-        super(pEntityType, pLevel);
+        super(pEntityType, pLevel, SCGExtra.asResource("tentacliator"));
     }
 
     @Override
