@@ -21,9 +21,9 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.CommonConfig;
-import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.MobUtil;
@@ -32,7 +32,6 @@ import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
 import net.zincstudios.scgextra.particle.ModParticleTypes;
 import net.zincstudios.scgextra.sounds.ModSounds;
-import org.joml.Quaternionf;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -272,22 +271,9 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable, 
                         (this.getRandom().nextDouble() - 0.5) * dirRand,
                         (this.getRandom().nextDouble() - 0.5) * dirRand
                 );
-
-                pos = offset.yRot(-(this.getRandom().nextFloat() * 360) * Mth.DEG_TO_RAD).add(this.position());
-
-//                level.addParticle(
-//                        ParticleTypes.SMOKE,
-//                        pos.x + (this.getRandom().nextDouble()-0.5) * posRand,
-//                        pos.y + (this.getRandom().nextDouble()-0.5) * posRand,
-//                        pos.z + (this.getRandom().nextDouble()-0.5) * posRand,
-//                        (this.getRandom().nextDouble()-0.5) * dirRand,
-//                        (this.getRandom().nextDouble()-0.5) * dirRand,
-//                        (this.getRandom().nextDouble()-0.5) * dirRand
-//                );
             }
 
             for (int i = 0; i < 2; i++) {
-//            if (this.tickCount%2==0) {
                 double posRand = 0.2;
                 double dirRand = 0.15;
                 Vec3 offset = new Vec3(0, 1.7, 1.6);
@@ -306,8 +292,6 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable, 
                 );
             }
 
-
-//            for (int i = 0; i < 1; i++) {
             if (this.tickCount%2==0) {
                 double posRand = 0.2;
                 double dirRand = 0.15;
@@ -396,30 +380,9 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable, 
     public void aiStep() {
         super.aiStep();
 
-//        if(this.tickCount%8==0) {
-//            for (int i = 0; i < 360; i += 10) {
-//                double rad = Math.toRadians(i);
-//                double x = this.getX() + Math.cos(rad) * 4;
-//                double z = this.getZ() + Math.sin(rad) * 4;
-//                FireProjectile en = new FireProjectile(
-//                        this.level(),
-//                        this
-//                );
-//                en.setPos(this.position().add(0, 3, 0));
-//                double dx = x - this.getX();
-//                double dy = this.getY() - (this.getY()+3);
-//                double dz = z - this.getZ();
-//                en.shoot(
-//                        dx,
-//                        dy,
-//                        dz,
-//                        2.5F,
-//                        0F
-//                );
-//                this.level().addFreshEntity(en);
-//            }
-//        }
-
+        if (this.tickCount%5==1) {
+            this.burnNearby(3);
+        }
     }
 
     @Override
@@ -480,5 +443,20 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable, 
 
     protected void playStepSound(net.minecraft.core.BlockPos pPos, net.minecraft.world.level.block.state.BlockState pState) {
       this.playSound(this.getStepSound(), this.getSoundVolume() * 0.15F, 1F);
+    }
+
+    public void burnNearby(float radius) {
+        AABB boundingBox = this.getBoundingBox().inflate(radius);
+
+        List<LivingEntity> nearbyEntities = this.level().getEntitiesOfClass(
+                LivingEntity.class,
+                boundingBox,
+                entity -> entity instanceof LivingEntity && entity.distanceTo(this) <= radius
+        );
+
+        for (LivingEntity entity : nearbyEntities) {
+            entity.setSecondsOnFire(5);
+            entity.hurt(this.damageSources().onFire(), 2.0F);
+        }
     }
 }
