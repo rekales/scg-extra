@@ -11,7 +11,7 @@ public class CopperKnightKickGoal extends Goal{
     private final CopperKnightEntity parent;
     public CopperKnightKickGoal(CopperKnightEntity mob){
         this.parent = mob;
-        this.setFlags(EnumSet.of(Flag.LOOK));
+        this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
     @Override
     public boolean canUse() {
