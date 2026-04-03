@@ -1,12 +1,6 @@
 package net.zincstudios.scgextra.entity.common;
 
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
-import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.entity.common.ai.StunnedGoal;
-import org.jetbrains.annotations.Nullable;
-import top.ribs.scguns.init.ModEffects;
 
 /**
  * Interface to be paired with the use of StunnedGoal.
@@ -39,5 +33,8 @@ public interface Stunnable {
      */
     default boolean isStunned() {
         return false;
+    }
+
+    default void setStunCooldown(boolean cooldown) {
     }
 }

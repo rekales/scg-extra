@@ -57,6 +57,7 @@ public class TurtlemanEntity extends GunnerEntity implements GeoEntity, Stunnabl
     // Server-side only for stunnable handling
     private boolean shouldStun = false;
     private int headshotCounter = 0;
+    private boolean stunned = false;
 
     public TurtlemanEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -75,6 +76,7 @@ public class TurtlemanEntity extends GunnerEntity implements GeoEntity, Stunnabl
 
     @Override
     public void setStunned(boolean stunned) {
+        this.stunned = stunned;
         if (stunned) {
             this.triggerAnim("behaviour", "stun");
         } else {
@@ -92,6 +94,17 @@ public class TurtlemanEntity extends GunnerEntity implements GeoEntity, Stunnabl
     }
 
     @Override
+    public boolean isStunned() {
+        return this.stunned;
+    }
+
+    public void setStunCooldown(boolean cooldown) {
+        if (cooldown) {
+            this.shouldStun = false;
+        }
+    }
+
+    @Override
     public boolean headshot(DamageSource source, float amount) {
         this.headshotCounter++;
         return false;
@@ -102,7 +115,7 @@ public class TurtlemanEntity extends GunnerEntity implements GeoEntity, Stunnabl
         ItemStack mainHandItem = this.getMainHandItem();
 
         // TODO: approach enemy while walking backwards behaviour goal
-        this.goalSelector.addGoal(1, new StunnedWithVisualGoal<>(this));
+        this.goalSelector.addGoal(1, new StunnedWithVisualGoal<>(this).smoking(false));
         this.goalSelector.addGoal(2, new TurtlemanGunAttackGoal<>(this, mainHandItem, 1.0F, AIType.RECKLESS, 3, 10F));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 0.9));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -187,8 +200,9 @@ public class TurtlemanEntity extends GunnerEntity implements GeoEntity, Stunnabl
         if (effectInstance.getEffect() == ModEffects.BLINDED.get()
                 || effectInstance.getEffect() == ModEffects.DEAFENED.get()) {
             this.shouldStun = true;
+            return false;
         }
-        return true;
+        return super.addEffect(effectInstance, entity);
     }
 
     @Override
