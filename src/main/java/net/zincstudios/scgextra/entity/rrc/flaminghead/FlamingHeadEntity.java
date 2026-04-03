@@ -227,10 +227,10 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable, 
         this.goalSelector.addGoal(2, new RammingAttackGoal(this, 600, 50, 3));
         this.goalSelector.addGoal(3, new FireSpinAttackGoal(this, 200, 30, 8F, 10));
 //
-//        this.goalSelector.addGoal(5, new MoveTowardsTargetGoal(this, 1, 40));
-//        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 20));
-//        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1));
-//        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(5, new MoveTowardsTargetGoal(this, 1, 40));
+        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 20));
+        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1));
+        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
 
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
@@ -242,9 +242,6 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable, 
     @Override
     public void tick() {
         super.tick();
-
-        this.setYRot(0);
-        this.setYHeadRot(0);
 
         if (this.level() instanceof ClientLevel level) {
             if (this.lastState == BehaviorState.NONE && this.getBehaviorState() == BehaviorState.SPINNING) {
@@ -279,8 +276,6 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable, 
                 Vec3 offset = new Vec3(0, 1.7, 1.6);
                 Vec3 pos = offset.yRot(-(this.getRandom().nextFloat() * 360) * Mth.DEG_TO_RAD).add(this.position());
 
-                pos = offset.yRot(-(this.getRandom().nextFloat() * 360) * Mth.DEG_TO_RAD).add(this.position());
-
                 level.addParticle(
                         ParticleTypes.SMOKE,
                         pos.x + (this.getRandom().nextDouble()-0.5) * posRand,
@@ -297,8 +292,6 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable, 
                 double dirRand = 0.15;
                 Vec3 offset = new Vec3(0, 1.7, 1.6);
                 Vec3 pos = offset.yRot(-(this.getRandom().nextFloat() * 360) * Mth.DEG_TO_RAD).add(this.position());
-
-                pos = offset.yRot(-(this.getRandom().nextFloat() * 360) * Mth.DEG_TO_RAD).add(this.position());
 
                 level.addParticle(
                         ModParticleTypes.COPPER_FLAME.get(),
