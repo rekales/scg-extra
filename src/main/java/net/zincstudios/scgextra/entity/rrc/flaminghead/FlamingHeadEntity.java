@@ -1,11 +1,14 @@
 package net.zincstudios.scgextra.entity.rrc.flaminghead;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
@@ -18,15 +21,18 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.CommonConfig;
+import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
-import net.zincstudios.scgextra.entity.projectile.FireProjectile;
+import net.zincstudios.scgextra.particle.ModParticleTypes;
 import net.zincstudios.scgextra.sounds.ModSounds;
+import org.joml.Quaternionf;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -37,6 +43,7 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.List;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -57,6 +64,7 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable, 
             SynchedEntityData.defineId(FlamingHeadEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> BEHAVIOR_STATE =
             SynchedEntityData.defineId(FlamingHeadEntity.class, EntityDataSerializers.INT);
+//    private static final Vec3 FLAMER_NO_ROT_OFFSET = new Vec3(0, 2, 2);
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
@@ -64,9 +72,23 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable, 
     private int headshotCounter = 0;
     private boolean stunCooldown = false;
 
+    // Client-side only for flame particle rendering
+    private Vec3[] flamethrowerPos = {Vec3.ZERO,Vec3.ZERO,Vec3.ZERO,Vec3.ZERO};
+    private Vec3[] flamethrowerDir = {Vec3.ZERO,Vec3.ZERO,Vec3.ZERO,Vec3.ZERO};  // Radians
+    private long spinStart = 0;  // timestamp
+    private BehaviorState lastState = BehaviorState.NONE;
+
     public FlamingHeadEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
         this.setMaxUpStep(1.1F);
+    }
+
+    public void setFlamethrowerPos(Vec3[] pos) {
+        this.flamethrowerPos = pos;
+    }
+
+    public void setFlamethrowerDir(Vec3[] radians) {
+        this.flamethrowerDir = radians;
     }
 
     @Override
@@ -164,15 +186,10 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable, 
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "main", 4,
                 state -> {
-                    if (state.getAnimatable().isDeadOrDying()) {
-                        return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("death"));
-                    }
                     if (state.getAnimatable().getBehaviorState() == BehaviorState.STUNNED) {
                         state.setAnimation(RawAnimation.begin().thenLoop("stun"));
                     } else if (state.getAnimatable().isAnimateRamming()) {
                         state.setAnimation(RawAnimation.begin().thenPlay("ramming_attack"));
-                    } else if (state.getAnimatable().getBehaviorState() == BehaviorState.SPINNING) {
-                        state.setAnimation(RawAnimation.begin().thenPlay("fire_attack"));
                     } else if (state.isMoving()) {
                         state.setAnimation(RawAnimation.begin().thenLoop("move"));
                     } else {
@@ -180,6 +197,15 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable, 
                     }
 
                     return PlayState.CONTINUE;
+                }).triggerableAnim("spin", RawAnimation.begin().thenPlay("fire_attack"))
+        );
+
+        controllers.add(new AnimationController<>(this, "death", 4,
+                state -> {
+                    if (state.getAnimatable().isDeadOrDying()) {
+                        return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("death"));
+                    }
+                    return PlayState.STOP;
                 }
         ));
 
@@ -201,11 +227,11 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable, 
         this.goalSelector.addGoal(1, new StunnedWithVisualGoal<>(this));
         this.goalSelector.addGoal(2, new RammingAttackGoal(this, 600, 50, 3));
         this.goalSelector.addGoal(3, new FireSpinAttackGoal(this, 200, 30, 8F, 10));
-
-        this.goalSelector.addGoal(5, new MoveTowardsTargetGoal(this, 1, 40));
-        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 20));
-        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1));
-        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
+//
+//        this.goalSelector.addGoal(5, new MoveTowardsTargetGoal(this, 1, 40));
+//        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 20));
+//        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1));
+//        this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
 
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
@@ -218,8 +244,151 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable, 
     public void tick() {
         super.tick();
 
-        if (this.level().isClientSide && this.hasRamYaw()) {
-            MobUtil.turnEntityToYaw(this, this.getRamYaw(), 10F);
+        this.setYRot(0);
+        this.setYHeadRot(0);
+
+        if (this.level() instanceof ClientLevel level) {
+            if (this.lastState == BehaviorState.NONE && this.getBehaviorState() == BehaviorState.SPINNING) {
+                this.spinStart = this.level().getGameTime();
+                this.triggerAnim("main", "spin");
+            }
+            this.lastState = this.getBehaviorState();
+
+            // Random particles around to not make it look bare
+//            for (int i = 0; i < 1; i++) {
+            if (this.tickCount%1==0) {
+
+                double posRand = 0.2;
+                double dirRand = 0.15;
+                Vec3 offset = new Vec3(0, 1.7, 1.5);
+                Vec3 pos = offset.yRot(-(this.getRandom().nextFloat() * 360) * Mth.DEG_TO_RAD).add(this.position());
+
+                level.addParticle(
+                        ModParticleTypes.COPPER_FIRE_BALL.get(),
+                        pos.x + (this.getRandom().nextDouble() - 0.5) * posRand,
+                        pos.y + (this.getRandom().nextDouble() - 0.5) * posRand,
+                        pos.z + (this.getRandom().nextDouble() - 0.5) * posRand,
+                        (this.getRandom().nextDouble() - 0.5) * dirRand,
+                        (this.getRandom().nextDouble() - 0.5) * dirRand,
+                        (this.getRandom().nextDouble() - 0.5) * dirRand
+                );
+
+                pos = offset.yRot(-(this.getRandom().nextFloat() * 360) * Mth.DEG_TO_RAD).add(this.position());
+
+//                level.addParticle(
+//                        ParticleTypes.SMOKE,
+//                        pos.x + (this.getRandom().nextDouble()-0.5) * posRand,
+//                        pos.y + (this.getRandom().nextDouble()-0.5) * posRand,
+//                        pos.z + (this.getRandom().nextDouble()-0.5) * posRand,
+//                        (this.getRandom().nextDouble()-0.5) * dirRand,
+//                        (this.getRandom().nextDouble()-0.5) * dirRand,
+//                        (this.getRandom().nextDouble()-0.5) * dirRand
+//                );
+            }
+
+            for (int i = 0; i < 2; i++) {
+//            if (this.tickCount%2==0) {
+                double posRand = 0.2;
+                double dirRand = 0.15;
+                Vec3 offset = new Vec3(0, 1.7, 1.6);
+                Vec3 pos = offset.yRot(-(this.getRandom().nextFloat() * 360) * Mth.DEG_TO_RAD).add(this.position());
+
+                pos = offset.yRot(-(this.getRandom().nextFloat() * 360) * Mth.DEG_TO_RAD).add(this.position());
+
+                level.addParticle(
+                        ParticleTypes.SMOKE,
+                        pos.x + (this.getRandom().nextDouble()-0.5) * posRand,
+                        pos.y + (this.getRandom().nextDouble()-0.5) * posRand,
+                        pos.z + (this.getRandom().nextDouble()-0.5) * posRand,
+                        (this.getRandom().nextDouble()-0.5) * dirRand,
+                        (this.getRandom().nextDouble()-0.5) * dirRand,
+                        (this.getRandom().nextDouble()-0.5) * dirRand
+                );
+            }
+
+
+//            for (int i = 0; i < 1; i++) {
+            if (this.tickCount%2==0) {
+                double posRand = 0.2;
+                double dirRand = 0.15;
+                Vec3 offset = new Vec3(0, 1.7, 1.6);
+                Vec3 pos = offset.yRot(-(this.getRandom().nextFloat() * 360) * Mth.DEG_TO_RAD).add(this.position());
+
+                pos = offset.yRot(-(this.getRandom().nextFloat() * 360) * Mth.DEG_TO_RAD).add(this.position());
+
+                level.addParticle(
+                        ModParticleTypes.COPPER_FLAME.get(),
+                        pos.x + (this.getRandom().nextDouble()-0.5) * posRand,
+                        pos.y + (this.getRandom().nextDouble()-0.5) * posRand,
+                        pos.z + (this.getRandom().nextDouble()-0.5) * posRand,
+                        (this.getRandom().nextDouble()-0.5) * dirRand,
+                        (this.getRandom().nextDouble()-0.5) * dirRand,
+                        (this.getRandom().nextDouble()-0.5) * dirRand
+                );
+            }
+
+            // Flamethrower particles
+            for (int i = 0; i < 4; i++) {
+                boolean turbo = (this.level().getGameTime() - this.spinStart) > 20
+                        && (this.level().getGameTime() - this.spinStart) < 50
+                        && this.getBehaviorState() == BehaviorState.SPINNING;
+
+                double posRand = 0.2;
+                double dirRand = 0.12;
+                double velocity = turbo ? 0.75 : 0.15;
+                Vec3 delta = flamethrowerDir[i].scale(velocity);
+
+                if(this.tickCount%4==0 || turbo){
+                    for (int j = 0; j < 2; j++) {
+                        level.addParticle(
+                                ModParticleTypes.COPPER_FLAME.get(),
+                                this.flamethrowerPos[i].x + (this.getRandom().nextDouble()-0.5) * posRand,
+                                this.flamethrowerPos[i].y + (this.getRandom().nextDouble()-0.5) * posRand,
+                                this.flamethrowerPos[i].z + (this.getRandom().nextDouble()-0.5) * posRand,
+                                delta.x + (this.getRandom().nextDouble()-0.5) * dirRand,
+                                delta.y + (turbo ? 0.1 : 0) + (this.getRandom().nextDouble()-0.5) * dirRand,
+                                delta.z + (this.getRandom().nextDouble()-0.5) * dirRand
+                        );
+                        if (!turbo) break;
+                    }
+                }
+
+                delta = flamethrowerDir[i].scale(velocity * (turbo ? 1.5 : 1));
+
+                if(this.tickCount%3==0 || turbo){
+                    for (int j = 0; j < 2; j++) {
+                        level.addParticle(
+                                ModParticleTypes.COPPER_FIRE_BALL.get(),
+                                this.flamethrowerPos[i].x + (this.getRandom().nextDouble()-0.5) * posRand,
+                                this.flamethrowerPos[i].y + (this.getRandom().nextDouble()-0.5) * posRand,
+                                this.flamethrowerPos[i].z + (this.getRandom().nextDouble()-0.5) * posRand,
+                                delta.x + (this.getRandom().nextDouble()-0.5) * dirRand,
+                                delta.y + (turbo ? 0.1 : 0) + (this.getRandom().nextDouble()-0.5) * dirRand,
+                                delta.z + (this.getRandom().nextDouble()-0.5) * dirRand
+                        );
+                        if (!turbo) break;
+                    }
+                }
+
+                if(this.tickCount%3==0){
+                    for (int j = 0; j < 3; j++) {
+                        level.addParticle(
+                                ParticleTypes.SMOKE,
+                                this.flamethrowerPos[i].x + (this.getRandom().nextDouble()-0.5) * posRand,
+                                this.flamethrowerPos[i].y + (this.getRandom().nextDouble()-0.5) * posRand,
+                                this.flamethrowerPos[i].z + (this.getRandom().nextDouble()-0.5) * posRand,
+                                delta.x + (this.getRandom().nextDouble()-0.5) * dirRand,
+                                delta.y + (turbo ? 0.1 : 0) + (this.getRandom().nextDouble()-0.5) * dirRand,
+                                delta.z + (this.getRandom().nextDouble()-0.5) * dirRand
+                        );
+                        if (!turbo) break;
+                    }
+                }
+            }
+
+            if (this.hasRamYaw()) {
+                MobUtil.turnEntityToYaw(this, this.getRamYaw(), 10F);
+            }
         }
     }
 
@@ -227,29 +396,29 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable, 
     public void aiStep() {
         super.aiStep();
 
-        if(this.tickCount%8==0) {
-            for (int i = 0; i < 360; i += 10) {
-                double rad = Math.toRadians(i);
-                double x = this.getX() + Math.cos(rad) * 4;
-                double z = this.getZ() + Math.sin(rad) * 4;
-                FireProjectile en = new FireProjectile(
-                        this.level(),
-                        this
-                );
-                en.setPos(this.position().add(0, 3, 0));
-                double dx = x - this.getX();
-                double dy = this.getY() - (this.getY()+3);
-                double dz = z - this.getZ();
-                en.shoot(
-                        dx,
-                        dy,
-                        dz,
-                        2.5F,
-                        0F
-                );
-                this.level().addFreshEntity(en);
-            }
-        }
+//        if(this.tickCount%8==0) {
+//            for (int i = 0; i < 360; i += 10) {
+//                double rad = Math.toRadians(i);
+//                double x = this.getX() + Math.cos(rad) * 4;
+//                double z = this.getZ() + Math.sin(rad) * 4;
+//                FireProjectile en = new FireProjectile(
+//                        this.level(),
+//                        this
+//                );
+//                en.setPos(this.position().add(0, 3, 0));
+//                double dx = x - this.getX();
+//                double dy = this.getY() - (this.getY()+3);
+//                double dz = z - this.getZ();
+//                en.shoot(
+//                        dx,
+//                        dy,
+//                        dz,
+//                        2.5F,
+//                        0F
+//                );
+//                this.level().addFreshEntity(en);
+//            }
+//        }
 
     }
 

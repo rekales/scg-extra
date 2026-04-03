@@ -16,15 +16,15 @@ public class CopperFireBallParticle extends TextureSheetParticle {
 
     protected CopperFireBallParticle(ClientLevel pLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed, SpriteSet pSprites) {
         super(pLevel, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed);
-        this.lifetime = 8 + this.random.nextInt(6);
-        this.initialSize = 0.3F + this.random.nextFloat() * 0.4F;
+        this.lifetime = 12 + this.random.nextInt(6);
+        this.initialSize = 0.25F + this.random.nextFloat() * 0.3F;
         this.quadSize = this.initialSize;
         this.sprites = pSprites;
         this.pickSprite(pSprites);
         this.xd = pXSpeed + (this.random.nextDouble() - (double)0.5F) * 0.1;
         this.yd = pYSpeed + (this.random.nextDouble() - (double)0.5F) * 0.1;
         this.zd = pZSpeed + (this.random.nextDouble() - (double)0.5F) * 0.1;
-        this.gravity = -0.0F + this.random.nextFloat() * -0.0F;
+        this.gravity = 0.015F + this.random.nextFloat() * -0.0F;
         this.hasPhysics = true;
         this.friction = 0.96F;
         this.initialAlpha = 0.9F + this.random.nextFloat() * 0.1F;
@@ -49,6 +49,12 @@ public class CopperFireBallParticle extends TextureSheetParticle {
 
         this.quadSize = Math.max(this.quadSize, 0.1F);
         this.alpha = Math.max(this.alpha, 0.0F);
+    }
+
+    public void move(double x, double y, double z) {
+        this.setBoundingBox(this.getBoundingBox().move(x, y, z));
+        this.setLocationFromBoundingbox();
+        this.yd += this.gravity;
     }
 
     public int getLightColor(float pPartialTick) {

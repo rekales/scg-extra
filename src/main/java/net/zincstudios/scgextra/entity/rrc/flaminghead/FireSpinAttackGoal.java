@@ -99,7 +99,7 @@ public class FireSpinAttackGoal extends Goal{
                         2.5F,
                         0F
                 );
-                this.mob.level().addFreshEntity(en);
+//                this.mob.level().addFreshEntity(en);
             }
         }
     }

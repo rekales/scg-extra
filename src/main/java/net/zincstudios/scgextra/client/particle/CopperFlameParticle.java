@@ -11,6 +11,7 @@ public class CopperFlameParticle extends RisingParticle {
 
     CopperFlameParticle(ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
         super(level, x, y, z, xSpeed, ySpeed, zSpeed);
+        this.gravity = 0.015F + this.random.nextFloat() * -0.0F;
     }
 
     public ParticleRenderType getRenderType() {
@@ -20,6 +21,7 @@ public class CopperFlameParticle extends RisingParticle {
     public void move(double x, double y, double z) {
         this.setBoundingBox(this.getBoundingBox().move(x, y, z));
         this.setLocationFromBoundingbox();
+        this.yd += this.gravity;
     }
 
     public float getQuadSize(float scaleFactor) {
