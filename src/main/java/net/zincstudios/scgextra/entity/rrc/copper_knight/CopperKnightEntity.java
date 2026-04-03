@@ -74,6 +74,8 @@ public class CopperKnightEntity extends GunnerEntity implements GeoEntity{
                 return PlayState.STOP;
             }
         }));
+        controllers.add(new AnimationController<>(this, "kick", 0, state -> PlayState.CONTINUE)
+        .triggerableAnim("kick", RawAnimation.begin().thenPlay("kick")));
     }
 
     @Override
@@ -89,6 +91,7 @@ public class CopperKnightEntity extends GunnerEntity implements GeoEntity{
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
                 entity -> Faction.isEnemies(this, entity) || entity.getMobType().equals(MobType.UNDEAD)));
+        this.goalSelector.addGoal(3, new CopperKnightKickGoal(this));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
