@@ -2037,10 +2037,7 @@
 						}
 					}
 				}
-			},
-            "timeline": {
-              "0.9": "spawn_flare;"
-            }
+			}
 		},
 		"flare_old": {
 			"animation_length": 2,
