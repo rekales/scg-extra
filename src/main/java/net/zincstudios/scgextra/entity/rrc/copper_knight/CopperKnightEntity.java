@@ -46,7 +46,7 @@ public class CopperKnightEntity extends GunnerEntity implements GeoEntity{
         controllers.add(new AnimationController<>(this, "walk/idle/aim", 2,
                 state -> {
                     if (state.getAnimatable().isAiming()) {
-                        if(state.isMoving()){
+                        if(((this.getX() - this.xo)*(this.getX() - this.xo))+((this.getZ() - this.zo)*(this.getZ() - this.zo))>0.0002){//extremely precise movement checks cause state.isMoving sometimes returns false while moving which causes sliding
                             return state.setAndContinue(RawAnimation.begin().thenLoop("walk_holding_aim"));
                         }else{
                             return state.setAndContinue(AIMING);
@@ -56,7 +56,7 @@ public class CopperKnightEntity extends GunnerEntity implements GeoEntity{
                         if (state.isCurrentAnimation(AIMING)) {
                             anim = anim.thenPlay("aim_idle");
                         }
-                        if (state.isMoving()) {
+                        if (((this.getX() - this.xo)*(this.getX() - this.xo))+((this.getZ() - this.zo)*(this.getZ() - this.zo))>0.0002){ //extremely precise movement checks cause state.isMoving sometimes returns false while moving which causes sliding
                             return state.setAndContinue(anim.thenLoop("walk"));
                         } else {
                             return state.setAndContinue(RawAnimation.begin()
