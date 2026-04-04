@@ -65,7 +65,7 @@ public class OppressorEntity extends GunnerEntity implements GeoEntity {
     protected void registerGoals() {
         // TODO: custom gun attack goal
         this.goalSelector.addGoal(3, new AlertFactionGoal(this, 200));
-        this.goalSelector.addGoal(4, new FlareSummonGoal(this, 100, 60,
+        this.goalSelector.addGoal(4, new FlareSummonGoal(this, 200, 60,
                 ModEntities.SCOUT.get(), ModEntities.TALLMAN.get(), ModEntities.COPPER_KNIGHT.get()));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
