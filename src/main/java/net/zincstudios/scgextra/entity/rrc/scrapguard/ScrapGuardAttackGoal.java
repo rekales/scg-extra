@@ -74,7 +74,7 @@ public class ScrapGuardAttackGoal<T extends PathfinderMob> extends GunAttackGoal
 
     protected void damageTarget(LivingEntity target) {
         this.shooter.doHurtTarget(target);
-        target.addEffect(new MobEffectInstance(ModEffects.LACERATED.get(), 5));
+        target.addEffect(new MobEffectInstance(ModEffects.LACERATED.get(), 100));
     }
 
     protected double getAttackReachSqr(LivingEntity attackTarget) {
