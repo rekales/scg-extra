@@ -17,6 +17,8 @@ public class RaidSummonerEntity extends Mob {
     private static ArrayList<EntityType<?>> WhalerElite = new ArrayList<>();
     private static ArrayList<EntityType<?>> RRCElite = new ArrayList<>();
     private static ArrayList<EntityType<?>> RRCInfantry = new ArrayList<>();
+    private static long lastRaidAttempt = 0;  // minecraft day calculated by  level.gameTime / 24000L
+
     public RaidSummonerEntity(EntityType<? extends Mob> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         WhalerElite.add(ModEntities.SALMONSAUR.get());
@@ -54,8 +56,19 @@ public class RaidSummonerEntity extends Mob {
     }
     @Override
     public boolean checkSpawnRules(LevelAccessor pLevel, MobSpawnType pSpawnReason) {
-        long time = pLevel.dayTime() % 24000;
-        return time >= 13000 && time < 23000;
+        long dayTime = pLevel.dayTime() % 24000;
+        long currentDay = pLevel.dayTime() / 24000L;
+
+        if (!(dayTime >= 13000 && dayTime < 23000)) return false;
+        if (RaidSummonerEntity.lastRaidAttempt == 0) {
+            RaidSummonerEntity.lastRaidAttempt = currentDay;
+            return false;
+        } else if (RaidSummonerEntity.lastRaidAttempt == currentDay) {
+            return false;
+        } else {
+            RaidSummonerEntity.lastRaidAttempt = currentDay;
+            return true;
+        }
     }
     @Override
     public boolean checkSpawnObstruction(LevelReader pLevel) {
