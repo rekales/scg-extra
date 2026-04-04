@@ -67,9 +67,10 @@
         "weight": 5.0,
         "health_multiplier": 1.4,
         "weapons": [
-          "scguns:marlin",
-          "scguns:bomb_lance",
+          "scguns:hyperbaria",
+          "scguns:sequoia",
           "scguns:floundergat",
+          "scguns:spirulida",
           "minecraft:trident"
         ],
         "armor": [
@@ -108,9 +109,7 @@
         "weight": 3.0,
         "fixed_health": 35.0,
         "weapons": [
-          "scguns:spirulida",
-            "scguns:hyperbaria",
-          "minecraft:trident"
+          "minecraft:air"
         ],
         "armor": [
           {
@@ -146,18 +145,15 @@
           }
         ],
         "ai_difficulty": 4,
-        "ai_type": "TACTICAL"
+        "ai_type": "DEFAULT"
       },
       {
         "entity_type": "scgextra:turtleman",
         "weight": 3.0,
         "health_multiplier": 1.2,
         "weapons": [
-          "scguns:marlin",
-          "scguns:floundergat",
-          "scguns:hyperbaria",
-          "minecraft:iron_sword",
-          "minecraft:iron_axe"
+          "scguns:hullbreaker",
+          "scguns:bomb_lance"
         ],
         "armor": [
           {
@@ -181,18 +177,16 @@
           }
         ],
         "ai_difficulty": 2,
-        "ai_type": "RECKLESS"
+        "ai_type": "DEFAULT"
       },
       {
         "entity_type": "scgextra:tentacliator",
         "weight": 2.0,
         "health_multiplier": 1.2,
         "weapons": [
-          "scguns:marlin",
-          "scguns:floundergat",
           "scguns:hyperbaria",
-          "minecraft:iron_sword",
-          "minecraft:iron_axe"
+          "scguns:sequoia",
+          "minecraft:trident"
         ],
         "armor": [
           {
@@ -216,18 +210,16 @@
           }
         ],
         "ai_difficulty": 2,
-        "ai_type": "RECKLESS"
+        "ai_type": "DEFAULT"
       },
       {
         "entity_type": "scgextra:glowing_tentacliator",
         "weight": 2.0,
         "health_multiplier": 1.2,
         "weapons": [
-          "scguns:marlin",
-          "scguns:floundergat",
           "scguns:hyperbaria",
-          "minecraft:iron_sword",
-          "minecraft:iron_axe"
+          "scguns:sequoia",
+          "minecraft:trident"
         ],
         "armor": [
           {
@@ -251,18 +243,14 @@
           }
         ],
         "ai_difficulty": 2,
-        "ai_type": "RECKLESS"
+        "ai_type": "DEFAULT"
       },
       {
         "entity_type": "scgextra:pufficus",
         "weight": 2.0,
         "health_multiplier": 1.2,
         "weapons": [
-          "scguns:marlin",
-          "scguns:floundergat",
-          "scguns:hyperbaria",
-          "minecraft:iron_sword",
-          "minecraft:iron_axe"
+          "scgextra:atlantic_mace"
         ],
         "armor": [
           {
@@ -286,7 +274,7 @@
           }
         ],
         "ai_difficulty": 2,
-        "ai_type": "RECKLESS"
+        "ai_type": "DEFAULT"
       },
       {
         "entity_type": "scguns:finforcer",
