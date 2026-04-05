@@ -13,9 +13,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.entity.PartEntity;
 
-import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
+import java.util.UUID;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -110,5 +110,14 @@ public class ArmoredWhalePart extends PartEntity<ArmoredWhaleEntity>{
     @Override
     public EntityDimensions getDimensions(net.minecraft.world.entity.Pose pPose) {
         return this.size;
+    }
+    //giving the parent's UUID makes it so any commands that target this always get's the parent
+    @Override
+    public UUID getUUID() {
+        return this.parentMob.getUUID();
+    }
+    @Override
+    public String getStringUUID() {
+        return this.parentMob.getStringUUID();
     }
 }
