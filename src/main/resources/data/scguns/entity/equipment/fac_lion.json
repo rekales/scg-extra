@@ -1,0 +1,14 @@
+{
+  "id": "scgextra:fac_lion",
+  "equipment_chance": 1.0,
+  "items": [
+    {
+      "item": "scguns:combat_shotgun",
+      "weight": 10.0,
+      "drop_chance": 0.0,
+      "min_durability": 0.2,
+      "max_durability": 0.5,
+      "slot": "mainhand"
+    }
+  ]
+}

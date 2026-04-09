@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "scgextra:item/fac_lion_spawn_egg"
+  }
+}

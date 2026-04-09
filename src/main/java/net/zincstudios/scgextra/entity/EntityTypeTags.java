@@ -15,6 +15,7 @@ public class EntityTypeTags {
     // Faction
     public static final TagKey<EntityType<?>> ASGHARIAN = tag("factions/asgharian");
     public static final TagKey<EntityType<?>> COG = tag("factions/cog");
+    public static final TagKey<EntityType<?>> FAC = tag("factions/fac");
     public static final TagKey<EntityType<?>> RRC = tag("factions/rrc");
     public static final TagKey<EntityType<?>> WHALER = tag("factions/whaler");
 

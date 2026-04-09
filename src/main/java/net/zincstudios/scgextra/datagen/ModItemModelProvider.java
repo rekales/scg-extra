@@ -18,6 +18,10 @@ public class ModItemModelProvider extends ItemModelProvider {
     @Override
     protected void registerModels() {
         //don't mind me changing these
+        basicItem(ModItems.CAVALRY_SABER.get());
+        basicItem(ModItems.SPEAR_SHOVEL.get());
+        basicItem(ModItems.WALKER_MG.get());
+
         basicItem(ModItems.FISH_FOLK_SPAWN_EGG.get());
         basicItem(ModItems.TURTLEMAN_SPAWN_EGG.get());
         basicItem(ModItems.SALMONSAUR_SPAWN_EGG.get());
@@ -26,6 +30,16 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.GLOWING_TENTACLIATOR_SPAWN_EGG.get());
         basicItem(ModItems.PUFFICUS_SPAWN_EGG.get());
         basicItem(ModItems.ARMORED_WHALE_SPAWN_EGG.get());
+        basicItem(ModItems.FAC_TRENCHER_SPAWN_EGG.get());
+        basicItem(ModItems.FAC_BLUECOAT_SPAWN_EGG.get());
+        basicItem(ModItems.TRENCH_GOBLIN_SPAWN_EGG.get());
+        basicItem(ModItems.TRENCH_SNIPER_SPAWN_EGG.get());
+        basicItem(ModItems.SHOVEL_KNIGHT_SPAWN_EGG.get());
+        basicItem(ModItems.FAC_TANK_BUSTER_SPAWN_EGG.get());
+        basicItem(ModItems.FAC_LION_SPAWN_EGG.get());
+        basicItem(ModItems.FAC_COMMISSAR_SPAWN_EGG.get());
+        basicItem(ModItems.FAC_WALKER_SPAWN_EGG.get());
+        basicItem(ModItems.FAC_TANK_SPAWN_EGG.get());
 
         basicItem(ModItems.COPPER_KNIGHT_SPAWN_EGG.get());
         basicItem(ModItems.DRONE_SPAWN_EGG.get());

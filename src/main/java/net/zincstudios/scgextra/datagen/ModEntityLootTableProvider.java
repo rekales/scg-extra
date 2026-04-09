@@ -72,6 +72,47 @@ public class ModEntityLootTableProvider extends EntityLootSubProvider {
                 .constant(ModItems.LEVIATHAN_TOOTH.get(), 1)
                 .range(ModBlocks.SUPPLY_CRATE.get().asItem(), 3, 6);
 
+        basicLoot(ModEntities.FAC_TRENCHER.get())
+                .range(Items.IRON_NUGGET, 1, 3);
+
+        basicLoot(ModEntities.FAC_BLUECOAT.get())
+                .range(Items.IRON_NUGGET, 1, 3);
+
+        basicLoot(ModEntities.TRENCH_GOBLIN.get())
+                .range(Items.IRON_NUGGET, 1, 3)
+                .range(ModItems.ANTHRALITE_NUGGET.get(), 1, 3);
+
+        basicLoot(ModEntities.TRENCH_SNIPER.get())
+                .range(Items.IRON_NUGGET, 1, 3)
+                .range(ModItems.ANTHRALITE_INGOT.get(), 1, 3);
+
+        basicLoot(ModEntities.SHOVEL_KNIGHT.get())
+                .range(Items.IRON_NUGGET, 1, 3)
+                .range(ModItems.ANTHRALITE_INGOT.get(), 1, 3);
+
+        basicLoot(ModEntities.FAC_TANK_BUSTER.get())
+                .range(Items.IRON_NUGGET, 1, 3)
+                .range(ModItems.ANTHRALITE_NUGGET.get(), 1, 3)
+                .range(ModItems.MICROJET.get(), 1, 3);
+
+        basicLoot(ModEntities.FAC_LION.get())
+                .range(Items.IRON_INGOT, 1, 3)
+                .range(ModItems.ANTHRALITE_INGOT.get(), 1, 3);
+
+        basicLoot(ModEntities.FAC_COMMISSAR.get())
+                .range(Items.IRON_INGOT, 1, 3)
+                .range(ModItems.BLUEPRINT_SCRAP.get(), 1, 2);
+
+        basicLoot(ModEntities.FAC_WALKER.get())
+                .range(ModItems.ANTHRALITE_INGOT.get(), 1, 3)
+                .range(Items.COAL, 1, 3);
+
+        basicLoot(ModEntities.FAC_TANK.get())
+                .constant(ModItems.LABOR_TROPHY.get(), 1)
+                .range(Items.IRON_BLOCK, 1, 3)
+                .range(Items.COAL_BLOCK, 1, 3)
+                .range(ModItems.ANTHRALITE_INGOT.get(), 1, 3);
+
 
         basicLoot(ModEntities.COPPER_KNIGHT.get())
                 .range(Items.COPPER_INGOT, 1, 3)

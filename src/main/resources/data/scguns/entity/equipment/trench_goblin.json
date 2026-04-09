@@ -1,0 +1,23 @@
+{
+  "id": "scgextra:trench_goblin",
+  "equipment_chance": 1.0,
+  "items": [
+    {
+      "item": "scguns:anthralite_axe",
+      "weight": 7.0,
+      "drop_chance": 0.0,
+      "min_durability": 0.2,
+      "max_durability": 0.5,
+      "slot": "mainhand"
+    },
+    {
+      "item": "scguns:trenchur",
+      "weight": 3.0,
+      "drop_chance": 0.0,
+      "min_durability": 0.2,
+      "max_durability": 0.5,
+      "slot": "mainhand"
+    }
+  ]
+}
+

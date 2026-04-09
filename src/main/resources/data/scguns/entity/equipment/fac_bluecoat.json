@@ -1,0 +1,23 @@
+{
+  "id": "scgextra:fac_bluecoat",
+  "equipment_chance": 1.0,
+  "items": [
+    {
+      "item": "scguns:iron_javelin",
+      "weight": 6.0,
+      "drop_chance": 0.0,
+      "min_durability": 0.2,
+      "max_durability": 0.5,
+      "slot": "mainhand"
+    },
+    {
+      "item": "scguns:m3_carabine",
+      "weight": 4.0,
+      "drop_chance": 0.0,
+      "min_durability": 0.2,
+      "max_durability": 0.5,
+      "slot": "mainhand"
+    }
+  ]
+}
+

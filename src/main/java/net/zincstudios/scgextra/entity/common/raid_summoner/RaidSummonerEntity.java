@@ -14,24 +14,45 @@ import net.minecraft.world.level.LevelReader;
 import net.zincstudios.scgextra.entity.ModEntities;
 
 public class RaidSummonerEntity extends Mob {
-    private static ArrayList<EntityType<?>> WhalerElite = new ArrayList<>();
-    private static ArrayList<EntityType<?>> RRCElite = new ArrayList<>();
-    private static ArrayList<EntityType<?>> RRCInfantry = new ArrayList<>();
+    private static final ArrayList<EntityType<?>> whalerElite = new ArrayList<>();
+    private static final ArrayList<EntityType<?>> rrcElite = new ArrayList<>();
+    private static final ArrayList<EntityType<?>> rrcInfantry = new ArrayList<>();
+    private static final ArrayList<EntityType<?>> facElite = new ArrayList<>();
+    private static final ArrayList<EntityType<?>> facInfantry = new ArrayList<>();
+    private static boolean poolsInitialized = false;
     private static long lastRaidAttempt = 0;  // minecraft day calculated by  level.gameTime / 24000L
 
     public RaidSummonerEntity(EntityType<? extends Mob> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
-        WhalerElite.add(ModEntities.SALMONSAUR.get());
-        WhalerElite.add(ModEntities.TURTLEMAN.get());
-        WhalerElite.add(ModEntities.TENTACLIATOR.get());
-        WhalerElite.add(ModEntities.GLOWING_TENTACLIATOR.get());
-        WhalerElite.add(ModEntities.PUFFICUS.get());
-        RRCElite.add(ModEntities.SPRING_JUNKIE.get());
-        RRCElite.add(ModEntities.SCRAP_GUARD.get());
-        RRCElite.add(ModEntities.ARC_PSYCHO.get());
-        RRCInfantry.add(ModEntities.COPPER_KNIGHT.get());
-        RRCInfantry.add(ModEntities.TALLMAN.get());
-        RRCInfantry.add(ModEntities.SCOUT.get());
+        initPools();
+    }
+
+    private static void initPools() {
+        if (poolsInitialized) {
+            return;
+        }
+
+        whalerElite.add(ModEntities.SALMONSAUR.get());
+        whalerElite.add(ModEntities.TURTLEMAN.get());
+        whalerElite.add(ModEntities.TENTACLIATOR.get());
+        whalerElite.add(ModEntities.GLOWING_TENTACLIATOR.get());
+        whalerElite.add(ModEntities.PUFFICUS.get());
+
+        rrcElite.add(ModEntities.SPRING_JUNKIE.get());
+        rrcElite.add(ModEntities.SCRAP_GUARD.get());
+        rrcElite.add(ModEntities.ARC_PSYCHO.get());
+        rrcInfantry.add(ModEntities.COPPER_KNIGHT.get());
+        rrcInfantry.add(ModEntities.TALLMAN.get());
+        rrcInfantry.add(ModEntities.SCOUT.get());
+
+        facElite.add(ModEntities.TRENCH_SNIPER.get());
+        facElite.add(ModEntities.SHOVEL_KNIGHT.get());
+        facElite.add(ModEntities.FAC_TANK_BUSTER.get());
+        facInfantry.add(ModEntities.FAC_TRENCHER.get());
+        facInfantry.add(ModEntities.FAC_BLUECOAT.get());
+        facInfantry.add(ModEntities.TRENCH_GOBLIN.get());
+
+        poolsInitialized = true;
     }
 
     @Override
@@ -46,11 +67,13 @@ public class RaidSummonerEntity extends Mob {
             this.remove(RemovalReason.DISCARDED);
             return;
         }
-        int rand = this.random.nextInt(2);
+        int rand = this.random.nextInt(3);
         if(rand==0){
             this.spawnWhaler();
-        }else{
+        } else if (rand == 1) {
             this.spawnRRC();
+        } else {
+            this.spawnFAC();
         }
         this.remove(RemovalReason.DISCARDED);
     }
@@ -85,9 +108,9 @@ public class RaidSummonerEntity extends Mob {
             ModEntities.FISH_FOLK.get().spawn(sLevel, this.blockPosition(), MobSpawnType.MOB_SUMMONED);
         }
         for(int i = 0; i < 3; i++){
-            EntityType<?> entity = WhalerElite.get(this.random.nextInt(WhalerElite.size()));
+            EntityType<?> entity = whalerElite.get(this.random.nextInt(whalerElite.size()));
             while(spawned.contains(entity)){
-                entity = WhalerElite.get(this.random.nextInt(WhalerElite.size()));
+                entity = whalerElite.get(this.random.nextInt(whalerElite.size()));
             }
             entity.spawn(sLevel, this.blockPosition(), MobSpawnType.MOB_SUMMONED);
             spawned.add(entity);
@@ -98,10 +121,27 @@ public class RaidSummonerEntity extends Mob {
         int eliteCount = this.random.nextInt(1, 3);
         int infantryCount = this.random.nextInt(1, 5);
         for(int i = 0; i < eliteCount; i++){
-            RRCElite.get(this.random.nextInt(RRCElite.size())).spawn(sLevel, this.blockPosition(), getSpawnType());
+            rrcElite.get(this.random.nextInt(rrcElite.size())).spawn(sLevel, this.blockPosition(), getSpawnType());
         }
         for(int i = 0; i < infantryCount; i++){
-            RRCInfantry.get(this.random.nextInt(RRCInfantry.size())).spawn(sLevel, this.blockPosition(), getSpawnType());
+            rrcInfantry.get(this.random.nextInt(rrcInfantry.size())).spawn(sLevel, this.blockPosition(), getSpawnType());
+        }
+    }
+
+    private void spawnFAC() {
+        ServerLevel sLevel = (ServerLevel)this.level();
+        int eliteCount = this.random.nextInt(1, 3);
+        int infantryPairs = this.random.nextInt(2, 5);
+        int infantryCount = infantryPairs * 2;
+
+        for (int i = 0; i < eliteCount; i++) {
+            facElite.get(this.random.nextInt(facElite.size())).spawn(sLevel, this.blockPosition(), getSpawnType());
+        }
+        for (int i = 0; i < infantryCount; i++) {
+            facInfantry.get(this.random.nextInt(facInfantry.size())).spawn(sLevel, this.blockPosition(), getSpawnType());
+        }
+        if (this.random.nextFloat() < 0.18F) {
+            ModEntities.FAC_COMMISSAR.get().spawn(sLevel, this.blockPosition(), getSpawnType());
         }
     }
 }

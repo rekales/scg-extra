@@ -1,0 +1,278 @@
+{
+  "raid_id": "fac",
+  "raid_level": 2,
+  "boss": {
+    "entity_type": "scgextra:fac_tank",
+    "custom_name": "translation:raid.boss.scguns.fac",
+    "fixed_health": 700.0,
+    "weapon": {
+      "item": "minecraft:air",
+      "drop_chance": 0.0
+    },
+    "armor": [
+      {
+        "item": "minecraft:air",
+        "slot": "head",
+        "drop_chance": 0.0
+      },
+      {
+        "item": "minecraft:air",
+        "slot": "chest",
+        "drop_chance": 0.0
+      },
+      {
+        "item": "minecraft:air",
+        "slot": "legs",
+        "drop_chance": 0.0
+      },
+      {
+        "item": "minecraft:air",
+        "slot": "feet",
+        "drop_chance": 0.0
+      }
+    ],
+    "effects": [],
+    "ai_difficulty": 5,
+    "ai_type": "TACTICAL",
+    "special_loot_table": "scguns:raids/fac_boss"
+  },
+  "henchmen": {
+    "types": [
+      {
+        "entity_type": "scgextra:fac_trencher",
+        "weight": 10.0,
+        "health_multiplier": 1,
+        "weapons": [
+          "scguns:greaser_smg",
+          "scguns:m3_marksman",
+          "scguns:anthralite_axe",
+          "scguns:anthralite_sword",
+          "scguns:anthralite_shovel"
+        ],
+        "armor": [
+          {
+            "item": "minecraft:air",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "minecraft:air",
+            "slot": "chest",
+            "chance": 1.0
+          }
+        ],
+        "effects": [],
+        "ai_difficulty": 2,
+        "ai_type": "DEFAULT"
+      },
+      {
+        "entity_type": "scgextra:fac_bluecoat",
+        "weight": 10.0,
+        "health_multiplier": 1,
+        "weapons": [
+          "scguns:iron_javelin",
+          "scguns:m3_carabine"
+        ],
+        "armor": [
+          {
+            "item": "minecraft:air",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "minecraft:air",
+            "slot": "chest",
+            "chance": 1.0
+          }
+        ],
+        "effects": [],
+        "ai_difficulty": 2,
+        "ai_type": "DEFAULT"
+      },
+      {
+        "entity_type": "scgextra:trench_goblin",
+        "weight": 6.0,
+        "health_multiplier": 1,
+        "weapons": [
+          "scguns:anthralite_axe",
+          "scguns:trenchur"
+        ],
+        "armor": [
+          {
+            "item": "minecraft:air",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "minecraft:air",
+            "slot": "chest",
+            "chance": 1.0
+          }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": false,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 2,
+        "ai_type": "DEFAULT"
+      },
+      {
+        "entity_type": "scgextra:trench_sniper",
+        "weight": 2.0,
+        "health_multiplier": 1,
+        "weapons": [
+          "scguns:iron_spear"
+        ],
+        "armor": [
+          {
+            "item": "minecraft:air",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "minecraft:air",
+            "slot": "chest",
+            "chance": 1.0
+          }
+        ],
+        "effects": [],
+        "ai_difficulty": 3,
+        "ai_type": "TACTICAL"
+      },
+      {
+        "entity_type": "scgextra:shovel_knight",
+        "weight": 2.0,
+        "health_multiplier": 1,
+        "weapons": [
+          "scguns:iron_spear",
+          "scgextra:spear_shovel"
+        ],
+        "armor": [
+          {
+            "item": "minecraft:air",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "minecraft:air",
+            "slot": "chest",
+            "chance": 1.0
+          }
+        ],
+        "effects": [],
+        "ai_difficulty": 3,
+        "ai_type": "DEFAULT"
+      },
+      {
+        "entity_type": "scgextra:fac_tank_buster",
+        "weight": 1.0,
+        "health_multiplier": 1,
+        "weapons": [
+          "scguns:mk43_rifle"
+        ],
+        "armor": [
+          {
+            "item": "minecraft:air",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "minecraft:air",
+            "slot": "chest",
+            "chance": 1.0
+          }
+        ],
+        "effects": [],
+        "ai_difficulty": 3,
+        "ai_type": "TACTICAL"
+      },
+      {
+        "entity_type": "scgextra:fac_lion",
+        "weight": 0.6,
+        "health_multiplier": 1,
+        "weapons": [
+          "scguns:combat_shotgun"
+        ],
+        "armor": [
+          {
+            "item": "minecraft:air",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "minecraft:air",
+            "slot": "chest",
+            "chance": 1.0
+          }
+        ],
+        "effects": [],
+        "ai_difficulty": 4,
+        "ai_type": "RECKLESS"
+      },
+      {
+        "entity_type": "scgextra:fac_commissar",
+        "weight": 0.8,
+        "health_multiplier": 1,
+        "weapons": [
+          "scguns:defender_pistol",
+          "scgextra:cavalry_saber"
+        ],
+        "armor": [
+          {
+            "item": "minecraft:air",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "minecraft:air",
+            "slot": "chest",
+            "chance": 1.0
+          }
+        ],
+        "effects": [],
+        "ai_difficulty": 4,
+        "ai_type": "TACTICAL"
+      },
+      {
+        "entity_type": "scgextra:fac_walker",
+        "weight": 0.5,
+        "health_multiplier": 1,
+        "weapons": [
+          "scgextra:walker_mg"
+        ],
+        "armor": [
+          {
+            "item": "minecraft:air",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "minecraft:air",
+            "slot": "chest",
+            "chance": 1.0
+          }
+        ],
+        "effects": [],
+        "ai_difficulty": 4,
+        "ai_type": "TACTICAL"
+      }
+    ],
+    "spawn_interval_ticks": 700,
+    "max_alive": 12,
+    "spawn_radius": 20,
+    "spawn_attempts_per_wave": 8
+  },
+  "spawn_conditions": {
+    "min_players_nearby": 1,
+    "search_radius": 64,
+    "valid_dimensions": [
+      "minecraft:overworld"
+    ],
+    "announcement_message": "translation:raid.announcement.scguns.fac"
+  }
+}

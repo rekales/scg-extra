@@ -11,4 +11,13 @@ public interface GunAttackGoalAccessor {
     @Accessor("aimingStabilityTimer")
     int getAimingStabilityTimer();
 
+    @Accessor("isReloading")
+    boolean isReloading();
+
+    @Accessor("remainingBursts")
+    int getRemainingBursts();
+
+    @Accessor("attackTime")
+    int getAttackTime();
+
 }

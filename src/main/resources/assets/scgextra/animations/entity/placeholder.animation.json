@@ -1,0 +1,31 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "idle": { "animation_length": 0.0 },
+    "idle_2": { "animation_length": 0.0 },
+    "idle_aim": { "animation_length": 0.0 },
+    "aim_idle": { "animation_length": 0.0 },
+    "walk": { "animation_length": 0.0 },
+    "run": { "animation_length": 0.0 },
+    "death": { "animation_length": 0.0 },
+    "stun": { "animation_length": 0.0 },
+    "stomp": { "animation_length": 0.0 },
+    "shield_up": { "animation_length": 0.0 },
+    "shield_walk": { "animation_length": 0.0 },
+    "shield_bash": { "animation_length": 0.0 },
+    "atacc": { "animation_length": 0.0 },
+    "flare": { "animation_length": 0.0 },
+    "alert": { "animation_length": 0.0 },
+    "melee": { "animation_length": 0.0 },
+    "firing_stance": { "animation_length": 0.0 },
+    "idle_lookout": { "animation_length": 0.0 },
+    "agro": { "animation_length": 0.0 },
+    "agro_run": { "animation_length": 0.0 },
+    "swing4": { "animation_length": 0.0 },
+    "scan": { "animation_length": 0.0 },
+    "dance": { "animation_length": 0.0 },
+    "side_gun_fire": { "animation_length": 0.0 },
+    "cannon_fire": { "animation_length": 0.0 },
+    "animation4": { "animation_length": 0.0 }
+  }
+}
