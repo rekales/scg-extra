@@ -36,7 +36,7 @@ public class FacWalkerStompGoal extends Goal {
                 && this.cooldown <= 0
                 && !this.parent.isStunned()
                 && !this.parent.isActionLocked()
-                && this.parent.distanceToSqr(target) <= 9.0D;
+                && this.horizontalDistanceSqr(target) <= 9.0D;
     }
 
     @Override
@@ -88,7 +88,7 @@ public class FacWalkerStompGoal extends Goal {
                 LivingEntity.class,
                 this.parent.getBoundingBox().inflate(STOMP_RADIUS, 1.5D, STOMP_RADIUS),
                 entity -> !entity.is(this.parent) && entity.isAlive() && !Faction.isFriendlies(this.parent, entity))) {
-            if (this.parent.distanceToSqr(nearby) > radiusSq) {
+            if (this.horizontalDistanceSqr(nearby) > radiusSq) {
                 continue;
             }
             this.applyStompHit(nearby);
@@ -105,6 +105,12 @@ public class FacWalkerStompGoal extends Goal {
         double dx = this.parent.getX() - target.getX();
         double dz = this.parent.getZ() - target.getZ();
         target.knockback(1.0D, dx, dz);
+    }
+
+    private double horizontalDistanceSqr(LivingEntity target) {
+        double dx = this.parent.getX() - target.getX();
+        double dz = this.parent.getZ() - target.getZ();
+        return dx * dx + dz * dz;
     }
 
     @Override

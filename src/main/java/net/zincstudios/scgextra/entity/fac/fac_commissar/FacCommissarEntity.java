@@ -2,7 +2,6 @@ package net.zincstudios.scgextra.entity.fac.fac_commissar;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,12 +13,14 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.ModEntities;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.item.HurtEffects;
 import net.zincstudios.scgextra.item.ModItems;
 import net.zincstudios.scgextra.sounds.ModSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -29,7 +30,6 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import top.ribs.scguns.init.ModEffects;
 
 public class FacCommissarEntity extends GunnerEntity implements GeoEntity {
 
@@ -200,12 +200,27 @@ public class FacCommissarEntity extends GunnerEntity implements GeoEntity {
             if (this.getMainHandItem().is(ModItems.CAVALRY_SABER.get())
                     || this.getOffhandItem().is(ModItems.CAVALRY_SABER.get())) {
                 this.triggerAnim("attack", "melee");
-                if (target instanceof LivingEntity livingTarget) {
-                    livingTarget.addEffect(new MobEffectInstance(ModEffects.LACERATED.get(), 100));
-                }
+                this.applyHeldWeaponEffects(target);
             }
         }
         return hit;
+    }
+
+    private void applyHeldWeaponEffects(Entity target) {
+        if (!(target instanceof LivingEntity livingTarget)) {
+            return;
+        }
+
+        ItemStack main = this.getMainHandItem();
+        if (main.getItem() instanceof HurtEffects item) {
+            item.hurtEffect(main, livingTarget, this);
+            return;
+        }
+
+        ItemStack off = this.getOffhandItem();
+        if (off.getItem() instanceof HurtEffects item) {
+            item.hurtEffect(off, livingTarget, this);
+        }
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSource) {

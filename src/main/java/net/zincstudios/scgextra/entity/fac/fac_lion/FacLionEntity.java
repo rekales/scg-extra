@@ -50,7 +50,7 @@ public class FacLionEntity extends GunnerEntity implements GeoEntity {
     private static final double SHIELD_BLOCK_HEIGHT_OFFSET = 1.45D;
     private static final double SHIELD_BLOCK_FORWARD_OFFSET = 0.45D;
     private static final int SHIELD_START_BLOCK_TICKS = 30;
-    private static final boolean SHIELD_DEBUG_VISUAL = true;
+    private static final boolean SHIELD_DEBUG_VISUAL = false;
     private static final int SHIELD_DEBUG_PARTICLE_INTERVAL_TICKS = 4;
 
     private static final RawAnimation SHIELD_UP = RawAnimation.begin().thenPlayAndHold("shield_up");
@@ -92,7 +92,7 @@ public class FacLionEntity extends GunnerEntity implements GeoEntity {
                 .add(Attributes.ATTACK_DAMAGE, 15.0D)
                 .add(Attributes.ARMOR, 12.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.8D)
-                .add(Attributes.MAX_HEALTH, 300.0D);
+                .add(Attributes.MAX_HEALTH, 200.0D);
     }
 
     @Override

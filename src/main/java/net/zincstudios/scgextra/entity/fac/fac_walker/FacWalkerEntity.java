@@ -3,6 +3,7 @@ package net.zincstudios.scgextra.entity.fac.fac_walker;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -15,6 +16,8 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.HitResult;
@@ -23,9 +26,11 @@ import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.HeadShotHandler;
+import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
+import net.zincstudios.scgextra.sounds.ModSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -270,6 +275,33 @@ public class FacWalkerEntity extends GunnerEntity implements GeoEntity, Stunnabl
 
     private boolean shouldPlayRunAnimation() {
         return this.hasLiveTarget() && !this.isStunned() && !this.isRangedPoseActive() && !this.isStompAnimationActive();
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return MobUtil.getSound(
+                this.random,
+                ModSounds.FAC_WALKER_HURT_1.get(),
+                ModSounds.FAC_WALKER_HURT_2.get()
+        );
+    }
+
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return MobUtil.getSound(
+                this.random,
+                ModSounds.FAC_WALKER_IDLE_1.get(),
+                ModSounds.FAC_WALKER_IDLE_2.get(),
+                ModSounds.FAC_WALKER_IDLE_3.get()
+        );
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState state) {
+        SoundEvent step = this.shouldPlayRunAnimation()
+                ? ModSounds.FAC_WALKER_RUN.get()
+                : ModSounds.FAC_WALKER_WALK.get();
+        this.playSound(step, 0.85F, 0.95F + this.random.nextFloat() * 0.1F);
     }
 
     @Override

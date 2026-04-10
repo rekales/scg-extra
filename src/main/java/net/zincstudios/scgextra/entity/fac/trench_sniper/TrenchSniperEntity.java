@@ -24,13 +24,23 @@ import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class TrenchSniperEntity extends GunnerEntity implements GeoEntity {
 
-    private static final RawAnimation AIMING = RawAnimation.begin().thenPlayAndHold("idle_aim");
+    private static final int ATTACK_POSE_TRANSITION_TICKS = 7;
+    private static final int AIMING_GRACE_TICKS = 16;
+    private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
+    private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
+    private static final RawAnimation IDLE_ATTACK = RawAnimation.begin().thenPlayAndHold("idle_attack");
+    private static final RawAnimation ATTACK_IDLE = RawAnimation.begin().thenPlayAndHold("attack_idle");
+    private static final RawAnimation HOLD_ATTACK = RawAnimation.begin().thenLoop("hold_attack");
+    private static final RawAnimation WALK_ATTACK = RawAnimation.begin().thenLoop("walk_attack");
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+    private boolean attackPoseActive = false;
+    private boolean enteringAttackPose = false;
+    private int attackPoseTransitionTicks = 0;
+    private int aimingGraceTicks = 0;
 
     public TrenchSniperEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -53,7 +63,7 @@ public class TrenchSniperEntity extends GunnerEntity implements GeoEntity {
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.20F)
+                .add(Attributes.MOVEMENT_SPEED, 0.18F)
                 .add(Attributes.ATTACK_DAMAGE, 4.0D)
                 .add(Attributes.ARMOR, 2.0D)
                 .add(Attributes.MAX_HEALTH, 40.0D);
@@ -62,21 +72,44 @@ public class TrenchSniperEntity extends GunnerEntity implements GeoEntity {
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "walk/idle/aim", 2, state -> {
-            if (state.getAnimatable().isAiming()) {
-                return state.setAndContinue(AIMING);
+            boolean moving = state.isMoving() || this.isActuallyMoving() || this.getNavigation().isInProgress();
+            boolean aimingNow = state.getAnimatable().isAiming();
+            if (aimingNow) {
+                this.aimingGraceTicks = AIMING_GRACE_TICKS;
+            } else if (this.aimingGraceTicks > 0) {
+                this.aimingGraceTicks--;
             }
-            if (state.isMoving()) {
-                return state.setAndContinue(RawAnimation.begin().thenLoop("walk"));
-            }
-            return state.setAndContinue(RawAnimation.begin().thenLoop("idle_2"));
-        }).setAnimationSpeed(1.2));
 
-        controllers.add(new AnimationController<>(this, "death", 2, state -> {
-            if (state.getAnimatable().isDeadOrDying()) {
-                return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("death"));
+            boolean wantsAttackPose = aimingNow || this.aimingGraceTicks > 0;
+
+            if (wantsAttackPose != this.attackPoseActive) {
+                this.attackPoseActive = wantsAttackPose;
+                this.enteringAttackPose = wantsAttackPose;
+                this.attackPoseTransitionTicks = ATTACK_POSE_TRANSITION_TICKS;
             }
-            return PlayState.STOP;
-        }));
+
+            if (this.attackPoseTransitionTicks > 0) {
+                this.attackPoseTransitionTicks--;
+                return state.setAndContinue(this.enteringAttackPose ? IDLE_ATTACK : ATTACK_IDLE);
+            }
+
+            if (this.attackPoseActive) {
+                if (moving) {
+                    return state.setAndContinue(WALK_ATTACK);
+                }
+                return state.setAndContinue(HOLD_ATTACK);
+            }
+            if (moving) {
+                return state.setAndContinue(WALK);
+            }
+            return state.setAndContinue(IDLE);
+        }).setAnimationSpeed(1.0));
+    }
+
+    private boolean isActuallyMoving() {
+        double dx = this.getX() - this.xo;
+        double dz = this.getZ() - this.zo;
+        return dx * dx + dz * dz > 0.000001D;
     }
 
     @Override

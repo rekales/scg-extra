@@ -1,6 +1,5 @@
 package net.zincstudios.scgextra.entity.fac.fac_tank;
 
-import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -11,9 +10,8 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.entity.Faction;
-import org.joml.Vector3f;
+import net.zincstudios.scgextra.sounds.ModSounds;
 
 import java.util.List;
 
@@ -21,9 +19,6 @@ public class FacTankCannonGoal extends Goal {
     private static final float MAX_TURN_PER_TICK = 3.0F;
     private static final float FIRE_ANGLE_TOLERANCE = 2.0F;
     private static final int AIM_LOCK_REQUIRED_TICKS = 8;
-    private static final DustParticleOptions WARNING_FLASH_PARTICLE =
-            new DustParticleOptions(new Vector3f(1.0F, 0.12F, 0.12F), 1.8F);
-
     private final FacTankEntity entity;
     private final int cooldownTicks;
     private final int warningDurationTicks;
@@ -76,6 +71,7 @@ public class FacTankCannonGoal extends Goal {
         super.start();
         this.cooldown = this.cooldownTicks;
         this.warningTicks = this.warningDurationTicks;
+        this.entity.startCannonWarning(this.warningDurationTicks);
         this.aimLockTicks = 0;
         this.travelTicks = -1;
         this.entity.getNavigation().stop();
@@ -83,6 +79,16 @@ public class FacTankCannonGoal extends Goal {
         if (target != null) {
             this.targetPos = target.position().add(0.0D, target.getBbHeight() * 0.5D, 0.0D);
         }
+        this.entity.level().playSound(
+                null,
+                this.entity.getX(),
+                this.entity.getY(),
+                this.entity.getZ(),
+                ModSounds.FAC_TANK_CANNON_CHARGE.get(),
+                SoundSource.HOSTILE,
+                1.2F,
+                1.0F
+        );
     }
 
     @Override
@@ -102,6 +108,7 @@ public class FacTankCannonGoal extends Goal {
 
     private void tickWarning() {
         this.warningTicks--;
+        this.entity.updateCannonWarning(this.warningTicks);
         this.entity.getNavigation().stop();
         Vec3 cannonPos = this.entity.getCannonPos();
 
@@ -121,33 +128,20 @@ public class FacTankCannonGoal extends Goal {
             this.aimLockTicks = 0;
         }
 
-        if (this.entity.level() instanceof ServerLevel level
-                && CommonConfig.enableAbilityWarning
-                && this.warningTicks % 5 == 0) {
-            level.sendParticles(
-                    WARNING_FLASH_PARTICLE,
-                    this.targetPos.x,
-                    this.targetPos.y + 0.4D,
-                    this.targetPos.z,
-                    16,
-                    0.85D,
-                    0.3D,
-                    0.85D,
-                    0.0D
-            );
-        }
-
         if (this.warningTicks <= 0) {
             if (target == null || !target.isAlive()) {
                 this.warningTicks = 1;
+                this.entity.updateCannonWarning(this.warningTicks);
                 return;
             }
             if (angleDiff > FIRE_ANGLE_TOLERANCE || !clearShot || this.aimLockTicks < AIM_LOCK_REQUIRED_TICKS) {
                 this.warningTicks = 1;
+                this.entity.updateCannonWarning(this.warningTicks);
                 return;
             }
             this.startPos = cannonPos;
             this.travelTicks = this.maxTravelTicks;
+            this.entity.clearCannonWarning();
             this.entity.startCannonFireAnimation();
             this.entity.level().playSound(
                     null,
@@ -219,7 +213,7 @@ public class FacTankCannonGoal extends Goal {
                 pos.y,
                 pos.z,
                 this.radius,
-                Level.ExplosionInteraction.MOB
+                Level.ExplosionInteraction.NONE
         );
 
         level.sendParticles(
@@ -255,6 +249,7 @@ public class FacTankCannonGoal extends Goal {
     @Override
     public void stop() {
         super.stop();
+        this.entity.clearCannonWarning();
         this.warningTicks = 0;
         this.aimLockTicks = 0;
         this.travelTicks = -1;

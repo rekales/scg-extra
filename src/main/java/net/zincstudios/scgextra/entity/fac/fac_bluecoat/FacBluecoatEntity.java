@@ -13,14 +13,27 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.zincstudios.scgextra.entity.EntityTypeTags;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
-import net.zincstudios.scgextra.entity.rrc.scout.ScoutEntity;
 import net.zincstudios.scgextra.sounds.ModSounds;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class FacBluecoatEntity extends ScoutEntity {
+public class FacBluecoatEntity extends GunnerEntity implements GeoEntity {
+
+    private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
+    private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
+    private static final RawAnimation HOLD_ATTACK = RawAnimation.begin().thenLoop("hold_attack");
+    private static final RawAnimation WALK_ATTACK = RawAnimation.begin().thenLoop("walk_attack");
+
+    private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
     public FacBluecoatEntity(EntityType<? extends GunnerEntity> entityType, Level level) {
         super(entityType, level);
@@ -28,7 +41,7 @@ public class FacBluecoatEntity extends ScoutEntity {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.FOLLOW_RANGE, 20.0D)
+                .add(Attributes.FOLLOW_RANGE, 28.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.23F)
                 .add(Attributes.ATTACK_DAMAGE, 2.0D)
                 .add(Attributes.ARMOR, 2.0D)
@@ -42,10 +55,40 @@ public class FacBluecoatEntity extends ScoutEntity {
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
 
         this.targetSelector.addGoal(0, new HurtByNonFactionGoal(this));
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true,
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, 1, true, false,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
-                entity -> Faction.isEnemies(this, entity)));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 1, true, false,
+                this::isHostileFactionTarget));
+    }
+
+    private boolean isHostileFactionTarget(LivingEntity entity) {
+        if (entity == this) {
+            return false;
+        }
+
+        if (Faction.isEnemies(this, entity)) {
+            return true;
+        }
+
+        return entity.getType().is(EntityTypeTags.RRC);
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "walk/idle/aim", 2, state -> {
+            boolean moving = state.isMoving() || this.getNavigation().isInProgress();
+
+            if (state.getAnimatable().isAiming()) {
+                return state.setAndContinue(moving ? WALK_ATTACK : HOLD_ATTACK);
+            }
+
+            return state.setAndContinue(moving ? WALK : IDLE);
+        }).setAnimationSpeed(1.15));
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.geoCache;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSource) {

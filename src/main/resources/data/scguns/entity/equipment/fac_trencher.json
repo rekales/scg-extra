@@ -17,30 +17,6 @@
       "min_durability": 0.2,
       "max_durability": 0.5,
       "slot": "mainhand"
-    },
-    {
-      "item": "scguns:anthralite_axe",
-      "weight": 1.0,
-      "drop_chance": 0.0,
-      "min_durability": 0.2,
-      "max_durability": 0.5,
-      "slot": "mainhand"
-    },
-    {
-      "item": "scguns:anthralite_sword",
-      "weight": 1.0,
-      "drop_chance": 0.0,
-      "min_durability": 0.2,
-      "max_durability": 0.5,
-      "slot": "mainhand"
-    },
-    {
-      "item": "scguns:anthralite_shovel",
-      "weight": 1.0,
-      "drop_chance": 0.0,
-      "min_durability": 0.2,
-      "max_durability": 0.5,
-      "slot": "mainhand"
     }
   ]
 }

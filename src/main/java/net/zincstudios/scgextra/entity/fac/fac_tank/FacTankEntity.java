@@ -7,6 +7,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
@@ -15,16 +16,20 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.HeadShotHandler;
+import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
+import net.zincstudios.scgextra.sounds.ModSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -48,6 +53,12 @@ public class FacTankEntity extends Monster implements GeoEntity, Stunnable, Head
     private static final EntityDataAccessor<Integer> SIDE_GUN_ANIM_TICKS =
             SynchedEntityData.defineId(FacTankEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> CANNON_ANIM_TICKS =
+            SynchedEntityData.defineId(FacTankEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> CANNON_WARNING_ACTIVE =
+            SynchedEntityData.defineId(FacTankEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> CANNON_WARNING_TICKS =
+            SynchedEntityData.defineId(FacTankEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> CANNON_WARNING_MAX_TICKS =
             SynchedEntityData.defineId(FacTankEntity.class, EntityDataSerializers.INT);
 
     // Calibrated from fac_tank.geo muzzle regions:
@@ -74,6 +85,9 @@ public class FacTankEntity extends Monster implements GeoEntity, Stunnable, Head
         super.defineSynchedData();
         this.entityData.define(SIDE_GUN_ANIM_TICKS, 0);
         this.entityData.define(CANNON_ANIM_TICKS, 0);
+        this.entityData.define(CANNON_WARNING_ACTIVE, false);
+        this.entityData.define(CANNON_WARNING_TICKS, 0);
+        this.entityData.define(CANNON_WARNING_MAX_TICKS, 0);
     }
 
     @Override
@@ -128,7 +142,7 @@ public class FacTankEntity extends Monster implements GeoEntity, Stunnable, Head
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 700.0D)
+                .add(Attributes.MAX_HEALTH, 400.0D)
                 .add(Attributes.ARMOR, 20.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
                 .add(Attributes.FOLLOW_RANGE, 48.0D)
@@ -153,6 +167,7 @@ public class FacTankEntity extends Monster implements GeoEntity, Stunnable, Head
         this.stunned = stunned;
         if (stunned) {
             this.triggerAnim("behaviour", "stun");
+            this.playSound(ModSounds.FAC_TANK_STUN.get(), 1.0F, 1.0F);
         } else {
             this.headshotCounter = 0;
         }
@@ -236,6 +251,41 @@ public class FacTankEntity extends Monster implements GeoEntity, Stunnable, Head
         this.entityData.set(CANNON_ANIM_TICKS, 15);
     }
 
+    public void setCannonWarningActive(boolean active) {
+        this.entityData.set(CANNON_WARNING_ACTIVE, active);
+    }
+
+    public boolean isCannonWarningActive() {
+        return this.entityData.get(CANNON_WARNING_ACTIVE);
+    }
+
+    public void startCannonWarning(int ticks) {
+        int clamped = Math.max(ticks, 0);
+        this.entityData.set(CANNON_WARNING_ACTIVE, clamped > 0);
+        this.entityData.set(CANNON_WARNING_TICKS, clamped);
+        this.entityData.set(CANNON_WARNING_MAX_TICKS, clamped);
+    }
+
+    public void updateCannonWarning(int ticks) {
+        int clamped = Math.max(ticks, 0);
+        this.entityData.set(CANNON_WARNING_ACTIVE, clamped > 0);
+        this.entityData.set(CANNON_WARNING_TICKS, clamped);
+    }
+
+    public void clearCannonWarning() {
+        this.entityData.set(CANNON_WARNING_ACTIVE, false);
+        this.entityData.set(CANNON_WARNING_TICKS, 0);
+        this.entityData.set(CANNON_WARNING_MAX_TICKS, 0);
+    }
+
+    public int getCannonWarningTicks() {
+        return this.entityData.get(CANNON_WARNING_TICKS);
+    }
+
+    public int getCannonWarningMaxTicks() {
+        return this.entityData.get(CANNON_WARNING_MAX_TICKS);
+    }
+
     public void startStompLock(int durationTicks) {
         this.stompLockTicks = Math.max(this.stompLockTicks, durationTicks);
     }
@@ -268,6 +318,29 @@ public class FacTankEntity extends Monster implements GeoEntity, Stunnable, Head
         double dx = this.getX() - this.xo;
         double dz = this.getZ() - this.zo;
         return dx * dx + dz * dz > 0.000001D;
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return MobUtil.getSound(
+                this.random,
+                ModSounds.FAC_TANK_HURT_1.get(),
+                ModSounds.FAC_TANK_HURT_2.get()
+        );
+    }
+
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return MobUtil.getSound(
+                this.random,
+                ModSounds.FAC_TANK_IDLE_1.get(),
+                ModSounds.FAC_TANK_IDLE_2.get()
+        );
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState state) {
+        this.playSound(ModSounds.FAC_TANK_WALK.get(), 0.95F, 0.95F + this.random.nextFloat() * 0.1F);
     }
 
     @Override

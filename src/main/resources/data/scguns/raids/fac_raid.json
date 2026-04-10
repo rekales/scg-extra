@@ -44,10 +44,7 @@
         "health_multiplier": 1,
         "weapons": [
           "scguns:greaser_smg",
-          "scguns:m3_marksman",
-          "scguns:anthralite_axe",
-          "scguns:anthralite_sword",
-          "scguns:anthralite_shovel"
+          "scguns:m3_marksman"
         ],
         "armor": [
           {
@@ -94,8 +91,7 @@
         "weight": 6.0,
         "health_multiplier": 1,
         "weapons": [
-          "scguns:anthralite_axe",
-          "scguns:trenchur"
+          "scguns:anthralite_axe"
         ],
         "armor": [
           {
