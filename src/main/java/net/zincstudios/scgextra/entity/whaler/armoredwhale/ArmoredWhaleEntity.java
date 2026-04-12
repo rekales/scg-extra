@@ -95,6 +95,8 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
             controllers.add(new AnimationController<>(this, "special", 0, state -> PlayState.CONTINUE)
                     .triggerableAnim("slam", RawAnimation.begin().thenPlay("slam")));
         }
+        controllers.add(new AnimationController<>(this, "water", 0, state -> PlayState.CONTINUE)
+                    .triggerableAnim("water_spray", RawAnimation.begin().thenPlay("water_spray")));
     }
 
     public static AttributeSupplier.Builder createAttributes() {

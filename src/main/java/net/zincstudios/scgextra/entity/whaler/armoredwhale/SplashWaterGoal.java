@@ -17,6 +17,7 @@ public class SplashWaterGoal extends Goal{
     private final ArmoredWhaleEntity mob;
     private int cooldown = 0;
     private int ticks = 0;
+    private int runTicks = 0;
     private double radius = 0.0;
     private final HashSet<LivingEntity> entities = new HashSet<>();
 
@@ -30,7 +31,9 @@ public class SplashWaterGoal extends Goal{
         radius = 0.0;
         entities.clear();
         ticks = 0;
+        runTicks = 0;
         this.mob.setWaterSplash(true);
+        this.mob.triggerAnim("water", "water_spray");
         super.start();
         this.mob.level().playSound(
             this.mob, 
@@ -50,13 +53,17 @@ public class SplashWaterGoal extends Goal{
     
     @Override
     public boolean canContinueToUse() {
-        return ticks <= 16;
+        return runTicks <= 25;
     }
 
     @Override
     public void tick() {
         super.tick();
         ticks++;
+        runTicks++;
+        if(ticks > 16){
+            return;
+        }
         if(ticks % 3 == 0){
             this.mob.setLayerN(this.mob.getLayerN()+1);
         }
