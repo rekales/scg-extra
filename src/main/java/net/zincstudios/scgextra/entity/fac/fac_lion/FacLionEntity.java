@@ -52,6 +52,8 @@ public class FacLionEntity extends GunnerEntity implements GeoEntity {
     private static final int SHIELD_START_BLOCK_TICKS = 30;
     private static final boolean SHIELD_DEBUG_VISUAL = false;
     private static final int SHIELD_DEBUG_PARTICLE_INTERVAL_TICKS = 4;
+    private static final double HITBOX_BACK_OFFSET = 0.0D;
+    private static final double HITBOX_SIDE_OFFSET = 0.0D;
 
     private static final RawAnimation SHIELD_UP = RawAnimation.begin().thenPlayAndHold("shield_up");
     private static final RawAnimation SHIELD_WALK = RawAnimation.begin().thenLoop("shield_walk");
@@ -100,11 +102,10 @@ public class FacLionEntity extends GunnerEntity implements GeoEntity {
         var dimensions = this.getDimensions(this.getPose());
         float halfWidth = dimensions.width / 2.0F;
 
-        // Keep the collision box slightly biased backwards relative to facing direction.
         Vec3 forward = Vec3.directionFromRotation(0.0F, this.getYRot()).normalize();
-        double backOffset = 0.32D;
-        double centerX = this.getX() - forward.x * backOffset;
-        double centerZ = this.getZ() - forward.z * backOffset;
+        Vec3 right = new Vec3(forward.z, 0.0D, -forward.x);
+        double centerX = this.getX() - forward.x * HITBOX_BACK_OFFSET + right.x * HITBOX_SIDE_OFFSET;
+        double centerZ = this.getZ() - forward.z * HITBOX_BACK_OFFSET + right.z * HITBOX_SIDE_OFFSET;
 
         return new AABB(
                 centerX - halfWidth, this.getY(), centerZ - halfWidth,

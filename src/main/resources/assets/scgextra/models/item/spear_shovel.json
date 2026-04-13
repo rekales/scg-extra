@@ -1,6 +1,30 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "scgextra:item/spear_shovel"
+  "parent": "minecraft:item/handheld",
+  "loader": "forge:separate_transforms",
+  "base": {
+    "parent": "scgextra:item/spear_shovel_3d"
+  },
+  "perspectives": {
+    "firstperson_righthand": {
+      "parent": "scgextra:item/spear_shovel_3d"
+    },
+    "firstperson_lefthand": {
+      "parent": "scgextra:item/spear_shovel_3d"
+    },
+    "thirdperson_righthand": {
+      "parent": "scgextra:item/spear_shovel_3d"
+    },
+    "thirdperson_lefthand": {
+      "parent": "scgextra:item/spear_shovel_3d"
+    },
+    "fixed": {
+      "parent": "scgextra:item/spear_shovel_3d"
+    },
+    "gui": {
+      "parent": "scgextra:item/spear_shovel_3d"
+    },
+    "ground": {
+      "parent": "scgextra:item/spear_shovel_3d"
+    }
   }
 }

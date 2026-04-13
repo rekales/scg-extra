@@ -1,0 +1,29 @@
+{
+  "raid_id": "fac_commissar_visual",
+  "burst_delay": 10,
+  "duration": 30,
+  "trail_particles": [
+    {
+      "particle": "minecraft:smoke",
+      "count": 2,
+      "spread": 0.04,
+      "speed": 0.01
+    }
+  ],
+  "burst_particles": [
+    {
+      "particle": "minecraft:poof",
+      "count": 8,
+      "spread": 0.12,
+      "speed": 0.2
+    }
+  ],
+  "pattern": {
+    "type": "default",
+    "repetitions": 1,
+    "scale": 1.0
+  },
+  "burst_sound": "minecraft:entity.firework_rocket.large_blast",
+  "burst_sound_volume": 0.6,
+  "burst_sound_pitch": 1.25
+}

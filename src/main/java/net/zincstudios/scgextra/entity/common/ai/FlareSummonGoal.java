@@ -21,6 +21,7 @@ public class FlareSummonGoal extends Goal {
     private long cooldownEnd = 0;  // level timestamp
 
     private ItemStack itemInHand = null;
+    private boolean usingFlarePistol = false;
 
     @SafeVarargs
     public FlareSummonGoal(PathfinderMob mob, int cooldownDuration, int summonDelay, EntityType<? extends Mob>... summonTypes) {
@@ -39,15 +40,21 @@ public class FlareSummonGoal extends Goal {
     @Override
     public void start() {
         this.cooldownEnd = this.mob.level().getGameTime() + this.cooldownDuration/2;  // Half cooldown at start
-        this.itemInHand = this.mob.getMainHandItem();
-        this.mob.setItemInHand(InteractionHand.MAIN_HAND, ModItems.FLARE_PISTOL.get().getDefaultInstance());
+        this.usingFlarePistol = this.shouldUseFlarePistolInHand();
+        if (this.usingFlarePistol) {
+            this.itemInHand = this.mob.getMainHandItem();
+            this.mob.setItemInHand(InteractionHand.MAIN_HAND, ModItems.FLARE_PISTOL.get().getDefaultInstance());
+        }
     }
 
     @Override
     public void stop() {
         super.stop();
-        this.mob.setItemInHand(InteractionHand.MAIN_HAND, this.itemInHand);
-        this.itemInHand = null;
+        if (this.usingFlarePistol) {
+            this.mob.setItemInHand(InteractionHand.MAIN_HAND, this.itemInHand);
+            this.itemInHand = null;
+            this.usingFlarePistol = false;
+        }
     }
 
     @Override
@@ -56,8 +63,9 @@ public class FlareSummonGoal extends Goal {
             this.cooldownEnd = this.mob.level().getGameTime() + this.cooldownDuration;
             this.summonTrigger = this.mob.level().getGameTime() + this.summonDelay;
             if (this.mob instanceof GeoEntity geoEntity) {
-                geoEntity.triggerAnim("behaviour", "flare");
+                geoEntity.triggerAnim("behaviour", this.getAnimationTrigger());
             }
+            this.onFlareTriggered();
         }
 
         if (this.summonTrigger != -1 && this.mob.level().getGameTime() > this.summonTrigger) {
@@ -83,5 +91,16 @@ public class FlareSummonGoal extends Goal {
                 }
             }
         }
+    }
+
+    protected String getAnimationTrigger() {
+        return "flare";
+    }
+
+    protected boolean shouldUseFlarePistolInHand() {
+        return true;
+    }
+
+    protected void onFlareTriggered() {
     }
 }

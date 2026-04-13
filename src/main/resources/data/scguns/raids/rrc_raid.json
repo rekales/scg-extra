@@ -1,0 +1,327 @@
+{
+  "raid_id": "rrc",
+  "raid_level": 2,
+
+  "boss": {
+    "entity_type": "scgextra:flaming_head",
+    "custom_name": "translation:raid.boss.scguns.copper",
+    "fixed_health": 400.0,
+    "weapon": {
+      "item": "minecraft:air",
+      "drop_chance": 0.0
+    },
+    "armor": [
+      {
+        "item": "minecraft:air",
+        "slot": "head",
+        "drop_chance": 0.0
+      },
+      {
+        "item": "minecraft:air",
+        "slot": "chest",
+        "drop_chance": 0.0
+      },
+      {
+        "item": "minecraft:air",
+        "slot": "legs",
+        "drop_chance": 0.0
+      },
+      {
+        "item": "minecraft:air",
+        "slot": "feet",
+        "drop_chance": 0.0
+      }
+    ],
+    "effects": [
+      {
+        "effect": "minecraft:speed",
+        "amplifier": 0,
+        "duration": -1,
+        "ambient": false,
+        "visible": false
+      }
+    ],
+    "ai_difficulty": 4,
+    "ai_type": "TACTICAL",
+    "special_loot_table": "scguns:raids/copper_boss"
+  },
+
+  "henchmen": {
+    "types": [
+      {
+        "entity_type": "scgextra:copper_knight",
+        "weight": 5.0,
+        "health_multiplier": 1,
+        "weapons": [
+          "scguns:blooper",
+          "scguns:whistler",
+          "scguns:birdfeeder",
+          "scguns:llr_director",
+          "scguns:boomstick",
+          "scguns:makeshift_rifle",
+          "scguns:rusty_gnat"
+        ],
+        "armor": [
+          {
+            "item": "scguns:scrap_helmet",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "scguns:scrap_chestplate",
+            "slot": "chest",
+            "chance": 0.4
+          }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": false,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 2,
+        "ai_type": "DEFAULT"
+      },
+      {
+        "entity_type": "scgextra:scout",
+        "weight": 5.0,
+        "health_multiplier": 1,
+        "weapons": [
+          "scguns:bruiser",
+          "scguns:scrapper",
+          "scguns:umax_pistol"
+        ],
+        "armor": [
+          {
+            "item": "scguns:scrap_helmet",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "scguns:scrap_chestplate",
+            "slot": "chest",
+            "chance": 0.4
+          }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": false,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 2,
+        "ai_type": "DEFAULT"
+      },
+      {
+        "entity_type": "scgextra:tallman",
+        "weight": 5.0,
+        "health_multiplier": 1,
+        "weapons": [
+          "scguns:whistler",
+          "scguns:llr_director"
+        ],
+        "armor": [
+          {
+            "item": "scguns:scrap_helmet",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "scguns:scrap_chestplate",
+            "slot": "chest",
+            "chance": 0.4
+          }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": false,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 2,
+        "ai_type": "DEFAULT"
+      },
+      {
+        "entity_type": "scgextra:drone",
+        "weight": 1.0,
+        "health_multiplier": 1,
+        "weapons": [
+          "minecraft:air"
+        ],
+        "armor": [
+          {
+            "item": "scguns:scrap_helmet",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "scguns:scrap_chestplate",
+            "slot": "chest",
+            "chance": 0.4
+          }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": false,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 2,
+        "ai_type": "DEFAULT"
+      },
+      {
+        "entity_type": "scgextra:oppressor",
+        "weight": 1.0,
+        "health_multiplier": 1,
+        "weapons": [
+          "scguns:scrapper",
+          "scguns:umax_pistol",
+          "scguns:bruiser"
+        ],
+        "armor": [
+          {
+            "item": "scguns:scrap_helmet",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "scguns:scrap_chestplate",
+            "slot": "chest",
+            "chance": 0.4
+          }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": false,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 2,
+        "ai_type": "DEFAULT"
+      },
+      {
+        "entity_type": "scgextra:spring_junkie",
+        "weight": 3.0,
+        "health_multiplier": 1,
+        "weapons": [
+          "minecraft:air"
+        ],
+        "armor": [
+          {
+            "item": "minecraft:air",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "minecraft:air",
+            "slot": "chest",
+            "chance": 0.4
+          }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": false,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 2,
+        "ai_type": "DEFAULT"
+      },
+      {
+        "entity_type": "scgextra:scrap_guard",
+        "weight": 3.0,
+        "health_multiplier": 1,
+        "weapons": [
+          "scguns:bruiser",
+          "scguns:boomstick"
+        ],
+        "armor": [
+          {
+            "item": "minecraft:air",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "minecraft:air",
+            "slot": "chest",
+            "chance": 0.4
+          }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": false,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 2,
+        "ai_type": "DEFAULT"
+      },
+      {
+        "entity_type": "scgextra:arc_psycho",
+        "weight": 3.0,
+        "health_multiplier": 1,
+        "weapons": [
+          "minecraft:air"
+        ],
+        "armor": [
+          {
+            "item": "minecraft:air",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "minecraft:air",
+            "slot": "chest",
+            "chance": 0.4
+          }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": false,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 2,
+        "ai_type": "DEFAULT"
+      }
+    ],
+    "spawn_interval_ticks": 700,
+    "max_alive": 5,
+    "max_total": 13,
+    "spawn_radius": 20,
+    "spawn_attempts_per_wave": 4
+  },
+
+  "spawn_conditions": {
+    "min_players_nearby": 1,
+    "search_radius": 64,
+    "valid_dimensions": [
+      "minecraft:overworld"
+    ],
+    "announcement_message": "translation:raid.announcement.scguns.copper"
+  }
+}
