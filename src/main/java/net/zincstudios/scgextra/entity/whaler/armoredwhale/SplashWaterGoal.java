@@ -53,7 +53,7 @@ public class SplashWaterGoal extends Goal{
     
     @Override
     public boolean canContinueToUse() {
-        return runTicks <= 25;
+        return runTicks <= 23;
     }
 
     @Override

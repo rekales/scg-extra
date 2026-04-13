@@ -286,6 +286,9 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
     }
 
     private void checkShouldDeleteSelf(){
+        if(this.getSpawnType() == MobSpawnType.SPAWN_EGG){
+            return;
+        }
         Map<BlockState, BlockPos> blocks = new HashMap<>();
         //ocean monuments sometimes spawn under ice, so when the guardian statue spawns and falls, it might land on ice instead, so remove self if it's on ice
         if(this.onGround() && !this.isInWater()){
