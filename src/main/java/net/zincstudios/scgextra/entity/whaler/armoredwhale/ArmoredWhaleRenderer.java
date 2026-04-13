@@ -11,11 +11,17 @@ public class ArmoredWhaleRenderer extends GeoEntityRenderer<ArmoredWhaleEntity>{
     public ArmoredWhaleRenderer(Context renderManager) {
         super(renderManager, new ArmoredWhaleModel<>());
 
-        addRenderLayer(new FastBoneFilterGeoLayer<>(this, () -> List.of("water_splash"), (bone, entity, partialTick) ->  bone.setHidden(!entity.getWaterSplash())));
-        addRenderLayer(new FastBoneFilterGeoLayer<>(this, () -> List.of("water_layer1"), (bone, entity, partialTick) ->  {bone.setHidden(!(entity.getLayerN()>=1));bone.setChildrenHidden(!(entity.getLayerN()>=1));}));
-        addRenderLayer(new FastBoneFilterGeoLayer<>(this, () -> List.of("water_layer2"), (bone, entity, partialTick) ->  {bone.setHidden(!(entity.getLayerN()>=2));bone.setChildrenHidden(!(entity.getLayerN()>=2));}));
-        addRenderLayer(new FastBoneFilterGeoLayer<>(this, () -> List.of("water_layer3"), (bone, entity, partialTick) ->  {bone.setHidden(!(entity.getLayerN()>=3));bone.setChildrenHidden(!(entity.getLayerN()>=3));}));
-        addRenderLayer(new FastBoneFilterGeoLayer<>(this, () -> List.of("water_layer4"), (bone, entity, partialTick) ->  {bone.setHidden(!(entity.getLayerN()>=4));bone.setChildrenHidden(!(entity.getLayerN()>=4));}));
-        addRenderLayer(new FastBoneFilterGeoLayer<>(this, () -> List.of("water_layer5"), (bone, entity, partialTick) ->  {bone.setHidden(!(entity.getLayerN()>=5));bone.setChildrenHidden(!(entity.getLayerN()>=5));}));
+        addRenderLayer(new FastBoneFilterGeoLayer<>(this, () -> List.of("bottom"), (bone, entity, partialTick) -> {
+            bone.setHidden(!entity.getWaterSplash());
+            bone.setChildrenHidden(!entity.getWaterSplash());
+        }));
+        addRenderLayer(new FastBoneFilterGeoLayer<>(this, () -> List.of("side"), (bone, entity, partialTick) ->{
+            bone.setHidden(!entity.getWaterSplash());
+            bone.setChildrenHidden(!entity.getWaterSplash());
+        }));
+        addRenderLayer(new FastBoneFilterGeoLayer<>(this, () -> List.of("top"), (bone, entity, partialTick) ->{
+            bone.setHidden(!entity.getWaterSplash());
+            bone.setChildrenHidden(!entity.getWaterSplash());
+        }));
     }
 }
