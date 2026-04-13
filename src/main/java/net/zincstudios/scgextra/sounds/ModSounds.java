@@ -314,6 +314,34 @@ public class ModSounds {
         () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("fac_lion.idle2")));
     public static final RegistryObject<SoundEvent> FAC_LION_IDLE_3 = SOUND_EVENTS.register("fac_lion.idle3", 
         () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("fac_lion.idle3")));
+    public static final RegistryObject<SoundEvent> FAC_WALKER_HURT_1 = SOUND_EVENTS.register("fac_walker.hurt1",
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("fac_walker.hurt1")));
+    public static final RegistryObject<SoundEvent> FAC_WALKER_HURT_2 = SOUND_EVENTS.register("fac_walker.hurt2",
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("fac_walker.hurt2")));
+    public static final RegistryObject<SoundEvent> FAC_WALKER_IDLE_1 = SOUND_EVENTS.register("fac_walker.idle1",
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("fac_walker.idle1")));
+    public static final RegistryObject<SoundEvent> FAC_WALKER_IDLE_2 = SOUND_EVENTS.register("fac_walker.idle2",
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("fac_walker.idle2")));
+    public static final RegistryObject<SoundEvent> FAC_WALKER_IDLE_3 = SOUND_EVENTS.register("fac_walker.idle3",
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("fac_walker.idle3")));
+    public static final RegistryObject<SoundEvent> FAC_WALKER_WALK = SOUND_EVENTS.register("fac_walker.walk",
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("fac_walker.walk")));
+    public static final RegistryObject<SoundEvent> FAC_WALKER_RUN = SOUND_EVENTS.register("fac_walker.run",
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("fac_walker.run")));
+    public static final RegistryObject<SoundEvent> FAC_TANK_HURT_1 = SOUND_EVENTS.register("fac_tank.hurt1",
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("fac_tank.hurt1")));
+    public static final RegistryObject<SoundEvent> FAC_TANK_HURT_2 = SOUND_EVENTS.register("fac_tank.hurt2",
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("fac_tank.hurt2")));
+    public static final RegistryObject<SoundEvent> FAC_TANK_IDLE_1 = SOUND_EVENTS.register("fac_tank.idle1",
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("fac_tank.idle1")));
+    public static final RegistryObject<SoundEvent> FAC_TANK_IDLE_2 = SOUND_EVENTS.register("fac_tank.idle2",
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("fac_tank.idle2")));
+    public static final RegistryObject<SoundEvent> FAC_TANK_WALK = SOUND_EVENTS.register("fac_tank.walk",
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("fac_tank.walk")));
+    public static final RegistryObject<SoundEvent> FAC_TANK_STUN = SOUND_EVENTS.register("fac_tank.stun",
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("fac_tank.stun")));
+    public static final RegistryObject<SoundEvent> FAC_TANK_CANNON_CHARGE = SOUND_EVENTS.register("fac_tank.cannon_charge",
+        () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("fac_tank.cannon_charge")));
     public static final RegistryObject<SoundEvent> TRENCH_GOBLIN_ATTACK_1 = SOUND_EVENTS.register("trench_goblin.attack1", 
         () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("trench_goblin.attack1")));
     public static final RegistryObject<SoundEvent> TRENCH_GOBLIN_ATTACK_2 = SOUND_EVENTS.register("trench_goblin.attack2", 

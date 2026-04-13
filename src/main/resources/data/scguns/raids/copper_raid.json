@@ -5,7 +5,7 @@
   "boss": {
     "entity_type": "scgextra:flaming_head",
     "custom_name": "translation:raid.boss.scguns.copper",
-    "fixed_health": 600.0,
+    "fixed_health": 400.0,
     "weapon": {
       "item": "minecraft:air",
       "drop_chance": 0.0
@@ -310,9 +310,10 @@
       }
     ],
     "spawn_interval_ticks": 700,
-    "max_alive": 8,
+    "max_alive": 5,
+    "max_total": 13,
     "spawn_radius": 20,
-    "spawn_attempts_per_wave": 6
+    "spawn_attempts_per_wave": 4
   },
 
   "spawn_conditions": {

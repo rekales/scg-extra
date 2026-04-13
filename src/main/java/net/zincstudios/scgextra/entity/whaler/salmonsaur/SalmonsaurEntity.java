@@ -49,6 +49,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class SalmonsaurEntity extends Monster implements GeoEntity {
+    private static final String SCGEXTRA_NO_AUTO_RIDER_TAG = "SCGExtraRaidNoAutoRider";
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
@@ -69,26 +70,31 @@ public class SalmonsaurEntity extends Monster implements GeoEntity {
     @Override
     public void tick() {
         super.tick();
+        boolean noAutoRider = this.getTags().contains(SCGEXTRA_NO_AUTO_RIDER_TAG);
         if (!this.level().isClientSide() && !riderSpawned && this.getPassengers().isEmpty()) {
-            FishFolkEntity rider = new FishFolkEntity(ModEntities.FISH_FOLK.get(), this.level());
-            int i = new Random().nextInt(20);
-            if (i < 10) {
-                rider.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.TRIDENT));
+            if (noAutoRider) {
+                riderSpawned = true;
             } else {
-                ArrayList<Item> guns = new ArrayList<>();
-                for(RegistryObject<Item> item : ModItems.REGISTER.getEntries()){
-                    if(item.get() instanceof AnimatedUnderWaterGunItem){
-                        guns.add(item.get());
+                FishFolkEntity rider = new FishFolkEntity(ModEntities.FISH_FOLK.get(), this.level());
+                int i = new Random().nextInt(20);
+                if (i < 10) {
+                    rider.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.TRIDENT));
+                } else {
+                    ArrayList<Item> guns = new ArrayList<>();
+                    for(RegistryObject<Item> item : ModItems.REGISTER.getEntries()){
+                        if(item.get() instanceof AnimatedUnderWaterGunItem){
+                            guns.add(item.get());
+                        }
                     }
+                    ItemStack gun = new ItemStack(guns.get(new Random().nextInt(guns.size())));
+                    gun.getOrCreateTag().putBoolean("IgnoreAmmo", true);
+                    rider.setItemSlot(EquipmentSlot.MAINHAND, gun);
                 }
-                ItemStack gun = new ItemStack(guns.get(new Random().nextInt(guns.size())));
-                gun.getOrCreateTag().putBoolean("IgnoreAmmo", true);
-                rider.setItemSlot(EquipmentSlot.MAINHAND, gun);
+                rider.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), this.getXRot());
+                this.level().addFreshEntity(rider);
+                rider.startRiding(this, true);
+                riderSpawned = true;
             }
-            rider.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), this.getXRot());
-            this.level().addFreshEntity(rider);
-            rider.startRiding(this, true);
-            riderSpawned = true;
         }
         if (this.getLastHurtByMob() != null &&
             !Faction.isFriendlies(this, this.getLastHurtByMob())) {
@@ -143,9 +149,15 @@ public class SalmonsaurEntity extends Monster implements GeoEntity {
     }
     @Override
     public void setTarget(@Nullable LivingEntity pTarget) {
-        if(pTarget!=null && !Faction.isFriendlies(this, pTarget)){
-            super.setTarget(pTarget);
+        if (pTarget == null) {
+            super.setTarget(null);
+            return;
         }
+        if (pTarget instanceof Player player && (player.isCreative() || player.isSpectator())) {
+            super.setTarget(null);
+            return;
+        }
+        if (!Faction.isFriendlies(this, pTarget)) super.setTarget(pTarget);
     }
 
     @Override

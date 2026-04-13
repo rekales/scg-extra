@@ -833,6 +833,90 @@
             "scgextra:fac/lion/idle3"
         ]
     },
+    "fac_walker.hurt1": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:fac/walker/hurt1"
+        ]
+    },
+    "fac_walker.hurt2": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:fac/walker/hurt2"
+        ]
+    },
+    "fac_walker.idle1": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:fac/walker/idle1"
+        ]
+    },
+    "fac_walker.idle2": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:fac/walker/idle2"
+        ]
+    },
+    "fac_walker.idle3": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:fac/walker/idle3"
+        ]
+    },
+    "fac_walker.walk": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:fac/walker/walk"
+        ]
+    },
+    "fac_walker.run": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:fac/walker/run"
+        ]
+    },
+    "fac_tank.hurt1": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:fac/tank/hurt1"
+        ]
+    },
+    "fac_tank.hurt2": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:fac/tank/hurt2"
+        ]
+    },
+    "fac_tank.idle1": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:fac/tank/idle1"
+        ]
+    },
+    "fac_tank.idle2": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:fac/tank/idle2"
+        ]
+    },
+    "fac_tank.walk": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:fac/tank/walk"
+        ]
+    },
+    "fac_tank.stun": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:fac/tank/stun"
+        ]
+    },
+    "fac_tank.cannon_charge": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:fac/tank/cannon_charge"
+        ]
+    },
     "trench_goblin.attack1": {
         "category": "hostile",
         "sounds": [

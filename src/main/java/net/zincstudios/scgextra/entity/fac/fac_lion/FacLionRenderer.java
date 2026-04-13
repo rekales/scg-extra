@@ -13,6 +13,12 @@ import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer;
 
 public class FacLionRenderer extends GunnerRenderer<FacLionEntity> {
+    private static final double GUN_X = 0.0D;
+    private static final double GUN_Y = 0.15D;
+    private static final double GUN_Z = -0.25D;
+    private static final float GUN_ROT_X = -90.0F;
+    private static final float GUN_ROT_Y = 1.0F;
+
     public FacLionRenderer(EntityRendererProvider.Context context) {
         super(context, new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_lion")), true);
         addRenderLayer(new BlockAndItemGeoLayer<>(this) {
@@ -35,13 +41,13 @@ public class FacLionRenderer extends GunnerRenderer<FacLionEntity> {
             @Override
             protected void renderStackForBone(PoseStack poseStack, GeoBone bone, ItemStack stack, FacLionEntity animatable, MultiBufferSource bufferSource, float partialTick, int packedLight, int packedOverlay) {
                 if ("right_hand".equals(bone.getName())) {
-                    if (animatable.isAiming()) {
-                        poseStack.translate(-0.3, -0.02, -0.25);
-                        poseStack.mulPose(Axis.XP.rotationDegrees(-102));
-                    } else {
-                        poseStack.translate(-0.3, -0.02, -0.25);
-                        poseStack.mulPose(Axis.XP.rotationDegrees(-82));
-                    }
+                    poseStack.pushPose();
+                    poseStack.translate(GUN_X, GUN_Y, GUN_Z);
+                    poseStack.mulPose(Axis.XP.rotationDegrees(GUN_ROT_X));
+                    poseStack.mulPose(Axis.YP.rotationDegrees(GUN_ROT_Y));
+                    super.renderStackForBone(poseStack, bone, stack, animatable, bufferSource, partialTick, packedLight, packedOverlay);
+                    poseStack.popPose();
+                    return;
                 }
 
                 super.renderStackForBone(poseStack, bone, stack, animatable, bufferSource, partialTick, packedLight, packedOverlay);

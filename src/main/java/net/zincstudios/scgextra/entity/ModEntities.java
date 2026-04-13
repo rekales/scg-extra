@@ -11,6 +11,7 @@ import net.zincstudios.scgextra.entity.common.raid_summoner.RaidSummonerEntity;
 import net.zincstudios.scgextra.entity.common.raid_summoner.RaidSummonerRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_tank_buster.FacTankBusterEntity;
 import net.zincstudios.scgextra.entity.fac.fac_bluecoat.FacBluecoatEntity;
+import net.zincstudios.scgextra.entity.fac.fac_bluecoat.FacBluecoatRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_commissar.FacCommissarEntity;
 import net.zincstudios.scgextra.entity.fac.fac_commissar.FacCommissarRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_lion.FacLionEntity;
@@ -18,9 +19,13 @@ import net.zincstudios.scgextra.entity.fac.fac_lion.FacLionRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_tank.FacTankEntity;
 import net.zincstudios.scgextra.entity.fac.fac_tank.FacTankRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_trencher.FacTrencherEntity;
+import net.zincstudios.scgextra.entity.fac.fac_trencher.FacTrencherRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_walker.FacWalkerEntity;
+import net.zincstudios.scgextra.entity.fac.fac_tank_buster.FacTankBusterRenderer;
+import net.zincstudios.scgextra.entity.fac.trench_goblin.TrenchGoblinRenderer;
 import net.zincstudios.scgextra.entity.fac.shovel_knight.ShovelKnightEntity;
 import net.zincstudios.scgextra.entity.fac.trench_sniper.TrenchSniperEntity;
+import net.zincstudios.scgextra.entity.fac.trench_sniper.TrenchSniperRenderer;
 import net.zincstudios.scgextra.entity.fac.trench_goblin.TrenchGoblinEntity;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntity;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntityModel;
@@ -126,7 +131,7 @@ public class ModEntities {
 
     public static final RegistryObject<EntityType<FacTrencherEntity>> FAC_TRENCHER = ENTITY_TYPES
             .register("fac_trencher", () -> EntityType.Builder.of(FacTrencherEntity::new, MobCategory.MONSTER)
-                    .sized(0.6F, 1.95F)
+                    .sized(0.68F, 1.82F)
                     .build("fac_trencher"));
 
     public static final RegistryObject<EntityType<FacBluecoatEntity>> FAC_BLUECOAT = ENTITY_TYPES
@@ -136,32 +141,32 @@ public class ModEntities {
 
     public static final RegistryObject<EntityType<TrenchGoblinEntity>> TRENCH_GOBLIN = ENTITY_TYPES
             .register("trench_goblin", () -> EntityType.Builder.of(TrenchGoblinEntity::new, MobCategory.MONSTER)
-                    .sized(0.6F, 1.2F)
+                    .sized(0.72F, 1.72F)
                     .build("trench_goblin"));
 
     public static final RegistryObject<EntityType<TrenchSniperEntity>> TRENCH_SNIPER = ENTITY_TYPES
             .register("trench_sniper", () -> EntityType.Builder.of(TrenchSniperEntity::new, MobCategory.MONSTER)
-                    .sized(0.6F, 1.95F)
+                    .sized(0.72F, 2.22F)
                     .build("trench_sniper"));
 
     public static final RegistryObject<EntityType<ShovelKnightEntity>> SHOVEL_KNIGHT = ENTITY_TYPES
             .register("shovel_knight", () -> EntityType.Builder.of(ShovelKnightEntity::new, MobCategory.MONSTER)
-                    .sized(0.72F, 2.2F)
+                    .sized(0.78F, 2.08F)
                     .build("shovel_knight"));
 
     public static final RegistryObject<EntityType<FacTankBusterEntity>> FAC_TANK_BUSTER = ENTITY_TYPES
             .register("fac_tank_buster", () -> EntityType.Builder.of(FacTankBusterEntity::new, MobCategory.MONSTER)
-                    .sized(0.8F, 1.95F)
+                    .sized(1.02F, 2.02F)
                     .build("fac_tank_buster"));
 
     public static final RegistryObject<EntityType<FacLionEntity>> FAC_LION = ENTITY_TYPES
             .register("fac_lion", () -> EntityType.Builder.of(FacLionEntity::new, MobCategory.MONSTER)
-                    .sized(1.9F, 2.95F)
+                    .sized(1.3F, 2.9F)
                     .build("fac_lion"));
 
     public static final RegistryObject<EntityType<FacCommissarEntity>> FAC_COMMISSAR = ENTITY_TYPES
             .register("fac_commissar", () -> EntityType.Builder.of(FacCommissarEntity::new, MobCategory.MONSTER)
-                    .sized(0.81F, 2.15F)
+                    .sized(0.96F, 2.22F)
                     .build("fac_commissar"));
 
     public static final RegistryObject<EntityType<FacWalkerEntity>> FAC_WALKER = ENTITY_TYPES
@@ -205,12 +210,12 @@ public class ModEntities {
 
     public static final RegistryObject<EntityType<OppressorEntity>> OPPRESSOR = ENTITY_TYPES
             .register("oppressor", () -> EntityType.Builder.of(OppressorEntity::new, MobCategory.MONSTER)
-                    .sized(2.5F, 5F)
+                    .sized(2F, 4F)
                     .build("oppressor"));
 
     public static final RegistryObject<EntityType<SpringJunkieEntity>> SPRING_JUNKIE = ENTITY_TYPES
             .register("spring_junkie", () -> EntityType.Builder.of(SpringJunkieEntity::new, MobCategory.MONSTER)
-                    .sized(1.4F, 4F)
+                    .sized(1.30F, 3.5F)
                     .build("spring_junkie"));
 
     public static final RegistryObject<EntityType<FlamingHeadEntity>> FLAMING_HEAD = ENTITY_TYPES
@@ -221,7 +226,7 @@ public class ModEntities {
 
     public static final RegistryObject<EntityType<ScrapGuardEntity>> SCRAP_GUARD = ENTITY_TYPES
             .register("scrap_guard", () -> EntityType.Builder.of(ScrapGuardEntity::new, MobCategory.MONSTER)
-                    .sized(1.3F, 3F)
+                    .sized(1.17F, 3F)
                     .build("scrap_guard"));
 
     public static final RegistryObject<EntityType<ArcPsychoEntity>> ARC_PSYCHO = ENTITY_TYPES
@@ -231,7 +236,7 @@ public class ModEntities {
 
     public static final RegistryObject<EntityType<CopperKnightEntity>> COPPER_KNIGHT = ENTITY_TYPES
             .register("copper_knight", () -> EntityType.Builder.of(CopperKnightEntity::new, MobCategory.MONSTER)
-                    .sized(0.6F, 2F)
+                    .sized(0.8F, 2F)
                     .build("copper_knight"));
 
     public static final RegistryObject<EntityType<FireProjectile>> FIRE_PROJECTILE = ENTITY_TYPES
@@ -271,18 +276,13 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.WHALE_PROJECTILE.get(), EnemyProjectileRenderer::new);
         EntityRenderers.register(ModEntities.FIRE_PROJECTILE.get(), EnemyProjectileRenderer::new);
         EntityRenderers.register(ModEntities.RAID_SUMMONER.get(), RaidSummonerRenderer::new);
-        EntityRenderers.register(ModEntities.FAC_TRENCHER.get(), (ctx) -> new GunnerRenderer<>(ctx,
-                new DefaultedEntityGeoModel<>(SCGExtra.asResource("placeholder")), -10).noDeathTilt());
-        EntityRenderers.register(ModEntities.FAC_BLUECOAT.get(), (ctx) -> new GunnerRenderer<>(ctx,
-                new DefaultedEntityGeoModel<>(SCGExtra.asResource("placeholder")), -10).noDeathTilt());
-        EntityRenderers.register(ModEntities.TRENCH_GOBLIN.get(), (ctx) -> new GunnerRenderer<>(ctx,
-                new DefaultedEntityGeoModel<>(SCGExtra.asResource("placeholder"))).noDeathTilt());
-        EntityRenderers.register(ModEntities.TRENCH_SNIPER.get(), (ctx) -> new GunnerRenderer<>(ctx,
-                new DefaultedEntityGeoModel<>(SCGExtra.asResource("placeholder")), -10).noDeathTilt());
+        EntityRenderers.register(ModEntities.FAC_TRENCHER.get(), (ctx) -> new FacTrencherRenderer(ctx).noDeathTilt());
+        EntityRenderers.register(ModEntities.FAC_BLUECOAT.get(), (ctx) -> new FacBluecoatRenderer(ctx).noDeathTilt());
+        EntityRenderers.register(ModEntities.TRENCH_GOBLIN.get(), (ctx) -> new TrenchGoblinRenderer(ctx).noDeathTilt());
+        EntityRenderers.register(ModEntities.TRENCH_SNIPER.get(), (ctx) -> new TrenchSniperRenderer(ctx).noDeathTilt());
         EntityRenderers.register(ModEntities.SHOVEL_KNIGHT.get(), (ctx) -> new GunnerRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_shovel_knight")), -10).noDeathTilt());
-        EntityRenderers.register(ModEntities.FAC_TANK_BUSTER.get(), (ctx) -> new GunnerRenderer<>(ctx,
-                new DefaultedEntityGeoModel<>(SCGExtra.asResource("placeholder")), -10).noDeathTilt());
+        EntityRenderers.register(ModEntities.FAC_TANK_BUSTER.get(), (ctx) -> new FacTankBusterRenderer(ctx).noDeathTilt());
         EntityRenderers.register(ModEntities.FAC_LION.get(), (ctx) -> new FacLionRenderer(ctx).noDeathTilt());
         EntityRenderers.register(ModEntities.FAC_COMMISSAR.get(), (ctx) -> new FacCommissarRenderer(ctx).noDeathTilt());
         EntityRenderers.register(ModEntities.FAC_WALKER.get(), (ctx) -> new GunnerRenderer<>(ctx,
@@ -339,12 +339,23 @@ public class ModEntities {
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
+        BoundingBoxManager.registerHeadshotBox(ModEntities.FAC_TRENCHER.get(), new BasicHeadshotBox<>(9.0, 20.0));
+        BoundingBoxManager.registerHeadshotBox(ModEntities.FAC_BLUECOAT.get(), new BasicHeadshotBox<>(9.0, 22.0));
+        BoundingBoxManager.registerHeadshotBox(ModEntities.TRENCH_GOBLIN.get(), new OffsetRotatedHeadshotBox<>(8.0, 7.0, 21.0, 0.5F, 5.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(ModEntities.TRENCH_SNIPER.get(), new OffsetRotatedHeadshotBox<>(9.0, 9.0, 30.0, 0.0F, 2.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(ModEntities.SHOVEL_KNIGHT.get(), new BasicHeadshotBox<>(9.0, 24.0));
+        BoundingBoxManager.registerHeadshotBox(ModEntities.FAC_COMMISSAR.get(), new OffsetRotatedHeadshotBox<>(10.0, 18.0, 30.0, 0.0F, 0, false, true));
         BoundingBoxManager.registerHeadshotBox(ModEntities.TURTLEMAN.get(), new BasicHeadshotBox<>(11.0, 28.0));
         BoundingBoxManager.registerHeadshotBox(ModEntities.DRONE.get(), new RotatedHeadshotBox<>(15.0, 28.0, 20, false, true));
         BoundingBoxManager.registerHeadshotBox(ModEntities.FLAMING_HEAD.get(), new OffsetRotatedHeadshotBox<>(10.0F, 55.0, 13, 70, false, true));
-        BoundingBoxManager.registerHeadshotBox(ModEntities.FAC_TANK_BUSTER.get(), new BasicHeadshotBox<>(8.0, 24.0));
+        BoundingBoxManager.registerHeadshotBox(ModEntities.FAC_TANK_BUSTER.get(), new OffsetRotatedHeadshotBox<>(10.0, 9.0, 24.0, 0.0F, 2.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(ModEntities.FAC_LION.get(), new RotatedHeadshotBox<>(10, 36.0, 7.0, false, true));
         BoundingBoxManager.registerHeadshotBox(ModEntities.FAC_WALKER.get(), new RotatedHeadshotBox<>(14.0, 44.0, 4.0, false, true));
         BoundingBoxManager.registerHeadshotBox(ModEntities.FAC_TANK.get(), new OffsetRotatedHeadshotBox<>(13.0, 16.0, 9.0, 0.0F, false, true));
+        BoundingBoxManager.registerHeadshotBox(ModEntities.OPPRESSOR.get(), new OffsetRotatedHeadshotBox<>(10.0, 15.0, 60.0, 0.0F, 6.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(ModEntities.SCRAP_GUARD.get(), new OffsetRotatedHeadshotBox<>(11.0, 14.0, 40.0, 0.0F, 1.5, false, true));
+        BoundingBoxManager.registerHeadshotBox(ModEntities.SPRING_JUNKIE.get(), new OffsetRotatedHeadshotBox<>(9.0, 20.0, 34.0, 0.0F, 0, false, true));
+        BoundingBoxManager.registerHeadshotBox(ModEntities.COPPER_KNIGHT.get(), new OffsetRotatedHeadshotBox<>(8, 9.5, 28.0, 0.0F, 2.0, false, true));
 
         WeakPointBoxManager.registerWeakPointBox(ModEntities.FLAMING_HEAD.get(), new WeakPointBox<>(new OffsetRotatedHeadshotBox<>(10.0F, 55.0, 13, -70, false, true)));
         WeakPointBoxManager.registerWeakPointBox(ModEntities.FAC_WALKER.get(), new WeakPointBox<>(new RotatedHeadshotBox<>(14.0, 44.0, 4.0, false, true)));

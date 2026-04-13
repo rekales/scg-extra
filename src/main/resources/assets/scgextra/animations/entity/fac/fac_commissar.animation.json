@@ -585,6 +585,9 @@
 		"flare": {
 			"loop": false,
 			"animation_length": 2,
+			"timeline": {
+				"1.1": "spawn_flare;"
+			},
 			"bones": {
 				"Head2": {
 					"rotation": {

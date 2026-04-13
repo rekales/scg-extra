@@ -23,12 +23,12 @@ public class ModItems {
             () -> new AtlanticMaceItem(Tiers.IRON, 7, -3.2F, new Item.Properties())
     );
 
-    public static final RegistryObject<SwordItem> CAVALRY_SABER = ITEMS.register("cavalry_saber",
-            () -> new SwordItem(Tiers.IRON, 3, -2.2F, new Item.Properties())
+    public static final RegistryObject<CavalrySaberItem> CAVALRY_SABER = ITEMS.register("cavalry_saber",
+            () -> new CavalrySaberItem(Tiers.IRON, 3, -2.2F, new Item.Properties())
     );
 
-    public static final RegistryObject<ShovelItem> SPEAR_SHOVEL = ITEMS.register("spear_shovel",
-            () -> new ShovelItem(Tiers.IRON, 2.5F, -2.8F, new Item.Properties())
+    public static final RegistryObject<SpearShovelItem> SPEAR_SHOVEL = ITEMS.register("spear_shovel",
+            () -> new SpearShovelItem(Tiers.IRON, 2.5F, -2.8F, new Item.Properties())
     );
 
     public static final RegistryObject<Item> WALKER_MG = ITEMS.register("walker_mg",

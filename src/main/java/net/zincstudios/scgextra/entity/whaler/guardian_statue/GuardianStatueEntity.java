@@ -191,6 +191,9 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
 
     @Override
     public void setTarget(@Nullable LivingEntity target) {
+        if (target instanceof Player player && (player.isCreative() || player.isSpectator())) {
+            target = null;
+        }
         super.setTarget(target);
         this.entityData.set(TARGET_ID, target == null ? 0 : target.getId());
     }

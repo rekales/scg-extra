@@ -1,110 +1,65 @@
 package net.zincstudios.scgextra.entity.fac.fac_commissar;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
+import net.zincstudios.scgextra.entity.common.ai.FlareSummonGoal;
+import top.ribs.scguns.entity.projectile.RaidFlareEntity;
 
-public class FacCommissarFlareSummonGoal extends Goal {
-
-    private final FacCommissarEntity mob;
-    private final int cooldownDuration;
-    private final int summonDelay;
-    private final EntityType<? extends Mob>[] summonTypes;
-
-    private long summonTrigger = -1;
-    private long cooldownEnd = 0;
+public class FacCommissarFlareSummonGoal extends FlareSummonGoal {
+    private static final String VISUAL_FLARE_ID = "fac_commissar_visual";
+    private static final int FLARE_LAUNCH_DELAY_TICKS = 25;
+    private long pendingLaunchTime = -1L;
 
     @SafeVarargs
     public FacCommissarFlareSummonGoal(FacCommissarEntity mob, int cooldownDuration, int summonDelay,
                                        EntityType<? extends Mob>... summonTypes) {
-        this.mob = mob;
-        this.cooldownDuration = cooldownDuration;
-        this.summonDelay = summonDelay;
-        this.summonTypes = summonTypes;
+        super(mob, cooldownDuration, summonDelay, summonTypes);
     }
 
     @Override
-    public boolean canUse() {
-        return this.mob.getTarget() instanceof Player;
+    protected String getAnimationTrigger() {
+        return "flare";
     }
 
     @Override
-    public void start() {
-        this.cooldownEnd = this.mob.level().getGameTime() + this.cooldownDuration / 2;
+    protected boolean shouldUseFlarePistolInHand() {
+        return false;
+    }
+
+    @Override
+    protected void onFlareTriggered() {
+        if (this.mob.level().isClientSide()) {
+            return;
+        }
+        this.pendingLaunchTime = this.mob.level().getGameTime() + FLARE_LAUNCH_DELAY_TICKS;
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (this.pendingLaunchTime == -1L || this.mob.level().isClientSide()) {
+            return;
+        }
+        if (this.mob.level().getGameTime() < this.pendingLaunchTime) {
+            return;
+        }
+        this.pendingLaunchTime = -1L;
+
+        RaidFlareEntity flare = new RaidFlareEntity(this.mob.level(), this.mob, VISUAL_FLARE_ID);
+        flare.setPos(this.mob.getX(), this.mob.getY() + 2.1D, this.mob.getZ());
+        Vec3 look = this.mob.getLookAngle();
+        flare.setDeltaMovement(look.x * 0.15D, 1.55D, look.z * 0.15D);
+        this.mob.level().addFreshEntity(flare);
+        this.mob.level().playSound(null, this.mob.getX(), this.mob.getY(), this.mob.getZ(),
+                SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.HOSTILE, 1.2F, 0.95F);
     }
 
     @Override
     public void stop() {
         super.stop();
-        this.summonTrigger = -1;
-    }
-
-    @Override
-    public void tick() {
-        if (this.mob.level().getGameTime() > this.cooldownEnd) {
-            this.cooldownEnd = this.mob.level().getGameTime() + this.cooldownDuration;
-            this.summonTrigger = this.mob.level().getGameTime() + this.summonDelay;
-            this.mob.startFlareLock();
-            this.mob.triggerAnim("behaviour", "flare");
-            this.spawnFlareBurst();
-        }
-
-        if (this.summonTrigger != -1) {
-            this.mob.getNavigation().stop();
-            this.spawnFlareParticles();
-        }
-
-        if (this.summonTrigger != -1 && this.mob.level().getGameTime() > this.summonTrigger) {
-            this.summonTrigger = -1;
-            summonMobs();
-        }
-    }
-
-    @SuppressWarnings("deprecation")
-    private void summonMobs() {
-        LivingEntity target = this.mob.getTarget();
-        if (target != null && this.mob.level() instanceof ServerLevel level) {
-            for (int i = 0; i < 3; ++i) {
-                EntityType<? extends Mob> summonType = this.summonTypes[this.mob.getRandom().nextInt(this.summonTypes.length)];
-                BlockPos blockPos = this.mob.blockPosition().offset(
-                        -2 + this.mob.getRandom().nextInt(5),
-                        1,
-                        -2 + this.mob.getRandom().nextInt(5)
-                );
-                Mob summonedMob = summonType.create(level);
-                if (summonedMob != null) {
-                    summonedMob.moveTo(blockPos, 0.0F, 0.0F);
-                    summonedMob.finalizeSpawn(level, level.getCurrentDifficultyAt(blockPos), MobSpawnType.MOB_SUMMONED, null, null);
-                    level.addFreshEntityWithPassengers(summonedMob);
-                }
-            }
-        }
-    }
-
-    private void spawnFlareBurst() {
-        if (!(this.mob.level() instanceof ServerLevel level)) {
-            return;
-        }
-        double x = this.mob.getX();
-        double y = this.mob.getY() + 1.8D;
-        double z = this.mob.getZ();
-        level.sendParticles(ParticleTypes.FIREWORK, x, y, z, 28, 0.6D, 0.25D, 0.6D, 0.02D);
-    }
-
-    private void spawnFlareParticles() {
-        if (!(this.mob.level() instanceof ServerLevel level)) {
-            return;
-        }
-
-        double x = this.mob.getX();
-        double y = this.mob.getY() + 1.8D;
-        double z = this.mob.getZ();
-        level.sendParticles(ParticleTypes.FIREWORK, x, y, z, 7, 0.28D, 0.1D, 0.28D, 0.01D);
+        this.pendingLaunchTime = -1L;
     }
 }

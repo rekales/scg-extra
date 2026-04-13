@@ -1958,7 +1958,7 @@
 			}
 		},
 		"stun": {
-			"loop": "hold_on_last_frame",
+			"loop": false,
 			"animation_length": 4,
 			"bones": {
 				"right_f": {

@@ -24,12 +24,14 @@ import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class FacTankBusterEntity extends GunnerEntity implements GeoEntity, HeadShotHandler {
 
-    private static final RawAnimation AIMING = RawAnimation.begin().thenPlayAndHold("idle_aim");
+    private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
+    private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
+    private static final RawAnimation HOLD_ATTACK = RawAnimation.begin().thenLoop("hold_attack");
+    private static final RawAnimation WALK_ATTACK = RawAnimation.begin().thenLoop("walk_attack");
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private int headshotDamageReductionTicks = 0;
 
@@ -85,21 +87,24 @@ public class FacTankBusterEntity extends GunnerEntity implements GeoEntity, Head
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "walk/idle/aim", 2, state -> {
+            boolean moving = state.isMoving() || this.isActuallyMoving() || this.getNavigation().isInProgress();
             if (state.getAnimatable().isAiming()) {
-                return state.setAndContinue(AIMING);
+                if (moving) {
+                    return state.setAndContinue(WALK_ATTACK);
+                }
+                return state.setAndContinue(HOLD_ATTACK);
             }
-            if (state.isMoving()) {
-                return state.setAndContinue(RawAnimation.begin().thenLoop("walk"));
+            if (moving) {
+                return state.setAndContinue(WALK);
             }
-            return state.setAndContinue(RawAnimation.begin().thenLoop("idle_2"));
+            return state.setAndContinue(IDLE);
         }).setAnimationSpeed(1.05));
+    }
 
-        controllers.add(new AnimationController<>(this, "death", 2, state -> {
-            if (state.getAnimatable().isDeadOrDying()) {
-                return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("death"));
-            }
-            return PlayState.STOP;
-        }));
+    private boolean isActuallyMoving() {
+        double dx = this.getX() - this.xo;
+        double dz = this.getZ() - this.zo;
+        return dx * dx + dz * dz > 0.000001D;
     }
 
     @Override
