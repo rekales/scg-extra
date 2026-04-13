@@ -286,7 +286,11 @@ public class GuardianStatueEntity extends Monster implements GeoEntity {
     }
 
     private void checkShouldDeleteSelf(){
-        if(this.getSpawnType() == MobSpawnType.SPAWN_EGG){
+        if(
+            this.getSpawnType() == MobSpawnType.SPAWN_EGG ||
+            this.getSpawnType() == MobSpawnType.COMMAND ||
+            this.getSpawnType() == MobSpawnType.DISPENSER
+        ){
             return;
         }
         Map<BlockState, BlockPos> blocks = new HashMap<>();
