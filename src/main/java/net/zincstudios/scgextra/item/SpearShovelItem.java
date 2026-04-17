@@ -35,8 +35,8 @@ public class SpearShovelItem extends ShovelItem implements GeoItem {
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         try {
             Class<?> clazz = Class.forName("net.zincstudios.scgextra.client.ItemClientInit");
-            Method method = clazz.getMethod("initializeSpearShovel", Consumer.class);
-            method.invoke(null, consumer);
+            Method method = clazz.getMethod("initializeItem", Consumer.class, String.class);
+            method.invoke(null, consumer, "spear_shovel");
         } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {
         }
     }
