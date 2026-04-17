@@ -11,13 +11,9 @@ import java.util.function.Consumer;
 public final class ItemClientInit {
     private ItemClientInit() {
     }
-
-    public static void initializeAtlanticMace(Consumer<IClientItemExtensions> consumer) {
-        registerGeoItemRenderer(consumer, "atlantic_mace");
-    }
-
-    public static void initializeSpearShovel(Consumer<IClientItemExtensions> consumer) {
-        registerGeoItemRenderer(consumer, "spear_shovel");
+    
+    public static void initializeItem(Consumer<IClientItemExtensions> consumer, String item){
+        registerGeoItemRenderer(consumer, item);
     }
 
     private static void registerGeoItemRenderer(Consumer<IClientItemExtensions> consumer, String modelName) {

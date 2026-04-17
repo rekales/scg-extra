@@ -52,8 +52,8 @@ public class AtlanticMaceItem extends SwordItem implements GeoItem, HurtEffects 
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         try {
             Class<?> clazz = Class.forName("net.zincstudios.scgextra.client.ItemClientInit");
-            Method method = clazz.getMethod("initializeAtlanticMace", Consumer.class);
-            method.invoke(null, consumer);
+            Method method = clazz.getMethod("initializeItem", Consumer.class, String.class);
+            method.invoke(null, consumer, "atlantic_mace");
         } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {
         }
     }
