@@ -7,15 +7,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.zincstudios.scgextra.SCGExtra;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.model.DefaultedItemGeoModel;
-import software.bernie.geckolib.renderer.GeoItemRenderer;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.function.Consumer;
 
 // Needed to be a geomodel because of multiple rotations with the spikes (1.20 vanilla limitation)
@@ -51,8 +50,11 @@ public class AtlanticMaceItem extends SwordItem implements GeoItem, HurtEffects 
 
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(new SimpleCustomRenderer(new GeoItemRenderer<>(
-                new DefaultedItemGeoModel<>(SCGExtra.asResource("atlantic_mace"))
-        )));
+        try {
+            Class<?> clazz = Class.forName("net.zincstudios.scgextra.client.ItemClientInit");
+            Method method = clazz.getMethod("initializeAtlanticMace", Consumer.class);
+            method.invoke(null, consumer);
+        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {
+        }
     }
 }

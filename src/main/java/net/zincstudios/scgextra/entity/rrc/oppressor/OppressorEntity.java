@@ -1,7 +1,6 @@
 package net.zincstudios.scgextra.entity.rrc.oppressor;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -155,8 +154,8 @@ public class OppressorEntity extends GunnerEntity implements GeoEntity {
                         OppressorEntity self = event.getAnimatable();
                         FireworkRocketEntity firework = new FireworkRocketEntity(self.level(),
                                 self.getX(), self.getY()+3, self.getZ(), createFireworkItem());
-                        if (self.level() instanceof ClientLevel level) {
-                            level.putNonPlayerEntity(firework.getId() ,firework);
+                        if (self.level().isClientSide()) {
+                            self.level().addFreshEntity(firework);
                         }
                     }
                 })

@@ -6,81 +6,47 @@ import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.common.OffsetRotatedHeadshotBox;
 import net.zincstudios.scgextra.entity.common.WeakPointBox;
 import net.zincstudios.scgextra.entity.common.WeakPointBoxManager;
-import net.zincstudios.scgextra.entity.common.client.GunnerRenderer;
 import net.zincstudios.scgextra.entity.common.raid_summoner.RaidSummonerEntity;
-import net.zincstudios.scgextra.entity.common.raid_summoner.RaidSummonerRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_tank_buster.FacTankBusterEntity;
 import net.zincstudios.scgextra.entity.fac.fac_bluecoat.FacBluecoatEntity;
-import net.zincstudios.scgextra.entity.fac.fac_bluecoat.FacBluecoatRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_commissar.FacCommissarEntity;
-import net.zincstudios.scgextra.entity.fac.fac_commissar.FacCommissarRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_lion.FacLionEntity;
-import net.zincstudios.scgextra.entity.fac.fac_lion.FacLionRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_tank.FacTankEntity;
-import net.zincstudios.scgextra.entity.fac.fac_tank.FacTankRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_trencher.FacTrencherEntity;
-import net.zincstudios.scgextra.entity.fac.fac_trencher.FacTrencherRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_walker.FacWalkerEntity;
-import net.zincstudios.scgextra.entity.fac.fac_tank_buster.FacTankBusterRenderer;
-import net.zincstudios.scgextra.entity.fac.trench_goblin.TrenchGoblinRenderer;
 import net.zincstudios.scgextra.entity.fac.shovel_knight.ShovelKnightEntity;
 import net.zincstudios.scgextra.entity.fac.trench_sniper.TrenchSniperEntity;
-import net.zincstudios.scgextra.entity.fac.trench_sniper.TrenchSniperRenderer;
 import net.zincstudios.scgextra.entity.fac.trench_goblin.TrenchGoblinEntity;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntity;
-import net.zincstudios.scgextra.entity.projectile.net.NetEntityModel;
-import net.zincstudios.scgextra.entity.projectile.net.NetEntityRenderer;
 import net.zincstudios.scgextra.entity.rrc.flaminghead.FlamingHeadEntity;
-import net.zincstudios.scgextra.entity.rrc.flaminghead.FlamingHeadRenderer;
 import net.zincstudios.scgextra.entity.rrc.oppressor.OppressorEntity;
 import net.zincstudios.scgextra.entity.rrc.scrapguard.ScrapGuardEntity;
-import net.zincstudios.scgextra.entity.rrc.scrapguard.ScrapGuardRenderer;
 import net.zincstudios.scgextra.entity.rrc.tallman.TallmanEntity;
 import net.zincstudios.scgextra.entity.whaler.armoredwhale.ArmoredWhaleEntity;
-import net.zincstudios.scgextra.entity.whaler.armoredwhale.ArmoredWhaleRenderer;
 import net.zincstudios.scgextra.entity.whaler.fishfolk.FishFolkEntity;
 import net.zincstudios.scgextra.entity.rrc.drone.DroneEntity;
 import net.zincstudios.scgextra.entity.rrc.scout.ScoutEntity;
 import net.zincstudios.scgextra.entity.rrc.spring_junkie.SpringJunkieEntity;
-import net.zincstudios.scgextra.entity.rrc.spring_junkie.SpringJunkieRenderer;
 import net.zincstudios.scgextra.entity.rrc.arc_psycho.ArcPsychoEntity;
-import net.zincstudios.scgextra.entity.rrc.arc_psycho.ArcPsychoEntityRenderer;
 import net.zincstudios.scgextra.entity.rrc.copper_knight.CopperKnightEntity;
-import net.zincstudios.scgextra.entity.rrc.copper_knight.CopperKnightRenderer;
-
-import net.zincstudios.scgextra.entity.whaler.fishfolk.FishFolkRenderer;
 import net.zincstudios.scgextra.entity.whaler.tentacliator.GlowingTentacliatorEntity;
-import net.zincstudios.scgextra.entity.whaler.tentacliator.GlowingTentacliatorRenderer;
 import net.zincstudios.scgextra.entity.whaler.guardian_statue.GuardianStatueEntity;
-import net.zincstudios.scgextra.entity.whaler.guardian_statue.GuardianStatueRenderer;
 import net.zincstudios.scgextra.entity.projectile.ArmoredWhaleProjectileEntity;
 import net.zincstudios.scgextra.entity.projectile.FireProjectile;
 import net.zincstudios.scgextra.entity.whaler.pufficus.PufficusEntity;
-import net.zincstudios.scgextra.entity.whaler.pufficus.PufficusRenderer;
 import net.zincstudios.scgextra.entity.whaler.salmonsaur.SalmonsaurEntity;
-import net.zincstudios.scgextra.entity.whaler.salmonsaur.SalmonsaurRenderer;
 import net.zincstudios.scgextra.entity.whaler.tentacliator.TentacliatorEntity;
-import net.zincstudios.scgextra.entity.whaler.tentacliator.TentacliatorRenderer;
 import net.zincstudios.scgextra.entity.whaler.turtleman.TurtlemanEntity;
-import net.zincstudios.scgextra.entity.rrc.drone.DroneEntityRenderer;
-import net.zincstudios.scgextra.entity.rrc.scout.ScoutRenderer;
-import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import top.ribs.scguns.common.BoundingBoxManager;
 import top.ribs.scguns.common.headshot.BasicHeadshotBox;
 import top.ribs.scguns.common.headshot.RotatedHeadshotBox;
-import top.ribs.scguns.entity.client.EnemyProjectileRenderer;
 
 public class ModEntities {
     private static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, SCGExtra.MOD_ID);
@@ -251,59 +217,9 @@ public class ModEntities {
     public static void register(IEventBus modEventBus){
         ENTITY_TYPES.register(modEventBus);
 
-        modEventBus.addListener(ModEntities::registerLayers);
         modEventBus.addListener(ModEntities::registerAttributes);
         modEventBus.addListener(ModEntities::onCommonSetup);
         MinecraftForge.EVENT_BUS.addListener(EntityAdjustments::onEntityJoin);
-
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            modEventBus.addListener(ModEntities::onClientSetup);
-        }
-
-    }
-
-    private static void onClientSetup(FMLClientSetupEvent event) {
-        EntityRenderers.register(ModEntities.FISH_FOLK.get(), FishFolkRenderer::new);
-        EntityRenderers.register(ModEntities.TURTLEMAN.get(), (ctx) -> new GunnerRenderer<>(ctx,
-                new DefaultedEntityGeoModel<>(SCGExtra.asResource("whaler/turtleman")), -10));
-        EntityRenderers.register(ModEntities.SALMONSAUR.get(), SalmonsaurRenderer::new);
-        EntityRenderers.register(ModEntities.GUARDIAN_STATUE.get(), GuardianStatueRenderer::new);
-        EntityRenderers.register(ModEntities.TENTACLIATOR.get(), TentacliatorRenderer::new);
-        EntityRenderers.register(ModEntities.GLOWING_TENTACLIATOR.get(), GlowingTentacliatorRenderer::new);
-        EntityRenderers.register(ModEntities.PUFFICUS.get(), PufficusRenderer::new);
-        EntityRenderers.register(ModEntities.NET.get(), NetEntityRenderer::new);
-        EntityRenderers.register(ModEntities.ARMORED_WHALE.get(), ArmoredWhaleRenderer::new);
-        EntityRenderers.register(ModEntities.WHALE_PROJECTILE.get(), EnemyProjectileRenderer::new);
-        EntityRenderers.register(ModEntities.FIRE_PROJECTILE.get(), EnemyProjectileRenderer::new);
-        EntityRenderers.register(ModEntities.RAID_SUMMONER.get(), RaidSummonerRenderer::new);
-        EntityRenderers.register(ModEntities.FAC_TRENCHER.get(), (ctx) -> new FacTrencherRenderer(ctx).noDeathTilt());
-        EntityRenderers.register(ModEntities.FAC_BLUECOAT.get(), (ctx) -> new FacBluecoatRenderer(ctx).noDeathTilt());
-        EntityRenderers.register(ModEntities.TRENCH_GOBLIN.get(), (ctx) -> new TrenchGoblinRenderer(ctx).noDeathTilt());
-        EntityRenderers.register(ModEntities.TRENCH_SNIPER.get(), (ctx) -> new TrenchSniperRenderer(ctx).noDeathTilt());
-        EntityRenderers.register(ModEntities.SHOVEL_KNIGHT.get(), (ctx) -> new GunnerRenderer<>(ctx,
-                new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_shovel_knight")), -10).noDeathTilt());
-        EntityRenderers.register(ModEntities.FAC_TANK_BUSTER.get(), (ctx) -> new FacTankBusterRenderer(ctx).noDeathTilt());
-        EntityRenderers.register(ModEntities.FAC_LION.get(), (ctx) -> new FacLionRenderer(ctx).noDeathTilt());
-        EntityRenderers.register(ModEntities.FAC_COMMISSAR.get(), (ctx) -> new FacCommissarRenderer(ctx).noDeathTilt());
-        EntityRenderers.register(ModEntities.FAC_WALKER.get(), (ctx) -> new GunnerRenderer<>(ctx,
-                new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_walker")), -10).noDeathTilt());
-        EntityRenderers.register(ModEntities.FAC_TANK.get(), FacTankRenderer::new);
-
-        EntityRenderers.register(ModEntities.DRONE.get(), DroneEntityRenderer::new);
-        EntityRenderers.register(ModEntities.TALLMAN.get(), (ctx) -> new GunnerRenderer<>(ctx,
-                new DefaultedEntityGeoModel<>(SCGExtra.asResource("rrc/tallman"))).noDeathTilt());
-        EntityRenderers.register(ModEntities.SCOUT.get(), (ctx) -> new ScoutRenderer<>(ctx).noDeathTilt());
-        EntityRenderers.register(ModEntities.OPPRESSOR.get(), (ctx) -> new GunnerRenderer<>(ctx,
-                new DefaultedEntityGeoModel<>(SCGExtra.asResource("rrc/oppressor"))).noDeathTilt());
-        EntityRenderers.register(ModEntities.SPRING_JUNKIE.get(), SpringJunkieRenderer::new);
-        EntityRenderers.register(ModEntities.FLAMING_HEAD.get(), FlamingHeadRenderer::new);
-        EntityRenderers.register(ModEntities.SCRAP_GUARD.get(), (ctx) -> new ScrapGuardRenderer<>(ctx).noDeathTilt());
-        EntityRenderers.register(ModEntities.ARC_PSYCHO.get(), ArcPsychoEntityRenderer::new);
-        EntityRenderers.register(ModEntities.COPPER_KNIGHT.get(), (ctx) -> new CopperKnightRenderer<>(ctx).noDeathTilt());
-    }
-
-    private static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event){
-        event.registerLayerDefinition(NetEntityModel.LAYER_LOCATION, NetEntityModel::createBodyLayer);
     }
 
     private static void registerAttributes(EntityAttributeCreationEvent event) {

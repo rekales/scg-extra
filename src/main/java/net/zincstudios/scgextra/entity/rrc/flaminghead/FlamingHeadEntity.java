@@ -1,7 +1,6 @@
 package net.zincstudios.scgextra.entity.rrc.flaminghead;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -243,7 +242,8 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable, 
     public void tick() {
         super.tick();
 
-        if (this.level() instanceof ClientLevel level) {
+        if (this.level().isClientSide()) {
+            Level level = this.level();
             if (this.lastState == BehaviorState.NONE && this.getBehaviorState() == BehaviorState.SPINNING) {
                 this.spinStart = this.level().getGameTime();
                 this.triggerAnim("main", "spin");
