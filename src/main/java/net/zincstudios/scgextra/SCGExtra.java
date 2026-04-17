@@ -3,7 +3,6 @@ package net.zincstudios.scgextra;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.config.ModConfig;
 import net.zincstudios.scgextra.datagen.DataGenerators;
-import net.zincstudios.scgextra.debug.EntityHeadBoxDebug;
 import net.zincstudios.scgextra.effects.ModEffects;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.ModEntities;
@@ -46,7 +45,6 @@ public class SCGExtra
         modEventBus.addListener(CommonConfig::onLoad);
         modEventBus.addListener(CommonConfig::onReload);
 
-        EntityHeadBoxDebug.register();
         MinecraftForge.EVENT_BUS.addListener(Faction::onTagsUpdated);
 
         modEventBus.addListener(DataGenerators::gatherData);
