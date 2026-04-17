@@ -107,97 +107,97 @@ public class ModItems {
             )
     );
 
-    public static final RegistryObject<SpawnEggItem> FAC_TRENCHER_SPAWN_EGG = ITEMS.register("fac_trencher_spawn_egg",
-            () -> new ForgeSpawnEggItem(
-                    ModEntities.FAC_TRENCHER,
-                    0xFFFFFF,
-                    0xFFFFFF,
-                    new Item.Properties()
-            )
-    );
-
-    public static final RegistryObject<SpawnEggItem> FAC_BLUECOAT_SPAWN_EGG = ITEMS.register("fac_bluecoat_spawn_egg",
-            () -> new ForgeSpawnEggItem(
-                    ModEntities.FAC_BLUECOAT,
-                    0xFFFFFF,
-                    0xFFFFFF,
-                    new Item.Properties()
-            )
-    );
-
-    public static final RegistryObject<SpawnEggItem> TRENCH_GOBLIN_SPAWN_EGG = ITEMS.register("trench_goblin_spawn_egg",
-            () -> new ForgeSpawnEggItem(
-                    ModEntities.TRENCH_GOBLIN,
-                    0xFFFFFF,
-                    0xFFFFFF,
-                    new Item.Properties()
-            )
-    );
-
-    // Keep this pairing explicit: trench sniper egg -> trench sniper entity.
-    public static final RegistryObject<SpawnEggItem> TRENCH_SNIPER_SPAWN_EGG = ITEMS.register("trench_sniper_spawn_egg",
-            () -> new ForgeSpawnEggItem(
-                    ModEntities.TRENCH_SNIPER,
-                    0xFFFFFF,
-                    0xFFFFFF,
-                    new Item.Properties()
-            )
-    );
-
-    // Keep this pairing explicit: shovel knight egg -> shovel knight entity.
-    public static final RegistryObject<SpawnEggItem> SHOVEL_KNIGHT_SPAWN_EGG = ITEMS.register("shovel_knight_spawn_egg",
-            () -> new ForgeSpawnEggItem(
-                    ModEntities.SHOVEL_KNIGHT,
-                    0xFFFFFF,
-                    0xFFFFFF,
-                    new Item.Properties()
-            )
-    );
-
-    public static final RegistryObject<SpawnEggItem> FAC_TANK_BUSTER_SPAWN_EGG = ITEMS.register("fac_tank_buster_spawn_egg",
-            () -> new ForgeSpawnEggItem(
-                    ModEntities.FAC_TANK_BUSTER,
-                    0xFFFFFF,
-                    0xFFFFFF,
-                    new Item.Properties()
-            )
-    );
-
-    public static final RegistryObject<SpawnEggItem> FAC_LION_SPAWN_EGG = ITEMS.register("fac_lion_spawn_egg",
-            () -> new ForgeSpawnEggItem(
-                    ModEntities.FAC_LION,
-                    0xFFFFFF,
-                    0xFFFFFF,
-                    new Item.Properties()
-            )
-    );
-
-    public static final RegistryObject<SpawnEggItem> FAC_COMMISSAR_SPAWN_EGG = ITEMS.register("fac_commissar_spawn_egg",
-            () -> new ForgeSpawnEggItem(
-                    ModEntities.FAC_COMMISSAR,
-                    0xFFFFFF,
-                    0xFFFFFF,
-                    new Item.Properties()
-            )
-    );
-
-    public static final RegistryObject<SpawnEggItem> FAC_WALKER_SPAWN_EGG = ITEMS.register("fac_walker_spawn_egg",
-            () -> new ForgeSpawnEggItem(
-                    ModEntities.FAC_WALKER,
-                    0xFFFFFF,
-                    0xFFFFFF,
-                    new Item.Properties()
-            )
-    );
-
-    public static final RegistryObject<SpawnEggItem> FAC_TANK_SPAWN_EGG = ITEMS.register("fac_tank_spawn_egg",
-            () -> new ForgeSpawnEggItem(
-                    ModEntities.FAC_TANK,
-                    0xFFFFFF,
-                    0xFFFFFF,
-                    new Item.Properties()
-            )
-    );
+//    public static final RegistryObject<SpawnEggItem> FAC_TRENCHER_SPAWN_EGG = ITEMS.register("fac_trencher_spawn_egg",
+//            () -> new ForgeSpawnEggItem(
+//                    ModEntities.FAC_TRENCHER,
+//                    0xFFFFFF,
+//                    0xFFFFFF,
+//                    new Item.Properties()
+//            )
+//    );
+//
+//    public static final RegistryObject<SpawnEggItem> FAC_BLUECOAT_SPAWN_EGG = ITEMS.register("fac_bluecoat_spawn_egg",
+//            () -> new ForgeSpawnEggItem(
+//                    ModEntities.FAC_BLUECOAT,
+//                    0xFFFFFF,
+//                    0xFFFFFF,
+//                    new Item.Properties()
+//            )
+//    );
+//
+//    public static final RegistryObject<SpawnEggItem> TRENCH_GOBLIN_SPAWN_EGG = ITEMS.register("trench_goblin_spawn_egg",
+//            () -> new ForgeSpawnEggItem(
+//                    ModEntities.TRENCH_GOBLIN,
+//                    0xFFFFFF,
+//                    0xFFFFFF,
+//                    new Item.Properties()
+//            )
+//    );
+//
+//    // Keep this pairing explicit: trench sniper egg -> trench sniper entity.
+//    public static final RegistryObject<SpawnEggItem> TRENCH_SNIPER_SPAWN_EGG = ITEMS.register("trench_sniper_spawn_egg",
+//            () -> new ForgeSpawnEggItem(
+//                    ModEntities.TRENCH_SNIPER,
+//                    0xFFFFFF,
+//                    0xFFFFFF,
+//                    new Item.Properties()
+//            )
+//    );
+//
+//    // Keep this pairing explicit: shovel knight egg -> shovel knight entity.
+//    public static final RegistryObject<SpawnEggItem> SHOVEL_KNIGHT_SPAWN_EGG = ITEMS.register("shovel_knight_spawn_egg",
+//            () -> new ForgeSpawnEggItem(
+//                    ModEntities.SHOVEL_KNIGHT,
+//                    0xFFFFFF,
+//                    0xFFFFFF,
+//                    new Item.Properties()
+//            )
+//    );
+//
+//    public static final RegistryObject<SpawnEggItem> FAC_TANK_BUSTER_SPAWN_EGG = ITEMS.register("fac_tank_buster_spawn_egg",
+//            () -> new ForgeSpawnEggItem(
+//                    ModEntities.FAC_TANK_BUSTER,
+//                    0xFFFFFF,
+//                    0xFFFFFF,
+//                    new Item.Properties()
+//            )
+//    );
+//
+//    public static final RegistryObject<SpawnEggItem> FAC_LION_SPAWN_EGG = ITEMS.register("fac_lion_spawn_egg",
+//            () -> new ForgeSpawnEggItem(
+//                    ModEntities.FAC_LION,
+//                    0xFFFFFF,
+//                    0xFFFFFF,
+//                    new Item.Properties()
+//            )
+//    );
+//
+//    public static final RegistryObject<SpawnEggItem> FAC_COMMISSAR_SPAWN_EGG = ITEMS.register("fac_commissar_spawn_egg",
+//            () -> new ForgeSpawnEggItem(
+//                    ModEntities.FAC_COMMISSAR,
+//                    0xFFFFFF,
+//                    0xFFFFFF,
+//                    new Item.Properties()
+//            )
+//    );
+//
+//    public static final RegistryObject<SpawnEggItem> FAC_WALKER_SPAWN_EGG = ITEMS.register("fac_walker_spawn_egg",
+//            () -> new ForgeSpawnEggItem(
+//                    ModEntities.FAC_WALKER,
+//                    0xFFFFFF,
+//                    0xFFFFFF,
+//                    new Item.Properties()
+//            )
+//    );
+//
+//    public static final RegistryObject<SpawnEggItem> FAC_TANK_SPAWN_EGG = ITEMS.register("fac_tank_spawn_egg",
+//            () -> new ForgeSpawnEggItem(
+//                    ModEntities.FAC_TANK,
+//                    0xFFFFFF,
+//                    0xFFFFFF,
+//                    new Item.Properties()
+//            )
+//    );
 
     public static final RegistryObject<SpawnEggItem> COPPER_KNIGHT_SPAWN_EGG = ITEMS.register("copper_knight_spawn_egg",
             () -> new ForgeSpawnEggItem(

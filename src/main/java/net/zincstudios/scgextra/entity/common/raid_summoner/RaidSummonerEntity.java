@@ -17,8 +17,8 @@ public class RaidSummonerEntity extends Mob {
     private static final ArrayList<EntityType<?>> whalerElite = new ArrayList<>();
     private static final ArrayList<EntityType<?>> rrcElite = new ArrayList<>();
     private static final ArrayList<EntityType<?>> rrcInfantry = new ArrayList<>();
-    private static final ArrayList<EntityType<?>> facElite = new ArrayList<>();
-    private static final ArrayList<EntityType<?>> facInfantry = new ArrayList<>();
+//    private static final ArrayList<EntityType<?>> facElite = new ArrayList<>();
+//    private static final ArrayList<EntityType<?>> facInfantry = new ArrayList<>();
     private static boolean poolsInitialized = false;
     private static long lastRaidAttempt = 0;  // minecraft day calculated by  level.gameTime / 24000L
 
@@ -45,12 +45,12 @@ public class RaidSummonerEntity extends Mob {
         rrcInfantry.add(ModEntities.TALLMAN.get());
         rrcInfantry.add(ModEntities.SCOUT.get());
 
-        facElite.add(ModEntities.TRENCH_SNIPER.get());
-        facElite.add(ModEntities.SHOVEL_KNIGHT.get());
-        facElite.add(ModEntities.FAC_TANK_BUSTER.get());
-        facInfantry.add(ModEntities.FAC_TRENCHER.get());
-        facInfantry.add(ModEntities.FAC_BLUECOAT.get());
-        facInfantry.add(ModEntities.TRENCH_GOBLIN.get());
+//        facElite.add(ModEntities.TRENCH_SNIPER.get());
+//        facElite.add(ModEntities.SHOVEL_KNIGHT.get());
+//        facElite.add(ModEntities.FAC_TANK_BUSTER.get());
+//        facInfantry.add(ModEntities.FAC_TRENCHER.get());
+//        facInfantry.add(ModEntities.FAC_BLUECOAT.get());
+//        facInfantry.add(ModEntities.TRENCH_GOBLIN.get());
 
         poolsInitialized = true;
     }
@@ -67,13 +67,11 @@ public class RaidSummonerEntity extends Mob {
             this.remove(RemovalReason.DISCARDED);
             return;
         }
-        int rand = this.random.nextInt(3);
+        int rand = this.random.nextInt(2);
         if(rand==0){
             this.spawnWhaler();
         } else if (rand == 1) {
             this.spawnRRC();
-        } else {
-            this.spawnFAC();
         }
         this.remove(RemovalReason.DISCARDED);
     }
@@ -128,20 +126,20 @@ public class RaidSummonerEntity extends Mob {
         }
     }
 
-    private void spawnFAC() {
-        ServerLevel sLevel = (ServerLevel)this.level();
-        int eliteCount = this.random.nextInt(1, 3);
-        int infantryPairs = this.random.nextInt(2, 5);
-        int infantryCount = infantryPairs * 2;
-
-        for (int i = 0; i < eliteCount; i++) {
-            facElite.get(this.random.nextInt(facElite.size())).spawn(sLevel, this.blockPosition(), getSpawnType());
-        }
-        for (int i = 0; i < infantryCount; i++) {
-            facInfantry.get(this.random.nextInt(facInfantry.size())).spawn(sLevel, this.blockPosition(), getSpawnType());
-        }
-        if (this.random.nextFloat() < 0.18F) {
-            ModEntities.FAC_COMMISSAR.get().spawn(sLevel, this.blockPosition(), getSpawnType());
-        }
-    }
+//    private void spawnFAC() {
+//        ServerLevel sLevel = (ServerLevel)this.level();
+//        int eliteCount = this.random.nextInt(1, 3);
+//        int infantryPairs = this.random.nextInt(2, 5);
+//        int infantryCount = infantryPairs * 2;
+//
+//        for (int i = 0; i < eliteCount; i++) {
+//            facElite.get(this.random.nextInt(facElite.size())).spawn(sLevel, this.blockPosition(), getSpawnType());
+//        }
+//        for (int i = 0; i < infantryCount; i++) {
+//            facInfantry.get(this.random.nextInt(facInfantry.size())).spawn(sLevel, this.blockPosition(), getSpawnType());
+//        }
+//        if (this.random.nextFloat() < 0.18F) {
+//            ModEntities.FAC_COMMISSAR.get().spawn(sLevel, this.blockPosition(), getSpawnType());
+//        }
+//    }
 }

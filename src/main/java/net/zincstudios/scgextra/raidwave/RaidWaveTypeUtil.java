@@ -90,7 +90,7 @@ public final class RaidWaveTypeUtil {
 
     static {
         RAID_ID_ALIASES = new HashMap<>();
-        RAID_ID_ALIASES.put("iron", "fac");
+//        RAID_ID_ALIASES.put("iron", "fac");
         RAID_ID_ALIASES.put("copper", "rrc");
         RAID_ID_ALIASES.put("rcc", "rrc");
         RAID_ID_ALIASES.put("ocean", "whale");
@@ -98,14 +98,14 @@ public final class RaidWaveTypeUtil {
         RAID_ID_ALIASES.put("whale_whale", "whale");
 
         FACTION_PROFILES = new HashMap<>();
-        FACTION_PROFILES.put(
-            "fac",
-            new FactionProfile(
-                setOf("fac_trencher", "fac_bluecoat", "trench_goblin"),
-                setOf("trench_sniper", "shovel_knight", "fac_tank_buster"),
-                setOf("fac_lion", "fac_commissar", "fac_walker")
-            )
-        );
+//        FACTION_PROFILES.put(
+//            "fac",
+//            new FactionProfile(
+//                setOf("fac_trencher", "fac_bluecoat", "trench_goblin"),
+//                setOf("trench_sniper", "shovel_knight", "fac_tank_buster"),
+//                setOf("fac_lion", "fac_commissar", "fac_walker")
+//            )
+//        );
         FACTION_PROFILES.put(
             "rrc",
             new FactionProfile(
