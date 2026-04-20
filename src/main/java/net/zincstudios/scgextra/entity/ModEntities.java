@@ -3,6 +3,7 @@ package net.zincstudios.scgextra.entity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.zincstudios.scgextra.SCGExtra;
+import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
 import net.zincstudios.scgextra.entity.common.OffsetRotatedHeadshotBox;
 import net.zincstudios.scgextra.entity.common.WeakPointBox;
 import net.zincstudios.scgextra.entity.common.WeakPointBoxManager;
@@ -49,7 +50,7 @@ import top.ribs.scguns.common.headshot.BasicHeadshotBox;
 import top.ribs.scguns.common.headshot.RotatedHeadshotBox;
 
 public class ModEntities {
-    private static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, SCGExtra.MOD_ID);
+    public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, SCGExtra.MOD_ID);
 
     public static final RegistryObject<EntityType<FishFolkEntity>> FISH_FOLK = ENTITY_TYPES
             .register("fish_folk", () -> EntityType.Builder.of(FishFolkEntity::new, MobCategory.MONSTER)
@@ -215,6 +216,8 @@ public class ModEntities {
 
 
     public static void register(IEventBus modEventBus){
+        AsgharianEntities.register(modEventBus);
+
         ENTITY_TYPES.register(modEventBus);
 
         modEventBus.addListener(ModEntities::registerAttributes);
