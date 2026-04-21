@@ -11,6 +11,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.SCGExtra;
+import net.zincstudios.scgextra.entity.asgharian.candlefiend.CandleFiendEntity;
+import net.zincstudios.scgextra.entity.asgharian.candlefiend.CandleFiendRenderer;
 import net.zincstudios.scgextra.entity.asgharian.failedone.FailedOneEntity;
 import net.zincstudios.scgextra.entity.asgharian.flamer.AsgharFlamerEntity;
 import net.zincstudios.scgextra.entity.asgharian.surgeon.AsgharSurgeonEntity;
@@ -43,6 +45,11 @@ public class AsgharianEntities {
                     .sized(1.1F, 2.1F)
                     .build("asghar_flamer"));
 
+    public static final RegistryObject<EntityType<CandleFiendEntity>> CANDLE_FIEND = ENTITY_TYPES
+            .register("candle_fiend", () -> EntityType.Builder.of(CandleFiendEntity::new, MobCategory.MONSTER)
+                    .sized(1.4F, 2.5F)
+                    .build("candle_fiend"));
+
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(AsgharianEntities::registerAttributes);
         modEventBus.addListener(AsgharianEntities::onCommonSetup);
@@ -59,6 +66,8 @@ public class AsgharianEntities {
         EntityRenderers.register(AsgharianEntities.ASGHAR_WORKER.get(), AsgharWorkerRenderer::new);
         EntityRenderers.register(AsgharianEntities.ASGHAR_FLAMER.get(), (ctx) -> new EquippedRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("asgharian/asghar_flamer")), 10).noDeathTilt());
+        EntityRenderers.register(AsgharianEntities.CANDLE_FIEND.get(), CandleFiendRenderer::new);
+
     }
 
     private static void registerAttributes(EntityAttributeCreationEvent event) {
@@ -66,6 +75,7 @@ public class AsgharianEntities {
         event.put(AsgharianEntities.ASGHAR_SURGEON.get(), AsgharSurgeonEntity.createAttributes().build());
         event.put(AsgharianEntities.ASGHAR_WORKER.get(), AsgharWorkerEntity.createAttributes().build());
         event.put(AsgharianEntities.ASGHAR_FLAMER.get(), AsgharFlamerEntity.createAttributes().build());
+        event.put(AsgharianEntities.CANDLE_FIEND.get(), CandleFiendEntity.createAttributes().build());
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
