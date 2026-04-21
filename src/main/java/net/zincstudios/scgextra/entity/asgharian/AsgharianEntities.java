@@ -14,6 +14,8 @@ import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.asgharian.failedone.FailedOneEntity;
 import net.zincstudios.scgextra.entity.asgharian.surgeon.AsgharSurgeonEntity;
 import net.zincstudios.scgextra.entity.asgharian.surgeon.AsgharSurgeonRenderer;
+import net.zincstudios.scgextra.entity.asgharian.worker.AsgharWorkerEntity;
+import net.zincstudios.scgextra.entity.asgharian.worker.AsgharWorkerRenderer;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 
 import static net.zincstudios.scgextra.entity.ModEntities.ENTITY_TYPES;
@@ -30,6 +32,11 @@ public class AsgharianEntities {
                     .sized(1.4F, 2.3F)
                     .build("asghar_surgeon"));
 
+    public static final RegistryObject<EntityType<AsgharWorkerEntity>> ASGHAR_WORKER = ENTITY_TYPES
+            .register("asghar_worker", () -> EntityType.Builder.of(AsgharWorkerEntity::new, MobCategory.MONSTER)
+                    .sized(1.1F, 2.1F)
+                    .build("asghar_worker"));
+
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(AsgharianEntities::registerAttributes);
         modEventBus.addListener(AsgharianEntities::onCommonSetup);
@@ -43,11 +50,14 @@ public class AsgharianEntities {
         EntityRenderers.register(AsgharianEntities.FAILED_ONE.get(), (ctx) -> new EquippedRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("asgharian/failed_one")), 90).noDeathTilt());
         EntityRenderers.register(AsgharianEntities.ASGHAR_SURGEON.get(), (ctx) -> new AsgharSurgeonRenderer<>(ctx).noDeathTilt());
+        EntityRenderers.register(AsgharianEntities.ASGHAR_WORKER.get(), AsgharWorkerRenderer::new);
     }
 
     private static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(AsgharianEntities.FAILED_ONE.get(), FailedOneEntity.createAttributes().build());
         event.put(AsgharianEntities.ASGHAR_SURGEON.get(), AsgharSurgeonEntity.createAttributes().build());
+        event.put(AsgharianEntities.ASGHAR_WORKER.get(), AsgharWorkerEntity.createAttributes().build());
+
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
