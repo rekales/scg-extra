@@ -1,5 +1,6 @@
 package net.zincstudios.scgextra.entity.asgharian.surgeon;
 
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -95,5 +96,15 @@ public class AsgharSurgeonEntity extends GunnerEntity implements GeoEntity {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.geocache;
+    }
+
+    @Override
+    protected void tickDeath() {
+        // Override to only extend death time
+        ++this.deathTime;
+        if (this.deathTime >= 30 && !this.level().isClientSide() && !this.isRemoved()) {
+            this.level().broadcastEntityEvent(this, (byte)60);
+            this.remove(Entity.RemovalReason.KILLED);
+        }
     }
 }
