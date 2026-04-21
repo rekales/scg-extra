@@ -12,6 +12,8 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.asgharian.failedone.FailedOneEntity;
+import net.zincstudios.scgextra.entity.asgharian.surgeon.AsgharSurgeonEntity;
+import net.zincstudios.scgextra.entity.asgharian.surgeon.AsgharSurgeonRenderer;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 
 import static net.zincstudios.scgextra.entity.ModEntities.ENTITY_TYPES;
@@ -22,6 +24,11 @@ public class AsgharianEntities {
             .register("failed_one", () -> EntityType.Builder.of(FailedOneEntity::new, MobCategory.MONSTER)
                     .sized(0.6F, 1.95F)
                     .build("failed_one"));
+
+    public static final RegistryObject<EntityType<AsgharSurgeonEntity>> ASGHAR_SURGEON = ENTITY_TYPES
+            .register("asghar_surgeon", () -> EntityType.Builder.of(AsgharSurgeonEntity::new, MobCategory.MONSTER)
+                    .sized(1.4F, 2.3F)
+                    .build("asghar_surgeon"));
 
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(AsgharianEntities::registerAttributes);
@@ -35,10 +42,12 @@ public class AsgharianEntities {
     private static void onClientSetup(FMLClientSetupEvent event) {
         EntityRenderers.register(AsgharianEntities.FAILED_ONE.get(), (ctx) -> new EquippedRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("asgharian/failed_one")), 90).noDeathTilt());
+        EntityRenderers.register(AsgharianEntities.ASGHAR_SURGEON.get(), (ctx) -> new AsgharSurgeonRenderer<>(ctx).noDeathTilt());
     }
 
     private static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(AsgharianEntities.FAILED_ONE.get(), FailedOneEntity.createAttributes().build());
+        event.put(AsgharianEntities.ASGHAR_SURGEON.get(), AsgharSurgeonEntity.createAttributes().build());
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {

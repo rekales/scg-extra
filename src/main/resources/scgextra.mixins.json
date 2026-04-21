@@ -6,6 +6,7 @@
   "refmap": "scgextra.refmap.json",
   "mixins": [
     "ActiveRaidAccessor",
+    "AIGunEventMixin",
     "EnemyProjectileEntityMixin",
     "GunAttackGoalAccessor",
     "LightningProjectileEntityMixin",

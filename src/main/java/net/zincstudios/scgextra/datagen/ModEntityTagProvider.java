@@ -6,6 +6,7 @@ import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.zincstudios.scgextra.entity.EntityTypeTags;
 import net.zincstudios.scgextra.entity.ModEntities;
+import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
 import org.jetbrains.annotations.Nullable;
 import top.ribs.scguns.init.ModTags;
 
@@ -46,6 +47,8 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
                 .add(ModEntities.GUARDIAN_STATUE.get());
 
         tag(EntityTypeTags.ASGHARIAN)
+                .add(AsgharianEntities.FAILED_ONE.get())
+                .add(AsgharianEntities.ASGHAR_SURGEON.get())
                 .add(top.ribs.scguns.init.ModEntities.DISSIDENT.get())
                 .add(top.ribs.scguns.init.ModEntities.PRAETOR.get())
                 .add(top.ribs.scguns.init.ModEntities.ADJUDICATOR.get())
