@@ -12,6 +12,7 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.asgharian.failedone.FailedOneEntity;
+import net.zincstudios.scgextra.entity.asgharian.flamer.AsgharFlamerEntity;
 import net.zincstudios.scgextra.entity.asgharian.surgeon.AsgharSurgeonEntity;
 import net.zincstudios.scgextra.entity.asgharian.surgeon.AsgharSurgeonRenderer;
 import net.zincstudios.scgextra.entity.asgharian.worker.AsgharWorkerEntity;
@@ -37,6 +38,11 @@ public class AsgharianEntities {
                     .sized(1.1F, 2.1F)
                     .build("asghar_worker"));
 
+    public static final RegistryObject<EntityType<AsgharFlamerEntity>> ASGHAR_FLAMER = ENTITY_TYPES
+            .register("asghar_flamer", () -> EntityType.Builder.of(AsgharFlamerEntity::new, MobCategory.MONSTER)
+                    .sized(1.1F, 2.1F)
+                    .build("asghar_flamer"));
+
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(AsgharianEntities::registerAttributes);
         modEventBus.addListener(AsgharianEntities::onCommonSetup);
@@ -48,19 +54,20 @@ public class AsgharianEntities {
 
     private static void onClientSetup(FMLClientSetupEvent event) {
         EntityRenderers.register(AsgharianEntities.FAILED_ONE.get(), (ctx) -> new EquippedRenderer<>(ctx,
-                new DefaultedEntityGeoModel<>(SCGExtra.asResource("asgharian/failed_one")), 90).noDeathTilt());
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("asgharian/failed_one")), 0).noDeathTilt());
         EntityRenderers.register(AsgharianEntities.ASGHAR_SURGEON.get(), (ctx) -> new AsgharSurgeonRenderer<>(ctx).noDeathTilt());
         EntityRenderers.register(AsgharianEntities.ASGHAR_WORKER.get(), AsgharWorkerRenderer::new);
+        EntityRenderers.register(AsgharianEntities.ASGHAR_FLAMER.get(), (ctx) -> new EquippedRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("asgharian/asghar_flamer")), 10).noDeathTilt());
     }
 
     private static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(AsgharianEntities.FAILED_ONE.get(), FailedOneEntity.createAttributes().build());
         event.put(AsgharianEntities.ASGHAR_SURGEON.get(), AsgharSurgeonEntity.createAttributes().build());
         event.put(AsgharianEntities.ASGHAR_WORKER.get(), AsgharWorkerEntity.createAttributes().build());
-
+        event.put(AsgharianEntities.ASGHAR_FLAMER.get(), AsgharFlamerEntity.createAttributes().build());
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
-
     }
 }
