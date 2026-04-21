@@ -1,5 +1,6 @@
 package net.zincstudios.scgextra.entity.asgharian.worker;
 
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -14,9 +15,13 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.Faction;
+import net.zincstudios.scgextra.entity.common.HeadShotHandler;
+import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -29,9 +34,16 @@ import top.ribs.scguns.init.ModEffects;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class AsgharWorkerEntity extends Monster implements GeoEntity {
+public class AsgharWorkerEntity extends Monster implements GeoEntity, Stunnable, HeadShotHandler {
+
+    private static final int STUN_DURATION = 60;
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
+
+    // Server-side only for stunnable handling
+    private int headshotCounter = 0;
+    private boolean stunCooldown = false;
+    private boolean stunned = false;
 
     private int currentAttack = 0;  // 0: none, 1: saw, 2: claw
     private int hurtDelay = -1;
@@ -42,6 +54,7 @@ public class AsgharWorkerEntity extends Monster implements GeoEntity {
 
     @Override
     protected void registerGoals() {
+        this.goalSelector.addGoal(1, new StunnedWithVisualGoal<>(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, false));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -126,6 +139,11 @@ public class AsgharWorkerEntity extends Monster implements GeoEntity {
                 .triggerableAnim("saw", RawAnimation.begin().thenPlay("saw"))
         );
 
+        controllers.add(new AnimationController<>(this, "behaviour", 2, state -> PlayState.STOP)
+                .triggerableAnim("stun", RawAnimation.begin().thenPlayAndHold("stun_start"))
+                .triggerableAnim("end_stun", RawAnimation.begin().thenPlay("stun_end"))
+        );
+
         controllers.add(new AnimationController<>(this, "death", 2, state -> {
             if (state.getAnimatable().isDeadOrDying()) {
                 return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("death"));
@@ -143,9 +161,58 @@ public class AsgharWorkerEntity extends Monster implements GeoEntity {
     protected void tickDeath() {
         // Override to only extend death time
         ++this.deathTime;
-        if (this.deathTime >= 35 && !this.level().isClientSide() && !this.isRemoved()) {
+        if (this.deathTime >= 37 && !this.level().isClientSide() && !this.isRemoved()) {
             this.level().broadcastEntityEvent(this, (byte)60);
             this.remove(Entity.RemovalReason.KILLED);
         }
+    }
+
+    @Override
+    public boolean headshot(DamageSource source, float amount) {
+        if (this.headshotCounter < CommonConfig.abilityWeaknessHeadshots-1 || !this.stunCooldown) {
+            this.headshotCounter++;
+        }
+
+        SCGExtra.LOGGER.debug("h: " + this.headshotCounter);
+        return false;
+    }
+
+    @Override
+    public int shouldStun() {
+        if (!CommonConfig.enableAbilityWeakness) return 0;
+
+        if (this.headshotCounter >= CommonConfig.abilityWeaknessHeadshots) {
+            return STUN_DURATION;
+        }
+
+        return 0;
+    }
+
+    @Override
+    public void setStunned(boolean stunned) {
+        this.stunned = stunned;
+        if (stunned) {
+            this.triggerAnim("behaviour", "stun");
+        } else {
+            this.headshotCounter = 0;
+        }
+    }
+
+    @Override
+    public void setStunCooldown(boolean stunCooldown) {
+        this.stunCooldown = stunCooldown;
+    }
+
+    @Override
+    public boolean isStunned() {
+        return this.stunned;
+    }
+
+    @Override
+    public boolean tickStunned(int ticksLeft) {
+        if (ticksLeft == 15) {
+            this.triggerAnim("behaviour", "end_stun");
+        }
+        return false;
     }
 }

@@ -1250,7 +1250,6 @@
 			}
 		},
 		"stun_start": {
-			"loop": "hold_on_last_frame",
 			"animation_length": 0.5833,
 			"bones": {
 				"left_leg": {
