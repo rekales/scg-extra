@@ -38,8 +38,6 @@ public class AsgharFlamerEntity extends GunnerEntity implements GeoEntity {
         return true;
     }
 
-    // TODO: adjust engagement distance to be closer
-    // TODO: maybe custom and stupider gun attack ai that allows moving while aiming
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new SimpleBurstGunAttackGoal<>(this, 3, 4)
