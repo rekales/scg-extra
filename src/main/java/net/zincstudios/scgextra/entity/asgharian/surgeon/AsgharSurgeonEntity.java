@@ -1,21 +1,25 @@
 package net.zincstudios.scgextra.entity.asgharian.surgeon;
 
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
+import net.zincstudios.scgextra.entity.asgharian.GoalStateHandler;
+import net.zincstudios.scgextra.entity.asgharian.SimpleGunAttackGoal;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -25,9 +29,13 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import top.ribs.scguns.entity.ai.AIType;
 
-public class AsgharSurgeonEntity extends GunnerEntity implements GeoEntity {
+import java.util.Objects;
+
+public class AsgharSurgeonEntity extends GunnerEntity implements GeoEntity, GoalStateHandler {
+
+    private static final EntityDataAccessor<String> GUN_ATTACK_GOAL_STATE =
+            SynchedEntityData.defineId(AsgharSurgeonEntity.class, EntityDataSerializers.STRING);
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
 
@@ -38,8 +46,7 @@ public class AsgharSurgeonEntity extends GunnerEntity implements GeoEntity {
     // TODO: custom gun attack
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(2, new AsgharSurgeonAttackGoal<>(this, this.getMainHandItem(),
-                1.0F, AIType.RECKLESS, 3, 10));
+        this.goalSelector.addGoal(2, new AsgharSurgeonAttackGoal<>(this));
         this.goalSelector.addGoal(3, new ConstantSummonGoal(this, 140, AsgharianEntities.FAILED_ONE.get()));
         this.goalSelector.addGoal(4, new HealNearbyGoal<>(this, 8, LivingEntity.class,
                 entity -> Faction.isFriendlies(entity, this)));
@@ -58,14 +65,9 @@ public class AsgharSurgeonEntity extends GunnerEntity implements GeoEntity {
         return Monster.createMonsterAttributes()
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.2F)
-                .add(Attributes.ATTACK_DAMAGE, 3.0D)
+                .add(Attributes.ATTACK_DAMAGE, 7.0D)
                 .add(Attributes.ARMOR, 7.0D)
                 .add(Attributes.MAX_HEALTH, 200.0D);
-    }
-
-    @Override
-    public void onGunAttack(LivingEntity target, ItemStack itemStack) {
-//        SCGExtra.LOGGER.debug("tick: " + this.tickCount);
     }
 
     // TODO: gun attack animation
@@ -84,6 +86,14 @@ public class AsgharSurgeonEntity extends GunnerEntity implements GeoEntity {
                 .triggerableAnim("melee", RawAnimation.begin().thenPlay("saw"))
                 .setAnimationSpeed(1.2f)
         );
+
+        controllers.add(new AnimationController<>(this, "gun", 2, state -> {
+            if (this.getGunAttackGoalState().equals(SimpleGunAttackGoal.FIRING_STATE)) {
+                return state.setAndContinue(RawAnimation.begin().thenLoop("gun"));
+            } else {
+                return PlayState.STOP;
+            }
+        }));
 
         controllers.add(new AnimationController<>(this, "death", 2, state -> {
             if (state.getAnimatable().isDeadOrDying()) {
@@ -106,5 +116,29 @@ public class AsgharSurgeonEntity extends GunnerEntity implements GeoEntity {
             this.level().broadcastEntityEvent(this, (byte)60);
             this.remove(Entity.RemovalReason.KILLED);
         }
+    }
+
+    @Override
+    public void onGoalStateChanged(Goal goal, String state) {
+        if (state.equals(AsgharSurgeonAttackGoal.MELEE_STATE) && !Objects.equals(this.getGunAttackGoalState(), state)) {
+            this.triggerAnim("behaviour", "melee");
+        }
+        this.setGunAttackGoalState(state);
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(GUN_ATTACK_GOAL_STATE, SimpleGunAttackGoal.IDLE_STATE);
+    }
+
+    public void setGunAttackGoalState(String state) {
+        if (!this.entityData.get(GUN_ATTACK_GOAL_STATE).equals(state)) {
+            this.entityData.set(GUN_ATTACK_GOAL_STATE, state);
+        }
+    }
+
+    public String getGunAttackGoalState() {
+        return this.entityData.get(GUN_ATTACK_GOAL_STATE);
     }
 }

@@ -155,13 +155,11 @@ public class SimpleGunAttackGoal<T extends PathfinderMob> extends Goal {
         this.attackCooldown = this.mob.getRandom().nextIntBetweenInclusive(this.attackInterval - randRange, this.attackInterval + randRange);
     }
 
-//    private void consumeAmmo(ItemStack itemStack) {
-//        itemStack.getTag().putInt("AmmoCount", itemStack.getTag().getInt("AmmoCount") - 1);
-//    }
-
     protected void setGoalState(String goalState) {
         this.goalState = goalState;
-        // TODO: invoke GoalStateHandler methods
+        if (this.mob instanceof GoalStateHandler goalStateHandler) {
+            goalStateHandler.onGoalStateChanged(this, goalState);
+        }
     }
 
     public String getGoalState() {
