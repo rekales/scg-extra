@@ -1,10 +1,16 @@
 package net.zincstudios.scgextra.entity.asgharian.candlefiend;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
@@ -25,11 +31,17 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class CandleFiendEntity extends Monster implements GeoEntity {
 
     public enum BehaviorState {
-        NONE, ENRAGED, SLASH, SLAM, DYING
+        NONE, ENRAGED, SLASH, SLAM, DYING, REVIVE
     }
+
+    public static final AttributeModifier UNMASKED_SPEED_MODIFIER = new AttributeModifier("unmasked_speed", 0.4,
+            AttributeModifier.Operation.MULTIPLY_TOTAL);
 
     private static final EntityDataAccessor<Boolean> MASKED =
             SynchedEntityData.defineId(CandleFiendEntity.class, EntityDataSerializers.BOOLEAN);
@@ -46,7 +58,9 @@ public class CandleFiendEntity extends Monster implements GeoEntity {
     private static final RawAnimation SLASH_UNMASKED = RawAnimation.begin().thenPlay("double_slash_mask_off");
     private static final RawAnimation SLAM = RawAnimation.begin().thenPlay("slam");
     private static final RawAnimation SLAM_UNMASKED = RawAnimation.begin().thenPlay("slam_mask_off");
-
+    private static final RawAnimation DEATH = RawAnimation.begin().thenPlay("death_1");
+    private static final RawAnimation DEATH_UNMASKED = RawAnimation.begin().thenPlay("death_2");
+    private static final RawAnimation REVIVE = RawAnimation.begin().thenPlay("revive");
 
     private static final int ENRAGE_DURATION_TICKS = 70;  // Match with animation
 
@@ -66,6 +80,23 @@ public class CandleFiendEntity extends Monster implements GeoEntity {
 
         if (this.level().isClientSide) return;
 
+        if (this.tickCount % 20 == 0) {
+            if (this.isMasked()) {
+                if (!this.hasEffect(MobEffects.REGENERATION)) {
+                    this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, -1, 1));
+                }
+
+            } else {
+                if (this.hasEffect(MobEffects.REGENERATION)) {
+                    this.removeEffect(MobEffects.REGENERATION);
+                }
+                AttributeInstance speedAttr = this.getAttribute(Attributes.MOVEMENT_SPEED);
+                if (speedAttr != null && !speedAttr.hasModifier(UNMASKED_SPEED_MODIFIER)) {
+                    speedAttr.addTransientModifier(UNMASKED_SPEED_MODIFIER);
+                }
+            }
+        }
+
         if (this.enragedTicks > 0) {
             this.enragedTicks--;
             this.getNavigation().stop();
@@ -83,6 +114,30 @@ public class CandleFiendEntity extends Monster implements GeoEntity {
             this.setSprinting(false);
         }
         this.lastTarget = this.getTarget();
+    }
+
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.isMasked()) {
+            if (this.deathTime >= 150) {
+                this.setBehaviorState(BehaviorState.NONE);
+                this.deathTime = 0;
+                this.setMasked(false);
+                this.setHealth(this.getMaxHealth());
+            }
+            if (this.deathTime >= 90) {
+                this.setBehaviorState(BehaviorState.REVIVE);
+            } else {
+                this.setBehaviorState(BehaviorState.DYING);
+            }
+        } else {
+            this.setBehaviorState(BehaviorState.DYING);
+            if (this.deathTime >= 65 && !this.level().isClientSide() && !this.isRemoved()) {
+                this.level().broadcastEntityEvent(this, (byte)60);
+                this.remove(Entity.RemovalReason.KILLED);
+            }
+        }
     }
 
     @Override
@@ -134,6 +189,28 @@ public class CandleFiendEntity extends Monster implements GeoEntity {
                 .triggerableAnim("slash", (ctr) -> this.isMasked() ? SLASH : SLASH_UNMASKED)
                 .triggerableAnim("slam", (ctr) -> this.isMasked() ? SLAM : SLAM_UNMASKED)
         );
+
+        controllers.add(new AnimationController<>(this, "death", 2, state -> {
+            if (state.getAnimatable().isMasked()) {
+                if (state.getAnimatable().isDeadOrDying() || state.isCurrentAnimation(DEATH)) {
+                    return state.setAndContinue(DEATH);
+                }
+            } else {
+                if (state.getAnimatable().isDeadOrDying()) {
+                    return state.setAndContinue(DEATH_UNMASKED);
+                }
+            }
+            return PlayState.STOP;
+        }).triggerableAnim("revive", REVIVE));
+
+        controllers.add(new ExpandedAnimationController<>(this, "revive", 2, state -> PlayState.STOP)
+                .triggerableAnim("enraged", (ctr) -> this.isMasked() ? ENRAGED : ENRAGED_UNMASKED)
+                .triggerableAnim("slash", (ctr) -> this.isMasked() ? SLASH : SLASH_UNMASKED)
+                .triggerableAnim("slam", (ctr) -> this.isMasked() ? SLAM : SLAM_UNMASKED)
+        );
+
+        controllers.add(new AnimationController<>(this, "revive", 2, state -> PlayState.STOP)
+                .triggerableAnim("revive", REVIVE));
     }
 
     @Override
@@ -166,8 +243,27 @@ public class CandleFiendEntity extends Monster implements GeoEntity {
             this.triggerAnim("behaviour", "slash");
         } else if (this.behaviorState != BehaviorState.SLAM && behaviorState == BehaviorState.SLAM) {
             this.triggerAnim("behaviour", "slam");
+        } else if (this.behaviorState != BehaviorState.REVIVE && behaviorState == BehaviorState.REVIVE) {
+            this.triggerAnim("revive", "revive");
         }
 
         this.behaviorState = behaviorState;
+    }
+
+    // TODO: improve slam visual impact
+    // TODO: fast lunging advancing behaviour?
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putBoolean("Masked", this.isMasked());
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        if (tag.contains("Masked")) {
+            this.setMasked(tag.getBoolean("Masked"));
+        }
     }
 }
