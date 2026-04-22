@@ -7616,7 +7616,6 @@
 			}
 		},
 		"double_slash": {
-			"loop": "hold_on_last_frame",
 			"animation_length": 1,
 			"bones": {
 				"right_arm": {
@@ -8426,7 +8425,6 @@
 			}
 		},
 		"double_slash_mask_off": {
-			"loop": "hold_on_last_frame",
 			"animation_length": 1,
 			"bones": {
 				"right_arm": {

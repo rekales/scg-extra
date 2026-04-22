@@ -47,7 +47,7 @@ public class AsgharianEntities {
 
     public static final RegistryObject<EntityType<CandleFiendEntity>> CANDLE_FIEND = ENTITY_TYPES
             .register("candle_fiend", () -> EntityType.Builder.of(CandleFiendEntity::new, MobCategory.MONSTER)
-                    .sized(1.4F, 2.5F)
+                    .sized(1.55F, 3.2F)
                     .build("candle_fiend"));
 
     public static void register(IEventBus modEventBus) {
