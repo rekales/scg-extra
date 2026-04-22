@@ -9,13 +9,14 @@
     "AIGunEventMixin",
     "EnemyProjectileEntityMixin",
     "GunAttackGoalAccessor",
+    "GunnerMobSpawnerMixin",
     "LightningProjectileEntityMixin",
     "MineUnitBlockEntityMixin",
     "OceanMonumentEntryRoomMixin",
     "ProjectileEntityMixin",
     "RaidManagerInvoker",
-    "RaidSaveDataAccessor",
-    "RaidManagerWaveMixin"
+    "RaidManagerWaveMixin",
+    "RaidSaveDataAccessor"
   ],
   "minVersion": "0.8.5"
 }

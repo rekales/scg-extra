@@ -9,6 +9,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.pathfinder.Path;
 import top.ribs.scguns.init.ModEffects;
 
+import java.util.EnumSet;
+
 // Modified and simplified MeleeAttackGoal
 // Removed canPenalize because dead code
 public class CandleFiendAttackGoal extends Goal {
@@ -33,6 +35,7 @@ public class CandleFiendAttackGoal extends Goal {
         this.mob = mob;
         this.attackInterval = attackIntervalTicks;
         this.followingTargetEvenIfNotSeen = followingTargetEvenIfNotSeen;
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
     @Override

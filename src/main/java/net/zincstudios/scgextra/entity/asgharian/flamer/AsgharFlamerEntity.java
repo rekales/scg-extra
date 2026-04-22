@@ -1,8 +1,6 @@
 package net.zincstudios.scgextra.entity.asgharian.flamer;
 
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
@@ -13,6 +11,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.zincstudios.scgextra.entity.Faction;
+import net.zincstudios.scgextra.entity.asgharian.SimpleBurstGunAttackGoal;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -22,12 +21,11 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import top.ribs.scguns.entity.ai.AIType;
-import top.ribs.scguns.entity.ai.GunAttackGoal;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public class AsgharFlamerEntity extends GunnerEntity implements GeoEntity {
-
-    private static final RawAnimation AIMING = RawAnimation.begin().thenPlay("idle_aim").thenLoop("walk");
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
 
@@ -44,8 +42,11 @@ public class AsgharFlamerEntity extends GunnerEntity implements GeoEntity {
     // TODO: maybe custom and stupider gun attack ai that allows moving while aiming
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new GunAttackGoal<>(this, this.getMainHandItem(),
-                1.0F, AIType.RECKLESS, 3));
+        this.goalSelector.addGoal(1, new SimpleBurstGunAttackGoal<>(this, 3, 4)
+                .runAndGun()
+                .approachDist(4)
+                .attackInterval(30)
+        );
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
@@ -67,11 +68,15 @@ public class AsgharFlamerEntity extends GunnerEntity implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "main", 3, state -> {
-            if (state.getAnimatable().isAiming()) {
-                state.setAnimation(AIMING);
+        controllers.add(new AnimationController<>(this, "main", 4, state -> {
+            if (state.getAnimatable().isAggressive()) {
+                if (state.isMoving()) {
+                    return state.setAndContinue(RawAnimation.begin().thenLoop("aim_walk"));
+                } else {
+                    return state.setAndContinue(RawAnimation.begin().thenLoop("aim"));
+                }
             } else {
-                 if (state.isMoving()) {
+                if (state.isMoving()) {
                     state.setAnimation(RawAnimation.begin().thenLoop("walk"));
                 } else {
                     state.setAnimation(RawAnimation.begin().thenLoop("idle"));
