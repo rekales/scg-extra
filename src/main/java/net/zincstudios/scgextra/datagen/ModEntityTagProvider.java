@@ -44,7 +44,11 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
                 .add(ModEntities.GUARDIAN_STATUE.get());
 
         tag(ModTags.Entities.CANNOT_BE_LACERATED)
-                .add(ModEntities.GUARDIAN_STATUE.get());
+                .add(ModEntities.GUARDIAN_STATUE.get())
+                .add(AsgharianEntities.ASGHAR_WORKER.get());
+
+        tag(ModTags.Entities.BOT)
+                .add(AsgharianEntities.ASGHAR_WORKER.get());
 
         tag(EntityTypeTags.ASGHARIAN)
                 .add(AsgharianEntities.FAILED_ONE.get())
