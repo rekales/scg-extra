@@ -3,38 +3,33 @@ package net.zincstudios.scgextra.entity.asgharian;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.zincstudios.scgextra.entity.common.EquippedEntity;
+import net.minecraft.world.entity.Mob;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-// TODO: refactor then use
-
+// Normally I don't like making base classes but having this utility outweighs it.
+/**
+ * Base renderer that provides automatic shadow radius and factory methods for customizability without needing to extend
+ */
+@SuppressWarnings("unused")
 @ParametersAreNonnullByDefault
-public class EquippedRenderer <T extends EquippedEntity & GeoEntity> extends GeoEntityRenderer<T> {
+public class BaseEntityRenderer <T extends Mob & GeoEntity> extends GeoEntityRenderer<T> {
 
     protected boolean noDeathTilt = false;
     protected boolean noDeathRedTint = false;  // NOTE: can't be assed to do it since nothing uses it yet.
     protected boolean hasCustomShadowRadius = false;
 
-    private final float weaponTilt;
-
-    public EquippedRenderer(EntityRendererProvider.Context renderManager, GeoModel<T> model, float weaponTilt) {
-        super(renderManager, model);
+    public BaseEntityRenderer(EntityRendererProvider.Context context, GeoModel<T> model) {
+        super(context, model);
         this.shadowRadius = 0;  // no way to get the entity type on construction
-        this.weaponTilt = weaponTilt;
 
-        addRenderLayers();
+        addRenderLayers(context);
     }
 
-    public EquippedRenderer(EntityRendererProvider.Context renderManager, GeoModel<T> model) {
-        this(renderManager, model, 0);
-    }
-
-    protected void addRenderLayers() {
-        addRenderLayer(new EquipmentGeoLayer<>(this, this.weaponTilt));
+    protected void addRenderLayers(EntityRendererProvider.Context context) {
     }
 
     @Override
@@ -51,20 +46,19 @@ public class EquippedRenderer <T extends EquippedEntity & GeoEntity> extends Geo
         return 90f;
     }
 
-
     // Factory methods
 
-    public EquippedRenderer<T> noDeathTilt() {
+    public BaseEntityRenderer<T> noDeathTilt() {
         this.noDeathTilt = true;
         return this;
     }
 
-    public EquippedRenderer<T> noDeathRedTint() {
+    public BaseEntityRenderer<T> noDeathRedTint() {
         this.noDeathRedTint = true;
         return this;
     }
 
-    public EquippedRenderer<T> customShadowRadius(float shadowRadius) {
+    public BaseEntityRenderer<T> customShadowRadius(float shadowRadius) {
         this.hasCustomShadowRadius = true;
         this.shadowRadius = shadowRadius;
         return this;

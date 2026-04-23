@@ -16,7 +16,6 @@ import net.zincstudios.scgextra.entity.asgharian.candlefiend.CandleFiendRenderer
 import net.zincstudios.scgextra.entity.asgharian.failedone.FailedOneEntity;
 import net.zincstudios.scgextra.entity.asgharian.flamer.AsgharFlamerEntity;
 import net.zincstudios.scgextra.entity.asgharian.surgeon.AsgharSurgeonEntity;
-import net.zincstudios.scgextra.entity.asgharian.surgeon.AsgharSurgeonRenderer;
 import net.zincstudios.scgextra.entity.asgharian.worker.AsgharWorkerEntity;
 import net.zincstudios.scgextra.entity.asgharian.worker.AsgharWorkerRenderer;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
@@ -61,14 +60,14 @@ public class AsgharianEntities {
     }
 
     private static void onClientSetup(FMLClientSetupEvent event) {
-        EntityRenderers.register(AsgharianEntities.FAILED_ONE.get(), (ctx) -> new EquippedRenderer<>(ctx,
-                new DefaultedEntityGeoModel<>(SCGExtra.asResource("asgharian/failed_one")), 0).noDeathTilt());
-        EntityRenderers.register(AsgharianEntities.ASGHAR_SURGEON.get(), (ctx) -> new AsgharSurgeonRenderer<>(ctx).noDeathTilt());
+        EntityRenderers.register(AsgharianEntities.FAILED_ONE.get(), (ctx) -> new ItemHoldingMobRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("asgharian/failed_one"))).noDeathTilt());
+        EntityRenderers.register(AsgharianEntities.ASGHAR_SURGEON.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("asgharian/asghar_surgeon"))).noDeathTilt());
         EntityRenderers.register(AsgharianEntities.ASGHAR_WORKER.get(), AsgharWorkerRenderer::new);
-        EntityRenderers.register(AsgharianEntities.ASGHAR_FLAMER.get(), (ctx) -> new EquippedRenderer<>(ctx,
+        EntityRenderers.register(AsgharianEntities.ASGHAR_FLAMER.get(), (ctx) -> new GunnerRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("asgharian/asghar_flamer")), 10).noDeathTilt());
         EntityRenderers.register(AsgharianEntities.CANDLE_FIEND.get(), CandleFiendRenderer::new);
-
     }
 
     private static void registerAttributes(EntityAttributeCreationEvent event) {
