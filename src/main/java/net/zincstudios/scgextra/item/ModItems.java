@@ -2,6 +2,8 @@ package net.zincstudios.scgextra.item;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.*;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -11,6 +13,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.ModEntities;
+import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
 
 @SuppressWarnings("unused")
 public class ModItems {
@@ -280,6 +283,13 @@ public class ModItems {
             )
     );
 
+    public static final RegistryObject<SpawnEggItem>
+            FAILED_ONE_SPAWN_EGG = basicSpawnEgg(AsgharianEntities.FAILED_ONE),
+            ASGHAR_SURGEON_SPAWN_EGG = basicSpawnEgg(AsgharianEntities.ASGHAR_SURGEON),
+            ASGHAR_WORKER_SPAWN_EGG = basicSpawnEgg(AsgharianEntities.ASGHAR_WORKER),
+            ASGHAR_FLAMER_SPAWN_EGG = basicSpawnEgg(AsgharianEntities.ASGHAR_FLAMER),
+            CANDLE_FIEND_SPAWN_EGG = basicSpawnEgg(AsgharianEntities.CANDLE_FIEND);
+
     public static void register(IEventBus modEventBus) {
         ITEMS.register(modEventBus);
         CREATIVE_TABS.register(modEventBus);
@@ -302,5 +312,16 @@ public class ModItems {
                     .map(RegistryObject::get)
                     .forEach(event::accept);
         }
+    }
+
+    private static RegistryObject<SpawnEggItem> basicSpawnEgg(RegistryObject<? extends EntityType<? extends Mob>> type) {
+        assert type.getId() != null;
+        return ITEMS.register(type.getId().getPath() + "_spawn_egg",
+                () -> new ForgeSpawnEggItem(
+                        type,
+                        0xFFFFFF,
+                        0xFFFFFF,
+                        new Item.Properties()
+                ));
     }
 }

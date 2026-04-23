@@ -50,6 +50,12 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.FLAMING_HEAD_SPAWN_EGG.get());
         basicItem(ModItems.SCRAP_GUARD_SPAWN_EGG.get());
         basicItem(ModItems.ARC_PSYCHO_SPAWN_EGG.get());
+
+        spawnEgg(ModItems.FAILED_ONE_SPAWN_EGG);
+        spawnEgg(ModItems.ASGHAR_SURGEON_SPAWN_EGG);
+        spawnEgg(ModItems.ASGHAR_WORKER_SPAWN_EGG);
+        spawnEgg(ModItems.ASGHAR_FLAMER_SPAWN_EGG);
+        spawnEgg(ModItems.CANDLE_FIEND_SPAWN_EGG);
     }
 
     private void spawnEgg(RegistryObject<SpawnEggItem> item) {
