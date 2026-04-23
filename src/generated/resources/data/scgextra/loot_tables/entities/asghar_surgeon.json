@@ -17,53 +17,34 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:iron_nugget"
+          "name": "minecraft:red_candle"
         }
       ],
       "rolls": 1.0
     },
     {
       "bonus_rolls": 0.0,
-      "entries": [
+      "conditions": [
         {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 3.0,
-                "min": 1.0
-              },
-              "function": "minecraft:set_count"
-            }
-          ],
-          "name": "scguns:anthralite_nugget"
+          "chance": 0.5,
+          "condition": "minecraft:random_chance"
         }
       ],
-      "rolls": 1.0
-    },
-    {
-      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
           "functions": [
             {
               "add": false,
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 3.0,
-                "min": 1.0
-              },
+              "count": 1.0,
               "function": "minecraft:set_count"
             }
           ],
-          "name": "scguns:microjet"
+          "name": "scguns:diamond_steel_ingot"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "scgextra:entities/fac_tank_buster"
+  "random_sequence": "scgextra:entities/asghar_surgeon"
 }

@@ -15,6 +15,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCon
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.zincstudios.scgextra.entity.ModEntities;
+import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
 import top.ribs.scguns.init.ModBlocks;
 import top.ribs.scguns.init.ModItems;
 
@@ -155,6 +156,26 @@ public class ModEntityLootTableProvider extends EntityLootSubProvider {
                 .range(Items.REDSTONE, 1, 3)
                 .range(ModItems.SHOCK_CELL.get(), 1, 3);
 
+        basicLoot(AsgharianEntities.FAILED_ONE.get())
+                .range(Items.ROTTEN_FLESH, 1, 3)
+                .range(Items.CLAY_BALL, 1, 3);
+
+        basicLoot(AsgharianEntities.ASGHAR_SURGEON.get())
+                .range(Items.RED_CANDLE, 1, 3)
+                .chance(ModItems.DIAMOND_STEEL_INGOT.get(), 0.5f);
+
+        basicLoot(AsgharianEntities.ASGHAR_WORKER.get())
+                .range(Items.REDSTONE, 1, 3)
+                .constant(ModItems.DEPLETED_DIAMOND_STEEL_INGOT.get(), 1);
+
+        basicLoot(AsgharianEntities.ASGHAR_FLAMER.get())
+                .range(Items.GUNPOWDER, 1, 3)
+                .constant(ModItems.DEPLETED_DIAMOND_STEEL_INGOT.get(), 1);
+
+        basicLoot(AsgharianEntities.CANDLE_FIEND.get())
+                .range(Items.RED_CANDLE, 3, 6)
+                .range(ModItems.BLUEPRINT_SCRAP.get(), 1, 3)
+                .constant(ModItems.CERIMONIAL_COD.get(), 1);
     }
 
     // don't use this for more complex loot tables

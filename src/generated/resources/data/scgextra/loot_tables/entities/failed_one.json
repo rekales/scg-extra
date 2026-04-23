@@ -17,7 +17,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:iron_ingot"
+          "name": "minecraft:rotten_flesh"
         }
       ],
       "rolls": 1.0
@@ -32,17 +32,17 @@
               "add": false,
               "count": {
                 "type": "minecraft:uniform",
-                "max": 2.0,
+                "max": 3.0,
                 "min": 1.0
               },
               "function": "minecraft:set_count"
             }
           ],
-          "name": "scguns:blueprint_scrap"
+          "name": "minecraft:clay_ball"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "scgextra:entities/fac_commissar"
+  "random_sequence": "scgextra:entities/failed_one"
 }

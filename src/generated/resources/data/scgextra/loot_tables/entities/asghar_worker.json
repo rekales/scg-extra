@@ -17,7 +17,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:iron_nugget"
+          "name": "minecraft:redstone"
         }
       ],
       "rolls": 1.0
@@ -30,19 +30,15 @@
           "functions": [
             {
               "add": false,
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 3.0,
-                "min": 1.0
-              },
+              "count": 1.0,
               "function": "minecraft:set_count"
             }
           ],
-          "name": "scguns:anthralite_ingot"
+          "name": "scguns:depleted_diamond_steel_ingot"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "scgextra:entities/shovel_knight"
+  "random_sequence": "scgextra:entities/asghar_worker"
 }
