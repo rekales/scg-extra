@@ -66,6 +66,7 @@ public class CandleFiendEntity extends Monster implements GeoEntity {
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
 
+    // Serverside only
     private BehaviorState behaviorState = BehaviorState.NONE;
     private LivingEntity lastTarget = null;
     private int enragedTicks = 0;
@@ -77,10 +78,6 @@ public class CandleFiendEntity extends Monster implements GeoEntity {
     @Override
     public void tick() {
         super.tick();
-
-        if (!this.isDeadOrDying() && this.getBehaviourState() == BehaviorState.DYING) {
-            this.setBehaviorState(BehaviorState.NONE);  // still not sure why state is dying when it's not supposed to
-        }
 
         if (this.level().isClientSide) return;
 
@@ -125,16 +122,15 @@ public class CandleFiendEntity extends Monster implements GeoEntity {
         ++this.deathTime;
         if (this.isMasked()) {
             if (this.deathTime >= 160) {
-                this.setBehaviorState(BehaviorState.NONE);
+                if (!this.level().isClientSide) this.setBehaviorState(BehaviorState.NONE);
                 this.deathTime = 0;
                 this.setMasked(false);
                 this.setHealth(this.getMaxHealth());
                 this.dead = false;
-            }
-            if (this.deathTime >= 100) {
-                this.setBehaviorState(BehaviorState.REVIVE);
+            } else if (this.deathTime >= 100) {
+                if (!this.level().isClientSide) this.setBehaviorState(BehaviorState.REVIVE);
             } else {
-                this.setBehaviorState(BehaviorState.DYING);
+                if (!this.level().isClientSide) this.setBehaviorState(BehaviorState.DYING);
             }
         } else {
             this.setBehaviorState(BehaviorState.DYING);
@@ -214,14 +210,10 @@ public class CandleFiendEntity extends Monster implements GeoEntity {
             return PlayState.STOP;
         }).triggerableAnim("revive", REVIVE));
 
-        controllers.add(new ExpandedAnimationController<>(this, "revive", 2, state -> PlayState.STOP)
-                .triggerableAnim("enraged", (ctr) -> this.isMasked() ? ENRAGED : ENRAGED_UNMASKED)
-                .triggerableAnim("slash", (ctr) -> this.isMasked() ? SLASH : SLASH_UNMASKED)
-                .triggerableAnim("slam", (ctr) -> this.isMasked() ? SLAM : SLAM_UNMASKED)
-        );
-
         controllers.add(new AnimationController<>(this, "revive", 2, state -> PlayState.STOP)
                 .triggerableAnim("revive", REVIVE));
+
+
     }
 
     @Override
