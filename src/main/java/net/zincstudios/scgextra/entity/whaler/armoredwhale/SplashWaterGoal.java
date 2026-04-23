@@ -3,8 +3,8 @@ package net.zincstudios.scgextra.entity.whaler.armoredwhale;
 import java.util.HashSet;
 
 import net.zincstudios.scgextra.entity.Faction;
+import net.zincstudios.scgextra.entity.whaler.WhalerSounds;
 import net.zincstudios.scgextra.effects.ModEffects;
-import net.zincstudios.scgextra.sounds.ModSounds;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -38,7 +38,7 @@ public class SplashWaterGoal extends Goal{
         this.mob.level().playSound(
             this.mob, 
             this.mob.blockPosition(), 
-            this.mob.getRandom().nextBoolean() ? ModSounds.WHALE_SPLASH_1.get() : ModSounds.WHALE_SPLASH_2.get(), 
+            this.mob.getRandom().nextBoolean() ? WhalerSounds.WHALE_SPLASH_1.get() : WhalerSounds.WHALE_SPLASH_2.get(), 
             SoundSource.MASTER, 
             2.0F, 
             1.0F

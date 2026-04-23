@@ -30,7 +30,7 @@ import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.entity.rrc.RRCSounds;
 import net.minecraftforge.entity.PartEntity;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -249,32 +249,32 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable, HeadSh
     protected SoundEvent getDeathSound() {
         return MobUtil.getSound(
             this.random, 
-            ModSounds.RRC_DRONE_DEATH_1.get(), 
-            ModSounds.RRC_DRONE_DEATH_2.get()
+            RRCSounds.RRC_DRONE_DEATH_1.get(), 
+            RRCSounds.RRC_DRONE_DEATH_2.get()
         );
     }
 
     protected SoundEvent getAmbientSound() {
-        return ModSounds.RRC_DRONE_IDLE.get();
+        return RRCSounds.RRC_DRONE_IDLE.get();
     }
 
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
         return MobUtil.getSound(
             this.random, 
-            ModSounds.RRC_DRONE_HURT_1.get(),
-            ModSounds.RRC_DRONE_HURT_2.get(),
-            ModSounds.RRC_DRONE_HURT_3.get(),
-            ModSounds.RRC_DRONE_HURT_4.get(),
-            ModSounds.RRC_DRONE_HURT_5.get(),
-            ModSounds.RRC_DRONE_HURT_6.get(),
-            ModSounds.RRC_DRONE_HURT_7.get(),
-            ModSounds.RRC_DRONE_HURT_8.get()
+            RRCSounds.RRC_DRONE_HURT_1.get(),
+            RRCSounds.RRC_DRONE_HURT_2.get(),
+            RRCSounds.RRC_DRONE_HURT_3.get(),
+            RRCSounds.RRC_DRONE_HURT_4.get(),
+            RRCSounds.RRC_DRONE_HURT_5.get(),
+            RRCSounds.RRC_DRONE_HURT_6.get(),
+            RRCSounds.RRC_DRONE_HURT_7.get(),
+            RRCSounds.RRC_DRONE_HURT_8.get()
         );
     }
 
     protected SoundEvent getStepSound() {
         if(this.random.nextFloat() < 0.4F){
-            return ModSounds.RRC_DRONE_WALK.get();
+            return RRCSounds.RRC_DRONE_WALK.get();
         }else{
             return SoundEvents.IRON_GOLEM_STEP;
         }

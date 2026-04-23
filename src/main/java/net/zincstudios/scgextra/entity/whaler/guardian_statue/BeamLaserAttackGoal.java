@@ -2,7 +2,7 @@ package net.zincstudios.scgextra.entity.whaler.guardian_statue;
 
 import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.SCGExtra;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.entity.whaler.WhalerSounds;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -70,7 +70,7 @@ public class BeamLaserAttackGoal extends Goal {
             this.mob.level().playSound(
                 this.mob, 
                 this.mob.blockPosition(), 
-                ModSounds.GUARDIAN_STATUE_CHARGE.get(), 
+                WhalerSounds.GUARDIAN_STATUE_CHARGE.get(), 
                 SoundSource.MASTER, 
                 2.0F, 
                 1.0F

@@ -20,7 +20,7 @@ import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.AlertFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.entity.rrc.RRCSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -119,24 +119,24 @@ public class CopperKnightEntity extends GunnerEntity implements GeoEntity{
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
         return MobUtil.getSound(
             this.random, 
-            ModSounds.RRC_COPPER_KNIGHT_HURT_1.get(),
-            ModSounds.RRC_COPPER_KNIGHT_HURT_2.get(),
-            ModSounds.RRC_COPPER_KNIGHT_HURT_3.get()
+            RRCSounds.RRC_COPPER_KNIGHT_HURT_1.get(),
+            RRCSounds.RRC_COPPER_KNIGHT_HURT_2.get(),
+            RRCSounds.RRC_COPPER_KNIGHT_HURT_3.get()
         );
     };
     protected SoundEvent getAmbientSound() {
         return MobUtil.getSound(
             this.random,
-            ModSounds.RRC_COPPER_KNIGHT_IDLE_1.get(),
-            ModSounds.RRC_COPPER_KNIGHT_IDLE_2.get(),
-            ModSounds.RRC_COPPER_KNIGHT_IDLE_3.get() 
+            RRCSounds.RRC_COPPER_KNIGHT_IDLE_1.get(),
+            RRCSounds.RRC_COPPER_KNIGHT_IDLE_2.get(),
+            RRCSounds.RRC_COPPER_KNIGHT_IDLE_3.get() 
         );
     };
     protected SoundEvent getStepSound() {
         return SoundEvents.IRON_GOLEM_STEP;
     };
     protected SoundEvent getDeathSound() {
-        return ModSounds.RRC_COPPER_KNIGHT_DEAD.get();
+        return RRCSounds.RRC_COPPER_KNIGHT_DEAD.get();
     };
     protected float getSoundVolume() {
         return 2F;

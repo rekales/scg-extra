@@ -29,7 +29,7 @@ import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.entity.fac.FACSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -167,7 +167,7 @@ public class FacTankEntity extends Monster implements GeoEntity, Stunnable, Head
         this.stunned = stunned;
         if (stunned) {
             this.triggerAnim("behaviour", "stun");
-            this.playSound(ModSounds.FAC_TANK_STUN.get(), 1.0F, 1.0F);
+            this.playSound(FACSounds.FAC_TANK_STUN.get(), 1.0F, 1.0F);
         } else {
             this.headshotCounter = 0;
         }
@@ -324,8 +324,8 @@ public class FacTankEntity extends Monster implements GeoEntity, Stunnable, Head
     protected SoundEvent getHurtSound(DamageSource damageSource) {
         return MobUtil.getSound(
                 this.random,
-                ModSounds.FAC_TANK_HURT_1.get(),
-                ModSounds.FAC_TANK_HURT_2.get()
+                FACSounds.FAC_TANK_HURT_1.get(),
+                FACSounds.FAC_TANK_HURT_2.get()
         );
     }
 
@@ -333,14 +333,14 @@ public class FacTankEntity extends Monster implements GeoEntity, Stunnable, Head
     protected SoundEvent getAmbientSound() {
         return MobUtil.getSound(
                 this.random,
-                ModSounds.FAC_TANK_IDLE_1.get(),
-                ModSounds.FAC_TANK_IDLE_2.get()
+                FACSounds.FAC_TANK_IDLE_1.get(),
+                FACSounds.FAC_TANK_IDLE_2.get()
         );
     }
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
-        this.playSound(ModSounds.FAC_TANK_WALK.get(), 0.95F, 0.95F + this.random.nextFloat() * 0.1F);
+        this.playSound(FACSounds.FAC_TANK_WALK.get(), 0.95F, 0.95F + this.random.nextFloat() * 0.1F);
     }
 
     @Override

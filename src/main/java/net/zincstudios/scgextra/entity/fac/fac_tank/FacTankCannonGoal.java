@@ -11,7 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.Faction;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.entity.fac.FACSounds;
 
 import java.util.List;
 
@@ -84,7 +84,7 @@ public class FacTankCannonGoal extends Goal {
                 this.entity.getX(),
                 this.entity.getY(),
                 this.entity.getZ(),
-                ModSounds.FAC_TANK_CANNON_CHARGE.get(),
+                FACSounds.FAC_TANK_CANNON_CHARGE.get(),
                 SoundSource.HOSTILE,
                 1.2F,
                 1.0F

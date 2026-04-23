@@ -3,7 +3,7 @@ package net.zincstudios.scgextra.entity.fac.fac_lion;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.entity.fac.FACSounds;
 
 import java.util.EnumSet;
 
@@ -68,7 +68,7 @@ public class FacLionShieldBashGoal extends Goal {
         if (!this.attacked && this.ticks >= 5 && this.parent.distanceToSqr(target) <= 12.25D) {
             this.attacked = true;
             target.hurt(this.parent.damageSources().mobAttack(this.parent), 15.0F);
-            this.parent.playSound(ModSounds.FAC_LION_ATTACK_1.get(), 1.0F, 1.0F);
+            this.parent.playSound(FACSounds.FAC_LION_ATTACK_1.get(), 1.0F, 1.0F);
             double dx = this.parent.getX() - target.getX();
             double dz = this.parent.getZ() - target.getZ();
             target.knockback(2.0D, dx, dz);

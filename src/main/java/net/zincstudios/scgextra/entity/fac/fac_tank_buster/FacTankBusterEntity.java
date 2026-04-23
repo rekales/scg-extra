@@ -18,7 +18,7 @@ import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.entity.fac.FACSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -115,27 +115,27 @@ public class FacTankBusterEntity extends GunnerEntity implements GeoEntity, Head
     protected SoundEvent getHurtSound(DamageSource damageSource) {
         return MobUtil.getSound(
                 this.random,
-                ModSounds.FAC_TANK_BUSTER_HURT_1.get(),
-                ModSounds.FAC_TANK_BUSTER_HURT_2.get(),
-                ModSounds.FAC_TANK_BUSTER_HURT_3.get()
+                FACSounds.FAC_TANK_BUSTER_HURT_1.get(),
+                FACSounds.FAC_TANK_BUSTER_HURT_2.get(),
+                FACSounds.FAC_TANK_BUSTER_HURT_3.get()
         );
     }
 
     protected SoundEvent getAmbientSound() {
         return MobUtil.getSound(
                 this.random,
-                ModSounds.FAC_TANK_BUSTER_IDLE_1.get(),
-                ModSounds.FAC_TANK_BUSTER_IDLE_2.get(),
-                ModSounds.FAC_TANK_BUSTER_IDLE_3.get()
+                FACSounds.FAC_TANK_BUSTER_IDLE_1.get(),
+                FACSounds.FAC_TANK_BUSTER_IDLE_2.get(),
+                FACSounds.FAC_TANK_BUSTER_IDLE_3.get()
         );
     }
 
     protected SoundEvent getDeathSound() {
         return MobUtil.getSound(
                 this.random,
-                ModSounds.FAC_TANK_BUSTER_DEATH_1.get(),
-                ModSounds.FAC_TANK_BUSTER_DEATH_2.get(),
-                ModSounds.FAC_TANK_BUSTER_DEATH_3.get()
+                FACSounds.FAC_TANK_BUSTER_DEATH_1.get(),
+                FACSounds.FAC_TANK_BUSTER_DEATH_2.get(),
+                FACSounds.FAC_TANK_BUSTER_DEATH_3.get()
         );
     }
 }

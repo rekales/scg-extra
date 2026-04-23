@@ -29,8 +29,8 @@ import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
+import net.zincstudios.scgextra.entity.rrc.RRCSounds;
 import net.zincstudios.scgextra.particle.ModParticleTypes;
-import net.zincstudios.scgextra.sounds.ModSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -404,17 +404,17 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable, 
         }
     }
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return ModSounds.RRC_FLAMING_HEAD_DEAD_1.get();
+        return RRCSounds.RRC_FLAMING_HEAD_DEAD_1.get();
     }
 
     protected SoundEvent getAmbientSound() {
         return MobUtil.getSound(
             this.random, 
-            ModSounds.RRC_FLAMING_HEAD_IDLE_1.get(),
-            ModSounds.RRC_FLAMING_HEAD_IDLE_2.get(),
-            ModSounds.RRC_FLAMING_HEAD_IDLE_3.get(),
-            ModSounds.RRC_FLAMING_HEAD_IDLE_4.get(),
-            ModSounds.RRC_FLAMING_HEAD_IDLE_5.get()
+            RRCSounds.RRC_FLAMING_HEAD_IDLE_1.get(),
+            RRCSounds.RRC_FLAMING_HEAD_IDLE_2.get(),
+            RRCSounds.RRC_FLAMING_HEAD_IDLE_3.get(),
+            RRCSounds.RRC_FLAMING_HEAD_IDLE_4.get(),
+            RRCSounds.RRC_FLAMING_HEAD_IDLE_5.get()
         );
     }
 
@@ -425,8 +425,8 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable, 
     protected SoundEvent getDeathSound() {
         return MobUtil.getSound(
             this.random,
-            ModSounds.RRC_FLAMING_HEAD_DEAD_1.get(),
-            ModSounds.RRC_FLAMING_HEAD_DEAD_2.get()
+            RRCSounds.RRC_FLAMING_HEAD_DEAD_1.get(),
+            RRCSounds.RRC_FLAMING_HEAD_DEAD_2.get()
         );
     }
 

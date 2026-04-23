@@ -18,7 +18,7 @@ import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.AlertFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.entity.fac.FACSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -120,27 +120,27 @@ public class TrenchSniperEntity extends GunnerEntity implements GeoEntity {
     protected SoundEvent getHurtSound(DamageSource damageSource) {
         return MobUtil.getSound(
                 this.random,
-                ModSounds.TRENCH_SNIPER_ALERT_1.get(),
-                ModSounds.TRENCH_SNIPER_ALERT_2.get(),
-                ModSounds.TRENCH_SNIPER_ALERT_3.get()
+                FACSounds.TRENCH_SNIPER_ALERT_1.get(),
+                FACSounds.TRENCH_SNIPER_ALERT_2.get(),
+                FACSounds.TRENCH_SNIPER_ALERT_3.get()
         );
     }
 
     protected SoundEvent getAmbientSound() {
         return MobUtil.getSound(
                 this.random,
-                ModSounds.TRENCH_SNIPER_IDLE_1.get(),
-                ModSounds.TRENCH_SNIPER_IDLE_2.get(),
-                ModSounds.TRENCH_SNIPER_IDLE_3.get(),
-                ModSounds.TRENCH_SNIPER_IDLE_4.get()
+                FACSounds.TRENCH_SNIPER_IDLE_1.get(),
+                FACSounds.TRENCH_SNIPER_IDLE_2.get(),
+                FACSounds.TRENCH_SNIPER_IDLE_3.get(),
+                FACSounds.TRENCH_SNIPER_IDLE_4.get()
         );
     }
 
     protected SoundEvent getDeathSound() {
         return MobUtil.getSound(
                 this.random,
-                ModSounds.TRENCH_SNIPER_DEATH_1.get(),
-                ModSounds.TRENCH_SNIPER_DEATH_2.get()
+                FACSounds.TRENCH_SNIPER_DEATH_1.get(),
+                FACSounds.TRENCH_SNIPER_DEATH_2.get()
         );
     }
 }

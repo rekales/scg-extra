@@ -19,7 +19,7 @@ import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.AlertFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.entity.rrc.RRCSounds;
 
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -122,20 +122,20 @@ public class TallmanEntity extends GunnerEntity implements GeoEntity {
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
         return MobUtil.getSound(
             this.random,
-            ModSounds.RRC_TALLMAN_HURT_1.get(),
-            ModSounds.RRC_TALLMAN_HURT_2.get(),
-            ModSounds.RRC_TALLMAN_HURT_3.get(),
-            ModSounds.RRC_TALLMAN_HURT_4.get(),
-            ModSounds.RRC_TALLMAN_HURT_5.get(),
-            ModSounds.RRC_TALLMAN_HURT_6.get()
+            RRCSounds.RRC_TALLMAN_HURT_1.get(),
+            RRCSounds.RRC_TALLMAN_HURT_2.get(),
+            RRCSounds.RRC_TALLMAN_HURT_3.get(),
+            RRCSounds.RRC_TALLMAN_HURT_4.get(),
+            RRCSounds.RRC_TALLMAN_HURT_5.get(),
+            RRCSounds.RRC_TALLMAN_HURT_6.get()
         );
     }
 
     protected SoundEvent getAmbientSound() {
         return MobUtil.getSound(
             this.random,
-            ModSounds.RRC_TALLMAN_IDLE_1.get(),
-            ModSounds.RRC_TALLMAN_IDLE_2.get()
+            RRCSounds.RRC_TALLMAN_IDLE_1.get(),
+            RRCSounds.RRC_TALLMAN_IDLE_2.get()
         );
     }
 
@@ -143,8 +143,8 @@ public class TallmanEntity extends GunnerEntity implements GeoEntity {
         if(this.random.nextFloat() < 0.4F){
             return MobUtil.getSound(
                 this.random,
-                ModSounds.RRC_TALLMAN_WALK_1.get(),
-                ModSounds.RRC_TALLMAN_WALK_2.get()
+                RRCSounds.RRC_TALLMAN_WALK_1.get(),
+                RRCSounds.RRC_TALLMAN_WALK_2.get()
             );
         }else{
             return SoundEvents.IRON_GOLEM_STEP;
@@ -154,8 +154,8 @@ public class TallmanEntity extends GunnerEntity implements GeoEntity {
     protected SoundEvent getDeathSound() {
         return MobUtil.getSound(
             this.random,
-            ModSounds.RRC_TALLMAN_DEATH_1.get(),
-            ModSounds.RRC_TALLMAN_DEATH_2.get()
+            RRCSounds.RRC_TALLMAN_DEATH_1.get(),
+            RRCSounds.RRC_TALLMAN_DEATH_2.get()
         );
     }
 

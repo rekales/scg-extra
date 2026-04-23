@@ -17,7 +17,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.entity.rrc.RRCSounds;
 import top.ribs.scguns.init.ModEffects;
 
 public class AttackAndExplodeGoal extends Goal{
@@ -30,9 +30,9 @@ public class AttackAndExplodeGoal extends Goal{
     private boolean exploding = false;
     private int agroAnimTimer = 0;
     private SoundEvent[] deathSounds = {
-        ModSounds.RRC_SPRING_JUNKIE_DEATH_1.get(),
-        ModSounds.RRC_SPRING_JUNKIE_DEATH_2.get(),
-        ModSounds.RRC_SPRING_JUNKIE_DEATH_3.get()
+        RRCSounds.RRC_SPRING_JUNKIE_DEATH_1.get(),
+        RRCSounds.RRC_SPRING_JUNKIE_DEATH_2.get(),
+        RRCSounds.RRC_SPRING_JUNKIE_DEATH_3.get()
     };
 
     public AttackAndExplodeGoal(SpringJunkieEntity mob, float speed, double distance){
@@ -59,7 +59,7 @@ public class AttackAndExplodeGoal extends Goal{
         this.agroAnimTimer = 40;
         this.parent.setAttacking(true);
         this.parent.triggerAnim("anim", "aggroed");
-        this.parent.playSound(ModSounds.RRC_SPRING_JUNKIE_SCREAM.get(), this.parent.getSoundVolume()*3F, this.parent.getVoicePitch());
+        this.parent.playSound(RRCSounds.RRC_SPRING_JUNKIE_SCREAM.get(), this.parent.getSoundVolume()*3F, this.parent.getVoicePitch());
     }
     @Override
     public void tick() {
@@ -158,7 +158,7 @@ public class AttackAndExplodeGoal extends Goal{
             if(this.fuseTimer==60){
                 this.parent.triggerAnim("anim1", "aggroed_long");
                 this.parent.playSound(
-                    this.parent.getRandom().nextBoolean() ? ModSounds.RRC_SPRING_JUNKIE_LAUGH_1.get() : ModSounds.RRC_SPRING_JUNKIE_LAUGH_2.get(), 
+                    this.parent.getRandom().nextBoolean() ? RRCSounds.RRC_SPRING_JUNKIE_LAUGH_1.get() : RRCSounds.RRC_SPRING_JUNKIE_LAUGH_2.get(), 
                     this.parent.getSoundVolume(), 
                     this.parent.getVoicePitch()
                 );

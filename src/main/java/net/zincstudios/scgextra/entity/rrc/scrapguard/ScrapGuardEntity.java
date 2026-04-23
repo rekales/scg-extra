@@ -22,7 +22,7 @@ import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.entity.rrc.RRCSounds;
 
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -117,16 +117,16 @@ public class ScrapGuardEntity extends GunnerEntity implements GeoEntity {
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
         return MobUtil.getSound(
             this.random,
-            ModSounds.RRC_OPPRESSOR_HURT_1.get(),
-            ModSounds.RRC_OPPRESSOR_HURT_2.get()
+            RRCSounds.RRC_OPPRESSOR_HURT_1.get(),
+            RRCSounds.RRC_OPPRESSOR_HURT_2.get()
         );
     };
     protected SoundEvent getAmbientSound() {
         return MobUtil.getSound(
             this.random,
-            ModSounds.RRC_OPPRESSOR_IDLE_1.get(),
-            ModSounds.RRC_OPPRESSOR_IDLE_2.get(),
-            ModSounds.RRC_OPPRESSOR_IDLE_3.get()
+            RRCSounds.RRC_OPPRESSOR_IDLE_1.get(),
+            RRCSounds.RRC_OPPRESSOR_IDLE_2.get(),
+            RRCSounds.RRC_OPPRESSOR_IDLE_3.get()
         );
     };
     protected SoundEvent getStepSound() {
@@ -135,8 +135,8 @@ public class ScrapGuardEntity extends GunnerEntity implements GeoEntity {
     protected SoundEvent getDeathSound() {
         return MobUtil.getSound(
             this.random,
-            ModSounds.RRC_OPPRESSOR_DEATH_1.get(),
-            ModSounds.RRC_OPPRESSOR_DEATH_2.get()
+            RRCSounds.RRC_OPPRESSOR_DEATH_1.get(),
+            RRCSounds.RRC_OPPRESSOR_DEATH_2.get()
         );
     };
     protected void playStepSound(BlockPos pPos, BlockState pBlock) {

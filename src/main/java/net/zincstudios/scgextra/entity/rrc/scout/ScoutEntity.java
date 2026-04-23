@@ -18,7 +18,7 @@ import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.entity.rrc.RRCSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
@@ -99,32 +99,32 @@ public class ScoutEntity extends GunnerEntity implements GeoEntity{
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
         return MobUtil.getSound(
             this.random, 
-            ModSounds.RRC_SCOUT_HURT_1.get(),
-            ModSounds.RRC_SCOUT_HURT_2.get(),
-            ModSounds.RRC_SCOUT_HURT_3.get(),
-            ModSounds.RRC_SCOUT_HURT_4.get(),
-            ModSounds.RRC_SCOUT_HURT_5.get()
+            RRCSounds.RRC_SCOUT_HURT_1.get(),
+            RRCSounds.RRC_SCOUT_HURT_2.get(),
+            RRCSounds.RRC_SCOUT_HURT_3.get(),
+            RRCSounds.RRC_SCOUT_HURT_4.get(),
+            RRCSounds.RRC_SCOUT_HURT_5.get()
         );
     };
     protected SoundEvent getAmbientSound() {
         return MobUtil.getSound(
             this.random,
-            ModSounds.RRC_SCOUT_IDLE_1.get(),
-            ModSounds.RRC_SCOUT_IDLE_2.get()
+            RRCSounds.RRC_SCOUT_IDLE_1.get(),
+            RRCSounds.RRC_SCOUT_IDLE_2.get()
         );
     };
     protected SoundEvent getStepSound() {
         return MobUtil.getSound(
             this.random,
-            ModSounds.RRC_SCOUT_WALK_1.get(),
-            ModSounds.RRC_SCOUT_WALK_2.get()
+            RRCSounds.RRC_SCOUT_WALK_1.get(),
+            RRCSounds.RRC_SCOUT_WALK_2.get()
         );
     };
     protected SoundEvent getDeathSound() {
         return MobUtil.getSound(
             this.random,
-            ModSounds.RRC_SCOUT_DEATH_1.get(),
-            ModSounds.RRC_SCOUT_DEATH_2.get()
+            RRCSounds.RRC_SCOUT_DEATH_1.get(),
+            RRCSounds.RRC_SCOUT_DEATH_2.get()
         );
     };
     protected float getSoundVolume() {
