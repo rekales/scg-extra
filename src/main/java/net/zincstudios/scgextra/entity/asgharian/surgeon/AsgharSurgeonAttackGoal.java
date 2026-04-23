@@ -77,4 +77,8 @@ public class AsgharSurgeonAttackGoal<T extends AsgharSurgeonEntity> extends Simp
         return (this.mob.getBbWidth() * 2.0F * this.mob.getBbWidth() * 2.0F + attackTarget.getBbWidth());
     }
 
+    @Override
+    protected float getAccuracyModifier() {
+        return super.getAccuracyModifier() * 0.4f;
+    }
 }

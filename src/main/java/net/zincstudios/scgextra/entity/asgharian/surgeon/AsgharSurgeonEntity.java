@@ -3,6 +3,7 @@ package net.zincstudios.scgextra.entity.asgharian.surgeon;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,8 +17,10 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
+import net.zincstudios.scgextra.entity.asgharian.BulletSpawnOffset;
 import net.zincstudios.scgextra.entity.asgharian.GoalStateHandler;
 import net.zincstudios.scgextra.entity.asgharian.SimpleGunAttackGoal;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
@@ -32,7 +35,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Objects;
 
-public class AsgharSurgeonEntity extends GunnerEntity implements GeoEntity, GoalStateHandler {
+public class AsgharSurgeonEntity extends GunnerEntity implements GeoEntity, GoalStateHandler, BulletSpawnOffset {
 
     private static final EntityDataAccessor<String> GUN_ATTACK_GOAL_STATE =
             SynchedEntityData.defineId(AsgharSurgeonEntity.class, EntityDataSerializers.STRING);
@@ -43,7 +46,6 @@ public class AsgharSurgeonEntity extends GunnerEntity implements GeoEntity, Goal
         super(entityType, level);
     }
 
-    // TODO: custom gun attack
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(2, new AsgharSurgeonAttackGoal<>(this));
@@ -140,5 +142,10 @@ public class AsgharSurgeonEntity extends GunnerEntity implements GeoEntity, Goal
 
     public String getGunAttackGoalState() {
         return this.entityData.get(GUN_ATTACK_GOAL_STATE);
+    }
+
+    @Override
+    public Vec3 getBulletSpawnOffset() {
+        return new Vec3(1.25,2,0.75).yRot(-this.yBodyRot * Mth.DEG_TO_RAD);
     }
 }
