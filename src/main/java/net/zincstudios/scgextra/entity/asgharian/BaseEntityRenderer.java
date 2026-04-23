@@ -58,7 +58,7 @@ public class BaseEntityRenderer <T extends Mob & GeoEntity> extends GeoEntityRen
         return this;
     }
 
-    public BaseEntityRenderer<T> customShadowRadius(float shadowRadius) {
+    public BaseEntityRenderer<T> shadowRadius(float shadowRadius) {
         this.hasCustomShadowRadius = true;
         this.shadowRadius = shadowRadius;
         return this;

@@ -1,6 +1,5 @@
 package net.zincstudios.scgextra.entity.asgharian.failedone;
 
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -27,16 +26,19 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class FailedOneEntity extends EquippedEntity implements GeoEntity {
 
+    private static final int MELEE_DAMAGE_DELAY = 12;  // match with animation
+
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
+
+    private int hurtDelay = -1;
 
     public FailedOneEntity(EntityType<? extends Monster> entity, Level level) {
         super(entity, level);
     }
 
+    // TODO: add delayed hit melee goal for general use
     @Override
     protected void registerGoals() {
-        // TODO: add delayed hit melee for more consistency with animations
-//        this.goalSelector.addGoal(2, new DelayedHitMeleeAttackGoal(this, 1.0D, false, 12));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, false));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -54,17 +56,41 @@ public class FailedOneEntity extends EquippedEntity implements GeoEntity {
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.23F)
                 .add(Attributes.ATTACK_DAMAGE, 3.0D)
-                .add(Attributes.ARMOR, 2.0D)
                 .add(Attributes.MAX_HEALTH, 30.0D);
     }
 
     @Override
-    public void swing(InteractionHand hand) {
-        super.swing(hand);
+    public void tick() {
+        super.tick();
 
-        if (!this.level().isClientSide) {
-            this.triggerAnim("behaviour", "melee");
+        if (this.level().isClientSide) return;
+
+        this.hurtDelay--;
+        if (this.hurtDelay == 0) {
+            LivingEntity target = this.getTarget();
+            if (target != null) {
+                double distToEnemySqr = this.getPerceivedTargetDistanceSquareForMeleeAttack(target);
+                double reach = this.getAttackReachSqr(target) * 1.2;
+                if (distToEnemySqr <= reach) {
+                    super.doHurtTarget(target);
+                }
+            }
         }
+    }
+
+    private double getAttackReachSqr(LivingEntity attackTarget) {
+        return (this.getBbWidth() * 2.0F * this.getBbWidth() * 2.0F + attackTarget.getBbWidth());
+    }
+
+    @Override
+    public boolean doHurtTarget(Entity entity) {
+        if (!this.level().isClientSide) {
+            if (this.hurtDelay > 0) return false;
+
+            this.triggerAnim("behaviour", "melee");
+            this.hurtDelay = MELEE_DAMAGE_DELAY;
+        }
+        return true;
     }
 
     @Override
@@ -80,6 +106,7 @@ public class FailedOneEntity extends EquippedEntity implements GeoEntity {
 
         controllers.add(new AnimationController<>(this, "behaviour", 2, state -> PlayState.STOP)
                 .triggerableAnim("melee", RawAnimation.begin().thenPlay("attack"))
+                .setAnimationSpeed(1.2f)
         );
 
         controllers.add(new AnimationController<>(this, "death", 2, state -> {

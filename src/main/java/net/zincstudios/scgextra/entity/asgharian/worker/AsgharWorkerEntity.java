@@ -45,6 +45,7 @@ public class AsgharWorkerEntity extends Monster implements GeoEntity, Stunnable,
     private boolean stunCooldown = false;
     private boolean stunned = false;
 
+    // Serverside only
     private int currentAttack = 0;  // 0: none, 1: saw, 2: claw
     private int hurtDelay = -1;
 
@@ -92,7 +93,6 @@ public class AsgharWorkerEntity extends Monster implements GeoEntity, Stunnable,
                     double reach = this.getAttackReachSqr(target) * 1.2;
                     if (distToEnemySqr <= reach) {
                         super.doHurtTarget(target);
-                        SCGExtra.LOGGER.debug("hurt: " + this.tickCount);
                         if (this.currentAttack == 1) {
                             target.addEffect(new MobEffectInstance(ModEffects.LACERATED.get(), 80));
                         }
