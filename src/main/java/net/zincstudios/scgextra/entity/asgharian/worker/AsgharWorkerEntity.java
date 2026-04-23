@@ -53,9 +53,10 @@ public class AsgharWorkerEntity extends Monster implements GeoEntity, Stunnable,
         super(entityType, level);
     }
 
+    // TODO: stunned cooldowns config per entity?
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new StunnedWithVisualGoal<>(this));
+        this.goalSelector.addGoal(1, new StunnedWithVisualGoal<>(this, CommonConfig.abilityWeaknessCooldown * 2));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, false));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
