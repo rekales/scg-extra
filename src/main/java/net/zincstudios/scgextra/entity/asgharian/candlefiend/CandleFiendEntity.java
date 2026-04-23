@@ -125,6 +125,7 @@ public class CandleFiendEntity extends Monster implements GeoEntity {
                 this.deathTime = 0;
                 this.setMasked(false);
                 this.setHealth(this.getMaxHealth());
+                this.dead = false;
             }
             if (this.deathTime >= 90) {
                 this.setBehaviorState(BehaviorState.REVIVE);
@@ -141,15 +142,21 @@ public class CandleFiendEntity extends Monster implements GeoEntity {
     }
 
     @Override
+    protected boolean shouldDropLoot() {
+        return !this.isMasked();
+    }
+
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new CandleFiendAttackGoal(this, 20, true));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
 
-        this.targetSelector.addGoal(2, new HurtByNonFactionGoal(this));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, true,
+        // Bosses should prioritize players
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
+        this.targetSelector.addGoal(3, new HurtByNonFactionGoal(this));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
                 entity -> Faction.isEnemies(this, entity)));
     }
@@ -161,7 +168,7 @@ public class CandleFiendEntity extends Monster implements GeoEntity {
                 .add(Attributes.ATTACK_DAMAGE, 10.0D)
                 .add(Attributes.ARMOR, 7.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.9)
-                .add(Attributes.MAX_HEALTH, 700.0D);
+                .add(Attributes.MAX_HEALTH, 100.0D);
     }
 
     @Override
