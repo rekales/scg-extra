@@ -78,6 +78,10 @@ public class CandleFiendEntity extends Monster implements GeoEntity {
     public void tick() {
         super.tick();
 
+        if (!this.isDeadOrDying() && this.getBehaviourState() == BehaviorState.DYING) {
+            this.setBehaviorState(BehaviorState.NONE);  // still not sure why state is dying when it's not supposed to
+        }
+
         if (this.level().isClientSide) return;
 
         if (this.tickCount % 20 == 0) {
@@ -120,14 +124,14 @@ public class CandleFiendEntity extends Monster implements GeoEntity {
     protected void tickDeath() {
         ++this.deathTime;
         if (this.isMasked()) {
-            if (this.deathTime >= 150) {
+            if (this.deathTime >= 160) {
                 this.setBehaviorState(BehaviorState.NONE);
                 this.deathTime = 0;
                 this.setMasked(false);
                 this.setHealth(this.getMaxHealth());
                 this.dead = false;
             }
-            if (this.deathTime >= 90) {
+            if (this.deathTime >= 100) {
                 this.setBehaviorState(BehaviorState.REVIVE);
             } else {
                 this.setBehaviorState(BehaviorState.DYING);
@@ -168,7 +172,7 @@ public class CandleFiendEntity extends Monster implements GeoEntity {
                 .add(Attributes.ATTACK_DAMAGE, 10.0D)
                 .add(Attributes.ARMOR, 7.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.9)
-                .add(Attributes.MAX_HEALTH, 100.0D);
+                .add(Attributes.MAX_HEALTH, 700.0D);
     }
 
     @Override
