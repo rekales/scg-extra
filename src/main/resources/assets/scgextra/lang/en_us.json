@@ -26,8 +26,15 @@
     "entity.scgextra.fac_commissar":  "FAC Commissar",
     "entity.scgextra.fac_walker":  "FAC Walker",
     "entity.scgextra.fac_tank":  "FAC Siege Tank",
+    "entity.scgextra.failed_one": "Failed One",
+    "entity.scgextra.asghar_surgeon": "Asghar Elite Surgeon",
+    "entity.scgextra.asghar_worker": "Asghar Worker Unit",
+    "entity.scgextra.asghar_flamer": "Asghar Flamer",
+    "entity.scgextra.candle_fiend": "Candle Fiend",
+
     "effect.scgextra.ink_effect":  "Ink Effect",
     "effect.scgextra.glowing_ink_effect":  "Glowing Ink Effect",
+
     "item.scgextra.atlantic_mace":  "Atlantic Mace",
     "item.scgextra.cavalry_saber":  "Cavalry Saber",
     "item.scgextra.spear_shovel":  "Spear Shovel",
@@ -59,6 +66,12 @@
     "item.scgextra.scrap_guard_spawn_egg":  "RRC Scrap Guard Spawn Egg",
     "item.scgextra.arc_psycho_spawn_egg":  "RRC Arc Psycho Spawn Egg",
     "item.scgextra.copper_knight_spawn_egg":  "RRC Copper Knight Spawn Egg",
+    "item.scgextra.failed_one_spawn_egg":  "Failed One Spawn Egg",
+    "item.scgextra.asghar_surgeon_spawn_egg":  "Asghar Elite Surgeon Spawn Egg",
+    "item.scgextra.asghar_worker_spawn_egg":  "Asghar Worker Unit Spawn Egg",
+    "item.scgextra.asghar_flamer_spawn_egg":  "Asghar Flamer Spawn Egg",
+    "item.scgextra.candle_fiend_spawn_egg":  "Candle Fiend Spawn Egg",
+
     "itemGroup.scgextra.tab":  "SCG Extra",
     "raid.boss.scguns.fac":  "FAC Siege Tank",
     "raid.announcement.scguns.fac":  "FAC raid sighted nearby!"
