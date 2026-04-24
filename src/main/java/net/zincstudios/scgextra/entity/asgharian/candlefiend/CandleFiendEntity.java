@@ -61,6 +61,8 @@ public class CandleFiendEntity extends Monster implements GeoEntity {
     private static final RawAnimation DEATH = RawAnimation.begin().thenPlay("death_1");
     private static final RawAnimation DEATH_UNMASKED = RawAnimation.begin().thenPlay("death_2");
     private static final RawAnimation REVIVE = RawAnimation.begin().thenPlay("revive");
+    private static final RawAnimation EFFECTS_BASE = RawAnimation.begin().thenPlayAndHold("effect.none");
+    private static final RawAnimation EYE_FLASH = RawAnimation.begin().thenPlay("effect.eye_flash");
 
     private static final int ENRAGE_DURATION_TICKS = 70;  // Match with animation
 
@@ -213,7 +215,10 @@ public class CandleFiendEntity extends Monster implements GeoEntity {
         controllers.add(new AnimationController<>(this, "revive", 2, state -> PlayState.STOP)
                 .triggerableAnim("revive", REVIVE));
 
-
+        controllers.add(new AnimationController<>(this, "effects", 0,
+                state -> state.setAndContinue(EFFECTS_BASE))
+                .triggerableAnim("eye_flash", EYE_FLASH)
+        );
     }
 
     @Override
@@ -246,6 +251,7 @@ public class CandleFiendEntity extends Monster implements GeoEntity {
             this.triggerAnim("behaviour", "slash");
         } else if (this.behaviorState != BehaviorState.SLAM && behaviorState == BehaviorState.SLAM) {
             this.triggerAnim("behaviour", "slam");
+            this.triggerAnim("effects", "eye_flash");
         } else if (this.behaviorState != BehaviorState.REVIVE && behaviorState == BehaviorState.REVIVE) {
             this.triggerAnim("revive", "revive");
         }

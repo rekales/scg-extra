@@ -16,6 +16,8 @@ import java.util.EnumSet;
 public class CandleFiendAttackGoal extends Goal {
 
     private static final int SLAM_COOLDOWN = 200;
+    private static final int SLAM_HURT_DELAY = 15;
+    private static final int SLASH_SECOND_HURT_DELAY = 12;
 
     private final CandleFiendEntity mob;
     private final boolean followingTargetEvenIfNotSeen;
@@ -163,11 +165,11 @@ public class CandleFiendAttackGoal extends Goal {
                 this.mob.setBehaviorState(CandleFiendEntity.BehaviorState.SLASH);
                 target.addEffect(new MobEffectInstance(ModEffects.LACERATED.get(), 80));
                 this.mob.doHurtTarget(target);
-                this.hurtDelay = 12;
+                this.hurtDelay = SLASH_SECOND_HURT_DELAY;
                 this.stateClearDelay = 20;
             } else {
                 this.mob.setBehaviorState(CandleFiendEntity.BehaviorState.SLAM);
-                this.hurtDelay = 15;
+                this.hurtDelay = SLAM_HURT_DELAY;
                 this.stateClearDelay = 30;
                 this.slamCooldown = SLAM_COOLDOWN;
             }
