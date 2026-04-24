@@ -1,12 +1,17 @@
 package net.zincstudios.scgextra.entity.asgharian.candlefiend;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -23,10 +28,13 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.Faction;
+import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.client.ExpandedAnimationController;
+import net.zincstudios.scgextra.sounds.AsgharianSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -38,6 +46,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class CandleFiendEntity extends Monster implements GeoEntity, Leaping {
 
     public enum BehaviorState {
@@ -169,6 +178,7 @@ public class CandleFiendEntity extends Monster implements GeoEntity, Leaping {
                 this.setHealth(this.getMaxHealth());
                 this.dead = false;
             } else if (this.deathTime >= 100) {
+                this.playSound(AsgharianSounds.CANDLE_FIEND_REVIVE.get());
                 if (!this.level().isClientSide) this.setBehaviorState(BehaviorState.REVIVE);
             } else {
                 if (!this.level().isClientSide) this.setBehaviorState(BehaviorState.DYING);
@@ -287,11 +297,15 @@ public class CandleFiendEntity extends Monster implements GeoEntity, Leaping {
     public void setBehaviorState(CandleFiendEntity.BehaviorState behaviorState) {
         if (this.behaviorState != BehaviorState.ENRAGED && behaviorState == BehaviorState.ENRAGED) {
             this.triggerAnim("behaviour", "enraged");
+            this.playSound(AsgharianSounds.CANDLE_FIEND_SCREAM.get());
         } else if (this.behaviorState != BehaviorState.SLASH && behaviorState == BehaviorState.SLASH) {
             this.triggerAnim("behaviour", "slash");
+            this.playSound(AsgharianSounds.CANDLE_FIEND_SLASH.get());
         } else if (this.behaviorState != BehaviorState.SLAM && behaviorState == BehaviorState.SLAM) {
             this.slamDelay = WARNING_FLASH_DURATION;
             this.triggerAnim("effects", "eye_flash");
+            this.playSound(AsgharianSounds.CANDLE_FIEND_SLAM.get());
+            this.playSound(AsgharianSounds.CANDLE_FIEND_WARNING.get());
         } else if (this.behaviorState != BehaviorState.REVIVE && behaviorState == BehaviorState.REVIVE) {
             this.triggerAnim("revive", "revive");
         }
@@ -319,5 +333,40 @@ public class CandleFiendEntity extends Monster implements GeoEntity, Leaping {
     @Override
     public boolean canLeap() {
         return this.getBehaviourState() == BehaviorState.NONE;
+    }
+
+    protected SoundEvent getAmbientSound() {
+        return MobUtil.getSound(
+                this.random,
+                AsgharianSounds.CANDLE_FIEND_IDLE_1.get(),
+                AsgharianSounds.CANDLE_FIEND_IDLE_2.get(),
+                AsgharianSounds.CANDLE_FIEND_IDLE_3.get()
+        );
+    }
+
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return MobUtil.getSound(
+                this.random,
+                AsgharianSounds.CANDLE_FIEND_HURT_1.get(),
+                AsgharianSounds.CANDLE_FIEND_HURT_2.get(),
+                AsgharianSounds.CANDLE_FIEND_HURT_3.get(),
+                AsgharianSounds.CANDLE_FIEND_HURT_4.get()
+        );
+    }
+
+    protected SoundEvent getDeathSound() {
+        return AsgharianSounds.CANDLE_FIEND_DEATH.get();
+    }
+
+    protected SoundEvent getStepSound() {
+        if (this.isSprinting()) {
+            return AsgharianSounds.CANDLE_FIEND_RUN.get();
+        } else {
+            return AsgharianSounds.CANDLE_FIEND_WALK.get();
+        }
+    }
+
+    protected void playStepSound(BlockPos pos, BlockState block) {
+        this.playSound(this.getStepSound(), 0.15F, 1.0F);
     }
 }

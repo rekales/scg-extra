@@ -89,7 +89,7 @@ public class AsgharianSounds {
             () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("candle_fiend.scream")));
     public static final RegistryObject<SoundEvent> CANDLE_FIEND_SLASH = SOUND_EVENTS.register("candle_fiend.slash",
             () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("candle_fiend.slash")));
-    public static final RegistryObject<SoundEvent> CANDLE_FIEND_SMASH = SOUND_EVENTS.register("candle_fiend.smash",
+    public static final RegistryObject<SoundEvent> CANDLE_FIEND_SLAM = SOUND_EVENTS.register("candle_fiend.smash",
             () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("candle_fiend.smash")));
     public static final RegistryObject<SoundEvent> CANDLE_FIEND_WALK = SOUND_EVENTS.register("candle_fiend.walk",
             () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("candle_fiend.walk")));
