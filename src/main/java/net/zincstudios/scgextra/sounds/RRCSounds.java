@@ -1,15 +1,13 @@
 package net.zincstudios.scgextra.sounds;
 
 import net.minecraft.sounds.SoundEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.SCGExtra;
 
+import static net.zincstudios.scgextra.sounds.ModSounds.SOUND_EVENTS;
+
 public class RRCSounds {
-    public static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, SCGExtra.MOD_ID);
-    
+
     //Drone
     public static final RegistryObject<SoundEvent> RRC_DRONE_DEATH_1 = SOUND_EVENTS.register("drone.death1", 
         () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("drone.death1")));
@@ -194,7 +192,5 @@ public class RRCSounds {
     public static final RegistryObject<SoundEvent> RRC_ARC_PSYCHO_IDLE_3 = SOUND_EVENTS.register("arc_psycho.idle_3", 
         () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("arc_psycho.idle_3")));
 
-    public static void register(IEventBus eventbus){
-        SOUND_EVENTS.register(eventbus);
-    }
+    public static void init() {}
 }

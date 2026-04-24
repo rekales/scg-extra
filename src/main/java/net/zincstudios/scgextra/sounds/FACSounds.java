@@ -1,15 +1,13 @@
 package net.zincstudios.scgextra.sounds;
 
 import net.minecraft.sounds.SoundEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.SCGExtra;
 
+import static net.zincstudios.scgextra.sounds.ModSounds.SOUND_EVENTS;
+
 public class FACSounds {
-    public static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, SCGExtra.MOD_ID);
-    
+
     //TRENCHER
     public static final RegistryObject<SoundEvent> FAC_TRENCHER_DEATH_1 = SOUND_EVENTS.register("fac_trencher.death1", 
         () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("fac_trencher.death1")));
@@ -198,7 +196,5 @@ public class FACSounds {
     public static final RegistryObject<SoundEvent> TRENCH_SNIPER_IDLE_4 = SOUND_EVENTS.register("trench_sniper.idle4", 
         () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("trench_sniper.idle4")));
 
-    public static void register(IEventBus eventbus){
-        SOUND_EVENTS.register(eventbus);
-    }
+    public static void init() {}
 }

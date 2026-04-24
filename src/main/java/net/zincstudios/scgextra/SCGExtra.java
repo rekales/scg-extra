@@ -18,9 +18,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import net.zincstudios.scgextra.item.ModItems;
 import net.zincstudios.scgextra.particle.ModParticleTypes;
-import net.zincstudios.scgextra.sounds.FACSounds;
-import net.zincstudios.scgextra.sounds.RRCSounds;
-import net.zincstudios.scgextra.sounds.WhalerSounds;
+import net.zincstudios.scgextra.sounds.ModSounds;
 
 import org.slf4j.Logger;
 
@@ -39,9 +37,7 @@ public class SCGExtra
         ModEntities.register(modEventBus);
         ModEffects.register(modEventBus);
         ModItems.register(modEventBus);
-        WhalerSounds.register(modEventBus);
-        RRCSounds.register(modEventBus);
-        FACSounds.register(modEventBus);
+        ModSounds.register(modEventBus);
         ModParticleTypes.register(modEventBus);
 
         modEventBus.addListener(this::addCreative);

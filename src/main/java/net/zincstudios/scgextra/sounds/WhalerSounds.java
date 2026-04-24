@@ -1,15 +1,13 @@
 package net.zincstudios.scgextra.sounds;
 
 import net.minecraft.sounds.SoundEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.SCGExtra;
 
+import static net.zincstudios.scgextra.sounds.ModSounds.SOUND_EVENTS;
+
 public class WhalerSounds {
-    public static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, SCGExtra.MOD_ID);
-    
+
     public static final RegistryObject<SoundEvent> WHALE_SLAM_1 = SOUND_EVENTS.register("armored_whale_slam_1", 
         () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("armored_whale_slam_1")));
 
@@ -24,8 +22,6 @@ public class WhalerSounds {
 
     public static final RegistryObject<SoundEvent> GUARDIAN_STATUE_CHARGE = SOUND_EVENTS.register("guardian_statue_charge", 
         () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("guardian_statue_charge")));
-    
-    public static void register(IEventBus eventbus){
-        SOUND_EVENTS.register(eventbus);
-    }
+
+    public static void init() {}
 }
