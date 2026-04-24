@@ -56,6 +56,7 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
                 .add(AsgharianEntities.ASGHAR_WORKER.get())
                 .add(AsgharianEntities.ASGHAR_FLAMER.get())
                 .add(AsgharianEntities.CANDLE_FIEND.get())
+                .add(AsgharianEntities.SOUL_RIPPER.get())
                 .add(top.ribs.scguns.init.ModEntities.DISSIDENT.get())
                 .add(top.ribs.scguns.init.ModEntities.PRAETOR.get())
                 .add(top.ribs.scguns.init.ModEntities.ADJUDICATOR.get())

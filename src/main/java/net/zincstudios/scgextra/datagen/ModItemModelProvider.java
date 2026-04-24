@@ -51,11 +51,12 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.SCRAP_GUARD_SPAWN_EGG.get());
         basicItem(ModItems.ARC_PSYCHO_SPAWN_EGG.get());
 
-        spawnEgg(ModItems.FAILED_ONE_SPAWN_EGG);
-        spawnEgg(ModItems.ASGHAR_SURGEON_SPAWN_EGG);
-        spawnEgg(ModItems.ASGHAR_WORKER_SPAWN_EGG);
-        spawnEgg(ModItems.ASGHAR_FLAMER_SPAWN_EGG);
-        spawnEgg(ModItems.CANDLE_FIEND_SPAWN_EGG);
+        basicItem(ModItems.FAILED_ONE_SPAWN_EGG.get());
+        basicItem(ModItems.ASGHAR_SURGEON_SPAWN_EGG.get());
+        basicItem(ModItems.ASGHAR_WORKER_SPAWN_EGG.get());
+        basicItem(ModItems.ASGHAR_FLAMER_SPAWN_EGG.get());
+        basicItem(ModItems.CANDLE_FIEND_SPAWN_EGG.get());
+        basicItem(ModItems.SOUL_RIPPER_SPAWN_EGG.get());
     }
 
     private void spawnEgg(RegistryObject<SpawnEggItem> item) {

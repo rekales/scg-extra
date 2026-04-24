@@ -31,6 +31,7 @@
     "entity.scgextra.asghar_worker": "Asghar Worker Unit",
     "entity.scgextra.asghar_flamer": "Asghar Flamer",
     "entity.scgextra.candle_fiend": "Candle Fiend",
+    "entity.scgextra.soul_ripper": "Soul Ripper",
 
     "effect.scgextra.ink_effect":  "Ink Effect",
     "effect.scgextra.glowing_ink_effect":  "Glowing Ink Effect",
@@ -71,6 +72,7 @@
     "item.scgextra.asghar_worker_spawn_egg":  "Asghar Worker Unit Spawn Egg",
     "item.scgextra.asghar_flamer_spawn_egg":  "Asghar Flamer Spawn Egg",
     "item.scgextra.candle_fiend_spawn_egg":  "Candle Fiend Spawn Egg",
+    "item.scgextra.soul_ripper_spawn_egg":  "Soul Ripper Spawn Egg",
 
     "itemGroup.scgextra.tab":  "SCG Extra",
     "raid.boss.scguns.fac":  "FAC Siege Tank",

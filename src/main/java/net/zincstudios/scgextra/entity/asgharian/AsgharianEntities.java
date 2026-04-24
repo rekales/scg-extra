@@ -55,6 +55,12 @@ public class AsgharianEntities {
                     .setUpdateInterval(1)
                     .build("candle_fiend"));
 
+    public static final RegistryObject<EntityType<CandleFiendEntity>> SOUL_RIPPER = ENTITY_TYPES
+            .register("soul_ripper", () -> EntityType.Builder.of(CandleFiendEntity::new, MobCategory.MONSTER)
+                    .sized(1.45F, 3.2F)
+                    .setUpdateInterval(1)
+                    .build("soul_ripper"));
+
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(AsgharianEntities::registerAttributes);
         modEventBus.addListener(AsgharianEntities::onCommonSetup);
