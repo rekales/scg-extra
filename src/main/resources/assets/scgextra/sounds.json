@@ -1036,5 +1036,165 @@
         "sounds": [
             "scgextra:fac/trench_sniper/idle4"
         ]
+    },
+    "asghar_surgeon.attack1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_surgeon/attack1"]
+    },
+    "asghar_surgeon.attack2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_surgeon/attack2"]
+    },
+    "asghar_surgeon.death": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_surgeon/death"]
+    },
+    "asghar_surgeon.hurt1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_surgeon/hurt1"]
+    },
+    "asghar_surgeon.hurt2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_surgeon/hurt2"]
+    },
+    "asghar_surgeon.hurt3": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_surgeon/hurt3"]
+    },
+    "asghar_surgeon.hurt4": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_surgeon/hurt4"]
+    },
+    "asghar_surgeon.idle1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_surgeon/idle1"]
+    },
+    "asghar_surgeon.idle2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_surgeon/idle2"]
+    },
+    "asghar_surgeon.idle3": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_surgeon/idle3"]
+    },
+    "asghar_flamer.attack1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_flamer/attack1"]
+    },
+    "asghar_flamer.attack2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_flamer/attack2"]
+    },
+    "asghar_flamer.death": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_flamer/death"]
+    },
+    "asghar_flamer.hurt1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_flamer/hurt1"]
+    },
+    "asghar_flamer.hurt2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_flamer/hurt2"]
+    },
+    "asghar_flamer.idle1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_flamer/idle1"]
+    },
+    "asghar_flamer.idle2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_flamer/idle2"]
+    },
+    "asghar_flamer.idle3": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_flamer/idle3"]
+    },
+    "asghar_worker.claw": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_worker/claw"]
+    },
+    "asghar_worker.death": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_worker/death"]
+    },
+    "asghar_worker.hurt1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_worker/hurt1"]
+    },
+    "asghar_worker.hurt2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_worker/hurt2"]
+    },
+    "asghar_worker.hurt3": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_worker/hurt3"]
+    },
+    "asghar_worker.saw": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_worker/saw"]
+    },
+    "asghar_worker.walk": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_worker/walk"]
+    },
+    "candle_fiend.death": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/death"]
+    },
+    "candle_fiend.hurt1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/hurt1"]
+    },
+    "candle_fiend.hurt2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/hurt2"]
+    },
+    "candle_fiend.hurt3": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/hurt3"]
+    },
+    "candle_fiend.hurt4": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/hurt4"]
+    },
+    "candle_fiend.idle1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/idle1"]
+    },
+    "candle_fiend.idle2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/idle2"]
+    },
+    "candle_fiend.idle3": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/idle3"]
+    },
+    "candle_fiend.revive": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/revive"]
+    },
+    "candle_fiend.run": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/run"]
+    },
+    "candle_fiend.scream": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/scream"]
+    },
+    "candle_fiend.slash": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/slash"]
+    },
+    "candle_fiend.smash": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/smash"]
+    },
+    "candle_fiend.walk": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/walk"]
+    },
+    "candle_fiend.warning": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/warning"]
     }
 }
