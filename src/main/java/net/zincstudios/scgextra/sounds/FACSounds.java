@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.fac;
+package net.zincstudios.scgextra.sounds;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.eventbus.api.IEventBus;

@@ -3,7 +3,7 @@ package net.zincstudios.scgextra.entity.fac.fac_lion;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.zincstudios.scgextra.entity.fac.FACSounds;
+import net.zincstudios.scgextra.sounds.FACSounds;
 
 import java.util.EnumSet;
 

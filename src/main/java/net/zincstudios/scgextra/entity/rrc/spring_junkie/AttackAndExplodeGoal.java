@@ -17,7 +17,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.zincstudios.scgextra.entity.rrc.RRCSounds;
+import net.zincstudios.scgextra.sounds.RRCSounds;
 import top.ribs.scguns.init.ModEffects;
 
 public class AttackAndExplodeGoal extends Goal{

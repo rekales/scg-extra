@@ -3,7 +3,7 @@ package net.zincstudios.scgextra.entity.rrc.flaminghead;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.zincstudios.scgextra.entity.rrc.RRCSounds;
+import net.zincstudios.scgextra.sounds.RRCSounds;
 
 import java.util.EnumSet;
 

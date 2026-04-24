@@ -29,8 +29,7 @@ import net.zincstudios.scgextra.entity.common.ai.AlertFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.FlareSummonGoal;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.client.ExpandedAnimationController;
-import net.zincstudios.scgextra.entity.rrc.RRCSounds;
-
+import net.zincstudios.scgextra.sounds.RRCSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;

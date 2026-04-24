@@ -6,9 +6,6 @@ import net.zincstudios.scgextra.datagen.DataGenerators;
 import net.zincstudios.scgextra.effects.ModEffects;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.ModEntities;
-import net.zincstudios.scgextra.entity.fac.FACSounds;
-import net.zincstudios.scgextra.entity.rrc.RRCSounds;
-import net.zincstudios.scgextra.entity.whaler.WhalerSounds;
 
 import com.mojang.logging.LogUtils;
 
@@ -21,6 +18,9 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import net.zincstudios.scgextra.item.ModItems;
 import net.zincstudios.scgextra.particle.ModParticleTypes;
+import net.zincstudios.scgextra.sounds.FACSounds;
+import net.zincstudios.scgextra.sounds.RRCSounds;
+import net.zincstudios.scgextra.sounds.WhalerSounds;
 
 import org.slf4j.Logger;
 

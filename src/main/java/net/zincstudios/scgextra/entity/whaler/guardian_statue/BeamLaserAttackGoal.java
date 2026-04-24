@@ -2,7 +2,7 @@ package net.zincstudios.scgextra.entity.whaler.guardian_statue;
 
 import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.SCGExtra;
-import net.zincstudios.scgextra.entity.whaler.WhalerSounds;
+import net.zincstudios.scgextra.sounds.WhalerSounds;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;

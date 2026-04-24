@@ -26,7 +26,7 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
-import net.zincstudios.scgextra.entity.rrc.RRCSounds;
+import net.zincstudios.scgextra.sounds.RRCSounds;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 

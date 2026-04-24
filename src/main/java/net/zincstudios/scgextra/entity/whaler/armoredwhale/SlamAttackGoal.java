@@ -2,7 +2,7 @@ package net.zincstudios.scgextra.entity.whaler.armoredwhale;
 
 import java.util.List;
 import net.zincstudios.scgextra.entity.Faction;
-import net.zincstudios.scgextra.entity.whaler.WhalerSounds;
+import net.zincstudios.scgextra.sounds.WhalerSounds;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;

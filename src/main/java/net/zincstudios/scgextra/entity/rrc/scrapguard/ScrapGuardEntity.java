@@ -22,8 +22,7 @@ import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
-import net.zincstudios.scgextra.entity.rrc.RRCSounds;
-
+import net.zincstudios.scgextra.sounds.RRCSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;

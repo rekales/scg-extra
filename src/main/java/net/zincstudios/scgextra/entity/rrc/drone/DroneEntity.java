@@ -30,7 +30,7 @@ import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
-import net.zincstudios.scgextra.entity.rrc.RRCSounds;
+import net.zincstudios.scgextra.sounds.RRCSounds;
 import net.minecraftforge.entity.PartEntity;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;

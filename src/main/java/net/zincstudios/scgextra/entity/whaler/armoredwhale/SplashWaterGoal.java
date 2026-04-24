@@ -3,7 +3,7 @@ package net.zincstudios.scgextra.entity.whaler.armoredwhale;
 import java.util.HashSet;
 
 import net.zincstudios.scgextra.entity.Faction;
-import net.zincstudios.scgextra.entity.whaler.WhalerSounds;
+import net.zincstudios.scgextra.sounds.WhalerSounds;
 import net.zincstudios.scgextra.effects.ModEffects;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;

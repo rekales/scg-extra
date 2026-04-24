@@ -11,7 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.Faction;
-import net.zincstudios.scgextra.entity.fac.FACSounds;
+import net.zincstudios.scgextra.sounds.FACSounds;
 
 import java.util.List;
 
