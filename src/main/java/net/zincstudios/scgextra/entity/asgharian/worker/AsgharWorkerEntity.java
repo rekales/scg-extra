@@ -1,5 +1,8 @@
 package net.zincstudios.scgextra.entity.asgharian.worker;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -15,13 +18,16 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.HeadShotHandler;
+import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
+import net.zincstudios.scgextra.sounds.AsgharianSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -34,6 +40,7 @@ import top.ribs.scguns.init.ModEffects;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class AsgharWorkerEntity extends Monster implements GeoEntity, Stunnable, HeadShotHandler {
 
     private static final int STUN_DURATION = 60;
@@ -115,8 +122,10 @@ public class AsgharWorkerEntity extends Monster implements GeoEntity, Stunnable,
 
             this.currentAttack = this.random.nextIntBetweenInclusive(1,2);
             if (this.currentAttack == 1) {
+                this.playSound(AsgharianSounds.ASGHAR_WORKER_SAW.get());
                 this.triggerAnim("melee", "saw");
             } else if (this.currentAttack == 2){
+                this.playSound(AsgharianSounds.ASGHAR_WORKER_CLAW.get());
                 this.triggerAnim("melee", "claw");
             }
             this.hurtDelay = 14;
@@ -215,5 +224,26 @@ public class AsgharWorkerEntity extends Monster implements GeoEntity, Stunnable,
             this.triggerAnim("behaviour", "end_stun");
         }
         return false;
+    }
+
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return MobUtil.getSound(
+                this.random,
+                AsgharianSounds.ASGHAR_WORKER_HURT_1.get(),
+                AsgharianSounds.ASGHAR_WORKER_HURT_2.get(),
+                AsgharianSounds.ASGHAR_WORKER_HURT_3.get()
+        );
+    }
+
+    protected SoundEvent getDeathSound() {
+        return AsgharianSounds.ASGHAR_WORKER_DEATH.get();
+    }
+
+    protected SoundEvent getStepSound() {
+        return AsgharianSounds.ASGHAR_WORKER_WALK.get();
+    }
+
+    protected void playStepSound(BlockPos pos, BlockState block) {
+        this.playSound(this.getStepSound(), 0.15F, 1.0F);
     }
 }
