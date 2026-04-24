@@ -1,5 +1,10 @@
 package net.zincstudios.scgextra.entity.asgharian.flamer;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -10,10 +15,13 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.asgharian.SimpleBurstGunAttackGoal;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
+import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.sounds.AsgharianSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -25,6 +33,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class AsgharFlamerEntity extends GunnerEntity implements GeoEntity {
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
@@ -104,5 +113,43 @@ public class AsgharFlamerEntity extends GunnerEntity implements GeoEntity {
             this.level().broadcastEntityEvent(this, (byte)60);
             this.remove(Entity.RemovalReason.KILLED);
         }
+    }
+
+    protected SoundEvent getAmbientSound() {
+        return MobUtil.getSound(
+                this.random,
+                AsgharianSounds.ASGHAR_FLAMER_IDLE_1.get(),
+                AsgharianSounds.ASGHAR_FLAMER_IDLE_2.get(),
+                AsgharianSounds.ASGHAR_FLAMER_IDLE_3.get()
+        );
+    }
+
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return MobUtil.getSound(
+                this.random,
+                AsgharianSounds.ASGHAR_FLAMER_HURT_1.get(),
+                AsgharianSounds.ASGHAR_FLAMER_HURT_2.get()
+        );
+    }
+
+    protected SoundEvent getDeathSound() {
+        return AsgharianSounds.ASGHAR_FLAMER_DEATH.get();
+    }
+
+    protected SoundEvent getStepSound() {
+        return SoundEvents.ZOMBIE_STEP;
+    }
+
+    // TODO: use
+    protected SoundEvent getAttackSound() {
+        return MobUtil.getSound(
+                this.random,
+                AsgharianSounds.ASGHAR_FLAMER_ATTACK_1.get(),
+                AsgharianSounds.ASGHAR_FLAMER_ATTACK_2.get()
+        );
+    }
+
+    protected void playStepSound(BlockPos pos, BlockState block) {
+        this.playSound(this.getStepSound(), 0.15F, 1.0F);
     }
 }
