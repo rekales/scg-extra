@@ -135,7 +135,7 @@ public class AsgharSurgeonEntity extends GunnerEntity implements GeoEntity, Goal
     public void onGoalStateChanged(Goal goal, String state) {
         if (state.equals(AsgharSurgeonAttackGoal.MELEE_STATE) && !Objects.equals(this.getGunAttackGoalState(), state)) {
             this.triggerAnim("behaviour", "melee");
-            this.playSound(this.getMeleeSound(), 0.15F, 1.0F);
+            this.playSound(this.getAttackSound(), 0.15F, 1.0F);
         }
         this.setGunAttackGoalState(state);
     }
@@ -188,7 +188,7 @@ public class AsgharSurgeonEntity extends GunnerEntity implements GeoEntity, Goal
         return SoundEvents.ZOMBIE_STEP;
     }
 
-    protected SoundEvent getMeleeSound() {
+    protected SoundEvent getAttackSound() {
         return MobUtil.getSound(
                 this.random,
                 AsgharianSounds.ASGHAR_SURGEON_ATTACK_1.get(),
