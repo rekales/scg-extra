@@ -136,6 +136,10 @@ public class AsgharSurgeonEntity extends GunnerEntity implements GeoEntity, Goal
         if (state.equals(AsgharSurgeonAttackGoal.MELEE_STATE) && !Objects.equals(this.getGunAttackGoalState(), state)) {
             this.triggerAnim("behaviour", "melee");
             this.playSound(this.getAttackSound());
+        } else if (state.equals(AsgharSurgeonAttackGoal.FIRING_STATE) && !Objects.equals(this.getGunAttackGoalState(), state)) {
+            if (this.random.nextBoolean()) {
+                this.playSound(this.getAttackSound());
+            }
         }
         this.setGunAttackGoalState(state);
     }

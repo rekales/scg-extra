@@ -8,6 +8,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
@@ -17,7 +18,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.zincstudios.scgextra.entity.Faction;
+import net.zincstudios.scgextra.entity.asgharian.GoalStateHandler;
 import net.zincstudios.scgextra.entity.asgharian.SimpleBurstGunAttackGoal;
+import net.zincstudios.scgextra.entity.asgharian.surgeon.AsgharSurgeonAttackGoal;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
@@ -31,12 +34,16 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Objects;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class AsgharFlamerEntity extends GunnerEntity implements GeoEntity {
+public class AsgharFlamerEntity extends GunnerEntity implements GeoEntity, GoalStateHandler {
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
+
+    // Serverside only
+    private int lastAttackSound = 0;  // tickCount timestamp
 
     public AsgharFlamerEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -115,6 +122,13 @@ public class AsgharFlamerEntity extends GunnerEntity implements GeoEntity {
         }
     }
 
+    @Override
+    public void onGoalStateChanged(Goal goal, String state) {
+        if (state.equals(AsgharSurgeonAttackGoal.FIRING_STATE) && this.tickCount - this.lastAttackSound > 80) {
+            this.playSound(this.getAttackSound());
+        }
+    }
+
     protected SoundEvent getAmbientSound() {
         return MobUtil.getSound(
                 this.random,
@@ -140,7 +154,6 @@ public class AsgharFlamerEntity extends GunnerEntity implements GeoEntity {
         return SoundEvents.ZOMBIE_STEP;
     }
 
-    // TODO: use
     protected SoundEvent getAttackSound() {
         return MobUtil.getSound(
                 this.random,

@@ -20,7 +20,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.zincstudios.scgextra.CommonConfig;
-import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.MobUtil;
@@ -43,7 +42,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 public class AsgharWorkerEntity extends Monster implements GeoEntity, Stunnable, HeadShotHandler {
 
+    public static final int HURT_DELAY = 14;
     private static final int STUN_DURATION = 60;
+    private static final int SAW_SOUND_DELAY = 5;
+    private static final int CLAW_SOUND_DELAY = 12;
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
 
@@ -54,7 +56,7 @@ public class AsgharWorkerEntity extends Monster implements GeoEntity, Stunnable,
 
     // Serverside only
     private int currentAttack = 0;  // 0: none, 1: saw, 2: claw
-    private int hurtDelay = -1;
+    private int attackTicks = 0;
 
     public AsgharWorkerEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -91,10 +93,16 @@ public class AsgharWorkerEntity extends Monster implements GeoEntity, Stunnable,
 
         if (this.level().isClientSide) return;
 
-        if (this.hurtDelay > 0) {
-            this.hurtDelay--;
-        } else {
-            if (this.currentAttack != 0) {
+        if (this.currentAttack != 0) {
+            this.attackTicks++;
+
+            if (this.attackTicks == SAW_SOUND_DELAY && this.currentAttack == 1) {
+                this.playSound(AsgharianSounds.ASGHAR_WORKER_SAW.get());
+            } else if (this.attackTicks == CLAW_SOUND_DELAY &&this.currentAttack == 2) {
+                this.playSound(AsgharianSounds.ASGHAR_WORKER_CLAW.get());
+            }
+
+            if (this.attackTicks == HURT_DELAY) {
                 LivingEntity target = this.getTarget();
                 if (target != null) {
                     double distToEnemySqr = this.getPerceivedTargetDistanceSquareForMeleeAttack(target);
@@ -122,13 +130,11 @@ public class AsgharWorkerEntity extends Monster implements GeoEntity, Stunnable,
 
             this.currentAttack = this.random.nextIntBetweenInclusive(1,2);
             if (this.currentAttack == 1) {
-                this.playSound(AsgharianSounds.ASGHAR_WORKER_SAW.get());
                 this.triggerAnim("melee", "saw");
             } else if (this.currentAttack == 2){
-                this.playSound(AsgharianSounds.ASGHAR_WORKER_CLAW.get());
                 this.triggerAnim("melee", "claw");
             }
-            this.hurtDelay = 14;
+            this.attackTicks = 0;
         }
         return true;
     }
@@ -183,7 +189,6 @@ public class AsgharWorkerEntity extends Monster implements GeoEntity, Stunnable,
             this.headshotCounter++;
         }
 
-        SCGExtra.LOGGER.debug("h: " + this.headshotCounter);
         return false;
     }
 
@@ -244,6 +249,6 @@ public class AsgharWorkerEntity extends Monster implements GeoEntity, Stunnable,
     }
 
     protected void playStepSound(BlockPos pos, BlockState block) {
-        this.playSound(this.getStepSound(), 0.15F, 1.0F);
+        this.playSound(this.getStepSound(), 0.25F, 1.0F);
     }
 }
