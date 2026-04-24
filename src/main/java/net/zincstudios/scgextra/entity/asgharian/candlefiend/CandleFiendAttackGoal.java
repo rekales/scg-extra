@@ -7,6 +7,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.pathfinder.Path;
+import net.zincstudios.scgextra.sounds.AsgharianSounds;
 import top.ribs.scguns.init.ModEffects;
 
 import java.util.EnumSet;
@@ -130,6 +131,10 @@ public class CandleFiendAttackGoal extends Goal {
             this.checkAndPerformAttack(target, distToEnemySqr);
 
             if (this.hurtDelay > 0) {
+                if (this.hurtDelay == 6 && this.attackVar == 2) {
+                    // TODO: move to entity code
+                    this.mob.playSound(AsgharianSounds.CANDLE_FIEND_SLAM.get(), 4F, 1F);
+                }
                 this.hurtDelay--;
             } else {
                 if (this.attackVar != 0) {
@@ -167,7 +172,7 @@ public class CandleFiendAttackGoal extends Goal {
                 target.addEffect(new MobEffectInstance(ModEffects.LACERATED.get(), 80));
                 this.mob.doHurtTarget(target);
                 this.hurtDelay = SLASH_SECOND_HURT_DELAY;
-                this.stateClearDelay = 20;
+                this.stateClearDelay = 25;
             } else {
                 this.mob.setBehaviorState(CandleFiendEntity.BehaviorState.SLAM);
                 this.hurtDelay = SLAM_HURT_DELAY + CandleFiendEntity.WARNING_FLASH_DURATION;

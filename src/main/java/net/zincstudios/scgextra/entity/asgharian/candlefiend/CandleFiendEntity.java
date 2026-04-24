@@ -9,7 +9,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -30,6 +29,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
@@ -178,7 +178,6 @@ public class CandleFiendEntity extends Monster implements GeoEntity, Leaping {
                 this.setHealth(this.getMaxHealth());
                 this.dead = false;
             } else if (this.deathTime >= 100) {
-                this.playSound(AsgharianSounds.CANDLE_FIEND_REVIVE.get());
                 if (!this.level().isClientSide) this.setBehaviorState(BehaviorState.REVIVE);
             } else {
                 if (!this.level().isClientSide) this.setBehaviorState(BehaviorState.DYING);
@@ -220,7 +219,7 @@ public class CandleFiendEntity extends Monster implements GeoEntity, Leaping {
                 .add(Attributes.ATTACK_DAMAGE, 10.0D)
                 .add(Attributes.ARMOR, 7.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.9)
-                .add(Attributes.MAX_HEALTH, 700.0D);
+                .add(Attributes.MAX_HEALTH, 70.0D);
     }
 
     @Override
@@ -300,14 +299,15 @@ public class CandleFiendEntity extends Monster implements GeoEntity, Leaping {
             this.playSound(AsgharianSounds.CANDLE_FIEND_SCREAM.get());
         } else if (this.behaviorState != BehaviorState.SLASH && behaviorState == BehaviorState.SLASH) {
             this.triggerAnim("behaviour", "slash");
+            SCGExtra.LOGGER.debug("trig sound: " + this.tickCount);
             this.playSound(AsgharianSounds.CANDLE_FIEND_SLASH.get());
         } else if (this.behaviorState != BehaviorState.SLAM && behaviorState == BehaviorState.SLAM) {
             this.slamDelay = WARNING_FLASH_DURATION;
             this.triggerAnim("effects", "eye_flash");
-            this.playSound(AsgharianSounds.CANDLE_FIEND_SLAM.get());
             this.playSound(AsgharianSounds.CANDLE_FIEND_WARNING.get());
         } else if (this.behaviorState != BehaviorState.REVIVE && behaviorState == BehaviorState.REVIVE) {
             this.triggerAnim("revive", "revive");
+            this.playSound(AsgharianSounds.CANDLE_FIEND_REVIVE.get());
         }
 
         this.behaviorState = behaviorState;
@@ -367,6 +367,6 @@ public class CandleFiendEntity extends Monster implements GeoEntity, Leaping {
     }
 
     protected void playStepSound(BlockPos pos, BlockState block) {
-        this.playSound(this.getStepSound(), 0.15F, 1.0F);
+        this.playSound(this.getStepSound(), this.isMasked() ? 0.25F : 0.35F, 1.0F);
     }
 }
