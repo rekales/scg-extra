@@ -1,9 +1,12 @@
 package net.zincstudios.scgextra.entity.asgharian.candlefiend;
 
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -20,9 +23,11 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.client.ExpandedAnimationController;
+import net.zincstudios.scgextra.particle.ModParticleTypes;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -81,42 +86,68 @@ public class CandleFiendEntity extends Monster implements GeoEntity {
     public void tick() {
         super.tick();
 
-        if (this.level().isClientSide) return;
+        if (this.level() instanceof ClientLevel clientLevel) {
+            if (this.isMasked() && !this.isDeadOrDying() && this.tickCount % 3 == 0) {
+                Vec3 pos = this.isSprinting() ? new Vec3(0,3.4,1) : new Vec3(0,3.6,0.3);
+                pos = pos.add(
+                        (this.getRandom().nextDouble() - 0.5) * 2,
+                        (this.getRandom().nextDouble() - 0.5) * 0.6,
+                        (this.getRandom().nextDouble() - 0.5) * 0.6
+                        ).yRot(-this.yBodyRot * Mth.DEG_TO_RAD)
+                        .add(this.position());
 
-        if (this.tickCount % 20 == 0) {
-            if (this.isMasked()) {
-                if (!this.hasEffect(MobEffects.REGENERATION)) {
-                    this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, -1, 1));
-                }
+                clientLevel.addParticle(
+                        ParticleTypes.SOUL_FIRE_FLAME,
+                        pos.x, pos.y, pos.z,
+                        0, (this.getRandom().nextDouble()) * 0.02, 0
+                );
 
-            } else {
-                if (this.hasEffect(MobEffects.REGENERATION)) {
-                    this.removeEffect(MobEffects.REGENERATION);
-                }
-                AttributeInstance speedAttr = this.getAttribute(Attributes.MOVEMENT_SPEED);
-                if (speedAttr != null && !speedAttr.hasModifier(UNMASKED_SPEED_MODIFIER)) {
-                    speedAttr.addTransientModifier(UNMASKED_SPEED_MODIFIER);
-                }
+                clientLevel.addParticle(
+                        ParticleTypes.SMOKE,
+                        pos.x, pos.y, pos.z,
+                        (this.getRandom().nextDouble() - 0.5) * 0.03,
+                        0,
+                        (this.getRandom().nextDouble() - 0.5) * 0.03
+                );
             }
-        }
 
-        if (this.enragedTicks > 0) {
-            this.enragedTicks--;
-            this.getNavigation().stop();
-            this.setBehaviorState(BehaviorState.ENRAGED);
-        } else if (this.getBehaviourState() == BehaviorState.ENRAGED) {
-            this.setBehaviorState(BehaviorState.NONE);
-        }
 
-        if (this.getTarget() != null) {
-            if (this.lastTarget == null) {
-                this.enragedTicks = ENRAGE_DURATION_TICKS;
-            }
-            this.setSprinting(true);
         } else {
-            this.setSprinting(false);
+            if (this.tickCount % 20 == 0) {
+                if (this.isMasked()) {
+                    if (!this.hasEffect(MobEffects.REGENERATION)) {
+                        this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, -1, 1));
+                    }
+
+                } else {
+                    if (this.hasEffect(MobEffects.REGENERATION)) {
+                        this.removeEffect(MobEffects.REGENERATION);
+                    }
+                    AttributeInstance speedAttr = this.getAttribute(Attributes.MOVEMENT_SPEED);
+                    if (speedAttr != null && !speedAttr.hasModifier(UNMASKED_SPEED_MODIFIER)) {
+                        speedAttr.addTransientModifier(UNMASKED_SPEED_MODIFIER);
+                    }
+                }
+            }
+
+            if (this.enragedTicks > 0) {
+                this.enragedTicks--;
+                this.getNavigation().stop();
+                this.setBehaviorState(BehaviorState.ENRAGED);
+            } else if (this.getBehaviourState() == BehaviorState.ENRAGED) {
+                this.setBehaviorState(BehaviorState.NONE);
+            }
+
+            if (this.getTarget() != null) {
+                if (this.lastTarget == null) {
+                    this.enragedTicks = ENRAGE_DURATION_TICKS;
+                }
+                this.setSprinting(true);
+            } else {
+                this.setSprinting(false);
+            }
+            this.lastTarget = this.getTarget();
         }
-        this.lastTarget = this.getTarget();
     }
 
     @Override
