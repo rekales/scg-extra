@@ -27,7 +27,6 @@ import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.client.ExpandedAnimationController;
-import net.zincstudios.scgextra.particle.ModParticleTypes;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -39,7 +38,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class CandleFiendEntity extends Monster implements GeoEntity {
+public class CandleFiendEntity extends Monster implements GeoEntity, Leaping {
 
     public enum BehaviorState {
         NONE, ENRAGED, SLASH, SLAM, DYING, REVIVE
@@ -182,6 +181,7 @@ public class CandleFiendEntity extends Monster implements GeoEntity {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new CandleFiendAttackGoal(this, 20, true));
+        this.goalSelector.addGoal(1, new LeapGoal<>(this, 100, 3));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
@@ -305,5 +305,10 @@ public class CandleFiendEntity extends Monster implements GeoEntity {
         if (tag.contains("Masked")) {
             this.setMasked(tag.getBoolean("Masked"));
         }
+    }
+
+    @Override
+    public boolean canLeap() {
+        return this.getBehaviourState() == BehaviorState.NONE;
     }
 }
