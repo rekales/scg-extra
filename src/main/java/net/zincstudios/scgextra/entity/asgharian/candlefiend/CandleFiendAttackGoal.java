@@ -13,6 +13,7 @@ import java.util.EnumSet;
 
 // Modified and simplified MeleeAttackGoal
 // Removed canPenalize because dead code
+// TODO: redo with the use GoalStateHandler
 public class CandleFiendAttackGoal extends Goal {
 
     private static final int SLAM_COOLDOWN = 200;
@@ -169,8 +170,8 @@ public class CandleFiendAttackGoal extends Goal {
                 this.stateClearDelay = 20;
             } else {
                 this.mob.setBehaviorState(CandleFiendEntity.BehaviorState.SLAM);
-                this.hurtDelay = SLAM_HURT_DELAY;
-                this.stateClearDelay = 30;
+                this.hurtDelay = SLAM_HURT_DELAY + CandleFiendEntity.WARNING_FLASH_DURATION;
+                this.stateClearDelay = 30 + CandleFiendEntity.WARNING_FLASH_DURATION;
                 this.slamCooldown = SLAM_COOLDOWN;
             }
 

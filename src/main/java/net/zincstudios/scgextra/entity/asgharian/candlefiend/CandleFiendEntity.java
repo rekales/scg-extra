@@ -68,6 +68,7 @@ public class CandleFiendEntity extends Monster implements GeoEntity, Leaping {
     private static final RawAnimation EFFECTS_BASE = RawAnimation.begin().thenPlayAndHold("effect.none");
     private static final RawAnimation EYE_FLASH = RawAnimation.begin().thenPlay("effect.eye_flash");
 
+    public static final int WARNING_FLASH_DURATION = 10;
     private static final int ENRAGE_DURATION_TICKS = 70;  // Match with animation
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
@@ -76,6 +77,7 @@ public class CandleFiendEntity extends Monster implements GeoEntity, Leaping {
     private BehaviorState behaviorState = BehaviorState.NONE;
     private LivingEntity lastTarget = null;
     private int enragedTicks = 0;
+    private int slamDelay = 0;
 
     public CandleFiendEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -126,6 +128,13 @@ public class CandleFiendEntity extends Monster implements GeoEntity, Leaping {
                     if (speedAttr != null && !speedAttr.hasModifier(UNMASKED_SPEED_MODIFIER)) {
                         speedAttr.addTransientModifier(UNMASKED_SPEED_MODIFIER);
                     }
+                }
+            }
+
+            if (this.getBehaviourState() == BehaviorState.SLAM) {
+                this.slamDelay--;
+                if (this.slamDelay == 0) {
+                    this.triggerAnim("behaviour", "slam");
                 }
             }
 
@@ -281,7 +290,7 @@ public class CandleFiendEntity extends Monster implements GeoEntity, Leaping {
         } else if (this.behaviorState != BehaviorState.SLASH && behaviorState == BehaviorState.SLASH) {
             this.triggerAnim("behaviour", "slash");
         } else if (this.behaviorState != BehaviorState.SLAM && behaviorState == BehaviorState.SLAM) {
-            this.triggerAnim("behaviour", "slam");
+            this.slamDelay = WARNING_FLASH_DURATION;
             this.triggerAnim("effects", "eye_flash");
         } else if (this.behaviorState != BehaviorState.REVIVE && behaviorState == BehaviorState.REVIVE) {
             this.triggerAnim("revive", "revive");
