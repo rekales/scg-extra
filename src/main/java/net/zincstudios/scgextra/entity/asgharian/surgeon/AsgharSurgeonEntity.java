@@ -1,9 +1,14 @@
 package net.zincstudios.scgextra.entity.asgharian.surgeon;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,6 +22,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
@@ -24,7 +30,9 @@ import net.zincstudios.scgextra.entity.asgharian.BulletSpawnOffset;
 import net.zincstudios.scgextra.entity.asgharian.GoalStateHandler;
 import net.zincstudios.scgextra.entity.asgharian.SimpleGunAttackGoal;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
+import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.sounds.AsgharianSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -33,8 +41,11 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class AsgharSurgeonEntity extends GunnerEntity implements GeoEntity, GoalStateHandler, BulletSpawnOffset {
 
     private static final EntityDataAccessor<String> GUN_ATTACK_GOAL_STATE =
@@ -124,6 +135,7 @@ public class AsgharSurgeonEntity extends GunnerEntity implements GeoEntity, Goal
     public void onGoalStateChanged(Goal goal, String state) {
         if (state.equals(AsgharSurgeonAttackGoal.MELEE_STATE) && !Objects.equals(this.getGunAttackGoalState(), state)) {
             this.triggerAnim("behaviour", "melee");
+            this.playSound(this.getMeleeSound(), 0.15F, 1.0F);
         }
         this.setGunAttackGoalState(state);
     }
@@ -147,5 +159,44 @@ public class AsgharSurgeonEntity extends GunnerEntity implements GeoEntity, Goal
     @Override
     public Vec3 getBulletSpawnOffset() {
         return new Vec3(1.25,2,0.75).yRot(-this.yBodyRot * Mth.DEG_TO_RAD);
+    }
+
+    protected SoundEvent getAmbientSound() {
+        return MobUtil.getSound(
+                this.random,
+                AsgharianSounds.ASGHAR_SURGEON_IDLE_1.get(),
+                AsgharianSounds.ASGHAR_SURGEON_IDLE_2.get(),
+                AsgharianSounds.ASGHAR_SURGEON_IDLE_3.get()
+        );
+    }
+
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return MobUtil.getSound(
+                this.random,
+                AsgharianSounds.ASGHAR_SURGEON_HURT_1.get(),
+                AsgharianSounds.ASGHAR_SURGEON_HURT_2.get(),
+                AsgharianSounds.ASGHAR_SURGEON_HURT_3.get(),
+                AsgharianSounds.ASGHAR_SURGEON_HURT_4.get()
+        );
+    }
+
+    protected SoundEvent getDeathSound() {
+        return AsgharianSounds.ASGHAR_SURGEON_DEATH.get();
+    }
+
+    protected SoundEvent getStepSound() {
+        return SoundEvents.ZOMBIE_STEP;
+    }
+
+    protected SoundEvent getMeleeSound() {
+        return MobUtil.getSound(
+                this.random,
+                AsgharianSounds.ASGHAR_SURGEON_ATTACK_1.get(),
+                AsgharianSounds.ASGHAR_SURGEON_ATTACK_2.get()
+        );
+    }
+
+    protected void playStepSound(BlockPos pos, BlockState block) {
+        this.playSound(this.getStepSound(), 0.15F, 1.0F);
     }
 }
