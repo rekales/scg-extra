@@ -219,7 +219,7 @@ public class CandleFiendEntity extends Monster implements GeoEntity, Leaping {
                 .add(Attributes.ATTACK_DAMAGE, 10.0D)
                 .add(Attributes.ARMOR, 7.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.9)
-                .add(Attributes.MAX_HEALTH, 70.0D);
+                .add(Attributes.MAX_HEALTH, 700.0D);
     }
 
     @Override
