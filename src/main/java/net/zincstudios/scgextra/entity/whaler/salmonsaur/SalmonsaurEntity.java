@@ -5,7 +5,7 @@ import java.util.Random;
 
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
-import net.zincstudios.scgextra.entity.ModEntities;
+import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
 import net.zincstudios.scgextra.entity.whaler.fishfolk.FishFolkEntity;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -75,7 +75,7 @@ public class SalmonsaurEntity extends Monster implements GeoEntity {
             if (noAutoRider) {
                 riderSpawned = true;
             } else {
-                FishFolkEntity rider = new FishFolkEntity(ModEntities.FISH_FOLK.get(), this.level());
+                FishFolkEntity rider = new FishFolkEntity(WhalerEntities.FISH_FOLK.get(), this.level());
                 int i = new Random().nextInt(20);
                 if (i < 10) {
                     rider.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.TRIDENT));

@@ -33,6 +33,7 @@ import net.zincstudios.scgextra.entity.rrc.flaminghead.FlamingHeadRenderer;
 import net.zincstudios.scgextra.entity.rrc.scout.ScoutRenderer;
 import net.zincstudios.scgextra.entity.rrc.scrapguard.ScrapGuardRenderer;
 import net.zincstudios.scgextra.entity.rrc.spring_junkie.SpringJunkieRenderer;
+import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
 import net.zincstudios.scgextra.entity.whaler.armoredwhale.ArmoredWhaleRenderer;
 import net.zincstudios.scgextra.entity.whaler.fishfolk.FishFolkRenderer;
 import net.zincstudios.scgextra.entity.whaler.guardian_statue.GuardianStatueRenderer;
@@ -51,16 +52,16 @@ public final class ModClientEventHandler {
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
-        EntityRenderers.register(ModEntities.FISH_FOLK.get(), FishFolkRenderer::new);
-        EntityRenderers.register(ModEntities.TURTLEMAN.get(), (ctx) -> new GunnerRenderer<>(ctx,
+        EntityRenderers.register(WhalerEntities.FISH_FOLK.get(), FishFolkRenderer::new);
+        EntityRenderers.register(WhalerEntities.TURTLEMAN.get(), (ctx) -> new GunnerRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("whaler/turtleman")), -10));
-        EntityRenderers.register(ModEntities.SALMONSAUR.get(), SalmonsaurRenderer::new);
-        EntityRenderers.register(ModEntities.GUARDIAN_STATUE.get(), GuardianStatueRenderer::new);
-        EntityRenderers.register(ModEntities.TENTACLIATOR.get(), TentacliatorRenderer::new);
-        EntityRenderers.register(ModEntities.GLOWING_TENTACLIATOR.get(), GlowingTentacliatorRenderer::new);
-        EntityRenderers.register(ModEntities.PUFFICUS.get(), PufficusRenderer::new);
+        EntityRenderers.register(WhalerEntities.SALMONSAUR.get(), SalmonsaurRenderer::new);
+        EntityRenderers.register(WhalerEntities.GUARDIAN_STATUE.get(), GuardianStatueRenderer::new);
+        EntityRenderers.register(WhalerEntities.TENTACLIATOR.get(), TentacliatorRenderer::new);
+        EntityRenderers.register(WhalerEntities.GLOWING_TENTACLIATOR.get(), GlowingTentacliatorRenderer::new);
+        EntityRenderers.register(WhalerEntities.PUFFICUS.get(), PufficusRenderer::new);
+        EntityRenderers.register(WhalerEntities.ARMORED_WHALE.get(), ArmoredWhaleRenderer::new);
         EntityRenderers.register(ModEntities.NET.get(), NetEntityRenderer::new);
-        EntityRenderers.register(ModEntities.ARMORED_WHALE.get(), ArmoredWhaleRenderer::new);
         EntityRenderers.register(ModEntities.WHALE_PROJECTILE.get(), EnemyProjectileRenderer::new);
         EntityRenderers.register(ModEntities.FIRE_PROJECTILE.get(), EnemyProjectileRenderer::new);
         EntityRenderers.register(ModEntities.RAID_SUMMONER.get(), RaidSummonerRenderer::new);

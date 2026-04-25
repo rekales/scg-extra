@@ -11,8 +11,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.zincstudios.scgextra.entity.ModEntities;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
+import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
 
 public class RaidSummonerEntity extends Mob {
     private static final ArrayList<EntityType<?>> whalerElite = new ArrayList<>();
@@ -33,11 +33,11 @@ public class RaidSummonerEntity extends Mob {
             return;
         }
 
-        whalerElite.add(ModEntities.SALMONSAUR.get());
-        whalerElite.add(ModEntities.TURTLEMAN.get());
-        whalerElite.add(ModEntities.TENTACLIATOR.get());
-        whalerElite.add(ModEntities.GLOWING_TENTACLIATOR.get());
-        whalerElite.add(ModEntities.PUFFICUS.get());
+        whalerElite.add(WhalerEntities.SALMONSAUR.get());
+        whalerElite.add(WhalerEntities.TURTLEMAN.get());
+        whalerElite.add(WhalerEntities.TENTACLIATOR.get());
+        whalerElite.add(WhalerEntities.GLOWING_TENTACLIATOR.get());
+        whalerElite.add(WhalerEntities.PUFFICUS.get());
 
         rrcElite.add(RRCEntities.SPRING_JUNKIE.get());
         rrcElite.add(RRCEntities.SCRAP_GUARD.get());
@@ -104,7 +104,7 @@ public class RaidSummonerEntity extends Mob {
         ArrayList<EntityType<?>> spawned = new ArrayList<>();
         ServerLevel sLevel = (ServerLevel)this.level();
         for(int i = 0; i < 5; i++){
-            ModEntities.FISH_FOLK.get().spawn(sLevel, this.blockPosition(), MobSpawnType.MOB_SUMMONED);
+            WhalerEntities.FISH_FOLK.get().spawn(sLevel, this.blockPosition(), MobSpawnType.MOB_SUMMONED);
         }
         for(int i = 0; i < 3; i++){
             EntityType<?> entity = whalerElite.get(this.random.nextInt(whalerElite.size()));

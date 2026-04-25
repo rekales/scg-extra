@@ -5,10 +5,10 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.zincstudios.scgextra.entity.EntityTypeTags;
-import net.zincstudios.scgextra.entity.ModEntities;
 import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
 import net.zincstudios.scgextra.entity.fac.FACEntities;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
+import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
 import org.jetbrains.annotations.Nullable;
 import top.ribs.scguns.init.ModTags;
 
@@ -25,28 +25,28 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider provider) {
         tag(ModTags.Entities.WATER)
-                .add(ModEntities.FISH_FOLK.get())
-                .add(ModEntities.TURTLEMAN.get())
-                .add(ModEntities.SALMONSAUR.get())
-                .add(ModEntities.GUARDIAN_STATUE.get())
-                .add(ModEntities.TENTACLIATOR.get())
-                .add(ModEntities.GLOWING_TENTACLIATOR.get())
-                .add(ModEntities.PUFFICUS.get())
-                .add(ModEntities.ARMORED_WHALE.get());
+                .add(WhalerEntities.FISH_FOLK.get())
+                .add(WhalerEntities.TURTLEMAN.get())
+                .add(WhalerEntities.SALMONSAUR.get())
+                .add(WhalerEntities.GUARDIAN_STATUE.get())
+                .add(WhalerEntities.TENTACLIATOR.get())
+                .add(WhalerEntities.GLOWING_TENTACLIATOR.get())
+                .add(WhalerEntities.PUFFICUS.get())
+                .add(WhalerEntities.ARMORED_WHALE.get());
 
         tag(ModTags.Entities.HEAVY)
-                .add(ModEntities.TURTLEMAN.get())
-                .add(ModEntities.SALMONSAUR.get());
+                .add(WhalerEntities.TURTLEMAN.get())
+                .add(WhalerEntities.SALMONSAUR.get());
 
         tag(ModTags.Entities.VERY_HEAVY)
-                .add(ModEntities.GUARDIAN_STATUE.get())
-                .add(ModEntities.ARMORED_WHALE.get());
+                .add(WhalerEntities.GUARDIAN_STATUE.get())
+                .add(WhalerEntities.ARMORED_WHALE.get());
 
         tag(ModTags.Entities.WHITE_BLOOD)
-                .add(ModEntities.GUARDIAN_STATUE.get());
+                .add(WhalerEntities.GUARDIAN_STATUE.get());
 
         tag(ModTags.Entities.CANNOT_BE_LACERATED)
-                .add(ModEntities.GUARDIAN_STATUE.get())
+                .add(WhalerEntities.GUARDIAN_STATUE.get())
                 .add(AsgharianEntities.ASGHAR_WORKER.get());
 
         tag(ModTags.Entities.BOT)
@@ -68,7 +68,8 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
                 .add(top.ribs.scguns.init.ModEntities.COG_KNIGHT.get())
                 .add(top.ribs.scguns.init.ModEntities.TRAUMA_UNIT.get())
                 .add(top.ribs.scguns.init.ModEntities.COG_MINION.get())
-                .add(top.ribs.scguns.init.ModEntities.SKY_CARRIER.get())                .add(top.ribs.scguns.init.ModEntities.COG_KNIGHT.get())
+                .add(top.ribs.scguns.init.ModEntities.SKY_CARRIER.get())
+                .add(top.ribs.scguns.init.ModEntities.COG_KNIGHT.get())
                 .add(top.ribs.scguns.init.ModEntities.SIGNAL_BEACON.get())
                 .add(top.ribs.scguns.init.ModEntities.SCAMPLER.get())
                 .add(top.ribs.scguns.init.ModEntities.SCAMP_TANK.get());
@@ -86,14 +87,14 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
                 .add(FACEntities.FAC_TANK.get());
 
         tag(EntityTypeTags.WHALER)
-                .add(ModEntities.FISH_FOLK.get())
-                .add(ModEntities.TURTLEMAN.get())
-                .add(ModEntities.SALMONSAUR.get())
-                .add(ModEntities.TENTACLIATOR.get())
-                .add(ModEntities.GLOWING_TENTACLIATOR.get())
-                .add(ModEntities.PUFFICUS.get())
-                .add(ModEntities.GUARDIAN_STATUE.get())
-                .add(ModEntities.ARMORED_WHALE.get())
+                .add(WhalerEntities.FISH_FOLK.get())
+                .add(WhalerEntities.TURTLEMAN.get())
+                .add(WhalerEntities.SALMONSAUR.get())
+                .add(WhalerEntities.TENTACLIATOR.get())
+                .add(WhalerEntities.GLOWING_TENTACLIATOR.get())
+                .add(WhalerEntities.PUFFICUS.get())
+                .add(WhalerEntities.GUARDIAN_STATUE.get())
+                .add(WhalerEntities.ARMORED_WHALE.get())
                 .add(top.ribs.scguns.init.ModEntities.FINFORCER.get());
 
         tag(EntityTypeTags.RRC)

@@ -12,10 +12,10 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.SCGExtra;
-import net.zincstudios.scgextra.entity.ModEntities;
 import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
 import net.zincstudios.scgextra.entity.fac.FACEntities;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
+import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
 
 @SuppressWarnings("unused")
 public class ModItems {
@@ -42,14 +42,14 @@ public class ModItems {
 
     public static final RegistryObject<SpawnEggItem>
             // Whaler
-            FISH_FOLK_SPAWN_EGG = basicSpawnEgg(ModEntities.FISH_FOLK),
-            TURTLEMAN_SPAWN_EGG = basicSpawnEgg(ModEntities.TURTLEMAN),
-            SALMONSAUR_SPAWN_EGG = basicSpawnEgg(ModEntities.SALMONSAUR),
-            GUARDIAN_STATUE_SPAWN_EGG = basicSpawnEgg(ModEntities.GUARDIAN_STATUE),
-            TENTACLIATOR_SPAWN_EGG = basicSpawnEgg(ModEntities.TENTACLIATOR),
-            GLOWING_TENTACLIATOR_SPAWN_EGG = basicSpawnEgg(ModEntities.GLOWING_TENTACLIATOR),
-            PUFFICUS_SPAWN_EGG = basicSpawnEgg(ModEntities.PUFFICUS),
-            ARMORED_WHALE_SPAWN_EGG = basicSpawnEgg(ModEntities.ARMORED_WHALE),
+            FISH_FOLK_SPAWN_EGG = basicSpawnEgg(WhalerEntities.FISH_FOLK),
+            TURTLEMAN_SPAWN_EGG = basicSpawnEgg(WhalerEntities.TURTLEMAN),
+            SALMONSAUR_SPAWN_EGG = basicSpawnEgg(WhalerEntities.SALMONSAUR),
+            GUARDIAN_STATUE_SPAWN_EGG = basicSpawnEgg(WhalerEntities.GUARDIAN_STATUE),
+            TENTACLIATOR_SPAWN_EGG = basicSpawnEgg(WhalerEntities.TENTACLIATOR),
+            GLOWING_TENTACLIATOR_SPAWN_EGG = basicSpawnEgg(WhalerEntities.GLOWING_TENTACLIATOR),
+            PUFFICUS_SPAWN_EGG = basicSpawnEgg(WhalerEntities.PUFFICUS),
+            ARMORED_WHALE_SPAWN_EGG = basicSpawnEgg(WhalerEntities.ARMORED_WHALE),
 
             // RRC
             COPPER_KNIGHT_SPAWN_EGG = basicSpawnEgg(RRCEntities.COPPER_KNIGHT),

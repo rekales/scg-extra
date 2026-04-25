@@ -14,10 +14,10 @@ import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import net.zincstudios.scgextra.entity.ModEntities;
 import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
 import net.zincstudios.scgextra.entity.fac.FACEntities;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
+import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
 import top.ribs.scguns.init.ModBlocks;
 import top.ribs.scguns.init.ModItems;
 
@@ -35,42 +35,35 @@ public class ModEntityLootTableProvider extends EntityLootSubProvider {
     @Override
     public void generate() {
 
-        basicLoot(ModEntities.FISH_FOLK.get())
+        basicLoot(WhalerEntities.FISH_FOLK.get())
                 .range(ModItems.FROG_DART.get(), 1, 3)
                 .range(ModItems.ADVANCED_ROUND.get(), 1, 3)
                 .constant(Items.TROPICAL_FISH, 1);
-
-        basicLoot(ModEntities.SALMONSAUR.get())
+        basicLoot(WhalerEntities.SALMONSAUR.get())
                 .constant(Items.COD, 1)
                 .chance(Items.SADDLE,  0.2f);
-
-        basicLoot(ModEntities.TURTLEMAN.get())
+        basicLoot(WhalerEntities.TURTLEMAN.get())
                 .range(ModItems.SHOTBALL.get(), 1, 3)
                 .range(ModItems.ADVANCED_ROUND.get(), 1, 3)
                 .constant(Items.SCUTE, 1);
-
-        basicLoot(ModEntities.TENTACLIATOR.get())
+        basicLoot(WhalerEntities.TENTACLIATOR.get())
                 .range(ModItems.FROG_DART.get(), 1, 3)
                 .range(ModItems.ADVANCED_ROUND.get(), 1, 3)
                 .range(Items.INK_SAC, 1, 3);
-
-        basicLoot(ModEntities.GLOWING_TENTACLIATOR.get())
+        basicLoot(WhalerEntities.GLOWING_TENTACLIATOR.get())
                 .range(ModItems.FROG_DART.get(), 1, 3)
                 .range(ModItems.ADVANCED_ROUND.get(), 1, 3)
                 .range(Items.GLOW_INK_SAC, 1, 3);
-
-        basicLoot(ModEntities.PUFFICUS.get())
+        basicLoot(WhalerEntities.PUFFICUS.get())
                 .range(ModItems.FROG_DART.get(), 1, 3)
                 .range(ModItems.ADVANCED_ROUND.get(), 1, 3)
                 .constant(Items.PUFFERFISH, 1);
-
-        basicLoot(ModEntities.GUARDIAN_STATUE.get())
+        basicLoot(WhalerEntities.GUARDIAN_STATUE.get())
                 .constant(ModItems.OCEAN_FLARE.get(), 1)
                 .range(ModItems.BLUEPRINT_SCRAP.get(), 1, 2)
                 .range(Items.HEART_OF_THE_SEA, 1, 3)
                 .range(Items.PRISMARINE_SHARD, 3, 9);
-
-        basicLoot(ModEntities.ARMORED_WHALE.get())
+        basicLoot(WhalerEntities.ARMORED_WHALE.get())
                 .range(ModItems.BLUEPRINT_SCRAP.get(), 1, 2)
                 .constant(ModItems.LEVIATHAN_TOOTH.get(), 1)
                 .range(ModBlocks.SUPPLY_CRATE.get().asItem(), 3, 6);

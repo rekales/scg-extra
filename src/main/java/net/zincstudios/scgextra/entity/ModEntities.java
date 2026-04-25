@@ -1,45 +1,15 @@
 package net.zincstudios.scgextra.entity;
 
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
-import net.zincstudios.scgextra.entity.common.OffsetRotatedHeadshotBox;
-import net.zincstudios.scgextra.entity.common.WeakPointBox;
-import net.zincstudios.scgextra.entity.common.WeakPointBoxManager;
 import net.zincstudios.scgextra.entity.common.raid_summoner.RaidSummonerEntity;
 import net.zincstudios.scgextra.entity.fac.FACEntities;
-import net.zincstudios.scgextra.entity.fac.fac_tank_buster.FacTankBusterEntity;
-import net.zincstudios.scgextra.entity.fac.fac_bluecoat.FacBluecoatEntity;
-import net.zincstudios.scgextra.entity.fac.fac_commissar.FacCommissarEntity;
-import net.zincstudios.scgextra.entity.fac.fac_lion.FacLionEntity;
-import net.zincstudios.scgextra.entity.fac.fac_tank.FacTankEntity;
-import net.zincstudios.scgextra.entity.fac.fac_trencher.FacTrencherEntity;
-import net.zincstudios.scgextra.entity.fac.fac_walker.FacWalkerEntity;
-import net.zincstudios.scgextra.entity.fac.shovel_knight.ShovelKnightEntity;
-import net.zincstudios.scgextra.entity.fac.trench_sniper.TrenchSniperEntity;
-import net.zincstudios.scgextra.entity.fac.trench_goblin.TrenchGoblinEntity;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntity;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
-import net.zincstudios.scgextra.entity.rrc.flaminghead.FlamingHeadEntity;
-import net.zincstudios.scgextra.entity.rrc.oppressor.OppressorEntity;
-import net.zincstudios.scgextra.entity.rrc.scrapguard.ScrapGuardEntity;
-import net.zincstudios.scgextra.entity.rrc.tallman.TallmanEntity;
-import net.zincstudios.scgextra.entity.whaler.armoredwhale.ArmoredWhaleEntity;
-import net.zincstudios.scgextra.entity.whaler.fishfolk.FishFolkEntity;
-import net.zincstudios.scgextra.entity.rrc.drone.DroneEntity;
-import net.zincstudios.scgextra.entity.rrc.scout.ScoutEntity;
-import net.zincstudios.scgextra.entity.rrc.spring_junkie.SpringJunkieEntity;
-import net.zincstudios.scgextra.entity.rrc.arc_psycho.ArcPsychoEntity;
-import net.zincstudios.scgextra.entity.rrc.copper_knight.CopperKnightEntity;
-import net.zincstudios.scgextra.entity.whaler.tentacliator.GlowingTentacliatorEntity;
-import net.zincstudios.scgextra.entity.whaler.guardian_statue.GuardianStatueEntity;
+import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
 import net.zincstudios.scgextra.entity.projectile.ArmoredWhaleProjectileEntity;
 import net.zincstudios.scgextra.entity.projectile.FireProjectile;
-import net.zincstudios.scgextra.entity.whaler.pufficus.PufficusEntity;
-import net.zincstudios.scgextra.entity.whaler.salmonsaur.SalmonsaurEntity;
-import net.zincstudios.scgextra.entity.whaler.tentacliator.TentacliatorEntity;
-import net.zincstudios.scgextra.entity.whaler.turtleman.TurtlemanEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -47,50 +17,9 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import top.ribs.scguns.common.BoundingBoxManager;
-import top.ribs.scguns.common.headshot.BasicHeadshotBox;
-import top.ribs.scguns.common.headshot.RotatedHeadshotBox;
 
 public class ModEntities {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, SCGExtra.MOD_ID);
-
-    public static final RegistryObject<EntityType<FishFolkEntity>> FISH_FOLK = ENTITY_TYPES
-            .register("fish_folk", () -> EntityType.Builder.of(FishFolkEntity::new, MobCategory.MONSTER)
-                    .sized(0.6F, 1.95F).build("fish_folk"));
-
-    public static final RegistryObject<EntityType<TurtlemanEntity>> TURTLEMAN = ENTITY_TYPES
-            .register("turtleman", () -> EntityType.Builder.of(TurtlemanEntity::new, MobCategory.MONSTER)
-                    .updateInterval(1)
-                    .sized(1F, 2.3F)
-                    .build("turtleman"));
-
-    public static final RegistryObject<EntityType<SalmonsaurEntity>> SALMONSAUR = ENTITY_TYPES
-            .register("salmonsaur", () -> EntityType.Builder.of(SalmonsaurEntity::new, MobCategory.MONSTER)
-                    .sized(2F, 2.7F).build("salmonsaur"));
-
-    public static final RegistryObject<EntityType<GuardianStatueEntity>> GUARDIAN_STATUE = ENTITY_TYPES
-            .register("guardian_statue", () -> EntityType.Builder.of(GuardianStatueEntity::new, MobCategory.MONSTER)
-                    .setUpdateInterval(1)
-                    .sized(2F, 6.75F)
-                    .build("guardian_statue"));
-
-    public static final RegistryObject<EntityType<TentacliatorEntity>> TENTACLIATOR = ENTITY_TYPES
-            .register("tentacliator", () -> EntityType.Builder.of(TentacliatorEntity::new, MobCategory.MONSTER)
-                    .sized(0.6F, 1.95F).build("tentacliator"));
-    
-    public static final RegistryObject<EntityType<GlowingTentacliatorEntity>> GLOWING_TENTACLIATOR = ENTITY_TYPES
-            .register("glowing_tentacliator", () -> EntityType.Builder.of(GlowingTentacliatorEntity::new, MobCategory.MONSTER)
-                    .sized(0.6F, 1.95F).build("glowing_tentacliator"));
-
-    public static final RegistryObject<EntityType<PufficusEntity>> PUFFICUS = ENTITY_TYPES
-            .register("pufficus", () -> EntityType.Builder.of(PufficusEntity::new, MobCategory.MONSTER)
-                    .sized(1F, 3F).build("pufficus"));
-
-    public static final RegistryObject<EntityType<ArmoredWhaleEntity>> ARMORED_WHALE = ENTITY_TYPES
-            .register("armored_whale", () -> EntityType.Builder.of(ArmoredWhaleEntity::new, MobCategory.MONSTER)
-                    .updateInterval(1)
-                    .sized(5.5F, 6F)//i think we should use child elements like enderdragon but not sure
-                    .build("armored_whale"));
 
     public static final RegistryObject<EntityType<RaidSummonerEntity>> RAID_SUMMONER = ENTITY_TYPES
             .register("raid_summoner", () -> EntityType.Builder.of(RaidSummonerEntity::new, MobCategory.MONSTER)
@@ -119,33 +48,19 @@ public class ModEntities {
                     .build("fire_projectile"));
 
 
-    public static void register(IEventBus modEventBus){
-        AsgharianEntities.register(modEventBus);
-        FACEntities.register(modEventBus);
+    public static void register(IEventBus modEventBus) {
+        WhalerEntities.register(modEventBus);
         RRCEntities.register(modEventBus);
+        FACEntities.register(modEventBus);
+        AsgharianEntities.register(modEventBus);
 
         ENTITY_TYPES.register(modEventBus);
 
         modEventBus.addListener(ModEntities::registerAttributes);
-        modEventBus.addListener(ModEntities::onCommonSetup);
         MinecraftForge.EVENT_BUS.addListener(EntityAdjustments::onEntityJoin);
     }
 
     private static void registerAttributes(EntityAttributeCreationEvent event) {
-        event.put(ModEntities.FISH_FOLK.get(), FishFolkEntity.createAttributes().build());
-        event.put(ModEntities.TURTLEMAN.get(), TurtlemanEntity.createAttributes().build());
-        event.put(ModEntities.SALMONSAUR.get(), SalmonsaurEntity.createAttributes().build());
-        event.put(ModEntities.GUARDIAN_STATUE.get(), GuardianStatueEntity.createAttributes().build());
-        event.put(ModEntities.TENTACLIATOR.get(), TentacliatorEntity.createAttributes().build());
-        event.put(ModEntities.GLOWING_TENTACLIATOR.get(), GlowingTentacliatorEntity.createAttributes().build());
-        event.put(ModEntities.PUFFICUS.get(), PufficusEntity.createAttributes().build());
-        event.put(ModEntities.ARMORED_WHALE.get(), ArmoredWhaleEntity.createAttributes().build());
         event.put(ModEntities.RAID_SUMMONER.get(), RaidSummonerEntity.createAttributes().build());
     }
-
-    private static void onCommonSetup(FMLCommonSetupEvent event) {
-        BoundingBoxManager.registerHeadshotBox(ModEntities.TURTLEMAN.get(), new BasicHeadshotBox<>(11.0, 28.0));
-    }
-
-    // TODO: registration helper
 }
