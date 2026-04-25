@@ -50,8 +50,8 @@ public class RaidDataLoader extends SimpleJsonResourceReloadListener {
         @Override
         public Raid deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
             JsonObject obj = jsonElement.getAsJsonObject();
-            String alias = obj.get("raid_original_id").getAsString();
-            String name = obj.get("raid_id").getAsString();
+            String originalId = obj.get("raid_original_id").getAsString();
+            String id = obj.get("raid_id").getAsString();
 
             JsonObject profileObj = obj.getAsJsonObject("raid_profile");
             Raid.Wave first = parseWave(profileObj.getAsJsonObject("first_wave"));
@@ -73,7 +73,7 @@ public class RaidDataLoader extends SimpleJsonResourceReloadListener {
                 }
             }
 
-            return new Raid(name, alias, profile, adjustments);
+            return new Raid(id, originalId, profile, adjustments);
         }
 
         private Raid.Wave parseWave(JsonObject waveObj) {
