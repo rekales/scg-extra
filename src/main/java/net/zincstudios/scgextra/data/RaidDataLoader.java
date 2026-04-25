@@ -50,7 +50,7 @@ public class RaidDataLoader extends SimpleJsonResourceReloadListener {
         @Override
         public Raid deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
             JsonObject obj = jsonElement.getAsJsonObject();
-            String alias = obj.get("raid_alias_id").getAsString();
+            String alias = obj.get("raid_original_id").getAsString();
             String name = obj.get("raid_id").getAsString();
 
             JsonObject profileObj = obj.getAsJsonObject("raid_profile");

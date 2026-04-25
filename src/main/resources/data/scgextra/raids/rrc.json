@@ -1,6 +1,6 @@
 {
   "raid_id" : "rrc",
-  "raid_alias_id" : "copper",
+  "raid_original_id" : "copper",
 
   "raid_profile" : {
     "first_wave" : {

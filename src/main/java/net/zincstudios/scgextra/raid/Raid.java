@@ -17,8 +17,8 @@ public record Raid(String name, String alias, Profile profile, List<EntityAdjust
         raids.put(raid.alias, raid);
     }
 
-    public static @Nullable Raid getWaveRaid(String aliasId) {
-        return raids.get(aliasId);
+    public static @Nullable Raid getWaveRaid(String originalId) {
+        return raids.get(originalId);
     }
 
     public static void clearWaveRaids() {
