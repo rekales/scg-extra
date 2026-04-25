@@ -12,6 +12,7 @@ import java.util.Map;
 public enum EnemyRanks {
     INFANTRY(EntityTypeTags.INFANTRY),
     ELITE(EntityTypeTags.ELITE),
+    MINIBOSS(EntityTypeTags.MINIBOSS),
     BOSS(EntityTypeTags.BOSS),
     NONE();
 

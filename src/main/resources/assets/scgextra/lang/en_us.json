@@ -76,5 +76,10 @@
 
     "itemGroup.scgextra.tab":  "SCG Extra",
     "raid.boss.scguns.fac":  "FAC Siege Tank",
-    "raid.announcement.scguns.fac":  "FAC raid sighted nearby!"
+    "raid.announcement.scguns.fac":  "FAC raid sighted nearby!",
+
+    "scgextra.raid.label.whaler" : "Whaler",
+    "scgextra.raid.label.rrc" : "RRC",
+    "scgextra.raid.label.fac" : "FAC",
+    "scgextra.raid.label.asgharian" : "Asgharian"
 }

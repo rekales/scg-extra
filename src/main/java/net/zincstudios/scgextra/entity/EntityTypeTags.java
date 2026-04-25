@@ -10,6 +10,7 @@ public class EntityTypeTags {
     // Enemy Rank
     public static final TagKey<EntityType<?>> INFANTRY = tag("infantry");
     public static final TagKey<EntityType<?>> ELITE = tag("elite");
+    public static final TagKey<EntityType<?>> MINIBOSS = tag("miniboss");
     public static final TagKey<EntityType<?>> BOSS = tag("boss");
 
     // Faction
