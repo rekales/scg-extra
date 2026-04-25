@@ -25,6 +25,7 @@ import net.zincstudios.scgextra.entity.fac.trench_goblin.TrenchGoblinRenderer;
 import net.zincstudios.scgextra.entity.fac.trench_sniper.TrenchSniperRenderer;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntityModel;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntityRenderer;
+import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 import net.zincstudios.scgextra.entity.rrc.arc_psycho.ArcPsychoEntityRenderer;
 import net.zincstudios.scgextra.entity.rrc.copper_knight.CopperKnightRenderer;
 import net.zincstudios.scgextra.entity.rrc.drone.DroneEntityRenderer;
@@ -76,17 +77,17 @@ public final class ModClientEventHandler {
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_walker")), -10).noDeathTilt());
         EntityRenderers.register(FACEntities.FAC_TANK.get(), FacTankRenderer::new);
 
-        EntityRenderers.register(ModEntities.DRONE.get(), DroneEntityRenderer::new);
-        EntityRenderers.register(ModEntities.TALLMAN.get(), (ctx) -> new GunnerRenderer<>(ctx,
+        EntityRenderers.register(RRCEntities.DRONE.get(), DroneEntityRenderer::new);
+        EntityRenderers.register(RRCEntities.TALLMAN.get(), (ctx) -> new GunnerRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("rrc/tallman"))).noDeathTilt());
-        EntityRenderers.register(ModEntities.SCOUT.get(), (ctx) -> new ScoutRenderer<>(ctx).noDeathTilt());
-        EntityRenderers.register(ModEntities.OPPRESSOR.get(), (ctx) -> new GunnerRenderer<>(ctx,
+        EntityRenderers.register(RRCEntities.SCOUT.get(), (ctx) -> new ScoutRenderer<>(ctx).noDeathTilt());
+        EntityRenderers.register(RRCEntities.OPPRESSOR.get(), (ctx) -> new GunnerRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("rrc/oppressor"))).noDeathTilt());
-        EntityRenderers.register(ModEntities.SPRING_JUNKIE.get(), SpringJunkieRenderer::new);
-        EntityRenderers.register(ModEntities.FLAMING_HEAD.get(), FlamingHeadRenderer::new);
-        EntityRenderers.register(ModEntities.SCRAP_GUARD.get(), (ctx) -> new ScrapGuardRenderer<>(ctx).noDeathTilt());
-        EntityRenderers.register(ModEntities.ARC_PSYCHO.get(), ArcPsychoEntityRenderer::new);
-        EntityRenderers.register(ModEntities.COPPER_KNIGHT.get(), (ctx) -> new CopperKnightRenderer<>(ctx).noDeathTilt());
+        EntityRenderers.register(RRCEntities.SPRING_JUNKIE.get(), SpringJunkieRenderer::new);
+        EntityRenderers.register(RRCEntities.FLAMING_HEAD.get(), FlamingHeadRenderer::new);
+        EntityRenderers.register(RRCEntities.SCRAP_GUARD.get(), (ctx) -> new ScrapGuardRenderer<>(ctx).noDeathTilt());
+        EntityRenderers.register(RRCEntities.ARC_PSYCHO.get(), ArcPsychoEntityRenderer::new);
+        EntityRenderers.register(RRCEntities.COPPER_KNIGHT.get(), (ctx) -> new CopperKnightRenderer<>(ctx).noDeathTilt());
 
         EntityHeadBoxDebug.register();
     }

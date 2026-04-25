@@ -12,6 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.zincstudios.scgextra.entity.ModEntities;
+import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 
 public class RaidSummonerEntity extends Mob {
     private static final ArrayList<EntityType<?>> whalerElite = new ArrayList<>();
@@ -38,12 +39,12 @@ public class RaidSummonerEntity extends Mob {
         whalerElite.add(ModEntities.GLOWING_TENTACLIATOR.get());
         whalerElite.add(ModEntities.PUFFICUS.get());
 
-        rrcElite.add(ModEntities.SPRING_JUNKIE.get());
-        rrcElite.add(ModEntities.SCRAP_GUARD.get());
-        rrcElite.add(ModEntities.ARC_PSYCHO.get());
-        rrcInfantry.add(ModEntities.COPPER_KNIGHT.get());
-        rrcInfantry.add(ModEntities.TALLMAN.get());
-        rrcInfantry.add(ModEntities.SCOUT.get());
+        rrcElite.add(RRCEntities.SPRING_JUNKIE.get());
+        rrcElite.add(RRCEntities.SCRAP_GUARD.get());
+        rrcElite.add(RRCEntities.ARC_PSYCHO.get());
+        rrcInfantry.add(RRCEntities.COPPER_KNIGHT.get());
+        rrcInfantry.add(RRCEntities.TALLMAN.get());
+        rrcInfantry.add(RRCEntities.SCOUT.get());
 
 //        facElite.add(ModEntities.TRENCH_SNIPER.get());
 //        facElite.add(ModEntities.SHOVEL_KNIGHT.get());

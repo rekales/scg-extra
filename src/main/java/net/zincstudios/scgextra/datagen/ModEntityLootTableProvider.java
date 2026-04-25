@@ -16,6 +16,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.zincstudios.scgextra.entity.ModEntities;
 import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
+import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 import top.ribs.scguns.init.ModBlocks;
 import top.ribs.scguns.init.ModItems;
 
@@ -114,8 +115,7 @@ public class ModEntityLootTableProvider extends EntityLootSubProvider {
 //                .range(Items.COAL_BLOCK, 1, 3)
 //                .range(ModItems.ANTHRALITE_INGOT.get(), 1, 3);
 
-
-        basicLoot(ModEntities.COPPER_KNIGHT.get())
+        basicLoot(RRCEntities.COPPER_KNIGHT.get())
                 .range(Items.COPPER_INGOT, 1, 3)
                 .altsChance(List.of(
                         ModItems.SCRAP_HELMET.get(),
@@ -123,55 +123,43 @@ public class ModEntityLootTableProvider extends EntityLootSubProvider {
                         ModItems.SCRAP_LEGGINGS.get(),
                         ModItems.SCRAP_BOOTS.get()
                 ), 0.1F);
-
-        basicLoot(ModEntities.DRONE.get())
+        basicLoot(RRCEntities.DRONE.get())
                 .range(Items.COPPER_INGOT, 1, 3)
                 .range(Items.GUNPOWDER, 3, 5);
-
-        basicLoot(ModEntities.TALLMAN.get())
+        basicLoot(RRCEntities.TALLMAN.get())
                 .range(Items.COPPER_INGOT, 1, 3);
-
-        basicLoot(ModEntities.SCOUT.get())
+        basicLoot(RRCEntities.SCOUT.get())
                 .range(ModItems.SMALL_COPPER_CASING.get(), 1, 3);
-
-        basicLoot(ModEntities.OPPRESSOR.get())
+        basicLoot(RRCEntities.OPPRESSOR.get())
                 .range(ModItems.BLUEPRINT_SCRAP.get(), 1, 2)
                 .range(Items.COPPER_INGOT, 1, 3);
-
-        basicLoot(ModEntities.SPRING_JUNKIE.get())
+        basicLoot(RRCEntities.SPRING_JUNKIE.get())
                 .range(Items.GUNPOWDER, 1, 3)
                 .range(ModItems.FLECHETTE.get(), 1, 3);
-
-        basicLoot(ModEntities.FLAMING_HEAD.get())
+        basicLoot(RRCEntities.FLAMING_HEAD.get())
                 .constant(ModItems.RUSTY_MEDAL.get(), 1)
                 .range(ModItems.BLAZE_FUEL.get(), 3, 6)
                 .range(Items.COPPER_BLOCK, 1, 3);
-
-        basicLoot(ModEntities.SCRAP_GUARD.get())
+        basicLoot(RRCEntities.SCRAP_GUARD.get())
                 .range(Items.COPPER_INGOT, 1, 3)
                 .range(ModItems.BLUEPRINT_SCRAP.get(), 1, 2)
                 .range(ModItems.NEEDLE.get(), 1, 3);
-
-        basicLoot(ModEntities.ARC_PSYCHO.get())
+        basicLoot(RRCEntities.ARC_PSYCHO.get())
                 .range(Items.REDSTONE, 1, 3)
                 .range(ModItems.SHOCK_CELL.get(), 1, 3);
 
         basicLoot(AsgharianEntities.FAILED_ONE.get())
                 .range(Items.ROTTEN_FLESH, 1, 3)
                 .range(Items.CLAY_BALL, 1, 3);
-
         basicLoot(AsgharianEntities.ASGHAR_SURGEON.get())
                 .range(Items.RED_CANDLE, 1, 3)
                 .chance(ModItems.DIAMOND_STEEL_INGOT.get(), 0.5f);
-
         basicLoot(AsgharianEntities.ASGHAR_WORKER.get())
                 .range(Items.REDSTONE, 1, 3)
                 .constant(ModItems.DEPLETED_DIAMOND_STEEL_INGOT.get(), 1);
-
         basicLoot(AsgharianEntities.ASGHAR_FLAMER.get())
                 .range(Items.GUNPOWDER, 1, 3)
                 .constant(ModItems.DEPLETED_DIAMOND_STEEL_INGOT.get(), 1);
-
         basicLoot(AsgharianEntities.CANDLE_FIEND.get())
                 .range(Items.RED_CANDLE, 3, 6)
                 .range(ModItems.BLUEPRINT_SCRAP.get(), 1, 3)

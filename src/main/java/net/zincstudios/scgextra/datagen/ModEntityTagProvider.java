@@ -7,6 +7,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.zincstudios.scgextra.entity.EntityTypeTags;
 import net.zincstudios.scgextra.entity.ModEntities;
 import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
+import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 import org.jetbrains.annotations.Nullable;
 import top.ribs.scguns.init.ModTags;
 
@@ -95,14 +96,14 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
                 .add(top.ribs.scguns.init.ModEntities.FINFORCER.get());
 
         tag(EntityTypeTags.RRC)
-                .add(ModEntities.DRONE.get())
-                .add(ModEntities.TALLMAN.get())
-                .add(ModEntities.SCOUT.get())
-                .add(ModEntities.OPPRESSOR.get())
-                .add(ModEntities.SPRING_JUNKIE.get())
-                .add(ModEntities.SCRAP_GUARD.get())
-                .add(ModEntities.ARC_PSYCHO.get())
-                .add(ModEntities.FLAMING_HEAD.get())
-                .add(ModEntities.COPPER_KNIGHT.get());
+                .add(RRCEntities.DRONE.get())
+                .add(RRCEntities.TALLMAN.get())
+                .add(RRCEntities.SCOUT.get())
+                .add(RRCEntities.OPPRESSOR.get())
+                .add(RRCEntities.SPRING_JUNKIE.get())
+                .add(RRCEntities.SCRAP_GUARD.get())
+                .add(RRCEntities.ARC_PSYCHO.get())
+                .add(RRCEntities.FLAMING_HEAD.get())
+                .add(RRCEntities.COPPER_KNIGHT.get());
     }
 }
