@@ -14,6 +14,7 @@ import net.zincstudios.scgextra.debug.EntityHeadBoxDebug;
 import net.zincstudios.scgextra.entity.ModEntities;
 import net.zincstudios.scgextra.entity.common.client.GunnerRenderer;
 import net.zincstudios.scgextra.entity.common.raid_summoner.RaidSummonerRenderer;
+import net.zincstudios.scgextra.entity.fac.FACEntities;
 import net.zincstudios.scgextra.entity.fac.fac_bluecoat.FacBluecoatRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_commissar.FacCommissarRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_lion.FacLionRenderer;
@@ -62,18 +63,18 @@ public final class ModClientEventHandler {
         EntityRenderers.register(ModEntities.WHALE_PROJECTILE.get(), EnemyProjectileRenderer::new);
         EntityRenderers.register(ModEntities.FIRE_PROJECTILE.get(), EnemyProjectileRenderer::new);
         EntityRenderers.register(ModEntities.RAID_SUMMONER.get(), RaidSummonerRenderer::new);
-        EntityRenderers.register(ModEntities.FAC_TRENCHER.get(), (ctx) -> new FacTrencherRenderer(ctx).noDeathTilt());
-        EntityRenderers.register(ModEntities.FAC_BLUECOAT.get(), (ctx) -> new FacBluecoatRenderer(ctx).noDeathTilt());
-        EntityRenderers.register(ModEntities.TRENCH_GOBLIN.get(), (ctx) -> new TrenchGoblinRenderer(ctx).noDeathTilt());
-        EntityRenderers.register(ModEntities.TRENCH_SNIPER.get(), (ctx) -> new TrenchSniperRenderer(ctx).noDeathTilt());
-        EntityRenderers.register(ModEntities.SHOVEL_KNIGHT.get(), (ctx) -> new GunnerRenderer<>(ctx,
+        EntityRenderers.register(FACEntities.FAC_TRENCHER.get(), (ctx) -> new FacTrencherRenderer(ctx).noDeathTilt());
+        EntityRenderers.register(FACEntities.FAC_BLUECOAT.get(), (ctx) -> new FacBluecoatRenderer(ctx).noDeathTilt());
+        EntityRenderers.register(FACEntities.TRENCH_GOBLIN.get(), (ctx) -> new TrenchGoblinRenderer(ctx).noDeathTilt());
+        EntityRenderers.register(FACEntities.TRENCH_SNIPER.get(), (ctx) -> new TrenchSniperRenderer(ctx).noDeathTilt());
+        EntityRenderers.register(FACEntities.SHOVEL_KNIGHT.get(), (ctx) -> new GunnerRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_shovel_knight")), -10).noDeathTilt());
-        EntityRenderers.register(ModEntities.FAC_TANK_BUSTER.get(), (ctx) -> new FacTankBusterRenderer(ctx).noDeathTilt());
-        EntityRenderers.register(ModEntities.FAC_LION.get(), (ctx) -> new FacLionRenderer(ctx).noDeathTilt());
-        EntityRenderers.register(ModEntities.FAC_COMMISSAR.get(), (ctx) -> new FacCommissarRenderer(ctx).noDeathTilt());
-        EntityRenderers.register(ModEntities.FAC_WALKER.get(), (ctx) -> new GunnerRenderer<>(ctx,
+        EntityRenderers.register(FACEntities.FAC_TANK_BUSTER.get(), (ctx) -> new FacTankBusterRenderer(ctx).noDeathTilt());
+        EntityRenderers.register(FACEntities.FAC_LION.get(), (ctx) -> new FacLionRenderer(ctx).noDeathTilt());
+        EntityRenderers.register(FACEntities.FAC_COMMISSAR.get(), (ctx) -> new FacCommissarRenderer(ctx).noDeathTilt());
+        EntityRenderers.register(FACEntities.FAC_WALKER.get(), (ctx) -> new GunnerRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_walker")), -10).noDeathTilt());
-        EntityRenderers.register(ModEntities.FAC_TANK.get(), FacTankRenderer::new);
+        EntityRenderers.register(FACEntities.FAC_TANK.get(), FacTankRenderer::new);
 
         EntityRenderers.register(ModEntities.DRONE.get(), DroneEntityRenderer::new);
         EntityRenderers.register(ModEntities.TALLMAN.get(), (ctx) -> new GunnerRenderer<>(ctx,
