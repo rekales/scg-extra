@@ -1,0 +1,28 @@
+{
+  "raid_id" : "rrc",
+  "raid_alias_id" : "copper",
+
+  "raid_profile" : {
+    "first_wave" : {
+      "infantry": 4
+    },
+    "second_wave" : {
+      "infantry": 3,
+      "elite": 1
+    },
+    "third_wave" : {
+      "infantry": 2,
+      "elite": 2,
+      "miniboss": 1
+    },
+    "boss_wave" : {
+    }
+  },
+
+  "entity_adjustments" : [
+    {
+      "entity_id": "scg_extra:flaming_head",
+      "max_health": 600
+    }
+  ]
+}

@@ -2,6 +2,7 @@ package net.zincstudios.scgextra;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.config.ModConfig;
+import net.zincstudios.scgextra.data.RaidDataLoader;
 import net.zincstudios.scgextra.datagen.DataGenerators;
 import net.zincstudios.scgextra.effects.ModEffects;
 import net.zincstudios.scgextra.entity.Faction;
@@ -47,6 +48,7 @@ public class SCGExtra
         modEventBus.addListener(CommonConfig::onReload);
 
         MinecraftForge.EVENT_BUS.addListener(Faction::onTagsUpdated);
+        MinecraftForge.EVENT_BUS.addListener(RaidDataLoader::onAddReloadListeners);
 
         modEventBus.addListener(DataGenerators::gatherData);
     }
