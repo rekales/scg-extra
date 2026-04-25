@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "scgextra:item/trench_sniper_spawn_egg"
+  }
+}

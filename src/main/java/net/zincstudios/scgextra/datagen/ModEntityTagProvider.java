@@ -7,6 +7,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.zincstudios.scgextra.entity.EntityTypeTags;
 import net.zincstudios.scgextra.entity.ModEntities;
 import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
+import net.zincstudios.scgextra.entity.fac.FACEntities;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 import org.jetbrains.annotations.Nullable;
 import top.ribs.scguns.init.ModTags;
@@ -72,17 +73,17 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
                 .add(top.ribs.scguns.init.ModEntities.SCAMPLER.get())
                 .add(top.ribs.scguns.init.ModEntities.SCAMP_TANK.get());
 
-//        tag(EntityTypeTags.FAC)
-//                .add(ModEntities.FAC_TRENCHER.get())
-//                .add(ModEntities.FAC_BLUECOAT.get())
-//                .add(ModEntities.TRENCH_GOBLIN.get())
-//                .add(ModEntities.TRENCH_SNIPER.get())
-//                .add(ModEntities.SHOVEL_KNIGHT.get())
-//                .add(ModEntities.FAC_TANK_BUSTER.get())
-//                .add(ModEntities.FAC_LION.get())
-//                .add(ModEntities.FAC_COMMISSAR.get())
-//                .add(ModEntities.FAC_WALKER.get())
-//                .add(ModEntities.FAC_TANK.get());
+        tag(EntityTypeTags.FAC)
+                .add(FACEntities.FAC_TRENCHER.get())
+                .add(FACEntities.FAC_BLUECOAT.get())
+                .add(FACEntities.TRENCH_GOBLIN.get())
+                .add(FACEntities.TRENCH_SNIPER.get())
+                .add(FACEntities.SHOVEL_KNIGHT.get())
+                .add(FACEntities.FAC_TANK_BUSTER.get())
+                .add(FACEntities.FAC_LION.get())
+                .add(FACEntities.FAC_COMMISSAR.get())
+                .add(FACEntities.FAC_WALKER.get())
+                .add(FACEntities.FAC_TANK.get());
 
         tag(EntityTypeTags.WHALER)
                 .add(ModEntities.FISH_FOLK.get())
