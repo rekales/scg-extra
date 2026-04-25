@@ -16,10 +16,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.zincstudios.scgextra.entity.Faction;
-import net.zincstudios.scgextra.entity.ModEntities;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.entity.fac.FACEntities;
 import net.zincstudios.scgextra.item.HurtEffects;
 import net.zincstudios.scgextra.item.ModItems;
 import net.zincstudios.scgextra.sounds.FACSounds;
@@ -61,7 +61,7 @@ public class FacCommissarEntity extends GunnerEntity implements GeoEntity {
     protected void registerGoals() {
         this.goalSelector.addGoal(3, new FacCommissarAlertGoal(this, 200, true));
         this.goalSelector.addGoal(4, new FacCommissarFlareSummonGoal(this, 400, 60,
-                ModEntities.FAC_TRENCHER.get(), ModEntities.FAC_BLUECOAT.get(), ModEntities.TRENCH_GOBLIN.get()));
+                FACEntities.FAC_TRENCHER.get(), FACEntities.FAC_BLUECOAT.get(), FACEntities.TRENCH_GOBLIN.get()));
         this.goalSelector.addGoal(5, new FacCommissarSaberMeleeGoal(this, 1.05D, false));
         this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 0.95D));
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));
