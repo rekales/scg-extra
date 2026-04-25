@@ -34,11 +34,12 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Objects;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class AsgharFlamerEntity extends GunnerEntity implements GeoEntity, GoalStateHandler {
+
+    private static final int ATTACK_SOUND_INTERVAL = 100;
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
 
@@ -124,8 +125,9 @@ public class AsgharFlamerEntity extends GunnerEntity implements GeoEntity, GoalS
 
     @Override
     public void onGoalStateChanged(Goal goal, String state) {
-        if (state.equals(AsgharSurgeonAttackGoal.FIRING_STATE) && this.tickCount - this.lastAttackSound > 80) {
+        if (state.equals(AsgharSurgeonAttackGoal.FIRING_STATE) && this.tickCount - this.lastAttackSound > ATTACK_SOUND_INTERVAL) {
             this.playSound(this.getAttackSound());
+            this.lastAttackSound = this.tickCount;
         }
     }
 
