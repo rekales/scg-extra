@@ -8,15 +8,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public record Raid(String id, String originalId, Profile profile, List<EntityAdjustment> entityAdjustments) {
+public record WaveRaid(String id, String originalId, Profile profile, List<EntityAdjustment> entityAdjustments) {
 
-    private static final Map<String, Raid> raids = new HashMap<>();  // Key: original raid id
+    private static final Map<String, WaveRaid> raids = new HashMap<>();  // Key: original raid id
 
-    public static void addWaveRaid(Raid raid) {
+    public static void addWaveRaid(WaveRaid raid) {
         raids.put(raid.originalId, raid);
     }
 
-    public static @Nullable Raid getWaveRaid(String originalId) {
+    public static @Nullable WaveRaid getWaveRaid(String originalId) {
         return raids.get(originalId);
     }
 
@@ -25,7 +25,7 @@ public record Raid(String id, String originalId, Profile profile, List<EntityAdj
     }
 
     public static String getOriginalId(String originalId) {
-        Raid raid = getWaveRaid(originalId);
+        WaveRaid raid = getWaveRaid(originalId);
         if (raid == null) return originalId;
         return raid.id;
     }
