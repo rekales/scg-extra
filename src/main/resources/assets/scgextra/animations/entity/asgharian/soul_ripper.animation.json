@@ -165,7 +165,7 @@
 			"bones": {
 				"lantern_1": {
 					"scale": {
-						"vector": [1, 1, 1]
+						"vector": [0, 0, 0]
 					}
 				}
 			}

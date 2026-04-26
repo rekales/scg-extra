@@ -45,6 +45,13 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
             SynchedEntityData.defineId(SoulRipperEntity.class, EntityDataSerializers.INT);
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
+    private static final RawAnimation LANTERN_1_ON = RawAnimation.begin().thenPlayAndHold("lantern_1_on");
+    private static final RawAnimation LANTERN_1_OFF = RawAnimation.begin().thenPlayAndHold("lantern_1_off");
+    private static final RawAnimation LANTERN_2_ON = RawAnimation.begin().thenPlayAndHold("lantern_2_on");
+    private static final RawAnimation LANTERN_2_OFF = RawAnimation.begin().thenPlayAndHold("lantern_2_off");
+    private static final RawAnimation LANTERN_3_ON = RawAnimation.begin().thenPlayAndHold("lantern_3_on");
+    private static final RawAnimation LANTERN_3_OFF = RawAnimation.begin().thenPlayAndHold("lantern_3_off");
+
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
 
@@ -168,6 +175,14 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new ExpandedAnimationController<>(this, "main", 2,
                 state -> state.setAndContinue(IDLE)));
+
+        controllers.add(new ExpandedAnimationController<>(this, "lantern_1", 0,
+                state -> state.setAndContinue(state.getAnimatable().getLives() >= 2 ? LANTERN_1_ON : LANTERN_1_OFF)));
+        controllers.add(new ExpandedAnimationController<>(this, "lantern_2", 0,
+                state -> state.setAndContinue(state.getAnimatable().getLives() >= 3 ? LANTERN_2_ON : LANTERN_2_OFF)));
+        controllers.add(new ExpandedAnimationController<>(this, "lantern_3", 0,
+                state -> state.setAndContinue(state.getAnimatable().getLives() >= 1 ? LANTERN_3_ON : LANTERN_3_OFF)));
+
     }
 
     @Override
