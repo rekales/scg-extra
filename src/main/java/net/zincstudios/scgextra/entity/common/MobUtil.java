@@ -36,7 +36,7 @@ public class MobUtil {
 
     public static @Nullable BlockPos getBlocKPosFromTag(String prefix, CompoundTag tag) {
         if (tag.contains(prefix+"X")) {
-            return new BlockPos(tag.getInt(prefix+"X"), tag.getInt(prefix+"X"), tag.getInt(prefix+"X"));
+            return new BlockPos(tag.getInt(prefix+"X"), tag.getInt(prefix+"Y"), tag.getInt(prefix+"Z"));
         }
         return null;
     }

@@ -8,6 +8,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -63,7 +64,7 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
         this.noPhysics = !this.isDeadOrDying();
         super.tick();
         this.noPhysics = false;
-        this.setNoGravity(!this.isDeadOrDying());
+        this.setNoGravity(true);
     }
 
     @Override
@@ -86,6 +87,17 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
                 this.remove(Entity.RemovalReason.KILLED);
             }
         }
+    }
+
+    @Override
+    public void die(DamageSource damageSource) {
+        super.die(damageSource);
+        this.setDeltaMovement(this.getDeltaMovement().add(0,-0.25,0));
+    }
+
+    @Override
+    protected boolean shouldDropLoot() {
+        return this.getLives() == 0;
     }
 
     private void summonVexes() {
