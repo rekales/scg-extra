@@ -58,7 +58,7 @@ public class AsgharianEntities {
 
     public static final RegistryObject<EntityType<SoulRipperEntity>> SOUL_RIPPER = ENTITY_TYPES
             .register("soul_ripper", () -> EntityType.Builder.of(SoulRipperEntity::new, MobCategory.MONSTER)
-                    .sized(1.45F, 3.2F)
+                    .sized(0.9F, 2.6F)
                     .setUpdateInterval(1)
                     .build("soul_ripper"));
 

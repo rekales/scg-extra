@@ -1,5 +1,6 @@
 package net.zincstudios.scgextra.entity.asgharian.soulripper;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
@@ -13,12 +14,11 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.Faction;
+import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.client.ExpandedAnimationController;
 import org.jetbrains.annotations.Nullable;
@@ -28,16 +28,27 @@ import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class SoulRipperEntity extends Monster implements GeoEntity {
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
-    private BlockPos boundOrigin = BlockPos.ZERO;
+    private BlockPos boundOrigin = null;
 
     public SoulRipperEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new SoulRipperMoveControl(this);
+    }
+
+    public void tick() {
+        this.noPhysics = true;
+        super.tick();
+        this.noPhysics = false;
+        this.setNoGravity(true);
     }
 
     @Override
@@ -46,7 +57,7 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
         return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
     }
 
-    public BlockPos getBoundOrigin() {
+    public @Nullable BlockPos getBoundOrigin() {
         return this.boundOrigin;
     }
 
@@ -73,6 +84,18 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
                 .add(Attributes.ARMOR, 7.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1)
                 .add(Attributes.MAX_HEALTH, 400.0D);
+    }
+
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.boundOrigin = MobUtil.getBlocKPosFromTag("Bound", tag);
+    }
+
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        if (this.boundOrigin != null) {
+            MobUtil.putBlockPosToTag(this.boundOrigin, "Bound", tag);
+        }
     }
 
     @Override

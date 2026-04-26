@@ -8,6 +8,7 @@ import java.util.EnumSet;
 public class SoulRipperRandomMoveGoal extends Goal {
 
     protected final SoulRipperEntity mob;
+    // TODO: bound block here
 
     public SoulRipperRandomMoveGoal(SoulRipperEntity mob) {
         this.mob = mob;
@@ -29,7 +30,7 @@ public class SoulRipperRandomMoveGoal extends Goal {
         }
 
         for(int i = 0; i < 3; ++i) {
-            BlockPos blockpos1 = blockpos.offset(this.mob.getRandom().nextInt(15) - 7, this.mob.getRandom().nextInt(11) - 5, this.mob.getRandom().nextInt(15) - 7);
+            BlockPos blockpos1 = blockpos.offset(this.mob.getRandom().nextInt(11) - 5, this.mob.getRandom().nextInt(8) - 2, this.mob.getRandom().nextInt(11) - 5);
             if (this.mob.level().isEmptyBlock(blockpos1)) {
                 this.mob.getMoveControl().setWantedPosition((double)blockpos1.getX() + 0.5D, (double)blockpos1.getY() + 0.5D, (double)blockpos1.getZ() + 0.5D, 0.25D);
                 if (this.mob.getTarget() == null) {
