@@ -15,6 +15,7 @@
     "OceanMonumentEntryRoomMixin",
     "ProjectileEntityMixin",
     "RaidManagerInvoker",
+    "RaidManagerMixin",
     "RaidManagerWaveMixin",
     "RaidSaveDataAccessor"
   ],

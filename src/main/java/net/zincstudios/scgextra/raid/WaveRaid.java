@@ -1,17 +1,20 @@
 package net.zincstudios.scgextra.raid;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.EnemyRank;
 import net.zincstudios.scgextra.entity.Faction;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 // entityAdjustment key: entity id
 public record WaveRaid(String id, String originalId, Profile profile, Map<String, EntityAdjustment> entityAdjustments) {
@@ -55,6 +58,14 @@ public record WaveRaid(String id, String originalId, Profile profile, Map<String
         }
 
         return true;
+    }
+
+    public @Nullable EntityAdjustment getAdjustment(EntityType<?> entityType) {
+        ResourceLocation resLoc = ForgeRegistries.ENTITY_TYPES.getKey(entityType);
+        if (resLoc == null) return null;
+
+        String id = resLoc.getPath();
+        return entityAdjustments().get(id);
     }
 
     public Component getLabel(String raidId) {
@@ -112,5 +123,22 @@ public record WaveRaid(String id, String originalId, Profile profile, Map<String
 
     // Extend when needed like custom equipment path or something
     public record EntityAdjustment(String entityId, double maxHealth) {
+
+        public Mob adjustMob(Mob mob) {
+            if (this.maxHealth != -1) {
+                AttributeInstance healthAttr = mob.getAttribute(Attributes.MAX_HEALTH);
+                if (healthAttr != null) {
+                    double currentHealth = healthAttr.getBaseValue();
+                    healthAttr.addPermanentModifier(new AttributeModifier(UUID.randomUUID(), "Raid fixed health", this.maxHealth - currentHealth, AttributeModifier.Operation.ADDITION));
+                    mob.setHealth(mob.getMaxHealth());
+                }
+            }
+
+            return mob;
+        }
+
+        public boolean hasMaxHealthAdjustment() {
+            return this.maxHealth != -1;
+        }
     }
 }
