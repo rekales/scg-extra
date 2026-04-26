@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
@@ -15,10 +16,10 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
@@ -63,10 +64,6 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
         super.tick();
         this.noPhysics = false;
         this.setNoGravity(!this.isDeadOrDying());
-
-        if (!this.level().isClientSide) {
-            SCGExtra.LOGGER.debug("target: " + this.isCharging());
-        }
     }
 
     @Override
@@ -74,11 +71,14 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
         ++this.deathTime;
         if (this.getLives() > 0) {
             if (this.deathTime > 60) {
-                this.moveControl.setWantedPosition(this.getX(), this.getY(), this.getZ(), 1.0D); // clear move
                 this.deathTime = 0;
                 this.setLives(this.getLives() - 1);
                 this.setHealth(this.getMaxHealth());
                 this.dead = false;
+
+                if (this.getLives() == 1) {
+                    this.summonVexes();
+                }
             }
         } else {
             if (this.deathTime >= 35 && !this.level().isClientSide() && !this.isRemoved()) {
@@ -88,10 +88,30 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
         }
     }
 
+    private void summonVexes() {
+        if (this.level() instanceof ServerLevel serverlevel) {
+            for(int i = 0; i < 3; ++i) {
+                BlockPos blockpos = this.blockPosition().offset(-2 + this.random.nextInt(5), 1, -2 + this.random.nextInt(5));
+                Vex vex = EntityType.VEX.create(this.level());
+                if (vex != null) {
+                    vex.moveTo(blockpos, 0.0F, 0.0F);
+                    vex.finalizeSpawn(serverlevel, this.level().getCurrentDifficultyAt(blockpos), MobSpawnType.MOB_SUMMONED, null, null);
+                    vex.setOwner(this);
+                    vex.setBoundOrigin(blockpos);
+                    vex.setLimitedLife(20 * (30 + this.random.nextInt(90)));
+                    serverlevel.addFreshEntityWithPassengers(vex);
+                }
+            }
+        }
+    }
+
     @Override
     public boolean doHurtTarget(Entity entity) {
-        if (entity instanceof LivingEntity livingEntity) {
-            livingEntity.addEffect(new MobEffectInstance(ModEffects.LACERATED.get(), 60));
+        if (entity instanceof LivingEntity target) {
+            target.addEffect(new MobEffectInstance(ModEffects.LACERATED.get(), 60));
+            if (this.getLives() == 0) {
+                target.setSecondsOnFire(3);
+            }
         }
         return super.doHurtTarget(entity);
     }
@@ -109,7 +129,8 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(3, new SoulRipperChargeAttackGoal(this));
+        this.goalSelector.addGoal(3, new SoulRipperChargeAttackGoal(this, 80));
+        this.goalSelector.addGoal(5, new SoulRipperThrowFireballGoal(this, 200));
         this.goalSelector.addGoal(8, new SoulRipperRandomMoveGoal(this));
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
 
@@ -159,6 +180,10 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
         super.defineSynchedData();
         this.entityData.define(CHARGING, false);
         this.entityData.define(LIVES, 3);
+    }
+
+    public boolean canFireball() {
+        return !isCharging();  // TODO: state checks
     }
 
     // TODO: Use GoalStateHandler

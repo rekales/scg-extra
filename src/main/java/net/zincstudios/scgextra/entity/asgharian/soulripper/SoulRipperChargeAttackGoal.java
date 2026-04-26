@@ -8,16 +8,20 @@ import net.minecraft.world.phys.Vec3;
 public class SoulRipperChargeAttackGoal extends Goal {
 
     protected final SoulRipperEntity mob;
+    protected final int cooldownDuration;
+    protected int cooldownEnd = 0;  // tickCount timestamp
 
-    public SoulRipperChargeAttackGoal(SoulRipperEntity mob) {
+    public SoulRipperChargeAttackGoal(SoulRipperEntity mob, int cooldownDuration) {
         this.mob = mob;
+        this.cooldownDuration = cooldownDuration;
     }
 
     @Override
     public boolean canUse() {
         LivingEntity livingentity = this.mob.getTarget();
-        if (livingentity != null && livingentity.isAlive()
-                && !this.mob.getMoveControl().hasWanted()
+        if (this.mob.tickCount > this.cooldownEnd
+                && livingentity != null && livingentity.isAlive()
+                && this.mob.tickCount > this.cooldownEnd
                 && this.mob.getRandom().nextInt(reducedTickDelay(7)) == 0) {
             return this.mob.distanceToSqr(livingentity) > 4.0D;
         } else {
@@ -48,6 +52,7 @@ public class SoulRipperChargeAttackGoal extends Goal {
     @Override
     public void stop() {
         this.mob.setCharging(false);
+        this.cooldownEnd = this.mob.tickCount + this.cooldownDuration;
     }
 
     @Override

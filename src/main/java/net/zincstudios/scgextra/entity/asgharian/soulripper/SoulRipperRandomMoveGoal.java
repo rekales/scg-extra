@@ -17,7 +17,8 @@ public class SoulRipperRandomMoveGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return !this.mob.getMoveControl().hasWanted() && this.mob.getRandom().nextInt(reducedTickDelay(7)) == 0;
+        return !this.mob.getMoveControl().hasWanted()
+                && this.mob.getRandom().nextInt(reducedTickDelay(7)) == 0;
     }
 
     @Override
