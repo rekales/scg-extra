@@ -18,6 +18,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
@@ -58,10 +59,33 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
     }
 
     public void tick() {
-        this.noPhysics = true;
+        this.noPhysics = !this.isDeadOrDying();
         super.tick();
         this.noPhysics = false;
-        this.setNoGravity(true);
+        this.setNoGravity(!this.isDeadOrDying());
+
+        if (!this.level().isClientSide) {
+            SCGExtra.LOGGER.debug("target: " + this.isCharging());
+        }
+    }
+
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.getLives() > 0) {
+            if (this.deathTime > 60) {
+                this.moveControl.setWantedPosition(this.getX(), this.getY(), this.getZ(), 1.0D); // clear move
+                this.deathTime = 0;
+                this.setLives(this.getLives() - 1);
+                this.setHealth(this.getMaxHealth());
+                this.dead = false;
+            }
+        } else {
+            if (this.deathTime >= 35 && !this.level().isClientSide() && !this.isRemoved()) {
+                this.level().broadcastEntityEvent(this, (byte)60);
+                this.remove(Entity.RemovalReason.KILLED);
+            }
+        }
     }
 
     @Override
@@ -104,7 +128,7 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
                 .add(Attributes.ATTACK_DAMAGE, 15.0D)
                 .add(Attributes.ARMOR, 7.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1)
-                .add(Attributes.MAX_HEALTH, 400.0D);
+                .add(Attributes.MAX_HEALTH, 40.0D);
     }
 
     @Override

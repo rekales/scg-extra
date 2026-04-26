@@ -81,7 +81,7 @@ public class AsgharianEntities {
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("asgharian/asghar_flamer")), 10).noDeathTilt());
         EntityRenderers.register(AsgharianEntities.CANDLE_FIEND.get(), CandleFiendRenderer::new);
         EntityRenderers.register(AsgharianEntities.SOUL_RIPPER.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
-                new DefaultedEntityGeoModel<>(SCGExtra.asResource("asgharian/soul_ripper"))).noDeathTilt());    }
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("asgharian/soul_ripper"))));    }
 
     private static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(AsgharianEntities.FAILED_ONE.get(), FailedOneEntity.createAttributes().build());
