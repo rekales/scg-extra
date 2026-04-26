@@ -61,15 +61,13 @@ public class RaidDataLoader extends SimpleJsonResourceReloadListener {
 
             WaveRaid.Profile profile = new WaveRaid.Profile(first, second, third, boss);
 
-            List<WaveRaid.EntityAdjustment> adjustments = new ArrayList<>();
+            Map<String, WaveRaid.EntityAdjustment> adjustments = new HashMap<>();
             if (obj.has("entity_adjustments")) {
                 JsonArray adjArray = obj.getAsJsonArray("entity_adjustments");
                 for (JsonElement elem : adjArray) {
                     JsonObject adjObj = elem.getAsJsonObject();
-                    adjustments.add(new WaveRaid.EntityAdjustment(
-                            adjObj.get("entity_id").getAsString(),
-                            adjObj.get("max_health").getAsDouble()
-                    ));
+                    String entityId = adjObj.get("entity_id").getAsString();
+                    adjustments.put(entityId, new WaveRaid.EntityAdjustment(entityId, adjObj.get("max_health").getAsDouble()));
                 }
             }
 

@@ -13,7 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public record WaveRaid(String id, String originalId, Profile profile, List<EntityAdjustment> entityAdjustments) {
+// entityAdjustment key: entity id
+public record WaveRaid(String id, String originalId, Profile profile, Map<String, EntityAdjustment> entityAdjustments) {
 
     private static final Map<String, WaveRaid> raids = new HashMap<>();  // Key: original raid id
 
@@ -109,6 +110,7 @@ public record WaveRaid(String id, String originalId, Profile profile, List<Entit
     public record Wave(int infantry, int elite, int miniboss) {
     }
 
+    // Extend when needed like custom equipment path or something
     public record EntityAdjustment(String entityId, double maxHealth) {
     }
 }
