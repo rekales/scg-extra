@@ -168,7 +168,7 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
                 .add(Attributes.ATTACK_DAMAGE, 15.0D)
                 .add(Attributes.ARMOR, 7.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1)
-                .add(Attributes.MAX_HEALTH, 40.0D);
+                .add(Attributes.MAX_HEALTH, 400.0D);
     }
 
     @Override
@@ -193,6 +193,9 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.boundOrigin = MobUtil.getBlocKPosFromTag("Bound", tag);
+        if (tag.contains("Lives")) {
+            this.setLives(tag.getInt("Lives"));
+        }
     }
 
     public void addAdditionalSaveData(CompoundTag tag) {
@@ -200,6 +203,7 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
         if (this.boundOrigin != null) {
             MobUtil.putBlockPosToTag(this.boundOrigin, "Bound", tag);
         }
+        tag.putInt("Lives", this.getLives());
     }
 
     @Override

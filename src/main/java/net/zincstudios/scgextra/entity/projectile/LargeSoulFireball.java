@@ -68,9 +68,9 @@ public class LargeSoulFireball extends Fireball {
                         this.position().x + (level.getRandom().nextDouble() - 0.5) * 0.5,
                         this.position().y + (level.getRandom().nextDouble() - 0.5) * 0.5,
                         this.position().z + (level.getRandom().nextDouble() - 0.5) * 0.5,
-                        + (level.getRandom().nextDouble() - 0.5) * 0.05,
-                        + (level.getRandom().nextDouble() - 0.5) * 0.05,
-                        + (level.getRandom().nextDouble() - 0.5) * 0.05
+                        (level.getRandom().nextDouble() - 0.5) * 0.05,
+                        (level.getRandom().nextDouble() - 0.5) * 0.05,
+                        (level.getRandom().nextDouble() - 0.5) * 0.05
                 );
             }
         }
