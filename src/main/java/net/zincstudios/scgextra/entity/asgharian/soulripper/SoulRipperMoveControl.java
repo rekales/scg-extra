@@ -11,6 +11,7 @@ public class SoulRipperMoveControl extends MoveControl {
         super(mob);
     }
 
+    @Override
     public void tick() {
         if (this.operation == MoveControl.Operation.MOVE_TO) {
             Vec3 vec3 = new Vec3(this.wantedX - this.mob.getX(), this.wantedY - this.mob.getY(), this.wantedZ - this.mob.getZ());

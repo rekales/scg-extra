@@ -15,14 +15,17 @@ public class SoulRipperRandomMoveGoal extends Goal {
         this.setFlags(EnumSet.of(Goal.Flag.MOVE));
     }
 
+    @Override
     public boolean canUse() {
         return !this.mob.getMoveControl().hasWanted() && this.mob.getRandom().nextInt(reducedTickDelay(7)) == 0;
     }
 
+    @Override
     public boolean canContinueToUse() {
         return false;
     }
 
+    @Override
     public void tick() {
         BlockPos blockpos = this.mob.getBoundOrigin();
         if (blockpos == null) {
