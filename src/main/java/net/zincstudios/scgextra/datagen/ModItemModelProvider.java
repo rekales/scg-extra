@@ -21,6 +21,7 @@ public class ModItemModelProvider extends ItemModelProvider {
 //        basicItem(ModItems.CAVALRY_SABER.get());
 //        basicItem(ModItems.SPEAR_SHOVEL.get());
 //        basicItem(ModItems.WALKER_MG.get());
+        basicItem(ModItems.SOUL_FIRE_CHARGE.get());
 
         basicItem(ModItems.FISH_FOLK_SPAWN_EGG.get());
         basicItem(ModItems.TURTLEMAN_SPAWN_EGG.get());

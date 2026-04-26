@@ -40,6 +40,10 @@ public class ModItems {
             () -> new Item(new Item.Properties().stacksTo(1))
     );
 
+    public static final RegistryObject<Item> SOUL_FIRE_CHARGE = ITEMS.register("soul_fire_charge",
+            () -> new Item(new Item.Properties().stacksTo(1))
+    );
+
     public static final RegistryObject<SpawnEggItem>
             // Whaler
             FISH_FOLK_SPAWN_EGG = basicSpawnEgg(WhalerEntities.FISH_FOLK),
@@ -102,6 +106,7 @@ public class ModItems {
     private static void buildContents(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CREATIVE_TAB.getKey()) {
             ITEMS.getEntries().stream()
+                    .filter(item -> item != SOUL_FIRE_CHARGE)
                     .map(RegistryObject::get)
                     .forEach(event::accept);
         }

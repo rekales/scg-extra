@@ -1,6 +1,7 @@
 package net.zincstudios.scgextra.client;
 
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
@@ -89,6 +90,7 @@ public final class ModClientEventHandler {
         EntityRenderers.register(RRCEntities.SCRAP_GUARD.get(), (ctx) -> new ScrapGuardRenderer<>(ctx).noDeathTilt());
         EntityRenderers.register(RRCEntities.ARC_PSYCHO.get(), ArcPsychoEntityRenderer::new);
         EntityRenderers.register(RRCEntities.COPPER_KNIGHT.get(), (ctx) -> new CopperKnightRenderer<>(ctx).noDeathTilt());
+        EntityRenderers.register(ModEntities.LARGE_SOUL_FIREBALL.get(), (ctx) -> new ThrownItemRenderer<>(ctx, 3.0F, true));
 
         EntityHeadBoxDebug.register();
     }

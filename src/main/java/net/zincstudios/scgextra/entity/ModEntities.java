@@ -1,10 +1,12 @@
 package net.zincstudios.scgextra.entity;
 
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
 import net.zincstudios.scgextra.entity.common.raid_summoner.RaidSummonerEntity;
 import net.zincstudios.scgextra.entity.fac.FACEntities;
+import net.zincstudios.scgextra.entity.projectile.LargeSoulFireball;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntity;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
@@ -47,6 +49,13 @@ public class ModEntities {
                     .setShouldReceiveVelocityUpdates(true)
                     .build("fire_projectile"));
 
+    public static final RegistryObject<EntityType<LargeSoulFireball>> LARGE_SOUL_FIREBALL = ENTITY_TYPES
+            .register("soul_fireball", () -> EntityType.Builder.of(
+                    (EntityType<LargeSoulFireball> type, Level level) -> new LargeSoulFireball(type, level), MobCategory.MISC)
+                    .sized(1.0F, 1.0F)
+                    .clientTrackingRange(4)
+                    .updateInterval(3)
+                    .build("soul_fireball"));
 
     public static void register(IEventBus modEventBus) {
         WhalerEntities.register(modEventBus);

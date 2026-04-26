@@ -2,9 +2,9 @@ package net.zincstudios.scgextra.entity.asgharian.soulripper;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.projectile.LargeFireball;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.SCGExtra;
+import net.zincstudios.scgextra.entity.projectile.LargeSoulFireball;
 
 public class SoulRipperThrowFireballGoal extends Goal {
 
@@ -69,8 +69,8 @@ public class SoulRipperThrowFireballGoal extends Goal {
         double d3 = target.getY(0.5D) - (0.5D + this.mob.getY(0.5D));
         double d4 = target.getZ() - (this.mob.getZ() + vec3.z * 4.0D);
 
-        LargeFireball largefireball = new LargeFireball(this.mob.level(), this.mob, d2, d3, d4, 1);
-        largefireball.setPos(this.mob.getX() + vec3.x * 4.0D, this.mob.getY(0.5D) + 0.5D, largefireball.getZ() + vec3.z * 4.0D);
-        this.mob.level().addFreshEntity(largefireball);
+        LargeSoulFireball largeSoulFireball = new LargeSoulFireball(this.mob.level(), this.mob, d2, d3, d4, 1);
+        largeSoulFireball.setPos(this.mob.getX() + vec3.x * 4.0D, this.mob.getY(0.5D) + 0.5D, largeSoulFireball.getZ() + vec3.z * 4.0D);
+        this.mob.level().addFreshEntity(largeSoulFireball);
     }
 }
