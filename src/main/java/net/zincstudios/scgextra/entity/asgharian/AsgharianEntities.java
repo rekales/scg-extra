@@ -15,6 +15,7 @@ import net.zincstudios.scgextra.entity.asgharian.candlefiend.CandleFiendEntity;
 import net.zincstudios.scgextra.entity.asgharian.candlefiend.CandleFiendRenderer;
 import net.zincstudios.scgextra.entity.asgharian.failedone.FailedOneEntity;
 import net.zincstudios.scgextra.entity.asgharian.flamer.AsgharFlamerEntity;
+import net.zincstudios.scgextra.entity.asgharian.soulripper.SoulRipperEntity;
 import net.zincstudios.scgextra.entity.asgharian.surgeon.AsgharSurgeonEntity;
 import net.zincstudios.scgextra.entity.asgharian.worker.AsgharWorkerEntity;
 import net.zincstudios.scgextra.entity.asgharian.worker.AsgharWorkerRenderer;
@@ -55,8 +56,8 @@ public class AsgharianEntities {
                     .setUpdateInterval(1)
                     .build("candle_fiend"));
 
-    public static final RegistryObject<EntityType<CandleFiendEntity>> SOUL_RIPPER = ENTITY_TYPES
-            .register("soul_ripper", () -> EntityType.Builder.of(CandleFiendEntity::new, MobCategory.MONSTER)
+    public static final RegistryObject<EntityType<SoulRipperEntity>> SOUL_RIPPER = ENTITY_TYPES
+            .register("soul_ripper", () -> EntityType.Builder.of(SoulRipperEntity::new, MobCategory.MONSTER)
                     .sized(1.45F, 3.2F)
                     .setUpdateInterval(1)
                     .build("soul_ripper"));
@@ -79,7 +80,8 @@ public class AsgharianEntities {
         EntityRenderers.register(AsgharianEntities.ASGHAR_FLAMER.get(), (ctx) -> new GunnerRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("asgharian/asghar_flamer")), 10).noDeathTilt());
         EntityRenderers.register(AsgharianEntities.CANDLE_FIEND.get(), CandleFiendRenderer::new);
-    }
+        EntityRenderers.register(AsgharianEntities.SOUL_RIPPER.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("asgharian/soul_ripper"))).noDeathTilt());    }
 
     private static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(AsgharianEntities.FAILED_ONE.get(), FailedOneEntity.createAttributes().build());
@@ -87,6 +89,7 @@ public class AsgharianEntities {
         event.put(AsgharianEntities.ASGHAR_WORKER.get(), AsgharWorkerEntity.createAttributes().build());
         event.put(AsgharianEntities.ASGHAR_FLAMER.get(), AsgharFlamerEntity.createAttributes().build());
         event.put(AsgharianEntities.CANDLE_FIEND.get(), CandleFiendEntity.createAttributes().build());
+        event.put(AsgharianEntities.SOUL_RIPPER.get(), SoulRipperEntity.createAttributes().build());
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
