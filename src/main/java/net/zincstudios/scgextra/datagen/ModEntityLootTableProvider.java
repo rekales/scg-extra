@@ -149,6 +149,10 @@ public class ModEntityLootTableProvider extends EntityLootSubProvider {
                 .range(Items.RED_CANDLE, 3, 6)
                 .range(ModItems.BLUEPRINT_SCRAP.get(), 1, 3)
                 .constant(ModItems.CERIMONIAL_COD.get(), 1);
+        basicLoot(AsgharianEntities.SOUL_RIPPER.get())
+                .range(Items.SOUL_LANTERN, 1, 3)
+                .range(ModItems.DEPLETED_DIAMOND_STEEL_INGOT.get(), 1, 3)
+                .constant(ModItems.CERIMONIAL_COD.get(), 1);
     }
 
     // don't use this for more complex loot tables
