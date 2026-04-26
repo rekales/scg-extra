@@ -10,8 +10,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.TagsUpdatedEvent;
 import net.zincstudios.scgextra.SCGExtra;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 @ParametersAreNonnullByDefault
@@ -62,6 +64,20 @@ public record Faction(String name) {
             return NO_FACTION;
         }
         return faction;
+    }
+
+    public static @Nullable Faction getFaction(String factionName) {
+        return KEY_FACTION_MAP.values().stream()
+                .filter(faction -> faction.name.equals(factionName))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public static List<EntityType<?>> getFactionEntities(Faction faction) {
+        return ENTITY_FACTION_CACHE.entrySet().stream()
+                .filter(e -> e.getValue() == faction)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
     }
 
     public static boolean isEnemies(LivingEntity entity1, LivingEntity entity2) {
