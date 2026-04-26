@@ -1,7 +1,6 @@
 package net.zincstudios.scgextra.client;
 
 import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
@@ -24,6 +23,7 @@ import net.zincstudios.scgextra.entity.fac.fac_tank_buster.FacTankBusterRenderer
 import net.zincstudios.scgextra.entity.fac.fac_trencher.FacTrencherRenderer;
 import net.zincstudios.scgextra.entity.fac.trench_goblin.TrenchGoblinRenderer;
 import net.zincstudios.scgextra.entity.fac.trench_sniper.TrenchSniperRenderer;
+import net.zincstudios.scgextra.entity.projectile.SoulFireBallRenderer;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntityModel;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntityRenderer;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
@@ -90,7 +90,7 @@ public final class ModClientEventHandler {
         EntityRenderers.register(RRCEntities.SCRAP_GUARD.get(), (ctx) -> new ScrapGuardRenderer<>(ctx).noDeathTilt());
         EntityRenderers.register(RRCEntities.ARC_PSYCHO.get(), ArcPsychoEntityRenderer::new);
         EntityRenderers.register(RRCEntities.COPPER_KNIGHT.get(), (ctx) -> new CopperKnightRenderer<>(ctx).noDeathTilt());
-        EntityRenderers.register(ModEntities.LARGE_SOUL_FIREBALL.get(), (ctx) -> new ThrownItemRenderer<>(ctx, 3.0F, true));
+        EntityRenderers.register(ModEntities.LARGE_SOUL_FIREBALL.get(), SoulFireBallRenderer::new);
 
         EntityHeadBoxDebug.register();
     }
