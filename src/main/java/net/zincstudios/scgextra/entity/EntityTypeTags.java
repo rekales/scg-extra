@@ -7,12 +7,6 @@ import net.zincstudios.scgextra.SCGExtra;
 
 public class EntityTypeTags {
 
-    // Enemy Rank
-    public static final TagKey<EntityType<?>> INFANTRY = tag("infantry");
-    public static final TagKey<EntityType<?>> ELITE = tag("elite");
-    public static final TagKey<EntityType<?>> MINIBOSS = tag("miniboss");
-    public static final TagKey<EntityType<?>> BOSS = tag("boss");
-
     // Faction
     public static final TagKey<EntityType<?>> ASGHARIAN = tag("factions/asgharian");
     public static final TagKey<EntityType<?>> COG = tag("factions/cog");
