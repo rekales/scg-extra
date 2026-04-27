@@ -19,13 +19,13 @@ import java.util.*;
 @ParametersAreNonnullByDefault
 @FieldsAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public record WaveRaid(String id, String originalId, Profile profile, List<RaiderEntry> infantry, List<RaiderEntry> elite,
-                       List<RaiderEntry> miniboss, List<RaiderEntry> boss) {
+public record WaveRaidData(String id, String originalId, Profile profile, List<RaiderEntry> infantry, List<RaiderEntry> elite,
+                           List<RaiderEntry> miniboss, List<RaiderEntry> boss) {
 
-    private static final Map<String, WaveRaid> RAIDS = new HashMap<>();  // Key: raid id
-    private static final Map<String, WaveRaid> REPLACED_RAIDS = new HashMap<>();  // Key: original raid id
+    private static final Map<String, WaveRaidData> RAIDS = new HashMap<>();  // Key: raid id
+    private static final Map<String, WaveRaidData> REPLACED_RAIDS = new HashMap<>();  // Key: original raid id
 
-    public static void addWaveRaid(WaveRaid raid) {
+    public static void addWaveRaid(WaveRaidData raid) {
         RAIDS.put(raid.id, raid);
         if (!raid.originalId.isEmpty()) {
             RAIDS.put(raid.originalId, raid);
@@ -37,7 +37,7 @@ public record WaveRaid(String id, String originalId, Profile profile, List<Raide
         REPLACED_RAIDS.clear();
     }
 
-    public WaveRaid {
+    public WaveRaidData {
         if (infantry.isEmpty() || elite.isEmpty() || miniboss.isEmpty() || boss.isEmpty()) {
             throw new IllegalArgumentException("entries cannot be empty");
         }
@@ -57,11 +57,11 @@ public record WaveRaid(String id, String originalId, Profile profile, List<Raide
         };
     }
 
-    public static @Nullable WaveRaid getWaveRaidFromOriginal(String originalId) {
+    public static @Nullable WaveRaidData getWaveRaidFromOriginal(String originalId) {
         return REPLACED_RAIDS.get(originalId);
     }
 
-    public static @Nullable WaveRaid getWaveRaid(String id) {
+    public static @Nullable WaveRaidData getWaveRaid(String id) {
         return RAIDS.get(id);
     }
 

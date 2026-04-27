@@ -10,7 +10,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.zincstudios.scgextra.SCGExtra;
-import net.zincstudios.scgextra.raid.WaveRaid;
+import net.zincstudios.scgextra.raid.WaveRaidData;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.lang.reflect.Type;
@@ -20,7 +20,7 @@ import java.util.*;
 public class RaidDataLoader extends SimpleJsonResourceReloadListener {
 
     private static final Gson GSON = new GsonBuilder()
-            .registerTypeAdapter(WaveRaid.class, new RaidDeserializer())
+            .registerTypeAdapter(WaveRaidData.class, new RaidDeserializer())
             .setPrettyPrinting()
             .create();
     public static final RaidDataLoader INSTANCE = new RaidDataLoader();
@@ -32,13 +32,13 @@ public class RaidDataLoader extends SimpleJsonResourceReloadListener {
 
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> jsonMap, ResourceManager resourceManager, ProfilerFiller profiler) {
-        WaveRaid.clearWaveRaids();
+        WaveRaidData.clearWaveRaids();
 
         jsonMap.forEach((resLoc, jsonElement) -> {
             if (resLoc.getNamespace().equals(SCGExtra.MOD_ID))  {
                 try {
-                    WaveRaid raid = GSON.fromJson(jsonElement, WaveRaid.class);
-                    WaveRaid.addWaveRaid(raid);
+                    WaveRaidData raid = GSON.fromJson(jsonElement, WaveRaidData.class);
+                    WaveRaidData.addWaveRaid(raid);
                 } catch (Exception e) {
                     SCGExtra.LOGGER.warn("Failed to load raid for some reason: " + resLoc);
                 }
@@ -50,41 +50,41 @@ public class RaidDataLoader extends SimpleJsonResourceReloadListener {
         event.addListener(INSTANCE);
     }
 
-    private static class RaidDeserializer implements JsonDeserializer<WaveRaid> {
+    private static class RaidDeserializer implements JsonDeserializer<WaveRaidData> {
 
         @Override
-        public WaveRaid deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        public WaveRaidData deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
             JsonObject obj = jsonElement.getAsJsonObject();
             String originalId = obj.get("raid_original_id").getAsString();
             String id = obj.get("raid_id").getAsString();
 
-            WaveRaid.Profile profile = parseProfile(obj.getAsJsonObject("raid_profile"));
+            WaveRaidData.Profile profile = parseProfile(obj.getAsJsonObject("raid_profile"));
 
-            List<WaveRaid.RaiderEntry> infantry = parseRaiders(obj.getAsJsonArray("infantry"));
-            List<WaveRaid.RaiderEntry> elite = parseRaiders(obj.getAsJsonArray("elite"));
-            List<WaveRaid.RaiderEntry> miniboss = parseRaiders(obj.getAsJsonArray("miniboss"));
-            List<WaveRaid.RaiderEntry> boss = parseRaiders(obj.getAsJsonArray("boss"));
+            List<WaveRaidData.RaiderEntry> infantry = parseRaiders(obj.getAsJsonArray("infantry"));
+            List<WaveRaidData.RaiderEntry> elite = parseRaiders(obj.getAsJsonArray("elite"));
+            List<WaveRaidData.RaiderEntry> miniboss = parseRaiders(obj.getAsJsonArray("miniboss"));
+            List<WaveRaidData.RaiderEntry> boss = parseRaiders(obj.getAsJsonArray("boss"));
 
-            return new WaveRaid(id, originalId, profile, infantry, elite, miniboss, boss);
+            return new WaveRaidData(id, originalId, profile, infantry, elite, miniboss, boss);
         }
 
-        private WaveRaid.Profile parseProfile(JsonObject profileObj) {
-            WaveRaid.Wave first = parseWave(profileObj.getAsJsonObject("first_wave"));
-            WaveRaid.Wave second = parseWave(profileObj.getAsJsonObject("second_wave"));
-            WaveRaid.Wave third = parseWave(profileObj.getAsJsonObject("third_wave"));
-            WaveRaid.Wave boss = parseWave(profileObj.getAsJsonObject("boss_wave"));
+        private WaveRaidData.Profile parseProfile(JsonObject profileObj) {
+            WaveRaidData.Wave first = parseWave(profileObj.getAsJsonObject("first_wave"));
+            WaveRaidData.Wave second = parseWave(profileObj.getAsJsonObject("second_wave"));
+            WaveRaidData.Wave third = parseWave(profileObj.getAsJsonObject("third_wave"));
+            WaveRaidData.Wave boss = parseWave(profileObj.getAsJsonObject("boss_wave"));
 
-            return new WaveRaid.Profile(first, second, third, boss);
+            return new WaveRaidData.Profile(first, second, third, boss);
         }
-        private WaveRaid.Wave parseWave(JsonObject waveObj) {
+        private WaveRaidData.Wave parseWave(JsonObject waveObj) {
             int infantry = waveObj.has("infantry") ? waveObj.get("infantry").getAsInt() : 0;
             int elite = waveObj.has("elite") ? waveObj.get("elite").getAsInt() : 0;
             int miniboss = waveObj.has("miniboss") ? waveObj.get("miniboss").getAsInt() : 0;
-            return new WaveRaid.Wave(infantry, elite, miniboss);
+            return new WaveRaidData.Wave(infantry, elite, miniboss);
         }
 
-        private List<WaveRaid.RaiderEntry> parseRaiders(com.google.gson.JsonArray array) {
-            List<WaveRaid.RaiderEntry> entries = new ArrayList<>();
+        private List<WaveRaidData.RaiderEntry> parseRaiders(com.google.gson.JsonArray array) {
+            List<WaveRaidData.RaiderEntry> entries = new ArrayList<>();
 
             array.forEach(element -> {
                 JsonObject raiderObj = element.getAsJsonObject();
@@ -103,7 +103,7 @@ public class RaidDataLoader extends SimpleJsonResourceReloadListener {
                 double maxHealth = raiderObj.has("max_health") ? raiderObj.get("max_health").getAsDouble() : -1;
                 double weight = raiderObj.has("weight") ? raiderObj.get("weight").getAsDouble() : 1.0;
 
-                entries.add(new WaveRaid.RaiderEntry(mobType, maxHealth, weight));
+                entries.add(new WaveRaidData.RaiderEntry(mobType, maxHealth, weight));
             });
 
             return entries;
