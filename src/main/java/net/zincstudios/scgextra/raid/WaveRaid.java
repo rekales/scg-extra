@@ -1,113 +1,125 @@
 package net.zincstudios.scgextra.raid;
 
+import net.minecraft.FieldsAreNonnullByDefault;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.zincstudios.scgextra.SCGExtra;
-import net.zincstudios.scgextra.entity.EnemyRank;
-import net.zincstudios.scgextra.entity.Faction;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 
-// entityAdjustment key: entity id
-public record WaveRaid(String id, String originalId, Profile profile, Map<String, EntityAdjustment> entityAdjustments) {
+@ParametersAreNonnullByDefault
+@FieldsAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public record WaveRaid(String id, String originalId, Profile profile, List<RaiderEntry> infantry, List<RaiderEntry> elite,
+                       List<RaiderEntry> miniboss, List<RaiderEntry> boss) {
 
-    private static final Map<String, WaveRaid> raids = new HashMap<>();  // Key: original raid id
+    private static final Map<String, WaveRaid> RAIDS = new HashMap<>();  // Key: raid id
+    private static final Map<String, WaveRaid> REPLACED_RAIDS = new HashMap<>();  // Key: original raid id
 
     public static void addWaveRaid(WaveRaid raid) {
-        raids.put(raid.originalId, raid);
-    }
-
-    public static @Nullable WaveRaid getWaveRaid(String originalId) {
-        return raids.get(originalId);
+        RAIDS.put(raid.id, raid);
+        if (!raid.originalId.isEmpty()) {
+            RAIDS.put(raid.originalId, raid);
+        }
     }
 
     public static void clearWaveRaids() {
-        raids.clear();
+        RAIDS.clear();
+        REPLACED_RAIDS.clear();
     }
 
-    public static String getOriginalId(String originalId) {
-        WaveRaid raid = getWaveRaid(originalId);
-        if (raid == null) return originalId;
-        return raid.id;
+    public WaveRaid {
+        if (infantry.isEmpty() || elite.isEmpty() || miniboss.isEmpty() || boss.isEmpty()) {
+            throw new IllegalArgumentException("entries cannot be empty");
+        }
+
     }
 
-    public boolean verify() {
-        Faction faction = Faction.getFaction(this.id);
-        if (faction == null) return false;  // TODO: crash cuz no faction
-        List<EntityType<?>> factionEntities = Faction.getFactionEntities(faction);
-
-        if (factionEntities.stream().noneMatch(type -> EnemyRank.getEnemyRank(type) == EnemyRank.INFANTRY)) {
-            return false;  // TODO: crash cuz no infantry
-        }
-        if (factionEntities.stream().noneMatch(type -> EnemyRank.getEnemyRank(type) == EnemyRank.ELITE)) {
-            return false;  // TODO: crash cuz no elite
-        }
-        if (factionEntities.stream().noneMatch(type -> EnemyRank.getEnemyRank(type) == EnemyRank.MINIBOSS)) {
-            return false;  // TODO: crash cuz no miniboss
-        }
-        if (factionEntities.stream().noneMatch(type -> EnemyRank.getEnemyRank(type) == EnemyRank.BOSS)) {
-            return false;  // TODO: crash cuz no boss
-        }
-
-        return true;
+    public enum Rank {
+        INFANTRY, ELITE, MINIBOSS, BOSS
     }
 
-    public @Nullable EntityAdjustment getAdjustment(EntityType<?> entityType) {
-        ResourceLocation resLoc = ForgeRegistries.ENTITY_TYPES.getKey(entityType);
-        if (resLoc == null) return null;
+    public List<RaiderEntry> getRaiderEntries(Rank rank) {
+        return switch (rank) {
+            case INFANTRY -> infantry;
+            case ELITE -> elite;
+            case MINIBOSS -> miniboss;
+            case BOSS -> boss;
+        };
+    }
 
-        String id = resLoc.getPath();
-        return entityAdjustments().get(id);
+    public static @Nullable WaveRaid getWaveRaidFromOriginal(String originalId) {
+        return REPLACED_RAIDS.get(originalId);
+    }
+
+    public static @Nullable WaveRaid getWaveRaid(String id) {
+        return RAIDS.get(id);
     }
 
     public Component getLabel(String raidId) {
         return Component.translatable(SCGExtra.MOD_ID + ".raid.label." + raidId);
     }
 
-    public List<EntityType<?>> generateSpawnList(int currentWave, RandomSource random) {
-        return this.generateSpawnList(this.profile.getWave(currentWave), random);
+    public List<RaiderEntry> generateRaiders(int currentWave, RandomSource random) {
+        return this.generateRaiders(this.profile.getWave(currentWave), random);
     }
 
-    public List<EntityType<?>> generateSpawnList(Wave wave, RandomSource random) {
-        Faction faction = Faction.getFaction(this.id);
-        if (faction == null) return List.of();  // TODO: crash cuz no faction
-        List<EntityType<?>> factionEntities = Faction.getFactionEntities(faction);
-        List<EntityType<?>> spawnList = new ArrayList<>();
-        spawnList.addAll(this.generateRankSpawnList(factionEntities, EnemyRank.INFANTRY, wave.infantry, random));
-        spawnList.addAll(this.generateRankSpawnList(factionEntities, EnemyRank.ELITE, wave.elite, random));
-        spawnList.addAll(this.generateRankSpawnList(factionEntities, EnemyRank.MINIBOSS, wave.miniboss, random));
+    public List<RaiderEntry> generateRaiders(Wave wave, RandomSource random) {
+        List<RaiderEntry> spawnList = new ArrayList<>();
+        spawnList.addAll(sampleRandomRaiders(this.getRaiderEntries(Rank.INFANTRY), wave.infantry, random));
+        spawnList.addAll(sampleRandomRaiders(this.getRaiderEntries(Rank.ELITE), wave.elite, random));
+        spawnList.addAll(sampleRandomRaiders(this.getRaiderEntries(Rank.MINIBOSS), wave.miniboss, random));
 
         if (wave == this.profile.boss) {
-            List<EntityType<?>> bossEntity = this.generateRankSpawnList(factionEntities, EnemyRank.BOSS, 1, random);
-            if (bossEntity.isEmpty()) return List.of();  // TODO: crash cuz no boss
-            spawnList.addAll(bossEntity);
+            spawnList.addAll(sampleRandomRaiders(this.getRaiderEntries(Rank.BOSS), 1, random));
         }
 
-        return spawnList;  // TODO: crash or something when empty
+        return spawnList;
     }
 
-    private List<EntityType<?>> generateRankSpawnList(List<EntityType<?>> entityTypes, EnemyRank rank, int amount, RandomSource random) {
-        List<EntityType<?>> types = entityTypes.stream()
-                .filter(type -> EnemyRank.getEnemyRank(type) == rank)
-                .toList();
-        if (types.isEmpty()) return List.of();  // TODO: decide if warn or ignore
 
-        List<EntityType<?>> spawnList = new ArrayList<>();
-        for (int i = 0; i < amount; i++) {
-            spawnList.add(entityTypes.get(random.nextInt(entityTypes.size())));
+    private static List<RaiderEntry> sampleRandomRaiders(List<RaiderEntry> entries, int amount, RandomSource random) {
+        List<RaiderEntry> spawnList = new ArrayList<>();
+        for (int i = 0; i < amount; i++) {  // TODO: weights
+            spawnList.add(entries.get(random.nextInt(entries.size())));
         }
         return spawnList;
     }
 
+    public record RaiderEntry(EntityType<? extends Mob> entityType, double maxHealth, double weight) {
+        public @Nullable Mob createEntity(ServerLevel level) {
+            Mob entity = entityType.create(level);
+            if (entity == null) return null;
+
+            if (this.maxHealth != -1) {
+                AttributeInstance healthAttr = entity.getAttribute(Attributes.MAX_HEALTH);
+                if (healthAttr != null) {
+                    double currentHealth = healthAttr.getBaseValue();
+                    healthAttr.addPermanentModifier(new AttributeModifier(UUID.randomUUID(), "Raid fixed health", this.maxHealth - currentHealth, AttributeModifier.Operation.ADDITION));
+                    entity.setHealth(entity.getMaxHealth());
+                }
+            }
+
+            return entity;
+        }
+    }
+
     public record Profile(Wave first, Wave second, Wave third, Wave boss) {
+        public Profile {
+            if (first.getTotal() == 0 || second.getTotal() == 0 || third.getTotal() == 0) {
+                throw new IllegalArgumentException("non-boss waves cannot be empty");
+            }
+        }
+
         public Wave getWave(int currentWave) {
             return switch (currentWave) {
                 case 2 -> second;
@@ -119,26 +131,8 @@ public record WaveRaid(String id, String originalId, Profile profile, Map<String
     }
 
     public record Wave(int infantry, int elite, int miniboss) {
-    }
-
-    // Extend when needed like custom equipment path or something
-    public record EntityAdjustment(String entityId, double maxHealth) {
-
-        public Mob adjustMob(Mob mob) {
-            if (this.maxHealth != -1) {
-                AttributeInstance healthAttr = mob.getAttribute(Attributes.MAX_HEALTH);
-                if (healthAttr != null) {
-                    double currentHealth = healthAttr.getBaseValue();
-                    healthAttr.addPermanentModifier(new AttributeModifier(UUID.randomUUID(), "Raid fixed health", this.maxHealth - currentHealth, AttributeModifier.Operation.ADDITION));
-                    mob.setHealth(mob.getMaxHealth());
-                }
-            }
-
-            return mob;
-        }
-
-        public boolean hasMaxHealthAdjustment() {
-            return this.maxHealth != -1;
+        public int getTotal() {
+            return this.infantry + this.elite + this.miniboss;
         }
     }
 }

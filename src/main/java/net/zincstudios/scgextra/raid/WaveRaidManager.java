@@ -41,33 +41,33 @@ public class WaveRaidManager {
         this.currentActiveRaidId = raid.getRaidId();
         this.currentWave = 1;
         this.currentRaidData = raidData;
-        spawnCurrentWaveMobs(level);
+//        spawnCurrentWaveMobs(level);
     }
 
-    // TODO: add more params to make stateless and static
-    private void spawnCurrentWaveMobs(ServerLevel level) {
-        List<EntityType<?>> spawnList = this.currentRaidData.generateSpawnList(this.currentWave, level.getRandom());
-        int failedAttemptsLeft = spawnList.size() + 5;
+//    // TODO: add more params to make stateless and static
+//    private void spawnCurrentWaveMobs(ServerLevel level) {
+//        List<EntityType<?>> spawnList = this.currentRaidData.generateSpawnList(this.currentWave, level.getRandom());
+//        int failedAttemptsLeft = spawnList.size() + 5;
+//
+//        // TODO: missing impl
+//
+//    }
 
-        // TODO: missing impl
-
-    }
-
-    private Mob spawnMob(EntityType<?> entityType, ServerLevel level, Vec3 spawnPos) {
-        if (!(entityType.create(level) instanceof Mob mob)) return null;
-
-        mob.setPos(spawnPos.x, spawnPos.y, spawnPos.z);
-
-        WaveRaid.EntityAdjustment adjustment = this.currentRaidData.getAdjustment(entityType);
-        if (adjustment != null) {
-            adjustment.adjustMob(mob);
-        }
-
-        // NOTE: might need to dynamically add GunAttackGoal, maybe because could already be handled.
-
-        level.addFreshEntity(mob);
-        return mob;
-    }
+//    private Mob spawnMob(EntityType<?> entityType, ServerLevel level, Vec3 spawnPos) {
+//        if (!(entityType.create(level) instanceof Mob mob)) return null;
+//
+//        mob.setPos(spawnPos.x, spawnPos.y, spawnPos.z);
+//
+//        WaveRaid.EntityAdjustment adjustment = this.currentRaidData.getAdjustment(entityType);
+//        if (adjustment != null) {
+//            adjustment.adjustMob(mob);
+//        }
+//
+//        // NOTE: might need to dynamically add GunAttackGoal, maybe because could already be handled.
+//
+//        level.addFreshEntity(mob);
+//        return mob;
+//    }
 
     @Nullable
     private ServerPlayer findNearestPlayer(ServerLevel level, Vec3 pos) {

@@ -17,9 +17,9 @@ public class RaidManagerMixin {
     @Inject(method = "startRaid", at = @At("HEAD"), cancellable = true)
     private void onStartRaid(RaidConfig.RaidData config, ServerLevel level, Vec3 spawnPos, CallbackInfo ci) {
         RaidManager self = (RaidManager) (Object) this;
-        WaveRaid raidData = WaveRaid.getWaveRaid(config.raidId());
+        WaveRaid raidData = WaveRaid.getWaveRaidFromOriginal(config.raidId());
         if (!self.hasActiveRaid() && raidData != null) {
-            WaveRaidManager.get(level).startRaid(raidData, level, spawnPos);
+//            WaveRaidManager.get(level).startRaid(raidData, level, spawnPos);
             ci.cancel();
         }
     }
