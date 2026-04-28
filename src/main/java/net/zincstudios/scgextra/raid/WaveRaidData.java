@@ -129,6 +129,10 @@ public record WaveRaidData(String id, String originalId, Profile profile, List<R
                 default -> first;
             };
         }
+
+        public static boolean isFinalWave(int currentWave) {
+            return currentWave == 4;
+        }
     }
 
     public record Wave(int infantry, int elite, int miniboss) {

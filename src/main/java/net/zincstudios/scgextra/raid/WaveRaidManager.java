@@ -5,6 +5,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.TickEvent;
 import net.zincstudios.scgextra.SCGExtra;
 
 import javax.annotation.Nullable;
@@ -28,20 +29,44 @@ public class WaveRaidManager {
     }
 
     public void startRaid(WaveRaidData raidData, ServerLevel level, Vec3 spawnCenter) {
-        ServerPlayer targetPlayer = findNearestPlayer(level, spawnCenter);
+        ServerPlayer targetPlayer = WaveRaidUtil.findNearestPlayer(level, spawnCenter);
 
         WaveRaidState raid = new WaveRaidState(raidData, level, spawnCenter);
         if (targetPlayer != null) {
             raid.setTargetPlayer(targetPlayer.getUUID());
         }
 
-//        this.currentActiveRaidId = raid.getRaidId();
-//        activeRaids.put(raid.getRaidId(), raid);
+        this.raidState = raid;
         spawnCurrentWaveMobs(raid, level);
     }
 
-    // TODO: add more params to make stateless and static
-    private void spawnCurrentWaveMobs(WaveRaidState raid, ServerLevel level) {
+    public void surrenderRaid(ServerLevel level) {
+
+    }
+
+    public void tick(ServerLevel level) {
+        if (this.raidState != null) {
+            this.raidState.tick();
+
+            if (this.raidState.hasEnded()) {
+                this.raidState = null;
+            } else if (this.raidState.isNextWaveReady()) {
+                this.raidState.advanceWave();
+                spawnCurrentWaveMobs(this.raidState, level);
+            }
+        }
+    }
+
+    public static void onLevelTick(TickEvent.LevelTickEvent event) {
+        if (event.phase == TickEvent.Phase.END) {
+            if (event.level instanceof ServerLevel level) {
+                WaveRaidManager manager = WaveRaidManager.get(level);
+                manager.tick(level);
+            }
+        }
+    }
+
+    private static void spawnCurrentWaveMobs(WaveRaidState raid, ServerLevel level) {
         Vec3 waveCenter = WaveRaidUtil.findRaidSpawnLocation(level, raid.getSpawnCenter());
         if (waveCenter == null) return;  // TODO: crash or something
         WaveRaidData raidData = raid.getWaveRaidData();
@@ -58,6 +83,7 @@ public class WaveRaidManager {
                 Vec3 pos = WaveRaidUtil.findMobSpawnPos(level, waveCenter, RAID_SPAWN_RADIUS);
                 mob.setPos(pos);
                 level.addFreshEntity(mob);
+                raid.addRaider(mob);
                 spawnList.remove(entry);
             }
         }
@@ -69,25 +95,8 @@ public class WaveRaidManager {
         }
     }
 
-    private static @Nullable ServerPlayer findNearestPlayer(ServerLevel level, Vec3 pos) {
-        ServerPlayer nearest = null;
-        double nearestDist = Double.MAX_VALUE;
-
-        for(ServerPlayer player : level.players()) {
-            if (!player.isSpectator() && !player.isCreative()) {
-                double dist = player.position().distanceTo(pos);
-                if (dist < nearestDist) {
-                    nearestDist = dist;
-                    nearest = player;
-                }
-            }
-        }
-
-        return nearest;
-    }
-
     public boolean hasActiveRaid() {
-        return this.raidState == null;
+        return this.raidState != null;
     }
 
     public @Nullable WaveRaidState getCurrentRaidState() {

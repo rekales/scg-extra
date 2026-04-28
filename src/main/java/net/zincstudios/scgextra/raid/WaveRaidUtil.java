@@ -2,6 +2,7 @@ package net.zincstudios.scgextra.raid;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
@@ -13,6 +14,23 @@ import javax.annotation.Nullable;
 public class WaveRaidUtil {
 
     public static final int FIND_SPAWN_LOCATION_ATTEMPTS = 25;
+
+    public static @Nullable ServerPlayer findNearestPlayer(ServerLevel level, Vec3 pos) {
+        ServerPlayer nearest = null;
+        double nearestDist = Double.MAX_VALUE;
+
+        for(ServerPlayer player : level.players()) {
+            if (!player.isSpectator() && !player.isCreative()) {
+                double dist = player.position().distanceTo(pos);
+                if (dist < nearestDist) {
+                    nearestDist = dist;
+                    nearest = player;
+                }
+            }
+        }
+
+        return nearest;
+    }
 
     // Copied from RaidManager#findRaidSpawnLocation
     @SuppressWarnings("deprecation")
