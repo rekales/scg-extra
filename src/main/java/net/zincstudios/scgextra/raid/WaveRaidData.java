@@ -16,6 +16,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 
+@SuppressWarnings("unused")
 @ParametersAreNonnullByDefault
 @FieldsAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -28,7 +29,7 @@ public record WaveRaidData(String id, String originalId, Profile profile, List<R
     public static void addWaveRaid(WaveRaidData raid) {
         RAIDS.put(raid.id, raid);
         if (!raid.originalId.isEmpty()) {
-            RAIDS.put(raid.originalId, raid);
+            REPLACED_RAIDS.put(raid.originalId, raid);
         }
     }
 

@@ -5,8 +5,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.phys.Vec3;
-import top.ribs.scguns.config.RaidConfig;
-import top.ribs.scguns.entity.raid.ActiveRaid;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -16,38 +14,38 @@ import java.util.UUID;
 
 public class WaveRaidManager {
 
+    public static final double RAID_SPAWN_RADIUS = 15;  // NOTE: turned constant from data, make dynamic if needed
 
-    public static final double RAID_SPAWN_RADIUS = 15;  // NOTE: turned constant from data, make dynammic if needed
-    public static final int RAID_SPAWN_RADIUS_MIN = 40;
-    public static final double RAID_SPAWN_RADIUS_MULTIPLIER = 2.0;
-    private static final boolean DEBUG_RAID_SPAWN_LOGS = false;
-
-    private static final Map<UUID, ActiveRaid> activeRaids = new HashMap<>();
+    private static final Map<UUID, WaveRaidState> activeRaids = new HashMap<>();
     private static final Map<ResourceLocation, WaveRaidManager> INSTANCES = new HashMap<>();
 
-    @Nullable private UUID currentActiveRaidId = null;
+    @Nullable private UUID currentActiveRaidId = null;  // NOTE: maybe just have a WaveRaidState object per instance
+
+    public static WaveRaidManager get(ResourceLocation key) {
+        return INSTANCES.computeIfAbsent(key, (k) -> new WaveRaidManager());
+    }
 
     public static WaveRaidManager get(ServerLevel level) {
         ResourceLocation dimension = level.dimension().location();
         return INSTANCES.computeIfAbsent(dimension, (k) -> new WaveRaidManager());
     }
 
-    public void startRaid(RaidConfig.RaidData config, WaveRaidData raidData, ServerLevel level, Vec3 spawnPos) {
-        ServerPlayer targetPlayer = this.findNearestPlayer(level, spawnPos);
-        long startTime = level.getGameTime();
+    public void startRaid(WaveRaidData raidData, ServerLevel level, Vec3 spawnCenter) {
+        ServerPlayer targetPlayer = findNearestPlayer(level, spawnCenter);
 
-        ActiveWaveRaid raid = new ActiveWaveRaid(config.raidLevel(), config, raidData, level, spawnPos, startTime);
+        WaveRaidState raid = new WaveRaidState(raidData, level, spawnCenter);
         if (targetPlayer != null) {
             raid.setTargetPlayer(targetPlayer.getUUID());
         }
-        activeRaids.put(raid.getRaidId(), raid);
-        this.currentActiveRaidId = raid.getRaidId();
+
+//        this.currentActiveRaidId = raid.getRaidId();
+//        activeRaids.put(raid.getRaidId(), raid);
         spawnCurrentWaveMobs(raid, level);
     }
 
     // TODO: add more params to make stateless and static
-    private void spawnCurrentWaveMobs(ActiveWaveRaid raid, ServerLevel level) {
-        Vec3 waveCenter = WaveRaidUtil.findWaveSpawnLocation(level, raid.getSpawnCenter());
+    private void spawnCurrentWaveMobs(WaveRaidState raid, ServerLevel level) {
+        Vec3 waveCenter = WaveRaidUtil.findRaidSpawnLocation(level, raid.getSpawnCenter());
         if (waveCenter == null) return;  // TODO: crash or something
         WaveRaidData raidData = raid.getWaveRaidData();
         List<WaveRaidData.RaiderEntry> spawnList = raidData.generateRaiders(raid.getCurrentWave(), level.getRandom());
@@ -61,8 +59,7 @@ public class WaveRaidManager {
         }
     }
 
-    @Nullable
-    private ServerPlayer findNearestPlayer(ServerLevel level, Vec3 pos) {
+    private static @Nullable ServerPlayer findNearestPlayer(ServerLevel level, Vec3 pos) {
         ServerPlayer nearest = null;
         double nearestDist = Double.MAX_VALUE;
 
@@ -83,14 +80,13 @@ public class WaveRaidManager {
         if (this.currentActiveRaidId == null) {
             return false;
         } else {
-            ActiveRaid raid = activeRaids.get(this.currentActiveRaidId);
-            return raid != null && raid.isActive();
+            WaveRaidState raid = activeRaids.get(this.currentActiveRaidId);
+            return raid != null;
         }
     }
 
-    @Nullable
-    public ActiveWaveRaid getCurrentActiveRaid() {
-        return this.currentActiveRaidId == null ? null : (ActiveWaveRaid) activeRaids.get(this.currentActiveRaidId);
+    public @Nullable WaveRaidState getCurrentRaidState() {
+        return this.currentActiveRaidId == null ? null : activeRaids.get(this.currentActiveRaidId);
     }
 }
 
