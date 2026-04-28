@@ -11,6 +11,9 @@ import net.zincstudios.scgextra.SCGExtra;
 import javax.annotation.Nullable;
 import java.util.*;
 
+
+// TODO: persistence
+@SuppressWarnings("unused")
 public class WaveRaidManager {
 
     public static final double RAID_SPAWN_RADIUS = 15;  // NOTE: turned constant from data, make dynamic if needed
@@ -45,7 +48,10 @@ public class WaveRaidManager {
     }
 
     public void surrenderRaid(ServerLevel level) {
-
+        WaveRaidState raid = this.getCurrentRaidState();
+        if (raid == null || raid.hasEnded()) return;
+        raid.endRaid();
+        this.raidState = null;
     }
 
     public void tick(ServerLevel level) {

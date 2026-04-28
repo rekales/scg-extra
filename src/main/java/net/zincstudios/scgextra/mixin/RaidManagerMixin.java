@@ -57,6 +57,12 @@ public class RaidManagerMixin {
         }
     }
 
+    @Inject(method = "surrenderRaid", at = @At("HEAD"))
+    private static void onSurrenderRaid(ServerLevel level, CallbackInfo ci) {
+        WaveRaidManager manager = WaveRaidManager.get(level);
+        manager.surrenderRaid(level);
+    }
+
     @Unique
     private @Nullable ResourceLocation SCGExtra$findRaidManagerKey(RaidManager instance) {
         for (Map.Entry<ResourceLocation, RaidManager> entry : INSTANCES.entrySet()) {

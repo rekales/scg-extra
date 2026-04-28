@@ -4,7 +4,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.phys.Vec3;
 
@@ -13,6 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+@SuppressWarnings("unused")
 public class WaveRaidState {
 
     private static final int NEXT_WAVE_DELAY = 30;
@@ -90,7 +90,7 @@ public class WaveRaidState {
     public void endRaid() {
         this.active = false;
 
-        if (isRaidersEliminated()) {
+        if (this.isRaidersEliminated() && WaveRaidData.Profile.isFinalWave(this.currentWave)) {
             this.announceToNearbyPlayers(Component.translatable("raid.scguns.defeated"), 64.0F);
         } else {
             this.discardRaiders();
