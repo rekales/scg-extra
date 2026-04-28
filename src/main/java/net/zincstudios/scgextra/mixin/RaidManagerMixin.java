@@ -36,9 +36,9 @@ public class RaidManagerMixin {
         if (!self.hasActiveRaid()) {
             Vec3 playerPos = player.position();
             Vec3 spawnPos = WaveRaidUtil.findRaidSpawnLocation(level, playerPos);
-            if (spawnPos != null) {
+            WaveRaidData waveRaidData = WaveRaidData.getWaveRaidFromOriginal(config.raidId());
+            if (spawnPos != null && waveRaidData != null) {
                 WaveRaidManager waveRaidManager = WaveRaidManager.get(level);
-                WaveRaidData waveRaidData = WaveRaidData.getWaveRaidFromOriginal(config.raidId());
                 waveRaidManager.startRaid(waveRaidData, level, spawnPos);
                 ci.cancel();
             }

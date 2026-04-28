@@ -12,6 +12,7 @@
     "GunnerMobSpawnerMixin",
     "LightningProjectileEntityMixin",
     "MineUnitBlockEntityMixin",
+    "ModCommandsMixin",
     "OceanMonumentEntryRoomMixin",
     "ProjectileEntityMixin",
     "RaidManagerInvoker",

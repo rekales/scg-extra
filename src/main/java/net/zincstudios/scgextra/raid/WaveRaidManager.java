@@ -28,6 +28,10 @@ public class WaveRaidManager {
         return INSTANCES.computeIfAbsent(dimension, (k) -> new WaveRaidManager());
     }
 
+    public static List<WaveRaidManager> getAll() {
+        return INSTANCES.values().stream().toList();
+    }
+
     public void startRaid(WaveRaidData raidData, ServerLevel level, Vec3 spawnCenter) {
         ServerPlayer targetPlayer = WaveRaidUtil.findNearestPlayer(level, spawnCenter);
 

@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public class WaveRaidState {
 
-    private static final int NEXT_WAVE_DELAY = 50;
+    private static final int NEXT_WAVE_DELAY = 30;
 
     private final UUID raidId = UUID.randomUUID();
     private final ServerLevel level;
@@ -79,16 +79,13 @@ public class WaveRaidState {
     }
 
     public void discardRaiders() {
-
+        for (UUID uuid : this.raiderUUIDs) {
+            Entity entity = this.level.getEntity(uuid);
+            if (entity != null && !entity.isRemoved()) {
+                entity.discard();
+            }
+        }
     }
-
-//    public boolean isActive() {
-//        return this.active;
-//    }
-//
-//    public void setActive(boolean active) {
-//        this.active = active;
-//    }
 
     public void endRaid() {
         this.active = false;
@@ -104,8 +101,8 @@ public class WaveRaidState {
     public void tick() {
         if (this.active) {
             this.updateRaiders();
-            if (isRaidersEliminated()) {
-                if (WaveRaidData.Profile.isFinalWave(this.currentWave) && !this.hasEnded()) {
+            if (this.isRaidersEliminated()) {
+                if (WaveRaidData.Profile.isFinalWave(this.currentWave) && !this.hasEnded() && this.nextWaveDelay <= 0) {
                     this.endRaid();
                 } else {
                     this.nextWaveDelay--;
@@ -123,8 +120,8 @@ public class WaveRaidState {
     private void updateRaiders() {
         this.raiderUUIDs.removeIf((uuid) -> {
             Entity entity = this.level.getEntity(uuid);
-            if (entity instanceof LivingEntity livingEntity) {
-                return !livingEntity.isAlive();
+            if (entity != null) {
+                return entity.isRemoved();
             } else {
                 return true;
             }
