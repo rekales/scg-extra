@@ -5,21 +5,18 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.phys.Vec3;
+import net.zincstudios.scgextra.SCGExtra;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class WaveRaidManager {
 
     public static final double RAID_SPAWN_RADIUS = 15;  // NOTE: turned constant from data, make dynamic if needed
 
-    private static final Map<UUID, WaveRaidState> activeRaids = new HashMap<>();
     private static final Map<ResourceLocation, WaveRaidManager> INSTANCES = new HashMap<>();
 
-    @Nullable private UUID currentActiveRaidId = null;  // NOTE: maybe just have a WaveRaidState object per instance
+    @Nullable private WaveRaidState raidState = null;
 
     public static WaveRaidManager get(ResourceLocation key) {
         return INSTANCES.computeIfAbsent(key, (k) -> new WaveRaidManager());
@@ -50,12 +47,25 @@ public class WaveRaidManager {
         WaveRaidData raidData = raid.getWaveRaidData();
         List<WaveRaidData.RaiderEntry> spawnList = raidData.generateRaiders(raid.getCurrentWave(), level.getRandom());
 
-        for (WaveRaidData.RaiderEntry entry : spawnList) {
-            Mob mob = entry.createEntity(level);
-            if (mob == null) continue;  // TODO: handle
-            Vec3 pos = WaveRaidUtil.findMobSpawnPos(level, waveCenter, RAID_SPAWN_RADIUS);
-            mob.setPos(pos);
-            level.addFreshEntity(mob);
+        int failedAttemptsLeft = spawnList.size()/2 + 5;
+        while (!spawnList.isEmpty() && failedAttemptsLeft > 0) {
+            for (WaveRaidData.RaiderEntry entry : List.copyOf(spawnList)) {
+                Mob mob = entry.createEntity(level);
+                if (mob == null) {
+                    failedAttemptsLeft--;
+                    continue;
+                }
+                Vec3 pos = WaveRaidUtil.findMobSpawnPos(level, waveCenter, RAID_SPAWN_RADIUS);
+                mob.setPos(pos);
+                level.addFreshEntity(mob);
+                spawnList.remove(entry);
+            }
+        }
+
+        if (!spawnList.isEmpty()) {
+            for (WaveRaidData.RaiderEntry entry : spawnList) {
+                SCGExtra.LOGGER.warn("Failed to spawn {}", entry.entityType());
+            }
         }
     }
 
@@ -77,16 +87,11 @@ public class WaveRaidManager {
     }
 
     public boolean hasActiveRaid() {
-        if (this.currentActiveRaidId == null) {
-            return false;
-        } else {
-            WaveRaidState raid = activeRaids.get(this.currentActiveRaidId);
-            return raid != null;
-        }
+        return this.raidState == null;
     }
 
     public @Nullable WaveRaidState getCurrentRaidState() {
-        return this.currentActiveRaidId == null ? null : activeRaids.get(this.currentActiveRaidId);
+        return this.raidState;
     }
 }
 
