@@ -4,6 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.zincstudios.scgextra.SCGExtra;
@@ -40,7 +41,7 @@ public class WaveRaidManager {
 
         WaveRaidState raid = new WaveRaidState(raidData, level, spawnCenter);
         if (targetPlayer != null) {
-            raid.setTargetPlayer(targetPlayer.getUUID());
+            raid.setTargetPlayer(targetPlayer);
         }
 
         this.raidState = raid;
@@ -77,7 +78,8 @@ public class WaveRaidManager {
     }
 
     private static void spawnCurrentWaveMobs(WaveRaidState raid, ServerLevel level) {
-        Vec3 waveCenter = WaveRaidUtil.findRaidSpawnLocation(level, raid.getSpawnCenter());
+        Player player = raid.getTargetPlayer();
+        Vec3 waveCenter = WaveRaidUtil.findWaveSpawnLocation(level, raid.getSpawnCenter(), player == null ? null : player.position());
         if (waveCenter == null) return;  // TODO: crash or something
         WaveRaidData raidData = raid.getWaveRaidData();
         List<WaveRaidData.RaiderEntry> spawnList = raidData.generateRaiders(raid.getCurrentWave(), level.getRandom());
@@ -92,6 +94,7 @@ public class WaveRaidManager {
                 }
                 Vec3 pos = WaveRaidUtil.findMobSpawnPos(level, waveCenter, RAID_SPAWN_RADIUS);
                 mob.setPos(pos);
+                mob.setTarget(player);
                 level.addFreshEntity(mob);
                 raid.addRaider(mob);
                 spawnList.remove(entry);

@@ -5,6 +5,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
@@ -65,13 +66,14 @@ public class WaveRaidState {
         this.raiderUUIDs.add(mob.getUUID());
     }
 
-    public void setTargetPlayer(UUID playerUUID) {
-        this.targetPlayerUUID = playerUUID;
+    public void setTargetPlayer(Player player) {
+        this.targetPlayerUUID = player.getUUID();
     }
 
     @Nullable
-    public UUID getTargetPlayerUUID() {
-        return this.targetPlayerUUID;
+    public ServerPlayer getTargetPlayer() {
+        if (this.level == null || this.targetPlayerUUID == null) return null;
+        return this.level.getServer().getPlayerList().getPlayer(this.targetPlayerUUID);
     }
 
     public UUID getRaidId() {
