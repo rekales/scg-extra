@@ -22,7 +22,6 @@ public class WaveRaidManager {
     public static final double RAID_SPAWN_RADIUS = 15;  // NOTE: turned constant from data, make dynamic if needed
     public static final double RAID_BOSS_BAR_RADIUS = 128;  // NOTE: turned constant from data, make dynamic if needed
 
-
     private static final Map<ResourceLocation, WaveRaidManager> INSTANCES = new HashMap<>();
 
     @Nullable private WaveRaidState raidState = null;

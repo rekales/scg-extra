@@ -15,9 +15,11 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-//@SuppressWarnings("unused")
+// TODO: persistence
+@SuppressWarnings("unused")
 public class WaveRaidState {
 
+    public static final int RAID_TIMEOUT_TICKS = 12000;  // 10 minutes, TODO: config
     private static final int NEXT_WAVE_DELAY = 30;
 
     private final UUID raidId = UUID.randomUUID();
@@ -95,9 +97,13 @@ public class WaveRaidState {
     }
 
     public void endRaid() {
+        this.endRaid(this.isRaidersEliminated() && WaveRaidData.Profile.isFinalWave(this.currentWave));
+    }
+
+    public void endRaid(boolean success) {
         this.active = false;
 
-        if (this.isRaidersEliminated() && WaveRaidData.Profile.isFinalWave(this.currentWave)) {
+        if (success) {
             this.announceToNearbyPlayers(Component.translatable("raid.scguns.defeated"), 64.0F);
         } else {
             this.discardRaiders();
@@ -110,12 +116,19 @@ public class WaveRaidState {
             this.updateRaiders();
             if (this.isRaidersEliminated()) {
                 if (WaveRaidData.Profile.isFinalWave(this.currentWave) && !this.hasEnded() && this.nextWaveDelay <= 0) {
-                    this.endRaid();
+                    this.endRaid(true);
                 } else {
                     this.nextWaveDelay--;
                 }
             }
+            if (this.checkTimeout()) {
+                this.endRaid(false);
+            }
         }
+    }
+
+    private boolean checkTimeout() {
+        return this.level.getGameTime() > this.startTime + RAID_TIMEOUT_TICKS;
     }
 
     public void announceToNearbyPlayers(Component message, double radius) {
