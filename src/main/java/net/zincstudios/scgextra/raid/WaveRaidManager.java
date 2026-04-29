@@ -1,13 +1,16 @@
 package net.zincstudios.scgextra.raid;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.TickEvent;
 import net.zincstudios.scgextra.SCGExtra;
 
@@ -147,6 +150,11 @@ public class WaveRaidManager {
                 Vec3 pos = WaveRaidUtil.findMobSpawnPos(level, waveCenter, RAID_SPAWN_RADIUS);
                 mob.setPos(pos);
                 mob.setTarget(player);
+                ForgeEventFactory.onFinalizeSpawn(
+                        mob, level,
+                        level.getCurrentDifficultyAt(BlockPos.containing(pos)),
+                        MobSpawnType.EVENT, null, null
+                );
                 level.addFreshEntity(mob);
                 raid.addRaider(mob);
                 spawnList.remove(entry);
