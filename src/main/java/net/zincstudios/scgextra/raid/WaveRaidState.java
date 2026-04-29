@@ -4,6 +4,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -13,7 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@SuppressWarnings("unused")
+//@SuppressWarnings("unused")
 public class WaveRaidState {
 
     private static final int NEXT_WAVE_DELAY = 30;
@@ -28,6 +29,7 @@ public class WaveRaidState {
     private UUID targetPlayerUUID = null;
     private boolean active;
     private int nextWaveDelay;
+    private int totalWaveSpawned = 0;
 
     public WaveRaidState(WaveRaidData waveRaidData, ServerLevel level, Vec3 spawnCenter) {
         this.startTime = level.getGameTime();
@@ -51,10 +53,11 @@ public class WaveRaidState {
         if (!WaveRaidData.Profile.isFinalWave(this.currentWave)) {
             this.currentWave++;
             this.nextWaveDelay = NEXT_WAVE_DELAY;
+            this.totalWaveSpawned = 0;
         }
     }
 
-    public Vec3 getSpawnCenter() {
+    public Vec3 getCenter() {
         return this.spawnCenter;
     }
 
@@ -64,6 +67,7 @@ public class WaveRaidState {
 
     public void addRaider(Mob mob) {
         this.raiderUUIDs.add(mob.getUUID());
+        this.totalWaveSpawned = this.raiderUUIDs.size();
     }
 
     public void setTargetPlayer(Player player) {
@@ -140,5 +144,22 @@ public class WaveRaidState {
 
     public boolean hasEnded() {
         return !this.active;
+    }
+
+    public float getBossBarProgress() {
+        if (WaveRaidData.Profile.isFinalWave(this.currentWave) && this.raiderUUIDs.size() == 1) {
+            UUID bossId = this.raiderUUIDs.iterator().next();
+            Entity entity = this.level.getEntity(bossId);
+            if (entity instanceof LivingEntity bossEntity) {
+                return bossEntity.getHealth()/bossEntity.getMaxHealth();
+            }
+        } else {
+            return (float)this.raiderUUIDs.size()/this.totalWaveSpawned;
+        }
+        return 1f;
+    }
+
+    public Component getBossBarLabel() {
+        return Component.literal("Raid");
     }
 }
