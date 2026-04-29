@@ -1,0 +1,60 @@
+{
+  "raid_id" : "fac",
+  "raid_original_id" : "iron",
+
+  "raid_profile" : {
+    "first_wave" : {
+      "infantry": 8
+    },
+    "second_wave" : {
+      "infantry": 5,
+      "elite": 2
+    },
+    "third_wave" : {
+      "infantry": 3,
+      "elite": 3,
+      "miniboss": 1
+    },
+    "boss_wave" : {
+    }
+  },
+
+  "infantry" : [
+    {
+      "entity_id": "scgextra:fac_trencher"
+    },
+    {
+      "entity_id": "scgextra:fac_bluecoat"
+    },
+    {
+      "entity_id": "scgextra:trench_goblin"
+    }
+  ],
+  "elite" : [
+    {
+      "entity_id": "scgextra:trench_sniper"
+    },
+    {
+      "entity_id": "scgextra:shovel_knight"
+    },
+    {
+      "entity_id": "scgextra:fac_tank_buster"
+    }
+  ],
+  "miniboss" : [
+    {
+      "entity_id": "scgextra:fac_lion"
+    },
+    {
+      "entity_id": "scgextra:fac_commissar"
+    },
+    {
+      "entity_id": "scgextra:fac_walker"
+    }
+  ],
+  "boss" : [
+    {
+      "entity_id": "fac_tank"
+    }
+  ]
+}

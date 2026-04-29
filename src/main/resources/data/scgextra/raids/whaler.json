@@ -1,0 +1,51 @@
+{
+  "raid_id" : "whaler",
+  "raid_original_id" : "ocean",
+
+  "raid_profile" : {
+    "first_wave" : {
+      "infantry": 7
+    },
+    "second_wave" : {
+      "infantry": 2,
+      "elite": 4
+    },
+    "third_wave" : {
+      "infantry": 2,
+      "elite": 4,
+      "miniboss": 1
+    },
+    "boss_wave" : {
+    }
+  },
+
+  "infantry" : [
+    {
+      "entity_id": "scgextra:fish_folk"
+    }
+  ],
+  "elite" : [
+    {
+      "entity_id": "scgextra:turtleman"
+    },
+    {
+      "entity_id": "scgextra:salmonsaur"
+    },
+    {
+      "entity_id": "scgextra:tentacliator"
+    },
+    {
+      "entity_id": "scgextra:glowing_tentacliator"
+    }
+  ],
+  "miniboss" : [
+    {
+      "entity_id": "scgextra:pufficus"
+    }
+  ],
+  "boss" : [
+    {
+      "entity_id": "scgextra:armored_whale"
+    }
+  ]
+}
