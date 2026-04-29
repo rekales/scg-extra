@@ -51,6 +51,9 @@ public class WaveRaidManager {
 
         this.raidState = raid;
         spawnCurrentWaveMobs(raid, level);
+        for(ServerPlayer player : level.getPlayers((player) -> player.position().distanceTo(spawnCenter) <= RAID_BOSS_BAR_RADIUS)) {
+            player.sendSystemMessage(raid.getAnnouncement());
+        }
     }
 
     public void surrenderRaid(ServerLevel level) {
@@ -88,7 +91,9 @@ public class WaveRaidManager {
                 this.bossBar.setProgress(1);
                 this.bossBar.setVisible(true);
             }
-//            if (this.bossBar.getName() == )
+            if (!this.bossBar.getName().getString().equals(raid.getBossBarLabel().getString())) {
+                this.bossBar.setName(raid.getBossBarLabel());
+            }
 
             this.bossBar.setProgress(raid.getBossBarProgress());
 

@@ -2,7 +2,6 @@ package net.zincstudios.scgextra.raid;
 
 import net.minecraft.FieldsAreNonnullByDefault;
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
@@ -10,7 +9,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.zincstudios.scgextra.SCGExtra;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -64,10 +62,6 @@ public record WaveRaidData(String id, String originalId, Profile profile, List<R
 
     public static @Nullable WaveRaidData getWaveRaid(String id) {
         return RAIDS.get(id);
-    }
-
-    public Component getLabel(String raidId) {
-        return Component.translatable(SCGExtra.MOD_ID + ".raid.label." + raidId);
     }
 
     public List<RaiderEntry> generateRaiders(int currentWave, RandomSource random) {

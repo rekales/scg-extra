@@ -78,8 +78,18 @@
     "raid.boss.scguns.fac":  "FAC Siege Tank",
     "raid.announcement.scguns.fac":  "FAC raid sighted nearby!",
 
+    "scgextra.raid.label.wave_1" : "Wave 1",
+    "scgextra.raid.label.wave_2" : "Wave 2",
+    "scgextra.raid.label.wave_3" : "Wave 3",
+    "scgextra.raid.label.wave_4" : "Boss",
+
     "scgextra.raid.label.whaler" : "Whaler",
     "scgextra.raid.label.rrc" : "RRC",
     "scgextra.raid.label.fac" : "FAC",
-    "scgextra.raid.label.asgharian" : "Asgharian"
+    "scgextra.raid.label.asgharian" : "Asgharian",
+
+    "scgextra.raid.announcement.whaler" : "The Leviathan Syndicate is attacking from the depths!",
+    "scgextra.raid.announcement.rrc" : "The Remnants of Rust Ridge are raiding!",
+    "scgextra.raid.announcement.fac" : "The Remnants of Federal Armaments Consortium is launching an assault!",
+    "scgextra.raid.announcement.asgharian" : "The Asgharian Legion is marching!"
 }

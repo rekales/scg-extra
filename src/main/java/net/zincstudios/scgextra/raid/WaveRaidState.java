@@ -8,6 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import net.zincstudios.scgextra.SCGExtra;
 
 import javax.annotation.Nullable;
 import java.util.HashSet;
@@ -118,7 +119,7 @@ public class WaveRaidState {
     }
 
     public void announceToNearbyPlayers(Component message, double radius) {
-        for(ServerPlayer player : this.level.getPlayers((playerx) -> playerx.position().distanceTo(this.spawnCenter) <= radius)) {
+        for(ServerPlayer player : this.level.getPlayers((player) -> player.position().distanceTo(this.spawnCenter) <= radius)) {
             player.sendSystemMessage(message);
         }
     }
@@ -139,7 +140,10 @@ public class WaveRaidState {
     }
 
     public boolean isNextWaveReady() {
-        return this.active && this.isRaidersEliminated() && this.nextWaveDelay <= 0 ;
+        return this.active
+                && !WaveRaidData.Profile.isFinalWave(this.currentWave)
+                && this.isRaidersEliminated()
+                && this.nextWaveDelay <= 0 ;
     }
 
     public boolean hasEnded() {
@@ -160,6 +164,31 @@ public class WaveRaidState {
     }
 
     public Component getBossBarLabel() {
-        return Component.literal("Raid");
+        String wave = switch (this.currentWave) {
+            case 1 -> "wave_1";
+            case 2 -> "wave_2";
+            case 3 -> "wave_3";
+            case 4 -> "boss";
+            default -> "";
+        };
+
+//        Component component = Component.translatable(SCGExtra.MOD_ID+".raid.label."+this.raidId)
+//                .append(SCGExtra.MOD_ID+".raid.label."+wave);
+        if (WaveRaidData.Profile.isFinalWave(this.currentWave) && this.raiderUUIDs.size() == 1) {
+            UUID bossId = this.raiderUUIDs.iterator().next();
+            Entity entity = this.level.getEntity(bossId);
+            if (entity instanceof LivingEntity bossEntity) {
+                return bossEntity.getDisplayName();
+            }
+        }
+
+        return Component.translatable(SCGExtra.MOD_ID+".raid.label."+this.waveRaidData.id())
+                .append(" ")
+                .append(Component.translatable(SCGExtra.MOD_ID+".raid.label."+wave));
+    }
+
+    // NOTE: maybe on WaveRaidData instead?
+    public Component getAnnouncement() {
+        return Component.translatable(SCGExtra.MOD_ID+".raid.announcement."+this.waveRaidData.id());
     }
 }
