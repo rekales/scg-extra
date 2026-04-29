@@ -12,14 +12,14 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.PartEntity;
-import net.zincstudios.scgextra.SCGExtra;
+import net.zincstudios.scgextra.entity.asgharian.WeakPointPart;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class LanternPartEntity extends PartEntity<SoulRipperEntity> {
+public class LanternPartEntity extends PartEntity<SoulRipperEntity> implements WeakPointPart {
 
     private final EntityDimensions size;
     private final Vec3 offset;
@@ -33,9 +33,6 @@ public class LanternPartEntity extends PartEntity<SoulRipperEntity> {
 
     public void updatePos() {
         this.setOldPosAndRot();
-//        Vec3 tempOffset = new Vec3(-1.25, 2.3, -0.025);
-//        Vec3 tempOffset = new Vec3(0.725, 2.25, -0.2);
-//        Vec3 tempOffset = new Vec3(0, 2.825, -0.275);
         this.setPos(this.getParent().position().add(this.offset.yRot(-this.getParent().yBodyRot * Mth.DEG_TO_RAD)));
     }
 
@@ -51,7 +48,7 @@ public class LanternPartEntity extends PartEntity<SoulRipperEntity> {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        return !this.isInvulnerableTo(source) && this.getParent().hurt(this, source, amount);
+        return !this.isInvulnerableTo(source) && this.getParent().hurt(source, amount);
     }
 
     @Override

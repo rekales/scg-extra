@@ -174,10 +174,6 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
         return this.boundOrigin;
     }
 
-    public boolean hurt(LanternPartEntity partEntity, DamageSource source, float amount) {
-        return super.hurt(source, amount);
-    }
-
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
