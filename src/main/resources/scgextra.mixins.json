@@ -5,7 +5,6 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "scgextra.refmap.json",
   "mixins": [
-    "ActiveRaidAccessor",
     "AIGunEventMixin",
     "EnemyProjectileEntityMixin",
     "GunAttackGoalAccessor",
@@ -15,9 +14,7 @@
     "ModCommandsMixin",
     "OceanMonumentEntryRoomMixin",
     "ProjectileEntityMixin",
-    "RaidManagerInvoker",
     "RaidManagerMixin",
-    "RaidManagerWaveMixin",
     "RaidSaveDataAccessor"
   ],
   "minVersion": "0.8.5"
