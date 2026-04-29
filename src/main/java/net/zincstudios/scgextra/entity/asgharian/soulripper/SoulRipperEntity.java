@@ -9,6 +9,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -21,6 +22,8 @@ import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.entity.PartEntity;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
@@ -52,14 +55,19 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
     private static final RawAnimation LANTERN_3_ON = RawAnimation.begin().thenPlayAndHold("lantern_3_on");
     private static final RawAnimation LANTERN_3_OFF = RawAnimation.begin().thenPlayAndHold("lantern_3_off");
 
-
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
+    private final LanternPartEntity[] subEntities;
 
     // Serverside only
     private BlockPos boundOrigin = null;
 
     public SoulRipperEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
+        this.subEntities = new LanternPartEntity[] {
+                new LanternPartEntity(this, new Vec3(-1.25, 2.3, -0.025), 5/16f, 8/16f),
+                new LanternPartEntity(this, new Vec3(0.725, 2.25, -0.2), 5/16f, 8/16f),
+                new LanternPartEntity(this, new Vec3(0, 2.825, -0.275), 5/16f, 8/16f)
+        };
         this.moveControl = new SoulRipperMoveControl(this);
 
         if (!level.isClientSide) {
@@ -68,10 +76,18 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
     }
 
     public void tick() {
+
+        this.setYRot(this.getYRot()+1f);
+        this.setYHeadRot(this.getYRot());
+        this.setYBodyRot(this.getYRot());
+
         this.noPhysics = !this.isDeadOrDying();
         super.tick();
         this.noPhysics = false;
         this.setNoGravity(true);
+        for (LanternPartEntity subEntity : this.subEntities) {
+            subEntity.updatePos();
+        }
     }
 
     @Override
@@ -98,6 +114,9 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
 
     @Override
     public void die(DamageSource damageSource) {
+        if (damageSource.getEntity() == null && damageSource.getDirectEntity() == null && damageSource.is(DamageTypes.GENERIC_KILL)) {
+            this.setLives(0);  // Command death, unsure if it could be caused by other things
+        }
         super.die(damageSource);
         this.setDeltaMovement(this.getDeltaMovement().add(0,-0.25,0));
     }
@@ -105,6 +124,16 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
     @Override
     protected boolean shouldDropLoot() {
         return this.getLives() == 0;
+    }
+
+    @Override
+    public @Nullable PartEntity<?>[] getParts() {
+        return this.subEntities;
+    }
+
+    @Override
+    public boolean isMultipartEntity() {
+        return true;
     }
 
     private void summonVexes() {
@@ -143,6 +172,10 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
 
     public @Nullable BlockPos getBoundOrigin() {
         return this.boundOrigin;
+    }
+
+    public boolean hurt(LanternPartEntity partEntity, DamageSource source, float amount) {
+        return super.hurt(source, amount);
     }
 
     @Override

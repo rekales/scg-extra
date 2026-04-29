@@ -58,7 +58,7 @@ public class AsgharianEntities {
 
     public static final RegistryObject<EntityType<SoulRipperEntity>> SOUL_RIPPER = ENTITY_TYPES
             .register("soul_ripper", () -> EntityType.Builder.of(SoulRipperEntity::new, MobCategory.MONSTER)
-                    .sized(0.9F, 2.6F)
+                    .sized(0.7F, 2.6F)
                     .setUpdateInterval(1)
                     .build("soul_ripper"));
 
@@ -98,8 +98,10 @@ public class AsgharianEntities {
         BoundingBoxManager.registerHeadshotBox(AsgharianEntities.ASGHAR_WORKER.get(), new BasicHeadshotBox<>(14.0, 17, 17.0));
         BoundingBoxManager.registerHeadshotBox(AsgharianEntities.ASGHAR_FLAMER.get(), new RotatedHeadshotBox<>(8.0, 13, 17.0, 3, false, true));
         BoundingBoxManager.registerHeadshotBox(AsgharianEntities.CANDLE_FIEND.get(), new RotatedHeadshotBox<>(9.0, 39.0, 10, false, true));
+//        BoundingBoxManager.registerHeadshotBox(AsgharianEntities.SOUL_RIPPER.get(), new BasicHeadshotBox<>(9.0, 6.0));
 
         WeakPointBoxManager.registerWeakPointBox(AsgharianEntities.ASGHAR_FLAMER.get(), new WeakPointBox<>(new RotatedHeadshotBox<>(11.0, 16.0, 12.0, -8, false, true)));
+//        WeakPointBoxManager.registerWeakPointBox(AsgharianEntities.SOUL_RIPPER.get(), new WeakPointBox<>(new BasicHeadshotBox<>(9.0, 48.0)));
 
     }
 }
