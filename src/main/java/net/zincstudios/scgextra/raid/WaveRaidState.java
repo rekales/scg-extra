@@ -181,7 +181,7 @@ public class WaveRaidState {
             case 1 -> "wave_1";
             case 2 -> "wave_2";
             case 3 -> "wave_3";
-            case 4 -> "boss";
+            case 4 -> "wave_4";
             default -> "";
         };
 

@@ -9,6 +9,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import top.ribs.scguns.entity.monster.DissidentEntity;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -133,5 +134,14 @@ public record WaveRaidData(String id, String originalId, Profile profile, List<R
         public int getTotal() {
             return this.infantry + this.elite + this.miniboss;
         }
+    }
+
+    @SuppressWarnings("RedundantIfStatement")
+    public boolean handleRaiderEdgeCase(Mob mob) {
+        if (mob instanceof DissidentEntity) {
+            return false;
+        }
+
+        return true;
     }
 }

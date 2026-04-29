@@ -150,11 +150,14 @@ public class WaveRaidManager {
                 Vec3 pos = WaveRaidUtil.findMobSpawnPos(level, waveCenter, RAID_SPAWN_RADIUS);
                 mob.setPos(pos);
                 mob.setTarget(player);
-                ForgeEventFactory.onFinalizeSpawn(
-                        mob, level,
-                        level.getCurrentDifficultyAt(BlockPos.containing(pos)),
-                        MobSpawnType.EVENT, null, null
-                );
+                boolean finalize = raidData.handleRaiderEdgeCase(mob);
+                if (finalize) {
+                    ForgeEventFactory.onFinalizeSpawn(
+                            mob, level,
+                            level.getCurrentDifficultyAt(BlockPos.containing(pos)),
+                            MobSpawnType.EVENT, null, null
+                    );
+                }
                 level.addFreshEntity(mob);
                 raid.addRaider(mob);
                 spawnList.remove(entry);

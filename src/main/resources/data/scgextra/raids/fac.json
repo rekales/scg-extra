@@ -54,7 +54,7 @@
   ],
   "boss" : [
     {
-      "entity_id": "fac_tank"
+      "entity_id": "scgextra:fac_tank"
     }
   ]
 }
