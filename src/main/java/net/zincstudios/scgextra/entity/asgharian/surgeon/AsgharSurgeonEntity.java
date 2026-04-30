@@ -24,11 +24,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.Faction;
-import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
-import net.zincstudios.scgextra.entity.asgharian.BulletSpawnOffset;
-import net.zincstudios.scgextra.entity.asgharian.GoalStateHandler;
-import net.zincstudios.scgextra.entity.asgharian.SimpleGunAttackGoal;
+import net.zincstudios.scgextra.entity.asgharian.*;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
@@ -48,6 +46,7 @@ import java.util.Objects;
 @MethodsReturnNonnullByDefault
 public class AsgharSurgeonEntity extends GunnerEntity implements GeoEntity, GoalStateHandler, BulletSpawnOffset {
 
+    // TODO: maybe make custom EntityDataSerializer
     private static final EntityDataAccessor<String> GUN_ATTACK_GOAL_STATE =
             SynchedEntityData.defineId(AsgharSurgeonEntity.class, EntityDataSerializers.STRING);
 
@@ -132,7 +131,7 @@ public class AsgharSurgeonEntity extends GunnerEntity implements GeoEntity, Goal
     }
 
     @Override
-    public void onGoalStateChanged(Goal goal, String state) {
+    public void onGoalStateChanged(Goal goal, GoalState state) {
         if (state.equals(AsgharSurgeonAttackGoal.MELEE_STATE) && !Objects.equals(this.getGunAttackGoalState(), state)) {
             this.triggerAnim("behaviour", "melee");
             this.playSound(this.getAttackSound());
@@ -141,23 +140,26 @@ public class AsgharSurgeonEntity extends GunnerEntity implements GeoEntity, Goal
                 this.playSound(this.getAttackSound());
             }
         }
+        SCGExtra.LOGGER.debug(state.id());
         this.setGunAttackGoalState(state);
     }
 
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(GUN_ATTACK_GOAL_STATE, SimpleGunAttackGoal.IDLE_STATE);
+        this.entityData.define(GUN_ATTACK_GOAL_STATE, SimpleGunAttackGoal.IDLE_STATE.id());
     }
 
-    public void setGunAttackGoalState(String state) {
-        if (!this.entityData.get(GUN_ATTACK_GOAL_STATE).equals(state)) {
-            this.entityData.set(GUN_ATTACK_GOAL_STATE, state);
+    public void setGunAttackGoalState(GoalState state) {
+        if (!this.entityData.get(GUN_ATTACK_GOAL_STATE).equals(state.id())) {
+            this.entityData.set(GUN_ATTACK_GOAL_STATE, state.id());
         }
     }
 
-    public String getGunAttackGoalState() {
-        return this.entityData.get(GUN_ATTACK_GOAL_STATE);
+    public GoalState getGunAttackGoalState() {
+        GoalState state = GoalState.get(this.entityData.get(GUN_ATTACK_GOAL_STATE));
+        if (state == null) throw new IllegalStateException("no goal state found");
+        return state;
     }
 
     @Override

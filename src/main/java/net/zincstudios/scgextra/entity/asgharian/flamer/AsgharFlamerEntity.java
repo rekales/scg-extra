@@ -18,9 +18,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.zincstudios.scgextra.entity.Faction;
+import net.zincstudios.scgextra.entity.asgharian.GoalState;
 import net.zincstudios.scgextra.entity.asgharian.GoalStateHandler;
 import net.zincstudios.scgextra.entity.asgharian.SimpleBurstGunAttackGoal;
-import net.zincstudios.scgextra.entity.asgharian.surgeon.AsgharSurgeonAttackGoal;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
@@ -124,8 +124,8 @@ public class AsgharFlamerEntity extends GunnerEntity implements GeoEntity, GoalS
     }
 
     @Override
-    public void onGoalStateChanged(Goal goal, String state) {
-        if (state.equals(AsgharSurgeonAttackGoal.FIRING_STATE) && this.tickCount - this.lastAttackSound > ATTACK_SOUND_INTERVAL) {
+    public void onGoalStateChanged(Goal goal, GoalState state) {
+        if (state.equals(SimpleBurstGunAttackGoal.FIRING_STATE) && this.tickCount - this.lastAttackSound > ATTACK_SOUND_INTERVAL) {
             this.playSound(this.getAttackSound());
             this.lastAttackSound = this.tickCount;
         }

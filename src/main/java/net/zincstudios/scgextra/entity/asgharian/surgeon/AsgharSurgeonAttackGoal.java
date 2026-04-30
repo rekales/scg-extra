@@ -2,6 +2,7 @@ package net.zincstudios.scgextra.entity.asgharian.surgeon;
 
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.zincstudios.scgextra.entity.asgharian.GoalState;
 import net.zincstudios.scgextra.entity.asgharian.SimpleBurstGunAttackGoal;
 import top.ribs.scguns.init.ModEffects;
 
@@ -10,7 +11,7 @@ import java.util.Objects;
 // Much copied from MeleeAttackGoal
 public class AsgharSurgeonAttackGoal<T extends AsgharSurgeonEntity> extends SimpleBurstGunAttackGoal<T> {
 
-    public static final String MELEE_STATE = "asghar_surgeon_melee_state";
+    public static final GoalState MELEE_STATE = new GoalState("asghar_surgeon_melee_state");
 
     private static final int MELEE_DAMAGE_DELAY = 12;  // match with animation
     private static final int MELEE_FULL_DURATION = 25;  // match with animation

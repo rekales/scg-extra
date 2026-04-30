@@ -8,7 +8,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.ItemStack;
-import net.zincstudios.scgextra.SCGExtra;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.entity.ai.AIGunEvent;
@@ -26,10 +25,10 @@ import java.util.EnumSet;
  */
 public class SimpleGunAttackGoal<T extends PathfinderMob> extends Goal {
 
-    public static final String FIRING_STATE = "simple_gun_firing_state";
-    public static final String AIMING_STATE = "simple_gun_aiming_state";
-    public static final String IDLE_STATE = "simple_gun_idle_state";
-    public static final String APPROACH_STATE = "simple_gun_approach_state";
+    public static final GoalState FIRING_STATE = new GoalState("simple_gun_firing_state");
+    public static final GoalState AIMING_STATE = new GoalState("simple_gun_aiming_state");
+    public static final GoalState IDLE_STATE = new GoalState("simple_gun_idle_state");
+    public static final GoalState APPROACH_STATE = new GoalState("simple_gun_approach_state");
 
     protected final T mob;
     protected double speedModifier = 1;
@@ -40,7 +39,7 @@ public class SimpleGunAttackGoal<T extends PathfinderMob> extends Goal {
 
     protected int attackCooldown = 0;
     protected int seeTime = 0;
-    protected String goalState = IDLE_STATE;
+    protected GoalState goalState = IDLE_STATE;
 
     public SimpleGunAttackGoal(T mob) {
         this.mob = mob;
@@ -125,7 +124,6 @@ public class SimpleGunAttackGoal<T extends PathfinderMob> extends Goal {
         ItemStack itemStack = this.mob.getMainHandItem();
         if (itemStack.getItem() instanceof GunItem gunItem) {
             Gun gun = gunItem.getModifiedGun(itemStack);
-            SCGExtra.LOGGER.debug("fired: " + this.mob.tickCount);
             AIGunEvent.performGunAttack(this.mob, target, itemStack, gun, this.getAccuracyModifier());
 
             ResourceLocation fireSound = gun.getSounds().getFire();
@@ -138,8 +136,6 @@ public class SimpleGunAttackGoal<T extends PathfinderMob> extends Goal {
                 this.mob.level().playSound(null, posX, posY, posZ, SoundEvent.createVariableRangeEvent(fireSound), SoundSource.HOSTILE, volume - 0.5F, pitch);
             }
         }
-
-
     }
 
     protected float getAccuracyModifier() {
@@ -155,14 +151,14 @@ public class SimpleGunAttackGoal<T extends PathfinderMob> extends Goal {
         this.attackCooldown = this.mob.getRandom().nextIntBetweenInclusive(this.attackInterval - randRange, this.attackInterval + randRange);
     }
 
-    protected void setGoalState(String goalState) {
+    protected void setGoalState(GoalState goalState) {
         this.goalState = goalState;
         if (this.mob instanceof GoalStateHandler goalStateHandler) {
             goalStateHandler.onGoalStateChanged(this, goalState);
         }
     }
 
-    public String getGoalState() {
+    public GoalState getGoalState() {
         return this.goalState;
     }
 
