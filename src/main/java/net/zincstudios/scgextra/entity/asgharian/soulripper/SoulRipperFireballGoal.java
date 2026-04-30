@@ -7,7 +7,7 @@ import net.zincstudios.scgextra.entity.projectile.SoulFireball;
 
 public class SoulRipperFireballGoal extends AbilityGoal<SoulRipperEntity> {
 
-    public static final int FIREBALL_INTERVAL_TICKS = 15;
+    public static final int FIREBALL_INTERVAL_TICKS = 5;
 
     protected int volleys = 0;
 
@@ -17,12 +17,7 @@ public class SoulRipperFireballGoal extends AbilityGoal<SoulRipperEntity> {
 
     @Override
     public boolean canUse() {
-        LivingEntity target = this.mob.getTarget();
-        if (!super.canUse()) return false;
-        assert target != null;
-        return this.mob.getLives() <= 2
-                && this.mob.canFireball()
-                && this.mob.distanceToSqr(target) > 4.0D;
+        return super.canUse() && this.mob.canFireball();
     }
 
     @Override
@@ -60,7 +55,7 @@ public class SoulRipperFireballGoal extends AbilityGoal<SoulRipperEntity> {
         double d4 = target.getZ() - (this.mob.getZ() + vec3.z * 4.0D);
 
         SoulFireball soulFireball = new SoulFireball(this.mob.level(), this.mob, d2, d3, d4, 2.5f);
-        soulFireball.setPos(this.mob.getX() + vec3.x * 4.0D, this.mob.getY(0.5D) + 0.5D, soulFireball.getZ() + vec3.z * 4.0D);
+        soulFireball.setPos(this.mob.getEyePosition());
         this.mob.level().addFreshEntity(soulFireball);
     }
 }

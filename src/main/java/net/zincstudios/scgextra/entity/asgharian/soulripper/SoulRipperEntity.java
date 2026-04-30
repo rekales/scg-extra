@@ -6,7 +6,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -14,10 +13,10 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -25,11 +24,12 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.PartEntity;
-import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.Faction;
+import net.zincstudios.scgextra.entity.asgharian.AbilityGoal;
+import net.zincstudios.scgextra.entity.asgharian.GoalState;
+import net.zincstudios.scgextra.entity.asgharian.GoalStateHandler;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
-import net.zincstudios.scgextra.entity.common.client.ExpandedAnimationController;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -45,7 +45,7 @@ import java.util.Objects;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class SoulRipperEntity extends Monster implements GeoEntity {
+public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHandler {
 
     private static final EntityDataAccessor<Boolean> CHARGING =
             SynchedEntityData.defineId(SoulRipperEntity.class, EntityDataSerializers.BOOLEAN);
@@ -70,10 +70,12 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
     private final LanternPartEntity[] subEntities;
 
-    private boolean reviving = false;
-
     // Serverside only
+    private GoalState summonState = AbilityGoal.IDLE_STATE;
+    private GoalState fireballState = AbilityGoal.IDLE_STATE;
+    private GoalState meleeState = AbilityGoal.IDLE_STATE;
     private BlockPos boundOrigin = null;
+    private int lastDeath = 0;  // tickCount timestamp
 
     // Clientside only
     private int lanterns = 0;
@@ -118,10 +120,7 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
                 this.setLives(this.getLives() - 1);
                 this.setHealth(this.getMaxHealth());
                 this.dead = false;
-
-//                if (this.getLives() == 1) {
-//                    this.summonVexes();
-//                }
+                this.lastDeath = this.tickCount;
             } else if (this.deathTime == DEATH_DURATION_TICKS && !this.level().isClientSide) {
                 this.triggerAnim("revive", "revive");
                 this.setDeltaMovement(this.getDeltaMovement().add(MobUtil.vecFromRot(this.getYRot()).scale(0.15)));
@@ -186,23 +185,6 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
         }
     }
 
-    private void summonVexes() {
-        if (this.level() instanceof ServerLevel serverlevel) {
-            for(int i = 0; i < 3; ++i) {
-                BlockPos blockpos = this.blockPosition().offset(-2 + this.random.nextInt(5), 1, -2 + this.random.nextInt(5));
-                Vex vex = EntityType.VEX.create(this.level());
-                if (vex != null) {
-                    vex.moveTo(blockpos, 0.0F, 0.0F);
-                    vex.finalizeSpawn(serverlevel, this.level().getCurrentDifficultyAt(blockpos), MobSpawnType.MOB_SUMMONED, null, null);
-                    vex.setOwner(this);
-                    vex.setBoundOrigin(blockpos);
-                    vex.setLimitedLife(20 * (30 + this.random.nextInt(90)));
-                    serverlevel.addFreshEntityWithPassengers(vex);
-                }
-            }
-        }
-    }
-
     @Override
     public boolean doHurtTarget(Entity entity) {
         if (entity instanceof LivingEntity target) {
@@ -221,8 +203,9 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(3, new SoulRipperChargeAttackGoal(this, 80));
-        this.goalSelector.addGoal(5, new SoulRipperFireballGoal(this).cooldown(200));
+        this.goalSelector.addGoal(2, new SoulRipperChargeAttackGoal(this, 80));
+        this.goalSelector.addGoal(3, new SoulRipperFireballGoal(this).cooldown(200).windup(15).recovery(5));
+        this.goalSelector.addGoal(4, new SoulRipperSummonVexGoal(this).cooldown(2000).windup(18).recovery(7));
         this.goalSelector.addGoal(8, new SoulRipperRandomMoveGoal(this));
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
 
@@ -260,9 +243,25 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
         return Math.abs((oldRot + 1000) - (this.yBodyRot + 1000)) < 200 && dir.length() > 0.075;
     }
 
-//    public boolean isMoving() {
-//        return this.getDeltaMovement().length() > 0.075;
-//    }
+    @Override
+    public void onGoalStateChanged(Goal goal, GoalState state) {
+        if (goal instanceof SoulRipperSummonVexGoal) {
+            if (state == AbilityGoal.WINDUP_STATE) {
+                this.triggerAnim("behaviour", "summon");
+            }
+            this.summonState = state;
+        } else if (goal instanceof SoulRipperFireballGoal) {
+            if (state == AbilityGoal.WINDUP_STATE) {
+                this.triggerAnim("behaviour", "fireball");
+            }
+            this.fireballState = state;
+        } else if (goal instanceof SoulRipperChargeAttackGoal) {
+            if (state == AbilityGoal.WINDUP_STATE) {
+                this.triggerAnim("behaviour", "melee");
+            }
+            this.meleeState = state;
+        }
+    }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
@@ -274,13 +273,12 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
             }
         }));
 
-        controllers.add(new AnimationController<>(this, "lantern", 0, state ->
-                switch(state.getAnimatable().getLives()) {
-                    case 2 -> state.setAndContinue(LANTERN_1_OFF);
-                    case 1 -> state.setAndContinue(LANTERN_2_OFF);
-                    case 0 -> state.setAndContinue(LANTERN_3_OFF);
-                    default -> PlayState.STOP;
-        }));
+        controllers.add(new AnimationController<>(this, "behaviour", 2, state -> PlayState.STOP)
+                .triggerableAnim("melee", MELEE)
+                .triggerableAnim("fireball", FIREBALL)
+                .triggerableAnim("summon", SUMMON)
+
+        );
 
         controllers.add(new AnimationController<>(this, "death", 3, state -> {
             if (state.getAnimatable().isDeadOrDying()) {
@@ -293,6 +291,14 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
 
         controllers.add(new AnimationController<>(this, "revive", 2, state -> PlayState.STOP)
                 .triggerableAnim("revive", REVIVE));
+
+        controllers.add(new AnimationController<>(this, "lantern", 0, state ->
+                switch(state.getAnimatable().getLives()) {
+                    case 2 -> state.setAndContinue(LANTERN_1_OFF);
+                    case 1 -> state.setAndContinue(LANTERN_2_OFF);
+                    case 0 -> state.setAndContinue(LANTERN_3_OFF);
+                    default -> PlayState.STOP;
+                }));
 
 //                controllers.add(new ExpandedAnimationController<>(this, "lantern_1", 0,
 //                state -> state.setAndContinue(state.getAnimatable().getLives() >= 2 ? LANTERN_1_ON : LANTERN_1_OFF)));
@@ -332,11 +338,26 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
     }
 
     public boolean canFireball() {
-        return !isCharging();  // TODO: state checks
+        LivingEntity target = this.getTarget();
+        if (target == null) return false;
+        return this.getLives() <= 2
+            && !isCharging()
+            && this.distanceToSqr(target) > 4.0D;
+
+        // TODO: state checks
     }
 
     public boolean canMelee() {
         return true;
+    }
+
+    public boolean canSummon() {
+        LivingEntity target = this.getTarget();
+        if (target == null) return false;
+        return this.getLives() <= 1
+                && !this.isCharging()
+                && this.tickCount > this.lastDeath + 120
+                && this.distanceToSqr(target) > 4.0D;
     }
 
     // TODO: Use GoalStateHandler
