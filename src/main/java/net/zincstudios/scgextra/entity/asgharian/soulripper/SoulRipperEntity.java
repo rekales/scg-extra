@@ -178,7 +178,7 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(3, new SoulRipperChargeAttackGoal(this, 80));
-        this.goalSelector.addGoal(5, new SoulRipperThrowFireballGoal(this, 200));
+        this.goalSelector.addGoal(5, new SoulRipperFireballGoal(this).cooldown(200));
         this.goalSelector.addGoal(8, new SoulRipperRandomMoveGoal(this));
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
 
