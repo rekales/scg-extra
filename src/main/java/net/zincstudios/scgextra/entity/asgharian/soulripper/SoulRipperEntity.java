@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -24,13 +25,13 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.PartEntity;
-import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.asgharian.AbilityGoal;
 import net.zincstudios.scgextra.entity.asgharian.GoalState;
 import net.zincstudios.scgextra.entity.asgharian.GoalStateHandler;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.sounds.AsgharianSounds;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -80,9 +81,6 @@ public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHan
     private BlockPos boundOrigin = null;
     private int lastDeath = 0;  // tickCount timestamp
 
-    // Clientside only
-    private int lanterns = 0;
-
     public SoulRipperEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
         this.subEntities = new LanternPartEntity[] {
@@ -121,8 +119,10 @@ public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHan
                 this.dead = false;
                 this.lastDeath = this.tickCount;
                 this.behaviourState = BehaviourState.NONE;
+                this.playSound(AsgharianSounds.SOUL_RIPPER_LANTERN_SHATTER.get());
             } else if (this.deathTime == DEATH_DURATION_TICKS && !this.level().isClientSide) {
                 this.triggerAnim("revive", "revive");
+                this.playSound(this.getReviveSound());
                 this.setDeltaMovement(this.getDeltaMovement().add(MobUtil.vecFromRot(this.getYRot()).scale(0.15)));
             } else {
                 this.behaviourState = BehaviourState.DYING;
@@ -226,7 +226,7 @@ public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHan
                 .add(Attributes.ATTACK_DAMAGE, 15.0D)
                 .add(Attributes.ARMOR, 7.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1)
-                .add(Attributes.MAX_HEALTH, 40.0D);
+                .add(Attributes.MAX_HEALTH, 400.0D);
     }
 
     public boolean isMovingForward() {
@@ -268,6 +268,7 @@ public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHan
                     || state == AbilityGoal.RECOVERY_STATE)) {
                 this.behaviourState = BehaviourState.FIREBALL;
                 this.triggerAnim("behaviour", "fireball");
+                this.playSound(this.getAttackSounds());
             }
             if (this.behaviourState == BehaviourState.FIREBALL
                     && (state == AbilityGoal.COOLDOWN_STATE
@@ -280,6 +281,7 @@ public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHan
             }
             if (state == SoulRipperChargeAttackGoal.MELEE) {
                 this.triggerAnim("behaviour", "melee");
+                this.playSound(this.getAttackSounds());
             }
             if (this.behaviourState == BehaviourState.MELEE && state == SoulRipperChargeAttackGoal.COOLDOWN) {
                 this.behaviourState = BehaviourState.NONE;
@@ -394,6 +396,45 @@ public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHan
 
     private void setLives(int lives) {
         this.entityData.set(LIVES, lives);
+    }
+
+    protected SoundEvent getAttackSounds() {
+        return MobUtil.getSound(this.random,
+                AsgharianSounds.SOUL_RIPPER_ATTACK_1.get(),
+                AsgharianSounds.SOUL_RIPPER_ATTACK_2.get()
+        );
+    }
+
+    protected SoundEvent getAmbientSound() {
+        return MobUtil.getSound(this.random,
+                AsgharianSounds.SOUL_RIPPER_IDLE_1.get(),
+                AsgharianSounds.SOUL_RIPPER_IDLE_2.get(),
+                AsgharianSounds.SOUL_RIPPER_IDLE_3.get()
+        );
+    }
+
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return MobUtil.getSound(this.random,
+                AsgharianSounds.SOUL_RIPPER_HURT_1.get(),
+                AsgharianSounds.SOUL_RIPPER_HURT_2.get(),
+                AsgharianSounds.SOUL_RIPPER_HURT_3.get(),
+                AsgharianSounds.SOUL_RIPPER_HURT_4.get()
+        );
+    }
+
+    protected SoundEvent getDeathSound() {
+        return MobUtil.getSound(this.random,
+                AsgharianSounds.SOUL_RIPPER_DEATH_1.get(),
+                AsgharianSounds.SOUL_RIPPER_DEATH_2.get()
+        );
+    }
+
+    protected SoundEvent getReviveSound() {
+        return MobUtil.getSound(this.random,
+                AsgharianSounds.SOUL_RIPPER_REVIVE_1.get(),
+                AsgharianSounds.SOUL_RIPPER_REVIVE_2.get(),
+                AsgharianSounds.SOUL_RIPPER_REVIVE_3.get()
+        );
     }
 
 }
