@@ -32,8 +32,9 @@ public abstract class AbilityGoal<T extends Mob> extends Goal {
     }
 
     protected void setGoalState(GoalState state) {
+        GoalState oldState = this.state;
         this.state = state;
-        if (this.mob instanceof GoalStateHandler goalStateHandler) {
+        if (oldState != state && this.mob instanceof GoalStateHandler goalStateHandler) {
             goalStateHandler.onGoalStateChanged(this, state);
         }
     }

@@ -24,6 +24,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.PartEntity;
+import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.asgharian.AbilityGoal;
 import net.zincstudios.scgextra.entity.asgharian.GoalState;
@@ -46,6 +47,10 @@ import java.util.Objects;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHandler {
+
+    public enum BehaviourState {
+        NONE, MELEE, FIREBALL, SUMMON, DYING
+    }
 
     private static final EntityDataAccessor<Boolean> CHARGING =
             SynchedEntityData.defineId(SoulRipperEntity.class, EntityDataSerializers.BOOLEAN);
@@ -71,9 +76,7 @@ public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHan
     private final LanternPartEntity[] subEntities;
 
     // Serverside only
-    private GoalState summonState = AbilityGoal.IDLE_STATE;
-    private GoalState fireballState = AbilityGoal.IDLE_STATE;
-    private GoalState meleeState = AbilityGoal.IDLE_STATE;
+    private BehaviourState behaviourState = BehaviourState.NONE;
     private BlockPos boundOrigin = null;
     private int lastDeath = 0;  // tickCount timestamp
 
@@ -95,10 +98,6 @@ public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHan
     }
 
     public void tick() {
-//        this.setYRot(this.getYRot()+1f);
-//        this.setYHeadRot(this.getYRot());
-//        this.setYBodyRot(this.getYRot());
-
         this.noPhysics = !this.isDeadOrDying();
         super.tick();
         this.noPhysics = false;
@@ -121,9 +120,12 @@ public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHan
                 this.setHealth(this.getMaxHealth());
                 this.dead = false;
                 this.lastDeath = this.tickCount;
+                this.behaviourState = BehaviourState.NONE;
             } else if (this.deathTime == DEATH_DURATION_TICKS && !this.level().isClientSide) {
                 this.triggerAnim("revive", "revive");
                 this.setDeltaMovement(this.getDeltaMovement().add(MobUtil.vecFromRot(this.getYRot()).scale(0.15)));
+            } else {
+                this.behaviourState = BehaviourState.DYING;
             }
         } else {
             if (this.deathTime >= 35 && !this.level().isClientSide() && !this.isRemoved()) {
@@ -203,7 +205,7 @@ public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHan
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(2, new SoulRipperChargeAttackGoal(this, 80));
+        this.goalSelector.addGoal(2, new SoulRipperChargeAttackGoal(this, 50));
         this.goalSelector.addGoal(3, new SoulRipperFireballGoal(this).cooldown(200).windup(15).recovery(5));
         this.goalSelector.addGoal(4, new SoulRipperSummonVexGoal(this).cooldown(2000).windup(18).recovery(7));
         this.goalSelector.addGoal(8, new SoulRipperRandomMoveGoal(this));
@@ -243,24 +245,50 @@ public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHan
         return Math.abs((oldRot + 1000) - (this.yBodyRot + 1000)) < 200 && dir.length() > 0.075;
     }
 
+    // NOTE: There has to be a better way of doing this no? maybe an ability queue or something?
     @Override
     public void onGoalStateChanged(Goal goal, GoalState state) {
         if (goal instanceof SoulRipperSummonVexGoal) {
-            if (state == AbilityGoal.WINDUP_STATE) {
+            if (this.behaviourState == BehaviourState.NONE
+                    && (state == AbilityGoal.WINDUP_STATE
+                    || state == AbilityGoal.ACTIVE_STATE
+                    || state == AbilityGoal.RECOVERY_STATE)) {
+                this.behaviourState = BehaviourState.SUMMON;
                 this.triggerAnim("behaviour", "summon");
             }
-            this.summonState = state;
+            if (this.behaviourState == BehaviourState.SUMMON
+                    && (state == AbilityGoal.COOLDOWN_STATE
+                    || state == AbilityGoal.IDLE_STATE)) {
+                this.behaviourState = BehaviourState.NONE;
+            }
         } else if (goal instanceof SoulRipperFireballGoal) {
-            if (state == AbilityGoal.WINDUP_STATE) {
+            if (this.behaviourState == BehaviourState.NONE
+                    && (state == AbilityGoal.WINDUP_STATE
+                    || state == AbilityGoal.ACTIVE_STATE
+                    || state == AbilityGoal.RECOVERY_STATE)) {
+                this.behaviourState = BehaviourState.FIREBALL;
                 this.triggerAnim("behaviour", "fireball");
             }
-            this.fireballState = state;
+            if (this.behaviourState == BehaviourState.FIREBALL
+                    && (state == AbilityGoal.COOLDOWN_STATE
+                    || state == AbilityGoal.IDLE_STATE)) {
+                this.behaviourState = BehaviourState.NONE;
+            }
         } else if (goal instanceof SoulRipperChargeAttackGoal) {
-            if (state == AbilityGoal.WINDUP_STATE) {
+            if (this.behaviourState == BehaviourState.NONE && state != SoulRipperChargeAttackGoal.COOLDOWN) {
+                this.behaviourState = BehaviourState.MELEE;
+            }
+            if (state == SoulRipperChargeAttackGoal.MELEE) {
                 this.triggerAnim("behaviour", "melee");
             }
-            this.meleeState = state;
+            if (this.behaviourState == BehaviourState.MELEE && state == SoulRipperChargeAttackGoal.COOLDOWN) {
+                this.behaviourState = BehaviourState.NONE;
+            }
         }
+    }
+
+    public SoulRipperEntity.BehaviourState getBehaviourState() {
+        return this.behaviourState;
     }
 
     @Override
@@ -341,32 +369,23 @@ public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHan
         LivingEntity target = this.getTarget();
         if (target == null) return false;
         return this.getLives() <= 2
-            && !isCharging()
-            && this.distanceToSqr(target) > 4.0D;
+                && (this.behaviourState == BehaviourState.NONE || this.behaviourState == BehaviourState.FIREBALL)
+                && this.distanceToSqr(target) > 4.0D;
 
         // TODO: state checks
     }
 
     public boolean canMelee() {
-        return true;
+        return this.behaviourState == BehaviourState.NONE || this.behaviourState == BehaviourState.MELEE;
     }
 
     public boolean canSummon() {
         LivingEntity target = this.getTarget();
         if (target == null) return false;
         return this.getLives() <= 1
-                && !this.isCharging()
+                && (this.behaviourState == BehaviourState.NONE || this.behaviourState == BehaviourState.SUMMON)
                 && this.tickCount > this.lastDeath + 120
                 && this.distanceToSqr(target) > 4.0D;
-    }
-
-    // TODO: Use GoalStateHandler
-    public boolean isCharging() {
-        return this.entityData.get(CHARGING);
-    }
-
-    public void setCharging(boolean charging) {
-        this.entityData.set(CHARGING, charging);
     }
 
     public int getLives() {

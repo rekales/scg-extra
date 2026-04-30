@@ -23,6 +23,17 @@ public class SoulRipperSummonVexGoal extends AbilityGoal<SoulRipperEntity> {
     }
 
     @Override
+    public boolean canContinueToUse() {
+        return super.canUse()
+                && this.mob.canSummon();
+    }
+
+    @Override
+    public void stop() {
+        super.stop();
+    }
+
+    @Override
     public boolean activate() {
         this.summonVexes();
         this.summoned = true;
