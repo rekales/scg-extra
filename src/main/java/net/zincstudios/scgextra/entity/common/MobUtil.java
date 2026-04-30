@@ -7,6 +7,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
@@ -39,6 +40,17 @@ public class MobUtil {
             return new BlockPos(tag.getInt(prefix+"X"), tag.getInt(prefix+"Y"), tag.getInt(prefix+"Z"));
         }
         return null;
+    }
+
+    public static Vec3 vecFromRot(float yRot) {
+        float yaw = (float) Math.toRadians(yRot);
+        float x = -Mth.sin(yaw);
+        float z = Mth.cos(yaw);
+        return new Vec3(x, 0, z);
+    }
+
+    public static float rotFromVec(Vec3 vec) {
+        return (float) Mth.atan2(-vec.x, vec.z) * Mth.RAD_TO_DEG;
     }
 
 }

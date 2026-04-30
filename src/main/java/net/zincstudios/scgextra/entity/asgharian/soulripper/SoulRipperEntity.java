@@ -25,6 +25,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.PartEntity;
+import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
@@ -91,25 +92,7 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
         }
     }
 
-    public void updateBoundOrigin() {
-        Vec3 start = this.position().add(0,2,0);
-        Vec3 end = start.add(0, -64, 0);
-
-        BlockHitResult result = this.level().clip(new ClipContext(
-                start, end,
-                ClipContext.Block.COLLIDER,
-                ClipContext.Fluid.ANY,
-                this
-        ));
-
-        if (result.getType() != HitResult.Type.MISS) {
-            this.boundOrigin = result.getBlockPos();
-        }
-    }
-
     public void tick() {
-
-
 //        this.setYRot(this.getYRot()+1f);
 //        this.setYHeadRot(this.getYRot());
 //        this.setYBodyRot(this.getYRot());
@@ -159,16 +142,16 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
 
         if (damageSource.getEntity() != null) {
             Vec3 sourcePos = damageSource.getEntity().position();
-            Vec3 dir = sourcePos.subtract(this.position()).normalize();
-//            Vec3 dir = this.position().subtract(sourcePos).normalize();
+            Vec3 dir = sourcePos.subtract(this.position());
+            dir = new Vec3(dir.x, 0, dir.z).normalize();
             this.setDeltaMovement(dir.scale(-0.5).add(0,-0.15,0));
+            this.hasImpulse = true;
+            float yRot = MobUtil.rotFromVec(dir);
+            this.setYRot(yRot);
+            this.setYBodyRot(yRot);
         } else {
             this.setDeltaMovement(this.getDeltaMovement().add(0,-0.15,0));
         }
-//        this.setDeltaMovement(MobUtil.getVecFromRot(this.getYRot())
-//                .scale(0.5f)
-//                .add(0,-0.15,0)
-//        );
     }
 
     @Override
@@ -184,6 +167,22 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
     @Override
     public boolean isMultipartEntity() {
         return true;
+    }
+
+    public void updateBoundOrigin() {
+        Vec3 start = this.position().add(0,2,0);
+        Vec3 end = start.add(0, -64, 0);
+
+        BlockHitResult result = this.level().clip(new ClipContext(
+                start, end,
+                ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.ANY,
+                this
+        ));
+
+        if (result.getType() != HitResult.Type.MISS) {
+            this.boundOrigin = result.getBlockPos();
+        }
     }
 
     private void summonVexes() {
