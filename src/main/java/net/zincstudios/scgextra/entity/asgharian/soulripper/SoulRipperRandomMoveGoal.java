@@ -29,16 +29,13 @@ public class SoulRipperRandomMoveGoal extends Goal {
     @Override
     public void tick() {
         BlockPos blockpos = this.mob.getBoundOrigin();
-        if (blockpos == null) {
-            blockpos = this.mob.blockPosition();
-        }
 
         for(int i = 0; i < 3; ++i) {
-            BlockPos blockpos1 = blockpos.offset(this.mob.getRandom().nextInt(11) - 5, this.mob.getRandom().nextInt(8) - 2, this.mob.getRandom().nextInt(11) - 5);
-            if (this.mob.level().isEmptyBlock(blockpos1)) {
-                this.mob.getMoveControl().setWantedPosition((double)blockpos1.getX() + 0.5D, (double)blockpos1.getY() + 0.5D, (double)blockpos1.getZ() + 0.5D, 0.25D);
+            blockpos = blockpos.offset(this.mob.getRandom().nextInt(11) - 5, this.mob.getRandom().nextInt(10) - 2, this.mob.getRandom().nextInt(11) - 5);
+            if (this.mob.level().isEmptyBlock(blockpos)) {
+                this.mob.getMoveControl().setWantedPosition(blockpos.getX() + 0.5D, blockpos.getY() + 0.5D, blockpos.getZ() + 0.5D, 0.25D);
                 if (this.mob.getTarget() == null) {
-                    this.mob.getLookControl().setLookAt((double)blockpos1.getX() + 0.5D, (double)blockpos1.getY() + 0.5D, (double)blockpos1.getZ() + 0.5D, 180.0F, 20.0F);
+                    this.mob.getLookControl().setLookAt(blockpos.getX() + 0.5D, blockpos.getY() + 0.5D, blockpos.getZ() + 0.5D, 180.0F, 20.0F);
                 }
                 break;
             }
