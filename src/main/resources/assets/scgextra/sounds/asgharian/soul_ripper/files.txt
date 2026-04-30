@@ -1,0 +1,16 @@
+attack1.ogg
+attack2.ogg
+death1.ogg
+death2.ogg
+files.txt
+hurt1.ogg
+hurt2.ogg
+hurt3.ogg
+hurt4.ogg
+idle1.ogg
+idle2.ogg
+idle3.ogg
+lantern_shatter.ogg
+revive1.ogg
+revive2.ogg
+revive3.ogg

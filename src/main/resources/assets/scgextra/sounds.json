@@ -1196,5 +1196,65 @@
     "candle_fiend.warning": {
       "category": "hostile",
       "sounds": ["scgextra:asgharian/candle_fiend/warning"]
+    },
+    "soul_ripper.attack1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/attack1"]
+    },
+    "soul_ripper.attack2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/attack2"]
+    },
+    "soul_ripper.death1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/death1"]
+    },
+    "soul_ripper.death2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/death2"]
+    },
+    "soul_ripper.hurt1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/hurt1"]
+    },
+    "soul_ripper.hurt2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/hurt2"]
+    },
+    "soul_ripper.hurt3": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/hurt3"]
+    },
+    "soul_ripper.hurt4": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/hurt4"]
+    },
+    "soul_ripper.idle1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/idle1"]
+    },
+    "soul_ripper.idle2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/idle2"]
+    },
+    "soul_ripper.idle3": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/idle3"]
+    },
+    "soul_ripper.lantern_shatter": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/lantern_shatter"]
+    },
+    "soul_ripper.revive1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/revive1"]
+    },
+    "soul_ripper.revive2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/revive2"]
+    },
+    "soul_ripper.revive3": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/revive3"]
     }
 }

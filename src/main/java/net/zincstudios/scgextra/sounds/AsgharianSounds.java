@@ -96,5 +96,37 @@ public class AsgharianSounds {
     public static final RegistryObject<SoundEvent> CANDLE_FIEND_WARNING = SOUND_EVENTS.register("candle_fiend.warning",
             () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("candle_fiend.warning")));
 
+    // Soul Ripper
+    public static final RegistryObject<SoundEvent> SOUL_RIPPER_ATTACK_1 = SOUND_EVENTS.register("soul_ripper.attack1",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("soul_ripper.attack1")));
+    public static final RegistryObject<SoundEvent> SOUL_RIPPER_ATTACK_2 = SOUND_EVENTS.register("soul_ripper.attack2",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("soul_ripper.attack2")));
+    public static final RegistryObject<SoundEvent> SOUL_RIPPER_DEATH_1 = SOUND_EVENTS.register("soul_ripper.death1",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("soul_ripper.death1")));
+    public static final RegistryObject<SoundEvent> SOUL_RIPPER_DEATH_2 = SOUND_EVENTS.register("soul_ripper.death2",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("soul_ripper.death2")));
+    public static final RegistryObject<SoundEvent> SOUL_RIPPER_HURT_1 = SOUND_EVENTS.register("soul_ripper.hurt1",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("soul_ripper.hurt1")));
+    public static final RegistryObject<SoundEvent> SOUL_RIPPER_HURT_2 = SOUND_EVENTS.register("soul_ripper.hurt2",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("soul_ripper.hurt2")));
+    public static final RegistryObject<SoundEvent> SOUL_RIPPER_HURT_3 = SOUND_EVENTS.register("soul_ripper.hurt3",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("soul_ripper.hurt3")));
+    public static final RegistryObject<SoundEvent> SOUL_RIPPER_HURT_4 = SOUND_EVENTS.register("soul_ripper.hurt4",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("soul_ripper.hurt4")));
+    public static final RegistryObject<SoundEvent> SOUL_RIPPER_IDLE_1 = SOUND_EVENTS.register("soul_ripper.idle1",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("soul_ripper.idle1")));
+    public static final RegistryObject<SoundEvent> SOUL_RIPPER_IDLE_2 = SOUND_EVENTS.register("soul_ripper.idle2",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("soul_ripper.idle2")));
+    public static final RegistryObject<SoundEvent> SOUL_RIPPER_IDLE_3 = SOUND_EVENTS.register("soul_ripper.idle3",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("soul_ripper.idle3")));
+    public static final RegistryObject<SoundEvent> SOUL_RIPPER_LANTERN_SHATTER = SOUND_EVENTS.register("soul_ripper.lantern_shatter",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("soul_ripper.lantern_shatter")));
+    public static final RegistryObject<SoundEvent> SOUL_RIPPER_REVIVE_1 = SOUND_EVENTS.register("soul_ripper.revive1",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("soul_ripper.revive1")));
+    public static final RegistryObject<SoundEvent> SOUL_RIPPER_REVIVE_2 = SOUND_EVENTS.register("soul_ripper.revive2",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("soul_ripper.revive2")));
+    public static final RegistryObject<SoundEvent> SOUL_RIPPER_REVIVE_3 = SOUND_EVENTS.register("soul_ripper.revive3",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("soul_ripper.revive3")));
+
     public static void init() {}
 }
