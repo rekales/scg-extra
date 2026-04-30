@@ -57,7 +57,7 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
     private static final RawAnimation MELEE = RawAnimation.begin().thenPlay("melee");
     private static final RawAnimation FIREBALL = RawAnimation.begin().thenPlay("fireball");
     private static final RawAnimation SUMMON = RawAnimation.begin().thenPlay("summon");
-    private static final RawAnimation DEATH = RawAnimation.begin().thenPlayAndHold("death");
+    private static final RawAnimation DEATH = RawAnimation.begin().thenPlay("death");
     private static final RawAnimation REVIVE = RawAnimation.begin().thenPlay("revive");
     private static final RawAnimation LANTERN_1_OFF = RawAnimation.begin().thenPlayAndHold("lantern_1_flickering");
     private static final RawAnimation LANTERN_2_OFF = RawAnimation.begin().thenPlayAndHold("lantern_2_flickering");
@@ -124,6 +124,7 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
 //                }
             } else if (this.deathTime == DEATH_DURATION_TICKS && !this.level().isClientSide) {
                 this.triggerAnim("revive", "revive");
+                this.setDeltaMovement(this.getDeltaMovement().add(MobUtil.vecFromRot(this.getYRot()).scale(0.15)));
             }
         } else {
             if (this.deathTime >= 35 && !this.level().isClientSide() && !this.isRemoved()) {
@@ -243,17 +244,37 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
                 .add(Attributes.MAX_HEALTH, 40.0D);
     }
 
+    public boolean isMovingForward() {
+        Vec3 oldPos = new Vec3(this.xOld, this.yOld, this.zOld);
+        Vec3 dir = this.position().subtract(new Vec3(this.xOld, this.yOld, this.zOld));
+
+//        SCGExtra.LOGGER.debug("dev: " + dir.length());
+        float deltaRot = MobUtil.rotFromVec(this.getDeltaMovement());
+
+        float oldRot = MobUtil.rotFromVec(dir);
+
+//        SCGExtra.LOGGER.debug("old: " + oldRot);
+//        SCGExtra.LOGGER.debug("delta: " + deltaRot);
+//        SCGExtra.LOGGER.debug("rot: " + this.getYRot());
+//        SCGExtra.LOGGER.debug("dev: " + Math.abs((oldRot + 1000) - (this.getYRot() + 1000)));
+        return Math.abs((oldRot + 1000) - (this.yBodyRot + 1000)) < 200 && dir.length() > 0.075;
+    }
+
+//    public boolean isMoving() {
+//        return this.getDeltaMovement().length() > 0.075;
+//    }
+
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new ExpandedAnimationController<>(this, "main", 5, state -> {
-            if (state.isMoving()) {
+        controllers.add(new AnimationController<>(this, "main", 5, state -> {
+            if (state.getAnimatable().isMovingForward()) {
                 return state.setAndContinue(MOVE);
             } else {
                 return state.setAndContinue(IDLE);
             }
         }));
 
-        controllers.add(new ExpandedAnimationController<>(this, "lantern", 0, state ->
+        controllers.add(new AnimationController<>(this, "lantern", 0, state ->
                 switch(state.getAnimatable().getLives()) {
                     case 2 -> state.setAndContinue(LANTERN_1_OFF);
                     case 1 -> state.setAndContinue(LANTERN_2_OFF);
@@ -261,12 +282,14 @@ public class SoulRipperEntity extends Monster implements GeoEntity {
                     default -> PlayState.STOP;
         }));
 
-//        controllers.add(new AnimationController<>(this, "death", 2, state -> {
-//            if (state.getAnimatable().isDeadOrDying()) {
-//                return state.setAndContinue(DEATH);
-//            }
-//            return PlayState.STOP;
-//        }).triggerableAnim("revive", REVIVE));
+        controllers.add(new AnimationController<>(this, "death", 3, state -> {
+            if (state.getAnimatable().isDeadOrDying()) {
+                return state.setAndContinue(DEATH);
+            } else {
+                state.resetCurrentAnimation();
+                return PlayState.STOP;
+            }
+        }));
 
         controllers.add(new AnimationController<>(this, "revive", 2, state -> PlayState.STOP)
                 .triggerableAnim("revive", REVIVE));
