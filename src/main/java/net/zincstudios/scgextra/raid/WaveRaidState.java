@@ -121,6 +121,7 @@ public class WaveRaidState {
         }
     }
 
+    // Maybe the state shouldn't handle logic at all
     public void tick() {
         if (this.active) {
             this.updateRaiders();

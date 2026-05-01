@@ -41,7 +41,6 @@ public record WaveRaidData(String id, String originalId, Profile profile, List<R
         if (infantry.isEmpty() || elite.isEmpty() || miniboss.isEmpty() || boss.isEmpty()) {
             throw new IllegalArgumentException("entries cannot be empty");
         }
-
     }
 
     public enum Rank {
@@ -82,21 +81,44 @@ public record WaveRaidData(String id, String originalId, Profile profile, List<R
         return spawnList;
     }
 
-
-    private static List<RaiderEntry> sampleRandomRaiders(List<RaiderEntry> entries, int amount, RandomSource random) {
+    private static List<RaiderEntry> sampleRandomRaiders(List<RaiderEntry> entries, int value, RandomSource random) {
         List<RaiderEntry> spawnList = new ArrayList<>();
-        for (int i = 0; i < amount; i++) {  // TODO: weights
-            spawnList.add(entries.get(random.nextInt(entries.size())));
+        int SCALE = 10000;  // scale so I can do fractions while not dealing with floating point imprecision
+        int valueLeft = value * SCALE;
+        double totalWeight = 0;
+        for (RaiderEntry entry : entries) {
+            totalWeight += entry.weight;
+        }
+
+        while (valueLeft > 0) {
+            double randomWeight = random.nextDouble() * totalWeight;
+            for (RaiderEntry entry : entries) {
+                randomWeight -= entry.weight;
+                if (randomWeight < 0) {
+                    spawnList.add(entry);
+                    valueLeft -= (int) (entry.value * SCALE);
+                    break;
+                }
+            }
         }
         return spawnList;
     }
 
-    public record RaiderEntry(EntityType<? extends Mob> entityType, double maxHealth, double weight) {
+    public record RaiderEntry(EntityType<? extends Mob> entityType, double maxHealth, double weight, double value) {
+        public RaiderEntry {
+            if (weight <= 0) {
+                throw new IllegalArgumentException("weight cannot zero or lower");
+            }
+            if (value <= 0) {
+                throw new IllegalArgumentException("value cannot zero or lower");
+            }
+        }
+
         public @Nullable Mob createEntity(ServerLevel level) {
             Mob entity = entityType.create(level);
             if (entity == null) return null;
 
-            if (this.maxHealth != -1) {
+            if (this.maxHealth > 0) {
                 AttributeInstance healthAttr = entity.getAttribute(Attributes.MAX_HEALTH);
                 if (healthAttr != null) {
                     double currentHealth = healthAttr.getBaseValue();
