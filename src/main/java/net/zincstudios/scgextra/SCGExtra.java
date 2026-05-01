@@ -49,6 +49,7 @@ public class SCGExtra
         modEventBus.addListener(CommonConfig::onReload);
 
         MinecraftForge.EVENT_BUS.addListener(WaveRaidManager::onLevelTick);
+        MinecraftForge.EVENT_BUS.addListener(WaveRaidManager::onLevelLoad);
         MinecraftForge.EVENT_BUS.addListener(Faction::onTagsUpdated);
         MinecraftForge.EVENT_BUS.addListener(RaidDataLoader::onAddReloadListeners);
 
