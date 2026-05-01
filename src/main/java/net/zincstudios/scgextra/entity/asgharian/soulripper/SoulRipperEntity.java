@@ -117,7 +117,7 @@ public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHan
                 this.dead = false;
                 this.lastDeath = this.tickCount;
                 this.behaviourState = BehaviourState.NONE;
-                this.playSound(AsgharianSounds.SOUL_RIPPER_LANTERN_SHATTER.get());
+                this.playSound(AsgharianSounds.SOUL_RIPPER_LANTERN_SHATTER.get(), 0.75F, 1.0F);
             } else if (this.deathTime == DEATH_DURATION_TICKS && !this.level().isClientSide) {
                 this.triggerAnim("revive", "revive");
                 this.playSound(this.getReviveSound());
@@ -203,8 +203,8 @@ public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHan
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(2, new SoulRipperChargeAttackGoal(this, 50));
-        this.goalSelector.addGoal(3, new SoulRipperFireballGoal(this).cooldown(200).windup(15).recovery(5));
+        this.goalSelector.addGoal(2, new SoulRipperChargeAttackGoal(this, 70));
+        this.goalSelector.addGoal(3, new SoulRipperFireballGoal(this).cooldown(200).windup(13).recovery(7));
         this.goalSelector.addGoal(4, new SoulRipperSummonVexGoal(this).cooldown(2000).windup(18).recovery(7));
         this.goalSelector.addGoal(8, new SoulRipperRandomMoveGoal(this));
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
