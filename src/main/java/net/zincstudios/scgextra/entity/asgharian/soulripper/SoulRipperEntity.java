@@ -53,8 +53,6 @@ public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHan
         NONE, MELEE, FIREBALL, SUMMON, DYING
     }
 
-    private static final EntityDataAccessor<Boolean> CHARGING =
-            SynchedEntityData.defineId(SoulRipperEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> LIVES =
             SynchedEntityData.defineId(SoulRipperEntity.class, EntityDataSerializers.INT);
 
@@ -363,7 +361,6 @@ public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHan
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(CHARGING, false);
         this.entityData.define(LIVES, 3);
     }
 

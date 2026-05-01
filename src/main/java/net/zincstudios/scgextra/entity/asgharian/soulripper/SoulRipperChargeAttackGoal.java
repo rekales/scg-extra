@@ -55,7 +55,6 @@ public class SoulRipperChargeAttackGoal extends Goal {
             Vec3 vec3 = livingentity.getEyePosition();
             this.mob.getMoveControl().setWantedPosition(vec3.x, vec3.y, vec3.z, 1.4D);
         }
-        this.mob.playSound(SoundEvents.VEX_CHARGE, 1.0F, 1.0F);
         this.activeTimer = -1;
         this.setGoalState(APPROACH);
     }
