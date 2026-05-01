@@ -82,9 +82,9 @@ public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHan
     public SoulRipperEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
         this.subEntities = new LanternPartEntity[] {
-                new LanternPartEntity(this, new Vec3(-1.25, 2.3, -0.025), 5/16f, 8/16f),
-                new LanternPartEntity(this, new Vec3(0.725, 2.25, -0.2), 5/16f, 8/16f),
-                new LanternPartEntity(this, new Vec3(0, 2.825, -0.275), 5/16f, 8/16f)
+                new LanternPartEntity(this, new Vec3(-1.1, 2.3, -0.15), 5/16f, 8/16f),
+                new LanternPartEntity(this, new Vec3(0.6, 2.15, -0.25), 5/16f, 8/16f),
+                new LanternPartEntity(this, new Vec3(0.075, 2.575, -0.275), 5/16f, 8/16f)
         };
         this.moveControl = new SoulRipperMoveControl(this);
 
@@ -285,10 +285,6 @@ public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHan
                 this.behaviourState = BehaviourState.NONE;
             }
         }
-    }
-
-    public SoulRipperEntity.BehaviourState getBehaviourState() {
-        return this.behaviourState;
     }
 
     @Override
