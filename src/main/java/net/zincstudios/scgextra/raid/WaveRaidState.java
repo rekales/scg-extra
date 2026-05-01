@@ -1,5 +1,8 @@
 package net.zincstudios.scgextra.raid;
 
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -11,18 +14,15 @@ import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.SCGExtra;
 
 import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
-// TODO: persistence
 @SuppressWarnings("unused")
 public class WaveRaidState {
 
     public static final int RAID_TIMEOUT_TICKS = 12000;  // 10 minutes, TODO: config
     private static final int NEXT_WAVE_DELAY = 30;
 
-    private final UUID raidId = UUID.randomUUID();
+    private final UUID raidId;
     private final ServerLevel level;
     private final Set<UUID> raiderUUIDs = new HashSet<>();
     private final long startTime;  // level gametime timestamp
@@ -35,6 +35,7 @@ public class WaveRaidState {
     private int totalWaveSpawned = 0;
 
     public WaveRaidState(WaveRaidData waveRaidData, ServerLevel level, Vec3 spawnCenter) {
+        this.raidId = UUID.randomUUID();
         this.startTime = level.getGameTime();
         this.level = level;
         this.currentWave = 1;
@@ -42,6 +43,15 @@ public class WaveRaidState {
         this.spawnCenter = spawnCenter;
         this.active = true;
         this.nextWaveDelay = NEXT_WAVE_DELAY;
+    }
+
+    // For nbt deserialization
+    private WaveRaidState(ServerLevel level, UUID raidId, WaveRaidData waveRaidData, long startTime, Vec3 spawnCenter) {
+        this.level = level;
+        this.raidId = raidId;
+        this.waveRaidData = waveRaidData;
+        this.startTime = startTime;
+        this.spawnCenter = spawnCenter;
     }
 
     public int getCurrentWave() {
@@ -177,16 +187,6 @@ public class WaveRaidState {
     }
 
     public Component getBossBarLabel() {
-        String wave = switch (this.currentWave) {
-            case 1 -> "wave_1";
-            case 2 -> "wave_2";
-            case 3 -> "wave_3";
-            case 4 -> "wave_4";
-            default -> "";
-        };
-
-//        Component component = Component.translatable(SCGExtra.MOD_ID+".raid.label."+this.raidId)
-//                .append(SCGExtra.MOD_ID+".raid.label."+wave);
         if (WaveRaidData.Profile.isFinalWave(this.currentWave) && this.raiderUUIDs.size() == 1) {
             UUID bossId = this.raiderUUIDs.iterator().next();
             Entity entity = this.level.getEntity(bossId);
@@ -195,6 +195,13 @@ public class WaveRaidState {
             }
         }
 
+        String wave = switch (this.currentWave) {
+            case 1 -> "wave_1";
+            case 2 -> "wave_2";
+            case 3 -> "wave_3";
+            case 4 -> "wave_4";
+            default -> "";
+        };
         return Component.translatable(SCGExtra.MOD_ID+".raid.label."+this.waveRaidData.id())
                 .append(" ")
                 .append(Component.translatable(SCGExtra.MOD_ID+".raid.label."+wave));
@@ -203,5 +210,75 @@ public class WaveRaidState {
     // NOTE: maybe on WaveRaidData instead?
     public Component getAnnouncement() {
         return Component.translatable(SCGExtra.MOD_ID+".raid.announcement."+this.waveRaidData.id());
+    }
+
+    public CompoundTag serialize() {
+        CompoundTag tag = new CompoundTag();
+
+        tag.putUUID("RaidId", this.raidId);
+
+        ListTag raiderList = new ListTag();
+        for (UUID uuid : this.raiderUUIDs) {
+            CompoundTag uuidTag = new CompoundTag();
+            uuidTag.putUUID("UUID", uuid);
+            raiderList.add(uuidTag);
+        }
+        tag.put("Raiders", raiderList);
+
+        tag.putLong("StartTime", this.startTime);
+        tag.putDouble("SpawnX", this.spawnCenter.x);
+        tag.putDouble("SpawnY", this.spawnCenter.y);
+        tag.putDouble("SpawnZ", this.spawnCenter.z);
+        tag.putString("WaveRaidData", this.waveRaidData.id());
+        tag.putInt("CurrentWave", this.currentWave);
+
+        if (this.targetPlayerUUID != null) {
+            tag.putUUID("TargetPlayer", this.targetPlayerUUID);
+        }
+
+        tag.putBoolean("Active", this.active);
+        tag.putInt("NextWaveDelay", this.nextWaveDelay);
+        tag.putInt("TotalWaveSpawned", this.totalWaveSpawned);
+
+        return tag;
+    }
+
+    public static @Nullable WaveRaidState deserialize(CompoundTag tag, ServerLevel level) {
+        UUID raidId = tag.getUUID("RaidId");
+
+        Set<UUID> raiders = new HashSet<>();
+        ListTag raiderList = tag.getList("Raiders", Tag.TAG_COMPOUND);
+        for (int i = 0; i < raiderList.size(); i++) {
+            raiders.add(raiderList.getCompound(i).getUUID("UUID"));
+        }
+
+        long startTime = tag.getLong("StartTime");
+        Vec3 spawnCenter = new Vec3(
+                tag.getDouble("SpawnX"),
+                tag.getDouble("SpawnY"),
+                tag.getDouble("SpawnZ")
+        );
+
+        String waveRaidDataId = tag.getString("WaveRaidData");
+        WaveRaidData waveRaidData = WaveRaidData.getWaveRaid(waveRaidDataId);
+        if (waveRaidData == null) {
+            SCGExtra.LOGGER.warn("raid id: {}", waveRaidDataId);
+            return null;
+        }
+
+        int currentWave = tag.getInt("CurrentWave");
+        UUID targetPlayer = tag.contains("TargetPlayer") ? tag.getUUID("TargetPlayer") : null;
+        boolean active = tag.getBoolean("Active");
+        int nextWaveDelay = tag.getInt("NextWaveDelay");
+        int totalWaveSpawned = tag.getInt("TotalWaveSpawned");
+
+        WaveRaidState state = new WaveRaidState(level, raidId, waveRaidData, startTime, spawnCenter);
+        state.raiderUUIDs.addAll(raiders);
+        state.currentWave = currentWave;
+        state.targetPlayerUUID = targetPlayer;
+        state.active = active;
+        state.nextWaveDelay = nextWaveDelay;
+        state.totalWaveSpawned = totalWaveSpawned;
+        return state;
     }
 }
