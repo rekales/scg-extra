@@ -26,8 +26,8 @@ public class WaveRaidState {
     private final ServerLevel level;
     private final Set<UUID> raiderUUIDs = new HashSet<>();
     private final long startTime;  // level gametime timestamp
-    private final Vec3 spawnCenter;
     private final WaveRaidData waveRaidData;
+    private Vec3 spawnCenter;
     private int currentWave;
     private UUID targetPlayerUUID = null;
     private boolean active;
@@ -134,6 +134,10 @@ public class WaveRaidState {
             }
             if (this.checkTimeout()) {
                 this.endRaid(false);
+            }
+            ServerPlayer player = this.getTargetPlayer();
+            if (player != null) {
+                this.spawnCenter = player.position();  // NOTE: centering to player might not be ideal.
             }
         }
     }
