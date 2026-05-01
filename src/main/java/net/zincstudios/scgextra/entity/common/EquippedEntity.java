@@ -54,4 +54,9 @@ public class EquippedEntity extends Monster {
         EntityEquipmentConfig.equipEntity(this, this.equipmentResLoc.toString());
         return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
     }
+
+    @Override
+    public boolean isLeftHanded() {
+        return false;  // Made explicit because it sometimes spawns left-handed by slim chance
+    }
 }

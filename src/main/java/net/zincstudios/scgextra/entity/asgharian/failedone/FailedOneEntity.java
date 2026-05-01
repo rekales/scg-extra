@@ -91,7 +91,7 @@ public class FailedOneEntity extends EquippedEntity implements GeoEntity {
             LivingEntity target = this.getTarget();
             if (target != null) {
                 double distToEnemySqr = this.getPerceivedTargetDistanceSquareForMeleeAttack(target);
-                double reach = this.getAttackReachSqr(target) * 1.2;
+                double reach = this.getAttackReachSqr(target) * 1.3;
                 if (distToEnemySqr <= reach) {
                     super.doHurtTarget(target);
                 }

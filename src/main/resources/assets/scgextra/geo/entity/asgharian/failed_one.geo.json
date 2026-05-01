@@ -90,15 +90,25 @@
 						{"origin": [-8, 11.6543, -0.21721], "size": [4, 12, 4], "uv": [36, 12]}
 					]
 				},
-				{
-					"name": "left_arm",
-					"parent": "torso",
-					"pivot": [4, 23.6543, 1.78279],
-					"rotation": [-40, 0, 0],
-					"cubes": [
-						{"origin": [4, 11.6543, -0.21721], "size": [4, 12, 4], "uv": [36, 12], "mirror": true}
-					]
-				}
+                {
+                    "name": "right_hand",
+                    "parent": "right_arm",
+                    "pivot": [-6, 13.6543, 0.78279]
+                },
+                {
+                    "name": "left_arm",
+                    "parent": "torso",
+                    "pivot": [4, 23.6543, 1.78279],
+                    "rotation": [-40, 0, 0],
+                    "cubes": [
+                        {"origin": [4, 11.6543, -0.21721], "size": [4, 12, 4], "uv": [36, 12], "mirror": true}
+                    ]
+                },
+                {
+                    "name": "left_hand",
+                    "parent": "left_arm",
+                    "pivot": [6, 13.6543, 0.78279]
+                }
 			]
 		}
 	]
