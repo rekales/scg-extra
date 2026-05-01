@@ -6,7 +6,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.raid.WaveRaidData;
 import net.zincstudios.scgextra.raid.WaveRaidManager;
-import net.zincstudios.scgextra.raid.WaveRaidUtil;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -35,11 +34,11 @@ public class RaidManagerMixin {
 
         if (!self.hasActiveRaid()) {
             Vec3 playerPos = player.position();
-            Vec3 spawnPos = WaveRaidUtil.findRaidSpawnLocation(level, playerPos);
+//            Vec3 spawnPos = WaveRaidUtil.findRaidSpawnLocation(level, playerPos);
             WaveRaidData waveRaidData = WaveRaidData.getWaveRaidFromOriginal(config.raidId());
-            if (spawnPos != null && waveRaidData != null) {
+            if (waveRaidData != null) {
                 WaveRaidManager waveRaidManager = WaveRaidManager.get(level);
-                waveRaidManager.startRaid(waveRaidData, level, spawnPos);
+                waveRaidManager.startRaid(waveRaidData, level, playerPos);  // NOTE: centering to player might not be ideal.
                 ci.cancel();
             }
         }

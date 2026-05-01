@@ -15,7 +15,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class WaveRaidUtil {
 
     public static final int FIND_SPAWN_LOCATION_ATTEMPTS = 25;
-    public static final double MIN_SPAWN_PLAYER_DISTANCE = 20;
+    public static final double MIN_SPAWN_PLAYER_DISTANCE = 32;
 
     public static @Nullable ServerPlayer findNearestPlayer(ServerLevel level, Vec3 pos) {
         ServerPlayer nearest = null;
@@ -39,7 +39,7 @@ public class WaveRaidUtil {
     public static @Nullable Vec3 findRaidSpawnLocation(ServerLevel level, Vec3 center) {
         RandomSource random = level.getRandom();
         int playerY = (int)center.y;
-        boolean isUnderground = playerY < 50;
+        boolean isUnderground = playerY < 50 && !level.canSeeSky(BlockPos.containing(center));
 
         for(int attempt = 0; attempt < FIND_SPAWN_LOCATION_ATTEMPTS; ++attempt) {
             double angle = random.nextDouble() * Math.PI * (double)2.0F;
@@ -73,11 +73,11 @@ public class WaveRaidUtil {
     static @Nullable Vec3 findWaveSpawnLocation(ServerLevel level, Vec3 center, @Nullable Vec3 playerPos) {
         RandomSource random = level.getRandom();
         int playerY = (int)center.y;
-        boolean isUnderground = playerY < 50;
+        boolean isUnderground = playerY < 50 && !level.canSeeSky(BlockPos.containing(center));
 
         for(int attempt = 0; attempt < FIND_SPAWN_LOCATION_ATTEMPTS; ++attempt) {
             double angle = random.nextDouble() * Math.PI * 2.0F;
-            double distance = 25.0F + random.nextDouble() * 15.0F;
+            double distance = 30.0F + random.nextDouble() * 14.0F;
             double x = center.x + Math.cos(angle) * distance;
             double z = center.z + Math.sin(angle) * distance;
             BlockPos pos = new BlockPos((int)x, playerY, (int)z);
@@ -94,7 +94,6 @@ public class WaveRaidUtil {
                     continue;
                 }
             }
-
             if (level.getBlockState(groundPos.below()).isSolid()
                     && level.getBlockState(groundPos).isAir()
                     && level.getBlockState(groundPos.above()).isAir()
