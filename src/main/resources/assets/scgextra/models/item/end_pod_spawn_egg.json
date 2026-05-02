@@ -1,0 +1,7 @@
+﻿{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "scgextra:item/end_pod_spawn_egg"
+  }
+}
+

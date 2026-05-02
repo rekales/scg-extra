@@ -1,0 +1,102 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "idle": {
+      "loop": true,
+      "animation_length": 1.5,
+      "bones": {
+        "head": {
+          "rotation": {
+            "0.0": { "vector": [0, 0, 0] },
+            "0.75": { "vector": [6, 0, 0] },
+            "1.5": { "vector": [0, 0, 0] }
+          }
+        },
+        "wing1": {
+          "rotation": {
+            "0.0": { "vector": [0, 0, 0] },
+            "0.75": { "vector": [0, 0, 5] },
+            "1.5": { "vector": [0, 0, 0] }
+          }
+        },
+        "wing2": {
+          "rotation": {
+            "0.0": { "vector": [0, 0, 0] },
+            "0.75": { "vector": [0, 0, -5] },
+            "1.5": { "vector": [0, 0, 0] }
+          }
+        }
+      }
+    },
+    "walk": {
+      "loop": true,
+      "animation_length": 1.0,
+      "bones": {
+        "legs": {
+          "rotation": {
+            "0.0": { "vector": [0, 0, 8] },
+            "0.5": { "vector": [0, 0, -8] },
+            "1.0": { "vector": [0, 0, 8] }
+          }
+        },
+        "legs2": {
+          "rotation": {
+            "0.0": { "vector": [0, 0, -8] },
+            "0.5": { "vector": [0, 0, 8] },
+            "1.0": { "vector": [0, 0, -8] }
+          }
+        },
+        "bb_main": {
+          "position": {
+            "0.0": { "vector": [0, 0, 0] },
+            "0.5": { "vector": [0, 0.15, 0] },
+            "1.0": { "vector": [0, 0, 0] }
+          }
+        }
+      }
+    },
+    "attack": {
+      "animation_length": 0.5,
+      "bones": {
+        "head": {
+          "rotation": {
+            "0.0": { "vector": [0, 0, 0] },
+            "0.2": { "vector": [20, 0, 0] },
+            "0.5": { "vector": [0, 0, 0] }
+          }
+        },
+        "bb_main": {
+          "position": {
+            "0.0": { "vector": [0, 0, 0] },
+            "0.2": { "vector": [0, 0, -0.4] },
+            "0.5": { "vector": [0, 0, 0] }
+          }
+        }
+      }
+    },
+    "death": {
+      "loop": "hold_on_last_frame",
+      "animation_length": 0.8,
+      "bones": {
+        "bb_main": {
+          "rotation": {
+            "0.0": { "vector": [0, 0, 0] },
+            "0.8": { "vector": [0, 0, 90] }
+          }
+        },
+        "legs": {
+          "rotation": {
+            "0.0": { "vector": [0, 0, 0] },
+            "0.8": { "vector": [0, 0, 20] }
+          }
+        },
+        "legs2": {
+          "rotation": {
+            "0.0": { "vector": [0, 0, 0] },
+            "0.8": { "vector": [0, 0, -20] }
+          }
+        }
+      }
+    }
+  }
+}

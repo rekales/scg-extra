@@ -757,14 +757,9 @@ public abstract class RaidManagerWaveMixin {
     private RaidConfig.RaidData selectRaidConfigVariant(RaidConfig.RaidData inputConfig, ServerLevel level) {
         String raidId = this.normalizeRaidId(inputConfig.raidId());
         if (!"whale".equals(raidId)) return inputConfig;
-        RaidConfig.RaidData guardianConfig = RaidConfig.getRaidById("whale");
         RaidConfig.RaidData whaleConfig = RaidConfig.getRaidById("whale_whale");
-        if (guardianConfig == null) guardianConfig = RaidConfig.getRaidById("ocean");
         if (whaleConfig == null) whaleConfig = RaidConfig.getRaidById("ocean_whale");
-        if (guardianConfig == null && whaleConfig == null) return inputConfig;
-        if (guardianConfig == null) return whaleConfig;
-        if (whaleConfig == null) return guardianConfig;
-        return level.getRandom().nextBoolean() ? guardianConfig : whaleConfig;
+        return whaleConfig != null ? whaleConfig : inputConfig;
     }
 
     @Unique

@@ -1,0 +1,18 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "#minecraft:is_forest",
+  "spawners": [
+    {
+      "type": "scgextra:inflicted_boar",
+      "weight": 90,
+      "minCount": 2,
+      "maxCount": 4
+    },
+    {
+      "type": "scgextra:inflicted_wolf",
+      "weight": 80,
+      "minCount": 2,
+      "maxCount": 3
+    }
+  ]
+}

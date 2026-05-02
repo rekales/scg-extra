@@ -35,6 +35,10 @@ public class ModItems {
             () -> new Item(new Item.Properties().stacksTo(1))
     );
 
+    public static final RegistryObject<Item> END_SHELL = ITEMS.register("end_shell",
+            () -> new Item(new Item.Properties())
+    );
+
     public static final RegistryObject<SpawnEggItem> FISH_FOLK_SPAWN_EGG = ITEMS.register("fish_folk_spawn_egg",
             () -> new ForgeSpawnEggItem(
                     ModEntities.FISH_FOLK,
@@ -279,6 +283,31 @@ public class ModItems {
                     new Item.Properties()
             )
     );
+
+    public static final RegistryObject<SpawnEggItem> INFLICTED_BOAR_SPAWN_EGG = ITEMS.register("inflicted_boar_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.INFLICTED_BOAR, 0xFFFFFF, 0xFFFFFF, new Item.Properties()));
+    public static final RegistryObject<SpawnEggItem> INFLICTED_WOLF_SPAWN_EGG = ITEMS.register("inflicted_wolf_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.INFLICTED_WOLF, 0xFFFFFF, 0xFFFFFF, new Item.Properties()));
+    public static final RegistryObject<SpawnEggItem> AMMO_GOBLIN_SPAWN_EGG = ITEMS.register("ammo_goblin_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.AMMO_GOBLIN, 0xFFFFFF, 0xFFFFFF, new Item.Properties()));
+    public static final RegistryObject<SpawnEggItem> BIG_LUMP_SPAWN_EGG = ITEMS.register("big_lump_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.BIG_LUMP, 0xFFFFFF, 0xFFFFFF, new Item.Properties()));
+    public static final RegistryObject<SpawnEggItem> MUTANT_BAT_SPAWN_EGG = ITEMS.register("mutant_bat_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.MUTANT_BAT, 0xFFFFFF, 0xFFFFFF, new Item.Properties()));
+    public static final RegistryObject<SpawnEggItem> NITRO_BEETLE_SPAWN_EGG = ITEMS.register("nitro_beetle_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.NITRO_BEETLE, 0xFFFFFF, 0xFFFFFF, new Item.Properties()));
+    public static final RegistryObject<SpawnEggItem> HEAD_HUNTER_SPAWN_EGG = ITEMS.register("head_hunter_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.HEAD_HUNTER, 0xFFFFFF, 0xFFFFFF, new Item.Properties()));
+    public static final RegistryObject<SpawnEggItem> NETHERITE_EATER_SPAWN_EGG = ITEMS.register("netherite_eater_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.NETHERITE_EATER, 0xFFFFFF, 0xFFFFFF, new Item.Properties()));
+    public static final RegistryObject<SpawnEggItem> END_POD_SPAWN_EGG = ITEMS.register("end_pod_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.END_POD, 0xFFFFFF, 0xFFFFFF, new Item.Properties()));
+    public static final RegistryObject<SpawnEggItem> END_DWELLER_SPAWN_EGG = ITEMS.register("end_dweller_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.END_DWELLER, 0xFFFFFF, 0xFFFFFF, new Item.Properties()));
+    public static final RegistryObject<SpawnEggItem> END_STONE_CRAB_SPAWN_EGG = ITEMS.register("end_stone_crab_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.END_STONE_CRAB, 0xFFFFFF, 0xFFFFFF, new Item.Properties()));
+    public static final RegistryObject<SpawnEggItem> END_SCORPION_SPAWN_EGG = ITEMS.register("end_scorpion_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.END_SCORPION, 0xFFFFFF, 0xFFFFFF, new Item.Properties()));
 
     public static void register(IEventBus modEventBus) {
         ITEMS.register(modEventBus);

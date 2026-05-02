@@ -1,0 +1,7 @@
+﻿{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "scgextra:item/ammo_goblin_spawn_egg"
+  }
+}
+

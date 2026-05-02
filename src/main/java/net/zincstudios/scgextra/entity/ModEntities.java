@@ -14,6 +14,18 @@ import net.zincstudios.scgextra.entity.fac.fac_lion.FacLionEntity;
 import net.zincstudios.scgextra.entity.fac.fac_tank.FacTankEntity;
 import net.zincstudios.scgextra.entity.fac.fac_trencher.FacTrencherEntity;
 import net.zincstudios.scgextra.entity.fac.fac_walker.FacWalkerEntity;
+import net.zincstudios.scgextra.entity.neutral.ammo_goblin.AmmoGoblinEntity;
+import net.zincstudios.scgextra.entity.neutral.big_lump.BigLumpEntity;
+import net.zincstudios.scgextra.entity.neutral.end_dweller.EndDwellerEntity;
+import net.zincstudios.scgextra.entity.neutral.end_pod.EndPodEntity;
+import net.zincstudios.scgextra.entity.neutral.end_scorpion.EndScorpionEntity;
+import net.zincstudios.scgextra.entity.neutral.end_stone_crab.EndStoneCrabEntity;
+import net.zincstudios.scgextra.entity.neutral.head_hunter.HeadHunterEntity;
+import net.zincstudios.scgextra.entity.neutral.inflicted_boar.InflictedBoarEntity;
+import net.zincstudios.scgextra.entity.neutral.inflicted_wolf.InflictedWolfEntity;
+import net.zincstudios.scgextra.entity.neutral.mutant_bat.MutantBatEntity;
+import net.zincstudios.scgextra.entity.neutral.netherite_eater.NetheriteEaterEntity;
+import net.zincstudios.scgextra.entity.neutral.nitro_beetle.NitroBeetleEntity;
 import net.zincstudios.scgextra.entity.fac.shovel_knight.ShovelKnightEntity;
 import net.zincstudios.scgextra.entity.fac.trench_sniper.TrenchSniperEntity;
 import net.zincstudios.scgextra.entity.fac.trench_goblin.TrenchGoblinEntity;
@@ -38,7 +50,11 @@ import net.zincstudios.scgextra.entity.whaler.salmonsaur.SalmonsaurEntity;
 import net.zincstudios.scgextra.entity.whaler.tentacliator.TentacliatorEntity;
 import net.zincstudios.scgextra.entity.whaler.turtleman.TurtlemanEntity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -213,6 +229,74 @@ public class ModEntities {
                     .setShouldReceiveVelocityUpdates(true)
                     .build("fire_projectile"));
 
+    //neutral
+    public static final RegistryObject<EntityType<InflictedBoarEntity>> INFLICTED_BOAR = ENTITY_TYPES
+            .register("inflicted_boar", () -> EntityType.Builder.of(InflictedBoarEntity::new, MobCategory.MONSTER)
+                    .sized(1.7F, 1.7F)
+                    .build("inflicted_boar"));
+
+    public static final RegistryObject<EntityType<InflictedWolfEntity>> INFLICTED_WOLF = ENTITY_TYPES
+            .register("inflicted_wolf", () -> EntityType.Builder.of(InflictedWolfEntity::new, MobCategory.MONSTER)
+                    .sized(1.8F, 1.8F)
+                    .build("inflicted_wolf"));
+
+    public static final RegistryObject<EntityType<AmmoGoblinEntity>> AMMO_GOBLIN = ENTITY_TYPES
+            .register("ammo_goblin", () -> EntityType.Builder.of(AmmoGoblinEntity::new, MobCategory.MONSTER)
+                    .sized(1.1F, 1.5F)
+                    .build("ammo_goblin"));
+
+    public static final RegistryObject<EntityType<BigLumpEntity>> BIG_LUMP = ENTITY_TYPES
+            .register("big_lump", () -> EntityType.Builder.of(BigLumpEntity::new, MobCategory.MONSTER)
+                    .sized(3F, 3.5F)
+                    .build("big_lump"));
+
+    public static final RegistryObject<EntityType<MutantBatEntity>> MUTANT_BAT = ENTITY_TYPES
+            .register("mutant_bat", () -> EntityType.Builder.of(MutantBatEntity::new, MobCategory.MONSTER)
+                    .sized(2F, 2.2F)
+                    .setUpdateInterval(1)
+                    .build("mutant_bat"));
+
+    public static final RegistryObject<EntityType<NitroBeetleEntity>> NITRO_BEETLE = ENTITY_TYPES
+            .register("nitro_beetle", () -> EntityType.Builder.of(NitroBeetleEntity::new, MobCategory.MONSTER)
+                    .fireImmune()
+                    .sized(0.9F, 0.9F)
+                    .setUpdateInterval(1)
+                    .build("nitro_beetle"));
+
+    public static final RegistryObject<EntityType<HeadHunterEntity>> HEAD_HUNTER = ENTITY_TYPES
+            .register("head_hunter", () -> EntityType.Builder.of(HeadHunterEntity::new, MobCategory.MONSTER)
+                    .fireImmune()
+                    .sized(1.1F, 2.8F)
+                    .build("head_hunter"));
+
+    public static final RegistryObject<EntityType<NetheriteEaterEntity>> NETHERITE_EATER = ENTITY_TYPES
+            .register("netherite_eater", () -> EntityType.Builder.of(NetheriteEaterEntity::new, MobCategory.MONSTER)
+                    .fireImmune()
+                    .sized(1.85F, 2.8F)
+                    .build("netherite_eater"));
+
+    public static final RegistryObject<EntityType<EndPodEntity>> END_POD = ENTITY_TYPES
+            .register("end_pod", () -> EntityType.Builder.of(EndPodEntity::new, MobCategory.CREATURE)
+                    .sized(0.5F, 0.2F)
+                    .build("end_pod"));
+
+    public static final RegistryObject<EntityType<EndDwellerEntity>> END_DWELLER = ENTITY_TYPES
+            .register("end_dweller", () -> EntityType.Builder.of(EndDwellerEntity::new, MobCategory.MONSTER)
+                    .sized(1.4F, 1.5F)
+                    .setUpdateInterval(1)
+                    .build("end_dweller"));
+
+    public static final RegistryObject<EntityType<EndStoneCrabEntity>> END_STONE_CRAB = ENTITY_TYPES
+            .register("end_stone_crab", () -> EntityType.Builder.of(EndStoneCrabEntity::new, MobCategory.MONSTER)
+                    .sized(3.3F, 3F)
+                    .build("end_stone_crab"));
+
+    public static final RegistryObject<EntityType<EndScorpionEntity>> END_SCORPION = ENTITY_TYPES
+            .register("end_scorpion", () -> EntityType.Builder.of(EndScorpionEntity::new, MobCategory.MONSTER)
+                    .sized(2.5F, 0.5F)
+                    .setUpdateInterval(1)
+                    .build("end_scorpion"));
+
 
     public static void register(IEventBus modEventBus){
         ENTITY_TYPES.register(modEventBus);
@@ -252,9 +336,100 @@ public class ModEntities {
         event.put(ModEntities.SCRAP_GUARD.get(), ScrapGuardEntity.createAttributes().build());
         event.put(ModEntities.ARC_PSYCHO.get(), ArcPsychoEntity.createAttributes().build());
         event.put(ModEntities.COPPER_KNIGHT.get(), CopperKnightEntity.createAttributes().build());
+
+        event.put(ModEntities.INFLICTED_BOAR.get(), InflictedBoarEntity.createAttributes().build());
+        event.put(ModEntities.INFLICTED_WOLF.get(), InflictedWolfEntity.createAttributes().build());
+        event.put(ModEntities.AMMO_GOBLIN.get(), AmmoGoblinEntity.createAttributes().build());
+        event.put(ModEntities.BIG_LUMP.get(), BigLumpEntity.createAttributes().build());
+        event.put(ModEntities.MUTANT_BAT.get(), MutantBatEntity.createAttributes().build());
+        event.put(ModEntities.NITRO_BEETLE.get(), NitroBeetleEntity.createAttributes().build());
+        event.put(ModEntities.HEAD_HUNTER.get(), HeadHunterEntity.createAttributes().build());
+        event.put(ModEntities.NETHERITE_EATER.get(), NetheriteEaterEntity.createAttributes().build());
+        event.put(ModEntities.END_POD.get(), EndPodEntity.createAttributes().build());
+        event.put(ModEntities.END_DWELLER.get(), EndDwellerEntity.createAttributes().build());
+        event.put(ModEntities.END_STONE_CRAB.get(), EndStoneCrabEntity.createAttributes().build());
+        event.put(ModEntities.END_SCORPION.get(), EndScorpionEntity.createAttributes().build());
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            SpawnPlacements.register(
+                    ModEntities.END_DWELLER.get(),
+                    SpawnPlacements.Type.ON_GROUND,
+                    Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                    net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil::canSpawnEndMonster
+            );
+            SpawnPlacements.register(
+                    ModEntities.END_STONE_CRAB.get(),
+                    SpawnPlacements.Type.ON_GROUND,
+                    Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                    net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil::canSpawnEndMonster
+            );
+            SpawnPlacements.register(
+                    ModEntities.END_SCORPION.get(),
+                    SpawnPlacements.Type.ON_GROUND,
+                    Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                    net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil::canSpawnEndMonster
+            );
+            SpawnPlacements.register(
+                    ModEntities.END_POD.get(),
+                    SpawnPlacements.Type.ON_GROUND,
+                    Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                    (type, level, spawnReason, pos, random) ->
+                            spawnReason == net.minecraft.world.entity.MobSpawnType.SPAWN_EGG
+                                    || spawnReason == net.minecraft.world.entity.MobSpawnType.COMMAND
+                                    || net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.canSpawnEndSurface(level, pos)
+            );
+            SpawnPlacements.register(
+                    ModEntities.HEAD_HUNTER.get(),
+                    SpawnPlacements.Type.ON_GROUND,
+                    Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                    Monster::checkAnyLightMonsterSpawnRules
+            );
+            SpawnPlacements.register(
+                    ModEntities.NETHERITE_EATER.get(),
+                    SpawnPlacements.Type.ON_GROUND,
+                    Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                    Monster::checkMonsterSpawnRules
+            );
+            SpawnPlacements.register(
+                    ModEntities.AMMO_GOBLIN.get(),
+                    SpawnPlacements.Type.ON_GROUND,
+                    Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                    Monster::checkAnyLightMonsterSpawnRules
+            );
+            SpawnPlacements.register(
+                    ModEntities.BIG_LUMP.get(),
+                    SpawnPlacements.Type.ON_GROUND,
+                    Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                    Monster::checkMonsterSpawnRules
+            );
+            SpawnPlacements.register(
+                    ModEntities.MUTANT_BAT.get(),
+                    SpawnPlacements.Type.ON_GROUND,
+                    Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                    MutantBatEntity::checkMutantBatSpawnRules
+            );
+            SpawnPlacements.register(
+                    ModEntities.NITRO_BEETLE.get(),
+                    SpawnPlacements.Type.ON_GROUND,
+                    Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                    Monster::checkMonsterSpawnRules
+            );
+            SpawnPlacements.register(
+                    ModEntities.INFLICTED_BOAR.get(),
+                    SpawnPlacements.Type.ON_GROUND,
+                    Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                    Mob::checkMobSpawnRules
+            );
+            SpawnPlacements.register(
+                    ModEntities.INFLICTED_WOLF.get(),
+                    SpawnPlacements.Type.ON_GROUND,
+                    Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                    Monster::checkAnyLightMonsterSpawnRules
+            );
+        });
+
         BoundingBoxManager.registerHeadshotBox(ModEntities.FAC_TRENCHER.get(), new BasicHeadshotBox<>(9.0, 20.0));
         BoundingBoxManager.registerHeadshotBox(ModEntities.FAC_BLUECOAT.get(), new BasicHeadshotBox<>(9.0, 22.0));
         BoundingBoxManager.registerHeadshotBox(ModEntities.TRENCH_GOBLIN.get(), new OffsetRotatedHeadshotBox<>(8.0, 7.0, 21.0, 0.5F, 5.0, false, true));
@@ -272,10 +447,24 @@ public class ModEntities {
         BoundingBoxManager.registerHeadshotBox(ModEntities.SCRAP_GUARD.get(), new OffsetRotatedHeadshotBox<>(11.0, 14.0, 40.0, 0.0F, 1.5, false, true));
         BoundingBoxManager.registerHeadshotBox(ModEntities.SPRING_JUNKIE.get(), new OffsetRotatedHeadshotBox<>(9.0, 20.0, 34.0, 0.0F, 0, false, true));
         BoundingBoxManager.registerHeadshotBox(ModEntities.COPPER_KNIGHT.get(), new OffsetRotatedHeadshotBox<>(8, 9.5, 28.0, 0.0F, 2.0, false, true));
-
+        BoundingBoxManager.registerHeadshotBox(ModEntities.INFLICTED_BOAR.get(), new OffsetRotatedHeadshotBox<>(13, 13, 10.0, 0.0F, 8.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(ModEntities.INFLICTED_WOLF.get(), new OffsetRotatedHeadshotBox<>(12, 12, 10.0, 0.0F, 9.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(ModEntities.AMMO_GOBLIN.get(), new OffsetRotatedHeadshotBox<>(8, 8, 14.0, 0.0F, 4.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(ModEntities.BIG_LUMP.get(), new OffsetRotatedHeadshotBox<>(12.0, 12.0, 37.0, -35.0F, 15.5, false, true, true));
+        BoundingBoxManager.registerHeadshotBox(ModEntities.MUTANT_BAT.get(), new OffsetRotatedHeadshotBox<>(12, 12, 18.0, 0.0F, 6.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(ModEntities.NITRO_BEETLE.get(), new OffsetRotatedHeadshotBox<>(5, 5, 2.0, 0.0F, 3.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(ModEntities.HEAD_HUNTER.get(), new OffsetRotatedHeadshotBox<>(9, 9, 28.0, 0.0F, 3,-8, false, true, true));
+        BoundingBoxManager.registerHeadshotBox(ModEntities.NETHERITE_EATER.get(), new OffsetRotatedHeadshotBox<>(15, 15, 27, 0.0F, 5.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(ModEntities.END_POD.get(), new OffsetRotatedHeadshotBox<>(0, 0, 0, 0F, 0, false, true));
+        BoundingBoxManager.registerHeadshotBox(ModEntities.END_DWELLER.get(), new OffsetRotatedHeadshotBox<>(10, 10, 10.0, 0.0F, 10.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(ModEntities.END_STONE_CRAB.get(), new OffsetRotatedHeadshotBox<>(25, 25, 10.0, 0.0F, 6.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(ModEntities.END_SCORPION.get(), new OffsetRotatedHeadshotBox<>(10, 7, 1.5, 0.0F, 7.0, false, true));
         WeakPointBoxManager.registerWeakPointBox(ModEntities.FLAMING_HEAD.get(), new WeakPointBox<>(new OffsetRotatedHeadshotBox<>(10.0F, 55.0, 13, -70, false, true)));
         WeakPointBoxManager.registerWeakPointBox(ModEntities.FAC_WALKER.get(), new WeakPointBox<>(new RotatedHeadshotBox<>(14.0, 44.0, 4.0, false, true)));
         WeakPointBoxManager.registerWeakPointBox(ModEntities.FAC_TANK.get(), new WeakPointBox<>(new OffsetRotatedHeadshotBox<>(13.0, 16.0, 9.0, 0.0F, false, true)));
+        WeakPointBoxManager.registerWeakPointBox(ModEntities.HEAD_HUNTER.get(), new WeakPointBox<>(new OffsetRotatedHeadshotBox<>(9.0, 9.0, 34.0, 22.0F, 3, 2, false, true, true)));
+        WeakPointBoxManager.registerWeakPointBox(ModEntities.BIG_LUMP.get(), new WeakPointBox<>(new OffsetRotatedHeadshotBox<>(12.0, 12.0, 37.0, 40.0F, 18.0, false, true, true)));
+        WeakPointBoxManager.registerWeakPointBox(ModEntities.BIG_LUMP.get(), new WeakPointBox<>(new OffsetRotatedHeadshotBox<>(12.0, 12.0, 37.0, -60.0F, 18.0, false, true, true)));
     }
 
     // TODO: registration helper

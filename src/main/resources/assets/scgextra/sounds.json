@@ -1036,5 +1036,323 @@
         "sounds": [
             "scgextra:fac/trench_sniper/idle4"
         ]
+    },
+    "neutral.ammo_goblin.idle_01": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:ammo_goblin_idle_01"
+        ]
+    },
+    "neutral.ammo_goblin.idle_02": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:ammo_goblin_idle_02"
+        ]
+    },
+    "neutral.ammo_goblin.hurt_01": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:ammo_goblin_hurt_01"
+        ]
+    },
+    "neutral.ammo_goblin.hurt_02": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:ammo_goblin_hurt_02"
+        ]
+    },
+    "neutral.ammo_goblin.hurt_03": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:ammo_goblin_hurt_03"
+        ]
+    },
+    "neutral.ammo_goblin.dead": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:ammo_goblin_dead"
+        ]
+    },
+    "neutral.big_lump.idle_01": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:big_lump_idle_01"
+        ]
+    },
+    "neutral.big_lump.idle_02": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:big_lump_idle_02"
+        ]
+    },
+    "neutral.big_lump.idle_03": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:big_lump_idle_03"
+        ]
+    },
+    "neutral.big_lump.hurt_01": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:big_lump_hurt_01"
+        ]
+    },
+    "neutral.big_lump.hurt_02": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:big_lump_hurt_02"
+        ]
+    },
+    "neutral.big_lump.death": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:big_lump_death"
+        ]
+    },
+    "neutral.end_crab.attack_01": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:end_crab_attack_01"
+        ]
+    },
+    "neutral.end_crab.idle_01": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:end_crab_idle_01"
+        ]
+    },
+    "neutral.end_crab.idle_02": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:end_crab_idle_02"
+        ]
+    },
+    "neutral.end_crab.hurt_01": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:end_crab_hurt_01"
+        ]
+    },
+    "neutral.end_crab.hurt_02": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:end_crab_hurt_02"
+        ]
+    },
+    "neutral.end_crab.death": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:end_crab_death"
+        ]
+    },
+    "neutral.end_dweller.charging": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:end_dweller_charging"
+        ]
+    },
+    "neutral.end_dweller.idle_01": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:end_dweller_idle_01"
+        ]
+    },
+    "neutral.end_dweller.idle_02": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:end_dweller_idle_02"
+        ]
+    },
+    "neutral.end_dweller.idle_03": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:end_dweller_idle_03"
+        ]
+    },
+    "neutral.end_dweller.hurt_01": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:end_dweller_hurt_01"
+        ]
+    },
+    "neutral.end_dweller.hurt_02": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:end_dweller_hurt_02"
+        ]
+    },
+    "neutral.end_pod.breed": {
+        "category": "neutral",
+        "sounds": [
+            "scgextra:end_pod_breed"
+        ]
+    },
+    "neutral.end_pod.idle_01": {
+        "category": "neutral",
+        "sounds": [
+            "scgextra:end_pod_idle_01"
+        ]
+    },
+    "neutral.end_pod.idle_02": {
+        "category": "neutral",
+        "sounds": [
+            "scgextra:end_pod_idle_02"
+        ]
+    },
+    "neutral.end_pod.idle_03": {
+        "category": "neutral",
+        "sounds": [
+            "scgextra:end_pod_idle_03"
+        ]
+    },
+    "neutral.end_pod.idle_04": {
+        "category": "neutral",
+        "sounds": [
+            "scgextra:end_pod_idle_04"
+        ]
+    },
+    "neutral.end_pod.idle_05": {
+        "category": "neutral",
+        "sounds": [
+            "scgextra:end_pod_idle_05"
+        ]
+    },
+    "neutral.end_pod.death_01": {
+        "category": "neutral",
+        "sounds": [
+            "scgextra:end_pod_death_01"
+        ]
+    },
+    "neutral.end_pod.death_02": {
+        "category": "neutral",
+        "sounds": [
+            "scgextra:end_pod_death_02"
+        ]
+    },
+    "neutral.end_scorpion.idle_01": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:end_scorpion_idle_01"
+        ]
+    },
+    "neutral.end_scorpion.idle_02": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:end_scorpion_idle_02"
+        ]
+    },
+    "neutral.end_scorpion.idle_03": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:end_scorpion_idle_03"
+        ]
+    },
+    "neutral.end_scorpion.hurt_01": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:end_scorpion_hurt_01"
+        ]
+    },
+    "neutral.end_scorpion.hurt_02": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:end_scorpion_hurt_02"
+        ]
+    },
+    "neutral.end_scorpion.sting": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:end_scorpion_sting"
+        ]
+    },
+    "neutral.end_scorpion.death": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:end_scorpion_death"
+        ]
+    },
+    "neutral.mutant_bat.idle_01": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:mutant_bat_idle_01"
+        ]
+    },
+    "neutral.mutant_bat.idle_02": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:mutant_bat_idle_02"
+        ]
+    },
+    "neutral.mutant_bat.idle_03": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:mutant_bat_idle_03"
+        ]
+    },
+    "neutral.mutant_bat.hurt": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:mutant_bat_hurt"
+        ]
+    },
+    "neutral.mutant_bat.scream": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:mutant_bat_scream"
+        ]
+    },
+    "neutral.mutant_bat.death": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:mutant_bat_death"
+        ]
+    },
+    "neutral.netherite_eater.breath": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:netherite_eater_breath"
+        ]
+    },
+    "neutral.netherite_eater.idle_01": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:netherite_eater_idle_01"
+        ]
+    },
+    "neutral.netherite_eater.idle_02": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:netherite_eater_idle_02"
+        ]
+    },
+    "neutral.netherite_eater.idle_03": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:netherite_eater_idle_03"
+        ]
+    },
+    "neutral.netherite_eater.idle_04": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:netherite_eater_idle_04"
+        ]
+    },
+    "neutral.netherite_eater.hurt_01": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:netherite_eater_hurt_01"
+        ]
+    },
+    "neutral.netherite_eater.hurt_02": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:netherite_eater_hurt_02"
+        ]
+    },
+    "neutral.netherite_eater.death": {
+        "category": "hostile",
+        "sounds": [
+            "scgextra:netherite_eater_death"
+        ]
     }
 }
