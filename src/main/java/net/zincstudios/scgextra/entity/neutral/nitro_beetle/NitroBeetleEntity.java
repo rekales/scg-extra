@@ -1,10 +1,5 @@
 package net.zincstudios.scgextra.entity.neutral.nitro_beetle;
 
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
@@ -32,21 +27,13 @@ import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
 
 public class NitroBeetleEntity extends Monster implements GeoEntity {
-    private static final int FLY_PHASE_BASE_TICKS = 300; 
-    private static final int FLY_PHASE_RANDOM_TICKS = 40; 
-    private static final int WALK_PHASE_BASE_TICKS = 100; 
-    private static final int WALK_PHASE_RANDOM_TICKS = 40; 
-
-    private static final EntityDataAccessor<Boolean> FLY_ANIM =
-            SynchedEntityData.defineId(NitroBeetleEntity.class, EntityDataSerializers.BOOLEAN);
-
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
-    private int phaseTicks;
 
     public NitroBeetleEntity(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -61,13 +48,7 @@ public class NitroBeetleEntity extends Monster implements GeoEntity {
                 .add(Attributes.ARMOR, 12.0D)
                 .add(Attributes.ATTACK_DAMAGE, 3.0D)
                 .add(Attributes.FLYING_SPEED, 0.35D)
-                .add(Attributes.MOVEMENT_SPEED, 0.18D);
-    }
-
-    @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(FLY_ANIM, false);
+                .add(Attributes.MOVEMENT_SPEED, 0.28D);
     }
 
     @Override
@@ -95,79 +76,10 @@ public class NitroBeetleEntity extends Monster implements GeoEntity {
     @Override
     public void aiStep() {
         super.aiStep();
-
-        if (!this.level().isClientSide()) {
-            if (this.phaseTicks <= 0) {
-                if (this.entityData.get(FLY_ANIM)) {
-                    startWalkPhase();
-                } else {
-                    startFlyPhase();
-                }
-            }
-            this.phaseTicks--;
-            applyPhasePhysics();
-        }
-
         if (!this.onGround()) {
             Vec3 movement = this.getDeltaMovement();
             this.setDeltaMovement(movement.x, movement.y * 0.75D, movement.z);
         }
-    }
-
-    private void applyPhasePhysics() {
-        if (this.entityData.get(FLY_ANIM)) {
-            this.setNoGravity(true);
-            enforceMinFlightHeightAboveGround(0.5D);
-            return;
-        }
-
-        this.setNoGravity(false);
-        if (!this.onGround()) {
-            Vec3 motion = this.getDeltaMovement();
-            this.setDeltaMovement(motion.x * 0.92D, Math.min(motion.y, -0.08D), motion.z * 0.92D);
-        }
-    }
-
-    private void startFlyPhase() {
-        this.entityData.set(FLY_ANIM, true);
-        this.phaseTicks = FLY_PHASE_BASE_TICKS + this.random.nextInt(FLY_PHASE_RANDOM_TICKS + 1);
-    }
-
-    private void startWalkPhase() {
-        this.entityData.set(FLY_ANIM, false);
-        this.phaseTicks = WALK_PHASE_BASE_TICKS + this.random.nextInt(WALK_PHASE_RANDOM_TICKS + 1);
-    }
-
-    private void enforceMinFlightHeightAboveGround(double minHeight) {
-        double groundY = findNearestGroundTopY(8);
-        if (Double.isNaN(groundY)) {
-            return;
-        }
-
-        double clearance = this.getY() - groundY;
-        if (clearance >= minHeight) {
-            return;
-        }
-
-        Vec3 motion = this.getDeltaMovement();
-        double pushUp = 0.08D + (minHeight - clearance) * 0.12D;
-        this.setDeltaMovement(motion.x, Math.max(motion.y, pushUp), motion.z);
-        this.hasImpulse = true;
-    }
-
-    private double findNearestGroundTopY(int maxDown) {
-        int baseX = Mth.floor(this.getX());
-        int baseY = Mth.floor(this.getY());
-        int baseZ = Mth.floor(this.getZ());
-
-        for (int offset = 1; offset <= maxDown; offset++) {
-            BlockPos check = new BlockPos(baseX, baseY - offset, baseZ);
-            if (!this.level().getBlockState(check).isAir()
-                    && this.level().getBlockState(check).blocksMotion()) {
-                return check.getY() + 1.0D;
-            }
-        }
-        return Double.NaN;
     }
 
     @Override
@@ -203,14 +115,16 @@ public class NitroBeetleEntity extends Monster implements GeoEntity {
             if (this.isDeadOrDying()) {
                 return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("death"));
             }
-            boolean moving = state.isMoving() || this.getNavigation().isInProgress();
-            if (this.entityData.get(FLY_ANIM)) {
-                return state.setAndContinue(RawAnimation.begin().thenLoop("fly"));
-            }
-            if (moving) {
+            if (state.isMoving()) {
                 return state.setAndContinue(RawAnimation.begin().thenLoop("walk"));
             }
             return state.setAndContinue(RawAnimation.begin().thenLoop("idle"));
+        }));
+        controllers.add(new AnimationController<>(this, "attack", 0, state -> {
+            if (this.swinging) {
+                return state.setAndContinue(RawAnimation.begin().thenPlay("attack"));
+            }
+            return PlayState.STOP;
         }));
     }
 

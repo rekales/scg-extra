@@ -10,11 +10,6 @@ public class NitroBeetleRenderer extends GeoEntityRenderer<NitroBeetleEntity> {
         super(context, new DefaultedEntityGeoModel<>(SCGExtra.asResource("neutral/nitro_beetle"), false));
         this.shadowRadius = 0.4F;
     }
-
-    @Override
-    protected float getDeathMaxRotation(NitroBeetleEntity animatable) {
-        return 0.0F;
-    }
 }
 
 

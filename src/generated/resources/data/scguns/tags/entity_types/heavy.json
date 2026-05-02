@@ -2,6 +2,14 @@
   "values": [
     "scgextra:turtleman",
     "scgextra:salmonsaur",
-    "scgextra:pufficus"
-   ]
+    "scgextra:pufficus",
+    "scgextra:fac_lion",
+    "scgextra:head_hunter",
+    "scgextra:netherite_eater",
+    "scgextra:big_lump",
+    "scgextra:inflicted_boar",
+    "scgextra:mutant_bat",
+    "scgextra:end_stone_crab",
+    "scgextra:end_scorpion"
+  ]
 }

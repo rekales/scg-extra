@@ -584,14 +584,7 @@ public class EndStoneCrabEntity extends Monster implements GeoEntity {
     }
 
     private static final class EndStoneCrabMeleeGoal extends Goal {
-        private static final int REPATH_INTERVAL_TICKS = 4;
-        private static final double TARGET_MOVE_REPATH_DISTANCE_SQR = 1.0D;
-
         private final EndStoneCrabEntity crab;
-        private int repathCooldown;
-        private double lastTargetX;
-        private double lastTargetY;
-        private double lastTargetZ;
 
         private EndStoneCrabMeleeGoal(EndStoneCrabEntity crab) {
             this.crab = crab;
@@ -617,30 +610,12 @@ public class EndStoneCrabEntity extends Monster implements GeoEntity {
                 return;
             }
 
-            this.crab.getLookControl().setLookAt(target, 30.0F, 30.0F);
             if (!this.crab.isAttackAnimationActive()) {
-                boolean canDirectChase = this.crab.hasLineOfSight(target)
-                        && Math.abs(target.getY() - this.crab.getY()) < 1.5D;
-                if (canDirectChase) {
-                    this.crab.getNavigation().stop();
-                    this.crab.getMoveControl().setWantedPosition(target.getX(), this.crab.getY(), target.getZ(), 0.95D);
-                    this.repathCooldown = 0;
-                } else {
-                    if (this.repathCooldown > 0) {
-                        this.repathCooldown--;
-                    }
-                    if (shouldRepath(target)) {
-                        this.crab.getNavigation().moveTo(target, 0.95D);
-                        this.repathCooldown = REPATH_INTERVAL_TICKS;
-                        this.lastTargetX = target.getX();
-                        this.lastTargetY = target.getY();
-                        this.lastTargetZ = target.getZ();
-                    }
-                }
+                this.crab.getNavigation().moveTo(target, 0.95D);
             } else {
                 this.crab.getNavigation().stop();
-                this.crab.faceTarget(target, 12.0F);
             }
+            this.crab.faceTarget(target, this.crab.isAttackAnimationActive() ? 12.0F : 8.0F);
 
             if (this.crab.attackCooldownTicks > 0 || this.crab.pendingAttackTicks >= 0 || this.crab.isAttackAnimationActive()) {
                 return;
@@ -652,19 +627,6 @@ public class EndStoneCrabEntity extends Monster implements GeoEntity {
             this.crab.swing(InteractionHand.MAIN_HAND);
             this.crab.startAttackAnimation();
             this.crab.scheduleMeleeHit(target);
-        }
-
-        private boolean shouldRepath(LivingEntity target) {
-            if (!this.crab.getNavigation().isInProgress()) {
-                return true;
-            }
-            if (this.repathCooldown <= 0) {
-                return true;
-            }
-            double dx = target.getX() - this.lastTargetX;
-            double dy = target.getY() - this.lastTargetY;
-            double dz = target.getZ() - this.lastTargetZ;
-            return (dx * dx + dy * dy + dz * dz) >= TARGET_MOVE_REPATH_DISTANCE_SQR;
         }
     }
 }

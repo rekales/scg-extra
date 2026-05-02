@@ -131,10 +131,7 @@ public class EndScorpionEntity extends Monster implements GeoEntity {
 
         LivingEntity target = this.getTarget();
         if (target != null && target.isAlive()) {
-            this.getLookControl().setLookAt(target, 30.0F, 30.0F);
-            if (this.isAttackAnimationActive()) {
-                this.faceTarget(target, 10.0F);
-            }
+            this.faceTarget(target, this.isAttackAnimationActive() ? 10.0F : 7.0F);
         }
         this.setAggroSpeedState(target != null && target.isAlive());
 
@@ -439,14 +436,7 @@ public class EndScorpionEntity extends Monster implements GeoEntity {
     }
 
     private static final class EndScorpionMeleeGoal extends Goal {
-        private static final int REPATH_INTERVAL_TICKS = 4;
-        private static final double TARGET_MOVE_REPATH_DISTANCE_SQR = 1.0D;
-
         private final EndScorpionEntity scorpion;
-        private int repathCooldown;
-        private double lastTargetX;
-        private double lastTargetY;
-        private double lastTargetZ;
 
         private EndScorpionMeleeGoal(EndScorpionEntity scorpion) {
             this.scorpion = scorpion;
@@ -472,37 +462,14 @@ public class EndScorpionEntity extends Monster implements GeoEntity {
                 return;
             }
 
-            this.scorpion.getLookControl().setLookAt(target, 30.0F, 30.0F);
             if (this.scorpion.isAttackAnimationActive()) {
                 this.scorpion.getNavigation().stop();
-                this.scorpion.faceTarget(target, 10.0F);
             } else {
                 double chaseMultiplier = this.scorpion.aggroSpeedActive ? AGGRO_SPEED_MULTIPLIER : 1.0D;
-                boolean canDirectChase = this.scorpion.hasLineOfSight(target)
-                        && Math.abs(target.getY() - this.scorpion.getY()) < 2.0D;
-                if (canDirectChase) {
-                    this.scorpion.getNavigation().stop();
-                    this.scorpion.getMoveControl().setWantedPosition(
-                            target.getX(),
-                            target.getY() + HOVER_HEIGHT,
-                            target.getZ(),
-                            BASE_CHASE_SPEED * chaseMultiplier
-                    );
-                    this.repathCooldown = 0;
-                } else {
-                    if (this.repathCooldown > 0) {
-                        this.repathCooldown--;
-                    }
-                    if (shouldRepath(target)) {
-                        this.scorpion.getNavigation().moveTo(target, BASE_CHASE_SPEED * chaseMultiplier);
-                        this.repathCooldown = REPATH_INTERVAL_TICKS;
-                        this.lastTargetX = target.getX();
-                        this.lastTargetY = target.getY();
-                        this.lastTargetZ = target.getZ();
-                    }
-                }
+                this.scorpion.getNavigation().moveTo(target, BASE_CHASE_SPEED * chaseMultiplier);
                 this.scorpion.applyFlightChaseBoost(target, chaseMultiplier);
             }
+            this.scorpion.faceTarget(target, this.scorpion.isAttackAnimationActive() ? 10.0F : 7.0F);
 
             if (this.scorpion.attackCooldownTicks > 0
                     || this.scorpion.pendingAttackTicks >= 0
@@ -518,19 +485,6 @@ public class EndScorpionEntity extends Monster implements GeoEntity {
             this.scorpion.swing(InteractionHand.MAIN_HAND);
             this.scorpion.startAttackAnimation(attackKind);
             this.scorpion.scheduleAttackHit(target, attackKind);
-        }
-
-        private boolean shouldRepath(LivingEntity target) {
-            if (!this.scorpion.getNavigation().isInProgress()) {
-                return true;
-            }
-            if (this.repathCooldown <= 0) {
-                return true;
-            }
-            double dx = target.getX() - this.lastTargetX;
-            double dy = target.getY() - this.lastTargetY;
-            double dz = target.getZ() - this.lastTargetZ;
-            return (dx * dx + dy * dy + dz * dz) >= TARGET_MOVE_REPATH_DISTANCE_SQR;
         }
     }
 }

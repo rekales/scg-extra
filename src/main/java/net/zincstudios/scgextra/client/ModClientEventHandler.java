@@ -23,6 +23,18 @@ import net.zincstudios.scgextra.entity.fac.fac_tank_buster.FacTankBusterRenderer
 import net.zincstudios.scgextra.entity.fac.fac_trencher.FacTrencherRenderer;
 import net.zincstudios.scgextra.entity.fac.trench_goblin.TrenchGoblinRenderer;
 import net.zincstudios.scgextra.entity.fac.trench_sniper.TrenchSniperRenderer;
+import net.zincstudios.scgextra.entity.neutral.ammo_goblin.AmmoGoblinRenderer;
+import net.zincstudios.scgextra.entity.neutral.big_lump.BigLumpRenderer;
+import net.zincstudios.scgextra.entity.neutral.end_dweller.EndDwellerRenderer;
+import net.zincstudios.scgextra.entity.neutral.end_pod.EndPodRenderer;
+import net.zincstudios.scgextra.entity.neutral.end_scorpion.EndScorpionRenderer;
+import net.zincstudios.scgextra.entity.neutral.end_stone_crab.EndStoneCrabRenderer;
+import net.zincstudios.scgextra.entity.neutral.head_hunter.HeadHunterRenderer;
+import net.zincstudios.scgextra.entity.neutral.inflicted_boar.InflictedBoarRenderer;
+import net.zincstudios.scgextra.entity.neutral.inflicted_wolf.InflictedWolfRenderer;
+import net.zincstudios.scgextra.entity.neutral.mutant_bat.MutantBatRenderer;
+import net.zincstudios.scgextra.entity.neutral.netherite_eater.NetheriteEaterRenderer;
+import net.zincstudios.scgextra.entity.neutral.nitro_beetle.NitroBeetleRenderer;
 import net.zincstudios.scgextra.entity.projectile.SoulFireBallRenderer;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntityModel;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntityRenderer;
@@ -91,6 +103,18 @@ public final class ModClientEventHandler {
         EntityRenderers.register(RRCEntities.ARC_PSYCHO.get(), ArcPsychoEntityRenderer::new);
         EntityRenderers.register(RRCEntities.COPPER_KNIGHT.get(), (ctx) -> new CopperKnightRenderer<>(ctx).noDeathTilt());
         EntityRenderers.register(ModEntities.LARGE_SOUL_FIREBALL.get(), SoulFireBallRenderer::new);
+        EntityRenderers.register(ModEntities.INFLICTED_BOAR.get(), InflictedBoarRenderer::new);
+        EntityRenderers.register(ModEntities.INFLICTED_WOLF.get(), InflictedWolfRenderer::new);
+        EntityRenderers.register(ModEntities.AMMO_GOBLIN.get(), AmmoGoblinRenderer::new);
+        EntityRenderers.register(ModEntities.BIG_LUMP.get(), BigLumpRenderer::new);
+        EntityRenderers.register(ModEntities.MUTANT_BAT.get(), MutantBatRenderer::new);
+        EntityRenderers.register(ModEntities.NITRO_BEETLE.get(), NitroBeetleRenderer::new);
+        EntityRenderers.register(ModEntities.HEAD_HUNTER.get(), HeadHunterRenderer::new);
+        EntityRenderers.register(ModEntities.NETHERITE_EATER.get(), NetheriteEaterRenderer::new);
+        EntityRenderers.register(ModEntities.END_POD.get(), EndPodRenderer::new);
+        EntityRenderers.register(ModEntities.END_DWELLER.get(), EndDwellerRenderer::new);
+        EntityRenderers.register(ModEntities.END_STONE_CRAB.get(), EndStoneCrabRenderer::new);
+        EntityRenderers.register(ModEntities.END_SCORPION.get(), EndScorpionRenderer::new);
 
         EntityHeadBoxDebug.register();
     }
