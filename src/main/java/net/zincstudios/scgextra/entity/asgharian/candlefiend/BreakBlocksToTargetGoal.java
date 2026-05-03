@@ -10,7 +10,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.zincstudios.scgextra.SCGExtra;
 
 public class BreakBlocksToTargetGoal extends Goal {
 
@@ -37,11 +36,8 @@ public class BreakBlocksToTargetGoal extends Goal {
                 this.frustration += 5;
             } else {
                 this.frustration -= 1;
-                if (this.frustration > 50) {
-                    this.frustration -= 2;
-                }
             }
-            this.frustration = Mth.clamp(this.frustration, 0, 80);
+            this.frustration = Mth.clamp(this.frustration, 0, 60);
 
             this.lastPos = this.mob.position();
             this.lastPosCheck = this.mob.tickCount;
@@ -80,23 +76,14 @@ public class BreakBlocksToTargetGoal extends Goal {
         Vec3 xzOffset = new Vec3(direction.x, 0, direction.z).normalize();
 
         AABB breakBB = this.mob.getBoundingBox();
-
-        SCGExtra.LOGGER.debug("original:" + breakBB.minY);
-
         breakBB = breakBB.move(xzOffset);
-
-        SCGExtra.LOGGER.debug("moved:" + breakBB.minY);
 
         double pitchDegrees = Math.toDegrees(Math.asin(direction.y));
         if (target.position().y-this.mob.position().y >= HEIGHT_DIFF_THRESHOLD) {
             breakBB = breakBB.move(0,1.1,0);
-            SCGExtra.LOGGER.debug("adjusted:" + breakBB.minY);
         } else if (pitchDegrees < -45.0) {
             breakBB = breakBB.move(0,-0.9,0);
-            SCGExtra.LOGGER.debug("adjusted:" + breakBB.minY);
         }
-
-
 
         return breakBB;
     }
