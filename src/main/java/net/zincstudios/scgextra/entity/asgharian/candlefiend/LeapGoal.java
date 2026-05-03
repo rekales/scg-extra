@@ -10,8 +10,8 @@ import net.minecraft.world.phys.Vec3;
  */
 public class LeapGoal<T extends PathfinderMob & Leaping> extends Goal {
 
-    public static final int POS_CHECK_INTERVAL = 60;
-    public static final double LAST_POS_DISTANCE_THRESHOLD = 1.5;
+    public static final int POS_CHECK_INTERVAL = 20;
+    public static final double LAST_POS_DISTANCE_THRESHOLD = 0.5;
     public static final double HEIGHT_DIFF_THRESHOLD = 2;
 
     protected final T mob;
@@ -25,7 +25,7 @@ public class LeapGoal<T extends PathfinderMob & Leaping> extends Goal {
         this.mob = mob;
         this.cooldownDuration = cooldownDuration;
         this.jumpHeight = jumpHeight;
-        // TODO: maybe add a position threshold for activation?
+        // maybe add a position threshold for activation?
     }
 
     @Override

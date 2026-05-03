@@ -200,12 +200,13 @@ public class CandleFiendEntity extends Monster implements GeoEntity, Leaping {
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new CandleFiendAttackGoal(this, 20, true));
         this.goalSelector.addGoal(1, new LeapGoal<>(this, 160, 3));
+        this.goalSelector.addGoal(2, new BreakBlocksToTargetGoal(this));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
 
         // Bosses should prioritize players
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true,
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, false,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
         this.targetSelector.addGoal(3, new HurtByNonFactionGoal(this));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
