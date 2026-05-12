@@ -26,7 +26,7 @@ import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.mixin.GunAttackGoalAccessor;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.sounds.FACSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -342,26 +342,26 @@ public class FacLionEntity extends GunnerEntity implements GeoEntity {
     protected SoundEvent getHurtSound(DamageSource damageSource) {
         return MobUtil.getSound(
                 this.random,
-                ModSounds.FAC_LION_HURT_1.get(),
-                ModSounds.FAC_LION_HURT_2.get(),
-                ModSounds.FAC_LION_HURT_3.get()
+                FACSounds.FAC_LION_HURT_1.get(),
+                FACSounds.FAC_LION_HURT_2.get(),
+                FACSounds.FAC_LION_HURT_3.get()
         );
     }
 
     protected SoundEvent getAmbientSound() {
         return MobUtil.getSound(
                 this.random,
-                ModSounds.FAC_LION_IDLE_1.get(),
-                ModSounds.FAC_LION_IDLE_2.get(),
-                ModSounds.FAC_LION_IDLE_3.get()
+                FACSounds.FAC_LION_IDLE_1.get(),
+                FACSounds.FAC_LION_IDLE_2.get(),
+                FACSounds.FAC_LION_IDLE_3.get()
         );
     }
 
     protected SoundEvent getDeathSound() {
         return MobUtil.getSound(
                 this.random,
-                ModSounds.FAC_LION_DEATH_1.get(),
-                ModSounds.FAC_LION_DEATH_2.get()
+                FACSounds.FAC_LION_DEATH_1.get(),
+                FACSounds.FAC_LION_DEATH_2.get()
         );
     }
 }

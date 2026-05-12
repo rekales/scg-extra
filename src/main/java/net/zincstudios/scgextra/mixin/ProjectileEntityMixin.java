@@ -1,21 +1,21 @@
 package net.zincstudios.scgextra.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.zincstudios.scgextra.entity.asgharian.WeakPointPart;
 import net.zincstudios.scgextra.entity.common.HeadShotHandler;
-import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.WeakPointBox;
 import net.zincstudios.scgextra.entity.common.WeakPointBoxManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.entity.projectile.ProjectileEntity;
@@ -25,26 +25,31 @@ import top.ribs.scguns.util.math.ExtendedEntityRayTraceResult;
 import java.util.List;
 import java.util.Optional;
 
+// TODO: test if GunProjectileHitEvent can be utilized
 @Mixin(value = ProjectileEntity.class, remap = false)
 public class ProjectileEntityMixin {
 
-    @Inject(
+    @WrapOperation(
             method = "onHit",
             at = @At(
                     value = "INVOKE",
                     target = "Ltop/ribs/scguns/entity/projectile/ProjectileEntity;onHitEntity(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/Vec3;Z)V"
-            )
-    )
-    private void beforeOnHit(HitResult result, Vec3 startVec, Vec3 endVec, CallbackInfo ci, @Local(name = "entityHitResult") ExtendedEntityRayTraceResult entityHitResult) {
+            ))
+    private void atOnHit(ProjectileEntity instance, Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot,
+                         Operation<Void> original, @Local(name = "entityHitResult") ExtendedEntityRayTraceResult entityHitResult) {
+        headshot = headshot || entityHitResult.getEntity() instanceof WeakPointPart;
+
         ProjectileEntity self = (ProjectileEntity) (Object) this;
         DamageSource source = ModDamageTypes.Sources.projectile(self.level().registryAccess(), self, self.getShooter());
 
-        if (entityHitResult.isHeadshot() && entityHitResult.getEntity() instanceof HeadShotHandler headShotHandler) {
+        if (headshot && entityHitResult.getEntity() instanceof HeadShotHandler headShotHandler) {
             headShotHandler.headshot(source, self.getDamage());
         }
+
+        original.call(instance, entity, hitVec, startVec, endVec, headshot);
     }
 
-    // TODO: Requires fix on ScorchedGuns to use this proper method
+        // TODO: Requires fix on ScorchedGuns to use this proper method
 //    @Inject(
 //            method = "onHitEntity",
 //            at = @At(

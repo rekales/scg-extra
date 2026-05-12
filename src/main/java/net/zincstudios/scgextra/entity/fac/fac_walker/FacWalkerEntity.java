@@ -30,7 +30,7 @@ import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.sounds.FACSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -281,8 +281,8 @@ public class FacWalkerEntity extends GunnerEntity implements GeoEntity, Stunnabl
     protected SoundEvent getHurtSound(DamageSource damageSource) {
         return MobUtil.getSound(
                 this.random,
-                ModSounds.FAC_WALKER_HURT_1.get(),
-                ModSounds.FAC_WALKER_HURT_2.get()
+                FACSounds.FAC_WALKER_HURT_1.get(),
+                FACSounds.FAC_WALKER_HURT_2.get()
         );
     }
 
@@ -290,17 +290,17 @@ public class FacWalkerEntity extends GunnerEntity implements GeoEntity, Stunnabl
     protected SoundEvent getAmbientSound() {
         return MobUtil.getSound(
                 this.random,
-                ModSounds.FAC_WALKER_IDLE_1.get(),
-                ModSounds.FAC_WALKER_IDLE_2.get(),
-                ModSounds.FAC_WALKER_IDLE_3.get()
+                FACSounds.FAC_WALKER_IDLE_1.get(),
+                FACSounds.FAC_WALKER_IDLE_2.get(),
+                FACSounds.FAC_WALKER_IDLE_3.get()
         );
     }
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
         SoundEvent step = this.shouldPlayRunAnimation()
-                ? ModSounds.FAC_WALKER_RUN.get()
-                : ModSounds.FAC_WALKER_WALK.get();
+                ? FACSounds.FAC_WALKER_RUN.get()
+                : FACSounds.FAC_WALKER_WALK.get();
         this.playSound(step, 0.85F, 0.95F + this.random.nextFloat() * 0.1F);
     }
 

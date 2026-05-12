@@ -18,7 +18,7 @@ import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.sounds.FACSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -146,9 +146,9 @@ public class TrenchGoblinEntity extends GunnerEntity implements GeoEntity {
         if (hit) {
             this.playSound(MobUtil.getSound(
                     this.random,
-                    ModSounds.TRENCH_GOBLIN_ATTACK_1.get(),
-                    ModSounds.TRENCH_GOBLIN_ATTACK_2.get(),
-                    ModSounds.TRENCH_GOBLIN_ATTACK_3.get()
+                    FACSounds.TRENCH_GOBLIN_ATTACK_1.get(),
+                    FACSounds.TRENCH_GOBLIN_ATTACK_2.get(),
+                    FACSounds.TRENCH_GOBLIN_ATTACK_3.get()
             ), 1.0F, 1.0F);
         }
         return hit;
@@ -157,26 +157,26 @@ public class TrenchGoblinEntity extends GunnerEntity implements GeoEntity {
     protected SoundEvent getHurtSound(DamageSource damageSource) {
         return MobUtil.getSound(
                 this.random,
-                ModSounds.TRENCH_GOBLIN_HURT_1.get(),
-                ModSounds.TRENCH_GOBLIN_HURT_2.get(),
-                ModSounds.TRENCH_GOBLIN_HURT_3.get()
+                FACSounds.TRENCH_GOBLIN_HURT_1.get(),
+                FACSounds.TRENCH_GOBLIN_HURT_2.get(),
+                FACSounds.TRENCH_GOBLIN_HURT_3.get()
         );
     }
 
     protected SoundEvent getAmbientSound() {
         return MobUtil.getSound(
                 this.random,
-                ModSounds.TRENCH_GOBLIN_IDLE_1.get(),
-                ModSounds.TRENCH_GOBLIN_IDLE_2.get(),
-                ModSounds.TRENCH_GOBLIN_IDLE_3.get()
+                FACSounds.TRENCH_GOBLIN_IDLE_1.get(),
+                FACSounds.TRENCH_GOBLIN_IDLE_2.get(),
+                FACSounds.TRENCH_GOBLIN_IDLE_3.get()
         );
     }
 
     protected SoundEvent getDeathSound() {
         return MobUtil.getSound(
                 this.random,
-                ModSounds.TRENCH_GOBLIN_DEATH_1.get(),
-                ModSounds.TRENCH_GOBLIN_DEATH_2.get()
+                FACSounds.TRENCH_GOBLIN_DEATH_1.get(),
+                FACSounds.TRENCH_GOBLIN_DEATH_2.get()
         );
     }
 }

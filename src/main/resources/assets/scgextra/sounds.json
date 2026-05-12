@@ -1037,322 +1037,224 @@
             "scgextra:fac/trench_sniper/idle4"
         ]
     },
-    "neutral.ammo_goblin.idle_01": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:ammo_goblin_idle_01"
-        ]
+    "asghar_surgeon.attack1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_surgeon/attack1"]
     },
-    "neutral.ammo_goblin.idle_02": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:ammo_goblin_idle_02"
-        ]
+    "asghar_surgeon.attack2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_surgeon/attack2"]
     },
-    "neutral.ammo_goblin.hurt_01": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:ammo_goblin_hurt_01"
-        ]
+    "asghar_surgeon.death": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_surgeon/death"]
     },
-    "neutral.ammo_goblin.hurt_02": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:ammo_goblin_hurt_02"
-        ]
+    "asghar_surgeon.hurt1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_surgeon/hurt1"]
     },
-    "neutral.ammo_goblin.hurt_03": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:ammo_goblin_hurt_03"
-        ]
+    "asghar_surgeon.hurt2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_surgeon/hurt2"]
     },
-    "neutral.ammo_goblin.dead": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:ammo_goblin_dead"
-        ]
+    "asghar_surgeon.hurt3": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_surgeon/hurt3"]
     },
-    "neutral.big_lump.idle_01": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:big_lump_idle_01"
-        ]
+    "asghar_surgeon.hurt4": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_surgeon/hurt4"]
     },
-    "neutral.big_lump.idle_02": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:big_lump_idle_02"
-        ]
+    "asghar_surgeon.idle1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_surgeon/idle1"]
     },
-    "neutral.big_lump.idle_03": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:big_lump_idle_03"
-        ]
+    "asghar_surgeon.idle2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_surgeon/idle2"]
     },
-    "neutral.big_lump.hurt_01": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:big_lump_hurt_01"
-        ]
+    "asghar_surgeon.idle3": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_surgeon/idle3"]
     },
-    "neutral.big_lump.hurt_02": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:big_lump_hurt_02"
-        ]
+    "asghar_flamer.attack1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_flamer/attack1"]
     },
-    "neutral.big_lump.death": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:big_lump_death"
-        ]
+    "asghar_flamer.attack2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_flamer/attack2"]
     },
-    "neutral.end_crab.attack_01": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:end_crab_attack_01"
-        ]
+    "asghar_flamer.death": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_flamer/death"]
     },
-    "neutral.end_crab.idle_01": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:end_crab_idle_01"
-        ]
+    "asghar_flamer.hurt1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_flamer/hurt1"]
     },
-    "neutral.end_crab.idle_02": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:end_crab_idle_02"
-        ]
+    "asghar_flamer.hurt2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_flamer/hurt2"]
     },
-    "neutral.end_crab.hurt_01": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:end_crab_hurt_01"
-        ]
+    "asghar_flamer.idle1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_flamer/idle1"]
     },
-    "neutral.end_crab.hurt_02": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:end_crab_hurt_02"
-        ]
+    "asghar_flamer.idle2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_flamer/idle2"]
     },
-    "neutral.end_crab.death": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:end_crab_death"
-        ]
+    "asghar_flamer.idle3": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_flamer/idle3"]
     },
-    "neutral.end_dweller.charging": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:end_dweller_charging"
-        ]
+    "asghar_worker.claw": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_worker/claw"]
     },
-    "neutral.end_dweller.idle_01": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:end_dweller_idle_01"
-        ]
+    "asghar_worker.death": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_worker/death"]
     },
-    "neutral.end_dweller.idle_02": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:end_dweller_idle_02"
-        ]
+    "asghar_worker.hurt1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_worker/hurt1"]
     },
-    "neutral.end_dweller.idle_03": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:end_dweller_idle_03"
-        ]
+    "asghar_worker.hurt2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_worker/hurt2"]
     },
-    "neutral.end_dweller.hurt_01": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:end_dweller_hurt_01"
-        ]
+    "asghar_worker.hurt3": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_worker/hurt3"]
     },
-    "neutral.end_dweller.hurt_02": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:end_dweller_hurt_02"
-        ]
+    "asghar_worker.saw": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_worker/saw"]
     },
-    "neutral.end_pod.breed": {
-        "category": "neutral",
-        "sounds": [
-            "scgextra:end_pod_breed"
-        ]
+    "asghar_worker.walk": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/asghar_worker/walk"]
     },
-    "neutral.end_pod.idle_01": {
-        "category": "neutral",
-        "sounds": [
-            "scgextra:end_pod_idle_01"
-        ]
+    "candle_fiend.death": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/death"]
     },
-    "neutral.end_pod.idle_02": {
-        "category": "neutral",
-        "sounds": [
-            "scgextra:end_pod_idle_02"
-        ]
+    "candle_fiend.hurt1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/hurt1"]
     },
-    "neutral.end_pod.idle_03": {
-        "category": "neutral",
-        "sounds": [
-            "scgextra:end_pod_idle_03"
-        ]
+    "candle_fiend.hurt2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/hurt2"]
     },
-    "neutral.end_pod.idle_04": {
-        "category": "neutral",
-        "sounds": [
-            "scgextra:end_pod_idle_04"
-        ]
+    "candle_fiend.hurt3": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/hurt3"]
     },
-    "neutral.end_pod.idle_05": {
-        "category": "neutral",
-        "sounds": [
-            "scgextra:end_pod_idle_05"
-        ]
+    "candle_fiend.hurt4": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/hurt4"]
     },
-    "neutral.end_pod.death_01": {
-        "category": "neutral",
-        "sounds": [
-            "scgextra:end_pod_death_01"
-        ]
+    "candle_fiend.idle1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/idle1"]
     },
-    "neutral.end_pod.death_02": {
-        "category": "neutral",
-        "sounds": [
-            "scgextra:end_pod_death_02"
-        ]
+    "candle_fiend.idle2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/idle2"]
     },
-    "neutral.end_scorpion.idle_01": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:end_scorpion_idle_01"
-        ]
+    "candle_fiend.idle3": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/idle3"]
     },
-    "neutral.end_scorpion.idle_02": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:end_scorpion_idle_02"
-        ]
+    "candle_fiend.revive": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/revive"]
     },
-    "neutral.end_scorpion.idle_03": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:end_scorpion_idle_03"
-        ]
+    "candle_fiend.run": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/run"]
     },
-    "neutral.end_scorpion.hurt_01": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:end_scorpion_hurt_01"
-        ]
+    "candle_fiend.scream": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/scream"]
     },
-    "neutral.end_scorpion.hurt_02": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:end_scorpion_hurt_02"
-        ]
+    "candle_fiend.slash": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/slash"]
     },
-    "neutral.end_scorpion.sting": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:end_scorpion_sting"
-        ]
+    "candle_fiend.smash": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/smash"]
     },
-    "neutral.end_scorpion.death": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:end_scorpion_death"
-        ]
+    "candle_fiend.walk": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/walk"]
     },
-    "neutral.mutant_bat.idle_01": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:mutant_bat_idle_01"
-        ]
+    "candle_fiend.warning": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/candle_fiend/warning"]
     },
-    "neutral.mutant_bat.idle_02": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:mutant_bat_idle_02"
-        ]
+    "soul_ripper.attack1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/attack1"]
     },
-    "neutral.mutant_bat.idle_03": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:mutant_bat_idle_03"
-        ]
+    "soul_ripper.attack2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/attack2"]
     },
-    "neutral.mutant_bat.hurt": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:mutant_bat_hurt"
-        ]
+    "soul_ripper.death1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/death1"]
     },
-    "neutral.mutant_bat.scream": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:mutant_bat_scream"
-        ]
+    "soul_ripper.death2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/death2"]
     },
-    "neutral.mutant_bat.death": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:mutant_bat_death"
-        ]
+    "soul_ripper.hurt1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/hurt1"]
     },
-    "neutral.netherite_eater.breath": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:netherite_eater_breath"
-        ]
+    "soul_ripper.hurt2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/hurt2"]
     },
-    "neutral.netherite_eater.idle_01": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:netherite_eater_idle_01"
-        ]
+    "soul_ripper.hurt3": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/hurt3"]
     },
-    "neutral.netherite_eater.idle_02": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:netherite_eater_idle_02"
-        ]
+    "soul_ripper.hurt4": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/hurt4"]
     },
-    "neutral.netherite_eater.idle_03": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:netherite_eater_idle_03"
-        ]
+    "soul_ripper.idle1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/idle1"]
     },
-    "neutral.netherite_eater.idle_04": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:netherite_eater_idle_04"
-        ]
+    "soul_ripper.idle2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/idle2"]
     },
-    "neutral.netherite_eater.hurt_01": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:netherite_eater_hurt_01"
-        ]
+    "soul_ripper.idle3": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/idle3"]
     },
-    "neutral.netherite_eater.hurt_02": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:netherite_eater_hurt_02"
-        ]
+    "soul_ripper.lantern_shatter": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/lantern_shatter"]
     },
-    "neutral.netherite_eater.death": {
-        "category": "hostile",
-        "sounds": [
-            "scgextra:netherite_eater_death"
-        ]
+    "soul_ripper.revive1": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/revive1"]
+    },
+    "soul_ripper.revive2": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/revive2"]
+    },
+    "soul_ripper.revive3": {
+      "category": "hostile",
+      "sounds": ["scgextra:asgharian/soul_ripper/revive3"]
     }
 }

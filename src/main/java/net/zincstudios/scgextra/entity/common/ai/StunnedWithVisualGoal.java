@@ -14,9 +14,14 @@ public class StunnedWithVisualGoal <T extends PathfinderMob & Stunnable> extends
 
     private boolean smoking = false;
 
+    public StunnedWithVisualGoal(T mob, int cooldownLength) {
+        super(mob, cooldownLength);
+    }
+
     public StunnedWithVisualGoal(T mob) {
         super(mob);
     }
+
 
     public StunnedWithVisualGoal<T> smoking(boolean smoking) {
         this.smoking = smoking;

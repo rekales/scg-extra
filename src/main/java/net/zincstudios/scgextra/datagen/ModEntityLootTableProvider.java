@@ -14,7 +14,10 @@ import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import net.zincstudios.scgextra.entity.ModEntities;
+import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
+import net.zincstudios.scgextra.entity.fac.FACEntities;
+import net.zincstudios.scgextra.entity.rrc.RRCEntities;
+import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
 import top.ribs.scguns.init.ModBlocks;
 import top.ribs.scguns.init.ModItems;
 
@@ -32,89 +35,72 @@ public class ModEntityLootTableProvider extends EntityLootSubProvider {
     @Override
     public void generate() {
 
-        basicLoot(ModEntities.FISH_FOLK.get())
+        basicLoot(WhalerEntities.FISH_FOLK.get())
                 .range(ModItems.FROG_DART.get(), 1, 3)
                 .range(ModItems.ADVANCED_ROUND.get(), 1, 3)
                 .constant(Items.TROPICAL_FISH, 1);
-
-        basicLoot(ModEntities.SALMONSAUR.get())
+        basicLoot(WhalerEntities.SALMONSAUR.get())
                 .constant(Items.COD, 1)
                 .chance(Items.SADDLE,  0.2f);
-
-        basicLoot(ModEntities.TURTLEMAN.get())
+        basicLoot(WhalerEntities.TURTLEMAN.get())
                 .range(ModItems.SHOTBALL.get(), 1, 3)
                 .range(ModItems.ADVANCED_ROUND.get(), 1, 3)
                 .constant(Items.SCUTE, 1);
-
-        basicLoot(ModEntities.TENTACLIATOR.get())
+        basicLoot(WhalerEntities.TENTACLIATOR.get())
                 .range(ModItems.FROG_DART.get(), 1, 3)
                 .range(ModItems.ADVANCED_ROUND.get(), 1, 3)
                 .range(Items.INK_SAC, 1, 3);
-
-        basicLoot(ModEntities.GLOWING_TENTACLIATOR.get())
+        basicLoot(WhalerEntities.GLOWING_TENTACLIATOR.get())
                 .range(ModItems.FROG_DART.get(), 1, 3)
                 .range(ModItems.ADVANCED_ROUND.get(), 1, 3)
                 .range(Items.GLOW_INK_SAC, 1, 3);
-
-        basicLoot(ModEntities.PUFFICUS.get())
+        basicLoot(WhalerEntities.PUFFICUS.get())
                 .range(ModItems.FROG_DART.get(), 1, 3)
                 .range(ModItems.ADVANCED_ROUND.get(), 1, 3)
                 .constant(Items.PUFFERFISH, 1);
-
-        basicLoot(ModEntities.GUARDIAN_STATUE.get())
+        basicLoot(WhalerEntities.GUARDIAN_STATUE.get())
                 .constant(ModItems.OCEAN_FLARE.get(), 1)
                 .range(ModItems.BLUEPRINT_SCRAP.get(), 1, 2)
                 .range(Items.HEART_OF_THE_SEA, 1, 3)
                 .range(Items.PRISMARINE_SHARD, 3, 9);
-
-        basicLoot(ModEntities.ARMORED_WHALE.get())
+        basicLoot(WhalerEntities.ARMORED_WHALE.get())
                 .range(ModItems.BLUEPRINT_SCRAP.get(), 1, 2)
                 .constant(ModItems.LEVIATHAN_TOOTH.get(), 1)
                 .range(ModBlocks.SUPPLY_CRATE.get().asItem(), 3, 6);
 
-        basicLoot(ModEntities.FAC_TRENCHER.get())
+        basicLoot(FACEntities.FAC_TRENCHER.get())
                 .range(Items.IRON_NUGGET, 1, 3);
-
-        basicLoot(ModEntities.FAC_BLUECOAT.get())
+        basicLoot(FACEntities.FAC_BLUECOAT.get())
                 .range(Items.IRON_NUGGET, 1, 3);
-
-        basicLoot(ModEntities.TRENCH_GOBLIN.get())
+        basicLoot(FACEntities.TRENCH_GOBLIN.get())
                 .range(Items.IRON_NUGGET, 1, 3)
                 .range(ModItems.ANTHRALITE_NUGGET.get(), 1, 3);
-
-        basicLoot(ModEntities.TRENCH_SNIPER.get())
+        basicLoot(FACEntities.TRENCH_SNIPER.get())
                 .range(Items.IRON_NUGGET, 1, 3)
                 .range(ModItems.ANTHRALITE_INGOT.get(), 1, 3);
-
-        basicLoot(ModEntities.SHOVEL_KNIGHT.get())
+        basicLoot(FACEntities.SHOVEL_KNIGHT.get())
                 .range(Items.IRON_NUGGET, 1, 3)
                 .range(ModItems.ANTHRALITE_INGOT.get(), 1, 3);
-
-        basicLoot(ModEntities.FAC_TANK_BUSTER.get())
+        basicLoot(FACEntities.FAC_TANK_BUSTER.get())
                 .range(Items.IRON_NUGGET, 1, 3)
                 .range(ModItems.ANTHRALITE_NUGGET.get(), 1, 3)
                 .range(ModItems.MICROJET.get(), 1, 3);
-
-        basicLoot(ModEntities.FAC_LION.get())
+        basicLoot(FACEntities.FAC_LION.get())
                 .range(Items.IRON_INGOT, 1, 3)
                 .range(ModItems.ANTHRALITE_INGOT.get(), 1, 3);
-
-        basicLoot(ModEntities.FAC_COMMISSAR.get())
+        basicLoot(FACEntities.FAC_COMMISSAR.get())
                 .range(Items.IRON_INGOT, 1, 3)
                 .range(ModItems.BLUEPRINT_SCRAP.get(), 1, 2);
-
-        basicLoot(ModEntities.FAC_WALKER.get())
+        basicLoot(FACEntities.FAC_WALKER.get())
                 .range(ModItems.ANTHRALITE_INGOT.get(), 1, 3)
                 .range(Items.COAL, 1, 3);
-
-        basicLoot(ModEntities.FAC_TANK.get())
+        basicLoot(FACEntities.FAC_TANK.get())
                 .constant(ModItems.LABOR_TROPHY.get(), 1)
                 .range(Items.IRON_BLOCK, 1, 3)
                 .range(Items.COAL_BLOCK, 1, 3)
                 .range(ModItems.ANTHRALITE_INGOT.get(), 1, 3);
 
-
-        basicLoot(ModEntities.COPPER_KNIGHT.get())
+        basicLoot(RRCEntities.COPPER_KNIGHT.get())
                 .range(Items.COPPER_INGOT, 1, 3)
                 .altsChance(List.of(
                         ModItems.SCRAP_HELMET.get(),
@@ -122,39 +108,51 @@ public class ModEntityLootTableProvider extends EntityLootSubProvider {
                         ModItems.SCRAP_LEGGINGS.get(),
                         ModItems.SCRAP_BOOTS.get()
                 ), 0.1F);
-
-        basicLoot(ModEntities.DRONE.get())
+        basicLoot(RRCEntities.DRONE.get())
                 .range(Items.COPPER_INGOT, 1, 3)
                 .range(Items.GUNPOWDER, 3, 5);
-
-        basicLoot(ModEntities.TALLMAN.get())
+        basicLoot(RRCEntities.TALLMAN.get())
                 .range(Items.COPPER_INGOT, 1, 3);
-
-        basicLoot(ModEntities.SCOUT.get())
+        basicLoot(RRCEntities.SCOUT.get())
                 .range(ModItems.SMALL_COPPER_CASING.get(), 1, 3);
-
-        basicLoot(ModEntities.OPPRESSOR.get())
+        basicLoot(RRCEntities.OPPRESSOR.get())
                 .range(ModItems.BLUEPRINT_SCRAP.get(), 1, 2)
                 .range(Items.COPPER_INGOT, 1, 3);
-
-        basicLoot(ModEntities.SPRING_JUNKIE.get())
+        basicLoot(RRCEntities.SPRING_JUNKIE.get())
                 .range(Items.GUNPOWDER, 1, 3)
                 .range(ModItems.FLECHETTE.get(), 1, 3);
-
-        basicLoot(ModEntities.FLAMING_HEAD.get())
+        basicLoot(RRCEntities.FLAMING_HEAD.get())
                 .constant(ModItems.RUSTY_MEDAL.get(), 1)
                 .range(ModItems.BLAZE_FUEL.get(), 3, 6)
                 .range(Items.COPPER_BLOCK, 1, 3);
-
-        basicLoot(ModEntities.SCRAP_GUARD.get())
+        basicLoot(RRCEntities.SCRAP_GUARD.get())
                 .range(Items.COPPER_INGOT, 1, 3)
                 .range(ModItems.BLUEPRINT_SCRAP.get(), 1, 2)
                 .range(ModItems.NEEDLE.get(), 1, 3);
-
-        basicLoot(ModEntities.ARC_PSYCHO.get())
+        basicLoot(RRCEntities.ARC_PSYCHO.get())
                 .range(Items.REDSTONE, 1, 3)
                 .range(ModItems.SHOCK_CELL.get(), 1, 3);
 
+        basicLoot(AsgharianEntities.FAILED_ONE.get())
+                .range(Items.ROTTEN_FLESH, 1, 3)
+                .range(Items.CLAY_BALL, 1, 3);
+        basicLoot(AsgharianEntities.ASGHAR_SURGEON.get())
+                .range(Items.RED_CANDLE, 1, 3)
+                .chance(ModItems.DIAMOND_STEEL_INGOT.get(), 0.5f);
+        basicLoot(AsgharianEntities.ASGHAR_WORKER.get())
+                .range(Items.REDSTONE, 1, 3)
+                .constant(ModItems.DEPLETED_DIAMOND_STEEL_INGOT.get(), 1);
+        basicLoot(AsgharianEntities.ASGHAR_FLAMER.get())
+                .range(Items.GUNPOWDER, 1, 3)
+                .constant(ModItems.DEPLETED_DIAMOND_STEEL_INGOT.get(), 1);
+        basicLoot(AsgharianEntities.CANDLE_FIEND.get())
+                .range(Items.RED_CANDLE, 3, 6)
+                .range(ModItems.BLUEPRINT_SCRAP.get(), 1, 3)
+                .constant(ModItems.CERIMONIAL_COD.get(), 1);
+        basicLoot(AsgharianEntities.SOUL_RIPPER.get())
+                .range(Items.SOUL_LANTERN, 1, 3)
+                .range(ModItems.DEPLETED_DIAMOND_STEEL_INGOT.get(), 1, 3)
+                .constant(ModItems.CERIMONIAL_COD.get(), 1);
     }
 
     // don't use this for more complex loot tables

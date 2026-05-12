@@ -19,7 +19,7 @@ import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.rrc.scout.ScoutEntity;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.sounds.FACSounds;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
@@ -115,27 +115,27 @@ public class FacTrencherEntity extends ScoutEntity {
     protected SoundEvent getHurtSound(DamageSource damageSource) {
         return MobUtil.getSound(
                 this.random,
-                ModSounds.FAC_TRENCHER_HURT_1.get(),
-                ModSounds.FAC_TRENCHER_HURT_2.get(),
-                ModSounds.FAC_TRENCHER_HURT_3.get()
+                FACSounds.FAC_TRENCHER_HURT_1.get(),
+                FACSounds.FAC_TRENCHER_HURT_2.get(),
+                FACSounds.FAC_TRENCHER_HURT_3.get()
         );
     }
 
     protected SoundEvent getAmbientSound() {
         return MobUtil.getSound(
                 this.random,
-                ModSounds.FAC_TRENCHER_IDLE_1.get(),
-                ModSounds.FAC_TRENCHER_IDLE_2.get(),
-                ModSounds.FAC_TRENCHER_IDLE_3.get()
+                FACSounds.FAC_TRENCHER_IDLE_1.get(),
+                FACSounds.FAC_TRENCHER_IDLE_2.get(),
+                FACSounds.FAC_TRENCHER_IDLE_3.get()
         );
     }
 
     protected SoundEvent getDeathSound() {
         return MobUtil.getSound(
                 this.random,
-                ModSounds.FAC_TRENCHER_DEATH_1.get(),
-                ModSounds.FAC_TRENCHER_DEATH_2.get(),
-                ModSounds.FAC_TRENCHER_DEATH_3.get()
+                FACSounds.FAC_TRENCHER_DEATH_1.get(),
+                FACSounds.FAC_TRENCHER_DEATH_2.get(),
+                FACSounds.FAC_TRENCHER_DEATH_3.get()
         );
     }
 }

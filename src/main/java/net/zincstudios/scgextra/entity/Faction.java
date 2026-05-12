@@ -10,8 +10,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.TagsUpdatedEvent;
 import net.zincstudios.scgextra.SCGExtra;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 @ParametersAreNonnullByDefault
@@ -21,20 +23,8 @@ public record Faction(String name) {
     private static final String FACTION_NAMESPACE = "scgextra";
     private static final String FACTION_PATH_PREFIX = "factions/";
     public static final Faction NO_FACTION = new Faction("none");
-    private static final Faction ASGHARIAN = new Faction("asgharian");
-    private static final Faction COG = new Faction("cog");
-    private static final Faction FAC = new Faction("fac");
-    private static final Faction RRC = new Faction("rrc");
-    private static final Faction WHALER = new Faction("whaler");
     private static final Map<TagKey<EntityType<?>>, Faction> KEY_FACTION_MAP = new HashMap<>();
     private static final Map<EntityType<?>, Faction> ENTITY_FACTION_CACHE = new HashMap<>();
-    private static final Map<TagKey<EntityType<?>>, Faction> STATIC_FACTION_TAG_MAP = Map.of(
-            EntityTypeTags.ASGHARIAN, ASGHARIAN,
-            EntityTypeTags.COG, COG,
-            EntityTypeTags.FAC, FAC,
-            EntityTypeTags.RRC, RRC,
-            EntityTypeTags.WHALER, WHALER
-    );
 
     public static void onTagsUpdated(TagsUpdatedEvent event) {
         KEY_FACTION_MAP.clear();
@@ -70,46 +60,37 @@ public record Faction(String name) {
                     return entry.getValue();
                 }
             }
-            for (Map.Entry<TagKey<EntityType<?>>, Faction> entry : STATIC_FACTION_TAG_MAP.entrySet()) {
-                if (entityType.is(entry.getKey())) {
-                    ENTITY_FACTION_CACHE.put(entityType, entry.getValue());
-                    return entry.getValue();
-                }
-            }
             ENTITY_FACTION_CACHE.put(entityType, NO_FACTION);
             return NO_FACTION;
         }
         return faction;
     }
 
+    public static @Nullable Faction getFaction(String factionName) {
+        return KEY_FACTION_MAP.values().stream()
+                .filter(faction -> faction.name.equals(factionName))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public static List<EntityType<?>> getFactionEntities(Faction faction) {
+        return ENTITY_FACTION_CACHE.entrySet().stream()
+                .filter(e -> e.getValue() == faction)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+    }
+
     public static boolean isEnemies(LivingEntity entity1, LivingEntity entity2) {
         Faction f1 = getFaction(entity1.getType());
         Faction f2 = getFaction(entity2.getType());
 
-        if (f1.equals(NO_FACTION) || f2.equals(NO_FACTION)) {
-            return false;
-        }
-
-        if (f1.equals(f2)) {
-            return false;
-        }
-
-        return !isCrossFactionAlliance(f1, f2);
+        return f1 != NO_FACTION && f2 != NO_FACTION && f1 != f2;
     }
 
     public static boolean isFriendlies(LivingEntity entity1, LivingEntity entity2) {
         Faction f1 = getFaction(entity1.getType());
         Faction f2 = getFaction(entity2.getType());
 
-        if (f1.equals(NO_FACTION) || f2.equals(NO_FACTION)) {
-            return false;
-        }
-
-        return f1.equals(f2) || isCrossFactionAlliance(f1, f2);
-    }
-
-    private static boolean isCrossFactionAlliance(Faction f1, Faction f2) {
-        return (f1.name.equals("fac") && f2.name.equals("whaler"))
-                || (f1.name.equals("whaler") && f2.name.equals("fac"));
+        return f1 != NO_FACTION && f1 == f2;
     }
 }

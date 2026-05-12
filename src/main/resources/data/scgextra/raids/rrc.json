@@ -1,0 +1,57 @@
+{
+  "raid_id" : "rrc",
+  "raid_original_id" : "copper",
+
+  "raid_profile" : {
+    "first_wave" : {
+      "infantry": 4
+    },
+    "second_wave" : {
+      "infantry": 3,
+      "elite": 1
+    },
+    "third_wave" : {
+      "infantry": 2,
+      "elite": 2,
+      "miniboss": 1
+    },
+    "boss_wave" : {
+    }
+  },
+
+  "infantry" : [
+    {
+      "entity_id": "scgextra:copper_knight"
+    },
+    {
+      "entity_id": "scgextra:scout"
+    },
+    {
+      "entity_id": "scgextra:tallman"
+    }
+  ],
+  "elite" : [
+    {
+      "entity_id": "scgextra:spring_junkie"
+    },
+    {
+      "entity_id": "scgextra:scrap_guard"
+    },
+    {
+      "entity_id": "scgextra:arc_psycho"
+    }
+  ],
+  "miniboss" : [
+    {
+      "entity_id": "scgextra:drone"
+    },
+    {
+      "entity_id": "scgextra:oppressor"
+    }
+  ],
+  "boss" : [
+    {
+      "entity_id": "scgextra:flaming_head"
+    }
+  ]
+}

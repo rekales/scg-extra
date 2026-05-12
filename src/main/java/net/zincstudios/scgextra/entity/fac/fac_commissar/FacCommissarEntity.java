@@ -16,13 +16,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.zincstudios.scgextra.entity.Faction;
-import net.zincstudios.scgextra.entity.ModEntities;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.entity.fac.FACEntities;
 import net.zincstudios.scgextra.item.HurtEffects;
 import net.zincstudios.scgextra.item.ModItems;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.sounds.FACSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -61,7 +61,7 @@ public class FacCommissarEntity extends GunnerEntity implements GeoEntity {
     protected void registerGoals() {
         this.goalSelector.addGoal(3, new FacCommissarAlertGoal(this, 200, true));
         this.goalSelector.addGoal(4, new FacCommissarFlareSummonGoal(this, 400, 60,
-                ModEntities.FAC_TRENCHER.get(), ModEntities.FAC_BLUECOAT.get(), ModEntities.TRENCH_GOBLIN.get()));
+                FACEntities.FAC_TRENCHER.get(), FACEntities.FAC_BLUECOAT.get(), FACEntities.TRENCH_GOBLIN.get()));
         this.goalSelector.addGoal(5, new FacCommissarSaberMeleeGoal(this, 1.05D, false));
         this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 0.95D));
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -194,8 +194,8 @@ public class FacCommissarEntity extends GunnerEntity implements GeoEntity {
         if (hit) {
             this.playSound(MobUtil.getSound(
                     this.random,
-                    ModSounds.FAC_COMMISSAR_ATTACK_1.get(),
-                    ModSounds.FAC_COMMISSAR_ATTACK_2.get()
+                    FACSounds.FAC_COMMISSAR_ATTACK_1.get(),
+                    FACSounds.FAC_COMMISSAR_ATTACK_2.get()
             ), 1.0F, 1.0F);
             if (this.getMainHandItem().is(ModItems.CAVALRY_SABER.get())
                     || this.getOffhandItem().is(ModItems.CAVALRY_SABER.get())) {
@@ -226,29 +226,29 @@ public class FacCommissarEntity extends GunnerEntity implements GeoEntity {
     protected SoundEvent getHurtSound(DamageSource damageSource) {
         return MobUtil.getSound(
                 this.random,
-                ModSounds.FAC_COMMISSAR_HURT_1.get(),
-                ModSounds.FAC_COMMISSAR_HURT_2.get(),
-                ModSounds.FAC_COMMISSAR_HURT_3.get(),
-                ModSounds.FAC_COMMISSAR_HURT_4.get()
+                FACSounds.FAC_COMMISSAR_HURT_1.get(),
+                FACSounds.FAC_COMMISSAR_HURT_2.get(),
+                FACSounds.FAC_COMMISSAR_HURT_3.get(),
+                FACSounds.FAC_COMMISSAR_HURT_4.get()
         );
     }
 
     protected SoundEvent getAmbientSound() {
         return MobUtil.getSound(
                 this.random,
-                ModSounds.FAC_COMMISSAR_IDLE_1.get(),
-                ModSounds.FAC_COMMISSAR_IDLE_2.get(),
-                ModSounds.FAC_COMMISSAR_IDLE_3.get(),
-                ModSounds.FAC_COMMISSAR_IDLE_4.get(),
-                ModSounds.FAC_COMMISSAR_LINE_2.get()
+                FACSounds.FAC_COMMISSAR_IDLE_1.get(),
+                FACSounds.FAC_COMMISSAR_IDLE_2.get(),
+                FACSounds.FAC_COMMISSAR_IDLE_3.get(),
+                FACSounds.FAC_COMMISSAR_IDLE_4.get(),
+                FACSounds.FAC_COMMISSAR_LINE_2.get()
         );
     }
 
     protected SoundEvent getDeathSound() {
         return MobUtil.getSound(
                 this.random,
-                ModSounds.FAC_COMMISSAR_DEATH_1.get(),
-                ModSounds.FAC_COMMISSAR_DEATH_2.get()
+                FACSounds.FAC_COMMISSAR_DEATH_1.get(),
+                FACSounds.FAC_COMMISSAR_DEATH_2.get()
         );
     }
 }

@@ -1,11 +1,11 @@
 package net.zincstudios.scgextra.mixin;
 
+import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import net.zincstudios.scgextra.entity.ModEntities;
 import net.zincstudios.scgextra.entity.whaler.guardian_statue.GuardianStatueEntity;
 
 import net.minecraft.core.BlockPos;
@@ -22,7 +22,7 @@ public class OceanMonumentEntryRoomMixin {
     private void onGenerateWing(boolean pWing, int pX, WorldGenLevel pLevel, RandomSource pRandom, BoundingBox pBox, CallbackInfo ci){
         if(!spawned){
             BlockPos pos = pBox.getCenter();
-            GuardianStatueEntity entity = new GuardianStatueEntity(ModEntities.GUARDIAN_STATUE.get(), pLevel.getLevel());
+            GuardianStatueEntity entity = new GuardianStatueEntity(WhalerEntities.GUARDIAN_STATUE.get(), pLevel.getLevel());
             entity.moveTo(pos.below(70), 0, 0);
             pLevel.addFreshEntity(entity);
             spawned = true;

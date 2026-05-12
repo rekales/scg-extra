@@ -17,10 +17,12 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidType;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.item.ModItems;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
@@ -287,5 +289,9 @@ public class ArmoredWhaleEntity extends Monster implements GeoEntity {
 
     public int getLayerN(){
         return this.entityData.get(WATER_LEVEL);
+    }
+    @Override
+    public ItemStack getPickResult() {
+        return ModItems.ARMORED_WHALE_SPAWN_EGG.get().getDefaultInstance();
     }
 }

@@ -22,15 +22,14 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.zincstudios.scgextra.entity.Faction;
-import net.zincstudios.scgextra.entity.ModEntities;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.ai.AlertFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.FlareSummonGoal;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.client.ExpandedAnimationController;
-import net.zincstudios.scgextra.sounds.ModSounds;
-
+import net.zincstudios.scgextra.entity.rrc.RRCEntities;
+import net.zincstudios.scgextra.sounds.RRCSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -65,7 +64,7 @@ public class OppressorEntity extends GunnerEntity implements GeoEntity {
         // TODO: custom gun attack goal
         this.goalSelector.addGoal(3, new AlertFactionGoal(this, 200));
         this.goalSelector.addGoal(4, new FlareSummonGoal(this, 400, 60,
-                ModEntities.SCOUT.get(), ModEntities.TALLMAN.get(), ModEntities.COPPER_KNIGHT.get()));//400 cause you halve the cooldown in the goal
+                RRCEntities.SCOUT.get(), RRCEntities.TALLMAN.get(), RRCEntities.COPPER_KNIGHT.get()));//400 cause you halve the cooldown in the goal
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
@@ -210,16 +209,16 @@ public class OppressorEntity extends GunnerEntity implements GeoEntity {
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
         return MobUtil.getSound(
             this.random, 
-            ModSounds.RRC_OPPRESSOR_HURT_1.get(), 
-            ModSounds.RRC_OPPRESSOR_HURT_2.get()
+            RRCSounds.RRC_OPPRESSOR_HURT_1.get(), 
+            RRCSounds.RRC_OPPRESSOR_HURT_2.get()
         );
     };
     protected SoundEvent getAmbientSound() {
         return MobUtil.getSound(
             this.random,
-            ModSounds.RRC_OPPRESSOR_IDLE_1.get(),
-            ModSounds.RRC_OPPRESSOR_IDLE_2.get(),
-            ModSounds.RRC_OPPRESSOR_IDLE_3.get()
+            RRCSounds.RRC_OPPRESSOR_IDLE_1.get(),
+            RRCSounds.RRC_OPPRESSOR_IDLE_2.get(),
+            RRCSounds.RRC_OPPRESSOR_IDLE_3.get()
         );
     };
     protected SoundEvent getStepSound() {
@@ -228,8 +227,8 @@ public class OppressorEntity extends GunnerEntity implements GeoEntity {
     protected SoundEvent getDeathSound() {
         return MobUtil.getSound(
             this.random,
-            ModSounds.RRC_OPPRESSOR_DEATH_1.get(),
-            ModSounds.RRC_OPPRESSOR_DEATH_2.get()
+            RRCSounds.RRC_OPPRESSOR_DEATH_1.get(),
+            RRCSounds.RRC_OPPRESSOR_DEATH_2.get()
         );
     };
     protected void playStepSound(BlockPos pPos, BlockState pBlock) {

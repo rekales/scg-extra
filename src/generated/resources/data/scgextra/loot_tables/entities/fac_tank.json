@@ -9,10 +9,7 @@
           "functions": [
             {
               "add": false,
-              "count": {
-                "type": "minecraft:constant",
-                "value": 1.0
-              },
+              "count": 1.0,
               "function": "minecraft:set_count"
             }
           ],

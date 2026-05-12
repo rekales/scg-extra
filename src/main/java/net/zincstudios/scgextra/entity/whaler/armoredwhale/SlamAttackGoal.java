@@ -2,7 +2,7 @@ package net.zincstudios.scgextra.entity.whaler.armoredwhale;
 
 import java.util.List;
 import net.zincstudios.scgextra.entity.Faction;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.sounds.WhalerSounds;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -65,7 +65,7 @@ public class SlamAttackGoal extends Goal{
             this.entity.level().playSound(
                 this.entity, 
                 this.entity.blockPosition(), 
-                this.entity.getRandom().nextBoolean() ? ModSounds.WHALE_SLAM_1.get() : ModSounds.WHALE_SLAM_2.get(), 
+                this.entity.getRandom().nextBoolean() ? WhalerSounds.WHALE_SLAM_1.get() : WhalerSounds.WHALE_SLAM_2.get(), 
                 SoundSource.MASTER, 
                 2.0F, 
                 1.0F

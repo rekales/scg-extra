@@ -26,7 +26,7 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.sounds.RRCSounds;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 
@@ -98,24 +98,24 @@ public class ArcPsychoEntity extends Monster implements GeoEntity{
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
         return MobUtil.getSound(
             this.random, 
-            ModSounds.RRC_ARC_PSYCHO_HURT_1.get(),
-            ModSounds.RRC_ARC_PSYCHO_HURT_2.get(),
-            ModSounds.RRC_ARC_PSYCHO_HURT_3.get()
+            RRCSounds.RRC_ARC_PSYCHO_HURT_1.get(),
+            RRCSounds.RRC_ARC_PSYCHO_HURT_2.get(),
+            RRCSounds.RRC_ARC_PSYCHO_HURT_3.get()
         );
     };
     protected SoundEvent getAmbientSound() {
         return MobUtil.getSound(
             this.random, 
-            ModSounds.RRC_ARC_PSYCHO_IDLE_1.get(),
-            ModSounds.RRC_ARC_PSYCHO_IDLE_2.get(),
-            ModSounds.RRC_ARC_PSYCHO_IDLE_3.get()
+            RRCSounds.RRC_ARC_PSYCHO_IDLE_1.get(),
+            RRCSounds.RRC_ARC_PSYCHO_IDLE_2.get(),
+            RRCSounds.RRC_ARC_PSYCHO_IDLE_3.get()
         );
     };
     protected SoundEvent getDeathSound() {
         return MobUtil.getSound(
             this.random, 
-            ModSounds.RRC_ARC_PSYCHO_DEAD_1.get(), 
-            ModSounds.RRC_ARC_PSYCHO_DEAD_2.get()
+            RRCSounds.RRC_ARC_PSYCHO_DEAD_1.get(), 
+            RRCSounds.RRC_ARC_PSYCHO_DEAD_2.get()
         );
     };
     protected float getSoundVolume() {

@@ -2,10 +2,12 @@ package net.zincstudios.scgextra;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.config.ModConfig;
+import net.zincstudios.scgextra.data.RaidDataLoader;
 import net.zincstudios.scgextra.datagen.DataGenerators;
 import net.zincstudios.scgextra.effects.ModEffects;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.ModEntities;
+
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.resources.ResourceLocation;
@@ -17,6 +19,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import net.zincstudios.scgextra.item.ModItems;
 import net.zincstudios.scgextra.particle.ModParticleTypes;
+import net.zincstudios.scgextra.raid.WaveRaidManager;
 import net.zincstudios.scgextra.sounds.ModSounds;
 
 import org.slf4j.Logger;
@@ -45,7 +48,10 @@ public class SCGExtra
         modEventBus.addListener(CommonConfig::onLoad);
         modEventBus.addListener(CommonConfig::onReload);
 
+        MinecraftForge.EVENT_BUS.addListener(WaveRaidManager::onLevelTick);
+        MinecraftForge.EVENT_BUS.addListener(WaveRaidManager::onLevelLoad);
         MinecraftForge.EVENT_BUS.addListener(Faction::onTagsUpdated);
+        MinecraftForge.EVENT_BUS.addListener(RaidDataLoader::onAddReloadListeners);
 
         modEventBus.addListener(DataGenerators::gatherData);
     }

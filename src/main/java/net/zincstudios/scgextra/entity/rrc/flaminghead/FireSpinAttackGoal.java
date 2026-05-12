@@ -3,16 +3,16 @@ package net.zincstudios.scgextra.entity.rrc.flaminghead;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.sounds.RRCSounds;
 
 import java.util.EnumSet;
 
 public class FireSpinAttackGoal extends Goal{
 
     protected static final SoundEvent[] SPIN_SOUNDS = {
-            ModSounds.RRC_FLAMING_HEAD_SPIN_1.get(),
-            ModSounds.RRC_FLAMING_HEAD_SPIN_2.get(),
-            ModSounds.RRC_FLAMING_HEAD_SPIN_3.get()
+            RRCSounds.RRC_FLAMING_HEAD_SPIN_1.get(),
+            RRCSounds.RRC_FLAMING_HEAD_SPIN_2.get(),
+            RRCSounds.RRC_FLAMING_HEAD_SPIN_3.get()
     }; 
 
     protected final FlamingHeadEntity mob;
