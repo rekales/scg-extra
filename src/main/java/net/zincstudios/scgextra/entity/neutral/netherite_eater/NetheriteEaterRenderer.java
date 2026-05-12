@@ -10,6 +10,11 @@ public class NetheriteEaterRenderer extends GeoEntityRenderer<NetheriteEaterEnti
         super(context, new DefaultedEntityGeoModel<>(SCGExtra.asResource("neutral/netherite_eater"), false));
         this.shadowRadius = 0.95F;
     }
+
+    @Override
+    protected float getDeathMaxRotation(NetheriteEaterEntity animatable) {
+        return 0.0F;
+    }
 }
 
 
