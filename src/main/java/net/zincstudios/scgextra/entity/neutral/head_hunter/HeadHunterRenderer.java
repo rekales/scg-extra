@@ -1,14 +1,87 @@
 package net.zincstudios.scgextra.entity.neutral.head_hunter;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.zincstudios.scgextra.SCGExtra;
+import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer;
 
 public class HeadHunterRenderer extends GeoEntityRenderer<HeadHunterEntity> {
+    private static final float HEAD_SWORD_TX = 0.0F;
+    private static final float HEAD_SWORD_TY = 0.0F;
+    private static final float HEAD_SWORD_TZ = 0.0F;
+    private static final float HEAD_SWORD_RX = 0.0F;
+    private static final float HEAD_SWORD_RY = 0.0F;
+    private static final float HEAD_SWORD_RZ = 0.0F;
+    private static final float HEAD_SWORD_SCALE = 0.9F;
+
+    private static final float LEFT_WEAPON_TX = 0.0F;
+    private static final float LEFT_WEAPON_TY = 0.0F;
+    private static final float LEFT_WEAPON_TZ = 0.0F;
+    private static final float LEFT_WEAPON_RX = 0.0F;
+    private static final float LEFT_WEAPON_RY = 0.0F;
+    private static final float LEFT_WEAPON_RZ = 0.0F;
+    private static final float LEFT_WEAPON_SCALE = 0.9F;
+
     public HeadHunterRenderer(EntityRendererProvider.Context context) {
         super(context, new DefaultedEntityGeoModel<>(SCGExtra.asResource("neutral/head_hunter"), false));
         this.shadowRadius = 0.65F;
+
+        addRenderLayer(new BlockAndItemGeoLayer<>(this) {
+            @Override
+            protected ItemStack getStackForBone(GeoBone bone, HeadHunterEntity animatable) {
+                String boneName = bone.getName();
+
+                if ("head_sword".equals(boneName) || "left_weapon".equals(boneName)) {
+                    return new ItemStack(Items.STONE_SWORD);
+                }
+
+                return null;
+            }
+
+            @Override
+            protected ItemDisplayContext getTransformTypeForStack(GeoBone bone, ItemStack stack, HeadHunterEntity animatable) {
+                return ItemDisplayContext.NONE;
+            }
+
+            @Override
+            protected void renderStackForBone(PoseStack poseStack, GeoBone bone, ItemStack stack, HeadHunterEntity animatable,
+                                              MultiBufferSource bufferSource, float partialTick, int packedLight, int packedOverlay) {
+                String boneName = bone.getName();
+
+                if ("head_sword".equals(boneName)) {
+                    poseStack.pushPose();
+                    poseStack.translate(-0.04, -0.08, 0.35);
+                    poseStack.mulPose(com.mojang.math.Axis.XP.rotationDegrees(0F));
+                    poseStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(-90F));
+                    poseStack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(-45F));
+                    poseStack.scale(HEAD_SWORD_SCALE, HEAD_SWORD_SCALE, HEAD_SWORD_SCALE);
+                    super.renderStackForBone(poseStack, bone, stack, animatable, bufferSource, partialTick, packedLight, packedOverlay);
+                    poseStack.popPose();
+                    return;
+                }
+
+                if ("left_weapon".equals(boneName)) {
+                    poseStack.pushPose();
+                    poseStack.translate(LEFT_WEAPON_TX, LEFT_WEAPON_TY, -0.35);
+                    poseStack.mulPose(com.mojang.math.Axis.XP.rotationDegrees(270.0F));
+                    poseStack.mulPose(com.mojang.math.Axis.YP.rotationDegrees(90.0F));
+                    poseStack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(45.0F));
+                    poseStack.scale(LEFT_WEAPON_SCALE, LEFT_WEAPON_SCALE, LEFT_WEAPON_SCALE);
+                    super.renderStackForBone(poseStack, bone, stack, animatable, bufferSource, partialTick, packedLight, packedOverlay);
+                    poseStack.popPose();
+                    return;
+                }
+
+                super.renderStackForBone(poseStack, bone, stack, animatable, bufferSource, partialTick, packedLight, packedOverlay);
+            }
+        });
     }
 
     @Override
@@ -16,5 +89,3 @@ public class HeadHunterRenderer extends GeoEntityRenderer<HeadHunterEntity> {
         return 0.0F;
     }
 }
-
-

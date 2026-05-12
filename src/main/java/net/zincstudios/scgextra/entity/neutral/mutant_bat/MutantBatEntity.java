@@ -9,6 +9,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
@@ -29,6 +30,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.sounds.ModSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -43,13 +45,14 @@ public class MutantBatEntity extends Monster implements GeoEntity {
     private static final int SCREAM_COOLDOWN_TICKS = 220;
     private static final int SCREAM_EFFECT_TICKS = 180;
     private static final int SCREAM_NAUSEA_AMPLIFIER = 2;
-    private static final int SCREAM_ANIM_TICKS = 40;
+    private static final int SCREAM_ANIM_TICKS = 50; 
     private static final int MELEE_ATTACK_INTERVAL_TICKS = 42;
     private static final int BITE_LOCK_TICKS = 20;
-    private static final int MELEE_HIT_DELAY_MIN_TICKS = 6;
-    private static final int MELEE_HIT_DELAY_MAX_TICKS = 7;
+    private static final int MELEE_HIT_DELAY_TICKS = 15; 
+    private static final int DEATH_ANIM_TICKS = 40; 
     private static final float SCREAM_RANGE = 6.0F;
     private static final float SCREAM_DAMAGE = 3.0F;
+    private static final double RUN_SPEED_MULTIPLIER = 0.4D;
     private static final double MELEE_CHASE_SPEED = 1.44D;
     private static final EntityDataAccessor<Integer> SCREAM_LOCK_TICKS =
             SynchedEntityData.defineId(MutantBatEntity.class, EntityDataSerializers.INT);
@@ -118,6 +121,7 @@ public class MutantBatEntity extends Monster implements GeoEntity {
         if (this.isScreaming()) {
             this.getNavigation().stop();
             this.setSprinting(false);
+            this.setDeltaMovement(0.0D, 0.0D, 0.0D);
             this.faceCurrentTarget();
         }
 
@@ -125,8 +129,12 @@ public class MutantBatEntity extends Monster implements GeoEntity {
         boolean runAnim = !this.isScreaming()
                 && target != null
                 && target.isAlive()
-                && this.distanceTo(target) > 3.0F;
+                && this.distanceTo(target) > 4.0F;
         this.entityData.set(RUN_ANIM, runAnim);
+        if (runAnim) {
+            Vec3 motion = this.getDeltaMovement();
+            this.setDeltaMovement(motion.x * RUN_SPEED_MULTIPLIER, motion.y, motion.z * RUN_SPEED_MULTIPLIER);
+        }
 
         if (this.isScreaming() || target == null || !target.isAlive() || this.distanceTo(target) > SCREAM_RANGE) {
             return;
@@ -186,9 +194,7 @@ public class MutantBatEntity extends Monster implements GeoEntity {
             return;
         }
         this.pendingMeleeTarget = target;
-        this.pendingMeleeDamageTicks = this.random.nextInt(
-                MELEE_HIT_DELAY_MAX_TICKS - MELEE_HIT_DELAY_MIN_TICKS + 1
-        ) + MELEE_HIT_DELAY_MIN_TICKS;
+        this.pendingMeleeDamageTicks = MELEE_HIT_DELAY_TICKS;
     }
 
     private void tickPendingMeleeDamage() {
@@ -246,6 +252,15 @@ public class MutantBatEntity extends Monster implements GeoEntity {
     @Override
     public boolean doHurtTarget(Entity target) {
         return super.doHurtTarget(target);
+    }
+
+    @Override
+    protected void tickDeath() {
+        this.deathTime++;
+        if (this.deathTime >= DEATH_ANIM_TICKS && !this.level().isClientSide()) {
+            this.level().broadcastEntityEvent(this, (byte) 60);
+            this.remove(RemovalReason.KILLED);
+        }
     }
 
     @Override

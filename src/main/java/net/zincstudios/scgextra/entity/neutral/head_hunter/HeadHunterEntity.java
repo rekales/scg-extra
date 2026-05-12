@@ -37,7 +37,8 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 public class HeadHunterEntity extends Monster implements GeoEntity {
     private static final int ATTACK_LOCK_TICKS = 40;
     private static final int ATTACK_COOLDOWN_TICKS = 46;
-    private static final int ATTACK_HIT_DELAY_TICKS = 18;
+    private static final int ATTACK_FIRST_HIT_DELAY_TICKS = 10;  
+    private static final int ATTACK_SECOND_HIT_DELAY_TICKS = 29; 
     private static final int DEATH_ANIM_TICKS = 56;
     private static final EntityDataAccessor<Integer> ATTACK_LOCK =
             SynchedEntityData.defineId(HeadHunterEntity.class, EntityDataSerializers.INT);
@@ -47,7 +48,8 @@ public class HeadHunterEntity extends Monster implements GeoEntity {
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private int attackCooldown;
     private LivingEntity pendingAttackTarget;
-    private int pendingAttackTicks = -1;
+    private int pendingFirstHitTicks = -1;
+    private int pendingSecondHitTicks = -1;
 
     public HeadHunterEntity(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -128,7 +130,7 @@ public class HeadHunterEntity extends Monster implements GeoEntity {
     private void startAttackLock() {
         this.entityData.set(ATTACK_LOCK, ATTACK_LOCK_TICKS);
         this.attackCooldown = ATTACK_COOLDOWN_TICKS;
-        this.triggerAnim("attack", "attack_animation");
+        this.triggerAnim("attack", "attack");
     }
 
     private void faceTargetDuringAttack() {
@@ -142,26 +144,43 @@ public class HeadHunterEntity extends Monster implements GeoEntity {
     private void scheduleDelayedAttack(LivingEntity target) {
         if (target == null || !target.isAlive()) {
             this.pendingAttackTarget = null;
-            this.pendingAttackTicks = -1;
+            this.pendingFirstHitTicks = -1;
+            this.pendingSecondHitTicks = -1;
             return;
         }
         this.pendingAttackTarget = target;
-        this.pendingAttackTicks = ATTACK_HIT_DELAY_TICKS;
+        this.pendingFirstHitTicks = ATTACK_FIRST_HIT_DELAY_TICKS;
+        this.pendingSecondHitTicks = ATTACK_SECOND_HIT_DELAY_TICKS;
     }
 
     private void tickPendingAttack() {
-        if (this.pendingAttackTicks < 0) {
-            return;
-        }
-        if (this.pendingAttackTicks > 0) {
-            this.pendingAttackTicks--;
+        if (this.pendingAttackTarget == null || !this.pendingAttackTarget.isAlive()) {
+            this.pendingAttackTarget = null;
+            this.pendingFirstHitTicks = -1;
+            this.pendingSecondHitTicks = -1;
             return;
         }
 
-        LivingEntity target = this.pendingAttackTarget;
-        this.pendingAttackTarget = null;
-        this.pendingAttackTicks = -1;
+        if (this.pendingFirstHitTicks > 0) {
+            this.pendingFirstHitTicks--;
+        } else if (this.pendingFirstHitTicks == 0) {
+            performPendingHit(this.pendingAttackTarget);
+            this.pendingFirstHitTicks = -1;
+        }
 
+        if (this.pendingSecondHitTicks > 0) {
+            this.pendingSecondHitTicks--;
+        } else if (this.pendingSecondHitTicks == 0) {
+            performPendingHit(this.pendingAttackTarget);
+            this.pendingSecondHitTicks = -1;
+        }
+
+        if (this.pendingFirstHitTicks < 0 && this.pendingSecondHitTicks < 0) {
+            this.pendingAttackTarget = null;
+        }
+    }
+
+    private void performPendingHit(LivingEntity target) {
         if (target == null || !target.isAlive()) {
             return;
         }
@@ -196,21 +215,21 @@ public class HeadHunterEntity extends Monster implements GeoEntity {
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "main", 2, state -> {
             if (this.isDeadOrDying()) {
-                return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("death_animation"));
+                return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("death"));
             }
             if (this.isAttackLocked()) {
                 return PlayState.STOP;
             }
             if (state.isMoving()) {
                 if (this.entityData.get(RUN_ANIM)) {
-                    return state.setAndContinue(RawAnimation.begin().thenLoop("run_animation"));
+                    return state.setAndContinue(RawAnimation.begin().thenLoop("run"));
                 }
-                return state.setAndContinue(RawAnimation.begin().thenLoop("walk_animation"));
+                return state.setAndContinue(RawAnimation.begin().thenLoop("walk"));
             }
-            return state.setAndContinue(RawAnimation.begin().thenLoop("idle_animation"));
+            return state.setAndContinue(RawAnimation.begin().thenLoop("idle"));
         }));
         controllers.add(new AnimationController<>(this, "attack", 0, state -> PlayState.STOP)
-                .triggerableAnim("attack_animation", RawAnimation.begin().thenPlay("attack_animation")));
+                .triggerableAnim("attack", RawAnimation.begin().thenPlay("attack")));
     }
 
     @Override

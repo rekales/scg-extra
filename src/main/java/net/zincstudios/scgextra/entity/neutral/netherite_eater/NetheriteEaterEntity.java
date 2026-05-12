@@ -2,6 +2,9 @@ package net.zincstudios.scgextra.entity.neutral.netherite_eater;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.EntityType;
@@ -9,7 +12,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
@@ -30,11 +33,31 @@ import net.zincstudios.scgextra.sounds.ModSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.EnumSet;
 import java.util.List;
 
 public class NetheriteEaterEntity extends Monster implements GeoEntity {
+    private static final int ATTACK_FIRST_HIT_DELAY_TICKS = 10; 
+    private static final int ATTACK_SECOND_HIT_DELAY_TICKS = 18; 
+    private static final int ATTACK_LOCK_TICKS = 30;
+    private static final int ATTACK_COOLDOWN_TICKS = 34;
+    private static final int ATTACK_ANIM_TICKS = 30;
+    private static final int BREATH_ANIM_TICKS = 77; 
+    private static final int BREATH_COOLDOWN_TICKS = 300; 
+    private static final float BREATH_RANGE = 4.0F;
+    private static final int BREATH_ACTIVE_TICKS = 77; 
+    private static final double ATTACK_EXTRA_REACH_BLOCKS = 1.0D;
+
+    private static final EntityDataAccessor<Integer> ATTACK_ANIM_LOCK =
+            SynchedEntityData.defineId(NetheriteEaterEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> BREATH_ANIM_LOCK =
+            SynchedEntityData.defineId(NetheriteEaterEntity.class, EntityDataSerializers.INT);
+
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private static final double MAX_CLIMB_HEIGHT = 3.0D;
     private static final int CLIMB_NO_DIG_TICKS = 20;
@@ -45,6 +68,13 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity {
     private int climbNoDigTicks;
     private int climbCooldownTicks;
     private boolean runningForAnim;
+    private int attackLockTicks;
+    private int attackCooldownTicks;
+    private LivingEntity pendingAttackTarget;
+    private int pendingFirstHitTicks = -1;
+    private int pendingSecondHitTicks = -1;
+    private boolean actionYawLocked;
+    private float actionLockedYaw;
 
     public NetheriteEaterEntity(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -63,9 +93,16 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity {
     }
 
     @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(ATTACK_ANIM_LOCK, 0);
+        this.entityData.define(BREATH_ANIM_LOCK, 0);
+    }
+
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.15D, true));
+        this.goalSelector.addGoal(2, new NetheriteEaterMeleeGoal(this));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.9D));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 10.0F));
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
@@ -79,11 +116,22 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity {
 
     @Override
     public boolean doHurtTarget(net.minecraft.world.entity.Entity target) {
-        boolean hit = super.doHurtTarget(target);
-        if (hit && target instanceof LivingEntity living) {
-            net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.applyLacerate(living, 60);
+        if (isBreathAnimActive()) {
+            return false;
         }
-        return hit;
+        if (this.attackLockTicks > 0 || this.attackCooldownTicks > 0) {
+            return false;
+        }
+        if (!(target instanceof LivingEntity living) || !living.isAlive()) {
+            return false;
+        }
+
+        this.attackLockTicks = ATTACK_LOCK_TICKS;
+        this.attackCooldownTicks = ATTACK_COOLDOWN_TICKS;
+        startAnimLock(ATTACK_ANIM_LOCK, ATTACK_ANIM_TICKS);
+        this.triggerAnim("attack", "attack");
+        this.scheduleTwoHitAttack(living);
+        return true;
     }
 
     @Override
@@ -99,14 +147,36 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity {
             applyBreathPulse();
         } else if (breathCooldown > 0) {
             breathCooldown--;
-        } else if (target != null && target.isAlive() && this.distanceTo(target) <= 5.0F) {
-            breathCooldown = 120;
-            breathActiveTicks = 20;
+        } else if (target != null && target.isAlive()
+                && this.distanceTo(target) <= BREATH_RANGE
+                && !isAttackAnimActive()) {
+            breathCooldown = BREATH_COOLDOWN_TICKS;
+            breathActiveTicks = BREATH_ACTIVE_TICKS;
+            startAnimLock(BREATH_ANIM_LOCK, BREATH_ANIM_TICKS);
+            this.triggerAnim("breath", "fire_breath");
             this.playSound(ModSounds.NEUTRAL_NETHERITE_EATER_BREATH.get(), 1.4F, this.getVoicePitch());
+        }
+
+        if (isBreathAnimActive()) {
+            this.runningForAnim = false;
+            this.setSprinting(false);
+            this.getNavigation().stop();
+            Vec3 motion = this.getDeltaMovement();
+            this.setDeltaMovement(0.0D, motion.y * 0.2D, 0.0D);
+            tickActionRotationLock();
+            this.tickAttackState();
+            this.tickClimbCooldowns();
+            tickAnimLock(ATTACK_ANIM_LOCK);
+            tickAnimLock(BREATH_ANIM_LOCK);
+            return;
         }
 
         this.runningForAnim = target != null && target.isAlive() && this.distanceTo(target) > 4.5F;
         this.setSprinting(this.runningForAnim);
+        tickActionRotationLock();
+        tickAnimLock(ATTACK_ANIM_LOCK);
+        tickAnimLock(BREATH_ANIM_LOCK);
+        this.tickAttackState();
         this.tickClimbCooldowns();
         boolean climbingThisTick = this.tryClimbTowardTarget(target);
 
@@ -125,6 +195,106 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity {
         }
     }
 
+    private void scheduleTwoHitAttack(LivingEntity target) {
+        this.pendingAttackTarget = target;
+        this.pendingFirstHitTicks = ATTACK_FIRST_HIT_DELAY_TICKS;
+        this.pendingSecondHitTicks = ATTACK_SECOND_HIT_DELAY_TICKS;
+    }
+
+    private void startAnimLock(EntityDataAccessor<Integer> key, int ticks) {
+        int current = this.entityData.get(key);
+        if (current < ticks) {
+            this.entityData.set(key, ticks);
+        }
+    }
+
+    private void tickAnimLock(EntityDataAccessor<Integer> key) {
+        int ticks = this.entityData.get(key);
+        if (ticks > 0) {
+            this.entityData.set(key, ticks - 1);
+        }
+    }
+
+    private boolean isAttackAnimActive() {
+        return this.entityData.get(ATTACK_ANIM_LOCK) > 0;
+    }
+
+    private boolean isBreathAnimActive() {
+        return this.entityData.get(BREATH_ANIM_LOCK) > 0;
+    }
+
+    private void tickActionRotationLock() {
+        boolean actionActive = isAttackAnimActive() || isBreathAnimActive();
+        if (!actionActive) {
+            this.actionYawLocked = false;
+            return;
+        }
+
+        if (!this.actionYawLocked) {
+            this.actionLockedYaw = this.getYRot();
+            this.actionYawLocked = true;
+        }
+
+        this.setYRot(this.actionLockedYaw);
+        this.setYBodyRot(this.actionLockedYaw);
+        this.setYHeadRot(this.actionLockedYaw);
+        this.yRotO = this.actionLockedYaw;
+        this.yBodyRotO = this.actionLockedYaw;
+        this.yHeadRotO = this.actionLockedYaw;
+    }
+
+    private void tickAttackState() {
+        if (this.attackLockTicks > 0) {
+            this.attackLockTicks--;
+        }
+        if (this.attackCooldownTicks > 0) {
+            this.attackCooldownTicks--;
+        }
+
+        LivingEntity target = this.pendingAttackTarget;
+        if (target == null || !target.isAlive()) {
+            this.pendingAttackTarget = null;
+            this.pendingFirstHitTicks = -1;
+            this.pendingSecondHitTicks = -1;
+            return;
+        }
+
+        if (this.pendingFirstHitTicks > 0) {
+            this.pendingFirstHitTicks--;
+        } else if (this.pendingFirstHitTicks == 0) {
+            performTimedHit(target);
+            this.pendingFirstHitTicks = -1;
+        }
+
+        if (this.pendingSecondHitTicks > 0) {
+            this.pendingSecondHitTicks--;
+        } else if (this.pendingSecondHitTicks == 0) {
+            performTimedHit(target);
+            this.pendingSecondHitTicks = -1;
+        }
+
+        if (this.pendingFirstHitTicks < 0 && this.pendingSecondHitTicks < 0) {
+            this.pendingAttackTarget = null;
+        }
+    }
+
+    private void performTimedHit(LivingEntity target) {
+        if (target == null || !target.isAlive()) {
+            return;
+        }
+        double baseReach = this.getBbWidth() * 2.0D + target.getBbWidth();
+        double reach = baseReach + ATTACK_EXTRA_REACH_BLOCKS;
+        if (this.distanceToSqr(target) > reach * reach) {
+            return;
+        }
+
+        target.invulnerableTime = 0;
+        boolean hit = super.doHurtTarget(target);
+        if (hit) {
+            net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.applyLacerate(target, 60);
+        }
+    }
+
     public boolean isRunningForAnim() {
         return this.runningForAnim;
     }
@@ -134,7 +304,7 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity {
         server.sendParticles(net.minecraft.core.particles.ParticleTypes.SOUL_FIRE_FLAME,
                 this.getX(), this.getY() + 1.2D, this.getZ(), 10, 1.5D, 0.5D, 1.5D, 0.02D);
 
-        if (!(breathActiveTicks == 19 || breathActiveTicks == 12 || breathActiveTicks == 5)) {
+        if (breathActiveTicks % 9 != 0) {
             return;
         }
 
@@ -151,7 +321,28 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        
+        controllers.add(new AnimationController<>(this, "main", 2, state -> {
+            if (this.isDeadOrDying()) {
+                return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("death"));
+            }
+            if (isAttackAnimActive() || isBreathAnimActive()) {
+                return PlayState.STOP;
+            }
+            boolean moving = state.isMoving()
+                    || this.getNavigation().isInProgress()
+                    || this.getDeltaMovement().horizontalDistanceSqr() > 1.0E-5D;
+            if (moving) {
+                if (this.isSprinting()) {
+                    return state.setAndContinue(RawAnimation.begin().thenLoop("run"));
+                }
+                return state.setAndContinue(RawAnimation.begin().thenLoop("walk"));
+            }
+            return state.setAndContinue(RawAnimation.begin().thenLoop("idle"));
+        }));
+        controllers.add(new AnimationController<>(this, "attack", 0, state -> PlayState.STOP)
+                .triggerableAnim("attack", RawAnimation.begin().thenPlay("attack")));
+        controllers.add(new AnimationController<>(this, "breath", 0, state -> PlayState.STOP)
+                .triggerableAnim("fire_breath", RawAnimation.begin().thenPlay("fire_breath")));
     }
 
     @Override
@@ -286,5 +477,91 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity {
     @Override
     protected SoundEvent getDeathSound() {
         return ModSounds.NEUTRAL_NETHERITE_EATER_DEATH.get();
+    }
+
+    private static final class NetheriteEaterMeleeGoal extends Goal {
+        private static final double CHASE_SPEED = 1.15D;
+        private static final int REPATH_INTERVAL_TICKS = 4;
+        private static final double TARGET_MOVE_REPATH_DISTANCE_SQR = 1.0D;
+
+        private final NetheriteEaterEntity eater;
+        private int repathCooldown;
+        private double lastTargetX;
+        private double lastTargetY;
+        private double lastTargetZ;
+
+        private NetheriteEaterMeleeGoal(NetheriteEaterEntity eater) {
+            this.eater = eater;
+            this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+        }
+
+        @Override
+        public boolean canUse() {
+            LivingEntity target = this.eater.getTarget();
+            return target != null && target.isAlive();
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            LivingEntity target = this.eater.getTarget();
+            return target != null && target.isAlive();
+        }
+
+        @Override
+        public void tick() {
+            LivingEntity target = this.eater.getTarget();
+            if (target == null || !target.isAlive()) {
+                return;
+            }
+
+            this.eater.getLookControl().setLookAt(target, 30.0F, 30.0F);
+
+            if (this.eater.isBreathAnimActive() || this.eater.isAttackAnimActive()) {
+                this.eater.getNavigation().stop();
+                return;
+            }
+
+            boolean canDirectChase = this.eater.hasLineOfSight(target)
+                    && Math.abs(target.getY() - this.eater.getY()) < 1.5D;
+            if (canDirectChase) {
+                this.eater.getNavigation().stop();
+                this.eater.getMoveControl().setWantedPosition(target.getX(), this.eater.getY(), target.getZ(), CHASE_SPEED);
+                this.repathCooldown = 0;
+            } else {
+                if (this.repathCooldown > 0) {
+                    this.repathCooldown--;
+                }
+                if (shouldRepath(target)) {
+                    this.eater.getNavigation().moveTo(target, CHASE_SPEED);
+                    this.repathCooldown = REPATH_INTERVAL_TICKS;
+                    this.lastTargetX = target.getX();
+                    this.lastTargetY = target.getY();
+                    this.lastTargetZ = target.getZ();
+                }
+            }
+
+            if (this.eater.attackLockTicks > 0 || this.eater.attackCooldownTicks > 0) {
+                return;
+            }
+
+            double reach = this.eater.getBbWidth() * 2.0D + target.getBbWidth() + ATTACK_EXTRA_REACH_BLOCKS;
+            if (this.eater.distanceToSqr(target) <= reach * reach) {
+                this.eater.swing(net.minecraft.world.InteractionHand.MAIN_HAND);
+                this.eater.doHurtTarget(target);
+            }
+        }
+
+        private boolean shouldRepath(LivingEntity target) {
+            if (!this.eater.getNavigation().isInProgress()) {
+                return true;
+            }
+            if (this.repathCooldown <= 0) {
+                return true;
+            }
+            double dx = target.getX() - this.lastTargetX;
+            double dy = target.getY() - this.lastTargetY;
+            double dz = target.getZ() - this.lastTargetZ;
+            return (dx * dx + dy * dy + dz * dz) >= TARGET_MOVE_REPATH_DISTANCE_SQR;
+        }
     }
 }

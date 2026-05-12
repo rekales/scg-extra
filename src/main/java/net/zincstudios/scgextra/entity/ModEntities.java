@@ -454,7 +454,7 @@ public class ModEntities {
         BoundingBoxManager.registerHeadshotBox(ModEntities.MUTANT_BAT.get(), new OffsetRotatedHeadshotBox<>(12, 12, 18.0, 0.0F, 6.0, false, true));
         BoundingBoxManager.registerHeadshotBox(ModEntities.NITRO_BEETLE.get(), new OffsetRotatedHeadshotBox<>(5, 5, 2.0, 0.0F, 3.0, false, true));
         BoundingBoxManager.registerHeadshotBox(ModEntities.HEAD_HUNTER.get(), new OffsetRotatedHeadshotBox<>(9, 9, 28.0, 0.0F, 3,-8, false, true, true));
-        BoundingBoxManager.registerHeadshotBox(ModEntities.NETHERITE_EATER.get(), new OffsetRotatedHeadshotBox<>(15, 15, 27, 0.0F, 5.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(ModEntities.NETHERITE_EATER.get(), new OffsetRotatedHeadshotBox<>(15, 15, 28, 0.0F, 8.0, false, true));
         BoundingBoxManager.registerHeadshotBox(ModEntities.END_POD.get(), new OffsetRotatedHeadshotBox<>(0, 0, 0, 0F, 0, false, true));
         BoundingBoxManager.registerHeadshotBox(ModEntities.END_DWELLER.get(), new OffsetRotatedHeadshotBox<>(10, 10, 10.0, 0.0F, 10.0, false, true));
         BoundingBoxManager.registerHeadshotBox(ModEntities.END_STONE_CRAB.get(), new OffsetRotatedHeadshotBox<>(25, 25, 10.0, 0.0F, 6.0, false, true));
