@@ -17,3 +17,4 @@ public class InflictedBoarRenderer extends GeoEntityRenderer<InflictedBoarEntity
     }
 }
 
+

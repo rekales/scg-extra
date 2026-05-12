@@ -248,3 +248,4 @@ public class HeadHunterEntity extends Monster implements GeoEntity {
         return false;
     }
 }
+

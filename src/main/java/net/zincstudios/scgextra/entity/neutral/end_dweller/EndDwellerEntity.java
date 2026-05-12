@@ -20,7 +20,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.zincstudios.scgextra.CommonConfig;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.sounds.NeutralSounds;
 import org.joml.Vector3f;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -250,7 +250,7 @@ public class EndDwellerEntity extends Monster implements GeoEntity {
     }
 
     private void explodeNow() {
-        this.playSound(ModSounds.NEUTRAL_END_DWELLER_CHARGING.get(), 1.3F, this.getVoicePitch());
+        this.playSound(NeutralSounds.NEUTRAL_END_DWELLER_CHARGING.get(), 1.3F, this.getVoicePitch());
         this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(10.0D), e -> e != this && e.isAlive())
                 .forEach(living -> {
                     if (living instanceof Player player && (player.isCreative() || player.isSpectator())) {
@@ -334,16 +334,16 @@ public class EndDwellerEntity extends Monster implements GeoEntity {
     @Override
     protected SoundEvent getAmbientSound() {
         int roll = this.random.nextInt(3);
-        if (roll == 0) return ModSounds.NEUTRAL_END_DWELLER_IDLE_01.get();
-        if (roll == 1) return ModSounds.NEUTRAL_END_DWELLER_IDLE_02.get();
-        return ModSounds.NEUTRAL_END_DWELLER_IDLE_03.get();
+        if (roll == 0) return NeutralSounds.NEUTRAL_END_DWELLER_IDLE_01.get();
+        if (roll == 1) return NeutralSounds.NEUTRAL_END_DWELLER_IDLE_02.get();
+        return NeutralSounds.NEUTRAL_END_DWELLER_IDLE_03.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
         return this.random.nextBoolean()
-                ? ModSounds.NEUTRAL_END_DWELLER_HURT_01.get()
-                : ModSounds.NEUTRAL_END_DWELLER_HURT_02.get();
+                ? NeutralSounds.NEUTRAL_END_DWELLER_HURT_01.get()
+                : NeutralSounds.NEUTRAL_END_DWELLER_HURT_02.get();
     }
 
     @Override
@@ -355,5 +355,6 @@ public class EndDwellerEntity extends Monster implements GeoEntity {
                 && net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.canSpawnEndSurface(level, this.blockPosition());
     }
 }
+
 
 

@@ -11,3 +11,4 @@ public class EndDwellerRenderer extends GeoEntityRenderer<EndDwellerEntity> {
     }
 }
 
+

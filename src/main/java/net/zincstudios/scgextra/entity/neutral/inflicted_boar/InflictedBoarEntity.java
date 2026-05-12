@@ -199,3 +199,4 @@ public class InflictedBoarEntity extends Hoglin implements GeoEntity {
         return forward.dot(toTargetFlat.normalize()) >= minDot;
     }
 }
+

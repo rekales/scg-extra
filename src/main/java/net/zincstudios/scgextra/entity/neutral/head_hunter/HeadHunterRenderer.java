@@ -18,3 +18,4 @@ public class HeadHunterRenderer extends GeoEntityRenderer<HeadHunterEntity> {
 }
 
 
+

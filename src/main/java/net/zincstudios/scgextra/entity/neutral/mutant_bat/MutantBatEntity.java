@@ -30,7 +30,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.zincstudios.scgextra.CommonConfig;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.sounds.NeutralSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -139,7 +139,7 @@ public class MutantBatEntity extends Monster implements GeoEntity {
         this.screamCooldown = SCREAM_COOLDOWN_TICKS;
         this.startAnim(SCREAM_LOCK_TICKS, SCREAM_ANIM_TICKS);
         this.triggerAnim("scream", "scream_attack");
-        this.playSound(ModSounds.NEUTRAL_MUTANT_BAT_SCREAM.get(), 1.2F, this.getVoicePitch());
+        this.playSound(NeutralSounds.NEUTRAL_MUTANT_BAT_SCREAM.get(), 1.2F, this.getVoicePitch());
         this.pendingScreamTarget = target;
         this.pendingScreamDamageTicks = 5 + this.random.nextInt(2);
     }
@@ -316,19 +316,19 @@ public class MutantBatEntity extends Monster implements GeoEntity {
     @Override
     protected SoundEvent getAmbientSound() {
         int roll = this.random.nextInt(3);
-        if (roll == 0) return ModSounds.NEUTRAL_MUTANT_BAT_IDLE_01.get();
-        if (roll == 1) return ModSounds.NEUTRAL_MUTANT_BAT_IDLE_02.get();
-        return ModSounds.NEUTRAL_MUTANT_BAT_IDLE_03.get();
+        if (roll == 0) return NeutralSounds.NEUTRAL_MUTANT_BAT_IDLE_01.get();
+        if (roll == 1) return NeutralSounds.NEUTRAL_MUTANT_BAT_IDLE_02.get();
+        return NeutralSounds.NEUTRAL_MUTANT_BAT_IDLE_03.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return ModSounds.NEUTRAL_MUTANT_BAT_HURT.get();
+        return NeutralSounds.NEUTRAL_MUTANT_BAT_HURT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return ModSounds.NEUTRAL_MUTANT_BAT_DEATH.get();
+        return NeutralSounds.NEUTRAL_MUTANT_BAT_DEATH.get();
     }
 
     private static final class MutantBatMeleeGoal extends MeleeAttackGoal {
@@ -367,3 +367,4 @@ public class MutantBatEntity extends Monster implements GeoEntity {
         }
     }
 }
+

@@ -3,80 +3,67 @@ package net.zincstudios.scgextra.sounds;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.registries.RegistryObject;
 
-public final class NeutralSounds {
-    private static boolean initialized = false;
+public class NeutralSounds {
+    public static final RegistryObject<SoundEvent> NEUTRAL_AMMO_GOBLIN_IDLE_01 = ModSounds.NEUTRAL_AMMO_GOBLIN_IDLE_01;
+    public static final RegistryObject<SoundEvent> NEUTRAL_AMMO_GOBLIN_IDLE_02 = ModSounds.NEUTRAL_AMMO_GOBLIN_IDLE_02;
+    public static final RegistryObject<SoundEvent> NEUTRAL_AMMO_GOBLIN_HURT_01 = ModSounds.NEUTRAL_AMMO_GOBLIN_HURT_01;
+    public static final RegistryObject<SoundEvent> NEUTRAL_AMMO_GOBLIN_HURT_02 = ModSounds.NEUTRAL_AMMO_GOBLIN_HURT_02;
+    public static final RegistryObject<SoundEvent> NEUTRAL_AMMO_GOBLIN_HURT_03 = ModSounds.NEUTRAL_AMMO_GOBLIN_HURT_03;
+    public static final RegistryObject<SoundEvent> NEUTRAL_AMMO_GOBLIN_DEAD = ModSounds.NEUTRAL_AMMO_GOBLIN_DEAD;
 
-    private NeutralSounds() {}
+    public static final RegistryObject<SoundEvent> NEUTRAL_BIG_LUMP_IDLE_01 = ModSounds.NEUTRAL_BIG_LUMP_IDLE_01;
+    public static final RegistryObject<SoundEvent> NEUTRAL_BIG_LUMP_IDLE_02 = ModSounds.NEUTRAL_BIG_LUMP_IDLE_02;
+    public static final RegistryObject<SoundEvent> NEUTRAL_BIG_LUMP_IDLE_03 = ModSounds.NEUTRAL_BIG_LUMP_IDLE_03;
+    public static final RegistryObject<SoundEvent> NEUTRAL_BIG_LUMP_HURT_01 = ModSounds.NEUTRAL_BIG_LUMP_HURT_01;
+    public static final RegistryObject<SoundEvent> NEUTRAL_BIG_LUMP_HURT_02 = ModSounds.NEUTRAL_BIG_LUMP_HURT_02;
+    public static final RegistryObject<SoundEvent> NEUTRAL_BIG_LUMP_DEATH = ModSounds.NEUTRAL_BIG_LUMP_DEATH;
 
-    private static RegistryObject<SoundEvent> reg(String id) {
-        return ModSounds.SOUND_EVENTS.register(id, () -> SoundEvent.createVariableRangeEvent(ModSounds.asResource(id)));
-    }
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_CRAB_ATTACK_01 = ModSounds.NEUTRAL_END_CRAB_ATTACK_01;
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_CRAB_IDLE_01 = ModSounds.NEUTRAL_END_CRAB_IDLE_01;
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_CRAB_IDLE_02 = ModSounds.NEUTRAL_END_CRAB_IDLE_02;
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_CRAB_HURT_01 = ModSounds.NEUTRAL_END_CRAB_HURT_01;
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_CRAB_HURT_02 = ModSounds.NEUTRAL_END_CRAB_HURT_02;
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_CRAB_DEATH = ModSounds.NEUTRAL_END_CRAB_DEATH;
 
-    public static void init() {
-        if (initialized) {
-            return;
-        }
-        initialized = true;
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_DWELLER_CHARGING = ModSounds.NEUTRAL_END_DWELLER_CHARGING;
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_DWELLER_IDLE_01 = ModSounds.NEUTRAL_END_DWELLER_IDLE_01;
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_DWELLER_IDLE_02 = ModSounds.NEUTRAL_END_DWELLER_IDLE_02;
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_DWELLER_IDLE_03 = ModSounds.NEUTRAL_END_DWELLER_IDLE_03;
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_DWELLER_HURT_01 = ModSounds.NEUTRAL_END_DWELLER_HURT_01;
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_DWELLER_HURT_02 = ModSounds.NEUTRAL_END_DWELLER_HURT_02;
 
-        reg("neutral.ammo_goblin.idle_01");
-        reg("neutral.ammo_goblin.idle_02");
-        reg("neutral.ammo_goblin.hurt_01");
-        reg("neutral.ammo_goblin.hurt_02");
-        reg("neutral.ammo_goblin.hurt_03");
-        reg("neutral.ammo_goblin.dead");
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_POD_BREED = ModSounds.NEUTRAL_END_POD_BREED;
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_POD_IDLE_01 = ModSounds.NEUTRAL_END_POD_IDLE_01;
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_POD_IDLE_02 = ModSounds.NEUTRAL_END_POD_IDLE_02;
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_POD_IDLE_03 = ModSounds.NEUTRAL_END_POD_IDLE_03;
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_POD_IDLE_04 = ModSounds.NEUTRAL_END_POD_IDLE_04;
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_POD_IDLE_05 = ModSounds.NEUTRAL_END_POD_IDLE_05;
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_POD_DEATH_01 = ModSounds.NEUTRAL_END_POD_DEATH_01;
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_POD_DEATH_02 = ModSounds.NEUTRAL_END_POD_DEATH_02;
 
-        reg("neutral.big_lump.idle_01");
-        reg("neutral.big_lump.idle_02");
-        reg("neutral.big_lump.idle_03");
-        reg("neutral.big_lump.hurt_01");
-        reg("neutral.big_lump.hurt_02");
-        reg("neutral.big_lump.death");
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_SCORPION_IDLE_01 = ModSounds.NEUTRAL_END_SCORPION_IDLE_01;
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_SCORPION_IDLE_02 = ModSounds.NEUTRAL_END_SCORPION_IDLE_02;
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_SCORPION_IDLE_03 = ModSounds.NEUTRAL_END_SCORPION_IDLE_03;
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_SCORPION_HURT_01 = ModSounds.NEUTRAL_END_SCORPION_HURT_01;
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_SCORPION_HURT_02 = ModSounds.NEUTRAL_END_SCORPION_HURT_02;
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_SCORPION_STING = ModSounds.NEUTRAL_END_SCORPION_STING;
+    public static final RegistryObject<SoundEvent> NEUTRAL_END_SCORPION_DEATH = ModSounds.NEUTRAL_END_SCORPION_DEATH;
 
-        reg("neutral.end_crab.attack_01");
-        reg("neutral.end_crab.idle_01");
-        reg("neutral.end_crab.idle_02");
-        reg("neutral.end_crab.hurt_01");
-        reg("neutral.end_crab.hurt_02");
-        reg("neutral.end_crab.death");
+    public static final RegistryObject<SoundEvent> NEUTRAL_MUTANT_BAT_IDLE_01 = ModSounds.NEUTRAL_MUTANT_BAT_IDLE_01;
+    public static final RegistryObject<SoundEvent> NEUTRAL_MUTANT_BAT_IDLE_02 = ModSounds.NEUTRAL_MUTANT_BAT_IDLE_02;
+    public static final RegistryObject<SoundEvent> NEUTRAL_MUTANT_BAT_IDLE_03 = ModSounds.NEUTRAL_MUTANT_BAT_IDLE_03;
+    public static final RegistryObject<SoundEvent> NEUTRAL_MUTANT_BAT_HURT = ModSounds.NEUTRAL_MUTANT_BAT_HURT;
+    public static final RegistryObject<SoundEvent> NEUTRAL_MUTANT_BAT_SCREAM = ModSounds.NEUTRAL_MUTANT_BAT_SCREAM;
+    public static final RegistryObject<SoundEvent> NEUTRAL_MUTANT_BAT_DEATH = ModSounds.NEUTRAL_MUTANT_BAT_DEATH;
 
-        reg("neutral.end_dweller.charging");
-        reg("neutral.end_dweller.idle_01");
-        reg("neutral.end_dweller.idle_02");
-        reg("neutral.end_dweller.idle_03");
-        reg("neutral.end_dweller.hurt_01");
-        reg("neutral.end_dweller.hurt_02");
+    public static final RegistryObject<SoundEvent> NEUTRAL_NETHERITE_EATER_BREATH = ModSounds.NEUTRAL_NETHERITE_EATER_BREATH;
+    public static final RegistryObject<SoundEvent> NEUTRAL_NETHERITE_EATER_IDLE_01 = ModSounds.NEUTRAL_NETHERITE_EATER_IDLE_01;
+    public static final RegistryObject<SoundEvent> NEUTRAL_NETHERITE_EATER_IDLE_02 = ModSounds.NEUTRAL_NETHERITE_EATER_IDLE_02;
+    public static final RegistryObject<SoundEvent> NEUTRAL_NETHERITE_EATER_IDLE_03 = ModSounds.NEUTRAL_NETHERITE_EATER_IDLE_03;
+    public static final RegistryObject<SoundEvent> NEUTRAL_NETHERITE_EATER_IDLE_04 = ModSounds.NEUTRAL_NETHERITE_EATER_IDLE_04;
+    public static final RegistryObject<SoundEvent> NEUTRAL_NETHERITE_EATER_HURT_01 = ModSounds.NEUTRAL_NETHERITE_EATER_HURT_01;
+    public static final RegistryObject<SoundEvent> NEUTRAL_NETHERITE_EATER_HURT_02 = ModSounds.NEUTRAL_NETHERITE_EATER_HURT_02;
+    public static final RegistryObject<SoundEvent> NEUTRAL_NETHERITE_EATER_DEATH = ModSounds.NEUTRAL_NETHERITE_EATER_DEATH;
 
-        reg("neutral.end_pod.breed");
-        reg("neutral.end_pod.idle_01");
-        reg("neutral.end_pod.idle_02");
-        reg("neutral.end_pod.idle_03");
-        reg("neutral.end_pod.idle_04");
-        reg("neutral.end_pod.idle_05");
-        reg("neutral.end_pod.death_01");
-        reg("neutral.end_pod.death_02");
-
-        reg("neutral.end_scorpion.idle_01");
-        reg("neutral.end_scorpion.idle_02");
-        reg("neutral.end_scorpion.idle_03");
-        reg("neutral.end_scorpion.hurt_01");
-        reg("neutral.end_scorpion.hurt_02");
-        reg("neutral.end_scorpion.sting");
-        reg("neutral.end_scorpion.death");
-
-        reg("neutral.mutant_bat.idle_01");
-        reg("neutral.mutant_bat.idle_02");
-        reg("neutral.mutant_bat.idle_03");
-        reg("neutral.mutant_bat.hurt");
-        reg("neutral.mutant_bat.scream");
-        reg("neutral.mutant_bat.death");
-
-        reg("neutral.netherite_eater.breath");
-        reg("neutral.netherite_eater.idle_01");
-        reg("neutral.netherite_eater.idle_02");
-        reg("neutral.netherite_eater.idle_03");
-        reg("neutral.netherite_eater.idle_04");
-        reg("neutral.netherite_eater.hurt_01");
-        reg("neutral.netherite_eater.hurt_02");
-        reg("neutral.netherite_eater.death");
-    }
+    public static void init() {}
 }

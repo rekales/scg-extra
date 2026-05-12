@@ -18,3 +18,4 @@ public class MutantBatRenderer extends GeoEntityRenderer<MutantBatEntity> {
 }
 
 
+

@@ -36,7 +36,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.CommonConfig;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.sounds.NeutralSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -282,7 +282,7 @@ public class EndScorpionEntity extends Monster implements GeoEntity {
         if (!this.canHitTarget(target)) {
             return;
         }
-        this.playSound(ModSounds.NEUTRAL_END_SCORPION_STING.get(), 1.2F, this.getVoicePitch());
+        this.playSound(NeutralSounds.NEUTRAL_END_SCORPION_STING.get(), 1.2F, this.getVoicePitch());
         target.hurt(this.damageSources().mobAttack(this), 10.0F);
         target.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 0));
         target.addEffect(new MobEffectInstance(MobEffects.WITHER, 100, 0));
@@ -409,21 +409,21 @@ public class EndScorpionEntity extends Monster implements GeoEntity {
     @Override
     protected SoundEvent getAmbientSound() {
         int roll = this.random.nextInt(3);
-        if (roll == 0) return ModSounds.NEUTRAL_END_SCORPION_IDLE_01.get();
-        if (roll == 1) return ModSounds.NEUTRAL_END_SCORPION_IDLE_02.get();
-        return ModSounds.NEUTRAL_END_SCORPION_IDLE_03.get();
+        if (roll == 0) return NeutralSounds.NEUTRAL_END_SCORPION_IDLE_01.get();
+        if (roll == 1) return NeutralSounds.NEUTRAL_END_SCORPION_IDLE_02.get();
+        return NeutralSounds.NEUTRAL_END_SCORPION_IDLE_03.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
         return this.random.nextBoolean()
-                ? ModSounds.NEUTRAL_END_SCORPION_HURT_01.get()
-                : ModSounds.NEUTRAL_END_SCORPION_HURT_02.get();
+                ? NeutralSounds.NEUTRAL_END_SCORPION_HURT_01.get()
+                : NeutralSounds.NEUTRAL_END_SCORPION_HURT_02.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return ModSounds.NEUTRAL_END_SCORPION_DEATH.get();
+        return NeutralSounds.NEUTRAL_END_SCORPION_DEATH.get();
     }
 
     @Override
@@ -488,3 +488,4 @@ public class EndScorpionEntity extends Monster implements GeoEntity {
         }
     }
 }
+

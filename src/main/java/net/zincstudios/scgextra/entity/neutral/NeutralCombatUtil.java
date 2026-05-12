@@ -63,3 +63,4 @@ public final class NeutralCombatUtil {
         return canSpawnEndSurface(level, pos);
     }
 }
+

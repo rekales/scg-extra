@@ -12,6 +12,7 @@ import net.zincstudios.scgextra.client.particle.CopperFireBallParticle;
 import net.zincstudios.scgextra.client.particle.CopperFlameParticle;
 import net.zincstudios.scgextra.debug.EntityHeadBoxDebug;
 import net.zincstudios.scgextra.entity.ModEntities;
+import net.zincstudios.scgextra.entity.neutral.NeutralEntities;
 import net.zincstudios.scgextra.entity.common.client.GunnerRenderer;
 import net.zincstudios.scgextra.entity.common.raid_summoner.RaidSummonerRenderer;
 import net.zincstudios.scgextra.entity.fac.FACEntities;
@@ -103,18 +104,18 @@ public final class ModClientEventHandler {
         EntityRenderers.register(RRCEntities.ARC_PSYCHO.get(), ArcPsychoEntityRenderer::new);
         EntityRenderers.register(RRCEntities.COPPER_KNIGHT.get(), (ctx) -> new CopperKnightRenderer<>(ctx).noDeathTilt());
         EntityRenderers.register(ModEntities.LARGE_SOUL_FIREBALL.get(), SoulFireBallRenderer::new);
-        EntityRenderers.register(ModEntities.INFLICTED_BOAR.get(), InflictedBoarRenderer::new);
-        EntityRenderers.register(ModEntities.INFLICTED_WOLF.get(), InflictedWolfRenderer::new);
-        EntityRenderers.register(ModEntities.AMMO_GOBLIN.get(), AmmoGoblinRenderer::new);
-        EntityRenderers.register(ModEntities.BIG_LUMP.get(), BigLumpRenderer::new);
-        EntityRenderers.register(ModEntities.MUTANT_BAT.get(), MutantBatRenderer::new);
-        EntityRenderers.register(ModEntities.NITRO_BEETLE.get(), NitroBeetleRenderer::new);
-        EntityRenderers.register(ModEntities.HEAD_HUNTER.get(), HeadHunterRenderer::new);
-        EntityRenderers.register(ModEntities.NETHERITE_EATER.get(), NetheriteEaterRenderer::new);
-        EntityRenderers.register(ModEntities.END_POD.get(), EndPodRenderer::new);
-        EntityRenderers.register(ModEntities.END_DWELLER.get(), EndDwellerRenderer::new);
-        EntityRenderers.register(ModEntities.END_STONE_CRAB.get(), EndStoneCrabRenderer::new);
-        EntityRenderers.register(ModEntities.END_SCORPION.get(), EndScorpionRenderer::new);
+        EntityRenderers.register(NeutralEntities.INFLICTED_BOAR.get(), InflictedBoarRenderer::new);
+        EntityRenderers.register(NeutralEntities.INFLICTED_WOLF.get(), InflictedWolfRenderer::new);
+        EntityRenderers.register(NeutralEntities.AMMO_GOBLIN.get(), AmmoGoblinRenderer::new);
+        EntityRenderers.register(NeutralEntities.BIG_LUMP.get(), BigLumpRenderer::new);
+        EntityRenderers.register(NeutralEntities.MUTANT_BAT.get(), MutantBatRenderer::new);
+        EntityRenderers.register(NeutralEntities.NITRO_BEETLE.get(), NitroBeetleRenderer::new);
+        EntityRenderers.register(NeutralEntities.HEAD_HUNTER.get(), HeadHunterRenderer::new);
+        EntityRenderers.register(NeutralEntities.NETHERITE_EATER.get(), NetheriteEaterRenderer::new);
+        EntityRenderers.register(NeutralEntities.END_POD.get(), EndPodRenderer::new);
+        EntityRenderers.register(NeutralEntities.END_DWELLER.get(), EndDwellerRenderer::new);
+        EntityRenderers.register(NeutralEntities.END_STONE_CRAB.get(), EndStoneCrabRenderer::new);
+        EntityRenderers.register(NeutralEntities.END_SCORPION.get(), EndScorpionRenderer::new);
 
         EntityHeadBoxDebug.register();
     }
@@ -130,3 +131,4 @@ public final class ModClientEventHandler {
         event.registerSpriteSet(ModParticleTypes.COPPER_FLAME.get(), CopperFlameParticle.Provider::new);
     }
 }
+

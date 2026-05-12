@@ -85,3 +85,4 @@ final class BigLumpMeleeGoal extends Goal {
         this.hitApplied = true;
     }
 }
+

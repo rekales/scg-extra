@@ -230,3 +230,4 @@ public class InflictedWolfEntity extends Monster implements GeoEntity {
         this.playSound(SoundEvents.WOLF_STEP, 0.15F, 1.0F);
     }
 }
+

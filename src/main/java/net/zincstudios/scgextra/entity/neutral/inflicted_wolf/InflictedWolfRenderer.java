@@ -17,3 +17,4 @@ public class InflictedWolfRenderer extends GeoEntityRenderer<InflictedWolfEntity
     }
 }
 
+

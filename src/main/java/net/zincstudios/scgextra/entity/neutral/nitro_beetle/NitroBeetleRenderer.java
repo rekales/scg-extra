@@ -13,3 +13,4 @@ public class NitroBeetleRenderer extends GeoEntityRenderer<NitroBeetleEntity> {
 }
 
 
+

@@ -34,7 +34,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.sounds.NeutralSounds;
 import net.zincstudios.scgextra.CommonConfig;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -359,7 +359,7 @@ public class EndStoneCrabEntity extends Monster implements GeoEntity {
         if (!hit) {
             return;
         }
-        this.playSound(ModSounds.NEUTRAL_END_CRAB_ATTACK_01.get(), 1.1F, this.getVoicePitch());
+        this.playSound(NeutralSounds.NEUTRAL_END_CRAB_ATTACK_01.get(), 1.1F, this.getVoicePitch());
         target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 2));
     }
 
@@ -539,20 +539,20 @@ public class EndStoneCrabEntity extends Monster implements GeoEntity {
     @Override
     protected SoundEvent getAmbientSound() {
         return this.random.nextBoolean()
-                ? ModSounds.NEUTRAL_END_CRAB_IDLE_01.get()
-                : ModSounds.NEUTRAL_END_CRAB_IDLE_02.get();
+                ? NeutralSounds.NEUTRAL_END_CRAB_IDLE_01.get()
+                : NeutralSounds.NEUTRAL_END_CRAB_IDLE_02.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
         return this.random.nextBoolean()
-                ? ModSounds.NEUTRAL_END_CRAB_HURT_01.get()
-                : ModSounds.NEUTRAL_END_CRAB_HURT_02.get();
+                ? NeutralSounds.NEUTRAL_END_CRAB_HURT_01.get()
+                : NeutralSounds.NEUTRAL_END_CRAB_HURT_02.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return ModSounds.NEUTRAL_END_CRAB_DEATH.get();
+        return NeutralSounds.NEUTRAL_END_CRAB_DEATH.get();
     }
 
     @Override
@@ -630,3 +630,4 @@ public class EndStoneCrabEntity extends Monster implements GeoEntity {
         }
     }
 }
+

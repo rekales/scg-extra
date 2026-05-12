@@ -16,7 +16,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.zincstudios.scgextra.CommonConfig;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.sounds.NeutralSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -50,8 +50,8 @@ public class EndPodEntity extends Chicken implements GeoEntity {
     @Nullable
     @Override
     public Chicken getBreedOffspring(ServerLevel level, AgeableMob otherParent) {
-        this.playSound(ModSounds.NEUTRAL_END_POD_BREED.get(), 1.0F, this.getVoicePitch());
-        return net.zincstudios.scgextra.entity.ModEntities.END_POD.get().create(level);
+        this.playSound(NeutralSounds.NEUTRAL_END_POD_BREED.get(), 1.0F, this.getVoicePitch());
+        return net.zincstudios.scgextra.entity.neutral.NeutralEntities.END_POD.get().create(level);
     }
 
     @Override
@@ -68,25 +68,25 @@ public class EndPodEntity extends Chicken implements GeoEntity {
     @Override
     protected SoundEvent getAmbientSound() {
         int roll = this.random.nextInt(5);
-        if (roll == 0) return ModSounds.NEUTRAL_END_POD_IDLE_01.get();
-        if (roll == 1) return ModSounds.NEUTRAL_END_POD_IDLE_02.get();
-        if (roll == 2) return ModSounds.NEUTRAL_END_POD_IDLE_03.get();
-        if (roll == 3) return ModSounds.NEUTRAL_END_POD_IDLE_04.get();
-        return ModSounds.NEUTRAL_END_POD_IDLE_05.get();
+        if (roll == 0) return NeutralSounds.NEUTRAL_END_POD_IDLE_01.get();
+        if (roll == 1) return NeutralSounds.NEUTRAL_END_POD_IDLE_02.get();
+        if (roll == 2) return NeutralSounds.NEUTRAL_END_POD_IDLE_03.get();
+        if (roll == 3) return NeutralSounds.NEUTRAL_END_POD_IDLE_04.get();
+        return NeutralSounds.NEUTRAL_END_POD_IDLE_05.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
         return this.random.nextBoolean()
-                ? ModSounds.NEUTRAL_END_POD_DEATH_01.get()
-                : ModSounds.NEUTRAL_END_POD_DEATH_02.get();
+                ? NeutralSounds.NEUTRAL_END_POD_DEATH_01.get()
+                : NeutralSounds.NEUTRAL_END_POD_DEATH_02.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
         return this.random.nextBoolean()
-                ? ModSounds.NEUTRAL_END_POD_DEATH_01.get()
-                : ModSounds.NEUTRAL_END_POD_DEATH_02.get();
+                ? NeutralSounds.NEUTRAL_END_POD_DEATH_01.get()
+                : NeutralSounds.NEUTRAL_END_POD_DEATH_02.get();
     }
 
     @Override
@@ -113,5 +113,7 @@ public class EndPodEntity extends Chicken implements GeoEntity {
         return this.geoCache;
     }
 }
+
+
 
 

@@ -26,7 +26,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.zincstudios.scgextra.CommonConfig;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.sounds.NeutralSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -102,7 +102,7 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity {
         } else if (target != null && target.isAlive() && this.distanceTo(target) <= 5.0F) {
             breathCooldown = 120;
             breathActiveTicks = 20;
-            this.playSound(ModSounds.NEUTRAL_NETHERITE_EATER_BREATH.get(), 1.4F, this.getVoicePitch());
+            this.playSound(NeutralSounds.NEUTRAL_NETHERITE_EATER_BREATH.get(), 1.4F, this.getVoicePitch());
         }
 
         this.runningForAnim = target != null && target.isAlive() && this.distanceTo(target) > 4.5F;
@@ -270,21 +270,22 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity {
     @Override
     protected SoundEvent getAmbientSound() {
         int roll = this.random.nextInt(4);
-        if (roll == 0) return ModSounds.NEUTRAL_NETHERITE_EATER_IDLE_01.get();
-        if (roll == 1) return ModSounds.NEUTRAL_NETHERITE_EATER_IDLE_02.get();
-        if (roll == 2) return ModSounds.NEUTRAL_NETHERITE_EATER_IDLE_03.get();
-        return ModSounds.NEUTRAL_NETHERITE_EATER_IDLE_04.get();
+        if (roll == 0) return NeutralSounds.NEUTRAL_NETHERITE_EATER_IDLE_01.get();
+        if (roll == 1) return NeutralSounds.NEUTRAL_NETHERITE_EATER_IDLE_02.get();
+        if (roll == 2) return NeutralSounds.NEUTRAL_NETHERITE_EATER_IDLE_03.get();
+        return NeutralSounds.NEUTRAL_NETHERITE_EATER_IDLE_04.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
         return this.random.nextBoolean()
-                ? ModSounds.NEUTRAL_NETHERITE_EATER_HURT_01.get()
-                : ModSounds.NEUTRAL_NETHERITE_EATER_HURT_02.get();
+                ? NeutralSounds.NEUTRAL_NETHERITE_EATER_HURT_01.get()
+                : NeutralSounds.NEUTRAL_NETHERITE_EATER_HURT_02.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return ModSounds.NEUTRAL_NETHERITE_EATER_DEATH.get();
+        return NeutralSounds.NEUTRAL_NETHERITE_EATER_DEATH.get();
     }
 }
+

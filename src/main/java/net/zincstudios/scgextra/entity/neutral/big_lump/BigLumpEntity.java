@@ -30,7 +30,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.entity.projectile.ArmoredWhaleProjectileEntity;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.sounds.NeutralSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -265,20 +265,21 @@ public class BigLumpEntity extends Zombie implements GeoEntity {
     @Override
     protected SoundEvent getAmbientSound() {
         int roll = this.random.nextInt(3);
-        if (roll == 0) return ModSounds.NEUTRAL_BIG_LUMP_IDLE_01.get();
-        if (roll == 1) return ModSounds.NEUTRAL_BIG_LUMP_IDLE_02.get();
-        return ModSounds.NEUTRAL_BIG_LUMP_IDLE_03.get();
+        if (roll == 0) return NeutralSounds.NEUTRAL_BIG_LUMP_IDLE_01.get();
+        if (roll == 1) return NeutralSounds.NEUTRAL_BIG_LUMP_IDLE_02.get();
+        return NeutralSounds.NEUTRAL_BIG_LUMP_IDLE_03.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
         return this.random.nextBoolean()
-                ? ModSounds.NEUTRAL_BIG_LUMP_HURT_01.get()
-                : ModSounds.NEUTRAL_BIG_LUMP_HURT_02.get();
+                ? NeutralSounds.NEUTRAL_BIG_LUMP_HURT_01.get()
+                : NeutralSounds.NEUTRAL_BIG_LUMP_HURT_02.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return ModSounds.NEUTRAL_BIG_LUMP_DEATH.get();
+        return NeutralSounds.NEUTRAL_BIG_LUMP_DEATH.get();
     }
 }
+

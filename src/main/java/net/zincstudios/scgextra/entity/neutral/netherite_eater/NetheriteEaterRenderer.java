@@ -13,3 +13,4 @@ public class NetheriteEaterRenderer extends GeoEntityRenderer<NetheriteEaterEnti
 }
 
 
+

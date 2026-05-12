@@ -24,7 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.zincstudios.scgextra.CommonConfig;
-import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.sounds.NeutralSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -161,21 +161,21 @@ public class AmmoGoblinEntity extends Zombie implements GeoEntity {
     @Override
     protected SoundEvent getAmbientSound() {
         return this.random.nextBoolean()
-                ? ModSounds.NEUTRAL_AMMO_GOBLIN_IDLE_01.get()
-                : ModSounds.NEUTRAL_AMMO_GOBLIN_IDLE_02.get();
+                ? NeutralSounds.NEUTRAL_AMMO_GOBLIN_IDLE_01.get()
+                : NeutralSounds.NEUTRAL_AMMO_GOBLIN_IDLE_02.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
         int roll = this.random.nextInt(3);
-        if (roll == 0) return ModSounds.NEUTRAL_AMMO_GOBLIN_HURT_01.get();
-        if (roll == 1) return ModSounds.NEUTRAL_AMMO_GOBLIN_HURT_02.get();
-        return ModSounds.NEUTRAL_AMMO_GOBLIN_HURT_03.get();
+        if (roll == 0) return NeutralSounds.NEUTRAL_AMMO_GOBLIN_HURT_01.get();
+        if (roll == 1) return NeutralSounds.NEUTRAL_AMMO_GOBLIN_HURT_02.get();
+        return NeutralSounds.NEUTRAL_AMMO_GOBLIN_HURT_03.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return ModSounds.NEUTRAL_AMMO_GOBLIN_DEAD.get();
+        return NeutralSounds.NEUTRAL_AMMO_GOBLIN_DEAD.get();
     }
 
     @Override
@@ -183,3 +183,4 @@ public class AmmoGoblinEntity extends Zombie implements GeoEntity {
         return false;
     }
 }
+
