@@ -368,6 +368,9 @@ public class BigLumpEntity extends Zombie implements GeoEntity {
         if (spawnReason == MobSpawnType.SPAWN_EGG || spawnReason == MobSpawnType.COMMAND) {
             return true;
         }
+        if (net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.isWaterAtOrBelow(level, this.blockPosition())) {
+            return false;
+        }
         if (!super.checkSpawnRules(level, spawnReason)) {
             return false;
         }

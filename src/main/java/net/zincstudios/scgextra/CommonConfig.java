@@ -83,10 +83,10 @@ public class CommonConfig {
             .defineInRange("spawnChanceAmmoGoblin", 15, 0, 100);
     private static final ForgeConfigSpec.IntValue SPAWN_CHANCE_BIG_LUMP = BUILDER
             .comment("natural spawn chance for Big Lump in percent")
-            .defineInRange("spawnChanceBigLump", 15, 0, 100);
+            .defineInRange("spawnChanceBigLump", 20, 0, 100);
     private static final ForgeConfigSpec.IntValue SPAWN_CHANCE_MUTANT_BAT = BUILDER
             .comment("natural spawn chance for Mutant Bat in percent")
-            .defineInRange("spawnChanceMutantBat", 30, 0, 100);
+            .defineInRange("spawnChanceMutantBat", 20, 0, 100);
     private static final ForgeConfigSpec.IntValue SPAWN_CHANCE_NITRO_BEETLE = BUILDER
             .comment("natural spawn chance for Nitro Beetle in percent")
             .defineInRange("spawnChanceNitroBeetle", 20, 0, 100);

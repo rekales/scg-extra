@@ -6,6 +6,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Difficulty;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -61,6 +62,11 @@ public final class NeutralCombatUtil {
             return false;
         }
         return canSpawnEndSurface(level, pos);
+    }
+
+    public static boolean isWaterAtOrBelow(LevelAccessor level, BlockPos pos) {
+        return level.getFluidState(pos).is(FluidTags.WATER)
+                || level.getFluidState(pos.below()).is(FluidTags.WATER);
     }
 }
 

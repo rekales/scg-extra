@@ -224,6 +224,9 @@ public class NitroBeetleEntity extends Monster implements GeoEntity {
         if (spawnReason == MobSpawnType.SPAWN_EGG || spawnReason == MobSpawnType.COMMAND) {
             return true;
         }
+        if (net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.isWaterAtOrBelow(level, this.blockPosition())) {
+            return false;
+        }
         if (this.random.nextFloat() * 100.0F >= CommonConfig.spawnChanceNitroBeetle) {
             return false;
         }
