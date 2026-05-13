@@ -12,6 +12,11 @@ import net.zincstudios.scgextra.client.particle.CopperFireBallParticle;
 import net.zincstudios.scgextra.client.particle.CopperFlameParticle;
 import net.zincstudios.scgextra.debug.EntityHeadBoxDebug;
 import net.zincstudios.scgextra.entity.ModEntities;
+import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
+import net.zincstudios.scgextra.entity.asgharian.BaseEntityRenderer;
+import net.zincstudios.scgextra.entity.asgharian.ItemHoldingMobRenderer;
+import net.zincstudios.scgextra.entity.asgharian.candlefiend.CandleFiendRenderer;
+import net.zincstudios.scgextra.entity.asgharian.worker.AsgharWorkerRenderer;
 import net.zincstudios.scgextra.entity.neutral.NeutralEntities;
 import net.zincstudios.scgextra.entity.common.client.GunnerRenderer;
 import net.zincstudios.scgextra.entity.common.raid_summoner.RaidSummonerRenderer;
@@ -116,6 +121,16 @@ public final class ModClientEventHandler {
         EntityRenderers.register(NeutralEntities.END_DWELLER.get(), EndDwellerRenderer::new);
         EntityRenderers.register(NeutralEntities.END_STONE_CRAB.get(), EndStoneCrabRenderer::new);
         EntityRenderers.register(NeutralEntities.END_SCORPION.get(), EndScorpionRenderer::new);
+        EntityRenderers.register(AsgharianEntities.FAILED_ONE.get(), (ctx) -> new ItemHoldingMobRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("asgharian/failed_one"))).noDeathTilt().shadowRadius(0.5f));
+        EntityRenderers.register(AsgharianEntities.ASGHAR_SURGEON.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("asgharian/asghar_surgeon"))).noDeathTilt());
+        EntityRenderers.register(AsgharianEntities.ASGHAR_WORKER.get(), AsgharWorkerRenderer::new);
+        EntityRenderers.register(AsgharianEntities.ASGHAR_FLAMER.get(), (ctx) -> new GunnerRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("asgharian/asghar_flamer")), 10).noDeathTilt());
+        EntityRenderers.register(AsgharianEntities.CANDLE_FIEND.get(), CandleFiendRenderer::new);
+        EntityRenderers.register(AsgharianEntities.SOUL_RIPPER.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("asgharian/soul_ripper"))).noDeathTilt());
 
         EntityHeadBoxDebug.register();
     }
