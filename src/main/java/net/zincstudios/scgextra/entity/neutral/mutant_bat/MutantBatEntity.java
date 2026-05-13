@@ -299,10 +299,15 @@ public class MutantBatEntity extends Monster implements GeoEntity {
         if (spawnReason == MobSpawnType.SPAWN_EGG || spawnReason == MobSpawnType.COMMAND) {
             return true;
         }
-        return true;
+        if (!(level instanceof ServerLevelAccessor serverLevel)) {
+            return false;
+        }
+        @SuppressWarnings("unchecked")
+        EntityType<? extends MutantBatEntity> type = (EntityType<? extends MutantBatEntity>) this.getType();
+        return checkMutantBatSpawnRules(type, serverLevel, spawnReason, this.blockPosition(), this.random);
     }
 
-    public static boolean checkMutantBatSpawnRules(EntityType<MutantBatEntity> entityType,
+    public static boolean checkMutantBatSpawnRules(EntityType<? extends MutantBatEntity> entityType,
                                                    ServerLevelAccessor level,
                                                    MobSpawnType spawnType,
                                                    BlockPos pos,
