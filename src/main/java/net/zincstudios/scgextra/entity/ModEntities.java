@@ -1,25 +1,34 @@
 package net.zincstudios.scgextra.entity;
 
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
 import net.zincstudios.scgextra.entity.common.raid_summoner.RaidSummonerEntity;
+import net.zincstudios.scgextra.entity.common.raid_summoner.RaidSummonerRenderer;
 import net.zincstudios.scgextra.entity.fac.FACEntities;
 import net.zincstudios.scgextra.entity.neutral.NeutralEntities;
 import net.zincstudios.scgextra.entity.projectile.ArmoredWhaleProjectileEntity;
 import net.zincstudios.scgextra.entity.projectile.FireProjectile;
+import net.zincstudios.scgextra.entity.projectile.SoulFireBallRenderer;
 import net.zincstudios.scgextra.entity.projectile.SoulFireball;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntity;
+import net.zincstudios.scgextra.entity.projectile.net.NetEntityRenderer;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
+import top.ribs.scguns.entity.client.EnemyProjectileRenderer;
 
 public class ModEntities {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, SCGExtra.MOD_ID);
@@ -68,9 +77,21 @@ public class ModEntities {
 
         modEventBus.addListener(ModEntities::registerAttributes);
         MinecraftForge.EVENT_BUS.addListener(EntityAdjustments::onEntityJoin);
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            modEventBus.addListener(ModEntities::onClientSetup);
+        }
     }
 
     private static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(RAID_SUMMONER.get(), RaidSummonerEntity.createAttributes().build());
+    }
+
+    @OnlyIn(value = Dist.CLIENT)
+    private static void onClientSetup(FMLClientSetupEvent event) {
+        EntityRenderers.register(ModEntities.NET.get(), NetEntityRenderer::new);
+        EntityRenderers.register(ModEntities.WHALE_PROJECTILE.get(), EnemyProjectileRenderer::new);
+        EntityRenderers.register(ModEntities.FIRE_PROJECTILE.get(), EnemyProjectileRenderer::new);
+        EntityRenderers.register(ModEntities.RAID_SUMMONER.get(), RaidSummonerRenderer::new);
+        EntityRenderers.register(ModEntities.LARGE_SOUL_FIREBALL.get(), SoulFireBallRenderer::new);
     }
 }

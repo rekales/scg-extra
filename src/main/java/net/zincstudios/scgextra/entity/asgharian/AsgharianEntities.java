@@ -1,19 +1,28 @@
 package net.zincstudios.scgextra.entity.asgharian;
 
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
+import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.asgharian.candlefiend.CandleFiendEntity;
+import net.zincstudios.scgextra.entity.asgharian.candlefiend.CandleFiendRenderer;
 import net.zincstudios.scgextra.entity.asgharian.failedone.FailedOneEntity;
 import net.zincstudios.scgextra.entity.asgharian.flamer.AsgharFlamerEntity;
 import net.zincstudios.scgextra.entity.asgharian.soulripper.SoulRipperEntity;
 import net.zincstudios.scgextra.entity.asgharian.surgeon.AsgharSurgeonEntity;
 import net.zincstudios.scgextra.entity.asgharian.worker.AsgharWorkerEntity;
+import net.zincstudios.scgextra.entity.asgharian.worker.AsgharWorkerRenderer;
 import net.zincstudios.scgextra.entity.common.WeakPointBox;
 import net.zincstudios.scgextra.entity.common.WeakPointBoxManager;
+import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import top.ribs.scguns.common.BoundingBoxManager;
 import top.ribs.scguns.common.headshot.BasicHeadshotBox;
 import top.ribs.scguns.common.headshot.RotatedHeadshotBox;
@@ -57,6 +66,9 @@ public class AsgharianEntities {
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(AsgharianEntities::registerAttributes);
         modEventBus.addListener(AsgharianEntities::onCommonSetup);
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            modEventBus.addListener(AsgharianEntities::onClientSetup);
+        }
     }
 
     private static void registerAttributes(EntityAttributeCreationEvent event) {
@@ -79,5 +91,19 @@ public class AsgharianEntities {
         WeakPointBoxManager.registerWeakPointBox(AsgharianEntities.ASGHAR_FLAMER.get(), new WeakPointBox<>(new RotatedHeadshotBox<>(11.0, 16.0, 12.0, -8, false, true)));
 //        WeakPointBoxManager.registerWeakPointBox(AsgharianEntities.SOUL_RIPPER.get(), new WeakPointBox<>(new BasicHeadshotBox<>(9.0, 48.0)));
 
+    }
+
+    @OnlyIn(value = Dist.CLIENT)
+    private static void onClientSetup(FMLClientSetupEvent event) {
+        EntityRenderers.register(AsgharianEntities.FAILED_ONE.get(), (ctx) -> new ItemHoldingMobRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("asgharian/failed_one"))).noDeathTilt().shadowRadius(0.5f));
+        EntityRenderers.register(AsgharianEntities.ASGHAR_SURGEON.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("asgharian/asghar_surgeon"))).noDeathTilt());
+        EntityRenderers.register(AsgharianEntities.ASGHAR_WORKER.get(), AsgharWorkerRenderer::new);
+        EntityRenderers.register(AsgharianEntities.ASGHAR_FLAMER.get(), (ctx) -> new GunnerRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("asgharian/asghar_flamer")), 10).noDeathTilt());
+        EntityRenderers.register(AsgharianEntities.CANDLE_FIEND.get(), CandleFiendRenderer::new);
+        EntityRenderers.register(AsgharianEntities.SOUL_RIPPER.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("asgharian/soul_ripper"))).noDeathTilt());
     }
 }

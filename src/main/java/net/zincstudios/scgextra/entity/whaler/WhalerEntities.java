@@ -1,19 +1,34 @@
 package net.zincstudios.scgextra.entity.whaler;
 
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
+import net.zincstudios.scgextra.SCGExtra;
+import net.zincstudios.scgextra.entity.common.client.GunnerRenderer;
 import net.zincstudios.scgextra.entity.whaler.armoredwhale.ArmoredWhaleEntity;
+import net.zincstudios.scgextra.entity.whaler.armoredwhale.ArmoredWhaleRenderer;
 import net.zincstudios.scgextra.entity.whaler.fishfolk.FishFolkEntity;
+import net.zincstudios.scgextra.entity.whaler.fishfolk.FishFolkRenderer;
 import net.zincstudios.scgextra.entity.whaler.guardian_statue.GuardianStatueEntity;
+import net.zincstudios.scgextra.entity.whaler.guardian_statue.GuardianStatueRenderer;
 import net.zincstudios.scgextra.entity.whaler.pufficus.PufficusEntity;
+import net.zincstudios.scgextra.entity.whaler.pufficus.PufficusRenderer;
 import net.zincstudios.scgextra.entity.whaler.salmonsaur.SalmonsaurEntity;
+import net.zincstudios.scgextra.entity.whaler.salmonsaur.SalmonsaurRenderer;
 import net.zincstudios.scgextra.entity.whaler.tentacliator.GlowingTentacliatorEntity;
+import net.zincstudios.scgextra.entity.whaler.tentacliator.GlowingTentacliatorRenderer;
 import net.zincstudios.scgextra.entity.whaler.tentacliator.TentacliatorEntity;
+import net.zincstudios.scgextra.entity.whaler.tentacliator.TentacliatorRenderer;
 import net.zincstudios.scgextra.entity.whaler.turtleman.TurtlemanEntity;
+import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import top.ribs.scguns.common.BoundingBoxManager;
 import top.ribs.scguns.common.headshot.BasicHeadshotBox;
 
@@ -62,6 +77,9 @@ public class WhalerEntities {
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(WhalerEntities::registerAttributes);
         modEventBus.addListener(WhalerEntities::onCommonSetup);
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            modEventBus.addListener(WhalerEntities::onClientSetup);
+        }
     }
 
     private static void registerAttributes(EntityAttributeCreationEvent event) {
@@ -77,6 +95,19 @@ public class WhalerEntities {
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
         BoundingBoxManager.registerHeadshotBox(WhalerEntities.TURTLEMAN.get(), new BasicHeadshotBox<>(11.0, 28.0));
+    }
+
+    @OnlyIn(value = Dist.CLIENT)
+    private static void onClientSetup(FMLClientSetupEvent event) {
+        EntityRenderers.register(WhalerEntities.FISH_FOLK.get(), FishFolkRenderer::new);
+        EntityRenderers.register(WhalerEntities.TURTLEMAN.get(), (ctx) -> new GunnerRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("whaler/turtleman")), -10));
+        EntityRenderers.register(WhalerEntities.SALMONSAUR.get(), SalmonsaurRenderer::new);
+        EntityRenderers.register(WhalerEntities.GUARDIAN_STATUE.get(), GuardianStatueRenderer::new);
+        EntityRenderers.register(WhalerEntities.TENTACLIATOR.get(), TentacliatorRenderer::new);
+        EntityRenderers.register(WhalerEntities.GLOWING_TENTACLIATOR.get(), GlowingTentacliatorRenderer::new);
+        EntityRenderers.register(WhalerEntities.PUFFICUS.get(), PufficusRenderer::new);
+        EntityRenderers.register(WhalerEntities.ARMORED_WHALE.get(), ArmoredWhaleRenderer::new);
     }
 
 }
