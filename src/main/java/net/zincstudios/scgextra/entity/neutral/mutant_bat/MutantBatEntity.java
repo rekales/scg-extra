@@ -312,6 +312,9 @@ public class MutantBatEntity extends Monster implements GeoEntity {
                                                    MobSpawnType spawnType,
                                                    BlockPos pos,
                                                    RandomSource random) {
+        if (net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.isWaterAtOrBelow(level, pos)) {
+            return false;
+        }
         if (pos.getY() >= level.getSeaLevel()) {
             return false;
         }

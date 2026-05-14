@@ -10,13 +10,13 @@
     },
     {
       "type": "scgextra:big_lump",
-      "weight": 500,
+      "weight": 50,
       "minCount": 1,
       "maxCount": 2
     },
     {
       "type": "scgextra:mutant_bat",
-      "weight": 500,
+      "weight": 50,
       "minCount": 2,
       "maxCount": 4
     },

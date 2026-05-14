@@ -351,6 +351,9 @@ public class EndDwellerEntity extends Monster implements GeoEntity {
         if (spawnReason == MobSpawnType.SPAWN_EGG || spawnReason == MobSpawnType.COMMAND) {
             return true;
         }
+        if (net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.isWaterAtOrBelow(level, this.blockPosition())) {
+            return false;
+        }
         return this.random.nextFloat() * 100.0F < CommonConfig.spawnChanceEndDweller
                 && net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.canSpawnEndSurface(level, this.blockPosition());
     }
