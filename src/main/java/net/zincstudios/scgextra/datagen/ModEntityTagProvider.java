@@ -25,34 +25,6 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
-        tag(ModTags.Entities.WATER)
-                .add(WhalerEntities.FISH_FOLK.get())
-                .add(WhalerEntities.TURTLEMAN.get())
-                .add(WhalerEntities.SALMONSAUR.get())
-                .add(WhalerEntities.GUARDIAN_STATUE.get())
-                .add(WhalerEntities.TENTACLIATOR.get())
-                .add(WhalerEntities.GLOWING_TENTACLIATOR.get())
-                .add(WhalerEntities.PUFFICUS.get())
-                .add(WhalerEntities.ARMORED_WHALE.get());
-
-        tag(ModTags.Entities.HEAVY)
-                .add(WhalerEntities.TURTLEMAN.get())
-                .add(WhalerEntities.SALMONSAUR.get());
-
-        tag(ModTags.Entities.VERY_HEAVY)
-                .add(WhalerEntities.GUARDIAN_STATUE.get())
-                .add(WhalerEntities.ARMORED_WHALE.get());
-
-        tag(ModTags.Entities.CANNOT_BE_LACERATED)
-                .add(WhalerEntities.GUARDIAN_STATUE.get())
-                .add(AsgharianEntities.ASGHAR_WORKER.get())
-                .add(FACEntities.FAC_TANK.get())
-                .add(FACEntities.FAC_WALKER.get())
-                .add(NeutralEntities.HEAD_HUNTER.get());
-
-        tag(ModTags.Entities.BOT)
-                .add(AsgharianEntities.ASGHAR_WORKER.get());
-
         tag(EntityTypeTags.ASGHARIAN)
                 .add(AsgharianEntities.FAILED_ONE.get())
                 .add(AsgharianEntities.ASGHAR_SURGEON.get())
@@ -108,6 +80,34 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
                 .add(RRCEntities.ARC_PSYCHO.get())
                 .add(RRCEntities.FLAMING_HEAD.get())
                 .add(RRCEntities.COPPER_KNIGHT.get());
+
+        tag(ModTags.Entities.CANNOT_BE_LACERATED)
+                .add(WhalerEntities.GUARDIAN_STATUE.get())
+                .add(AsgharianEntities.ASGHAR_WORKER.get())
+                .add(FACEntities.FAC_TANK.get())
+                .add(FACEntities.FAC_WALKER.get())
+                .add(NeutralEntities.HEAD_HUNTER.get());
+
+        tag(ModTags.Entities.WATER)
+                .add(WhalerEntities.FISH_FOLK.get())
+                .add(WhalerEntities.TURTLEMAN.get())
+                .add(WhalerEntities.SALMONSAUR.get())
+                .add(WhalerEntities.GUARDIAN_STATUE.get())
+                .add(WhalerEntities.TENTACLIATOR.get())
+                .add(WhalerEntities.GLOWING_TENTACLIATOR.get())
+                .add(WhalerEntities.PUFFICUS.get())
+                .add(WhalerEntities.ARMORED_WHALE.get());
+
+        tag(ModTags.Entities.HEAVY)
+                .add(WhalerEntities.TURTLEMAN.get())
+                .add(WhalerEntities.SALMONSAUR.get());
+
+        tag(ModTags.Entities.VERY_HEAVY)
+                .add(WhalerEntities.GUARDIAN_STATUE.get())
+                .add(WhalerEntities.ARMORED_WHALE.get());
+
+        tag(ModTags.Entities.BOT)
+                .add(AsgharianEntities.ASGHAR_WORKER.get());
 
         tag(ModTags.Entities.FIRE)
                 .add(NeutralEntities.HEAD_HUNTER.get())
