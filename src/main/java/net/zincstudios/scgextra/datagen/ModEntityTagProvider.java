@@ -45,7 +45,10 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
 
         tag(ModTags.Entities.CANNOT_BE_LACERATED)
                 .add(WhalerEntities.GUARDIAN_STATUE.get())
-                .add(AsgharianEntities.ASGHAR_WORKER.get());
+                .add(AsgharianEntities.ASGHAR_WORKER.get())
+                .add(FACEntities.FAC_TANK.get())
+                .add(FACEntities.FAC_WALKER.get())
+                .add(NeutralEntities.HEAD_HUNTER.get());
 
         tag(ModTags.Entities.BOT)
                 .add(AsgharianEntities.ASGHAR_WORKER.get());
