@@ -96,7 +96,8 @@ public class CandleFiendEntity extends Monster implements GeoEntity, Leaping {
     public void tick() {
         super.tick();
 
-        if (this.level() instanceof ClientLevel clientLevel) {
+        if (this.level().isClientSide()) {
+            ClientLevel clientLevel = (ClientLevel) level();  // Dedicated Server doesn't like doing instanceof ClientLevel
             if (this.isMasked() && !this.isDeadOrDying() && this.tickCount % 3 == 0) {
                 Vec3 pos = this.isSprinting() ? new Vec3(0,3.4,1) : new Vec3(0,3.6,0.3);
                 pos = pos.add(

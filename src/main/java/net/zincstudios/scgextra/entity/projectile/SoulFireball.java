@@ -11,8 +11,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.zincstudios.scgextra.SCGExtra;
@@ -42,7 +40,9 @@ public class SoulFireball extends AbstractHurtingProjectile {
     public void tick() {
         super.tick();
 
-        if (this.level() instanceof ClientLevel level) {
+        if (this.level().isClientSide) {
+            ClientLevel level = (ClientLevel) level();  // Dedicated Server doesn't like doing instanceof ClientLevel
+
             level.addParticle(
                     ParticleTypes.SOUL_FIRE_FLAME,
                     this.position().x + (level.getRandom().nextDouble() - 0.5) * 0.5,

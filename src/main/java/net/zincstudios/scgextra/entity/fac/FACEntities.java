@@ -1,25 +1,40 @@
 package net.zincstudios.scgextra.entity.fac;
 
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
-import net.zincstudios.scgextra.entity.ModEntities;
+import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.common.OffsetRotatedHeadshotBox;
 import net.zincstudios.scgextra.entity.common.WeakPointBox;
 import net.zincstudios.scgextra.entity.common.WeakPointBoxManager;
+import net.zincstudios.scgextra.entity.common.client.GunnerRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_bluecoat.FacBluecoatEntity;
+import net.zincstudios.scgextra.entity.fac.fac_bluecoat.FacBluecoatRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_commissar.FacCommissarEntity;
+import net.zincstudios.scgextra.entity.fac.fac_commissar.FacCommissarRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_lion.FacLionEntity;
+import net.zincstudios.scgextra.entity.fac.fac_lion.FacLionRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_tank.FacTankEntity;
+import net.zincstudios.scgextra.entity.fac.fac_tank.FacTankRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_tank_buster.FacTankBusterEntity;
+import net.zincstudios.scgextra.entity.fac.fac_tank_buster.FacTankBusterRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_trencher.FacTrencherEntity;
+import net.zincstudios.scgextra.entity.fac.fac_trencher.FacTrencherRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_walker.FacWalkerEntity;
 import net.zincstudios.scgextra.entity.fac.shovel_knight.ShovelKnightEntity;
 import net.zincstudios.scgextra.entity.fac.trench_goblin.TrenchGoblinEntity;
+import net.zincstudios.scgextra.entity.fac.trench_goblin.TrenchGoblinRenderer;
 import net.zincstudios.scgextra.entity.fac.trench_sniper.TrenchSniperEntity;
+import net.zincstudios.scgextra.entity.fac.trench_sniper.TrenchSniperRenderer;
+import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import top.ribs.scguns.common.BoundingBoxManager;
 import top.ribs.scguns.common.headshot.BasicHeadshotBox;
 import top.ribs.scguns.common.headshot.RotatedHeadshotBox;
@@ -83,6 +98,9 @@ public class FACEntities {
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(FACEntities::registerAttributes);
         modEventBus.addListener(FACEntities::onCommonSetup);
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            modEventBus.addListener(FACEntities::onClientSetup);
+        }
     }
 
     private static void registerAttributes(EntityAttributeCreationEvent event) {
@@ -112,5 +130,21 @@ public class FACEntities {
 
         WeakPointBoxManager.registerWeakPointBox(FACEntities.FAC_WALKER.get(), new WeakPointBox<>(new RotatedHeadshotBox<>(14.0, 44.0, 4.0, false, true)));
         WeakPointBoxManager.registerWeakPointBox(FACEntities.FAC_TANK.get(), new WeakPointBox<>(new OffsetRotatedHeadshotBox<>(13.0, 16.0, 9.0, 0.0F, false, true)));
+    }
+
+    @OnlyIn(value = Dist.CLIENT)
+    private static void onClientSetup(FMLClientSetupEvent event) {
+        EntityRenderers.register(FACEntities.FAC_TRENCHER.get(), (ctx) -> new FacTrencherRenderer(ctx).noDeathTilt());
+        EntityRenderers.register(FACEntities.FAC_BLUECOAT.get(), (ctx) -> new FacBluecoatRenderer(ctx).noDeathTilt());
+        EntityRenderers.register(FACEntities.TRENCH_GOBLIN.get(), (ctx) -> new TrenchGoblinRenderer(ctx).noDeathTilt());
+        EntityRenderers.register(FACEntities.TRENCH_SNIPER.get(), (ctx) -> new TrenchSniperRenderer(ctx).noDeathTilt());
+        EntityRenderers.register(FACEntities.SHOVEL_KNIGHT.get(), (ctx) -> new GunnerRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_shovel_knight")), -10).noDeathTilt());
+        EntityRenderers.register(FACEntities.FAC_TANK_BUSTER.get(), (ctx) -> new FacTankBusterRenderer(ctx).noDeathTilt());
+        EntityRenderers.register(FACEntities.FAC_LION.get(), (ctx) -> new FacLionRenderer(ctx).noDeathTilt());
+        EntityRenderers.register(FACEntities.FAC_COMMISSAR.get(), (ctx) -> new FacCommissarRenderer(ctx).noDeathTilt());
+        EntityRenderers.register(FACEntities.FAC_WALKER.get(), (ctx) -> new GunnerRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_walker")), -10).noDeathTilt());
+        EntityRenderers.register(FACEntities.FAC_TANK.get(), FacTankRenderer::new);
     }
 }

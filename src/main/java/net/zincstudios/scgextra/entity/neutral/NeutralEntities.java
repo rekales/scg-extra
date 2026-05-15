@@ -1,22 +1,44 @@
 package net.zincstudios.scgextra.entity.neutral;
 
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
+import net.zincstudios.scgextra.entity.common.OffsetRotatedHeadshotBox;
+import net.zincstudios.scgextra.entity.common.WeakPointBox;
+import net.zincstudios.scgextra.entity.common.WeakPointBoxManager;
 import net.zincstudios.scgextra.entity.neutral.ammo_goblin.AmmoGoblinEntity;
+import net.zincstudios.scgextra.entity.neutral.ammo_goblin.AmmoGoblinRenderer;
 import net.zincstudios.scgextra.entity.neutral.big_lump.BigLumpEntity;
+import net.zincstudios.scgextra.entity.neutral.big_lump.BigLumpRenderer;
 import net.zincstudios.scgextra.entity.neutral.end_dweller.EndDwellerEntity;
+import net.zincstudios.scgextra.entity.neutral.end_dweller.EndDwellerRenderer;
 import net.zincstudios.scgextra.entity.neutral.end_pod.EndPodEntity;
+import net.zincstudios.scgextra.entity.neutral.end_pod.EndPodRenderer;
 import net.zincstudios.scgextra.entity.neutral.end_scorpion.EndScorpionEntity;
+import net.zincstudios.scgextra.entity.neutral.end_scorpion.EndScorpionRenderer;
 import net.zincstudios.scgextra.entity.neutral.end_stone_crab.EndStoneCrabEntity;
+import net.zincstudios.scgextra.entity.neutral.end_stone_crab.EndStoneCrabRenderer;
 import net.zincstudios.scgextra.entity.neutral.head_hunter.HeadHunterEntity;
+import net.zincstudios.scgextra.entity.neutral.head_hunter.HeadHunterRenderer;
 import net.zincstudios.scgextra.entity.neutral.inflicted_boar.InflictedBoarEntity;
+import net.zincstudios.scgextra.entity.neutral.inflicted_boar.InflictedBoarRenderer;
 import net.zincstudios.scgextra.entity.neutral.inflicted_wolf.InflictedWolfEntity;
+import net.zincstudios.scgextra.entity.neutral.inflicted_wolf.InflictedWolfRenderer;
 import net.zincstudios.scgextra.entity.neutral.mutant_bat.MutantBatEntity;
+import net.zincstudios.scgextra.entity.neutral.mutant_bat.MutantBatRenderer;
 import net.zincstudios.scgextra.entity.neutral.netherite_eater.NetheriteEaterEntity;
+import net.zincstudios.scgextra.entity.neutral.netherite_eater.NetheriteEaterRenderer;
 import net.zincstudios.scgextra.entity.neutral.nitro_beetle.NitroBeetleEntity;
+import net.zincstudios.scgextra.entity.neutral.nitro_beetle.NitroBeetleRenderer;
+import top.ribs.scguns.common.BoundingBoxManager;
 
 import static net.zincstudios.scgextra.entity.ModEntities.ENTITY_TYPES;
 
@@ -79,6 +101,10 @@ public class NeutralEntities {
 
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(NeutralEntities::registerAttributes);
+        modEventBus.addListener(NeutralEntities::onCommonSetup);
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            modEventBus.addListener(NeutralEntities::onClientSetup);
+        }
     }
 
     private static void registerAttributes(EntityAttributeCreationEvent event) {
@@ -95,5 +121,37 @@ public class NeutralEntities {
         event.put(END_STONE_CRAB.get(), EndStoneCrabEntity.createAttributes().build());
         event.put(END_SCORPION.get(), EndScorpionEntity.createAttributes().build());
     }
+    @OnlyIn(value = Dist.CLIENT)
+    private static void onClientSetup(FMLClientSetupEvent event) {
+        EntityRenderers.register(NeutralEntities.INFLICTED_BOAR.get(), InflictedBoarRenderer::new);
+        EntityRenderers.register(NeutralEntities.INFLICTED_WOLF.get(), InflictedWolfRenderer::new);
+        EntityRenderers.register(NeutralEntities.AMMO_GOBLIN.get(), AmmoGoblinRenderer::new);
+        EntityRenderers.register(NeutralEntities.BIG_LUMP.get(), BigLumpRenderer::new);
+        EntityRenderers.register(NeutralEntities.MUTANT_BAT.get(), MutantBatRenderer::new);
+        EntityRenderers.register(NeutralEntities.NITRO_BEETLE.get(), NitroBeetleRenderer::new);
+        EntityRenderers.register(NeutralEntities.HEAD_HUNTER.get(), HeadHunterRenderer::new);
+        EntityRenderers.register(NeutralEntities.NETHERITE_EATER.get(), NetheriteEaterRenderer::new);
+        EntityRenderers.register(NeutralEntities.END_POD.get(), EndPodRenderer::new);
+        EntityRenderers.register(NeutralEntities.END_DWELLER.get(), EndDwellerRenderer::new);
+        EntityRenderers.register(NeutralEntities.END_STONE_CRAB.get(), EndStoneCrabRenderer::new);
+        EntityRenderers.register(NeutralEntities.END_SCORPION.get(), EndScorpionRenderer::new);
+    }
+    private static void onCommonSetup(FMLCommonSetupEvent event) {
+        BoundingBoxManager.registerHeadshotBox(NeutralEntities.INFLICTED_BOAR.get(), new OffsetRotatedHeadshotBox<>(13, 13, 10.0, 0.0F, 8.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(NeutralEntities.INFLICTED_WOLF.get(), new OffsetRotatedHeadshotBox<>(12, 12, 10.0, 0.0F, 9.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(NeutralEntities.AMMO_GOBLIN.get(), new OffsetRotatedHeadshotBox<>(8, 8, 14.0, 0.0F, 4.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(NeutralEntities.BIG_LUMP.get(), new OffsetRotatedHeadshotBox<>(12.0, 12.0, 37.0, -35.0F, 15.5, false, true, true));
+        BoundingBoxManager.registerHeadshotBox(NeutralEntities.MUTANT_BAT.get(), new OffsetRotatedHeadshotBox<>(12, 12, 18.0, 0.0F, 6.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(NeutralEntities.NITRO_BEETLE.get(), new OffsetRotatedHeadshotBox<>(5, 5, 2.0, 0.0F, 3.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(NeutralEntities.HEAD_HUNTER.get(), new OffsetRotatedHeadshotBox<>(9, 9, 28.0, 0.0F, 3,-8, false, true, true));
+        BoundingBoxManager.registerHeadshotBox(NeutralEntities.NETHERITE_EATER.get(), new OffsetRotatedHeadshotBox<>(15, 15, 28, 0.0F, 8.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(NeutralEntities.END_POD.get(), new OffsetRotatedHeadshotBox<>(0, 0, 0, 0F, 0, false, true));
+        BoundingBoxManager.registerHeadshotBox(NeutralEntities.END_DWELLER.get(), new OffsetRotatedHeadshotBox<>(10, 10, 10.0, 0.0F, 10.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(NeutralEntities.END_STONE_CRAB.get(), new OffsetRotatedHeadshotBox<>(25, 25, 10.0, 0.0F, 6.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(NeutralEntities.END_SCORPION.get(), new OffsetRotatedHeadshotBox<>(10, 7, 1.5, 0.0F, 7.0, false, true));
+        
+        WeakPointBoxManager.registerWeakPointBox(NeutralEntities.HEAD_HUNTER.get(), new WeakPointBox<>(new OffsetRotatedHeadshotBox<>(9.0, 9.0, 34.0, 22.0F, 3, 2, false, true, true)));
+        WeakPointBoxManager.registerWeakPointBox(NeutralEntities.BIG_LUMP.get(), new WeakPointBox<>(new OffsetRotatedHeadshotBox<>(12.0, 12.0, 37.0, 40.0F, 18.0, false, true, true)));
+        WeakPointBoxManager.registerWeakPointBox(NeutralEntities.BIG_LUMP.get(), new WeakPointBox<>(new OffsetRotatedHeadshotBox<>(12.0, 12.0, 37.0, -60.0F, 18.0, false, true, true)));
+    }
 }
-

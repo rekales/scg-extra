@@ -1,23 +1,38 @@
 package net.zincstudios.scgextra.entity.rrc;
 
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
+import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.common.OffsetRotatedHeadshotBox;
 import net.zincstudios.scgextra.entity.common.WeakPointBox;
 import net.zincstudios.scgextra.entity.common.WeakPointBoxManager;
+import net.zincstudios.scgextra.entity.common.client.GunnerRenderer;
 import net.zincstudios.scgextra.entity.rrc.arc_psycho.ArcPsychoEntity;
+import net.zincstudios.scgextra.entity.rrc.arc_psycho.ArcPsychoEntityRenderer;
 import net.zincstudios.scgextra.entity.rrc.copper_knight.CopperKnightEntity;
+import net.zincstudios.scgextra.entity.rrc.copper_knight.CopperKnightRenderer;
 import net.zincstudios.scgextra.entity.rrc.drone.DroneEntity;
+import net.zincstudios.scgextra.entity.rrc.drone.DroneEntityRenderer;
 import net.zincstudios.scgextra.entity.rrc.flaminghead.FlamingHeadEntity;
+import net.zincstudios.scgextra.entity.rrc.flaminghead.FlamingHeadRenderer;
 import net.zincstudios.scgextra.entity.rrc.oppressor.OppressorEntity;
 import net.zincstudios.scgextra.entity.rrc.scout.ScoutEntity;
+import net.zincstudios.scgextra.entity.rrc.scout.ScoutRenderer;
 import net.zincstudios.scgextra.entity.rrc.scrapguard.ScrapGuardEntity;
+import net.zincstudios.scgextra.entity.rrc.scrapguard.ScrapGuardRenderer;
 import net.zincstudios.scgextra.entity.rrc.spring_junkie.SpringJunkieEntity;
+import net.zincstudios.scgextra.entity.rrc.spring_junkie.SpringJunkieRenderer;
 import net.zincstudios.scgextra.entity.rrc.tallman.TallmanEntity;
+import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import top.ribs.scguns.common.BoundingBoxManager;
 import top.ribs.scguns.common.headshot.RotatedHeadshotBox;
 
@@ -73,6 +88,9 @@ public class RRCEntities {
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(RRCEntities::registerAttributes);
         modEventBus.addListener(RRCEntities::onCommonSetup);
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            modEventBus.addListener(RRCEntities::onClientSetup);
+        }
     }
 
     private static void registerAttributes(EntityAttributeCreationEvent event) {
@@ -96,5 +114,19 @@ public class RRCEntities {
         BoundingBoxManager.registerHeadshotBox(RRCEntities.COPPER_KNIGHT.get(), new OffsetRotatedHeadshotBox<>(8, 9.5, 28.0, 0.0F, 2.0, false, true));
 
         WeakPointBoxManager.registerWeakPointBox(RRCEntities.FLAMING_HEAD.get(), new WeakPointBox<>(new OffsetRotatedHeadshotBox<>(10.0F, 55.0, 13, -70, false, true)));
+    }
+    @OnlyIn(value = Dist.CLIENT)
+    private static void onClientSetup(FMLClientSetupEvent event) {
+        EntityRenderers.register(RRCEntities.DRONE.get(), DroneEntityRenderer::new);
+        EntityRenderers.register(RRCEntities.TALLMAN.get(), (ctx) -> new GunnerRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("rrc/tallman"))).noDeathTilt());
+        EntityRenderers.register(RRCEntities.SCOUT.get(), (ctx) -> new ScoutRenderer<>(ctx).noDeathTilt());
+        EntityRenderers.register(RRCEntities.OPPRESSOR.get(), (ctx) -> new GunnerRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("rrc/oppressor"))).noDeathTilt());
+        EntityRenderers.register(RRCEntities.SPRING_JUNKIE.get(), SpringJunkieRenderer::new);
+        EntityRenderers.register(RRCEntities.FLAMING_HEAD.get(), FlamingHeadRenderer::new);
+        EntityRenderers.register(RRCEntities.SCRAP_GUARD.get(), (ctx) -> new ScrapGuardRenderer<>(ctx).noDeathTilt());
+        EntityRenderers.register(RRCEntities.ARC_PSYCHO.get(), ArcPsychoEntityRenderer::new);
+        EntityRenderers.register(RRCEntities.COPPER_KNIGHT.get(), (ctx) -> new CopperKnightRenderer<>(ctx).noDeathTilt());
     }
 }
