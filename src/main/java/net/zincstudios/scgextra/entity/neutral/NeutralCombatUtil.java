@@ -8,7 +8,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Difficulty;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -19,6 +18,7 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.resources.ResourceLocation;
@@ -64,7 +64,7 @@ public final class NeutralCombatUtil {
     private static TagKey<Item> scgGunsTierTag(String path) {
         return TagKey.create(
                 net.minecraft.core.registries.Registries.ITEM,
-                new ResourceLocation("scguns", path)
+                ResourceLocation.fromNamespaceAndPath("scguns", path)
         );
     }
 
@@ -168,7 +168,7 @@ public final class NeutralCombatUtil {
             return false;
         }
         Item item = stack.getItem();
-        ResourceLocation id = BuiltInRegistries.ITEM.getKey(item);
+        ResourceLocation id = ForgeRegistries.ITEMS.getKey(item);
         if (id == null || !"scguns".equals(id.getNamespace())) {
             return false;
         }
