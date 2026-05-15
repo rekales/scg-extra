@@ -4,31 +4,31 @@
   "spawners": [
     {
       "type": "scgextra:ammo_goblin",
-      "weight": 80,
+      "weight": 60,
       "minCount": 1,
       "maxCount": 2
     },
     {
       "type": "scgextra:big_lump",
-      "weight": 50,
+      "weight": 30,
       "minCount": 1,
       "maxCount": 2
     },
     {
       "type": "scgextra:mutant_bat",
-      "weight": 50,
+      "weight": 30,
       "minCount": 2,
       "maxCount": 4
     },
     {
       "type": "scgextra:inflicted_boar",
-      "weight": 90,
+      "weight": 50,
       "minCount": 2,
       "maxCount": 4
     },
     {
       "type": "scgextra:inflicted_wolf",
-      "weight": 90,
+      "weight": 50,
       "minCount": 2,
       "maxCount": 4
     }

@@ -3,9 +3,12 @@ package net.zincstudios.scgextra.entity.neutral.head_hunter;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
@@ -33,6 +36,7 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import javax.annotation.Nullable;
 
 public class HeadHunterEntity extends Monster implements GeoEntity {
     private static final int ATTACK_LOCK_TICKS = 40;
@@ -55,9 +59,18 @@ public class HeadHunterEntity extends Monster implements GeoEntity {
         super(type, level);
     }
 
+    @Nullable
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType,
+                                        @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
+        SpawnGroupData data = super.finalizeSpawn(level, difficulty, spawnType, spawnData, dataTag);
+        net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.markNaturalSpawn(this, spawnType);
+        return data;
+    }
+
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 200.0D)
+                .add(Attributes.MAX_HEALTH, 120.0D)
                 .add(Attributes.ARMOR, 6.0D)
                 .add(Attributes.ATTACK_DAMAGE, 12.0D)
                 .add(Attributes.FOLLOW_RANGE, 32.0D)
@@ -255,6 +268,9 @@ public class HeadHunterEntity extends Monster implements GeoEntity {
             return false;
         }
         if (!(level instanceof ServerLevelAccessor serverLevel)) {
+            return false;
+        }
+        if (net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.hasReachedNaturalSpawnCap(serverLevel, HeadHunterEntity.class, 2)) {
             return false;
         }
         if (!serverLevel.getLevel().dimension().equals(Level.NETHER)) {

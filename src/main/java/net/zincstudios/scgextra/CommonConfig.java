@@ -80,22 +80,22 @@ public class CommonConfig {
 
     private static final ForgeConfigSpec.IntValue SPAWN_CHANCE_AMMO_GOBLIN = BUILDER
             .comment("natural spawn chance for Ammo Goblin in percent")
-            .defineInRange("spawnChanceAmmoGoblin", 15, 0, 100);
+            .defineInRange("spawnChanceAmmoGoblin", 5, 0, 100);
     private static final ForgeConfigSpec.IntValue SPAWN_CHANCE_BIG_LUMP = BUILDER
             .comment("natural spawn chance for Big Lump in percent")
-            .defineInRange("spawnChanceBigLump", 20, 0, 100);
+            .defineInRange("spawnChanceBigLump", 5, 0, 100);
     private static final ForgeConfigSpec.IntValue SPAWN_CHANCE_MUTANT_BAT = BUILDER
             .comment("natural spawn chance for Mutant Bat in percent")
-            .defineInRange("spawnChanceMutantBat", 20, 0, 100);
+            .defineInRange("spawnChanceMutantBat", 100, 0, 100);
     private static final ForgeConfigSpec.IntValue SPAWN_CHANCE_NITRO_BEETLE = BUILDER
             .comment("natural spawn chance for Nitro Beetle in percent")
             .defineInRange("spawnChanceNitroBeetle", 20, 0, 100);
     private static final ForgeConfigSpec.IntValue SPAWN_CHANCE_NETHERITE_EATER = BUILDER
             .comment("natural spawn chance for Netherite Eater in percent")
-            .defineInRange("spawnChanceNetheriteEater", 15, 0, 100);
+            .defineInRange("spawnChanceNetheriteEater", 30, 0, 100);
     private static final ForgeConfigSpec.IntValue SPAWN_CHANCE_HEAD_HUNTER = BUILDER
             .comment("natural spawn chance for HeadHunter in percent")
-            .defineInRange("spawnChanceHeadHunter", 5, 0, 100);
+            .defineInRange("spawnChanceHeadHunter", 30, 0, 100);
     private static final ForgeConfigSpec.IntValue SPAWN_CHANCE_INFLICTED_BOAR = BUILDER
             .comment("natural spawn chance for Inflicted Boar in percent")
             .defineInRange("spawnChanceInflictedBoar", 30, 0, 100);
@@ -104,16 +104,16 @@ public class CommonConfig {
             .defineInRange("spawnChanceInflictedWolf", 30, 0, 100);
     private static final ForgeConfigSpec.IntValue SPAWN_CHANCE_END_POD = BUILDER
             .comment("natural spawn chance for End Pod in percent")
-            .defineInRange("spawnChanceEndPod", 30, 0, 100);
+            .defineInRange("spawnChanceEndPod", 100, 0, 100);
     private static final ForgeConfigSpec.IntValue SPAWN_CHANCE_END_DWELLER = BUILDER
             .comment("natural spawn chance for End Dweller in percent")
-            .defineInRange("spawnChanceEndDweller", 15, 0, 100);
+            .defineInRange("spawnChanceEndDweller", 30, 0, 100);
     private static final ForgeConfigSpec.IntValue SPAWN_CHANCE_END_STONE_CRAB = BUILDER
             .comment("natural spawn chance for End Stone Crab in percent")
-            .defineInRange("spawnChanceEndStoneCrab", 30, 0, 100);
+            .defineInRange("spawnChanceEndStoneCrab", 50, 0, 100);
     private static final ForgeConfigSpec.IntValue SPAWN_CHANCE_END_SCORPION = BUILDER
             .comment("natural spawn chance for End Scorpion in percent")
-            .defineInRange("spawnChanceEndScorpion", 15, 0, 100);
+            .defineInRange("spawnChanceEndScorpion", 30, 0, 100);
     private static final ForgeConfigSpec.IntValue SPAWN_CHANCE_HEAD_HUNTER_FORTRESS_REPLACE = BUILDER
             .comment("chance to replace wither skeleton with HeadHunter in fortress, in percent")
             .defineInRange("spawnChanceHeadHunterFortressReplace", 10, 0, 100);

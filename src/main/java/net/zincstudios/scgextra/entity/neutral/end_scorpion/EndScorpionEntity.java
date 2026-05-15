@@ -97,7 +97,7 @@ public class EndScorpionEntity extends Monster implements GeoEntity {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 600.0D)
+                .add(Attributes.MAX_HEALTH, 250.0D)
                 .add(Attributes.ARMOR, 12.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.8D)
                 .add(Attributes.ATTACK_DAMAGE, 15.0D)

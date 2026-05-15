@@ -88,7 +88,7 @@ public class BigLumpEntity extends Zombie implements GeoEntity {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Zombie.createAttributes()
-                .add(Attributes.MAX_HEALTH, 350.0D)
+                .add(Attributes.MAX_HEALTH, 250.0D)
                 .add(Attributes.ARMOR, 0.0D)
                 .add(Attributes.ATTACK_DAMAGE, 6.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.30D)
@@ -101,6 +101,7 @@ public class BigLumpEntity extends Zombie implements GeoEntity {
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType,
                                         @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
         SpawnGroupData data = super.finalizeSpawn(level, difficulty, spawnType, spawnData, dataTag);
+        net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.markNaturalSpawn(this, spawnType);
         this.setBaby(false);
         this.refreshDimensions();
         return data;
@@ -368,6 +369,15 @@ public class BigLumpEntity extends Zombie implements GeoEntity {
         if (spawnReason == MobSpawnType.SPAWN_EGG || spawnReason == MobSpawnType.COMMAND) {
             return true;
         }
+        if (!(level instanceof ServerLevelAccessor serverLevel)) {
+            return false;
+        }
+        if (!net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.hasOverworldGunProgression(serverLevel)) {
+            return false;
+        }
+        if (net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.hasReachedNaturalSpawnCap(serverLevel, BigLumpEntity.class, 3)) {
+            return false;
+        }
         if (net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.isWaterAtOrBelow(level, this.blockPosition())) {
             return false;
         }
@@ -382,7 +392,10 @@ public class BigLumpEntity extends Zombie implements GeoEntity {
         }
 
         net.minecraft.core.BlockPos pos = this.blockPosition();
-        return vanillaLevel.getBrightness(LightLayer.SKY, pos) > 0;
+        if (vanillaLevel.getBrightness(LightLayer.SKY, pos) <= 0) {
+            return false;
+        }
+        return true;
     }
 
     @Override

@@ -84,10 +84,21 @@ public class InflictedBoarEntity extends Hoglin implements GeoEntity {
         if (spawnReason == MobSpawnType.SPAWN_EGG || spawnReason == MobSpawnType.COMMAND) {
             return true;
         }
+        if (!(level instanceof ServerLevelAccessor serverLevel)) {
+            return false;
+        }
+        if (!net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.hasOverworldGunProgression(serverLevel)) {
+            return false;
+        }
         if (net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.isWaterAtOrBelow(level, this.blockPosition())) {
             return false;
         }
-        if (!super.checkSpawnRules(level, spawnReason)) {
+        @SuppressWarnings("unchecked")
+        EntityType<? extends net.minecraft.world.entity.Mob> mobType = (EntityType<? extends net.minecraft.world.entity.Mob>) this.getType();
+        if (!net.minecraft.world.entity.Mob.checkMobSpawnRules(mobType, serverLevel, spawnReason, this.blockPosition(), this.random)) {
+            return false;
+        }
+        if (!level.canSeeSky(this.blockPosition())) {
             return false;
         }
         if (this.random.nextFloat() * 100.0F >= CommonConfig.spawnChanceInflictedBoar) {

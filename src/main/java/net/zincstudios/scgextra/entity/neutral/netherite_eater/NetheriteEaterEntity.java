@@ -2,14 +2,17 @@ package net.zincstudios.scgextra.entity.neutral.netherite_eater;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -25,6 +28,7 @@ import net.minecraft.world.entity.monster.piglin.AbstractPiglin;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -38,6 +42,7 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import javax.annotation.Nullable;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -82,9 +87,18 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity {
         this.xpReward = 60;
     }
 
+    @Nullable
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType,
+                                        @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
+        SpawnGroupData data = super.finalizeSpawn(level, difficulty, spawnType, spawnData, dataTag);
+        net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.markNaturalSpawn(this, spawnType);
+        return data;
+    }
+
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 500.0D)
+                .add(Attributes.MAX_HEALTH, 300.0D)
                 .add(Attributes.ARMOR, 6.0D)
                 .add(Attributes.ATTACK_DAMAGE, 15.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.27D)
@@ -447,6 +461,12 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity {
             return false;
         }
         if (!super.checkSpawnRules(level, spawnReason)) {
+            return false;
+        }
+        if (!(level instanceof ServerLevelAccessor serverLevel)) {
+            return false;
+        }
+        if (net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.hasReachedNaturalSpawnCap(serverLevel, NetheriteEaterEntity.class, 2)) {
             return false;
         }
         if (this.random.nextFloat() * 100.0F >= CommonConfig.spawnChanceNetheriteEater) {

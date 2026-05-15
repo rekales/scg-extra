@@ -74,7 +74,7 @@ public class MutantBatEntity extends Monster implements GeoEntity {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 200.0D)
+                .add(Attributes.MAX_HEALTH, 100.0D)
                 .add(Attributes.ARMOR, 2.0D)
                 .add(Attributes.ATTACK_DAMAGE, 8.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.33D)
@@ -312,6 +312,9 @@ public class MutantBatEntity extends Monster implements GeoEntity {
                                                    MobSpawnType spawnType,
                                                    BlockPos pos,
                                                    RandomSource random) {
+        if (!net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.hasOverworldGunProgression(level)) {
+            return false;
+        }
         if (net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.isWaterAtOrBelow(level, pos)) {
             return false;
         }
@@ -326,9 +329,16 @@ public class MutantBatEntity extends Monster implements GeoEntity {
         if (isHalloweenSeason) {
             maxLight = 7;
         }
-        return level.getMaxLocalRawBrightness(pos) <= random.nextInt(maxLight)
-                && net.minecraft.world.entity.Mob.checkMobSpawnRules(entityType, level, spawnType, pos, random)
-                && random.nextFloat() * 100.0F < CommonConfig.spawnChanceMutantBat;
+        if (level.getMaxLocalRawBrightness(pos) > random.nextInt(maxLight)) {
+            return false;
+        }
+        if (!net.minecraft.world.entity.Mob.checkMobSpawnRules(entityType, level, spawnType, pos, random)) {
+            return false;
+        }
+        if (random.nextFloat() * 100.0F >= CommonConfig.spawnChanceMutantBat) {
+            return false;
+        }
+        return true;
     }
 
     @Override

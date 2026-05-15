@@ -85,8 +85,8 @@ public class EndStoneCrabEntity extends Monster implements GeoEntity {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 500.0D)
-                .add(Attributes.ARMOR, 12.0D)
+                .add(Attributes.MAX_HEALTH, 300.0D)
+                .add(Attributes.ARMOR, 16.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
                 .add(Attributes.ATTACK_DAMAGE, 15.0D)
                 .add(Attributes.FOLLOW_RANGE, 40.0D)
