@@ -158,7 +158,13 @@ public class AsgharSurgeonEntity extends GunnerEntity implements GeoEntity, Goal
 
     public GoalState getGunAttackGoalState() {
         GoalState state = GoalState.get(this.entityData.get(GUN_ATTACK_GOAL_STATE));
-        if (state == null) throw new IllegalStateException("no goal state found");
+        if (state == null) {
+            if (this.level().isClientSide) {
+                // in case there's no goal state because checks on render side are too early
+                return SimpleGunAttackGoal.IDLE_STATE;
+            }
+            throw new IllegalStateException("no goal state found");
+        }
         return state;
     }
 
