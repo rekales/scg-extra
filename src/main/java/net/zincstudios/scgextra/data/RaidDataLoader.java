@@ -105,8 +105,9 @@ public class RaidDataLoader extends SimpleJsonResourceReloadListener {
                 double maxHealth = raiderObj.has("max_health") ? raiderObj.get("max_health").getAsDouble() : -1;
                 double weight = raiderObj.has("weight") ? raiderObj.get("weight").getAsDouble() : 1.0;
                 double value = raiderObj.has("value") ? raiderObj.get("value").getAsDouble() : 1.0;
+                int maxCount = raiderObj.has("max_count") ? raiderObj.get("max_count").getAsInt() : 0;
 
-                entries.add(new WaveRaidData.RaiderEntry(mobType, maxHealth, weight, value));
+                entries.add(new WaveRaidData.RaiderEntry(mobType, maxHealth, weight, value, maxCount));
             });
 
             return entries;

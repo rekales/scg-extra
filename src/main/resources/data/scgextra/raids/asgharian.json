@@ -24,7 +24,8 @@
       "entity_id": "scgextra:failed_one"
     },
     {
-      "entity_id": "scguns:dissident"
+      "entity_id": "scguns:dissident",
+      "max_count": 3
     }
   ],
   "elite" : [

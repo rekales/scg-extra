@@ -15,6 +15,7 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 
+// Should entries be a Set instead?
 @SuppressWarnings("unused")
 @ParametersAreNonnullByDefault
 @FieldsAreNonnullByDefault
@@ -82,21 +83,31 @@ public record WaveRaidData(String id, String originalId, Profile profile, List<R
     }
 
     private static List<RaiderEntry> sampleRandomRaiders(List<RaiderEntry> entries, int value, RandomSource random) {
+        Map<RaiderEntry, Integer> availableEntries = new HashMap<>();  // entry to spawns remaining pair
+        for (RaiderEntry entry : entries) {
+            availableEntries.put(entry, entry.maxCount);
+        }
+
         List<RaiderEntry> spawnList = new ArrayList<>();
         int SCALE = 10000;  // scale so I can do fractions while not dealing with floating point imprecision
         int valueLeft = value * SCALE;
-        double totalWeight = 0;
-        for (RaiderEntry entry : entries) {
-            totalWeight += entry.weight;
-        }
 
         while (valueLeft > 0) {
+            double totalWeight = availableEntries.keySet().stream()
+                    .mapToDouble(e-> e.weight)
+                    .sum();
+
             double randomWeight = random.nextDouble() * totalWeight;
-            for (RaiderEntry entry : entries) {
+            for (RaiderEntry entry : availableEntries.keySet()) {
                 randomWeight -= entry.weight;
                 if (randomWeight < 0) {
                     spawnList.add(entry);
                     valueLeft -= (int) (entry.value * SCALE);
+
+                    availableEntries.put(entry, availableEntries.get(entry)-1);
+                    if (availableEntries.get(entry) <= 0) {
+                        availableEntries.remove(entry);
+                    }
                     break;
                 }
             }
@@ -104,13 +115,18 @@ public record WaveRaidData(String id, String originalId, Profile profile, List<R
         return spawnList;
     }
 
-    public record RaiderEntry(EntityType<? extends Mob> entityType, double maxHealth, double weight, double value) {
+    public record RaiderEntry(EntityType<? extends Mob> entityType, double maxHealth, double weight, double value, int maxCount) {
+        public static final int DEFAULT_MAX_SPAWNS = 1000;
+
         public RaiderEntry {
             if (weight <= 0) {
                 throw new IllegalArgumentException("weight cannot zero or lower");
             }
             if (value <= 0) {
                 throw new IllegalArgumentException("value cannot zero or lower");
+            }
+            if (maxCount <= 0) {
+                maxCount = DEFAULT_MAX_SPAWNS;
             }
         }
 
@@ -136,6 +152,7 @@ public record WaveRaidData(String id, String originalId, Profile profile, List<R
             if (first.getTotal() == 0 || second.getTotal() == 0 || third.getTotal() == 0) {
                 throw new IllegalArgumentException("non-boss waves cannot be empty");
             }
+            // TODO: complex check if there's enough max_spawns for the wave.
         }
 
         public Wave getWave(int currentWave) {
