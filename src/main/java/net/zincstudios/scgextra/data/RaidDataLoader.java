@@ -39,6 +39,7 @@ public class RaidDataLoader extends SimpleJsonResourceReloadListener {
                 try {
                     WaveRaidData raid = GSON.fromJson(jsonElement, WaveRaidData.class);
                     WaveRaidData.addWaveRaid(raid);
+                    SCGExtra.LOGGER.info("Loaded raid: " + raid.id());
                 } catch (Exception e) {
                     SCGExtra.LOGGER.warn("Failed to load raid for some reason: " + resLoc);
                     SCGExtra.LOGGER.warn("Reason: " + e.getMessage());
