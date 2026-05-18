@@ -174,9 +174,8 @@ public class InflictedWolfEntity extends Monster implements GeoEntity {
         if (net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.isWaterAtOrBelow(level, this.blockPosition())) {
             return false;
         }
-        @SuppressWarnings("unchecked")
-        EntityType<? extends net.minecraft.world.entity.Mob> mobType = (EntityType<? extends net.minecraft.world.entity.Mob>) this.getType();
-        if (!net.minecraft.world.entity.Mob.checkMobSpawnRules(mobType, serverLevel, spawnReason, this.blockPosition(), this.random)) {
+        EntityType<? extends net.minecraft.world.entity.monster.Monster> mobType = (EntityType<? extends net.minecraft.world.entity.monster.Monster>) this.getType();
+        if (!net.minecraft.world.entity.monster.Monster.checkMonsterSpawnRules(mobType, serverLevel, spawnReason, this.blockPosition(), this.random)) {
             return false;
         }
         if (!level.canSeeSky(this.blockPosition())) {
@@ -245,4 +244,3 @@ public class InflictedWolfEntity extends Monster implements GeoEntity {
         this.playSound(SoundEvents.WOLF_STEP, 0.15F, 1.0F);
     }
 }
-
