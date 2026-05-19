@@ -22,7 +22,7 @@ public class CommonConfig {
             .define("enableAbilityDig", true);
 
     private static final ForgeConfigSpec.BooleanValue ENABLE_ABILITY_WEAKNESS = BUILDER
-            .comment("enables weakness exposed state, summoning 3 infantry mobs")
+            .comment("enables the Weakness Exposed effect: enemies are stunned and take double damage")
             .define("enableAbilityWeakness", true);
 
     private static final ForgeConfigSpec.BooleanValue ENABLE_ABILITY_BULLETPROOF = BUILDER
