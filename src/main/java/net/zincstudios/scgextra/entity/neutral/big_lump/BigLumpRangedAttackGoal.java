@@ -9,16 +9,14 @@ import java.util.EnumSet;
 public class BigLumpRangedAttackGoal extends Goal {
     private final BigLumpEntity mob;
     private final int shotIntervalTicks;
-    private final float maxDistance;
 
     private int shootAnimationTicks;
     private int shotCooldownTicks;
     private int shotsFired;
 
-    public BigLumpRangedAttackGoal(BigLumpEntity mob, double moveSpeed, int shotIntervalTicks, float maxDistance) {
+    public BigLumpRangedAttackGoal(BigLumpEntity mob, int shotIntervalTicks) {
         this.mob = mob;
         this.shotIntervalTicks = Math.max(1, shotIntervalTicks);
-        this.maxDistance = maxDistance;
         this.shotCooldownTicks = this.shotIntervalTicks;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
@@ -44,8 +42,6 @@ public class BigLumpRangedAttackGoal extends Goal {
         this.shotsFired = 0;
         this.mob.startRangedAnimation(BigLumpEntity.RANGED_SHOOT_WINDOW_TICKS);
         this.mob.getNavigation().stop();
-        this.mob.markMovementReason("ranged_start_stop_for_burst");
-        this.mob.markBodyTurnReason("ranged_burst_lock");
     }
 
     @Override
@@ -54,8 +50,6 @@ public class BigLumpRangedAttackGoal extends Goal {
         this.mob.stopRangedAnimation();
         this.mob.getNavigation().stop();
         this.mob.startRangedReload(BigLumpEntity.GUN_RELOAD_TICKS);
-        this.mob.markMovementReason("ranged_stop_reload");
-        this.mob.markBodyTurnReason("ranged_reload");
     }
 
     @Override
@@ -66,8 +60,6 @@ public class BigLumpRangedAttackGoal extends Goal {
         }
         this.mob.getLookControl().setLookAt(target, 30.0F, 30.0F);
         this.mob.getNavigation().stop();
-        this.mob.markHeadTurnReason("ranged_track_target");
-        this.mob.markMovementReason("ranged_hold_position");
 
         if (this.shootAnimationTicks <= 0) {
             return;

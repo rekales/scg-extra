@@ -7,7 +7,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.Difficulty;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -27,10 +29,10 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.core.registries.Registries;
 import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.item.GunItem;
 
-import java.util.List;
 import java.util.Set;
 
 public final class NeutralCombatUtil {
@@ -49,7 +51,6 @@ public final class NeutralCombatUtil {
             scgGunsTierTag("ocean_gun_tier"),
             scgGunsTierTag("scorched_gun_tier")
     );
-    private static final AABB FULL_LEVEL_BOUNDS = new AABB(-30_000_000, -64, -30_000_000, 30_000_000, 320, 30_000_000);
     private static final Set<String> IRON_TIER_GUN_IDS = Set.of(
             "iron_javelin",
             "iron_spear",
@@ -63,7 +64,7 @@ public final class NeutralCombatUtil {
 
     private static TagKey<Item> scgGunsTierTag(String path) {
         return TagKey.create(
-                net.minecraft.core.registries.Registries.ITEM,
+                Registries.ITEM,
                 ResourceLocation.fromNamespaceAndPath("scguns", path)
         );
     }
@@ -71,10 +72,35 @@ public final class NeutralCombatUtil {
     public static void applyLacerate(LivingEntity target, int durationTicks) {
         target.addEffect(new MobEffectInstance(ModEffects.LACERATED.get(), durationTicks));
     }
+    public static boolean isManualSpawn(MobSpawnType spawnType) {
+        return spawnType == MobSpawnType.SPAWN_EGG || spawnType == MobSpawnType.COMMAND;}
+    public static boolean passesSpawnChance(RandomSource random, float chancePercent) {
+        return random.nextFloat() * 100.0F < chancePercent;
+    }
+    public static boolean hasSolidGroundBelow(LevelAccessor level, BlockPos pos) {
+        return !level.getBlockState(pos.below()).isAir();
+    }
 
-    public static List<Player> nearbyPlayers(Mob mob, double radius) {
-        AABB box = mob.getBoundingBox().inflate(radius);
-        return mob.level().getEntitiesOfClass(Player.class, box, p -> !p.isCreative() && !p.isSpectator());
+    public static boolean hasNaturalGroundSupport(LevelAccessor level, BlockPos pos) {
+        BlockPos belowPos = pos.below();
+        BlockState below = level.getBlockState(belowPos);
+        if (below.isAir()) {
+            return false;}
+
+        if (below.is(BlockTags.LEAVES) || below.is(BlockTags.LOGS)) {
+            return false;
+        }
+        return below.isFaceSturdy(level, belowPos, Direction.UP);
+    }
+
+    public static Player nearestSurvivalPlayer(Mob mob, double radius) {
+        return mob.level().getNearestPlayer(
+                mob.getX(),
+                mob.getY(),
+                mob.getZ(),
+                radius,
+                entity -> entity instanceof Player player && !player.isCreative() && !player.isSpectator()
+        );
     }
 
     public static boolean canSpawnEndSurface(LevelAccessor level, BlockPos pos) {
@@ -117,12 +143,29 @@ public final class NeutralCombatUtil {
         }
     }
 
-    public static boolean hasReachedNaturalSpawnCap(ServerLevelAccessor level, Class<? extends Mob> mobClass, int maxCount) {
+    public static boolean hasReachedNaturalSpawnCap(
+            ServerLevelAccessor level,
+            Class<? extends Mob> mobClass,
+            int maxCount,
+            BlockPos center,
+            double horizontalRadius,
+            double verticalRadius
+    ) {
         if (maxCount <= 0) {
             return true;
         }
+        AABB searchBox = AABB.ofSize(
+                center.getCenter(),
+                horizontalRadius * 2.0D,
+                verticalRadius * 2.0D,
+                horizontalRadius * 2.0D
+        );
         int count = level.getLevel()
-                .getEntitiesOfClass(mobClass, FULL_LEVEL_BOUNDS, entity -> entity.getPersistentData().getBoolean(NATURAL_SPAWN_TAG))
+                .getEntitiesOfClass(
+                        mobClass,
+                        searchBox,
+                        entity -> entity.getPersistentData().getBoolean(NATURAL_SPAWN_TAG)
+                )
                 .size();
         return count >= maxCount;
     }

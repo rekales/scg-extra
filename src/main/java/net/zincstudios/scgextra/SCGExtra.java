@@ -7,6 +7,7 @@ import net.zincstudios.scgextra.datagen.DataGenerators;
 import net.zincstudios.scgextra.effects.ModEffects;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.ModEntities;
+import net.zincstudios.scgextra.entity.neutral.head_hunter.HeadHunterSpawnReplacement;
 
 import com.mojang.logging.LogUtils;
 
@@ -51,6 +52,7 @@ public class SCGExtra
         MinecraftForge.EVENT_BUS.addListener(WaveRaidManager::onLevelTick);
         MinecraftForge.EVENT_BUS.addListener(WaveRaidManager::onLevelLoad);
         MinecraftForge.EVENT_BUS.addListener(Faction::onTagsUpdated);
+        MinecraftForge.EVENT_BUS.addListener(HeadHunterSpawnReplacement::onFinalizeSpawn);
         MinecraftForge.EVENT_BUS.addListener(RaidDataLoader::onAddReloadListeners);
 
         modEventBus.addListener(DataGenerators::gatherData);

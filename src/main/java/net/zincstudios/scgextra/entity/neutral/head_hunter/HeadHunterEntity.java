@@ -1,10 +1,12 @@
 package net.zincstudios.scgextra.entity.neutral.head_hunter;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
@@ -29,6 +31,7 @@ import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
 import net.zincstudios.scgextra.CommonConfig;
+import net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -64,7 +67,7 @@ public class HeadHunterEntity extends Monster implements GeoEntity {
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType,
                                         @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
         SpawnGroupData data = super.finalizeSpawn(level, difficulty, spawnType, spawnData, dataTag);
-        net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.markNaturalSpawn(this, spawnType);
+        NeutralCombatUtil.markNaturalSpawn(this, spawnType);
         return data;
     }
 
@@ -210,7 +213,7 @@ public class HeadHunterEntity extends Monster implements GeoEntity {
     }
 
     @Override
-    public boolean doHurtTarget(net.minecraft.world.entity.Entity target) {
+    public boolean doHurtTarget(Entity target) {
         if (this.isAttackLocked() || this.attackCooldown > 0) {
             return false;
         }
@@ -252,38 +255,48 @@ public class HeadHunterEntity extends Monster implements GeoEntity {
 
     @Override
     public boolean checkSpawnRules(LevelAccessor level, MobSpawnType spawnReason) {
-        if (spawnReason == MobSpawnType.SPAWN_EGG || spawnReason == MobSpawnType.COMMAND) {
+        if (NeutralCombatUtil.isManualSpawn(spawnReason)) {
             return true;
         }
-        if (net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.isWaterAtOrBelow(level, this.blockPosition())) {
+        BlockPos pos = this.blockPosition();
+        if (NeutralCombatUtil.isWaterAtOrBelow(level, pos)) {
             return false;
         }
         if (!super.checkSpawnRules(level, spawnReason)) {
             return false;
         }
-        if (this.random.nextFloat() * 100.0F >= CommonConfig.spawnChanceHeadHunter) {
-            return false;
-        }
-        if (level.getBlockState(this.blockPosition().below()).isAir()) {
+        if (!NeutralCombatUtil.hasSolidGroundBelow(level, pos)) {
             return false;
         }
         if (!(level instanceof ServerLevelAccessor serverLevel)) {
             return false;
         }
-        if (net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.hasReachedNaturalSpawnCap(serverLevel, HeadHunterEntity.class, 2)) {
-            return false;
-        }
         if (!serverLevel.getLevel().dimension().equals(Level.NETHER)) {
             return false;
         }
-        if (serverLevel.getLevel().structureManager()
-                .getStructureWithPieceAt(this.blockPosition(), BuiltinStructures.FORTRESS).isValid()) {
-            return true;
+        boolean inFortress = serverLevel.getLevel().structureManager()
+                .getStructureWithPieceAt(pos, BuiltinStructures.FORTRESS).isValid();
+        boolean inSoulSandValley = level.getBiome(pos).is(Biomes.SOUL_SAND_VALLEY);
+        if (!inFortress && !inSoulSandValley) {
+            return false;
         }
-        if (level.getBiome(this.blockPosition()).is(Biomes.SOUL_SAND_VALLEY)) {
-            return true;
+        int spawnChance = inFortress
+                ? CommonConfig.spawnChanceHeadHunterFortressReplace
+                : CommonConfig.spawnChanceHeadHunter;
+        if (!NeutralCombatUtil.passesSpawnChance(this.random, spawnChance)) {
+            return false;
         }
-        return false;
+        if (NeutralCombatUtil.hasReachedNaturalSpawnCap(
+                serverLevel,
+                HeadHunterEntity.class,
+                2,
+                pos,
+                192.0D,
+                96.0D
+        )) {
+            return false;
+        }
+        return true;
     }
 }
 

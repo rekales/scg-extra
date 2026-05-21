@@ -40,8 +40,6 @@ public class BigLumpChaseGoal extends Goal {
         }
 
         this.mob.getLookControl().setLookAt(target, 30.0F, 30.0F);
-        this.mob.markHeadTurnReason("chase_track_target");
-        this.mob.markMovementReason("chase_move_to_target");
 
         boolean canDirectChase = this.mob.hasLineOfSight(target)
                 && Math.abs(target.getY() - this.mob.getY()) < 1.5D;
@@ -49,12 +47,10 @@ public class BigLumpChaseGoal extends Goal {
         if (canDirectChase) {
             this.mob.getNavigation().stop();
             this.mob.getMoveControl().setWantedPosition(target.getX(), this.mob.getY(), target.getZ(), this.speed);
-            this.mob.markBodyTurnReason("chase_body_by_move_control");
             this.repathCooldown = 0;
             return;
         }
 
-        this.mob.markBodyTurnReason("chase_body_by_navigation");
         if (this.repathCooldown > 0) {
             this.repathCooldown--;
         }
@@ -71,7 +67,6 @@ public class BigLumpChaseGoal extends Goal {
     @Override
     public void stop() {
         this.mob.getNavigation().stop();
-        this.mob.markMovementReason("chase_stop");
         this.repathCooldown = 0;
     }
 

@@ -5,6 +5,8 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
@@ -27,6 +29,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.CommonConfig;
+import net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -171,7 +174,7 @@ public class NitroBeetleEntity extends Monster implements GeoEntity {
     }
 
     @Override
-    public boolean doHurtTarget(net.minecraft.world.entity.Entity target) {
+    public boolean doHurtTarget(Entity target) {
         boolean hit = super.doHurtTarget(target);
         if (hit && target instanceof LivingEntity living) {
             living.setSecondsOnFire(3);
@@ -180,7 +183,7 @@ public class NitroBeetleEntity extends Monster implements GeoEntity {
     }
 
     @Override
-    public void die(net.minecraft.world.damagesource.DamageSource source) {
+    public void die(DamageSource source) {
         if (!this.level().isClientSide()) {
             List<LivingEntity> targets = this.level().getEntitiesOfClass(
                     LivingEntity.class,
@@ -221,17 +224,17 @@ public class NitroBeetleEntity extends Monster implements GeoEntity {
 
     @Override
     public boolean checkSpawnRules(LevelAccessor level, MobSpawnType spawnReason) {
-        if (spawnReason == MobSpawnType.SPAWN_EGG || spawnReason == MobSpawnType.COMMAND) {
+        if (NeutralCombatUtil.isManualSpawn(spawnReason)) {
             return true;
         }
-        if (net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.isWaterAtOrBelow(level, this.blockPosition())) {
-            return false;
+        BlockPos pos = this.blockPosition();
+        if (NeutralCombatUtil.isWaterAtOrBelow(level, pos)) {return false;
         }
-        if (this.random.nextFloat() * 100.0F >= CommonConfig.spawnChanceNitroBeetle) {
+        if (!NeutralCombatUtil.passesSpawnChance(this.random, CommonConfig.spawnChanceNitroBeetle)) {
             return false;
         }
         return super.checkSpawnRules(level, spawnReason)
-                && level.getBiome(this.blockPosition()).is(Biomes.CRIMSON_FOREST);
+                && level.getBiome(pos).is(Biomes.CRIMSON_FOREST);
     }
 }
 

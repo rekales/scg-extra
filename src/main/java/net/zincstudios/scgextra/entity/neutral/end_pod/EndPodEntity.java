@@ -1,5 +1,6 @@
 package net.zincstudios.scgextra.entity.neutral.end_pod;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
@@ -16,6 +17,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.zincstudios.scgextra.CommonConfig;
+import net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil;
 import net.zincstudios.scgextra.sounds.NeutralSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -91,14 +93,15 @@ public class EndPodEntity extends Chicken implements GeoEntity {
 
     @Override
     public boolean checkSpawnRules(LevelAccessor level, MobSpawnType spawnReason) {
-        if (spawnReason == MobSpawnType.SPAWN_EGG || spawnReason == MobSpawnType.COMMAND) {
+        if (NeutralCombatUtil.isManualSpawn(spawnReason)) {
             return true;
         }
-        if (net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.isWaterAtOrBelow(level, this.blockPosition())) {
+        BlockPos pos = this.blockPosition();
+        if (NeutralCombatUtil.isWaterAtOrBelow(level, pos)) {
             return false;
         }
-        return this.random.nextFloat() * 100.0F < CommonConfig.spawnChanceEndPod
-                && net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.canSpawnEndSurface(level, this.blockPosition());
+        return NeutralCombatUtil.passesSpawnChance(this.random, CommonConfig.spawnChanceEndPod)
+                && NeutralCombatUtil.canSpawnEndSurface(level, pos);
     }
 
     @Override

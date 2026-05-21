@@ -2,6 +2,7 @@ package net.zincstudios.scgextra.entity.neutral.netherite_eater;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -9,6 +10,8 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
@@ -29,10 +32,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.zincstudios.scgextra.CommonConfig;
+import net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil;
 import net.zincstudios.scgextra.sounds.NeutralSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -92,7 +97,7 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity {
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType,
                                         @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
         SpawnGroupData data = super.finalizeSpawn(level, difficulty, spawnType, spawnData, dataTag);
-        net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.markNaturalSpawn(this, spawnType);
+        NeutralCombatUtil.markNaturalSpawn(this, spawnType);
         return data;
     }
 
@@ -129,7 +134,7 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity {
     }
 
     @Override
-    public boolean doHurtTarget(net.minecraft.world.entity.Entity target) {
+    public boolean doHurtTarget(Entity target) {
         if (isBreathAnimActive()) {
             return false;
         }
@@ -305,7 +310,7 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity {
         target.invulnerableTime = 0;
         boolean hit = super.doHurtTarget(target);
         if (hit) {
-            net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.applyLacerate(target, 60);
+            NeutralCombatUtil.applyLacerate(target, 60);
         }
     }
 
@@ -315,7 +320,7 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity {
 
     private void applyBreathPulse() {
         ServerLevel server = (ServerLevel) this.level();
-        server.sendParticles(net.minecraft.core.particles.ParticleTypes.SOUL_FIRE_FLAME,
+        server.sendParticles(ParticleTypes.SOUL_FIRE_FLAME,
                 this.getX(), this.getY() + 1.2D, this.getZ(), 10, 1.5D, 0.5D, 1.5D, 0.02D);
 
         if (breathActiveTicks % 9 != 0) {
@@ -368,7 +373,7 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity {
         if (this.level().isClientSide()) return;
         BlockState state = this.level().getBlockState(pos);
         if (state.isAir() || state.getDestroySpeed(this.level(), pos) < 0.0F) return;
-        if (state.is(net.minecraft.tags.BlockTags.WITHER_IMMUNE)) return;
+        if (state.is(BlockTags.WITHER_IMMUNE)) return;
         if (!canBreakWithIronPickaxeOnly(state)) return;
         this.level().destroyBlock(pos, true, this);
     }
@@ -454,10 +459,11 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity {
 
     @Override
     public boolean checkSpawnRules(LevelAccessor level, MobSpawnType spawnReason) {
-        if (spawnReason == MobSpawnType.SPAWN_EGG || spawnReason == MobSpawnType.COMMAND) {
+        if (NeutralCombatUtil.isManualSpawn(spawnReason)) {
             return true;
         }
-        if (net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.isWaterAtOrBelow(level, this.blockPosition())) {
+        BlockPos pos = this.blockPosition();
+        if (NeutralCombatUtil.isWaterAtOrBelow(level, pos)) {
             return false;
         }
         if (!super.checkSpawnRules(level, spawnReason)) {
@@ -466,16 +472,23 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity {
         if (!(level instanceof ServerLevelAccessor serverLevel)) {
             return false;
         }
-        if (net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.hasReachedNaturalSpawnCap(serverLevel, NetheriteEaterEntity.class, 2)) {
+        if (!NeutralCombatUtil.passesSpawnChance(this.random, CommonConfig.spawnChanceNetheriteEater)) {
             return false;
         }
-        if (this.random.nextFloat() * 100.0F >= CommonConfig.spawnChanceNetheriteEater) {
+        if (!level.getBiome(pos).is(Biomes.NETHER_WASTES)) {
             return false;
         }
-        if (!level.getBiome(this.blockPosition()).is(net.minecraft.world.level.biome.Biomes.NETHER_WASTES)) {
+        if (!NeutralCombatUtil.hasSolidGroundBelow(level, pos)) {
             return false;
         }
-        if (level.getBlockState(this.blockPosition().below()).isAir()) {
+        if (NeutralCombatUtil.hasReachedNaturalSpawnCap(
+                serverLevel,
+                NetheriteEaterEntity.class,
+                2,
+                pos,
+                192.0D,
+                96.0D
+        )) {
             return false;
         }
         return true;
@@ -569,7 +582,7 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity {
 
             double reach = this.eater.getBbWidth() * 2.0D + target.getBbWidth() + ATTACK_EXTRA_REACH_BLOCKS;
             if (this.eater.distanceToSqr(target) <= reach * reach) {
-                this.eater.swing(net.minecraft.world.InteractionHand.MAIN_HAND);
+                this.eater.swing(InteractionHand.MAIN_HAND);
                 this.eater.doHurtTarget(target);
             }
         }

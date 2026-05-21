@@ -1,5 +1,6 @@
 package net.zincstudios.scgextra.entity.neutral.big_lump;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -24,8 +25,10 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.zincstudios.scgextra.CommonConfig;
+import net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil;
 import net.zincstudios.scgextra.entity.projectile.ArmoredWhaleProjectileEntity;
 import net.zincstudios.scgextra.sounds.NeutralSounds;
+import top.ribs.scguns.init.ModSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -68,9 +71,6 @@ public class BigLumpEntity extends Zombie implements GeoEntity {
     private int meleeCooldownTicks;
     private int pendingMeleeHitTicks = -1;
     private int rangedReloadTicks;
-    private String headTurnReason = "init";
-    private String bodyTurnReason = "init";
-    private String movementReason = "init";
     private CombatIntent combatIntent = CombatIntent.NONE;
     private int lastCombatTick = -1000000;
 
@@ -101,7 +101,7 @@ public class BigLumpEntity extends Zombie implements GeoEntity {
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawnType,
                                         @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
         SpawnGroupData data = super.finalizeSpawn(level, difficulty, spawnType, spawnData, dataTag);
-        net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.markNaturalSpawn(this, spawnType);
+        NeutralCombatUtil.markNaturalSpawn(this, spawnType);
         this.setBaby(false);
         this.refreshDimensions();
         return data;
@@ -111,7 +111,7 @@ public class BigLumpEntity extends Zombie implements GeoEntity {
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(2, new BigLumpMeleeGoal(this));
-        this.goalSelector.addGoal(3, new BigLumpRangedAttackGoal(this, 1.05D, GUN_SHOT_INTERVAL_TICKS, RANGED_MAX_DISTANCE));
+        this.goalSelector.addGoal(3, new BigLumpRangedAttackGoal(this, GUN_SHOT_INTERVAL_TICKS));
         this.goalSelector.addGoal(4, new BigLumpChaseGoal(this, 1.0D));
         this.goalSelector.addGoal(6, new BigLumpIdleStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(7, new BigLumpIdleLookAtPlayerGoal(this, Player.class, 8.0F));
@@ -135,8 +135,6 @@ public class BigLumpEntity extends Zombie implements GeoEntity {
             this.getNavigation().stop();
             Vec3 motion = this.getDeltaMovement();
             this.setDeltaMovement(0.0D, motion.y * 0.2D, 0.0D);
-            this.movementReason = isRangedAnimationActive() ? "ranged_lock_stop" : "melee_lock_stop";
-            this.bodyTurnReason = isRangedAnimationActive() ? "ranged_lock_hold" : "melee_lock_hold";
         }
 
     }
@@ -302,18 +300,6 @@ public class BigLumpEntity extends Zombie implements GeoEntity {
         return this.rangedReloadTicks > 0;
     }
 
-    public void markHeadTurnReason(String reason) {
-        this.headTurnReason = reason;
-    }
-
-    public void markBodyTurnReason(String reason) {
-        this.bodyTurnReason = reason;
-    }
-
-    public void markMovementReason(String reason) {
-        this.movementReason = reason;
-    }
-
     private enum CombatIntent {
         NONE,
         CHASE,
@@ -357,7 +343,7 @@ public class BigLumpEntity extends Zombie implements GeoEntity {
                 spawnVec.x,
                 spawnVec.y,
                 spawnVec.z,
-                top.ribs.scguns.init.ModSounds.BRUISER_SILENCED_FIRE.get(),
+                ModSounds.BRUISER_SILENCED_FIRE.get(),
                 SoundSource.HOSTILE,
                 1.0F,
                 0.9F + this.getRandom().nextFloat() * 0.2F
@@ -366,33 +352,40 @@ public class BigLumpEntity extends Zombie implements GeoEntity {
 
     @Override
     public boolean checkSpawnRules(LevelAccessor level, MobSpawnType spawnReason) {
-        if (spawnReason == MobSpawnType.SPAWN_EGG || spawnReason == MobSpawnType.COMMAND) {
+        if (NeutralCombatUtil.isManualSpawn(spawnReason)) {
             return true;
         }
         if (!(level instanceof ServerLevelAccessor serverLevel)) {
             return false;
         }
-        if (!net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.hasOverworldGunProgression(serverLevel)) {
+        if (!NeutralCombatUtil.hasOverworldGunProgression(serverLevel)) {
             return false;
         }
-        if (net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.hasReachedNaturalSpawnCap(serverLevel, BigLumpEntity.class, 3)) {
-            return false;
-        }
-        if (net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.isWaterAtOrBelow(level, this.blockPosition())) {
+        if (NeutralCombatUtil.isWaterAtOrBelow(level, this.blockPosition())) {
             return false;
         }
         if (!super.checkSpawnRules(level, spawnReason)) {
             return false;
         }
-        if (this.random.nextFloat() * 100.0F >= CommonConfig.spawnChanceBigLump) {
+        if (!NeutralCombatUtil.passesSpawnChance(this.random, CommonConfig.spawnChanceBigLump)) {
             return false;
         }
         if (!(level instanceof Level vanillaLevel)) {
             return false;
         }
 
-        net.minecraft.core.BlockPos pos = this.blockPosition();
+        BlockPos pos = this.blockPosition();
         if (vanillaLevel.getBrightness(LightLayer.SKY, pos) <= 0) {
+            return false;
+        }
+        if (NeutralCombatUtil.hasReachedNaturalSpawnCap(
+                serverLevel,
+                BigLumpEntity.class,
+                3,
+                pos,
+                256.0D,
+                128.0D
+        )) {
             return false;
         }
         return true;

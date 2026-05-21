@@ -36,6 +36,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.CommonConfig;
+import net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil;
 import net.zincstudios.scgextra.sounds.NeutralSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -289,7 +290,7 @@ public class EndScorpionEntity extends Monster implements GeoEntity {
         target.hurt(this.damageSources().mobAttack(this), 10.0F);
         target.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 0));
         target.addEffect(new MobEffectInstance(MobEffects.WITHER, 100, 0));
-        net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.applyLacerate(target, 100);
+        NeutralCombatUtil.applyLacerate(target, 100);
     }
 
     private void setAggroSpeedState(boolean aggro) {
@@ -431,14 +432,15 @@ public class EndScorpionEntity extends Monster implements GeoEntity {
 
     @Override
     public boolean checkSpawnRules(LevelAccessor level, MobSpawnType spawnReason) {
-        if (spawnReason == MobSpawnType.SPAWN_EGG || spawnReason == MobSpawnType.COMMAND) {
+        if (NeutralCombatUtil.isManualSpawn(spawnReason)) {
             return true;
         }
-        if (net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.isWaterAtOrBelow(level, this.blockPosition())) {
+        BlockPos pos = this.blockPosition();
+        if (NeutralCombatUtil.isWaterAtOrBelow(level, pos)) {
             return false;
         }
-        return this.random.nextFloat() * 100.0F < CommonConfig.spawnChanceEndScorpion
-                && net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.canSpawnEndSurface(level, this.blockPosition());
+        return NeutralCombatUtil.passesSpawnChance(this.random, CommonConfig.spawnChanceEndScorpion)
+                && NeutralCombatUtil.canSpawnEndSurface(level, pos);
     }
 
     private static final class EndScorpionMeleeGoal extends Goal {

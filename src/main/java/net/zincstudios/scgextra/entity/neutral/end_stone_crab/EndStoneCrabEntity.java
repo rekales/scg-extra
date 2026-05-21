@@ -36,6 +36,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.zincstudios.scgextra.sounds.NeutralSounds;
 import net.zincstudios.scgextra.CommonConfig;
+import net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -576,14 +577,15 @@ public class EndStoneCrabEntity extends Monster implements GeoEntity {
 
     @Override
     public boolean checkSpawnRules(LevelAccessor level, MobSpawnType spawnReason) {
-        if (spawnReason == MobSpawnType.SPAWN_EGG || spawnReason == MobSpawnType.COMMAND) {
+        if (NeutralCombatUtil.isManualSpawn(spawnReason)) {
             return true;
         }
-        if (net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.isWaterAtOrBelow(level, this.blockPosition())) {
+        BlockPos pos = this.blockPosition();
+        if (NeutralCombatUtil.isWaterAtOrBelow(level, pos)) {
             return false;
         }
-        return this.random.nextFloat() * 100.0F < CommonConfig.spawnChanceEndStoneCrab
-                && net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.canSpawnEndSurface(level, this.blockPosition());
+        return NeutralCombatUtil.passesSpawnChance(this.random, CommonConfig.spawnChanceEndStoneCrab)
+                && NeutralCombatUtil.canSpawnEndSurface(level, pos);
     }
 
     private static final class EndStoneCrabMeleeGoal extends Goal {

@@ -1,9 +1,9 @@
 package net.zincstudios.scgextra.entity.neutral.ammo_goblin;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.FluidTags;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
@@ -20,10 +20,10 @@ import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.zincstudios.scgextra.CommonConfig;
+import net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil;
 import net.zincstudios.scgextra.sounds.NeutralSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -33,7 +33,6 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 public class AmmoGoblinEntity extends Zombie implements GeoEntity {
     private static final int FLEE_RADIUS = 14;
@@ -79,10 +78,13 @@ public class AmmoGoblinEntity extends Zombie implements GeoEntity {
     @Override
     public void aiStep() {
         super.aiStep();
-        List<Player> nearbyForEscape = net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.nearbyPlayers(this, ESCAPE_GRACE_RADIUS);
-        boolean fleeing = nearbyForEscape.stream()
-                .anyMatch(player -> player.distanceToSqr(this) <= (double) (FLEE_RADIUS * FLEE_RADIUS));
-        boolean keepEscapeTimer = !nearbyForEscape.isEmpty();
+        Player nearestPlayer = NeutralCombatUtil.nearestSurvivalPlayer(
+                this,
+                ESCAPE_GRACE_RADIUS
+        );
+        boolean keepEscapeTimer = nearestPlayer != null;
+        boolean fleeing = keepEscapeTimer
+                && nearestPlayer.distanceToSqr(this) <= (double) (FLEE_RADIUS * FLEE_RADIUS);
 
         this.setSprinting(fleeing);
 
@@ -99,8 +101,8 @@ public class AmmoGoblinEntity extends Zombie implements GeoEntity {
         }
 
         if (!this.level().isClientSide() && fleeTicks >= ESCAPE_TICKS) {
-            ((net.minecraft.server.level.ServerLevel) this.level()).sendParticles(
-                    net.minecraft.core.particles.ParticleTypes.SMOKE,
+            ((ServerLevel) this.level()).sendParticles(
+                    ParticleTypes.SMOKE,
                     this.getX(), this.getY() + 1.0D, this.getZ(),
                     30, 0.6D, 0.4D, 0.6D, 0.02D
             );
@@ -131,34 +133,26 @@ public class AmmoGoblinEntity extends Zombie implements GeoEntity {
 
     @Override
     public boolean checkSpawnRules(LevelAccessor level, MobSpawnType spawnReason) {
-        if (spawnReason == MobSpawnType.SPAWN_EGG || spawnReason == MobSpawnType.COMMAND) {
+        if (NeutralCombatUtil.isManualSpawn(spawnReason)) {
             return true;
         }
         if (!(level instanceof ServerLevelAccessor serverLevel)) {
             return false;
         }
-        if (!net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.hasOverworldGunProgression(serverLevel)) {
+        if (!NeutralCombatUtil.hasOverworldGunProgression(serverLevel)) {
+            return false;
+        }
+        BlockPos pos = this.blockPosition();
+        if (NeutralCombatUtil.isWaterAtOrBelow(level, pos)) {
+            return false;
+        }
+        if (!NeutralCombatUtil.hasNaturalGroundSupport(level, pos)) {
             return false;
         }
         if (!super.checkSpawnRules(level, spawnReason)) {
             return false;
         }
-        if (this.random.nextFloat() * 100.0F >= CommonConfig.spawnChanceAmmoGoblin) {
-            return false;
-        }
-        BlockPos pos = this.blockPosition();
-        if (level.getFluidState(pos).is(FluidTags.WATER)
-                || level.getFluidState(pos.below()).is(FluidTags.WATER)) {
-            return false;
-        }
-        BlockState below = level.getBlockState(pos.below());
-        if (below.isAir()) {
-            return false;
-        }
-        if (below.is(BlockTags.LEAVES) || below.is(BlockTags.LOGS)) {
-            return false;
-        }
-        if (!below.isFaceSturdy(level, pos.below(), net.minecraft.core.Direction.UP)) {
+        if (!NeutralCombatUtil.passesSpawnChance(this.random, CommonConfig.spawnChanceAmmoGoblin)) {
             return false;
         }
         if (level instanceof Level vanillaLevel && vanillaLevel.isDay()) {

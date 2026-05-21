@@ -12,6 +12,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -32,6 +33,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.CommonConfig;
+import net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil;
 import net.zincstudios.scgextra.sounds.NeutralSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -296,7 +298,7 @@ public class MutantBatEntity extends Monster implements GeoEntity {
 
     @Override
     public boolean checkSpawnRules(LevelAccessor level, MobSpawnType spawnReason) {
-        if (spawnReason == MobSpawnType.SPAWN_EGG || spawnReason == MobSpawnType.COMMAND) {
+        if (NeutralCombatUtil.isManualSpawn(spawnReason)) {
             return true;
         }
         if (!(level instanceof ServerLevelAccessor serverLevel)) {
@@ -312,10 +314,10 @@ public class MutantBatEntity extends Monster implements GeoEntity {
                                                    MobSpawnType spawnType,
                                                    BlockPos pos,
                                                    RandomSource random) {
-        if (!net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.hasOverworldGunProgression(level)) {
+        if (!NeutralCombatUtil.hasOverworldGunProgression(level)) {
             return false;
         }
-        if (net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.isWaterAtOrBelow(level, pos)) {
+        if (NeutralCombatUtil.isWaterAtOrBelow(level, pos)) {
             return false;
         }
         if (pos.getY() >= level.getSeaLevel()) {
@@ -332,10 +334,10 @@ public class MutantBatEntity extends Monster implements GeoEntity {
         if (level.getMaxLocalRawBrightness(pos) > random.nextInt(maxLight)) {
             return false;
         }
-        if (!net.minecraft.world.entity.Mob.checkMobSpawnRules(entityType, level, spawnType, pos, random)) {
+        if (!Mob.checkMobSpawnRules(entityType, level, spawnType, pos, random)) {
             return false;
         }
-        if (random.nextFloat() * 100.0F >= CommonConfig.spawnChanceMutantBat) {
+        if (!NeutralCombatUtil.passesSpawnChance(random, CommonConfig.spawnChanceMutantBat)) {
             return false;
         }
         return true;

@@ -1,11 +1,11 @@
 package net.zincstudios.scgextra.entity.neutral.inflicted_wolf;
 
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
@@ -76,9 +76,9 @@ public class InflictedWolfEntity extends Monster implements GeoEntity {
     }
 
     @Override
-    public boolean doHurtTarget(net.minecraft.world.entity.Entity target) {
+    public boolean doHurtTarget(Entity target) {
         boolean hit = super.doHurtTarget(target);
-        if (hit && target instanceof net.minecraft.world.entity.LivingEntity living) {
+        if (hit && target instanceof LivingEntity living) {
             NeutralCombatUtil.applyLacerate(living, 60);
         }
         return hit;
@@ -109,7 +109,7 @@ public class InflictedWolfEntity extends Monster implements GeoEntity {
             return;
         }
 
-        this.swing(net.minecraft.world.InteractionHand.MAIN_HAND);
+        this.swing(InteractionHand.MAIN_HAND);
         this.triggerAnim("attack", "attack");
         this.scheduleDelayedHit(target, this.pendingHitDelayTicks);
         this.pendingHitDelayTicks = 0;
@@ -162,41 +162,30 @@ public class InflictedWolfEntity extends Monster implements GeoEntity {
 
     @Override
     public boolean checkSpawnRules(LevelAccessor level, MobSpawnType spawnReason) {
-        if (spawnReason == MobSpawnType.SPAWN_EGG || spawnReason == MobSpawnType.COMMAND) {
+        if (NeutralCombatUtil.isManualSpawn(spawnReason)) {
             return true;
         }
         if (!(level instanceof ServerLevelAccessor serverLevel)) {
             return false;
         }
-        if (!net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.hasOverworldGunProgression(serverLevel)) {
+        if (!NeutralCombatUtil.hasOverworldGunProgression(serverLevel)) {
             return false;
         }
-        if (net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.isWaterAtOrBelow(level, this.blockPosition())) {
+        BlockPos pos = this.blockPosition();
+        if (NeutralCombatUtil.isWaterAtOrBelow(level, pos)) {
             return false;
         }
-        EntityType<? extends net.minecraft.world.entity.monster.Monster> mobType = (EntityType<? extends net.minecraft.world.entity.monster.Monster>) this.getType();
-        if (!net.minecraft.world.entity.monster.Monster.checkMonsterSpawnRules(mobType, serverLevel, spawnReason, this.blockPosition(), this.random)) {
+        EntityType<? extends Monster> mobType = (EntityType<? extends Monster>) this.getType();
+        if (!Monster.checkMonsterSpawnRules(mobType, serverLevel, spawnReason, pos, this.random)) {
             return false;
         }
-        if (!level.canSeeSky(this.blockPosition())) {
+        if (!level.canSeeSky(pos)) {
             return false;
         }
-        if (this.random.nextFloat() * 100.0F >= CommonConfig.spawnChanceInflictedWolf) {
+        if (!NeutralCombatUtil.passesSpawnChance(this.random, CommonConfig.spawnChanceInflictedWolf)) {
             return false;
         }
-        net.minecraft.core.BlockPos pos = this.blockPosition();
-        if (level.getFluidState(pos).is(FluidTags.WATER)
-                || level.getFluidState(pos.below()).is(FluidTags.WATER)) {
-            return false;
-        }
-        net.minecraft.world.level.block.state.BlockState below = level.getBlockState(pos.below());
-        if (below.isAir()) {
-            return false;
-        }
-        if (below.is(BlockTags.LEAVES) || below.is(BlockTags.LOGS)) {
-            return false;
-        }
-        if (!below.isFaceSturdy(level, pos.below(), net.minecraft.core.Direction.UP)) {
+        if (!NeutralCombatUtil.hasNaturalGroundSupport(level, pos)) {
             return false;
         }
         return true;

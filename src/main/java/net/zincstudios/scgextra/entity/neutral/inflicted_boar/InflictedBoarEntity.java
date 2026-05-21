@@ -1,9 +1,10 @@
 package net.zincstudios.scgextra.entity.neutral.inflicted_boar;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tags.FluidTags;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
@@ -11,13 +12,16 @@ import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.CommonConfig;
+import net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -60,14 +64,14 @@ public class InflictedBoarEntity extends Hoglin implements GeoEntity {
     }
 
     @Override
-    public boolean doHurtTarget(net.minecraft.world.entity.Entity target) {
+    public boolean doHurtTarget(Entity target) {
         if (!(target instanceof LivingEntity living) || !living.isAlive()) {
             return false;
         }
         if (!this.isTargetInFront(living, ATTACK_FRONT_DOT) || !this.hasLineOfSight(living)) {
             return false;
         }
-        this.swing(net.minecraft.world.InteractionHand.MAIN_HAND);
+        this.swing(InteractionHand.MAIN_HAND);
         this.triggerAnim("attack", "attack");
         this.scheduleDelayedHit(living, HIT_DELAY_TICKS);
         return true;
@@ -81,48 +85,37 @@ public class InflictedBoarEntity extends Hoglin implements GeoEntity {
 
     @Override
     public boolean checkSpawnRules(LevelAccessor level, MobSpawnType spawnReason) {
-        if (spawnReason == MobSpawnType.SPAWN_EGG || spawnReason == MobSpawnType.COMMAND) {
+        if (NeutralCombatUtil.isManualSpawn(spawnReason)) {
             return true;
         }
         if (!(level instanceof ServerLevelAccessor serverLevel)) {
             return false;
         }
-        if (!net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.hasOverworldGunProgression(serverLevel)) {
+        if (!NeutralCombatUtil.hasOverworldGunProgression(serverLevel)) {
             return false;
         }
-        if (net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.isWaterAtOrBelow(level, this.blockPosition())) {
+        BlockPos pos = this.blockPosition();
+        if (NeutralCombatUtil.isWaterAtOrBelow(level, pos)) {
             return false;
         }
-        EntityType<? extends net.minecraft.world.entity.monster.Monster> mobType = (EntityType<? extends net.minecraft.world.entity.monster.Monster>) this.getType();
-        if (!net.minecraft.world.entity.monster.Monster.checkMonsterSpawnRules(mobType, serverLevel, spawnReason, this.blockPosition(), this.random)) {
+        EntityType<? extends Monster> mobType = (EntityType<? extends Monster>) this.getType();
+        if (!Monster.checkMonsterSpawnRules(mobType, serverLevel, spawnReason, pos, this.random)) {
             return false;
         }
-        if (!level.canSeeSky(this.blockPosition())) {
+        if (!level.canSeeSky(pos)) {
             return false;
         }
-        if (this.random.nextFloat() * 100.0F >= CommonConfig.spawnChanceInflictedBoar) {
+        if (!NeutralCombatUtil.passesSpawnChance(this.random, CommonConfig.spawnChanceInflictedBoar)) {
             return false;
         }
-        net.minecraft.core.BlockPos pos = this.blockPosition();
-        if (level.getFluidState(pos).is(FluidTags.WATER)
-                || level.getFluidState(pos.below()).is(FluidTags.WATER)) {
-            return false;
-        }
-        net.minecraft.world.level.block.state.BlockState below = level.getBlockState(pos.below());
-        if (below.isAir()) {
-            return false;
-        }
-        if (below.is(BlockTags.LEAVES) || below.is(BlockTags.LOGS)) {
-            return false;
-        }
-        if (!below.isFaceSturdy(level, pos.below(), net.minecraft.core.Direction.UP)) {
+        if (!NeutralCombatUtil.hasNaturalGroundSupport(level, pos)) {
             return false;
         }
         return true;
     }
 
     @Override
-    public boolean isFood(net.minecraft.world.item.ItemStack stack) {
+    public boolean isFood(ItemStack stack) {
         return false;
     }
 
@@ -196,7 +189,7 @@ public class InflictedBoarEntity extends Hoglin implements GeoEntity {
             float damage = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
             boolean hit = target.hurt(this.damageSources().mobAttack(this), damage);
             if (hit) {
-                net.zincstudios.scgextra.entity.neutral.NeutralCombatUtil.applyLacerate(target, 40);
+                NeutralCombatUtil.applyLacerate(target, 40);
                 target.knockback(0.6D, this.getX() - target.getX(), this.getZ() - target.getZ());
             }
         }
