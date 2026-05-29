@@ -60,7 +60,7 @@ public class AsgharFlamerEntity extends GunnerEntity implements GeoEntity, GoalS
         this.goalSelector.addGoal(1, new SimpleBurstGunAttackGoal<>(this, 3, 4)
                 .runAndGun()
                 .approachDist(4)
-                .attackInterval(30)
+                .attackInterval(60)
         );
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
