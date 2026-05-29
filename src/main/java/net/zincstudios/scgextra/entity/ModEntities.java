@@ -16,6 +16,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
+import net.zincstudios.scgextra.entity.cog.COGEntities;
 import net.zincstudios.scgextra.entity.common.raid_summoner.RaidSummonerEntity;
 import net.zincstudios.scgextra.entity.common.raid_summoner.RaidSummonerRenderer;
 import net.zincstudios.scgextra.entity.fac.FACEntities;
@@ -72,6 +73,7 @@ public class ModEntities {
         FACEntities.register(modEventBus);
         AsgharianEntities.register(modEventBus);
         NeutralEntities.register(modEventBus);
+        COGEntities.register(modEventBus);
 
         ENTITY_TYPES.register(modEventBus);
 
