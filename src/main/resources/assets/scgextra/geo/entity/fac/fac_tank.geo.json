@@ -122,6 +122,14 @@
 					]
 				},
 				{
+					"name": "eye_flash",
+					"parent": "head",
+					"pivot": [0, 20, -29.25],
+					"cubes": [
+						{"origin": [-11, 4, -29.25], "size": [22, 32, 0], "uv": [212, 0]}
+					]
+				},
+				{
 					"name": "cannon",
 					"parent": "body",
 					"pivot": [-11.5, 37.5, -22],

@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.CommonConfig;
+import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.MobUtil;
@@ -50,6 +51,8 @@ public class FacTankEntity extends Monster implements GeoEntity, Stunnable, Head
     private static final RawAnimation SIDE_GUN_FIRE = RawAnimation.begin().thenLoop("side gun fire");
     private static final RawAnimation CANNON_FIRE = RawAnimation.begin().thenPlayXTimes("cannon fire", 1);
     private static final RawAnimation DEATH = RawAnimation.begin().thenPlayAndHold("death");
+    private static final RawAnimation EFFECTS_BASE = RawAnimation.begin().thenPlayAndHold("effect.none");
+    private static final RawAnimation EYE_FLASH = RawAnimation.begin().thenPlay("effect.eye_flash");
     private static final EntityDataAccessor<Integer> SIDE_GUN_ANIM_TICKS =
             SynchedEntityData.defineId(FacTankEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> CANNON_ANIM_TICKS =
@@ -260,6 +263,8 @@ public class FacTankEntity extends Monster implements GeoEntity, Stunnable, Head
     }
 
     public void startCannonWarning(int ticks) {
+        this.triggerAnim("effects", "eye_flash");
+        SCGExtra.LOGGER.debug("warn cannon");
         int clamped = Math.max(ticks, 0);
         this.entityData.set(CANNON_WARNING_ACTIVE, clamped > 0);
         this.entityData.set(CANNON_WARNING_TICKS, clamped);
@@ -376,6 +381,11 @@ public class FacTankEntity extends Monster implements GeoEntity, Stunnable, Head
             }
             return PlayState.STOP;
         }));
+
+        controllers.add(new AnimationController<>(this, "effects", 0,
+                state -> state.setAndContinue(EFFECTS_BASE))
+                .triggerableAnim("eye_flash", EYE_FLASH)
+        );
 
         controllers.add(new AnimationController<>(this, "death", 0, state -> {
             if (state.getAnimatable().isDeadOrDying()) {
