@@ -1,5 +1,6 @@
 package net.zincstudios.scgextra.entity.cog;
 
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.api.distmarker.Dist;
@@ -10,6 +11,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
+import net.zincstudios.scgextra.SCGExtra;
+import net.zincstudios.scgextra.entity.asgharian.BaseEntityRenderer;
 import net.zincstudios.scgextra.entity.cog.bombardier.CogBombardierEntity;
 import net.zincstudios.scgextra.entity.cog.centipede.CogCentipedeEntity;
 import net.zincstudios.scgextra.entity.cog.devastator.CogDevastatorEntity;
@@ -17,6 +20,7 @@ import net.zincstudios.scgextra.entity.cog.gigantes.CogGigantesEntity;
 import net.zincstudios.scgextra.entity.cog.juggernaut.CogJuggernautEntity;
 import net.zincstudios.scgextra.entity.cog.venator.CogVenatorEntity;
 import net.zincstudios.scgextra.entity.cog.vulture.CogVultureEntity;
+import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 
 import static net.zincstudios.scgextra.entity.ModEntities.ENTITY_TYPES;
 
@@ -77,12 +81,24 @@ public class COGEntities {
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
 //        BoundingBoxManager.registerHeadshotBox(FACEntities.FAC_TRENCHER.get(), new BasicHeadshotBox<>(9.0, 20.0));
-
     }
 
     @OnlyIn(value = Dist.CLIENT)
     private static void onClientSetup(FMLClientSetupEvent event) {
-//        EntityRenderers.register(FACEntities.FAC_TRENCHER.get(), (ctx) -> new FacTrencherRenderer(ctx).noDeathTilt());
+        EntityRenderers.register(COGEntities.VULTURE.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_vulture"))).noDeathTilt());
+        EntityRenderers.register(COGEntities.DEVASTATOR.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_devastator"))).noDeathTilt());
+        EntityRenderers.register(COGEntities.BOMBARDIER.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_bombardier"))).noDeathTilt());
+        EntityRenderers.register(COGEntities.GIGANTES.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_gigantes"))).noDeathTilt());
+        EntityRenderers.register(COGEntities.VENATOR.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_venator"))).noDeathTilt());
+        EntityRenderers.register(COGEntities.CENTIPEDE.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_centipede"))).noDeathTilt());
+        EntityRenderers.register(COGEntities.JUGGERNAUT.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_juggernaut"))).noDeathTilt());
     }
 
 }
