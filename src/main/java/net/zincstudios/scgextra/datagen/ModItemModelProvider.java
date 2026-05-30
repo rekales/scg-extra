@@ -2,10 +2,8 @@ package net.zincstudios.scgextra.datagen;
 
 
 import net.minecraft.data.PackOutput;
-import net.minecraft.world.item.SpawnEggItem;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.item.ModItems;
 
 
@@ -69,10 +67,18 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.END_DWELLER_SPAWN_EGG.get());
         basicItem(ModItems.END_STONE_CRAB_SPAWN_EGG.get());
         basicItem(ModItems.END_SCORPION_SPAWN_EGG.get());
+
+        basicItem(ModItems.COG_VULTURE_SPAWN_EGG.get());
+        basicItem(ModItems.COG_DEVASTATOR_SPAWN_EGG.get());
+        basicItem(ModItems.COG_BOMBARDIER_SPAWN_EGG.get());
+        basicItem(ModItems.COG_GIGANTES_SPAWN_EGG.get());
+        basicItem(ModItems.COG_VENATOR_SPAWN_EGG.get());
+        basicItem(ModItems.COG_CENTIPEDE_SPAWN_EGG.get());
+        basicItem(ModItems.COG_JUGGERNAUT_SPAWN_EGG.get());
     }
 
-    private void spawnEgg(RegistryObject<SpawnEggItem> item) {
-        if (item.getId() == null) return;
-        withExistingParent(item.getId().getPath(), mcLoc("item/template_spawn_egg"));
-    }
+//    private void spawnEgg(RegistryObject<SpawnEggItem> item) {
+//        if (item.getId() == null) return;
+//        withExistingParent(item.getId().getPath(), mcLoc("item/template_spawn_egg"));
+//    }
 }
