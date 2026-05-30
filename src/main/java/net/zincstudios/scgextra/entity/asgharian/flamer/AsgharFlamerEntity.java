@@ -57,7 +57,9 @@ public class AsgharFlamerEntity extends GunnerEntity implements GeoEntity, GoalS
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new SimpleBurstGunAttackGoal<>(this, 3, 4)
+        this.goalSelector.addGoal(1, new SimpleBurstGunAttackGoal<>(this)
+                .burstAmount(3)
+                .burstIntervalTicks(4)
                 .runAndGun()
                 .approachDist(4)
                 .attackInterval(60)

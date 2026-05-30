@@ -18,7 +18,9 @@ public class AsgharSurgeonAttackGoal<T extends AsgharSurgeonEntity> extends Simp
     private int meleeTicks = 0;
 
     public AsgharSurgeonAttackGoal(T mob) {
-        super(mob, 12, 3);
+        super(mob);
+        this.burstAmount = 12;
+        this.burstInterval = 3;
         this.attackInterval = 60;
         this.maxRange = 16;
     }
