@@ -33,32 +33,32 @@ public class COGEntities {
 
     public static final RegistryObject<EntityType<CogDevastatorEntity>> DEVASTATOR = ENTITY_TYPES
             .register("cog_devastator", () -> EntityType.Builder.of(CogDevastatorEntity::new, MobCategory.MONSTER)
-                    .sized(0.68F, 1.82F)
+                    .sized(1.7F, 3.25F)
                     .build("cog_devastator"));
 
     public static final RegistryObject<EntityType<CogBombardierEntity>> BOMBARDIER = ENTITY_TYPES
             .register("cog_bombardier", () -> EntityType.Builder.of(CogBombardierEntity::new, MobCategory.MONSTER)
-                    .sized(0.68F, 1.82F)
+                    .sized(1.6F, 3.1F)
                     .build("cog_bombardier"));
 
     public static final RegistryObject<EntityType<CogGigantesEntity>> GIGANTES = ENTITY_TYPES
             .register("cog_gigantes", () -> EntityType.Builder.of(CogGigantesEntity::new, MobCategory.MONSTER)
-                    .sized(0.68F, 1.82F)
+                    .sized(1.8F, 3.4F)
                     .build("cog_gigantes"));
 
     public static final RegistryObject<EntityType<CogVenatorEntity>> VENATOR = ENTITY_TYPES
             .register("cog_venator", () -> EntityType.Builder.of(CogVenatorEntity::new, MobCategory.MONSTER)
-                    .sized(0.68F, 1.82F)
+                    .sized(0.75F, 1.5F)
                     .build("cog_venator"));
 
     public static final RegistryObject<EntityType<CogCentipedeEntity>> CENTIPEDE = ENTITY_TYPES
             .register("cog_centipede", () -> EntityType.Builder.of(CogCentipedeEntity::new, MobCategory.MONSTER)
-                    .sized(0.68F, 1.82F)
+                    .sized(2F, 3F)
                     .build("cog_centipede"));
 
     public static final RegistryObject<EntityType<CogJuggernautEntity>> JUGGERNAUT = ENTITY_TYPES
             .register("cog_juggernaut", () -> EntityType.Builder.of(CogJuggernautEntity::new, MobCategory.MONSTER)
-                    .sized(0.68F, 1.82F)
+                    .sized(1.6F, 3.0F)
                     .build("cog_juggernaut"));
 
     public static void register(IEventBus modEventBus) {
