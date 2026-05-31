@@ -28,7 +28,7 @@ public class COGEntities {
 
     public static final RegistryObject<EntityType<CogVultureEntity>> VULTURE = ENTITY_TYPES
             .register("cog_vulture", () -> EntityType.Builder.of(CogVultureEntity::new, MobCategory.MONSTER)
-                    .sized(0.68F, 1.82F)
+                    .sized(0.75F, 1.7F)
                     .build("cog_vulture"));
 
     public static final RegistryObject<EntityType<CogDevastatorEntity>> DEVASTATOR = ENTITY_TYPES
