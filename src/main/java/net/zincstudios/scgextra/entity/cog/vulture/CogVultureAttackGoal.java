@@ -50,6 +50,6 @@ public class CogVultureAttackGoal extends SimpleBurstGunAttackGoal<CogVultureEnt
 
     @Override
     protected float getAccuracyModifier() {
-        return super.getAccuracyModifier() * 1.5F;
+        return super.getAccuracyModifier() / 1.2F;
     }
 }

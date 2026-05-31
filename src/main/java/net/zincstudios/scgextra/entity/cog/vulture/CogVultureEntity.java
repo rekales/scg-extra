@@ -1,8 +1,11 @@
 package net.zincstudios.scgextra.entity.cog.vulture;
 
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.util.Mth;
+
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -21,14 +24,28 @@ import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class CogVultureEntity extends GunnerEntity implements GeoEntity {
 
     public static final Vec3 LEFT_GUN_OFFSET = new Vec3(0.45,1.3,-0.4);
     public static final Vec3 RIGHT_GUN_OFFSET = new Vec3(-0.45,1.3,-0.4);
 
+    private static final EntityDataAccessor<Integer> TARGET_ID =
+            SynchedEntityData.defineId(CogVultureEntity.class, EntityDataSerializers.INT);
+
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
+
+    @Nullable
+    private LivingEntity clientSideCachedTarget;
 
     public CogVultureEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -38,21 +55,25 @@ public class CogVultureEntity extends GunnerEntity implements GeoEntity {
     public void tick() {
         super.tick();
 
-//        this.setYRot(this.getYRot()+1);
-//        this.setYBodyRot(this.getYRot());
+        // TODO: make this actually work
+        if (this.level().isClientSide()) {
+            LivingEntity target = this.getTarget();
+            if (target == null || !this.hasLineOfSight(target) || !this.getNavigation().isDone()) return;
+            this.getLookControl().setLookAt(target, 90.0F, 90.0F);
+            this.setYRot(this.getYHeadRot());
+            this.setYBodyRot(this.getYHeadRot());
+        }
+    }
 
-//        if (this.level().isClientSide()) {
-//            ClientLevel clientLevel = (ClientLevel) level();  // Dedicated Server doesn't like doing instanceof ClientLevel
-//
-//            Vec3 lgo = new Vec3(-0.45,1.3,-0.4);
-//            Vec3 pos = this.position().add(lgo.yRot(-this.yBodyRot * Mth.DEG_TO_RAD));
-//
-//            clientLevel.addParticle(
-//                    ParticleTypes.SOUL_FIRE_FLAME,
-//                    pos.x, pos.y, pos.z,
-//                    0, (this.getRandom().nextDouble()) * 0.02, 0
-//            );
-//        }
+    @Override
+    public void aiStep() {
+        if (this.level().isClientSide()) {
+            LivingEntity target = this.getTarget();
+            if (target == null || !this.hasLineOfSight(target)) return;
+            this.getLookControl().setLookAt(target, 90.0F, 90.0F);
+        }
+
+        super.aiStep();
     }
 
     @Override
@@ -84,8 +105,57 @@ public class CogVultureEntity extends GunnerEntity implements GeoEntity {
     }
 
     @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+    public void setTarget(@Nullable LivingEntity target) {
+        if (target instanceof Player player && (player.isCreative() || player.isSpectator())) {
+            target = null;
+        }
+        super.setTarget(target);
+        this.entityData.set(TARGET_ID, target == null ? 0 : target.getId());
+    }
 
+    @Override
+    public @Nullable LivingEntity getTarget() {
+        if (this.level().isClientSide()) {
+            if (this.clientSideCachedTarget != null) {
+                return this.clientSideCachedTarget;
+            } else {
+                Entity entity = this.level().getEntity(this.entityData.get(TARGET_ID));
+                if (entity instanceof LivingEntity livingEntity) {
+                    this.clientSideCachedTarget = livingEntity;
+                    return this.clientSideCachedTarget;
+                } else {
+                    return null;
+                }
+            }
+        } else {
+            return super.getTarget();
+        }
+    }
+
+    public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
+        super.onSyncedDataUpdated(key);
+        if (TARGET_ID.equals(key)) {
+            this.clientSideCachedTarget = null;
+        }
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(TARGET_ID, 0);
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "main", 2, state ->
+                state.setAndContinue(RawAnimation.begin().thenLoop("idle"))));
+
+        controllers.add(new AnimationController<>(this, "death", 2, state -> {
+            if (state.getAnimatable().isDeadOrDying()) {
+                return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("death"));
+            }
+            return PlayState.STOP;
+        }).setAnimationSpeed(1.3f));
     }
 
     @Override
