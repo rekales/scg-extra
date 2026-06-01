@@ -88,7 +88,7 @@ public class COGEntities {
         EntityRenderers.register(COGEntities.VULTURE.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_vulture"))).noDeathTilt());
         EntityRenderers.register(COGEntities.DEVASTATOR.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
-                new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_devastator"))).noDeathTilt());
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_devastator"), "chest")).noDeathTilt());
         EntityRenderers.register(COGEntities.BOMBARDIER.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_bombardier"))).noDeathTilt());
         EntityRenderers.register(COGEntities.GIGANTES.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
