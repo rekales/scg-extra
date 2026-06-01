@@ -30,6 +30,7 @@ import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
+import net.zincstudios.scgextra.entity.fac.ApproachTargetGoal;
 import net.zincstudios.scgextra.sounds.FACSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -81,6 +82,7 @@ public class FacTankEntity extends Monster implements GeoEntity, Stunnable, Head
 
     public FacTankEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
+        this.setPersistenceRequired();
     }
 
     @Override
@@ -128,6 +130,7 @@ public class FacTankEntity extends Monster implements GeoEntity, Stunnable, Head
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new StunnedWithVisualGoal<>(this).smoking(true));
         this.goalSelector.addGoal(2, new FacTankStompGoal(this));
+        this.goalSelector.addGoal(3, new ApproachTargetGoal(this, 6, 4, 1.0F));
         this.goalSelector.addGoal(3, new FacTankCannonGoal(this, 200, 20, 16.0F, 20.0F, 3.0F));
         this.goalSelector.addGoal(4, new FacTankMountedGunGoal(this, 2, 16.0F, true));
         this.goalSelector.addGoal(4, new FacTankMountedGunGoal(this, 2, 16.0F, false));
@@ -148,7 +151,7 @@ public class FacTankEntity extends Monster implements GeoEntity, Stunnable, Head
                 .add(Attributes.MAX_HEALTH, 400.0D)
                 .add(Attributes.ARMOR, 20.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
-                .add(Attributes.FOLLOW_RANGE, 48.0D)
+                .add(Attributes.FOLLOW_RANGE, 64.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.3D)
                 .add(Attributes.ATTACK_DAMAGE, 20.0D);
     }

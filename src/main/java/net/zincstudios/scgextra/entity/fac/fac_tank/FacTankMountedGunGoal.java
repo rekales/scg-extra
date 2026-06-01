@@ -27,9 +27,6 @@ public class FacTankMountedGunGoal extends Goal {
         this.fireInterval = fireInterval;
         this.range = range;
         this.leftGun = leftGun;
-        if (leftGun) {
-            this.setFlags(EnumSet.of(Flag.LOOK));
-        }
     }
 
     @Override
@@ -72,8 +69,6 @@ public class FacTankMountedGunGoal extends Goal {
             this.cooldown = Math.max(this.cooldown, 1);
             return;
         }
-
-        this.entity.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
 
         Vec3 spawnVec = this.leftGun ? this.entity.getLeftGunPos() : this.entity.getRightGunPos();
         if (spawnVec.closerThan(target.position(), this.range)) {
