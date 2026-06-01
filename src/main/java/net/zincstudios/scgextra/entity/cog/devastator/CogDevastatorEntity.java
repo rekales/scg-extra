@@ -4,6 +4,7 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,13 +18,21 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.zincstudios.scgextra.CommonConfig;
+import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.cog.ApproachTargetGoal;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
+import net.zincstudios.scgextra.entity.common.HeadShotHandler;
+import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import top.ribs.scguns.init.ModItems;
 
@@ -32,16 +41,22 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CogDevastatorEntity extends GunnerEntity implements GeoEntity {
+public class CogDevastatorEntity extends GunnerEntity implements GeoEntity, Stunnable, HeadShotHandler {
 
     public static final Vec3 MACHINE_GUN_OFFSET = new Vec3(-0.7,2.1,0.4);
     public static final Vec3 SHOTGUN_OFFSET = new Vec3(-0.7,2.6,0.5);
     public static final Vec3 GATLING_GUN_OFFSET = new Vec3(0.7,2.6,0.3);
 
-    private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
-
+    private static final int STUN_DURATION = 60;
     private static final EntityDataAccessor<Integer> TARGET_ID =
             SynchedEntityData.defineId(CogDevastatorEntity.class, EntityDataSerializers.INT);
+
+    private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
+
+    // Server-side only for stunnable handling
+    private int headshotCounter = 0;
+    private boolean stunCooldown = false;
+    private boolean stunned = false;
 
     @Nullable
     private LivingEntity clientSideCachedTarget;
@@ -52,6 +67,7 @@ public class CogDevastatorEntity extends GunnerEntity implements GeoEntity {
 
     @Override
     protected void registerGoals() {
+        this.goalSelector.addGoal(1, new StunnedWithVisualGoal<>(this));
         this.goalSelector.addGoal(2, new ApproachTargetGoal(this, 4, 4, 1.0));
         this.goalSelector.addGoal(4, new CogDevastatorMountedGunGoal(this, ModItems.PRUSH_GUN.get())
                 .burstAmount(16)
@@ -64,7 +80,7 @@ public class CogDevastatorEntity extends GunnerEntity implements GeoEntity {
         this.goalSelector.addGoal(4, new CogDevastatorMountedGunGoal(this, ModItems.JACKHAMMER.get())
                 .burstAmount(3)
                 .burstIntervalTicks(6)
-                .maxRange(10)
+                .maxRange(6)
                 .attackInterval(120)
                 .spawnOffset(SHOTGUN_OFFSET)
         );
@@ -149,11 +165,80 @@ public class CogDevastatorEntity extends GunnerEntity implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "main", 4, state -> {
+            if (state.getAnimatable().getTarget() != null) {
+                state.setAnimation(RawAnimation.begin().thenLoop("aim"));
+            } else {
+                state.setAnimation(RawAnimation.begin().thenLoop("idle"));
+            }
+            return PlayState.CONTINUE;
+        }));
 
+        controllers.add(new AnimationController<>(this, "behaviour", 0, state -> PlayState.STOP)
+                .triggerableAnim("stun", RawAnimation.begin().thenPlayAndHold("stun_start"))
+                .triggerableAnim("end_stun", RawAnimation.begin().thenPlay("stun_end"))
+        );
+
+        controllers.add(new AnimationController<>(this, "death", 2, state -> {
+            if (state.getAnimatable().isDeadOrDying()) {
+                return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("death"));
+            }
+            return PlayState.STOP;
+        }));
     }
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.geocache;
+    }
+
+    @Override
+    public boolean headshot(DamageSource source, float amount) {
+        if (this.headshotCounter < CommonConfig.abilityWeaknessHeadshots-1 || !this.stunCooldown) {
+            this.headshotCounter++;
+        }
+
+        SCGExtra.LOGGER.debug(this.headshotCounter + "");
+
+        return false;
+    }
+
+    @Override
+    public int shouldStun() {
+        if (!CommonConfig.enableAbilityWeakness) return 0;
+
+        if (this.headshotCounter >= CommonConfig.abilityWeaknessHeadshots) {
+            return STUN_DURATION;
+        }
+
+        return 0;
+    }
+
+    @Override
+    public void setStunned(boolean stunned) {
+        this.stunned = stunned;
+        if (stunned) {
+            this.triggerAnim("behaviour", "stun");
+        } else {
+            this.headshotCounter = 0;
+        }
+    }
+
+    @Override
+    public void setStunCooldown(boolean stunCooldown) {
+        this.stunCooldown = stunCooldown;
+    }
+
+    @Override
+    public boolean isStunned() {
+        return this.stunned;
+    }
+
+    @Override
+    public boolean tickStunned(int ticksLeft) {
+        if (ticksLeft == 10) {
+            this.triggerAnim("behaviour", "end_stun");
+        }
+        return false;
     }
 }

@@ -29,7 +29,6 @@ public class FixedMountedGunGoal<T extends Mob> extends MountedGunGoal<T> {
         float targetYaw = (float) Math.toDegrees(Math.atan2(-toTarget.x, toTarget.z));
         float mobYaw = mob.getYHeadRot();
         float diff = Mth.wrapDegrees(mobYaw - targetYaw);
-        SCGExtra.LOGGER.debug(Math.abs(diff) + "");
         return Math.abs(diff) < 10.0f;
     }
 }

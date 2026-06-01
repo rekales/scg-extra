@@ -17,6 +17,11 @@ public class CogDevastatorMountedGunGoal extends FixedMountedGunGoal<CogDevastat
     }
 
     @Override
+    public boolean canUse() {
+        return super.canUse() && !this.mob.isStunned();
+    }
+
+    @Override
     protected Vec3 getSpawnOffset() {
         return this.spawnOffset.yRot(-this.mob.yHeadRot * Mth.DEG_TO_RAD);
     }
