@@ -17,6 +17,8 @@ import java.security.InvalidParameterException;
 import java.util.EnumSet;
 
 // Relying heavily on the builder pattern because overloads fucking suck for multiple optionals
+// TODO: another overhaul to use a simulated gun object to handle weapon firing logic and some
+//   aspects like burst fire and reloads.
 
 /**
  * A much more simplified and dumbed down version of the GunAttackGoal. No reloading, going into cover, or panicking.

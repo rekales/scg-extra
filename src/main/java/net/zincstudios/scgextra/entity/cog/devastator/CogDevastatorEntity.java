@@ -19,7 +19,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.CommonConfig;
-import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.cog.ApproachTargetGoal;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
@@ -197,9 +196,6 @@ public class CogDevastatorEntity extends GunnerEntity implements GeoEntity, Stun
         if (this.headshotCounter < CommonConfig.abilityWeaknessHeadshots-1 || !this.stunCooldown) {
             this.headshotCounter++;
         }
-
-        SCGExtra.LOGGER.debug(this.headshotCounter + "");
-
         return false;
     }
 
