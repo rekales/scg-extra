@@ -64,7 +64,7 @@ public class CogGigantesEntity extends FlyingMob implements GeoEntity, Stunnable
                 .accuracyModifier(1.5F)
                 .spawnOffset(new Vec3(0, 0.3, 0))
         );
-        this.goalSelector.addGoal(4, new CogGigantesSpawnCarriersGoal(this).cooldown(600));
+        this.goalSelector.addGoal(4, new CogGigantesSummonCarriersGoal(this).cooldown(600));
         this.goalSelector.addGoal(7, new CogGigantesRandomMoveGoal(this, 100));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
 

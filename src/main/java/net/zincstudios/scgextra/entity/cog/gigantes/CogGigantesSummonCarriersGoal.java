@@ -7,8 +7,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -18,9 +16,9 @@ import top.ribs.scguns.init.ModEntities;
 
 import java.util.List;
 
-public class CogGigantesSpawnCarriersGoal extends AbilityGoal<CogGigantesEntity> {
+public class CogGigantesSummonCarriersGoal extends AbilityGoal<CogGigantesEntity> {
 
-    public CogGigantesSpawnCarriersGoal(CogGigantesEntity mob) {
+    public CogGigantesSummonCarriersGoal(CogGigantesEntity mob) {
         super(mob);
     }
 
@@ -34,12 +32,12 @@ public class CogGigantesSpawnCarriersGoal extends AbilityGoal<CogGigantesEntity>
     private void spawnSkyCarriers() {
         Level level = this.mob.level();
         if (level instanceof ServerLevel serverLevel) {
-            int var9 = 1 + level.random.nextInt(4);
+            int maxSpawns = 2;
             int successfulSpawns = 0;
-            int maxAttempts = var9 * 5;
+            int maxAttempts = maxSpawns * 5;
             Vec3 beaconPosition = this.mob.position();
 
-            for(int attempt = 0; attempt < maxAttempts && successfulSpawns < var9; ++attempt) {
+            for(int attempt = 0; attempt < maxAttempts && successfulSpawns < maxSpawns; ++attempt) {
                 Vec3 spawnPos = this.findValidSpawnPosition(serverLevel);
                 if (spawnPos != null) {
                     SkyCarrierEntity skyCarrier = (SkyCarrierEntity)((EntityType<?>) ModEntities.SKY_CARRIER.get()).create(serverLevel);
