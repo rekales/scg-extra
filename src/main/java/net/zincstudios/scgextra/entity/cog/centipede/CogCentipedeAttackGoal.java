@@ -21,9 +21,9 @@ public class CogCentipedeAttackGoal extends SimpleGunAttackGoal<CogCentipedeEnti
 
     public static final GoalState SLAM_STATE = new GoalState("cog_centipede_slam_state");
 
-    private static final int SLAM_DAMAGE_DELAY = 12;  // match with animation
+    private static final int SLAM_DAMAGE_DELAY = 18;  // match with animation
     private static final int SLAM_FULL_DURATION = 25;  // match with animation
-    private static final int SLAM_DAMAGE_RANGE = 3;
+    private static final int SLAM_DAMAGE_RANGE = 4;
 
     private final int slamInterval;
 
@@ -84,6 +84,7 @@ public class CogCentipedeAttackGoal extends SimpleGunAttackGoal<CogCentipedeEnti
 
         if (this.mob.position().closerThan(target.position(), this.mob.getBbWidth()/2 + SLAM_DAMAGE_RANGE)) {
             this.setGoalState(SLAM_STATE);
+            this.mob.triggerAnim("behaviour", "slam");
             this.slamTicks = 0;
         }
     }
@@ -108,6 +109,7 @@ public class CogCentipedeAttackGoal extends SimpleGunAttackGoal<CogCentipedeEnti
         if (itemStack.getItem() instanceof GunItem gunItem) {
             Gun gun = gunItem.getModifiedGun(itemStack);
             AIGunEvent.performGunAttack(this.mob, target, itemStack, gun, this.getAccuracyModifier());
+            this.mob.triggerAnim("gun", "fire");
 
             ResourceLocation fireSound = gun.getSounds().getFire();
             if (fireSound != null) {

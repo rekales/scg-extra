@@ -1,6 +1,7 @@
 package net.zincstudios.scgextra.entity.cog.centipede;
 
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -22,6 +23,9 @@ import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class CogCentipedeEntity extends GunnerEntity implements GeoEntity, Stunnable, HeadShotHandler {
@@ -42,7 +46,7 @@ public class CogCentipedeEntity extends GunnerEntity implements GeoEntity, Stunn
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new StunnedWithVisualGoal<>(this));
-        this.goalSelector.addGoal(3, new CogCentipedeAttackGoal(this, 200)
+        this.goalSelector.addGoal(3, new CogCentipedeAttackGoal(this, 120)
                 .maxRange(10)
                 .approachDist(4)
                 .attackInterval(80)
@@ -69,12 +73,46 @@ public class CogCentipedeEntity extends GunnerEntity implements GeoEntity, Stunn
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "main", 4, state -> {
+            if (state.isMoving()) {
+                state.setAnimation(RawAnimation.begin().thenLoop("walk"));
+            } else {
+                state.setAnimation(RawAnimation.begin().thenLoop("idle"));
+            }
+            return PlayState.CONTINUE;
+        }));
 
+        controllers.add(new AnimationController<>(this, "gun", 2, state -> PlayState.STOP)
+                .triggerableAnim("fire", RawAnimation.begin().thenPlay("fire"))
+        );
+
+        controllers.add(new AnimationController<>(this, "behaviour", 0, state -> PlayState.STOP)
+                .triggerableAnim("stun", RawAnimation.begin().thenPlayAndHold("stun_start"))
+                .triggerableAnim("end_stun", RawAnimation.begin().thenPlay("stun_end"))
+                .triggerableAnim("slam", RawAnimation.begin().thenPlay("slam"))
+        );
+
+        controllers.add(new AnimationController<>(this, "death", 2, state -> {
+            if (state.getAnimatable().isDeadOrDying()) {
+                return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("death"));
+            }
+            return PlayState.STOP;
+        }));
     }
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.geocache;
+    }
+
+    @Override
+    protected void tickDeath() {
+        // Override to only extend death time
+        ++this.deathTime;
+        if (this.deathTime >= 42 && !this.level().isClientSide() && !this.isRemoved()) {
+            this.level().broadcastEntityEvent(this, (byte)60);
+            this.remove(Entity.RemovalReason.KILLED);
+        }
     }
 
     @Override
@@ -118,7 +156,7 @@ public class CogCentipedeEntity extends GunnerEntity implements GeoEntity, Stunn
 
     @Override
     public boolean tickStunned(int ticksLeft) {
-        if (ticksLeft == 15) {
+        if (ticksLeft == 12) {
             this.triggerAnim("behaviour", "end_stun");
         }
         return false;
