@@ -23,6 +23,18 @@ public class CogGigantesMountedGunGoal extends FixedMountedGunGoal<CogGigantesEn
     }
 
     @Override
+    public void start() {
+        super.start();
+        this.firingTimeOut = 0;
+    }
+
+    @Override
+    public void stop() {
+        super.stop();
+        this.mob.setFiring(false);
+    }
+
+    @Override
     public void tick() {
         if (this.firingTimeOut > 0) {
             this.mob.setFiring(true);

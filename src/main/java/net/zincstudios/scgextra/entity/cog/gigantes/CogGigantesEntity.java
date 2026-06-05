@@ -46,14 +46,14 @@ public class CogGigantesEntity extends FlyingMob implements GeoEntity, Stunnable
 
     public CogGigantesEntity(EntityType<? extends FlyingMob> entityType, Level level) {
         super(entityType, level);
-        this.moveControl = new CogGigantesMoveControl(this, 5.0F, 8.0F, 2.0F, 0.6, 0.12);
+        this.moveControl = new CogGigantesMoveControl(this, 5.0F, 8.0F, 2.0F, 0.3, 0.08);
 //        this.moveControl = new FlyingMoveControl(this, 20, true);
     }
 
     @Override
     protected void registerGoals() {
 //        this.goalSelector.addGoal(2, new FlyCloseToTargetGoal(this, 1, 8, 4));
-        this.goalSelector.addGoal(4, new CogGigantesMountedGunGoal(this, ModItems.PRUSH_GUN.get())
+        this.goalSelector.addGoal(3, new CogGigantesMountedGunGoal(this, ModItems.PRUSH_GUN.get())
                 .burstAmount(16)
                 .burstIntervalTicks(2)
                 .maxRange(15)
@@ -61,7 +61,7 @@ public class CogGigantesEntity extends FlyingMob implements GeoEntity, Stunnable
                 .accuracyModifier(1.5F)
                 .spawnOffset(new Vec3(0, 0.3, 0))
         );
-
+        this.goalSelector.addGoal(4, new CogGigantesSpawnCarriersGoal(this).cooldown(600));
         this.goalSelector.addGoal(7, new CogGigantesRandomMoveGoal(this, 100));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
 
@@ -154,7 +154,7 @@ public class CogGigantesEntity extends FlyingMob implements GeoEntity, Stunnable
 
     @Override
     public boolean tickStunned(int ticksLeft) {
-        if (ticksLeft == 10) {
+        if (ticksLeft == 15) {
             this.triggerAnim("behaviour", "end_stun");
         }
         return false;
@@ -163,7 +163,7 @@ public class CogGigantesEntity extends FlyingMob implements GeoEntity, Stunnable
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(FIRING, true);
+        this.entityData.define(FIRING, false);
     }
 
     public void setFiring(boolean firing) {
