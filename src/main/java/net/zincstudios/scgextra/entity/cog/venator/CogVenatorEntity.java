@@ -17,6 +17,9 @@ import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class CogVenatorEntity extends GunnerEntity implements GeoEntity {
@@ -55,7 +58,26 @@ public class CogVenatorEntity extends GunnerEntity implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "main", 2, state -> {
+            if (state.getAnimatable().isSprinting()) {
+                state.setAnimation(RawAnimation.begin().thenLoop("run"));
+            } else if (state.isMoving()) {
+                state.setAnimation(RawAnimation.begin().thenLoop("walk"));
+            } else if (state.getAnimatable().isAggressive()) {
+                state.setAnimation(RawAnimation.begin().thenPlayAndHold("aim"));
+            } else {
+                state.setAnimation(RawAnimation.begin().thenLoop("idle"));
+            }
+            return PlayState.CONTINUE;
+        }).triggerableAnim("fire", RawAnimation.begin().thenPlay("fire"))
+        );
 
+        controllers.add(new AnimationController<>(this, "death", 2, state -> {
+            if (state.getAnimatable().isDeadOrDying()) {
+                return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("death"));
+            }
+            return PlayState.STOP;
+        }));
     }
 
     @Override

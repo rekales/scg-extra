@@ -37,6 +37,7 @@ public class CogVenatorGunAttackGoal extends SimpleGunAttackGoal<CogVenatorEntit
         if (itemStack.getItem() instanceof GunItem gunItem) {
             Gun gun = gunItem.getModifiedGun(itemStack);
             AIGunEvent.performGunAttack(this.mob, target, itemStack, gun, this.getAccuracyModifier());
+            this.mob.triggerAnim("main", "fire");
 
             ResourceLocation fireSound = gun.getSounds().getFire();
             if (fireSound != null) {
@@ -48,5 +49,10 @@ public class CogVenatorGunAttackGoal extends SimpleGunAttackGoal<CogVenatorEntit
                 this.mob.level().playSound(null, posX, posY, posZ, SoundEvent.createVariableRangeEvent(fireSound), SoundSource.HOSTILE, volume - 0.5F, pitch);
             }
         }
+    }
+
+    @Override
+    protected float getAccuracyModifier() {
+        return 4.0F;
     }
 }
