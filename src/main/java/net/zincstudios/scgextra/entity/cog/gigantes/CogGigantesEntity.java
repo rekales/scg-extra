@@ -1,5 +1,9 @@
 package net.zincstudios.scgextra.entity.cog.gigantes;
 
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.FlyingMob;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,16 +15,32 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.entity.Faction;
+import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import top.ribs.scguns.init.ModItems;
 
-public class CogGigantesEntity extends FlyingMob implements GeoEntity, Stunnable, Enemy {
+public class CogGigantesEntity extends FlyingMob implements GeoEntity, Stunnable, Enemy, HeadShotHandler {
+
+    private static final int STUN_DURATION = 60;
+    private static final EntityDataAccessor<Boolean> FIRING =
+            SynchedEntityData.defineId(CogGigantesEntity.class, EntityDataSerializers.BOOLEAN);
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
+
+    // Server-side only for stunnable handling
+    private int headshotCounter = 0;
+    private boolean stunCooldown = false;
+    private boolean stunned = false;
 
     public CogGigantesEntity(EntityType<? extends FlyingMob> entityType, Level level) {
         super(entityType, level);
@@ -31,6 +51,15 @@ public class CogGigantesEntity extends FlyingMob implements GeoEntity, Stunnable
     @Override
     protected void registerGoals() {
 //        this.goalSelector.addGoal(2, new FlyCloseToTargetGoal(this, 1, 8, 4));
+        this.goalSelector.addGoal(4, new CogGigantesMountedGunGoal(this, ModItems.PRUSH_GUN.get())
+                .burstAmount(16)
+                .burstIntervalTicks(2)
+                .maxRange(15)
+                .attackInterval(60)
+                .accuracyModifier(1.5F)
+                .spawnOffset(new Vec3(0, 0.5, 0))
+        );
+
         this.goalSelector.addGoal(7, new CogGigantesRandomMoveGoal(this, 100));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
 
@@ -53,7 +82,26 @@ public class CogGigantesEntity extends FlyingMob implements GeoEntity, Stunnable
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "main", 4, state -> {
+            if (state.isMoving()) {
+                state.setAnimation(RawAnimation.begin().thenLoop("move"));
+            } else {
+                state.setAnimation(RawAnimation.begin().thenLoop("idle"));
+            }
+            return PlayState.CONTINUE;
+        }));
 
+        controllers.add(new AnimationController<>(this, "behaviour", 0, state -> PlayState.STOP)
+                .triggerableAnim("stun", RawAnimation.begin().thenPlayAndHold("stun_start"))
+                .triggerableAnim("end_stun", RawAnimation.begin().thenPlay("stun_end"))
+        );
+
+        controllers.add(new AnimationController<>(this, "death", 2, state -> {
+            if (state.getAnimatable().isDeadOrDying()) {
+                return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("stun"));
+            }
+            return PlayState.STOP;
+        }));
     }
 
     @Override
@@ -62,12 +110,63 @@ public class CogGigantesEntity extends FlyingMob implements GeoEntity, Stunnable
     }
 
     @Override
+    public boolean headshot(DamageSource source, float amount) {
+        if (this.headshotCounter < CommonConfig.abilityWeaknessHeadshots-1 || !this.stunCooldown) {
+            this.headshotCounter++;
+        }
+        return false;
+    }
+
+    @Override
     public int shouldStun() {
+        if (!CommonConfig.enableAbilityWeakness) return 0;
+
+        if (this.headshotCounter >= CommonConfig.abilityWeaknessHeadshots) {
+            return STUN_DURATION;
+        }
+
         return 0;
     }
 
     @Override
     public void setStunned(boolean stunned) {
+        this.stunned = stunned;
+        if (stunned) {
+            this.triggerAnim("behaviour", "stun");
+        } else {
+            this.headshotCounter = 0;
+        }
+    }
 
+    @Override
+    public void setStunCooldown(boolean stunCooldown) {
+        this.stunCooldown = stunCooldown;
+    }
+
+    @Override
+    public boolean isStunned() {
+        return this.stunned;
+    }
+
+    @Override
+    public boolean tickStunned(int ticksLeft) {
+        if (ticksLeft == 10) {
+            this.triggerAnim("behaviour", "end_stun");
+        }
+        return false;
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(FIRING, true);
+    }
+
+    public void setFiring(boolean firing) {
+        this.entityData.set(FIRING, firing);
+    }
+
+    public boolean isFiring() {
+        return this.entityData.get(FIRING);
     }
 }
