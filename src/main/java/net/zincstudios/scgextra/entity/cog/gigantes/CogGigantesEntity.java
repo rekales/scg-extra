@@ -24,13 +24,13 @@ public class CogGigantesEntity extends FlyingMob implements GeoEntity, Stunnable
 
     public CogGigantesEntity(EntityType<? extends FlyingMob> entityType, Level level) {
         super(entityType, level);
-        this.moveControl = new CogGigantesMoveControl(this);
+        this.moveControl = new CogGigantesMoveControl(this, 5.0F, 8.0F, 2.0F, 0.6, 0.12);
 //        this.moveControl = new FlyingMoveControl(this, 20, true);
     }
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(2, new FlyCloseToTargetGoal(this, 1, 8, 4));
+//        this.goalSelector.addGoal(2, new FlyCloseToTargetGoal(this, 1, 8, 4));
         this.goalSelector.addGoal(7, new CogGigantesRandomMoveGoal(this, 100));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
 
