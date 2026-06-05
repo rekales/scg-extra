@@ -5,12 +5,12 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 
-public class StunnedWithVisualGoal <T extends PathfinderMob & Stunnable> extends StunnedGoal<T> {
+public class StunnedWithVisualGoal <T extends Mob & Stunnable> extends StunnedGoal<T> {
 
     private boolean smoking = false;
 

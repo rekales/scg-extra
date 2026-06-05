@@ -20,6 +20,7 @@ import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.Stunnable;
+import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -52,6 +53,8 @@ public class CogGigantesEntity extends FlyingMob implements GeoEntity, Stunnable
 
     @Override
     protected void registerGoals() {
+        // NOTE: movement ai at CogGigantesMoveControl
+        this.goalSelector.addGoal(1, new StunnedWithVisualGoal<>(this));
 //        this.goalSelector.addGoal(2, new FlyCloseToTargetGoal(this, 1, 8, 4));
         this.goalSelector.addGoal(3, new CogGigantesMountedGunGoal(this, ModItems.PRUSH_GUN.get())
                 .burstAmount(16)
@@ -95,14 +98,14 @@ public class CogGigantesEntity extends FlyingMob implements GeoEntity, Stunnable
             return PlayState.CONTINUE;
         }));
 
-        controllers.add(new AnimationController<>(this, "behaviour", 2, state -> PlayState.STOP)
+        controllers.add(new AnimationController<>(this, "behaviour", 0, state -> PlayState.STOP)
                 .triggerableAnim("stun", RawAnimation.begin().thenPlayAndHold("stun_start"))
                 .triggerableAnim("end_stun", RawAnimation.begin().thenPlay("stun_end"))
         );
 
         controllers.add(new AnimationController<>(this, "death", 2, state -> {
             if (state.getAnimatable().isDeadOrDying()) {
-                return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("stun"));
+                return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("stun_start"));
             }
             return PlayState.STOP;
         }));

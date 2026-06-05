@@ -1,6 +1,6 @@
 package net.zincstudios.scgextra.entity.common.ai;
 
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.entity.common.Stunnable;
@@ -8,7 +8,7 @@ import net.zincstudios.scgextra.entity.common.Stunnable;
 import java.util.EnumSet;
 
 // NOTE: weakness exposed state == stunned goal
-public class StunnedGoal<T extends PathfinderMob & Stunnable> extends Goal {
+public class StunnedGoal<T extends Mob & Stunnable> extends Goal {
 
     protected final T mob;
     protected final int cooldownLength;

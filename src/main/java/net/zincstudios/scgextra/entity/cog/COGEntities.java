@@ -21,6 +21,8 @@ import net.zincstudios.scgextra.entity.cog.juggernaut.CogJuggernautEntity;
 import net.zincstudios.scgextra.entity.cog.venator.CogVenatorEntity;
 import net.zincstudios.scgextra.entity.cog.vulture.CogVultureEntity;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
+import top.ribs.scguns.common.BoundingBoxManager;
+import top.ribs.scguns.common.headshot.RotatedHeadshotBox;
 
 import static net.zincstudios.scgextra.entity.ModEntities.ENTITY_TYPES;
 
@@ -80,6 +82,7 @@ public class COGEntities {
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
+        BoundingBoxManager.registerHeadshotBox(COGEntities.GIGANTES.get(), new RotatedHeadshotBox<>(8, 18, 18, false, true));
 //        BoundingBoxManager.registerHeadshotBox(FACEntities.FAC_TRENCHER.get(), new BasicHeadshotBox<>(9.0, 20.0));
     }
 

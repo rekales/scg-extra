@@ -5,7 +5,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.phys.Vec3;
-import net.zincstudios.scgextra.SCGExtra;
 import top.ribs.scguns.item.GunItem;
 
 import javax.annotation.ParametersAreNonnullByDefault;
