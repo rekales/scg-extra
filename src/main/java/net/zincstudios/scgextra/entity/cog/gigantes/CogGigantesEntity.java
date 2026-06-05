@@ -29,6 +29,8 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import top.ribs.scguns.init.ModItems;
 
+// TODO: maybe tracking mounted gun for gigantes instead.
+
 public class CogGigantesEntity extends FlyingMob implements GeoEntity, Stunnable, Enemy, HeadShotHandler {
 
     private static final int STUN_DURATION = 60;
@@ -57,7 +59,7 @@ public class CogGigantesEntity extends FlyingMob implements GeoEntity, Stunnable
                 .maxRange(15)
                 .attackInterval(60)
                 .accuracyModifier(1.5F)
-                .spawnOffset(new Vec3(0, 0.5, 0))
+                .spawnOffset(new Vec3(0, 0.3, 0))
         );
 
         this.goalSelector.addGoal(7, new CogGigantesRandomMoveGoal(this, 100));
@@ -82,8 +84,10 @@ public class CogGigantesEntity extends FlyingMob implements GeoEntity, Stunnable
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "main", 4, state -> {
-            if (state.isMoving()) {
+        controllers.add(new AnimationController<>(this, "main", 3, state -> {
+            if (state.getAnimatable().isFiring()) {
+                state.setAnimation(RawAnimation.begin().thenLoop("attack"));
+            } else if (state.isMoving()) {
                 state.setAnimation(RawAnimation.begin().thenLoop("move"));
             } else {
                 state.setAnimation(RawAnimation.begin().thenLoop("idle"));
@@ -91,7 +95,7 @@ public class CogGigantesEntity extends FlyingMob implements GeoEntity, Stunnable
             return PlayState.CONTINUE;
         }));
 
-        controllers.add(new AnimationController<>(this, "behaviour", 0, state -> PlayState.STOP)
+        controllers.add(new AnimationController<>(this, "behaviour", 2, state -> PlayState.STOP)
                 .triggerableAnim("stun", RawAnimation.begin().thenPlayAndHold("stun_start"))
                 .triggerableAnim("end_stun", RawAnimation.begin().thenPlay("stun_end"))
         );

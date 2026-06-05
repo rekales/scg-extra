@@ -43,7 +43,7 @@ public class COGEntities {
 
     public static final RegistryObject<EntityType<CogGigantesEntity>> GIGANTES = ENTITY_TYPES
             .register("cog_gigantes", () -> EntityType.Builder.of(CogGigantesEntity::new, MobCategory.MONSTER)
-                    .sized(1.8F, 3.4F)
+                    .sized(1.8F, 3F)
                     .build("cog_gigantes"));
 
     public static final RegistryObject<EntityType<CogVenatorEntity>> VENATOR = ENTITY_TYPES
