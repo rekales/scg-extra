@@ -27,7 +27,7 @@ public class CogVenatorGunAttackGoal extends SimpleGunAttackGoal<CogVenatorEntit
     public void start() {
         this.mob.setAggressive(true);
         this.seeTime = 0;
-        this.attackCooldown = Math.max(this.attackCooldown, this.attackInterval/4);
+//        this.attackCooldown = Math.max(this.attackCooldown, this.attackInterval/4);
     }
 
     @Override
