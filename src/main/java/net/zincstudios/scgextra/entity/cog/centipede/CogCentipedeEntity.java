@@ -1,5 +1,6 @@
 package net.zincstudios.scgextra.entity.cog.centipede;
 
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -13,6 +14,8 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.entity.PartEntity;
 import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
@@ -20,6 +23,7 @@ import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -31,6 +35,11 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 public class CogCentipedeEntity extends GunnerEntity implements GeoEntity, Stunnable, HeadShotHandler {
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
+    private final CogCentipedeSegmentPartEntity headPart;
+    private final CogCentipedeSegmentPartEntity midPart;
+    private final CogCentipedeSegmentPartEntity tailPart;
+    private final CogCentipedeWeakpointPartEntity eyePart;
+    private final CogCentipedeSegmentPartEntity[] subEntities;
 
     private static final int STUN_DURATION = 80;
 
@@ -41,6 +50,16 @@ public class CogCentipedeEntity extends GunnerEntity implements GeoEntity, Stunn
 
     public CogCentipedeEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
+        this.headPart = new CogCentipedeSegmentPartEntity(this, 24/16f, 24/16f);
+        this.midPart = new CogCentipedeSegmentPartEntity(this, 28/16f, 30/16f);
+        this.tailPart = new CogCentipedeSegmentPartEntity(this, 22/16f, 24/16f);
+        this.eyePart = new CogCentipedeWeakpointPartEntity(this, 9/16f, 9/16f);
+        this.subEntities = new CogCentipedeSegmentPartEntity[] {
+                this.headPart,
+                this.midPart,
+                this.tailPart,
+                this.eyePart
+        };
     }
 
     @Override
@@ -69,6 +88,41 @@ public class CogCentipedeEntity extends GunnerEntity implements GeoEntity, Stunn
                 .add(Attributes.ARMOR, 12.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.8)
                 .add(Attributes.MAX_HEALTH, 400.0D);
+    }
+
+    @Override
+    public @Nullable PartEntity<?>[] getParts() {
+        return this.subEntities;
+    }
+
+    @Override
+    public boolean isMultipartEntity() {
+        return true;
+    }
+
+    @Override
+    public void tick() {
+        this.setYRot(this.getYRot() + 1);
+        this.setYBodyRot(this.getYRot());
+
+        super.tick();
+        updateSubEntities();
+    }
+
+    protected void updateSubEntities() {
+        this.headPart.setOldPosAndRot();
+        this.midPart.setOldPosAndRot();
+        this.tailPart.setOldPosAndRot();
+        this.eyePart.setOldPosAndRot();
+
+        Vec3 headOffset = new Vec3(0, 0, 1.5);
+        this.headPart.setPos(this.position().add(headOffset.yRot(-this.yBodyRot * Mth.DEG_TO_RAD)));
+        Vec3 midOffset = new Vec3(0, 0, -28/16f);
+        this.midPart.setPos(this.position().add(midOffset.yRot(-this.yBodyRot * Mth.DEG_TO_RAD)));
+        Vec3 tailOffset = new Vec3(0, 0, -28/16f - 24/16f);
+        this.tailPart.setPos(this.position().add(tailOffset.yRot(-this.yBodyRot * Mth.DEG_TO_RAD)));
+        Vec3 eyeOffset = new Vec3(0, 11/16f, 2.2);
+        this.eyePart.setPos(this.position().add(eyeOffset.yRot(-this.yBodyRot * Mth.DEG_TO_RAD)));
     }
 
     @Override

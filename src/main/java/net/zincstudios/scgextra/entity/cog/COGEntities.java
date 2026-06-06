@@ -22,6 +22,7 @@ import net.zincstudios.scgextra.entity.cog.venator.CogVenatorEntity;
 import net.zincstudios.scgextra.entity.cog.vulture.CogVultureEntity;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import top.ribs.scguns.common.BoundingBoxManager;
+import top.ribs.scguns.common.headshot.BasicHeadshotBox;
 import top.ribs.scguns.common.headshot.RotatedHeadshotBox;
 
 import static net.zincstudios.scgextra.entity.ModEntities.ENTITY_TYPES;
@@ -55,7 +56,7 @@ public class COGEntities {
 
     public static final RegistryObject<EntityType<CogCentipedeEntity>> CENTIPEDE = ENTITY_TYPES
             .register("cog_centipede", () -> EntityType.Builder.of(CogCentipedeEntity::new, MobCategory.MONSTER)
-                    .sized(2F, 3F)
+                    .sized(2F, 2.2F)
                     .build("cog_centipede"));
 
     public static final RegistryObject<EntityType<CogJuggernautEntity>> JUGGERNAUT = ENTITY_TYPES
@@ -83,7 +84,7 @@ public class COGEntities {
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
         BoundingBoxManager.registerHeadshotBox(COGEntities.GIGANTES.get(), new RotatedHeadshotBox<>(8, 18, 18, false, true));
-//        BoundingBoxManager.registerHeadshotBox(FACEntities.FAC_TRENCHER.get(), new BasicHeadshotBox<>(9.0, 20.0));
+        BoundingBoxManager.registerHeadshotBox(COGEntities.CENTIPEDE.get(), new BasicHeadshotBox<>(1,0));
     }
 
     @OnlyIn(value = Dist.CLIENT)
