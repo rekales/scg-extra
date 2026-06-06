@@ -17,6 +17,7 @@ import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
 import net.zincstudios.scgextra.entity.cog.COGEntities;
+import net.zincstudios.scgextra.entity.cog.centipede.PlasmaCannonProjectileEntity;
 import net.zincstudios.scgextra.entity.common.raid_summoner.RaidSummonerEntity;
 import net.zincstudios.scgextra.entity.common.raid_summoner.RaidSummonerRenderer;
 import net.zincstudios.scgextra.entity.fac.FACEntities;
@@ -29,6 +30,7 @@ import net.zincstudios.scgextra.entity.projectile.net.NetEntity;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntityRenderer;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
+import top.ribs.scguns.client.render.entity.ProjectileRenderer;
 import top.ribs.scguns.entity.client.EnemyProjectileRenderer;
 
 public class ModEntities {
@@ -67,6 +69,14 @@ public class ModEntities {
                     .updateInterval(3)
                     .build("soul_fireball"));
 
+    public static final RegistryObject<EntityType<PlasmaCannonProjectileEntity>> PLASMA_CANNON_PROJECTILE = ENTITY_TYPES
+            .register("plasma_cannon_projectile", () -> EntityType.Builder.of(
+                            (EntityType<PlasmaCannonProjectileEntity> type, Level level) -> new PlasmaCannonProjectileEntity(type, level), MobCategory.MISC)
+                    .sized(1.0F, 1.0F)
+                    .clientTrackingRange(4)
+                    .updateInterval(3)
+                    .build("plasma_cannon_projectile"));
+
     public static void register(IEventBus modEventBus) {
         WhalerEntities.register(modEventBus);
         RRCEntities.register(modEventBus);
@@ -95,5 +105,6 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.FIRE_PROJECTILE.get(), EnemyProjectileRenderer::new);
         EntityRenderers.register(ModEntities.RAID_SUMMONER.get(), RaidSummonerRenderer::new);
         EntityRenderers.register(ModEntities.LARGE_SOUL_FIREBALL.get(), SoulFireBallRenderer::new);
+        EntityRenderers.register(ModEntities.PLASMA_CANNON_PROJECTILE.get(), ProjectileRenderer::new);
     }
 }

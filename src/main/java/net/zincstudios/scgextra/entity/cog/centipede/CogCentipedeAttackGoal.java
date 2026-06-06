@@ -5,12 +5,15 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.asgharian.GoalState;
 import net.zincstudios.scgextra.entity.asgharian.SimpleGunAttackGoal;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.entity.ai.AIGunEvent;
+import top.ribs.scguns.entity.projectile.ProjectileEntity;
 import top.ribs.scguns.init.ModItems;
 import top.ribs.scguns.item.GunItem;
 
@@ -54,7 +57,7 @@ public class CogCentipedeAttackGoal extends SimpleGunAttackGoal<CogCentipedeEnti
 
     @Override
     protected void tickAttack(LivingEntity target, double dist) {
-        if (this.seeTime >= 10 && dist <= this.maxRange * 0.85) {
+        if (this.seeTime >= 10 && dist <= this.maxRange) {
             if (!this.runAndGun) {
                 this.mob.getNavigation().stop();
                 this.path = null;
@@ -131,17 +134,25 @@ public class CogCentipedeAttackGoal extends SimpleGunAttackGoal<CogCentipedeEnti
     @Override
     protected void fireGun(LivingEntity target) {
         ItemStack itemStack = new ItemStack(ModItems.LIBERTAS.get());
-        // TODO: custom projectile
         if (itemStack.getItem() instanceof GunItem gunItem) {
             Gun gun = gunItem.getModifiedGun(itemStack);
-            AIGunEvent.performGunAttack(this.mob, target, itemStack, gun, this.getAccuracyModifier());
+            Level level = this.mob.level();
+            ProjectileEntity projectileEntity = new PlasmaCannonProjectileEntity(level, this.mob, itemStack, gunItem, gun);
+            Vec3 dir = AIGunEvent.getDirection(this.mob, target, itemStack, (GunItem)itemStack.getItem(), gun, this.getAccuracyModifier());
+            double speed = projectileEntity.getProjectile().getSpeed() / 3;
+            projectileEntity.setDeltaMovement(dir.x * speed, dir.y * speed, dir.z * speed);
+            projectileEntity.updateHeading();
+            double posX = this.mob.xOld + (this.mob.getX() - this.mob.xOld) / (double)2.0F;
+            double posY = this.mob.yOld + (this.mob.getY() - this.mob.yOld) / (double)2.0F + this.mob.getEyeHeight();
+            double posZ = this.mob.zOld + (this.mob.getZ() - this.mob.zOld) / (double)2.0F;
+            projectileEntity.setPos(posX, posY, posZ);
+            level.addFreshEntity(projectileEntity);
+            projectileEntity.tick();
+
             this.mob.triggerAnim("gun", "fire");
 
-            ResourceLocation fireSound = gun.getSounds().getFire();
+            ResourceLocation fireSound = ModItems.RAYGUN.get().getGun().getSounds().getFire();
             if (fireSound != null) {
-                double posX = this.mob.getX();
-                double posY = this.mob.getY() + (double)this.mob.getEyeHeight();
-                double posZ = this.mob.getZ();
                 float volume = (float) Config.COMMON.gameplay.mobGunfireVolume.get();
                 float pitch = 0.9F + this.mob.level().random.nextFloat() * 0.2F;
                 this.mob.level().playSound(null, posX, posY, posZ, SoundEvent.createVariableRangeEvent(fireSound), SoundSource.HOSTILE, volume - 0.5F, pitch);

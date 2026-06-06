@@ -13,7 +13,6 @@ import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.ModEntities;
 import top.ribs.scguns.init.ModParticleTypes;
 
@@ -72,7 +71,6 @@ public class SoulFireball extends AbstractHurtingProjectile {
      */
     protected void onHit(HitResult result) {
         super.onHit(result);
-        SCGExtra.LOGGER.debug("hit");
         this.spawnExplosionParticles();
         if (!this.level().isClientSide) {
             Explosion explosion = this.level().explode(this, this.getX(), this.getY(), this.getZ(), this.explosionPower, false, Level.ExplosionInteraction.MOB);
