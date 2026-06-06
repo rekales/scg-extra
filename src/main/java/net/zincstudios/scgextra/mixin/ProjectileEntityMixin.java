@@ -9,6 +9,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.entity.PartEntity;
 import net.zincstudios.scgextra.entity.asgharian.WeakPointPart;
 import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.WeakPointBox;
@@ -37,12 +38,15 @@ public class ProjectileEntityMixin {
             ))
     private void atOnHit(ProjectileEntity instance, Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot,
                          Operation<Void> original, @Local(name = "entityHitResult") ExtendedEntityRayTraceResult entityHitResult) {
-        headshot = headshot || entityHitResult.getEntity() instanceof WeakPointPart;
-
         ProjectileEntity self = (ProjectileEntity) (Object) this;
         DamageSource source = ModDamageTypes.Sources.projectile(self.level().registryAccess(), self, self.getShooter());
 
-        if (headshot && entityHitResult.getEntity() instanceof HeadShotHandler headShotHandler) {
+        if (entityHitResult.getEntity() instanceof PartEntity<?> partEntity && partEntity instanceof WeakPointPart) {
+            headshot = true;
+            if (partEntity.getParent() instanceof HeadShotHandler headShotHandler) {
+                headShotHandler.headshot(source, self.getDamage());
+            }
+        } else if (headshot && entityHitResult.getEntity() instanceof HeadShotHandler headShotHandler) {
             headShotHandler.headshot(source, self.getDamage());
         }
 
