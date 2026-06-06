@@ -102,9 +102,6 @@ public class CogCentipedeEntity extends GunnerEntity implements GeoEntity, Stunn
 
     @Override
     public void tick() {
-        this.setYRot(this.getYRot() + 1);
-        this.setYBodyRot(this.getYRot());
-
         super.tick();
         updateSubEntities();
     }
