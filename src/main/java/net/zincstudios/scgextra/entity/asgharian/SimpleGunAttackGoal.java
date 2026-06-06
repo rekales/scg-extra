@@ -10,7 +10,6 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.pathfinder.Path;
-import net.zincstudios.scgextra.SCGExtra;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.entity.ai.AIGunEvent;
@@ -87,7 +86,6 @@ public class SimpleGunAttackGoal<T extends PathfinderMob> extends Goal {
         LivingEntity target = this.mob.getTarget();
         if (target == null) return;
 
-        PathNavigation nav = this.mob.getNavigation();
         double dist = this.mob.distanceTo(target);
         boolean lineOfSight = this.mob.getSensing().hasLineOfSight(target);
 
@@ -97,22 +95,30 @@ public class SimpleGunAttackGoal<T extends PathfinderMob> extends Goal {
             this.seeTime -= seeTime > 0 ? 1 : 0;
         }
 
+        this.tickMovement(target, dist);
+        this.tickAttack(target, dist);
+    }
+
+    protected void tickMovement(LivingEntity target, double dist) {
+        PathNavigation nav = this.mob.getNavigation();
         if (dist > this.maxRange || this.seeTime < 10) {
             if (this.path == null || (this.pathTimeout-- <= 0 && !this.path.getTarget().equals(target.blockPosition()))) {
                 this.pathTimeout = PATH_REEVALUATE_TICKS;
                 this.path = nav.createPath(target, 1);
                 nav.moveTo(this.path, this.speedModifier);
-                SCGExtra.LOGGER.debug("new path");
             }
             this.setGoalState(APPROACH_STATE);
         } else if (dist <= this.approachDist) {
             nav.stop();
             this.path = null;
         }
+    }
 
+    protected void tickAttack(LivingEntity target, double dist) {
         if (this.seeTime >= 10 && dist <= this.maxRange) {
-            if (!runAndGun) {
-                nav.stop();
+            if (!this.runAndGun) {
+                this.mob.getNavigation().stop();
+                this.path = null;
             }
 
             if (this.attackCooldown <= 0) {

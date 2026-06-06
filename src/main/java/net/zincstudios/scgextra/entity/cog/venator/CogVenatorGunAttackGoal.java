@@ -14,6 +14,8 @@ import top.ribs.scguns.item.GunItem;
 
 public class CogVenatorGunAttackGoal extends SimpleGunAttackGoal<CogVenatorEntity> {
 
+    private int aimTicks = 0;
+
     public CogVenatorGunAttackGoal(CogVenatorEntity mob) {
         super(mob);
     }
@@ -27,7 +29,31 @@ public class CogVenatorGunAttackGoal extends SimpleGunAttackGoal<CogVenatorEntit
     public void start() {
         this.mob.setAggressive(true);
         this.seeTime = 0;
-//        this.attackCooldown = Math.max(this.attackCooldown, this.attackInterval/4);
+    }
+
+    @Override
+    protected void tickAttack(LivingEntity target, double dist) {
+        if (this.seeTime >= 10 && dist <= this.maxRange * 0.85) {
+            if (!this.runAndGun) {
+                this.mob.getNavigation().stop();
+                this.path = null;
+            }
+
+            this.aimTicks = this.mob.getNavigation().isDone() ? this.aimTicks + 1 : 0;
+
+            if (this.attackCooldown <= 0 && this.aimTicks >= 20) {
+                this.setGoalState(FIRING_STATE);
+                boolean continueAttack = handleAttack(target);
+                if (!continueAttack) {
+                    resetAttackCooldown();
+                    this.setGoalState(AIMING_STATE);
+                }
+            } else {
+                this.setGoalState(AIMING_STATE);
+            }
+        } else {
+            this.aimTicks = 0;
+        }
     }
 
     @Override
