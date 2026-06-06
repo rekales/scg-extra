@@ -17,18 +17,19 @@ import top.ribs.scguns.item.GunItem;
 
 public class CogBombardierAttackGoal extends SimpleGunAttackGoal<CogBombardierEntity> {
 
-    public static final GoalState RELOADING_STATE = new GoalState("bombardier_reload_state");
-
     protected final int reloadTicks;
     protected final int ammoSize;
 
-    protected int currentAmmo = 6;
-    protected Vec3 fleePos = null;
+    protected int reloadEnd;  // tickCount timestamp
+    protected int currentAmmo;
+    private int aimTicks = 0;
 
     public CogBombardierAttackGoal(CogBombardierEntity mob, int reloadTicks, int ammoSize) {
         super(mob);
+        this.reloadEnd = this.mob.tickCount;
         this.reloadTicks = reloadTicks;
         this.ammoSize = ammoSize;
+        this.currentAmmo = ammoSize;
     }
 
     protected boolean isHoldingGun() {
@@ -36,61 +37,24 @@ public class CogBombardierAttackGoal extends SimpleGunAttackGoal<CogBombardierEn
     }
 
     @Override
-    public void tick() {
-        this.attackCooldown -= this.attackCooldown > 0 ? 1 : 0;
-
-        LivingEntity target = this.mob.getTarget();
-        if (target == null) return;
-
-        double distSqr = this.mob.distanceToSqr(target.getX(), target.getY(), target.getZ());
-        boolean lineOfSight = this.mob.getSensing().hasLineOfSight(target);
-
-        if (lineOfSight) {
-            this.seeTime += seeTime < 40 ? 1 : 0;
-        } else {
-            this.seeTime -= seeTime > 0 ? 1 : 0;
-        }
-
-        if (this.mob.closerThan(target, 5)
-                || this.isReloading() && this.mob.closerThan(target, 12)) {
-            if (this.fleePos == null) {
-                this.fleePos = DefaultRandomPos.getPosAway(this.mob, 12, 3, target.position());
-            }
-        } else {
-            this.fleePos = null;
-        }
-
-        if (this.fleePos != null) {
-            this.mob.getNavigation().moveTo(this.fleePos.x, this.fleePos.y, this.fleePos.z , this.speedModifier * 1.3);
-            if (this.mob.getNavigation().isDone()) {
-                this.fleePos = null;
-            }
-        } else {
-            if (distSqr > this.maxRange*this.maxRange || this.seeTime < 10) {
-                // NOTE: maybe cache pathfinding if necessary
-                this.mob.getNavigation().moveTo(target, this.speedModifier);
-                this.setGoalState(APPROACH_STATE);
-            } else if (distSqr <= this.approachDist * this.approachDist) {
+    protected void tickAttack(LivingEntity target, double dist) {
+        if (this.seeTime >= 10 && dist <= this.maxRange) {
+            if (!this.runAndGun) {
                 this.mob.getNavigation().stop();
+                this.path = null;
             }
 
-            if (this.seeTime >= 10 && distSqr <= this.maxRange*this.maxRange) {
-                if (!runAndGun) {
-                    this.mob.getNavigation().stop();
-                }
+            this.aimTicks = this.mob.getNavigation().isDone() ? this.aimTicks + 1 : 0;
 
-                if (this.isReloading()) {
-                    this.setGoalState(RELOADING_STATE);
-                } else if (this.attackCooldown <= 0) {
-                    this.setGoalState(FIRING_STATE);
-                    boolean continueAttack = handleAttack(target);
-                    if (!continueAttack) {
-                        resetAttackCooldown();
-                        this.setGoalState(AIMING_STATE);
-                    }
-                } else {
+            if (this.attackCooldown <= 0 && this.mob.tickCount > this.reloadEnd  && this.aimTicks >= 20) {
+                this.setGoalState(FIRING_STATE);
+                boolean continueAttack = handleAttack(target);
+                if (!continueAttack) {
+                    resetAttackCooldown();
                     this.setGoalState(AIMING_STATE);
                 }
+            } else {
+                this.setGoalState(AIMING_STATE);
             }
         }
     }
@@ -103,6 +67,10 @@ public class CogBombardierAttackGoal extends SimpleGunAttackGoal<CogBombardierEn
 
             MobUtil.performGunAttack(this.mob, target, itemStack, gun, this.getAccuracyModifier(), new Vec3(0, this.mob.getEyeHeight(), 0));
             this.currentAmmo--;
+            if (this.currentAmmo <= 0) {
+                this.reloadEnd = this.mob.tickCount + this.reloadTicks;
+                this.currentAmmo = this.ammoSize;
+            }
 
             ResourceLocation fireSound = gun.getSounds().getFire();
             if (fireSound != null) {
@@ -119,18 +87,5 @@ public class CogBombardierAttackGoal extends SimpleGunAttackGoal<CogBombardierEn
     @Override
     protected float getAccuracyModifier() {
         return super.getAccuracyModifier() * 3F;
-    }
-
-    protected void resetAttackCooldown() {
-        if (this.currentAmmo <= 0) {
-            this.currentAmmo = this.ammoSize;
-            this.attackCooldown = this.reloadTicks;
-        } else {
-            this.attackCooldown = this.attackInterval;
-        }
-    }
-
-    protected boolean isReloading() {
-        return this.attackCooldown > this.attackInterval;
     }
 }

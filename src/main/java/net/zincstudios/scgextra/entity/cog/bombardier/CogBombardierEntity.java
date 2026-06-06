@@ -16,6 +16,7 @@ import net.minecraft.world.level.Level;
 import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.Faction;
+import net.zincstudios.scgextra.entity.cog.venator.FleeTargetGoal;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.Stunnable;
@@ -48,7 +49,8 @@ public class CogBombardierEntity extends GunnerEntity implements GeoEntity, Stun
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new StunnedWithVisualGoal<>(this));
-        this.goalSelector.addGoal(2, new CogBombardierAttackGoal(this, 120, 6)
+        this.goalSelector.addGoal(2, new FleeTargetGoal(this, 10));
+        this.goalSelector.addGoal(3, new CogBombardierAttackGoal(this, 120, 6)
                 .maxRange(25)
                 .approachDist(20)
                 .attackInterval(10)

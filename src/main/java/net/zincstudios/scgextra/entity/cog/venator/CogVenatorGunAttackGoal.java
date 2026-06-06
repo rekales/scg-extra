@@ -33,7 +33,7 @@ public class CogVenatorGunAttackGoal extends SimpleGunAttackGoal<CogVenatorEntit
 
     @Override
     protected void tickAttack(LivingEntity target, double dist) {
-        if (this.seeTime >= 10 && dist <= this.maxRange * 0.85) {
+        if (this.seeTime >= 10 && dist <= this.maxRange) {
             if (!this.runAndGun) {
                 this.mob.getNavigation().stop();
                 this.path = null;
