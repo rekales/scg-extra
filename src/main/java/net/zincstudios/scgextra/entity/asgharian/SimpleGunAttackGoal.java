@@ -7,12 +7,16 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.pathfinder.Path;
+import net.zincstudios.scgextra.SCGExtra;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.entity.ai.AIGunEvent;
 import top.ribs.scguns.item.GunItem;
 
+import javax.annotation.Nullable;
 import java.security.InvalidParameterException;
 import java.util.EnumSet;
 
@@ -31,6 +35,7 @@ public class SimpleGunAttackGoal<T extends PathfinderMob> extends Goal {
     public static final GoalState AIMING_STATE = new GoalState("simple_gun_aiming_state");
     public static final GoalState IDLE_STATE = new GoalState("simple_gun_idle_state");
     public static final GoalState APPROACH_STATE = new GoalState("simple_gun_approach_state");
+    public static final int PATH_REEVALUATE_TICKS = 20;
 
     protected final T mob;
     protected double speedModifier = 1;
@@ -42,6 +47,8 @@ public class SimpleGunAttackGoal<T extends PathfinderMob> extends Goal {
     protected int attackCooldown = 0;
     protected int seeTime = 0;
     protected GoalState goalState = IDLE_STATE;
+    protected @Nullable Path path = null;
+    protected int pathTimeout = 0;
 
     public SimpleGunAttackGoal(T mob) {
         this.mob = mob;
@@ -63,6 +70,8 @@ public class SimpleGunAttackGoal<T extends PathfinderMob> extends Goal {
 
     public void stop() {
         this.mob.setAggressive(false);
+        this.mob.getNavigation().stop();
+        this.path = null;
         this.setGoalState(IDLE_STATE);
     }
 
@@ -78,7 +87,8 @@ public class SimpleGunAttackGoal<T extends PathfinderMob> extends Goal {
         LivingEntity target = this.mob.getTarget();
         if (target == null) return;
 
-        double distSqr = this.mob.distanceToSqr(target.getX(), target.getY(), target.getZ());
+        PathNavigation nav = this.mob.getNavigation();
+        double dist = this.mob.distanceTo(target);
         boolean lineOfSight = this.mob.getSensing().hasLineOfSight(target);
 
         if (lineOfSight) {
@@ -87,17 +97,22 @@ public class SimpleGunAttackGoal<T extends PathfinderMob> extends Goal {
             this.seeTime -= seeTime > 0 ? 1 : 0;
         }
 
-        if (distSqr > this.maxRange*this.maxRange || this.seeTime < 10) {
-            // NOTE: maybe cache pathfinding if necessary
-            this.mob.getNavigation().moveTo(target, this.speedModifier);
+        if (dist > this.maxRange || this.seeTime < 10) {
+            if (this.path == null || (this.pathTimeout-- <= 0 && !this.path.getTarget().equals(target.blockPosition()))) {
+                this.pathTimeout = PATH_REEVALUATE_TICKS;
+                this.path = nav.createPath(target, 1);
+                nav.moveTo(this.path, this.speedModifier);
+                SCGExtra.LOGGER.debug("new path");
+            }
             this.setGoalState(APPROACH_STATE);
-        }  if (distSqr <= this.approachDist) {
-            this.mob.getNavigation().stop();
+        } else if (dist <= this.approachDist) {
+            nav.stop();
+            this.path = null;
         }
 
-        if (this.seeTime >= 10 && distSqr <= this.maxRange*this.maxRange) {
+        if (this.seeTime >= 10 && dist <= this.maxRange) {
             if (!runAndGun) {
-                this.mob.getNavigation().stop();
+                nav.stop();
             }
 
             if (this.attackCooldown <= 0) {
