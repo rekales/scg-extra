@@ -25,6 +25,9 @@ import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -84,7 +87,35 @@ public class CogBombardierEntity extends GunnerEntity implements GeoEntity, Stun
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "main", 2, state -> {
+                    if (state.getAnimatable().isSprinting()) {
+                        state.setAnimation(RawAnimation.begin().thenLoop("run"));
+                    } else if (state.isMoving()) {
+                        state.setAnimation(RawAnimation.begin().thenLoop("walk"));
+                    } else if (state.getAnimatable().isAggressive()) {
+                        state.setAnimation(RawAnimation.begin().thenPlayAndHold("aim"));
+                    } else {
+                        state.setAnimation(RawAnimation.begin().thenLoop("idle"));
+                    }
+                    return PlayState.CONTINUE;
+                })
+        );
 
+        controllers.add(new AnimationController<>(this, "gun", 0, state -> PlayState.STOP)
+                .triggerableAnim("fire", RawAnimation.begin().thenPlay("fire"))
+        );
+
+//        controllers.add(new AnimationController<>(this, "behaviour", 0, state -> PlayState.STOP)
+//                .triggerableAnim("stun", RawAnimation.begin().thenPlayAndHold("stun_start"))
+//                .triggerableAnim("end_stun", RawAnimation.begin().thenPlay("stun_end"))
+//        );
+
+        controllers.add(new AnimationController<>(this, "death", 2, state -> {
+            if (state.getAnimatable().isDeadOrDying()) {
+                return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("death"));
+            }
+            return PlayState.STOP;
+        }));
     }
 
     @Override
