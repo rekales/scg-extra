@@ -56,7 +56,7 @@ public class CogBombardierAttackGoal extends SimpleGunAttackGoal<CogBombardierEn
 
             this.aimTicks = this.mob.getNavigation().isDone() ? this.aimTicks + 1 : 0;
 
-            if (this.attackCooldown <= 0 && this.mob.tickCount > this.reloadEnd  && this.aimTicks >= 20) {
+            if (this.attackCooldown <= 0 && this.mob.tickCount > this.reloadEnd && this.aimTicks >= 20) {
                 this.setGoalState(FIRING_STATE);
                 boolean continueAttack = handleAttack(target);
                 if (!continueAttack) {

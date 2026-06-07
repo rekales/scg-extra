@@ -20,6 +20,8 @@ import net.zincstudios.scgextra.entity.cog.gigantes.CogGigantesEntity;
 import net.zincstudios.scgextra.entity.cog.juggernaut.CogJuggernautEntity;
 import net.zincstudios.scgextra.entity.cog.venator.CogVenatorEntity;
 import net.zincstudios.scgextra.entity.cog.vulture.CogVultureEntity;
+import net.zincstudios.scgextra.entity.common.WeakPointBox;
+import net.zincstudios.scgextra.entity.common.WeakPointBoxManager;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import top.ribs.scguns.common.BoundingBoxManager;
 import top.ribs.scguns.common.headshot.BasicHeadshotBox;
@@ -41,7 +43,7 @@ public class COGEntities {
 
     public static final RegistryObject<EntityType<CogBombardierEntity>> BOMBARDIER = ENTITY_TYPES
             .register("cog_bombardier", () -> EntityType.Builder.of(CogBombardierEntity::new, MobCategory.MONSTER)
-                    .sized(1.6F, 3.1F)
+                    .sized(1.6F, 2.8F)
                     .build("cog_bombardier"));
 
     public static final RegistryObject<EntityType<CogGigantesEntity>> GIGANTES = ENTITY_TYPES
@@ -83,6 +85,9 @@ public class COGEntities {
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
+//        BoundingBoxManager.registerHeadshotBox(COGEntities.BOMBARDIER.get(), new BasicHeadshotBox<>(8, 36));
+        BoundingBoxManager.registerHeadshotBox(COGEntities.BOMBARDIER.get(), new RotatedHeadshotBox<>(8, 36, 6, false, true));
+        WeakPointBoxManager.registerWeakPointBox(COGEntities.BOMBARDIER.get(), new WeakPointBox<>(new RotatedHeadshotBox<>(8, 36, -6, false, true)));
         BoundingBoxManager.registerHeadshotBox(COGEntities.GIGANTES.get(), new RotatedHeadshotBox<>(8, 18, 18, false, true));
         BoundingBoxManager.registerHeadshotBox(COGEntities.CENTIPEDE.get(), new BasicHeadshotBox<>(1,0));
     }

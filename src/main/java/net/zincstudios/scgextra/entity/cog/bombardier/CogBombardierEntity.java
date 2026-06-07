@@ -53,7 +53,8 @@ public class CogBombardierEntity extends GunnerEntity implements GeoEntity, Stun
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new StunnedWithVisualGoal<>(this));
         this.goalSelector.addGoal(2, new FleeTargetGoal(this, 10));
-        this.goalSelector.addGoal(3, new CogBombardierAttackGoal(this, 120, 6)
+//        this.goalSelector.addGoal(3, new AlertFactionGoal(this, 10));
+        this.goalSelector.addGoal(4, new CogBombardierAttackGoal(this, 120, 6)
                 .maxRange(25)
                 .approachDist(20)
                 .attackInterval(10)
@@ -105,10 +106,10 @@ public class CogBombardierEntity extends GunnerEntity implements GeoEntity, Stun
                 .triggerableAnim("fire", RawAnimation.begin().thenPlay("fire"))
         );
 
-//        controllers.add(new AnimationController<>(this, "behaviour", 0, state -> PlayState.STOP)
-//                .triggerableAnim("stun", RawAnimation.begin().thenPlayAndHold("stun_start"))
-//                .triggerableAnim("end_stun", RawAnimation.begin().thenPlay("stun_end"))
-//        );
+        controllers.add(new AnimationController<>(this, "behaviour", 0, state -> PlayState.STOP)
+                .triggerableAnim("stun", RawAnimation.begin().thenPlayAndHold("stun_start"))
+                .triggerableAnim("end_stun", RawAnimation.begin().thenPlay("stun_end"))
+        );
 
         controllers.add(new AnimationController<>(this, "death", 2, state -> {
             if (state.getAnimatable().isDeadOrDying()) {
