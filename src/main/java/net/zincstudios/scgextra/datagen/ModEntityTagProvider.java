@@ -6,6 +6,7 @@ import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.zincstudios.scgextra.entity.EntityTypeTags;
 import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
+import net.zincstudios.scgextra.entity.cog.COGEntities;
 import net.zincstudios.scgextra.entity.fac.FACEntities;
 import net.zincstudios.scgextra.entity.neutral.NeutralEntities;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
@@ -45,7 +46,14 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
                 .add(top.ribs.scguns.init.ModEntities.COG_KNIGHT.get())
                 .add(top.ribs.scguns.init.ModEntities.SIGNAL_BEACON.get())
                 .add(top.ribs.scguns.init.ModEntities.SCAMPLER.get())
-                .add(top.ribs.scguns.init.ModEntities.SCAMP_TANK.get());
+                .add(top.ribs.scguns.init.ModEntities.SCAMP_TANK.get())
+                .add(COGEntities.VULTURE.get())
+                .add(COGEntities.DEVASTATOR.get())
+                .add(COGEntities.BOMBARDIER.get())
+                .add(COGEntities.GIGANTES.get())
+                .add(COGEntities.VENATOR.get())
+                .add(COGEntities.CENTIPEDE.get())
+                .add(COGEntities.JUGGERNAUT.get());
 
         tag(EntityTypeTags.FAC)
                 .add(FACEntities.FAC_TRENCHER.get())
@@ -86,7 +94,14 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
                 .add(AsgharianEntities.ASGHAR_WORKER.get())
                 .add(FACEntities.FAC_TANK.get())
                 .add(FACEntities.FAC_WALKER.get())
-                .add(NeutralEntities.HEAD_HUNTER.get());
+                .add(NeutralEntities.HEAD_HUNTER.get())
+                .add(COGEntities.VULTURE.get())
+                .add(COGEntities.DEVASTATOR.get())
+                .add(COGEntities.BOMBARDIER.get())
+                .add(COGEntities.GIGANTES.get())
+                .add(COGEntities.VENATOR.get())
+                .add(COGEntities.CENTIPEDE.get())
+                .add(COGEntities.JUGGERNAUT.get());
 
         tag(ModTags.Entities.WATER)
                 .add(WhalerEntities.FISH_FOLK.get())
@@ -100,14 +115,27 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
 
         tag(ModTags.Entities.HEAVY)
                 .add(WhalerEntities.TURTLEMAN.get())
-                .add(WhalerEntities.SALMONSAUR.get());
+                .add(WhalerEntities.SALMONSAUR.get())
+                .add(COGEntities.DEVASTATOR.get())
+                .add(COGEntities.BOMBARDIER.get())
+                .add(COGEntities.GIGANTES.get())
+                .add(COGEntities.VENATOR.get())
+                .add(COGEntities.CENTIPEDE.get())
+                .add(COGEntities.JUGGERNAUT.get());
 
         tag(ModTags.Entities.VERY_HEAVY)
                 .add(WhalerEntities.GUARDIAN_STATUE.get())
                 .add(WhalerEntities.ARMORED_WHALE.get());
 
         tag(ModTags.Entities.BOT)
-                .add(AsgharianEntities.ASGHAR_WORKER.get());
+                .add(AsgharianEntities.ASGHAR_WORKER.get())
+                .add(COGEntities.VULTURE.get())
+                .add(COGEntities.DEVASTATOR.get())
+                .add(COGEntities.BOMBARDIER.get())
+                .add(COGEntities.GIGANTES.get())
+                .add(COGEntities.VENATOR.get())
+                .add(COGEntities.CENTIPEDE.get())
+                .add(COGEntities.JUGGERNAUT.get());
 
         tag(ModTags.Entities.FIRE)
                 .add(NeutralEntities.HEAD_HUNTER.get())
@@ -126,7 +154,14 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
                 .add(WhalerEntities.GUARDIAN_STATUE.get());
 
         tag(ModTags.Entities.BLACK_BLOOD)
-                .add(NeutralEntities.HEAD_HUNTER.get());
+                .add(NeutralEntities.HEAD_HUNTER.get())
+                .add(COGEntities.VULTURE.get())
+                .add(COGEntities.DEVASTATOR.get())
+                .add(COGEntities.BOMBARDIER.get())
+                .add(COGEntities.GIGANTES.get())
+                .add(COGEntities.VENATOR.get())
+                .add(COGEntities.CENTIPEDE.get())
+                .add(COGEntities.JUGGERNAUT.get());
 
         tag(ModTags.Entities.GREEN_BLOOD)
                 .add(NeutralEntities.END_STONE_CRAB.get())
@@ -138,6 +173,5 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
 
         tag(ModTags.Entities.YELLOW_BLOOD)
                 .add(NeutralEntities.NITRO_BEETLE.get());
-
     }
 }

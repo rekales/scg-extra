@@ -1,5 +1,12 @@
 {
   "values": [
-    "scgextra:head_hunter"
+    "scgextra:head_hunter",
+    "scgextra:cog_vulture",
+    "scgextra:cog_devastator",
+    "scgextra:cog_bombardier",
+    "scgextra:cog_gigantes",
+    "scgextra:cog_venator",
+    "scgextra:cog_centipede",
+    "scgextra:cog_juggernaut"
   ]
 }

@@ -15,6 +15,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCon
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
+import net.zincstudios.scgextra.entity.cog.COGEntities;
 import net.zincstudios.scgextra.entity.fac.FACEntities;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
@@ -153,6 +154,27 @@ public class ModEntityLootTableProvider extends EntityLootSubProvider {
                 .range(Items.SOUL_LANTERN, 1, 3)
                 .range(ModItems.DEPLETED_DIAMOND_STEEL_INGOT.get(), 1, 3)
                 .constant(ModItems.CERIMONIAL_COD.get(), 1);
+
+        basicLoot(COGEntities.VULTURE.get())
+                .range(ModItems.ANCIENT_BRASS.get(), 1, 2)
+                .range(ModItems.COMPACT_ADVANCED_ROUND.get(), 1, 3);
+        basicLoot(COGEntities.DEVASTATOR.get())
+                .range(ModItems.TREATED_BRASS_INGOT.get(), 1, 3)
+                .range(Items.GUNPOWDER, 3, 5);
+        basicLoot(COGEntities.BOMBARDIER.get())
+                .range(ModItems.ANCIENT_BRASS.get(), 1, 2)
+                .range(ModItems.ROCKET.get(), 1, 3);
+        basicLoot(COGEntities.GIGANTES.get())
+                .range(ModItems.TREATED_BRASS_INGOT.get(), 1, 3)
+                .range(Items.GUNPOWDER, 3, 5);
+        basicLoot(COGEntities.VENATOR.get())
+                .range(ModItems.GIBBS_ROUND.get(), 1, 3);
+        basicLoot(COGEntities.CENTIPEDE.get())
+                .range(ModItems.TREATED_BRASS_INGOT.get(), 1, 3)
+                .range(ModItems.ENERGY_CELL.get(), 1, 3);
+        basicLoot(COGEntities.JUGGERNAUT.get())
+                .constant(ModItems.COG_HEART.get(), 1)
+                .range(ModItems.TREATED_BRASS_INGOT.get(), 1, 3);
     }
 
     // don't use this for more complex loot tables
