@@ -4,6 +4,7 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -26,6 +27,7 @@ import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
+import net.zincstudios.scgextra.sounds.CogSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -236,5 +238,15 @@ public class CogDevastatorEntity extends GunnerEntity implements GeoEntity, Stun
             this.triggerAnim("behaviour", "end_stun");
         }
         return false;
+    }
+
+    @Override
+    protected @Nullable SoundEvent getAmbientSound() {
+        return CogSounds.COG_DEVASTATOR_IDLE.get();
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return CogSounds.GENERAL_HEAVY_HURT.get();
     }
 }

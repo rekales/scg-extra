@@ -1,6 +1,8 @@
 package net.zincstudios.scgextra.entity.cog.bombardier;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,6 +15,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.Faction;
@@ -22,6 +25,7 @@ import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
+import net.zincstudios.scgextra.sounds.CogSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -30,6 +34,7 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
@@ -176,5 +181,24 @@ public class CogBombardierEntity extends GunnerEntity implements GeoEntity, Stun
             this.triggerAnim("behaviour", "end_stun");
         }
         return false;
+    }
+
+    @Override
+    protected @Nullable SoundEvent getAmbientSound() {
+        return CogSounds.COG_DEVASTATOR_IDLE.get();
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return CogSounds.GENERAL_LIGHT_HURT.get();
+    }
+
+    protected SoundEvent getStepSound() {
+        return CogSounds.COG_BOMBARDIER_WALK.get();
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState block) {
+        this.playSound(this.getStepSound(), 0.15F, 1.0F);
     }
 }

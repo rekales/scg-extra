@@ -5,6 +5,8 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,6 +23,7 @@ import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.sounds.CogSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -161,5 +164,15 @@ public class CogVultureEntity extends GunnerEntity implements GeoEntity {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.geocache;
+    }
+
+    @Override
+    protected @Nullable SoundEvent getAmbientSound() {
+        return CogSounds.GENERAL_IDLE.get();
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return CogSounds.GENERAL_LIGHT_HURT.get();
     }
 }

@@ -1,5 +1,8 @@
 package net.zincstudios.scgextra.entity.cog.venator;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -14,6 +17,7 @@ import net.minecraft.world.level.Level;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.sounds.CogSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -22,6 +26,11 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class CogVenatorEntity extends GunnerEntity implements GeoEntity {
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
@@ -83,5 +92,15 @@ public class CogVenatorEntity extends GunnerEntity implements GeoEntity {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.geocache;
+    }
+
+    @Override
+    protected @Nullable SoundEvent getAmbientSound() {
+        return CogSounds.GENERAL_IDLE.get();
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return CogSounds.GENERAL_LIGHT_HURT.get();
     }
 }

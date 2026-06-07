@@ -2,9 +2,11 @@ package net.zincstudios.scgextra.entity.cog.bombardier;
 
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.AABB;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.asgharian.AbilityGoal;
+import net.zincstudios.scgextra.sounds.CogSounds;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -15,12 +17,13 @@ public class CogBombardierAlertFactionGoal extends AbilityGoal<CogBombardierEnti
 
     public CogBombardierAlertFactionGoal(CogBombardierEntity mob) {
         super(mob);
-        this.setFlags(EnumSet.of(Flag.MOVE));
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
     @Override
     public boolean activate() {
         this.mob.triggerAnim("behaviour", "alert");
+        this.mob.playSound(CogSounds.COG_BOMBARDIER_SCAN.get());
         this.mob.getNavigation().stop();
         return false;
     }

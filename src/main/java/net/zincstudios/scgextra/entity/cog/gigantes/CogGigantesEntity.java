@@ -1,8 +1,10 @@
 package net.zincstudios.scgextra.entity.cog.gigantes;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.FlyingMob;
@@ -15,12 +17,14 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
+import net.zincstudios.scgextra.sounds.CogSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -30,8 +34,12 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import top.ribs.scguns.init.ModItems;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 // TODO: maybe tracking mounted gun for gigantes instead.
 
+@ParametersAreNonnullByDefault
 public class CogGigantesEntity extends FlyingMob implements GeoEntity, Stunnable, Enemy, HeadShotHandler {
 
     private static final int STUN_DURATION = 60;
@@ -175,5 +183,25 @@ public class CogGigantesEntity extends FlyingMob implements GeoEntity, Stunnable
 
     public boolean isFiring() {
         return this.entityData.get(FIRING);
+    }
+
+
+    @Override
+    protected @Nullable SoundEvent getAmbientSound() {
+        return CogSounds.COG_GIGANTES_IDLE.get();
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return CogSounds.GENERAL_HEAVY_HURT.get();
+    }
+
+    protected SoundEvent getStepSound() {
+        return CogSounds.COG_GIGANTES_FLY.get();
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState block) {
+        this.playSound(this.getStepSound(), 0.15F, 1.0F);
     }
 }

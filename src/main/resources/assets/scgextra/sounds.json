@@ -1256,5 +1256,107 @@
   "soul_ripper.revive3": {
     "category": "hostile",
     "sounds": ["scgextra:asgharian/soul_ripper/revive3"]
+  },
+  "cog_general.heavy_hurt": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:cog/heavy_hurt1",
+      "scgextra:cog/heavy_hurt2",
+      "scgextra:cog/heavy_hurt3",
+      "scgextra:cog/heavy_hurt4",
+      "scgextra:cog/heavy_hurt5"
+    ]
+  },
+  "cog_general.light_hurt": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:cog/light_hurt1",
+      "scgextra:cog/light_hurt2",
+      "scgextra:cog/light_hurt3"
+    ]
+  },
+  "cog_general.idle": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:cog/idle1",
+      "scgextra:cog/idle2",
+      "scgextra:cog/idle3",
+      "scgextra:cog/idle4",
+      "scgextra:cog/idle5",
+      "scgextra:cog/idle6",
+      "scgextra:cog/idle7",
+      "scgextra:cog/idle8"
+    ]
+  },
+  "cog_devastator.idle": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:cog/cog_devastator/idle1",
+      "scgextra:cog/cog_devastator/idle2",
+      "scgextra:cog/cog_devastator/idle3"
+    ]
+  },
+  "cog_bombardier.walk": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:cog/cog_bombardier/walk1",
+      "scgextra:cog/cog_bombardier/walk2",
+      "scgextra:cog/cog_bombardier/walk3"
+    ]
+  },
+  "cog_bombardier.scan": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:cog/cog_bombardier/scan"
+    ]
+  },
+  "cog_gigantes.fly": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:cog/cog_gigantes/fly"
+    ]
+  },
+  "cog_gigantes.idle": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:cog/cog_gigantes/idle1",
+      "scgextra:cog/cog_gigantes/idle2",
+      "scgextra:cog/cog_gigantes/idle3"
+    ]
+  },
+  "cog_venator.attack": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:cog/cog_venator/attack1",
+      "scgextra:cog/cog_venator/attack2"
+    ]
+  },
+  "cog_venator.run": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:cog/cog_venator/run1",
+      "scgextra:cog/cog_venator/run2"
+    ]
+  },
+  "cog_centipede.idle": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:cog/cog_centipede/idle"
+    ]
+  },
+  "cog_juggernaut.dead": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:cog/cog_juggernaut/dead1",
+      "scgextra:cog/cog_juggernaut/dead2"
+    ]
+  },
+  "cog_juggernaut.hurt": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:cog/cog_juggernaut/hurt1",
+      "scgextra:cog/cog_juggernaut/hurt2",
+      "scgextra:cog/cog_juggernaut/hurt3"
+    ]
   }
 }

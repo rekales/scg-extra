@@ -1,5 +1,7 @@
 package net.zincstudios.scgextra.entity.cog.centipede;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -23,6 +25,7 @@ import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
+import net.zincstudios.scgextra.sounds.CogSounds;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -32,6 +35,10 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class CogCentipedeEntity extends GunnerEntity implements GeoEntity, Stunnable, HeadShotHandler {
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
@@ -211,5 +218,15 @@ public class CogCentipedeEntity extends GunnerEntity implements GeoEntity, Stunn
             this.triggerAnim("behaviour", "end_stun");
         }
         return false;
+    }
+
+    @Override
+    protected @Nullable SoundEvent getAmbientSound() {
+        return CogSounds.COG_CENTIPEDE_IDLE.get();
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return CogSounds.GENERAL_HEAVY_HURT.get();
     }
 }

@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.asgharian.SimpleBurstGunAttackGoal;
 import net.zincstudios.scgextra.entity.common.MobUtil;
+import net.zincstudios.scgextra.sounds.CogSounds;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.init.ModItems;
@@ -29,6 +30,10 @@ public class CogVultureAttackGoal extends SimpleBurstGunAttackGoal<CogVultureEnt
 
         if (itemStack.getItem() instanceof GunItem gunItem) {
             Gun gun = gunItem.getModifiedGun(itemStack);
+
+            if (this.mob.getRandom().nextFloat() < 0.3) {
+                this.mob.playSound(CogSounds.COG_VENATOR_ATTACK.get());
+            }
 
             Vec3 spawnPosOffset = CogVultureEntity.LEFT_GUN_OFFSET.yRot(-this.mob.yBodyRot * Mth.DEG_TO_RAD);
             MobUtil.performGunAttack(this.mob, target, itemStack, gun, this.getAccuracyModifier(), spawnPosOffset);
