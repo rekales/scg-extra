@@ -120,6 +120,9 @@ public class CogCentipedeAttackGoal extends SimpleGunAttackGoal<CogCentipedeEnti
 
     protected void meleeDamageTarget(LivingEntity target) {
         this.mob.doHurtTarget(target);
+        double dx = this.mob.getX() - target.getX();
+        double dz = this.mob.getZ() - target.getZ();
+        target.knockback(2, dx, dz);
     }
 
     protected double getAttackReachSqr(LivingEntity attackTarget) {
