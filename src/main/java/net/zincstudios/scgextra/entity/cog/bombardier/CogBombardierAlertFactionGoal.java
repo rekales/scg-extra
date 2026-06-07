@@ -21,6 +21,7 @@ public class CogBombardierAlertFactionGoal extends AbilityGoal<CogBombardierEnti
     @Override
     public boolean activate() {
         this.mob.triggerAnim("behaviour", "alert");
+        this.mob.getNavigation().stop();
         return false;
     }
 
