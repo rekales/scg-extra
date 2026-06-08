@@ -128,7 +128,8 @@ public class WaveRaidManager extends SavedData {
                         return false;
                     }
                 });
-                Collection<ServerPlayer> bossBarPlayers = this.bossBar.getPlayers();
+                // to avoid ConcurrentModificationException, maybe
+                Collection<ServerPlayer> bossBarPlayers = new HashSet<>(this.bossBar.getPlayers());
                 for(ServerPlayer player : bossBarPlayers) {
                     if (!nearbyPlayers.contains(player) || !player.isAlive() || player.isRemoved()) {
                         this.bossBar.removePlayer(player);
