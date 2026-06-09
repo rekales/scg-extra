@@ -163,6 +163,11 @@
 					]
 				},
 				{
+					"name": "right_hand",
+					"parent": "rightForeArm",
+					"pivot": [-14, 17, -3]
+				},
+				{
 					"name": "rightGear",
 					"parent": "rightArm",
 					"pivot": [-19.796, 35.5, 0],
