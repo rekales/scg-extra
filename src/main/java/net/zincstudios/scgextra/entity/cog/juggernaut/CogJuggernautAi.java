@@ -9,8 +9,11 @@ import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.schedule.Activity;
 import net.zincstudios.scgextra.entity.Faction;
+import net.zincstudios.scgextra.entity.ModBrainMemories;
+import net.zincstudios.scgextra.entity.common.brain.ApproachTargetAndAim;
 import net.zincstudios.scgextra.entity.common.brain.AttackLastHurtIfNear;
 import net.zincstudios.scgextra.entity.common.brain.BrainUtils;
+import net.zincstudios.scgextra.entity.common.brain.RangeProvider;
 
 public class CogJuggernautAi {
 
@@ -30,7 +33,10 @@ public class CogJuggernautAi {
             MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE,
             MemoryModuleType.PATH,
             MemoryModuleType.ATTACK_TARGET,
-            MemoryModuleType.ATTACK_COOLING_DOWN
+            MemoryModuleType.ATTACK_COOLING_DOWN,
+            ModBrainMemories.AIM_TICKS.get(),
+            ModBrainMemories.APPROACH_DIST.get(),
+            ModBrainMemories.WEAPON_RANGE.get()
     );
 
     protected static Brain<?> makeBrain(CogJuggernautEntity mob, Brain<CogJuggernautEntity> brain) {
@@ -45,9 +51,11 @@ public class CogJuggernautAi {
 
     private static void initFightActivity(CogJuggernautEntity mob, Brain<CogJuggernautEntity> brain) {
         brain.addActivityAndRemoveMemoryWhenStopped(Activity.FIGHT, 10, ImmutableList.of(
+                new RangeProvider(),
                 StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValid(mob, target, false)),
                 AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), true),
-                SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(1.0F),
+                new ApproachTargetAndAim(1.0F),
+//                SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(1.0F),
                 MeleeAttack.create(20)
         ), MemoryModuleType.ATTACK_TARGET);
     }
