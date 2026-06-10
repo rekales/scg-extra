@@ -10,6 +10,7 @@ import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.schedule.Activity;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
+import net.zincstudios.scgextra.entity.ModBrainSensors;
 import net.zincstudios.scgextra.entity.common.brain.ApproachTargetAndAim;
 import net.zincstudios.scgextra.entity.common.brain.AttackLastHurtIfNear;
 import net.zincstudios.scgextra.entity.common.brain.BrainUtils;
@@ -20,7 +21,8 @@ public class CogJuggernautAi {
     protected static final ImmutableList<? extends SensorType<? extends Sensor<? super CogJuggernautEntity>>> SENSOR_TYPES = ImmutableList.of(
             SensorType.NEAREST_LIVING_ENTITIES,
             SensorType.NEAREST_PLAYERS,
-            SensorType.HURT_BY
+            SensorType.HURT_BY,
+            ModBrainSensors.HELD_GUN.get()
     );
     protected static final ImmutableList<? extends MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(
             MemoryModuleType.ATTACK_TARGET,
@@ -55,7 +57,6 @@ public class CogJuggernautAi {
                 StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValid(mob, target, false)),
                 AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), true),
                 new ApproachTargetAndAim(1.0F),
-//                SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(1.0F),
                 MeleeAttack.create(20)
         ), MemoryModuleType.ATTACK_TARGET);
     }

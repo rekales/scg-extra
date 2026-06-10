@@ -89,6 +89,7 @@ public class ModEntities {
         COGEntities.register(modEventBus);
 
         ModBrainMemories.register(modEventBus);
+        ModBrainSensors.register(modEventBus);
 
         ENTITY_TYPES.register(modEventBus);
 

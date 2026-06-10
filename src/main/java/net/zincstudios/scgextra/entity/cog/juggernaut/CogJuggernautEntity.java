@@ -11,8 +11,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
+import net.zincstudios.scgextra.entity.common.EquippedEntity;
 import net.zincstudios.scgextra.entity.common.brain.BrainUtils;
-import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.sounds.CogSounds;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -27,7 +27,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CogJuggernautEntity extends GunnerEntity implements GeoEntity {
+public class CogJuggernautEntity extends EquippedEntity implements GeoEntity {
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
 
