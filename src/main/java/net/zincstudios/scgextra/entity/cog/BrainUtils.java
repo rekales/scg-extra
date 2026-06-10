@@ -2,24 +2,52 @@ package net.zincstudios.scgextra.entity.cog;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.behavior.*;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.NearestVisibleLivingEntities;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
 import net.zincstudios.scgextra.entity.Faction;
 
-import java.util.List;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class BrainUtils {
 
-    private static final TargetingConditions BOSS_PLAYER_TARGET_CONDITIONS = TargetingConditions
-            .forCombat().range(16.0D).ignoreInvisibilityTesting().ignoreLineOfSight();
+    public static class Standard {
+
+        public static void initCoreActivity(Brain<? extends Mob> brain) {
+            brain.addActivity(Activity.CORE, 0, ImmutableList.of(
+                    new LookAtTargetSink(45, 90),
+                    new MoveToTargetSink())
+            );
+        }
+
+        // Not for flying and swimming mobs
+        public static void initIdleActivity(Brain<? extends PathfinderMob> brain) {
+            brain.addActivity(Activity.IDLE, 10, ImmutableList.of(
+                    StartAttacking.create(BrainUtils::getHurtBy),
+                    StartAttacking.create(BrainUtils::findNearestVisibleAttackablePlayer),
+                    StartAttacking.create(BrainUtils::findNearestAttackableFactionEnemy),
+                    new RunOne<>(ImmutableList.of(
+                            Pair.of(RandomStroll.stroll(1.0F), 2),
+                            Pair.of(SetWalkTargetFromLookTarget.create(1.0F, 3), 2),
+                            Pair.of(new DoNothing(30, 60), 1)
+                    ))
+            ));
+        }
+
+        public static void updateActivity(Mob mob) {
+            mob.getBrain().setActiveActivityToFirstValid(ImmutableList.of(Activity.FIGHT, Activity.IDLE));
+        }
+    }
 
     public static Optional<? extends LivingEntity> findNearestAttackableFactionEnemy(LivingEntity mob) {
         Brain<? extends LivingEntity> brain = mob.getBrain();
@@ -32,24 +60,25 @@ public class BrainUtils {
         return mob.getBrain().getMemory(MemoryModuleType.NEAREST_VISIBLE_ATTACKABLE_PLAYER);
     }
 
-    // No line of sight needed, for bosses
-    public static Optional<? extends LivingEntity> findNearestAttackablePlayer(LivingEntity mob) {
-        Optional<List<Player>> optional = mob.getBrain().getMemory(MemoryModuleType.NEAREST_PLAYERS);
-        if (optional.isEmpty()) return Optional.empty();
-        List<Player> players = optional.get();
-        return players.stream().filter(target -> BOSS_PLAYER_TARGET_CONDITIONS.test(mob, target)).findFirst();
+    public static Optional<LivingEntity> getHurtBy(LivingEntity mob) {
+        return mob.getBrain()
+                .getMemory(MemoryModuleType.HURT_BY_ENTITY)
+                .filter((entity -> isWithinRange(mob, entity)));
     }
 
-    // Not for flying and swimming mobs
-    public static void initGenericIdleActivity(Brain<PathfinderMob> brain) {
-        brain.addActivity(Activity.IDLE, 10, ImmutableList.of(
-                StartAttacking.create(BrainUtils::findNearestAttackableFactionEnemy),
-                StartAttacking.create(BrainUtils::findNearestVisibleAttackablePlayer),
-                new RunOne<>(ImmutableList.of(
-                        Pair.of(RandomStroll.stroll(1.0F), 2),
-                        Pair.of(SetWalkTargetFromLookTarget.create(1.0F, 3), 2),
-                        Pair.of(new DoNothing(30, 60), 1)
-                ))
-        ));
+    // Sensor.isEntityAttackable is shit and doesn't account for the follow range attribute
+    @SuppressWarnings("RedundantIfStatement")  // for readability
+    public static boolean isTargetStillValid(LivingEntity entity, LivingEntity target, boolean needLineOfSight) {
+        if (entity == target) return false;
+        if (!target.canBeSeenByAnyone()) return false;
+        if (!entity.canAttack(target) || !entity.canAttackType(target.getType()) || entity.isAlliedTo(target)) return false;
+        if (!isWithinRange(entity, target)) return false;
+        if (needLineOfSight && entity instanceof Mob mob && !mob.getSensing().hasLineOfSight(target)) return false;
+        return true;
+    }
+
+    private static boolean isWithinRange(LivingEntity entity, LivingEntity target) {
+        double range = Math.max(entity.getAttributeValue(Attributes.FOLLOW_RANGE), 2.0D);
+        return entity.closerThan(target, range);
     }
 }
