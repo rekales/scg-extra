@@ -2,7 +2,6 @@ package net.zincstudios.scgextra.entity.cog.juggernaut;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.*;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -10,8 +9,8 @@ import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.schedule.Activity;
 import net.zincstudios.scgextra.entity.Faction;
-import net.zincstudios.scgextra.entity.cog.AttackLastHurtIfNear;
-import net.zincstudios.scgextra.entity.cog.BrainUtils;
+import net.zincstudios.scgextra.entity.common.brain.AttackLastHurtIfNear;
+import net.zincstudios.scgextra.entity.common.brain.BrainUtils;
 
 public class CogJuggernautAi {
 

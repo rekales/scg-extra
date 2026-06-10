@@ -1,9 +1,10 @@
-package net.zincstudios.scgextra.entity.cog;
+package net.zincstudios.scgextra.entity.common.brain;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.behavior.BehaviorControl;
 import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder;
+import net.minecraft.world.entity.ai.behavior.declarative.MemoryAccessor;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeHooks;
@@ -35,26 +36,28 @@ public class AttackLastHurtIfNear {
                                 if (target instanceof Player && !(hurter instanceof Player)) return false;
 
                                 if (!(target instanceof Player) && hurter instanceof Player) {
-                                    LivingChangeTargetEvent changeTargetEvent = ForgeHooks.onLivingChangeTarget(mob, hurter, LivingChangeTargetEvent.LivingTargetType.BEHAVIOR_TARGET);
-                                    if (changeTargetEvent.isCanceled()) return false;
-                                    targetAcc.set(hurter);
-                                    lastReachAcc.erase();
-                                    return true;
+                                    return setAttackTarget(mob, target, targetAcc, lastReachAcc);
                                 }
                             }
 
                             if (mob.distanceToSqr(hurter) < mob.distanceToSqr(target)) {
-                                LivingChangeTargetEvent changeTargetEvent = ForgeHooks.onLivingChangeTarget(mob, hurter, LivingChangeTargetEvent.LivingTargetType.BEHAVIOR_TARGET);
-                                if (changeTargetEvent.isCanceled()) return false;
-                                targetAcc.set(hurter);
-                                lastReachAcc.erase();
-                                return true;
+                                return setAttackTarget(mob, target, targetAcc, lastReachAcc);
                             }
 
                             return false;
                         }
                 ))
         );
+    }
+
+    private static boolean setAttackTarget(Mob mob, LivingEntity newTarget,
+            MemoryAccessor<?, LivingEntity> targetAcc, MemoryAccessor<?, ?> lastReachAcc) {
+        LivingChangeTargetEvent event = ForgeHooks.onLivingChangeTarget(
+                mob, newTarget, LivingChangeTargetEvent.LivingTargetType.BEHAVIOR_TARGET);
+        if (event.isCanceled()) return false;
+        targetAcc.set(newTarget);
+        lastReachAcc.erase();
+        return true;
     }
 
 }

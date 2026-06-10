@@ -34,8 +34,11 @@ import top.ribs.scguns.client.render.entity.ProjectileRenderer;
 import top.ribs.scguns.entity.client.EnemyProjectileRenderer;
 
 public class ModEntities {
+
+    // TODO: move miscellaneous entity type registration to their related packages
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, SCGExtra.MOD_ID);
 
+    // TODO: Implement night raids
     public static final RegistryObject<EntityType<RaidSummonerEntity>> RAID_SUMMONER = ENTITY_TYPES
             .register("raid_summoner", () -> EntityType.Builder.of(RaidSummonerEntity::new, MobCategory.MONSTER)
                     .updateInterval(1)
@@ -84,6 +87,8 @@ public class ModEntities {
         AsgharianEntities.register(modEventBus);
         NeutralEntities.register(modEventBus);
         COGEntities.register(modEventBus);
+
+        ModBrainMemories.register(modEventBus);
 
         ENTITY_TYPES.register(modEventBus);
 

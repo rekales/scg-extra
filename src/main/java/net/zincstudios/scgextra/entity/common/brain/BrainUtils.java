@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.cog;
+package net.zincstudios.scgextra.entity.common.brain;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
