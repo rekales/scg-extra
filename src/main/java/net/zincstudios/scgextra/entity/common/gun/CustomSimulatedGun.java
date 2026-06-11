@@ -5,7 +5,7 @@ import net.minecraft.world.entity.LivingEntity;
 public class CustomSimulatedGun implements SimulatedGun {
 
     @Override
-    public void tick(LivingEntity entity, LivingEntity target, boolean firing) {
+    public void tickFire(LivingEntity entity, LivingEntity target, float accuracyModifier, boolean firing) {
 
     }
 
