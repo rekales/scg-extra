@@ -5,7 +5,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.phys.Vec3;
-import net.zincstudios.scgextra.entity.common.ai.FlareSummonGoal;
+import net.zincstudios.scgextra.entity.common.goal.FlareSummonGoal;
 import top.ribs.scguns.entity.projectile.RaidFlareEntity;
 
 public class FacCommissarFlareSummonGoal extends FlareSummonGoal {

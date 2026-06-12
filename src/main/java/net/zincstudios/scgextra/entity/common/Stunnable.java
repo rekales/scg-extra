@@ -1,6 +1,6 @@
 package net.zincstudios.scgextra.entity.common;
 
-import net.zincstudios.scgextra.entity.common.ai.StunnedGoal;
+import net.zincstudios.scgextra.entity.common.goal.StunnedGoal;
 
 /**
  * Interface to be paired with the use of StunnedGoal.

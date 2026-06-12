@@ -50,7 +50,7 @@ public class EquippedEntity extends Monster {
 
     @SuppressWarnings("deprecation")
     @Override
-    public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @org.jetbrains.annotations.Nullable SpawnGroupData spawnData, @org.jetbrains.annotations.Nullable CompoundTag dataTag) {
+    public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
         EntityEquipmentConfig.equipEntity(this, this.equipmentResLoc.toString());
         return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
     }

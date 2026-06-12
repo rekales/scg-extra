@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.common.ai;
+package net.zincstudios.scgextra.entity.common.goal;
 
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.player.Player;
