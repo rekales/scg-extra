@@ -36,7 +36,7 @@ public class ShootTarget extends Behavior<Mob> {
         this(
                 aimThreshold,
                 entity -> accuracy,
-                new MarkovTriggerSampler(0.95f, 0.95f)
+                new MarkovTriggerSampler(0.93f, 0.93f, 15, 80)
         );
     }
 
