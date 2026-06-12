@@ -64,6 +64,7 @@ public class COGEntities {
     public static final RegistryObject<EntityType<CogJuggernautEntity>> JUGGERNAUT = ENTITY_TYPES
             .register("cog_juggernaut", () -> EntityType.Builder.of(CogJuggernautEntity::new, MobCategory.MONSTER)
                     .sized(1.6F, 3.0F)
+                    .setUpdateInterval(1)
                     .build("cog_juggernaut"));
 
     public static void register(IEventBus modEventBus) {

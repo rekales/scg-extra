@@ -2,8 +2,6 @@ package net.zincstudios.scgextra.entity.common.gun;
 
 import net.minecraft.util.RandomSource;
 
-import java.util.Random;
-
 /**
  * Uses a 2 state markov chain to generate trigger patterns.
  * <p>
@@ -24,6 +22,7 @@ public class MarkovTriggerSampler implements TriggerStateSampler {
         this.pStayOff = pStayOff;
     }
 
+    @Override
     public boolean next(RandomSource random) {
         if (this.state) {
             this.state = random.nextDouble() < this.pStayOn;
@@ -33,7 +32,13 @@ public class MarkovTriggerSampler implements TriggerStateSampler {
         return this.state;
     }
 
+    @Override
     public void setState(boolean state) {
         this.state = state;
+    }
+
+    @Override
+    public boolean getState() {
+        return this.state;
     }
 }

@@ -69,6 +69,10 @@ public class ApproachTargetAndAim extends Behavior<Mob> {
         int aimTicks = brain.getMemory(ModBrainMemories.AIM_TICKS.get()).orElse(0);
         boolean lineOfSight = mob.getSensing().hasLineOfSight(target);
 
+        if (!brain.hasMemoryValue(MemoryModuleType.LOOK_TARGET)) {
+            brain.setMemory(MemoryModuleType.LOOK_TARGET, new PatchedEntityTracker(target, true));
+        }
+
         if (brain.hasMemoryValue(MemoryModuleType.WALK_TARGET)) {
             aimTicks = 0;
         } else {
@@ -79,10 +83,9 @@ public class ApproachTargetAndAim extends Behavior<Mob> {
 
         if (!mob.closerThan(target, weaponRange) || aimTicks <= MIN_AIM_TICKS) {
             if (!brain.hasMemoryValue(MemoryModuleType.WALK_TARGET)) {
-                brain.setMemory(MemoryModuleType.LOOK_TARGET, new EntityTracker(target, true));
                 brain.setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(
-                        new EntityTracker(target, false), this.speedModifier.apply(mob), 0)
-                );
+                        new EntityTracker(target, false), this.speedModifier.apply(mob), 0
+                ));
             }
             return;
         }

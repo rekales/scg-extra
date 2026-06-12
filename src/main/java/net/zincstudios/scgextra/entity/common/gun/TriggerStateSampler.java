@@ -7,4 +7,6 @@ public interface TriggerStateSampler {
     boolean next(RandomSource random);
 
     void setState(boolean state);
+
+    boolean getState();
 }
