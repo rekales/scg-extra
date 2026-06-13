@@ -26,6 +26,10 @@ public class ModBrainMemories {
             .register("simulated_gun", () -> new MemoryModuleType<>(Optional.empty()));
     public static final Supplier<MemoryModuleType<Integer>> STUN_END = MEMORY_MODULE_TYPES  // tickCount timestamp
             .register("stun_end", () -> new MemoryModuleType<>(Optional.of(Codec.INT)));
+    public static final Supplier<MemoryModuleType<Boolean>> ABILITY_COOLING_DOWN = MEMORY_MODULE_TYPES
+            .register("ability_cooling_down", () -> new MemoryModuleType<>(Optional.of(Codec.BOOL)));
+    public static final Supplier<MemoryModuleType<AbilityState>> ABILITY_STATE = MEMORY_MODULE_TYPES
+            .register("ability_state", () -> new MemoryModuleType<>(Optional.of(AbilityState.CODEC)));
 
     public static final int MAX_AIM_TICKS = 60;
     public static final int MIN_AIM_TICKS = -20;

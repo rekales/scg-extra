@@ -2,11 +2,12 @@ package net.zincstudios.scgextra.entity.common.gun;
 
 import net.minecraft.world.entity.LivingEntity;
 
+// TODO: add builder
 public class CustomSimulatedGun implements SimulatedGun {
 
     @Override
-    public void tickFire(LivingEntity entity, LivingEntity target, float accuracyModifier, boolean firing) {
-
+    public boolean tickFire(LivingEntity entity, LivingEntity target, float accuracyModifier, boolean firing) {
+        return false;
     }
 
     @Override

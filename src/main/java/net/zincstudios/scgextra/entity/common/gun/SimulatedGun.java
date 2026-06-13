@@ -11,7 +11,10 @@ public interface SimulatedGun {
 
     float BASE_AIM_ERROR = 5.0F;
 
-    void tickFire(LivingEntity entity, LivingEntity target, float accuracyModifier, boolean firing);
+    /**
+     * @return true if fired a projectile
+     */
+    boolean tickFire(LivingEntity shooter, LivingEntity target, float accuracyModifier, boolean firing);
 
     boolean hasChanged(LivingEntity entity);
 

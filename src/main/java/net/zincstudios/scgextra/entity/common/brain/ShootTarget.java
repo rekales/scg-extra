@@ -36,7 +36,7 @@ public class ShootTarget extends Behavior<Mob> {
         this(
                 aimThreshold,
                 entity -> accuracy,
-                new MarkovTriggerSampler(0.93f, 0.93f, 15, 80)
+                new MarkovTriggerSampler(0.93f, 0.94f, 15, 80)
         );
     }
 
@@ -45,7 +45,7 @@ public class ShootTarget extends Behavior<Mob> {
                 MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT,
                 ModBrainMemories.AIM_TICKS.get(), MemoryStatus.VALUE_PRESENT,
                 ModBrainMemories.SIMULATED_GUN.get(), MemoryStatus.VALUE_PRESENT
-        ));
+        ), 400);
         this.aimThreshold = aimThreshold;
         this.accuracyFunc = accuracyFunc;
         this.triggerSampler = triggerSampler;

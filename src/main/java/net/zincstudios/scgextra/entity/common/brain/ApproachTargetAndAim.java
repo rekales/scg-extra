@@ -59,6 +59,11 @@ public class ApproachTargetAndAim extends Behavior<Mob> {
         brain.setMemory(MemoryModuleType.LOOK_TARGET, new EntityTracker(target, true));
     }
 
+    @Override
+    protected void stop(ServerLevel level, Mob mob, long gameTime) {
+        mob.getBrain().setMemory(ModBrainMemories.AIM_TICKS.get(), 0);
+    }
+
     @SuppressWarnings("OptionalGetWithoutIsPresent")  // because already handled on canStillUse
     @Override
     protected void tick(ServerLevel level, Mob mob, long gameTime) {

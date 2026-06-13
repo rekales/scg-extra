@@ -1,77 +1,51 @@
-package net.zincstudios.scgextra.entity.common.gun;
+package net.zincstudios.scgextra.entity.cog.juggernaut;
 
 import com.mrcrayfish.framework.api.network.LevelLocation;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.zincstudios.scgextra.entity.asgharian.BulletSpawnOffset;
+import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.client.util.PropertyHelper;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.common.ProjectileManager;
 import top.ribs.scguns.entity.projectile.ProjectileEntity;
+import top.ribs.scguns.init.ModItems;
 import top.ribs.scguns.interfaces.IProjectileFactory;
 import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.S2CMessageBulletTrail;
-import top.ribs.scguns.network.message.S2CMessageEntityCasingEject;
 import top.ribs.scguns.network.message.S2CMessageEntityMuzzleFlash;
 import top.ribs.scguns.util.GunEnchantmentHelper;
 import top.ribs.scguns.util.GunModifierHelper;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
-@ParametersAreNonnullByDefault
-public class HeldSimulatedGun implements SimulatedGun {
+// TODO: use CustomSimulatedGun instead
+public class RocketBarrageSimGun implements SimulatedGun {
 
     protected final ItemStack gunStack;
     protected final int fireRate;
-    protected final int burstAmount;
-    protected final int burstInterval;
-    protected final float idealRange;
-    protected final float maxRange;
     private final IProjectileFactory projectileFactory;
-
-    protected int burstCooldown = 0;
-    protected int burstLeft = 0;
     protected int nextAttack = 0;  // tickCount timestamp
 
-    public HeldSimulatedGun(ItemStack gunStack) {
-        if (!(gunStack.getItem() instanceof GunItem)) {
-            throw new IllegalArgumentException("gunStack is not a GunItem");
-        }
-        this.gunStack = gunStack;
+    public RocketBarrageSimGun() {
+        this.gunStack = new ItemStack(ModItems.ROCKET_RIFLE.get());
         Gun gun = ((GunItem) gunStack.getItem()).getGun();
-        this.fireRate = gun.getGeneral().getRate();
-        this.burstAmount = gun.getGeneral().getBurstAmount();
-        this.burstInterval = gun.getGeneral().getBurstCooldown();
-        this.idealRange = (float) gun.getIdealAttackRange();
-        this.maxRange = this.idealRange * 1.5f;
+        this.fireRate = 5;
         this.projectileFactory = ProjectileManager.getInstance().getFactory(
                 ForgeRegistries.ITEMS.getKey(Objects.requireNonNull(gun.getProjectile().getItem())));
-    }
-
-    public HeldSimulatedGun(GunItem gunItem) {
-        this(new ItemStack(gunItem));
     }
 
     @Override
     public boolean tickFire(LivingEntity shooter, LivingEntity target, float accuracyModifier, boolean firing) {
         int tickCount = shooter.tickCount;
 
-        if (this.burstLeft > 0 && this.burstCooldown-- <= 0) {
-            fireProjectiles(shooter, target, accuracyModifier);
-            this.burstLeft--;
-            this.burstCooldown = this.burstInterval;
-            return true;
-        }
-
-        if (this.nextAttack <= tickCount && firing) {
+        if (this.nextAttack <= tickCount) {
             fireProjectiles(shooter, target, accuracyModifier);
             this.nextAttack = tickCount + this.fireRate;
             return true;
@@ -89,6 +63,7 @@ public class HeldSimulatedGun implements SimulatedGun {
         float projectileDamage = Gun.getAdditionalDamage(this.gunStack) * damageMultiplier;
         double speedModifier = GunEnchantmentHelper.getProjectileSpeedModifier(this.gunStack);
         double speed = GunModifierHelper.getModifiedProjectileSpeed(this.gunStack, gun.getProjectile().getSpeed() * speedModifier);
+        speed = speed/2;
 
         Vec3 startPos = shooter instanceof BulletSpawnOffset bso
                 ? shooter.position().add(bso.getBulletSpawnOffset())
@@ -131,28 +106,20 @@ public class HeldSimulatedGun implements SimulatedGun {
             S2CMessageEntityMuzzleFlash flashMessage = new S2CMessageEntityMuzzleFlash(shooter.getId(), randomValue, flashPosition, false);
             PacketHandler.getPlayChannel().sendToNearbyPlayers(() -> LevelLocation.create(level, radius, y1, z1, r), flashMessage);
         }
-
-        if (Config.COMMON.gameplay.spawnCasings.get() && gun.getProjectile().ejectsCasing() && !gun.getProjectile().ejectDuringReload()) {
-            ResourceLocation particleLocation = gun.getProjectile().getCasingParticle();
-            if (particleLocation != null) {
-                S2CMessageEntityCasingEject casingMessage = new S2CMessageEntityCasingEject(shooter.getId(), particleLocation);
-                PacketHandler.getPlayChannel().sendToNearbyPlayers(() -> LevelLocation.create(level, radius, y1, z1, r), casingMessage);
-            }
-        }
     }
 
     @Override
-    public boolean hasChanged(LivingEntity entity) {
-        return ItemStack.matches(entity.getMainHandItem(), this.gunStack);
+    public boolean hasChanged(LivingEntity shooter) {
+        return false;
     }
 
     @Override
     public float getMaxRange() {
-        return this.maxRange;
+        return 25;
     }
 
     @Override
     public float getIdealRange() {
-        return this.idealRange;
+        return 15;
     }
 }

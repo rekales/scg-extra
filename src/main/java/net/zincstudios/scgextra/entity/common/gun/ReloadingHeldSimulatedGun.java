@@ -22,7 +22,7 @@ public class ReloadingHeldSimulatedGun extends HeldSimulatedGun {
     }
 
     @Override
-    public void tickFire(LivingEntity shooter, LivingEntity target, float accuracyModifier, boolean firing) {
-
+    public boolean tickFire(LivingEntity shooter, LivingEntity target, float accuracyModifier, boolean firing) {
+        return false;
     }
 }

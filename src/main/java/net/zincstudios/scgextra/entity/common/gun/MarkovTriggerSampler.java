@@ -34,6 +34,7 @@ public class MarkovTriggerSampler implements TriggerStateSampler {
     @Override
     public boolean next(RandomSource random) {
         if (this.streak < this.minStreak) {
+            this.streak++;
             return this.state;
         } else if (this.streak > this.maxStreak) {
             this.streak = 1;
