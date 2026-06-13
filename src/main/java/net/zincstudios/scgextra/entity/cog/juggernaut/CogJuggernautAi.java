@@ -1,10 +1,13 @@
 package net.zincstudios.scgextra.entity.cog.juggernaut;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.*;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.schedule.Activity;
@@ -31,11 +34,12 @@ public class CogJuggernautAi {
             MemoryModuleType.WALK_TARGET,
             MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE,
             MemoryModuleType.PATH,
-            MemoryModuleType.ATTACK_TARGET,
             MemoryModuleType.ATTACK_COOLING_DOWN,
             ModBrainMemories.AIM_TICKS.get(),
             ModBrainMemories.APPROACH_DIST.get(),
-            ModBrainMemories.WEAPON_RANGE.get()
+            ModBrainMemories.WEAPON_RANGE.get(),
+            ModBrainMemories.ABILITY_STATE.get(),
+            ModBrainMemories.ABILITY_COOLING_DOWN.get()
     );
 
     protected static Brain<?> makeBrain(CogJuggernautEntity mob, Brain<CogJuggernautEntity> brain) {
@@ -52,8 +56,14 @@ public class CogJuggernautAi {
         brain.addActivityAndRemoveMemoryWhenStopped(Activity.FIGHT, 10, ImmutableList.of(
                 StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValid(mob, target, false)),
                 AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), true),
-                new ApproachTargetAndAim(1.0F),
-                new ShootTarget(20)
+                new RocketBarrageAbility(),
+                new ConditionalBehavior<Mob>(
+                        ImmutableMap.of(ModBrainMemories.ABILITY_STATE.get(), MemoryStatus.VALUE_ABSENT),
+                        ImmutableList.of(
+                                new ApproachTargetAndAim(1.0F),
+                                new ShootTarget(20)
+                        )
+                )
         ), MemoryModuleType.ATTACK_TARGET);
     }
 }
