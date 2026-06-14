@@ -26,8 +26,6 @@ public class ShootTarget extends Behavior<Mob> {
     private final Function<LivingEntity, Float> accuracyFunc;
     private final TriggerStateSampler triggerSampler;
 
-    private int length = 0;
-
     public ShootTarget(int aimThreshold) {
         this(aimThreshold, 3.2f);
     }
@@ -45,7 +43,7 @@ public class ShootTarget extends Behavior<Mob> {
                 MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT,
                 ModBrainMemories.AIM_TICKS.get(), MemoryStatus.VALUE_PRESENT,
                 ModBrainMemories.SIMULATED_GUN.get(), MemoryStatus.VALUE_PRESENT
-        ), 400);
+        ), 80);
         this.aimThreshold = aimThreshold;
         this.accuracyFunc = accuracyFunc;
         this.triggerSampler = triggerSampler;
@@ -67,19 +65,10 @@ public class ShootTarget extends Behavior<Mob> {
         int aimTicks = brain.getMemory(ModBrainMemories.AIM_TICKS.get()).get();
         SimulatedGun simGun = brain.getMemory(ModBrainMemories.SIMULATED_GUN.get()).get();
 
-        boolean lastState = this.triggerSampler.getState();
-
         if (aimTicks >= this.aimThreshold && this.triggerSampler.next(mob.getRandom())) {
             simGun.tickFire(mob, target, this.accuracyFunc.apply(mob), true);
         } else {
             simGun.tickFire(mob, target, this.accuracyFunc.apply(mob), false);
-        }
-
-        if (lastState != this.triggerSampler.getState()) {
-            SCGExtra.LOGGER.debug(this.length +  " length, switched to " + !lastState);
-            this.length = 1;
-        } else {
-            this.length++;
         }
     }
 }

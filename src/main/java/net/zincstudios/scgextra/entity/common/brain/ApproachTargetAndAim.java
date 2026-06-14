@@ -61,7 +61,9 @@ public class ApproachTargetAndAim extends Behavior<Mob> {
 
     @Override
     protected void stop(ServerLevel level, Mob mob, long gameTime) {
-        mob.getBrain().setMemory(ModBrainMemories.AIM_TICKS.get(), 0);
+        if (!this.timedOut(gameTime)) {
+            mob.getBrain().setMemory(ModBrainMemories.AIM_TICKS.get(), 0);
+        }
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")  // because already handled on canStillUse
