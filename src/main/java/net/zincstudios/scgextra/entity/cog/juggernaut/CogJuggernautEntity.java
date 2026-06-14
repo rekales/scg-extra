@@ -107,11 +107,11 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity {
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return CogSounds.COH_JUGGERNAUT_HURT.get();
+        return CogSounds.COG_JUGGERNAUT_HURT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return CogSounds.COH_JUGGERNAUT_DEAD.get();
+        return CogSounds.COG_JUGGERNAUT_DEAD.get();
     }
 }

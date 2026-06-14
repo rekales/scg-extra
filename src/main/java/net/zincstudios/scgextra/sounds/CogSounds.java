@@ -36,9 +36,9 @@ public class CogSounds {
     public static final RegistryObject<SoundEvent> COG_CENTIPEDE_IDLE = SOUND_EVENTS.register("cog_centipede.idle",
             () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("cog_centipede.idle")));
 
-    public static final RegistryObject<SoundEvent> COH_JUGGERNAUT_DEAD = SOUND_EVENTS.register("cog_juggernaut.dead",
+    public static final RegistryObject<SoundEvent> COG_JUGGERNAUT_DEAD = SOUND_EVENTS.register("cog_juggernaut.dead",
             () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("cog_juggernaut.dead")));
-    public static final RegistryObject<SoundEvent> COH_JUGGERNAUT_HURT = SOUND_EVENTS.register("cog_juggernaut.hurt",
+    public static final RegistryObject<SoundEvent> COG_JUGGERNAUT_HURT = SOUND_EVENTS.register("cog_juggernaut.hurt",
             () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("cog_juggernaut.hurt")));
 
     public static void init() {}
