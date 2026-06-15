@@ -34,8 +34,8 @@ public class HeldGunSensor extends Sensor<LivingEntity> {
     public Set<MemoryModuleType<?>> requires() {
         return ImmutableSet.of(
                 ModBrainMemories.SIMULATED_GUN.get(),
-                ModBrainMemories.APPROACH_DIST.get(),
-                ModBrainMemories.WEAPON_RANGE.get()
+                ModBrainMemories.WEAPON_IDEAL_RANGE.get(),
+                ModBrainMemories.WEAPON_MAX_RANGE.get()
         );
     }
 
@@ -48,8 +48,8 @@ public class HeldGunSensor extends Sensor<LivingEntity> {
                 && entity.getMainHandItem().getItem() instanceof GunItem gunItem) {
             SimulatedGun simGun = new HeldSimulatedGun(gunItem);
             brain.setMemory(ModBrainMemories.SIMULATED_GUN.get(), simGun);
-            brain.setMemory(ModBrainMemories.APPROACH_DIST.get(), simGun.getIdealRange());
-            brain.setMemory(ModBrainMemories.WEAPON_RANGE.get(), simGun.getMaxRange());
+            brain.setMemory(ModBrainMemories.WEAPON_IDEAL_RANGE.get(), simGun.getIdealRange());
+            brain.setMemory(ModBrainMemories.WEAPON_MAX_RANGE.get(), simGun.getMaxRange());
         }
     }
 }

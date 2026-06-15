@@ -18,9 +18,9 @@ public class ModBrainMemories {
 
     public static final Supplier<MemoryModuleType<Integer>> AIM_TICKS = MEMORY_MODULE_TYPES
             .register("aim_ticks", () -> new MemoryModuleType<>(Optional.of(Codec.INT)));
-    public static final Supplier<MemoryModuleType<Float>> APPROACH_DIST = MEMORY_MODULE_TYPES
+    public static final Supplier<MemoryModuleType<Float>> WEAPON_IDEAL_RANGE = MEMORY_MODULE_TYPES
             .register("approach_dist", () -> new MemoryModuleType<>(Optional.of(Codec.FLOAT)));
-    public static final Supplier<MemoryModuleType<Float>> WEAPON_RANGE = MEMORY_MODULE_TYPES
+    public static final Supplier<MemoryModuleType<Float>> WEAPON_MAX_RANGE = MEMORY_MODULE_TYPES
             .register("weapon_range", () -> new MemoryModuleType<>(Optional.of(Codec.FLOAT)));
     public static final Supplier<MemoryModuleType<SimulatedGun>> SIMULATED_GUN = MEMORY_MODULE_TYPES
             .register("simulated_gun", () -> new MemoryModuleType<>(Optional.empty()));

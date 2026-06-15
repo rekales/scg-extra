@@ -78,7 +78,6 @@ public class ConditionalBehavior<E extends LivingEntity> implements BehaviorCont
                 this.doStop(level, entity, gameTime);
             }
         } else {
-            SCGExtra.LOGGER.debug("condition not met");
             this.behaviors.stream()
                     .filter((behavior) -> behavior.getStatus() == Behavior.Status.RUNNING)
                     .forEach((behavior) -> behavior.doStop(level, entity, gameTime));

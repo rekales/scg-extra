@@ -33,8 +33,8 @@ public class ApproachTargetAndAim extends Behavior<Mob> {
                 MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED,
                 MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT,
                 ModBrainMemories.AIM_TICKS.get(), MemoryStatus.REGISTERED,
-                ModBrainMemories.APPROACH_DIST.get(), MemoryStatus.VALUE_PRESENT,
-                ModBrainMemories.WEAPON_RANGE.get(), MemoryStatus.VALUE_PRESENT
+                ModBrainMemories.WEAPON_IDEAL_RANGE.get(), MemoryStatus.VALUE_PRESENT,
+                ModBrainMemories.WEAPON_MAX_RANGE.get(), MemoryStatus.VALUE_PRESENT
         ));
         this.speedModifier = speedModifier;
     }
@@ -47,8 +47,8 @@ public class ApproachTargetAndAim extends Behavior<Mob> {
     protected boolean canStillUse(ServerLevel level, Mob mob, long gameTime) {
         Brain<?> brain = mob.getBrain();
         return brain.hasMemoryValue(MemoryModuleType.ATTACK_TARGET)
-                && brain.hasMemoryValue(ModBrainMemories.APPROACH_DIST.get())
-                && brain.hasMemoryValue(ModBrainMemories.WEAPON_RANGE.get());
+                && brain.hasMemoryValue(ModBrainMemories.WEAPON_IDEAL_RANGE.get())
+                && brain.hasMemoryValue(ModBrainMemories.WEAPON_MAX_RANGE.get());
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")  // because already handled on init
@@ -56,7 +56,7 @@ public class ApproachTargetAndAim extends Behavior<Mob> {
     protected void start(ServerLevel level, Mob mob, long gameTime) {
         Brain<?> brain = mob.getBrain();
         LivingEntity target = brain.getMemory(MemoryModuleType.ATTACK_TARGET).get();
-        brain.setMemory(MemoryModuleType.LOOK_TARGET, new EntityTracker(target, true));
+        brain.setMemory(MemoryModuleType.LOOK_TARGET, new PatchedEntityTracker(target, true));
     }
 
     @Override
@@ -71,8 +71,8 @@ public class ApproachTargetAndAim extends Behavior<Mob> {
     protected void tick(ServerLevel level, Mob mob, long gameTime) {
         Brain<?> brain = mob.getBrain();
         LivingEntity target = brain.getMemory(MemoryModuleType.ATTACK_TARGET).get();
-        float approachDist = brain.getMemory(ModBrainMemories.APPROACH_DIST.get()).get();
-        float weaponRange = brain.getMemory(ModBrainMemories.WEAPON_RANGE.get()).get();
+        float approachDist = brain.getMemory(ModBrainMemories.WEAPON_IDEAL_RANGE.get()).get();
+        float weaponRange = brain.getMemory(ModBrainMemories.WEAPON_MAX_RANGE.get()).get();
         int aimTicks = brain.getMemory(ModBrainMemories.AIM_TICKS.get()).orElse(0);
         boolean lineOfSight = mob.getSensing().hasLineOfSight(target);
 

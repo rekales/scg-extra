@@ -18,8 +18,8 @@ public class RangeProvider extends Behavior<Mob> {
 
     public RangeProvider() {
         super(ImmutableMap.of(
-                ModBrainMemories.APPROACH_DIST.get(), MemoryStatus.REGISTERED,
-                ModBrainMemories.WEAPON_RANGE.get(), MemoryStatus.REGISTERED
+                ModBrainMemories.WEAPON_IDEAL_RANGE.get(), MemoryStatus.REGISTERED,
+                ModBrainMemories.WEAPON_MAX_RANGE.get(), MemoryStatus.REGISTERED
         ));
     }
 
@@ -32,12 +32,12 @@ public class RangeProvider extends Behavior<Mob> {
     protected void tick(ServerLevel level, Mob mob, long gameTime) {
         Brain<?> brain = mob.getBrain();
 
-        if (!brain.hasMemoryValue(ModBrainMemories.APPROACH_DIST.get())) {
-            brain.setMemory(ModBrainMemories.APPROACH_DIST.get(), 10F);
+        if (!brain.hasMemoryValue(ModBrainMemories.WEAPON_IDEAL_RANGE.get())) {
+            brain.setMemory(ModBrainMemories.WEAPON_IDEAL_RANGE.get(), 10F);
         }
 
-        if (!brain.hasMemoryValue(ModBrainMemories.WEAPON_RANGE.get())) {
-            brain.setMemory(ModBrainMemories.WEAPON_RANGE.get(), 15F);
+        if (!brain.hasMemoryValue(ModBrainMemories.WEAPON_MAX_RANGE.get())) {
+            brain.setMemory(ModBrainMemories.WEAPON_MAX_RANGE.get(), 15F);
         }
     }
 

@@ -36,8 +36,8 @@ public class CogJuggernautAi {
             MemoryModuleType.PATH,
             MemoryModuleType.ATTACK_COOLING_DOWN,
             ModBrainMemories.AIM_TICKS.get(),
-            ModBrainMemories.APPROACH_DIST.get(),
-            ModBrainMemories.WEAPON_RANGE.get(),
+            ModBrainMemories.WEAPON_IDEAL_RANGE.get(),
+            ModBrainMemories.WEAPON_MAX_RANGE.get(),
             ModBrainMemories.ABILITY_STATE.get(),
             ModBrainMemories.ABILITY_COOLING_DOWN.get()
     );
@@ -56,7 +56,8 @@ public class CogJuggernautAi {
         brain.addActivityAndRemoveMemoryWhenStopped(Activity.FIGHT, 10, ImmutableList.of(
                 StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValid(mob, target, false)),
                 AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), true),
-                new RocketBarrageAbility(),
+//                new RocketBarrageAbility(),
+                new JetBootsAbility(),
                 new ConditionalBehavior<Mob>(
                         ImmutableMap.of(ModBrainMemories.ABILITY_STATE.get(), MemoryStatus.VALUE_ABSENT),
                         ImmutableList.of(
