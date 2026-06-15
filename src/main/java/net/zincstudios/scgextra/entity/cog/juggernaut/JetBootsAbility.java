@@ -93,7 +93,7 @@ public class JetBootsAbility extends Behavior<CogJuggernautEntity> {
 
         brain.setMemoryWithExpiry(
                 ModBrainMemories.ABILITY_STATE.get(),
-                new AbilityState(ABILITY_ID, mob.tickCount + 120),
+                new AbilityState(ABILITY_ID, gameTime, gameTime + 120),
                 120
         );
     }

@@ -59,7 +59,7 @@ public class RocketBarrageAbility extends Behavior<CogJuggernautEntity> {
         this.recoveryTimer = 20;
         mob.getBrain().setMemoryWithExpiry(
                 ModBrainMemories.ABILITY_STATE.get(),
-                new AbilityState(ABILITY_ID, mob.tickCount + Behavior.DEFAULT_DURATION),
+                new AbilityState(ABILITY_ID, gameTime, gameTime + Behavior.DEFAULT_DURATION),
                 Behavior.DEFAULT_DURATION
         );
     }
