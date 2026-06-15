@@ -2,15 +2,21 @@ package net.zincstudios.scgextra.entity.cog.juggernaut;
 
 import com.mojang.serialization.Dynamic;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.zincstudios.scgextra.entity.common.EquippedEntity;
 import net.zincstudios.scgextra.entity.common.brain.BrainUtils;
 import net.zincstudios.scgextra.sounds.CogSounds;
@@ -28,6 +34,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class CogJuggernautEntity extends EquippedEntity implements GeoEntity {
+
+    private static final EntityDataAccessor<Boolean> JET_ACTIVE =
+            SynchedEntityData.defineId(CogJuggernautEntity.class, EntityDataSerializers.BOOLEAN);
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
 
@@ -67,6 +76,18 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity {
         super.customServerAiStep();
     }
 
+//    @Override
+//    public boolean hurt(DamageSource source, float amount) {
+//        if (source.is(DamageTypes.FALL) && this.isJetActive()) return false;
+//        return super.hurt(source, amount);
+//    }
+
+    @Override
+    protected void checkFallDamage(double y, boolean onGround, BlockState state, BlockPos pos) {
+        if (this.isJetActive()) return;
+        super.checkFallDamage(y, onGround, state, pos);
+    }
+
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "main", 2, state -> {
@@ -101,6 +122,20 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity {
     }
 
     @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(JET_ACTIVE, false);
+    }
+
+    public void setJetActive(boolean jetActive) {
+        this.entityData.set(JET_ACTIVE, jetActive);
+    }
+
+    public boolean isJetActive() {
+        return this.entityData.get(JET_ACTIVE);
+    }
+
+    @Override
     protected @Nullable SoundEvent getAmbientSound() {
         return CogSounds.GENERAL_IDLE.get();
     }
@@ -114,4 +149,9 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity {
     protected SoundEvent getDeathSound() {
         return CogSounds.COG_JUGGERNAUT_DEAD.get();
     }
+
+//    @Override
+//    public Fallsounds getFallSounds() {
+//        return super.getFallSounds();
+//    }
 }
