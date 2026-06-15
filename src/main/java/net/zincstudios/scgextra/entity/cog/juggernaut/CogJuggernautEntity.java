@@ -108,6 +108,15 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity {
                 }).setAnimationSpeed(1.2f)
         );
 
+        controllers.add(new AnimationController<>(this, "jet", 4, state -> {
+                    if (state.getAnimatable().isJetActive()) {
+                        return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("fly"));
+                    }
+                    return PlayState.STOP;
+                })
+                .triggerableAnim("land", RawAnimation.begin().thenPlay("land"))
+        );
+
         controllers.add(new AnimationController<>(this, "death", 2, state -> {
             if (state.getAnimatable().isDeadOrDying()) {
                 return state.setAndContinue(RawAnimation.begin().thenPlayAndHold("death"));
@@ -128,6 +137,9 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity {
     }
 
     public void setJetActive(boolean jetActive) {
+        if (this.entityData.get(JET_ACTIVE) && !jetActive) {
+            this.triggerAnim("jet", "land");
+        }
         this.entityData.set(JET_ACTIVE, jetActive);
     }
 

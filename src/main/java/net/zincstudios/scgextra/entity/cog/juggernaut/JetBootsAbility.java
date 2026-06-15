@@ -3,6 +3,7 @@ package net.zincstudios.scgextra.entity.cog.juggernaut;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.Behavior;
@@ -15,6 +16,7 @@ import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.AbilityState;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
+import net.zincstudios.scgextra.entity.common.MobUtil;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -107,23 +109,27 @@ public class JetBootsAbility extends Behavior<CogJuggernautEntity> {
     @SuppressWarnings("OptionalGetWithoutIsPresent") // because already handled on canStillUse
     @Override
     protected void tick(ServerLevel level, CogJuggernautEntity mob, long gameTime) {
-        if (gameTime-this.startTime < this.jetStartTicks) return;
-
         Brain<?> brain = mob.getBrain();
         LivingEntity target = brain.getMemory(MemoryModuleType.ATTACK_TARGET).get();
-        long durationTicks = gameTime-this.startTime;
-
-//        if (!brain.hasMemoryValue(MemoryModuleType.LOOK_TARGET)) {
-//            brain.setMemory(MemoryModuleType.LOOK_TARGET, new PatchedEntityTracker(target, true));
-//        }
 
         if (brain.hasMemoryValue(MemoryModuleType.LOOK_TARGET)) {
             brain.eraseMemory(MemoryModuleType.LOOK_TARGET);  // Because look control isn't working great when flying
         }
 
+        float targetRot;
+        if (this.flee) {
+            targetRot = MobUtil.rotFromVec(mob.position().subtract(target.position()));
+        } else {
+            targetRot = MobUtil.rotFromVec(target.position().subtract(mob.position()));
+        }
+        MobUtil.turnEntityToYaw(mob, targetRot, 10f);
+
+        long durationTicks = gameTime-this.startTime;
+        if (durationTicks < this.jetStartTicks) return;
+
         double horizontalDist = getHorizontalDistance(this.startPos, mob.position());
-        double verticalAccel = 0.05F + 0.05F * ((12 - getDistanceToGround(mob, 8)) / 12) * ((24 - horizontalDist) / 24);
-        double horizontalAccel = 0.03F * ((20 - horizontalDist) / 20) * ((gameTime-this.startTime > this.jetStartTicks + 10) ? 1 : 0);
+        double verticalAccel = 0.04F + 0.06F * ((12 - getDistanceToGround(mob, 8)) / 12) * ((24 - horizontalDist) / 24);
+        double horizontalAccel = 0.03F * ((24 - horizontalDist) / 24) * Mth.clamp((durationTicks - this.jetStartTicks) / 15f, 0, 1);
 
         Vec3 delta = target.position().subtract(mob.position());
         delta = new Vec3(delta.x, 0, delta.z).normalize();
@@ -131,7 +137,6 @@ public class JetBootsAbility extends Behavior<CogJuggernautEntity> {
         delta = delta.add(0, verticalAccel, 0);
         SCGExtra.LOGGER.debug("jet active: " + horizontalDist);
         mob.addDeltaMovement(delta);
-
     }
 
     @SuppressWarnings("SameParameterValue")
