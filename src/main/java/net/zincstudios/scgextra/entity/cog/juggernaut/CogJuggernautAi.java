@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.*;
@@ -12,10 +13,7 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.schedule.Activity;
-import net.zincstudios.scgextra.entity.Faction;
-import net.zincstudios.scgextra.entity.ModBrainActivities;
-import net.zincstudios.scgextra.entity.ModBrainMemories;
-import net.zincstudios.scgextra.entity.ModBrainSensors;
+import net.zincstudios.scgextra.entity.*;
 import net.zincstudios.scgextra.entity.common.brain.*;
 
 public class CogJuggernautAi {
@@ -78,7 +76,7 @@ public class CogJuggernautAi {
     private static void initRelocateActivity(Brain<CogJuggernautEntity> brain) {
         brain.addActivityAndRemoveMemoriesWhenStopped(ModBrainActivities.RELOCATE.get(), BrainUtils.createPriorityPairs(10, ImmutableList.of(
                 new JetBootsAbility(),
-                new BurnNearby(5)
+                new BurnNearby(CogJuggernautAi::jetBootsShouldBurn)
                 )), ImmutableSet.of(
                         Pair.of(ModBrainMemories.RELOCATE_TARGET.get(), MemoryStatus.VALUE_PRESENT),
                         Pair.of(ModBrainMemories.JET_BOOTS_COOLING_DOWN.get(), MemoryStatus.VALUE_ABSENT)
@@ -92,5 +90,12 @@ public class CogJuggernautAi {
                 Activity.FIGHT,
                 Activity.IDLE
         ));
+    }
+
+    private static boolean jetBootsShouldBurn(LivingEntity entity, LivingEntity target) {
+        double dx = target.getX() - entity.getX();
+        double dz = target.getZ() - entity.getZ();
+        double dy = entity.getY() - target.getY(); // positive when target is below
+        return (dx * dx + dz * dz) <= 4 * 4 && dy >= 1.2 && dy <= 6;
     }
 }

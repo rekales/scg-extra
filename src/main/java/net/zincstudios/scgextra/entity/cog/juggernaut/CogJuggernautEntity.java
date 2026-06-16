@@ -74,7 +74,7 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity {
         RandomSource rand = this.getRandom();
 
         Vec3 pos;
-        Vec3 delta = new Vec3(0,-0.3, -0.0);
+        Vec3 delta = new Vec3(0,-0.35, -0.0);
         delta = delta.yRot(-this.yBodyRot * Mth.DEG_TO_RAD);
 
         for (int i = 0; i < 3; i++) {
@@ -82,9 +82,9 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity {
             clientLevel.addParticle(
                     ParticleTypes.SMOKE,
                     pos.x, pos.y, pos.z,
-                    delta.x + (rand.nextDouble()-0.5) * 0.1f,
-                    delta.y + (rand.nextDouble()-0.5) * 0.1f,
-                    delta.z + (rand.nextDouble()-0.5) * 0.1f
+                    delta.x + (rand.nextDouble()-0.5) * 0.15f,
+                    delta.y + (rand.nextDouble()-0.5) * 0.15f,
+                    delta.z + (rand.nextDouble()-0.5) * 0.15f
             );
         }
 
@@ -92,9 +92,9 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity {
         clientLevel.addParticle(
                 ParticleTypes.FLAME,
                 pos.x, pos.y, pos.z,
-                delta.x + (rand.nextDouble()-0.5) * 0.1f,
-                delta.y + (rand.nextDouble()-0.5) * 0.1f,
-                delta.z + (rand.nextDouble()-0.5) * 0.1f
+                delta.x + (rand.nextDouble()-0.5) * 0.15f,
+                delta.y + (rand.nextDouble()-0.5) * 0.15f,
+                delta.z + (rand.nextDouble()-0.5) * 0.15f
         );
 
         if(this.tickCount%2==0){
