@@ -25,6 +25,7 @@ import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.AbilityState;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.EquippedEntity;
+import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.sounds.CogSounds;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -41,7 +42,7 @@ import java.util.Optional;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CogJuggernautEntity extends EquippedEntity implements GeoEntity {
+public class CogJuggernautEntity extends EquippedEntity implements GeoEntity, Gunner {
 
     private static final EntityDataAccessor<Boolean> JET_ACTIVE =
             SynchedEntityData.defineId(CogJuggernautEntity.class, EntityDataSerializers.BOOLEAN);
