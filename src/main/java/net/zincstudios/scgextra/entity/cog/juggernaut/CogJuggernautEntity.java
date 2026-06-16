@@ -24,7 +24,6 @@ import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.AbilityState;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.EquippedEntity;
-import net.zincstudios.scgextra.entity.common.brain.BrainUtils;
 import net.zincstudios.scgextra.sounds.CogSounds;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -156,7 +155,7 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity {
     protected void customServerAiStep() {
         this.level().getProfiler().push("cogJuggernautBrain");
         this.getBrain().tick((ServerLevel)this.level(), this);
-        BrainUtils.Standard.updateActivity(this);
+        CogJuggernautAi.updateActivity(this);
         this.level().getProfiler().pop();
         super.customServerAiStep();
     }

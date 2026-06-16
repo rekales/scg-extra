@@ -2,7 +2,6 @@ package net.zincstudios.scgextra.entity;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 
 /**

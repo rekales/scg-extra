@@ -67,7 +67,7 @@ public class BrainUtils {
     }
 
     // Sensor.isEntityAttackable is shit and doesn't account for the follow range attribute
-    @SuppressWarnings("RedundantIfStatement")  // for readability
+    @SuppressWarnings({"RedundantIfStatement", "BooleanMethodIsAlwaysInverted"})  // for readability
     public static boolean isTargetStillValid(LivingEntity entity, LivingEntity target, boolean needLineOfSight) {
         if (entity == target) return false;
         if (!target.canBeSeenByAnyone()) return false;
@@ -75,6 +75,19 @@ public class BrainUtils {
         if (!isWithinRange(entity, target)) return false;
         if (needLineOfSight && entity instanceof Mob mob && !mob.getSensing().hasLineOfSight(target)) return false;
         return true;
+    }
+
+    // public static copy of Brain#createPriorityPairs
+    public static <E extends LivingEntity> ImmutableList<? extends Pair<Integer, ? extends BehaviorControl<? super E>>> createPriorityPairs(
+            int priorityStart, ImmutableList<? extends BehaviorControl<? super E>> tasks) {
+        int i = priorityStart;
+        ImmutableList.Builder<Pair<Integer, ? extends BehaviorControl<? super E>>> builder = ImmutableList.builder();
+
+        for(BehaviorControl<? super E> behaviorcontrol : tasks) {
+            builder.add(Pair.of(i++, behaviorcontrol));
+        }
+
+        return builder.build();
     }
 
     private static boolean isWithinRange(LivingEntity entity, LivingEntity target) {

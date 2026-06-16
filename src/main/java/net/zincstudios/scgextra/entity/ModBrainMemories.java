@@ -1,6 +1,7 @@
 package net.zincstudios.scgextra.entity;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.world.entity.ai.behavior.PositionTracker;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -30,6 +31,12 @@ public class ModBrainMemories {
             .register("ability_cooling_down", () -> new MemoryModuleType<>(Optional.of(Codec.BOOL)));
     public static final Supplier<MemoryModuleType<AbilityState>> ABILITY_STATE = MEMORY_MODULE_TYPES
             .register("ability_state", () -> new MemoryModuleType<>(Optional.of(AbilityState.CODEC)));
+    public static final Supplier<MemoryModuleType<PositionTracker>> RELOCATE_TARGET = MEMORY_MODULE_TYPES
+            .register("relocate_target", () -> new MemoryModuleType<>(Optional.empty()));
+
+    // Mob Specific Memories
+    public static final Supplier<MemoryModuleType<Boolean>> JET_BOOTS_COOLING_DOWN = MEMORY_MODULE_TYPES
+            .register("jet_boots_cooling_down", () -> new MemoryModuleType<>(Optional.of(Codec.BOOL)));
 
     public static final int MAX_AIM_TICKS = 60;
     public static final int MIN_AIM_TICKS = -20;
