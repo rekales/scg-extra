@@ -3,6 +3,8 @@ package net.zincstudios.scgextra.entity.common.gun;
 import com.mrcrayfish.framework.api.network.LevelLocation;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -116,6 +118,8 @@ public class HeldSimulatedGun implements SimulatedGun {
             projectileEntity.tick();
         }
 
+        gunFireSound(level, startPos);
+
         int radius = (int)shooter.getX();
         int y1 = (int)(shooter.getY() + (double)1.0F);
         int z1 = (int)shooter.getZ();
@@ -138,6 +142,24 @@ public class HeldSimulatedGun implements SimulatedGun {
                 S2CMessageEntityCasingEject casingMessage = new S2CMessageEntityCasingEject(shooter.getId(), particleLocation);
                 PacketHandler.getPlayChannel().sendToNearbyPlayers(() -> LevelLocation.create(level, radius, y1, z1, r), casingMessage);
             }
+        }
+    }
+
+    protected final void gunFireSound(Level level, Vec3 origin) {
+        GunItem gunItem = (GunItem) this.gunStack.getItem();
+        Gun gun = gunItem.getGun();
+        ResourceLocation fireSound = gun.getSounds().getFire();
+        if (fireSound != null) {
+            float volume = (float) Config.COMMON.gameplay.mobGunfireVolume.get();
+            float pitch = 0.9F + level.getRandom().nextFloat() * 0.2F;
+            level.playSound(
+                    null,
+                    origin.x, origin.y, origin.z,
+                    SoundEvent.createVariableRangeEvent(fireSound),
+                    SoundSource.HOSTILE,
+                    volume - 0.5F,
+                    pitch
+            );
         }
     }
 
