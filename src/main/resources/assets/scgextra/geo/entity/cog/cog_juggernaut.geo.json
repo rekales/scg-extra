@@ -16,13 +16,18 @@
 					"pivot": [0, 0, 0]
 				},
 				{
-					"name": "pelvis",
+					"name": "body",
 					"parent": "root",
 					"pivot": [0, 19, 0]
 				},
 				{
+					"name": "legs",
+					"parent": "body",
+					"pivot": [0, 16, 0]
+				},
+				{
 					"name": "leftLeg",
-					"parent": "pelvis",
+					"parent": "legs",
 					"pivot": [5, 17, 0],
 					"cubes": [
 						{"origin": [2, 7, -3], "size": [6, 10, 6], "uv": [155, 34]}
@@ -47,7 +52,7 @@
 				},
 				{
 					"name": "rightLeg",
-					"parent": "pelvis",
+					"parent": "legs",
 					"pivot": [-5, 17, 0],
 					"cubes": [
 						{"origin": [-8, 7, -3], "size": [6, 10, 6], "uv": [155, 34], "mirror": true}
@@ -71,8 +76,8 @@
 					]
 				},
 				{
-					"name": "waist",
-					"parent": "pelvis",
+					"name": "chest",
+					"parent": "body",
 					"pivot": [0, 19, 0],
 					"cubes": [
 						{"origin": [9, 34, -10], "size": [3, 8, 20], "uv": [65, 55]},
@@ -101,7 +106,7 @@
 				},
 				{
 					"name": "gear",
-					"parent": "waist",
+					"parent": "chest",
 					"pivot": [0, 38.51472, 15],
 					"cubes": [
 						{"origin": [-14.48528, 32.51472, 12], "size": [8, 12, 6], "uv": [0, 146], "mirror": true},
@@ -126,7 +131,7 @@
 				},
 				{
 					"name": "head",
-					"parent": "waist",
+					"parent": "chest",
 					"pivot": [0, 39, 0],
 					"cubes": [
 						{"origin": [-5, 39, -5], "size": [10, 10, 10], "uv": [0, 75]},
@@ -140,7 +145,7 @@
 				},
 				{
 					"name": "rightArm",
-					"parent": "waist",
+					"parent": "chest",
 					"pivot": [-13.27778, 35.08333, -0.60555],
 					"cubes": [
 						{"origin": [-19, 33, -5], "size": [9, 6, 10], "uv": [0, 96], "mirror": true},
@@ -165,7 +170,7 @@
 				{
 					"name": "right_hand",
 					"parent": "rightForeArm",
-					"pivot": [-14, 17, -3]
+					"pivot": [-14, 17, -5]
 				},
 				{
 					"name": "rightGear",
@@ -181,7 +186,7 @@
 				},
 				{
 					"name": "leftArm",
-					"parent": "waist",
+					"parent": "chest",
 					"pivot": [13.27778, 35.08333, -0.60555],
 					"cubes": [
 						{"origin": [10, 33, -5], "size": [9, 6, 10], "uv": [0, 96]},

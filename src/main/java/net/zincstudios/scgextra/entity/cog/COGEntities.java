@@ -13,12 +13,12 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.asgharian.BaseEntityRenderer;
-import net.zincstudios.scgextra.entity.asgharian.ItemHoldingMobRenderer;
 import net.zincstudios.scgextra.entity.cog.bombardier.CogBombardierEntity;
 import net.zincstudios.scgextra.entity.cog.centipede.CogCentipedeEntity;
 import net.zincstudios.scgextra.entity.cog.devastator.CogDevastatorEntity;
 import net.zincstudios.scgextra.entity.cog.gigantes.CogGigantesEntity;
 import net.zincstudios.scgextra.entity.cog.juggernaut.CogJuggernautEntity;
+import net.zincstudios.scgextra.entity.cog.juggernaut.CogJuggernautRenderer;
 import net.zincstudios.scgextra.entity.cog.venator.CogVenatorEntity;
 import net.zincstudios.scgextra.entity.cog.vulture.CogVultureEntity;
 import net.zincstudios.scgextra.entity.common.WeakPointBox;
@@ -108,8 +108,8 @@ public class COGEntities {
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_venator"))).noDeathTilt());
         EntityRenderers.register(COGEntities.CENTIPEDE.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_centipede"))).noDeathTilt());
-        EntityRenderers.register(COGEntities.JUGGERNAUT.get(), (ctx) -> new ItemHoldingMobRenderer<>(ctx,
-                new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_juggernaut"))).noDeathTilt());
+        EntityRenderers.register(COGEntities.JUGGERNAUT.get(), (ctx) -> new CogJuggernautRenderer(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_juggernaut"), "chest")).noDeathTilt());
     }
 
 }

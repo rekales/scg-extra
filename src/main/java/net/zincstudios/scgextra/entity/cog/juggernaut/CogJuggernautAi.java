@@ -68,7 +68,9 @@ public class CogJuggernautAi {
                         ImmutableList.of(new ShootTarget(20))
                 ))), ImmutableSet.of(
                         Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT)
-                ), ImmutableSet.of()
+                ), ImmutableSet.of(
+                        ModBrainMemories.AIM_TICKS.get()
+                )
         );
     }
 
