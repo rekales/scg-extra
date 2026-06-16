@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.common.brain;
+package net.zincstudios.scgextra.entity.cog.juggernaut;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
@@ -49,7 +49,7 @@ public class JetBootsRelocate {
                                     relocateAcc.set(new BlockPosTracker(result.getBlockPos().above()));
                                     return true;
                                 }
-                            } else if (dist > idealRange + 10 || dist > TOO_FAR_DIST) {
+                            } else if (dist > idealRange + 8 || dist > TOO_FAR_DIST) {
                                 Vec3 targetPos = target.getEyePosition()
                                         .subtract(mob.getEyePosition())
                                         .normalize()

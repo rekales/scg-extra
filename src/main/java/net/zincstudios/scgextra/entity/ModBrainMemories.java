@@ -25,7 +25,7 @@ public class ModBrainMemories {
             .register("weapon_range", () -> new MemoryModuleType<>(Optional.of(Codec.FLOAT)));
     public static final Supplier<MemoryModuleType<SimulatedGun>> SIMULATED_GUN = MEMORY_MODULE_TYPES
             .register("simulated_gun", () -> new MemoryModuleType<>(Optional.empty()));
-    public static final Supplier<MemoryModuleType<Integer>> STUN_END = MEMORY_MODULE_TYPES  // tickCount timestamp
+    public static final Supplier<MemoryModuleType<Integer>> STUN_END = MEMORY_MODULE_TYPES
             .register("stun_end", () -> new MemoryModuleType<>(Optional.of(Codec.INT)));
     public static final Supplier<MemoryModuleType<Boolean>> ABILITY_COOLING_DOWN = MEMORY_MODULE_TYPES
             .register("ability_cooling_down", () -> new MemoryModuleType<>(Optional.of(Codec.BOOL)));
