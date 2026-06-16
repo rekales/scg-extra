@@ -51,14 +51,6 @@ public class ApproachTargetAndAim extends Behavior<Mob> {
                 && brain.hasMemoryValue(ModBrainMemories.WEAPON_MAX_RANGE.get());
     }
 
-    @SuppressWarnings("OptionalGetWithoutIsPresent")  // because already handled on init
-    @Override
-    protected void start(ServerLevel level, Mob mob, long gameTime) {
-        Brain<?> brain = mob.getBrain();
-        LivingEntity target = brain.getMemory(MemoryModuleType.ATTACK_TARGET).get();
-        brain.setMemory(MemoryModuleType.LOOK_TARGET, new PatchedEntityTracker(target, true));
-    }
-
     @Override
     protected void stop(ServerLevel level, Mob mob, long gameTime) {
         if (!this.timedOut(gameTime)) {

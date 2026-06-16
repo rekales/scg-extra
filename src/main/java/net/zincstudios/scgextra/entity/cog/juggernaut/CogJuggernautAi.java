@@ -59,14 +59,13 @@ public class CogJuggernautAi {
         brain.addActivityAndRemoveMemoriesWhenStopped(Activity.FIGHT, BrainUtils.createPriorityPairs(10, ImmutableList.of(
                 StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValid(mob, target, false)),
                 AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), true),
+                GetCloseToTarget.create(5, 1.0F),
+                new AutoAimWhenTargetVisible(),
                 JetBootsRelocate.create(),
                 new RocketBarrageAbility(),
                 new ConditionalBehavior<>(
                         ImmutableMap.of(ModBrainMemories.ABILITY_STATE.get(), MemoryStatus.VALUE_ABSENT),
-                        ImmutableList.of(
-                                new ApproachTargetAndAim(1.0F),
-                                new ShootTarget(20)
-                        )
+                        ImmutableList.of(new ShootTarget(20))
                 ))), ImmutableSet.of(
                         Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT)
                 ), ImmutableSet.of()

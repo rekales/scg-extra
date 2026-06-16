@@ -37,11 +37,18 @@ public class RocketBarrageAbility extends Behavior<CogJuggernautEntity> {
         super(ImmutableMap.of(
                 MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED,
                 MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT,
+                ModBrainMemories.AIM_TICKS.get(), MemoryStatus.REGISTERED,
                 ModBrainMemories.ABILITY_COOLING_DOWN.get(), MemoryStatus.VALUE_ABSENT,
                 ModBrainMemories.ABILITY_STATE.get(), MemoryStatus.REGISTERED
         ), 40);
         this.cooldownDuration = cooldownDuration;
         this.gun = new RocketBarrageSimGun();
+    }
+
+    @Override
+    protected boolean checkExtraStartConditions(ServerLevel level, CogJuggernautEntity mob) {
+        int aimTicks = mob.getBrain().getMemory(ModBrainMemories.AIM_TICKS.get()).orElse(0);
+        return aimTicks >= 40;
     }
 
     @Override
@@ -84,7 +91,6 @@ public class RocketBarrageAbility extends Behavior<CogJuggernautEntity> {
         if (this.rocketsLeft > 0) {
             if (gun.tickFire(mob, target, 2F, true)) {
                 this.rocketsLeft--;
-                SCGExtra.LOGGER.debug(this.rocketsLeft + " tick: " + mob.tickCount);
             }
         } else {
             this.recoveryTimer--;
