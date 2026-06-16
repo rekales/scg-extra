@@ -6,13 +6,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.zincstudios.scgextra.entity.asgharian.BulletSpawnOffset;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.client.util.PropertyHelper;
 import top.ribs.scguns.common.Gun;
-import top.ribs.scguns.common.ProjectileManager;
 import top.ribs.scguns.entity.projectile.ProjectileEntity;
 import top.ribs.scguns.init.ModItems;
 import top.ribs.scguns.interfaces.IProjectileFactory;
@@ -22,8 +20,6 @@ import top.ribs.scguns.network.message.S2CMessageBulletTrail;
 import top.ribs.scguns.network.message.S2CMessageEntityMuzzleFlash;
 import top.ribs.scguns.util.GunEnchantmentHelper;
 import top.ribs.scguns.util.GunModifierHelper;
-
-import java.util.Objects;
 
 // TODO: use CustomSimulatedGun instead
 public class RocketBarrageSimGun implements SimulatedGun {
@@ -35,10 +31,8 @@ public class RocketBarrageSimGun implements SimulatedGun {
 
     public RocketBarrageSimGun() {
         this.gunStack = new ItemStack(ModItems.ROCKET_RIFLE.get());
-        Gun gun = ((GunItem) gunStack.getItem()).getGun();
         this.fireRate = 5;
-        this.projectileFactory = ProjectileManager.getInstance().getFactory(
-                ForgeRegistries.ITEMS.getKey(Objects.requireNonNull(gun.getProjectile().getItem())));
+        this.projectileFactory = RocketBarrageProjectileEntity::new;
     }
 
     @Override
@@ -59,8 +53,7 @@ public class RocketBarrageSimGun implements SimulatedGun {
         GunItem gunItem = (GunItem) this.gunStack.getItem();
         Gun gun = gunItem.getGun();
 
-        float damageMultiplier = SimulatedGun.getMobDamageMultiplier(level);
-        float projectileDamage = Gun.getAdditionalDamage(this.gunStack) * damageMultiplier;
+        float projectileDamage = 5;
         double speedModifier = GunEnchantmentHelper.getProjectileSpeedModifier(this.gunStack);
         double speed = GunModifierHelper.getModifiedProjectileSpeed(this.gunStack, gun.getProjectile().getSpeed() * speedModifier);
         speed = speed/2;
@@ -79,7 +72,7 @@ public class RocketBarrageSimGun implements SimulatedGun {
             ProjectileEntity projectileEntity = this.projectileFactory.create(level, shooter, this.gunStack, gunItem, gun);
             projectileEntity.setWeapon(this.gunStack);
             projectileEntity.setAdditionalDamage(projectileDamage);
-            projectileEntity.getPersistentData().putFloat("AIDamageScale", damageMultiplier);
+            projectileEntity.getPersistentData().putFloat("AIDamageScale", 1.0F);
 
             Vec3 dir = SimulatedGun.addWeaponSpread(shooter, aimDir, gun.getProjectile().getSpread());
             projectileEntity.setDeltaMovement(dir.x * speed, dir.y * speed, dir.z * speed);

@@ -3,6 +3,7 @@ package net.zincstudios.scgextra.entity.cog;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -15,15 +16,19 @@ import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.asgharian.BaseEntityRenderer;
 import net.zincstudios.scgextra.entity.cog.bombardier.CogBombardierEntity;
 import net.zincstudios.scgextra.entity.cog.centipede.CogCentipedeEntity;
+import net.zincstudios.scgextra.entity.cog.centipede.PlasmaCannonProjectileEntity;
 import net.zincstudios.scgextra.entity.cog.devastator.CogDevastatorEntity;
 import net.zincstudios.scgextra.entity.cog.gigantes.CogGigantesEntity;
 import net.zincstudios.scgextra.entity.cog.juggernaut.CogJuggernautEntity;
 import net.zincstudios.scgextra.entity.cog.juggernaut.CogJuggernautRenderer;
+import net.zincstudios.scgextra.entity.cog.juggernaut.RocketBarrageProjectileEntity;
 import net.zincstudios.scgextra.entity.cog.venator.CogVenatorEntity;
 import net.zincstudios.scgextra.entity.cog.vulture.CogVultureEntity;
 import net.zincstudios.scgextra.entity.common.WeakPointBox;
 import net.zincstudios.scgextra.entity.common.WeakPointBoxManager;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
+import top.ribs.scguns.client.render.entity.ProjectileRenderer;
+import top.ribs.scguns.client.render.entity.RocketRenderer;
 import top.ribs.scguns.common.BoundingBoxManager;
 import top.ribs.scguns.common.headshot.BasicHeadshotBox;
 import top.ribs.scguns.common.headshot.RotatedHeadshotBox;
@@ -68,6 +73,26 @@ public class COGEntities {
                     .setUpdateInterval(1)
                     .build("cog_juggernaut"));
 
+    public static final RegistryObject<EntityType<PlasmaCannonProjectileEntity>> PLASMA_CANNON_PROJECTILE = ENTITY_TYPES
+            .register("plasma_cannon_projectile", () -> EntityType.Builder.of(
+                            (EntityType<PlasmaCannonProjectileEntity> type, Level level) -> new PlasmaCannonProjectileEntity(type, level), MobCategory.MISC)
+                    .sized(1.0F, 1.0F)
+                    .clientTrackingRange(4)
+                    .updateInterval(3)
+                    .build("plasma_cannon_projectile"));
+
+    public static final RegistryObject<EntityType<RocketBarrageProjectileEntity>> ROCKET_BARRAGE_PROJECTILE = ENTITY_TYPES
+            .register("rocket_barrage_projectile", () -> EntityType.Builder.of(
+                            (EntityType<RocketBarrageProjectileEntity> type, Level level) -> new RocketBarrageProjectileEntity(type, level), MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .setTrackingRange(100)
+                    .setUpdateInterval(1)
+                    .noSummon()
+                    .fireImmune()
+                    .noSave()
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build("rocket_barrage_projectile"));
+
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(COGEntities::registerAttributes);
         modEventBus.addListener(COGEntities::onCommonSetup);
@@ -110,6 +135,9 @@ public class COGEntities {
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_centipede"))).noDeathTilt());
         EntityRenderers.register(COGEntities.JUGGERNAUT.get(), (ctx) -> new CogJuggernautRenderer(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_juggernaut"), "chest")).noDeathTilt());
+
+        EntityRenderers.register(COGEntities.PLASMA_CANNON_PROJECTILE.get(), ProjectileRenderer::new);
+        EntityRenderers.register(COGEntities.ROCKET_BARRAGE_PROJECTILE.get(), RocketRenderer::new);
     }
 
 }

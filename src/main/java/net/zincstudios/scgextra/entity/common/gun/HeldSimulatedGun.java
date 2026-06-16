@@ -28,6 +28,7 @@ import top.ribs.scguns.util.GunModifierHelper;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
+// TODO: decouple from gun itemstack, gun, and gunitem
 @ParametersAreNonnullByDefault
 public class HeldSimulatedGun implements SimulatedGun {
 
