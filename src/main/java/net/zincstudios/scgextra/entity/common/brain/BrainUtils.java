@@ -63,7 +63,9 @@ public class BrainUtils {
     public static Optional<LivingEntity> getHurtBy(LivingEntity mob) {
         return mob.getBrain()
                 .getMemory(MemoryModuleType.HURT_BY_ENTITY)
-                .filter((entity -> isWithinRange(mob, entity)));
+                .filter(entity -> mob != entity)
+                .filter(mob::canAttack)
+                .filter(entity -> isWithinRange(mob, entity));
     }
 
     // Sensor.isEntityAttackable is shit and doesn't account for the follow range attribute

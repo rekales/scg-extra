@@ -17,6 +17,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -156,6 +157,7 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity {
         this.level().getProfiler().push("cogJuggernautBrain");
         this.getBrain().tick((ServerLevel)this.level(), this);
         CogJuggernautAi.updateActivity(this);
+        this.setAggressive(getBrain().hasMemoryValue(MemoryModuleType.ATTACK_TARGET));
         this.level().getProfiler().pop();
         super.customServerAiStep();
     }
