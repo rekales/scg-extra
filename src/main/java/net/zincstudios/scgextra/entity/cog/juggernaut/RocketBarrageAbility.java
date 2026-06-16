@@ -8,7 +8,6 @@ import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
-import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.AbilityState;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.brain.PatchedEntityTracker;
@@ -27,6 +26,7 @@ public class RocketBarrageAbility extends Behavior<CogJuggernautEntity> {
     private final SimulatedGun gun;
 
     private int rocketsLeft = 0;
+    private long startTime = 0;
     private int recoveryTimer = 0;
 
     public RocketBarrageAbility() {
@@ -63,6 +63,7 @@ public class RocketBarrageAbility extends Behavior<CogJuggernautEntity> {
     @Override
     protected void start(ServerLevel level, CogJuggernautEntity mob, long gameTime) {
         this.rocketsLeft = 5;
+        this.startTime = gameTime;
         this.recoveryTimer = 20;
         mob.getBrain().setMemoryWithExpiry(
                 ModBrainMemories.ABILITY_STATE.get(),
@@ -81,6 +82,8 @@ public class RocketBarrageAbility extends Behavior<CogJuggernautEntity> {
     @SuppressWarnings("OptionalGetWithoutIsPresent") // because already handled on canStillUse
     @Override
     protected void tick(ServerLevel level, CogJuggernautEntity mob, long gameTime) {
+        if (gameTime-this.startTime < 30) return;
+
         Brain<?> brain = mob.getBrain();
         LivingEntity target = brain.getMemory(MemoryModuleType.ATTACK_TARGET).get();
 

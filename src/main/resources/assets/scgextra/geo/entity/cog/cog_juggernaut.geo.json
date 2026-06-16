@@ -105,6 +105,14 @@
 					]
 				},
 				{
+					"name": "eye_flash",
+					"parent": "chest",
+					"pivot": [-3, 44, -10.1],
+					"cubes": [
+						{"origin": [-14, 28, -10.1], "size": [22, 32, 0], "uv": [212, 0]}
+					]
+				},
+				{
 					"name": "gear",
 					"parent": "chest",
 					"pivot": [0, 38.51472, 15],

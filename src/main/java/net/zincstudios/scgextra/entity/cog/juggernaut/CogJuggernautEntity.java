@@ -47,6 +47,8 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity {
             SynchedEntityData.defineId(CogJuggernautEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> JET_DURATION = // Might be unnecessary
             SynchedEntityData.defineId(CogJuggernautEntity.class, EntityDataSerializers.INT);
+    private static final RawAnimation EFFECTS_BASE = RawAnimation.begin().thenPlayAndHold("effect.none");
+    private static final RawAnimation EYE_FLASH = RawAnimation.begin().thenPlay("effect.eye_flash");
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
 
@@ -60,6 +62,17 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity {
 
         if (!this.level().isClientSide()) {
             Optional<AbilityState> optional = this.getBrain().getMemory(ModBrainMemories.ABILITY_STATE.get());
+            if (optional.isPresent()) {
+                AbilityState abilityState = optional.get();
+                if (abilityState.isSame(JetBootsAbility.ABILITY_ID)) {
+                    this.setJetDuration((int) optional.get().getDuration(this.level()));
+                } else if (abilityState.isSame(RocketBarrageAbility.ABILITY_ID)) {
+                    if (abilityState.getDuration(this.level()) == 12) {
+                        this.triggerAnim("effects", "eye_flash");
+                    }
+                }
+            }
+
             if (optional.isPresent() && optional.get().isSame(JetBootsAbility.ABILITY_ID)) {
                 this.setJetDuration((int) optional.get().getDuration(this.level()));
             }
@@ -203,6 +216,11 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity {
             }
             return PlayState.STOP;
         }));
+
+        controllers.add(new AnimationController<>(this, "effects", 0,
+                state -> state.setAndContinue(EFFECTS_BASE))
+                .triggerableAnim("eye_flash", EYE_FLASH)
+        );
     }
 
     @Override
