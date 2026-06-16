@@ -250,9 +250,4 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity {
     protected SoundEvent getDeathSound() {
         return CogSounds.COG_JUGGERNAUT_DEAD.get();
     }
-
-//    @Override
-//    public Fallsounds getFallSounds() {
-//        return super.getFallSounds();
-//    }
 }

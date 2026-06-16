@@ -32,6 +32,7 @@ public class JetBootsAbility extends Behavior<CogJuggernautEntity> {
 
     private float targetRot = 0;
     private long startTime = 0;
+    private int recoveryTicks = 0;
 
     public JetBootsAbility() {
         this(DEFAULT_COOLDOWN_DURATION_TICKS);
@@ -50,7 +51,8 @@ public class JetBootsAbility extends Behavior<CogJuggernautEntity> {
     @Override
     protected boolean canStillUse(ServerLevel level, CogJuggernautEntity mob, long gameTime) {
         if (gameTime-this.startTime > this.jetStartTicks+10 && mob.onGround()) {
-            return false;
+            mob.setJetActive(false);
+            if (this.recoveryTicks-- <= 0) return false;
         }
 
         Brain<?> brain = mob.getBrain();
@@ -67,6 +69,7 @@ public class JetBootsAbility extends Behavior<CogJuggernautEntity> {
         PositionTracker target = brain.getMemory(ModBrainMemories.RELOCATE_TARGET.get()).get();
         this.targetRot = MobUtil.rotFromVec(target.currentPosition().subtract(mob.position()));
         this.startTime = gameTime;
+        this.recoveryTicks = 30;
 
         brain.setMemoryWithExpiry(
                 ModBrainMemories.ABILITY_STATE.get(),
