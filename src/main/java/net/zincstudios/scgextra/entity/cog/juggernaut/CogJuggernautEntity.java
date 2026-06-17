@@ -13,6 +13,11 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -35,10 +40,12 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.init.ModParticleTypes;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
+import java.util.Set;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -48,8 +55,18 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity, Gu
             SynchedEntityData.defineId(CogJuggernautEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> JET_DURATION = // Might be unnecessary
             SynchedEntityData.defineId(CogJuggernautEntity.class, EntityDataSerializers.INT);
+
     private static final RawAnimation EFFECTS_BASE = RawAnimation.begin().thenPlayAndHold("effect.none");
     private static final RawAnimation EYE_FLASH = RawAnimation.begin().thenPlay("effect.eye_flash");
+
+    private static final Set<MobEffect> IMMUNE_EFFECTS = Set.of(
+            MobEffects.MOVEMENT_SLOWDOWN,
+            MobEffects.LEVITATION,
+            ModEffects.DEAFENED.get(),
+            ModEffects.BLINDED.get(),
+            ModEffects.SULFUR_POISONING.get(),
+            ModEffects.LACERATED.get()
+    );
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
 
@@ -178,8 +195,24 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity, Gu
 
     @Override
     protected void checkFallDamage(double y, boolean onGround, BlockState state, BlockPos pos) {
-        if (this.isJetActive()) return;
+        if (this.isJetActive()) return;  // To cancel out sound, particle, and events
         super.checkFallDamage(y, onGround, state, pos);
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.is(DamageTypes.FALL) && this.isJetActive()) return false;
+        return super.hurt(source, amount);
+    }
+
+    @Override
+    protected void onEffectAdded(MobEffectInstance effectInstance, @Nullable Entity entity) {
+        super.onEffectAdded(effectInstance, entity);
+    }
+
+    @Override
+    public boolean canBeAffected(MobEffectInstance effectInstance) {
+        return super.canBeAffected(effectInstance) && !IMMUNE_EFFECTS.contains(effectInstance.getEffect());
     }
 
     @Override

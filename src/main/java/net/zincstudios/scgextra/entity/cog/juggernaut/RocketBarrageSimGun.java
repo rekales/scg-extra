@@ -56,7 +56,7 @@ public class RocketBarrageSimGun implements SimulatedGun {
         float projectileDamage = 5;
         double speedModifier = GunEnchantmentHelper.getProjectileSpeedModifier(this.gunStack);
         double speed = GunModifierHelper.getModifiedProjectileSpeed(this.gunStack, gun.getProjectile().getSpeed() * speedModifier);
-        speed = speed/2;
+        speed = speed/3;
 
         Vec3 startPos = shooter instanceof BulletSpawnOffset bso
                 ? shooter.position().add(bso.getBulletSpawnOffset())
@@ -75,7 +75,7 @@ public class RocketBarrageSimGun implements SimulatedGun {
             projectileEntity.getPersistentData().putFloat("AIDamageScale", 1.0F);
 
             Vec3 dir = SimulatedGun.addWeaponSpread(shooter, aimDir, gun.getProjectile().getSpread());
-            projectileEntity.setDeltaMovement(dir.x * speed, dir.y * speed, dir.z * speed);
+            projectileEntity.setDeltaMovement(dir.x * speed, dir.y * speed + 0.2F, dir.z * speed);
             projectileEntity.updateHeading();
             projectileEntity.setPos(startPos);
 
