@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.cog.gigantes;
+package net.zincstudios.scgextra.entity.common.goal;
 
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.Goal;

@@ -23,6 +23,7 @@ import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.Stunnable;
+import net.zincstudios.scgextra.entity.common.goal.MobHurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.goal.StunnedWithVisualGoal;
 import net.zincstudios.scgextra.sounds.CogSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
