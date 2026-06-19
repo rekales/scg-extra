@@ -3,10 +3,12 @@ package net.zincstudios.scgextra.entity;
 import com.mojang.serialization.Codec;
 import net.minecraft.world.entity.ai.behavior.PositionTracker;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.zincstudios.scgextra.SCGExtra;
+import net.zincstudios.scgextra.entity.common.gun.GunTarget;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
 
 import java.util.Optional;
@@ -33,6 +35,13 @@ public class ModBrainMemories {
             .register("ability_state", () -> new MemoryModuleType<>(Optional.of(AbilityState.CODEC)));
     public static final Supplier<MemoryModuleType<PositionTracker>> RELOCATE_TARGET = MEMORY_MODULE_TYPES
             .register("relocate_target", () -> new MemoryModuleType<>(Optional.empty()));
+
+    public static final Supplier<MemoryModuleType<GunTarget>> SHOOT_TARGET = MEMORY_MODULE_TYPES
+            .register("shoot_target", () -> new MemoryModuleType<>(Optional.empty()));
+    public static final Supplier<MemoryModuleType<Boolean>> HOLD_FIRE = MEMORY_MODULE_TYPES
+            .register("hold_fire", () -> new MemoryModuleType<>(Optional.of(Codec.BOOL)));
+    public static final Supplier<MemoryModuleType<Boolean>> TRIGGER_PULLED = MEMORY_MODULE_TYPES
+            .register("trigger_pulled", () -> new MemoryModuleType<>(Optional.of(Codec.BOOL)));
 
     // Mob Specific Memories
     public static final Supplier<MemoryModuleType<Boolean>> JET_BOOTS_COOLING_DOWN = MEMORY_MODULE_TYPES

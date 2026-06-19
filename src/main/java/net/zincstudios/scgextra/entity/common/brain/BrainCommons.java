@@ -1,0 +1,45 @@
+package net.zincstudios.scgextra.entity.common.brain;
+
+import com.google.common.collect.ImmutableList;
+import com.mojang.datafixers.util.Pair;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.behavior.*;
+import net.minecraft.world.entity.schedule.Activity;
+
+public class BrainCommons {
+
+    public static void initCoreActivity(Brain<? extends Mob> brain) {
+        brain.addActivity(Activity.CORE, 0, ImmutableList.of(
+                new LookAtTargetSink(45, 90),
+                new MoveToTargetSink())
+        );
+    }
+
+    public static void initGunnerCoreActivity(Brain<? extends Mob> brain) {
+        brain.addActivity(Activity.CORE, 0, ImmutableList.of(
+                new HandleSimulatedGun(3.2F),
+                new LookAtTargetSink(45, 90),
+                new MoveToTargetSink()
+        ));
+    }
+
+    // Not for flying and swimming mobs
+    public static void initIdleActivity(Brain<? extends PathfinderMob> brain) {
+        brain.addActivity(Activity.IDLE, 10, ImmutableList.of(
+                StartAttacking.create(BrainUtils::getHurtBy),
+                StartAttacking.create(BrainUtils::findNearestVisibleAttackablePlayer),
+                StartAttacking.create(BrainUtils::findNearestAttackableFactionEnemy),
+                new RunOne<>(ImmutableList.of(
+                        Pair.of(RandomStroll.stroll(1.0F), 2),
+                        Pair.of(SetWalkTargetFromLookTarget.create(1.0F, 3), 2),
+                        Pair.of(new DoNothing(30, 60), 1)
+                ))
+        ));
+    }
+
+    public static void updateActivity(Mob mob) {
+        mob.getBrain().setActiveActivityToFirstValid(ImmutableList.of(Activity.FIGHT, Activity.IDLE));
+    }
+}
