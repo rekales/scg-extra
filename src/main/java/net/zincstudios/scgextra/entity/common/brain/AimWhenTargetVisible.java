@@ -22,9 +22,9 @@ import static net.zincstudios.scgextra.entity.ModBrainMemories.MIN_AIM_TICKS;
  */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class AutoAimWhenTargetVisible extends Behavior<LivingEntity> {
+public class AimWhenTargetVisible extends Behavior<LivingEntity> {
 
-    public AutoAimWhenTargetVisible() {
+    public AimWhenTargetVisible() {
         super(ImmutableMap.of(
                 MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED,
                 MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT,

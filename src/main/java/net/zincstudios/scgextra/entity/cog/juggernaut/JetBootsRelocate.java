@@ -23,8 +23,9 @@ public class JetBootsRelocate {
                         builder.present(MemoryModuleType.ATTACK_TARGET),
                         builder.present(ModBrainMemories.WEAPON_IDEAL_RANGE.get()),
                         builder.registered(ModBrainMemories.RELOCATE_TARGET.get()),
-                        builder.absent(ModBrainMemories.JET_BOOTS_COOLING_DOWN.get())
-                ).apply(builder, (targetAcc, rangeAcc, relocateAcc, cdAcc) ->
+                        builder.absent(ModBrainMemories.JET_BOOTS_COOLING_DOWN.get()),
+                        builder.absent(ModBrainMemories.ABILITY_STATE.get())
+                ).apply(builder, (targetAcc, rangeAcc, relocateAcc, cdAcc, asAcc) ->
                         ((level, mob, gameTime) -> {
                             LivingEntity target = builder.get(targetAcc);
                             float idealRange = builder.get(rangeAcc);

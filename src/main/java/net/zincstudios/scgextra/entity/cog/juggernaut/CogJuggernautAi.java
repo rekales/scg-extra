@@ -34,7 +34,6 @@ public class CogJuggernautAi {
             MemoryModuleType.WALK_TARGET,
             MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE,
             MemoryModuleType.PATH,
-            MemoryModuleType.ATTACK_COOLING_DOWN,
             ModBrainMemories.AIM_TICKS.get(),
             ModBrainMemories.WEAPON_IDEAL_RANGE.get(),
             ModBrainMemories.WEAPON_MAX_RANGE.get(),
@@ -60,7 +59,7 @@ public class CogJuggernautAi {
                 StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValid(mob, target, false)),
                 AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), true),
                 GetCloseToTarget.create(5, 1.0F),
-                new AutoAimWhenTargetVisible(),
+                new AimWhenTargetVisible(),
                 JetBootsRelocate.create(),
                 new RocketBarrageAbility(),
                 new ConditionalBehavior<>(
