@@ -11,7 +11,9 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.zincstudios.scgextra.entity.AbilityState;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.brain.PatchedEntityTracker;
+import net.zincstudios.scgextra.entity.common.gun.CustomSimulatedGun;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
+import top.ribs.scguns.init.ModItems;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -42,7 +44,11 @@ public class RocketBarrageAbility extends Behavior<CogJuggernautEntity> {
                 ModBrainMemories.ABILITY_STATE.get(), MemoryStatus.REGISTERED
         ), 40);
         this.cooldownDuration = cooldownDuration;
-        this.gun = new RocketBarrageSimGun();
+        this.gun = new CustomSimulatedGun.Builder(ModItems.ROCKET_RIFLE.get().getGun())
+                .projectileFactory(RocketBarrageProjectileEntity::new)
+                .velocityModifier(vec -> vec.scale(1/3f).add(0, 0.2F, 0))
+                .fireRate(5)
+                .build();
     }
 
     @Override

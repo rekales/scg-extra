@@ -18,12 +18,19 @@ import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
 import net.zincstudios.scgextra.entity.fac.FACEntities;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
+import top.ribs.scguns.item.GunItem;
+
+import java.util.Set;
 
 @SuppressWarnings("unused")
 public class ModItems {
 
     private static final DeferredRegister<Item> ITEMS = DeferredRegister
             .create(ForgeRegistries.ITEMS, SCGExtra.MOD_ID);
+
+    public static final RegistryObject<GunItem> PLACEHOLDER_GUN = ITEMS.register("placeholder_gun",
+            () -> new GunItem(new Item.Properties())
+    );
 
     // NOTE: custom tier or nah?
     public static final RegistryObject<AtlanticMaceItem> ATLANTIC_MACE = ITEMS.register("atlantic_mace",
@@ -129,7 +136,12 @@ public class ModItems {
 
     private static void buildContents(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CREATIVE_TAB.getKey()) {
+            Set<RegistryObject<GunItem>> notInTab = Set.of(  // Turn to RegistryObject<Item> later
+                    PLACEHOLDER_GUN
+            );
+
             ITEMS.getEntries().stream()
+                    .filter(item -> !notInTab.contains(item))
                     .map(RegistryObject::get)
                     .forEach(event::accept);
         }

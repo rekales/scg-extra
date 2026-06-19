@@ -38,25 +38,27 @@ public class HeldSimulatedGun implements SimulatedGun {
     protected final int burstInterval;
     protected final float idealRange;
     protected final float maxRange;
-    private final IProjectileFactory projectileFactory;
+    private final ProjectileFactory projectileFactory;
 
     protected int burstCooldown = 0;
     protected int burstLeft = 0;
     protected int nextAttack = 0;  // tickCount timestamp
 
     public HeldSimulatedGun(ItemStack gunStack) {
-        if (!(gunStack.getItem() instanceof GunItem)) {
+        if (!(gunStack.getItem() instanceof GunItem gunItem)) {
             throw new IllegalArgumentException("gunStack is not a GunItem");
         }
         this.gunStack = gunStack;
-        Gun gun = ((GunItem) gunStack.getItem()).getGun();
+        Gun gun = gunItem.getGun();
         this.fireRate = gun.getGeneral().getRate();
         this.burstAmount = gun.getGeneral().getBurstAmount();
         this.burstInterval = gun.getGeneral().getBurstCooldown();
         this.idealRange = (float) gun.getIdealAttackRange();
         this.maxRange = this.idealRange * 1.5f;
-        this.projectileFactory = ProjectileManager.getInstance().getFactory(
+        IProjectileFactory projFac = ProjectileManager.getInstance().getFactory(
                 ForgeRegistries.ITEMS.getKey(Objects.requireNonNull(gun.getProjectile().getItem())));
+        this.projectileFactory = (level, entity, gunBase) ->
+                projFac.create(level, entity, gunStack, gunItem, gunBase);
     }
 
     public HeldSimulatedGun(GunItem gunItem) {
@@ -104,7 +106,7 @@ public class HeldSimulatedGun implements SimulatedGun {
         ProjectileEntity[] projectiles = new ProjectileEntity[count];
 
         for (int i = 0; i < count; ++i) {
-            ProjectileEntity projectileEntity = this.projectileFactory.create(level, shooter, this.gunStack, gunItem, gun);
+            ProjectileEntity projectileEntity = this.projectileFactory.create(level, shooter, gun);
             projectileEntity.setWeapon(this.gunStack);
             projectileEntity.setAdditionalDamage(projectileDamage);
             projectileEntity.getPersistentData().putFloat("AIDamageScale", damageMultiplier);
