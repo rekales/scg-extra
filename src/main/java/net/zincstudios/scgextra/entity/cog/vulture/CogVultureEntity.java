@@ -114,7 +114,7 @@ public class CogVultureEntity extends Monster implements GeoEntity, Gunner, Bull
     }
 
     @Override
-    public void onGunFire(LivingEntity target) {
+    public void onGunFire(SimulatedGun gun, Vec3 targetPos) {
         this.bulletSpawnLeft = !this.bulletSpawnLeft;
     }
 

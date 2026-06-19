@@ -11,6 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.zincstudios.scgextra.entity.asgharian.BulletSpawnOffset;
+import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.item.ModItems;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.common.Gun;
@@ -58,33 +59,40 @@ public class CustomSimulatedGun implements SimulatedGun {
     }
 
     @Override
-    public boolean tickFire(LivingEntity shooter, LivingEntity target, float accuracyModifier, boolean firing) {
+    public boolean tickFire(LivingEntity shooter, Vec3 targetPos, float accuracyModifier, boolean firing) {
         int tickCount = shooter.tickCount;
 
         if (this.burstLeft > 0 && this.burstCooldown-- <= 0) {
-            fireProjectiles(shooter, target, accuracyModifier);
+            fireProjectiles(shooter, targetPos, accuracyModifier);
             this.burstLeft--;
             this.burstCooldown = this.burstInterval;
+
+            if (shooter instanceof Gunner gunner) {
+                gunner.onGunFire(this ,targetPos);
+            }
             return true;
         }
 
         if (this.nextAttack <= tickCount && firing) {
-            fireProjectiles(shooter, target, accuracyModifier);
+            fireProjectiles(shooter, targetPos, accuracyModifier);
             this.nextAttack = tickCount + this.fireRate;
+
+            if (shooter instanceof Gunner gunner) {
+                gunner.onGunFire(this ,targetPos);
+            }
             return true;
         }
 
         return false;
     }
 
-    public void fireProjectiles(LivingEntity shooter, LivingEntity target, float accuracyModifier) {
+    public void fireProjectiles(LivingEntity shooter, Vec3 targetPos, float accuracyModifier) {
         Level level = shooter.level();
         Gun gun = this.gunBase;
 
         Vec3 startPos = shooter instanceof BulletSpawnOffset bso
                 ? shooter.position().add(bso.getBulletSpawnOffset())
                 : shooter.getEyePosition();
-        Vec3 targetPos = SimulatedGun.getCenterMassPos(target);
         Vec3 aimDir = SimulatedGun.getDirectionVector(startPos, targetPos);
         aimDir = SimulatedGun.addAimError(shooter, aimDir, accuracyModifier);
 

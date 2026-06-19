@@ -1,6 +1,7 @@
 package net.zincstudios.scgextra.entity.common.gun;
 
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.item.GunItem;
 
@@ -22,7 +23,7 @@ public class ReloadingHeldSimulatedGun extends HeldSimulatedGun {
     }
 
     @Override
-    public boolean tickFire(LivingEntity shooter, LivingEntity target, float accuracyModifier, boolean firing) {
-        return false;
+    public boolean tickFire(LivingEntity shooter, Vec3 targetPos, float accuracyModifier, boolean firing) {
+        return super.tickFire(shooter, targetPos, accuracyModifier, firing);
     }
 }

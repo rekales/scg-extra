@@ -98,7 +98,7 @@ public class RocketBarrageAbility extends Behavior<CogJuggernautEntity> {
         }
 
         if (this.rocketsLeft > 0) {
-            if (gun.tickFire(mob, target, 2F, true)) {
+            if (gun.tickFire(mob, SimulatedGun.getCenterMassPos(target), 2F, true)) {
                 this.rocketsLeft--;
             }
         } else {

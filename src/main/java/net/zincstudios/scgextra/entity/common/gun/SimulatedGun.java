@@ -14,7 +14,7 @@ public interface SimulatedGun {
     /**
      * @return true if fired a projectile
      */
-    boolean tickFire(LivingEntity shooter, LivingEntity target, float accuracyModifier, boolean firing);
+    boolean tickFire(LivingEntity shooter, Vec3 targetPos, float accuracyModifier, boolean firing);
 
     boolean hasChanged(LivingEntity entity);
 
@@ -44,17 +44,6 @@ public interface SimulatedGun {
             case NORMAL -> 1.5F;
             case HARD -> 1.0F;
         };
-    }
-
-    static Vec3 getTargetLeadPos(LivingEntity shooter, LivingEntity target, float projectileSpeed) {
-        Vec3 targetPos = getCenterMassPos(target);
-        Vec3 targetVelocity = target.getDeltaMovement();
-        Vec3 shooterPos = shooter.position().add(0.0F, shooter.getEyeHeight(), 0.0F);
-        Vec3 toTarget = targetPos.subtract(shooterPos);
-        double distance = toTarget.length();
-        double timeToHit = distance / projectileSpeed;
-        Vec3 predictedPos = targetPos.add(targetVelocity.scale(timeToHit));
-        return predictedPos.subtract(shooterPos).normalize();
     }
 
     static Vec3 getCenterMassPos(LivingEntity target) {
