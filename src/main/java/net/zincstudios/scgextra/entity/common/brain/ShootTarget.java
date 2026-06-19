@@ -43,7 +43,7 @@ public class ShootTarget extends Behavior<Mob> {
                 MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT,
                 ModBrainMemories.AIM_TICKS.get(), MemoryStatus.VALUE_PRESENT,
                 ModBrainMemories.SIMULATED_GUN.get(), MemoryStatus.VALUE_PRESENT
-        ), 80);
+        ));
         this.aimThreshold = aimThreshold;
         this.accuracyFunc = accuracyFunc;
         this.triggerSampler = triggerSampler;

@@ -12,22 +12,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.asgharian.BulletSpawnOffset;
-import net.zincstudios.scgextra.entity.cog.juggernaut.CogJuggernautAi;
-import net.zincstudios.scgextra.entity.cog.juggernaut.CogJuggernautEntity;
 import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.brain.BrainUtils;
-import net.zincstudios.scgextra.entity.common.goal.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.gun.CustomGunHolder;
 import net.zincstudios.scgextra.entity.common.gun.CustomSimulatedGun;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
@@ -59,7 +49,7 @@ public class CogVultureEntity extends Monster implements GeoEntity, Gunner, Bull
     public CogVultureEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
         this.customGun = new CustomSimulatedGun.Builder(ModItems.PRUSH_GUN.get().getGun())
-//                .projectileDamage(3)
+                .projectileDamage(3)
                 .fireRate(2)
                 .maxRange(10)
                 .idealRange(8)
@@ -88,7 +78,7 @@ public class CogVultureEntity extends Monster implements GeoEntity, Gunner, Bull
 
     @Override
     protected void customServerAiStep() {
-        this.level().getProfiler().push("cogJuggernautBrain");
+        this.level().getProfiler().push("cogVultureBrain");
         this.getBrain().tick((ServerLevel)this.level(), this);
         BrainUtils.Standard.updateActivity(this);
         this.level().getProfiler().pop();
