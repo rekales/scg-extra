@@ -9,8 +9,8 @@ import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
-import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
+import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.gun.MarkovTriggerSampler;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
 import net.zincstudios.scgextra.entity.common.gun.TriggerStateSampler;
@@ -57,18 +57,23 @@ public class ShootTarget extends Behavior<Mob> {
                 && brain.hasMemoryValue(ModBrainMemories.SIMULATED_GUN.get());
     }
 
-    @SuppressWarnings({"OptionalGetWithoutIsPresent", "RedundantIfStatement"}) // because already handled on canStillUse
+    @SuppressWarnings("OptionalGetWithoutIsPresent") // because already handled on canStillUse
     @Override
     protected void tick(ServerLevel level, Mob mob, long gameTime) {
         Brain<?> brain = mob.getBrain();
         LivingEntity target = brain.getMemory(MemoryModuleType.ATTACK_TARGET).get();
         int aimTicks = brain.getMemory(ModBrainMemories.AIM_TICKS.get()).get();
         SimulatedGun simGun = brain.getMemory(ModBrainMemories.SIMULATED_GUN.get()).get();
+        boolean firedGun;
 
         if (aimTicks >= this.aimThreshold && this.triggerSampler.next(mob.getRandom())) {
-            simGun.tickFire(mob, target, this.accuracyFunc.apply(mob), true);
+            firedGun = simGun.tickFire(mob, target, this.accuracyFunc.apply(mob), true);
         } else {
-            simGun.tickFire(mob, target, this.accuracyFunc.apply(mob), false);
+            firedGun = simGun.tickFire(mob, target, this.accuracyFunc.apply(mob), false);
+        }
+
+        if (firedGun && mob instanceof Gunner gunner) {
+            gunner.onGunFire(target);
         }
     }
 }

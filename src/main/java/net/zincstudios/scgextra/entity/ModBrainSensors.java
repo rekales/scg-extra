@@ -5,6 +5,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.zincstudios.scgextra.SCGExtra;
+import net.zincstudios.scgextra.entity.common.brain.CustomGunSensor;
 import net.zincstudios.scgextra.entity.common.brain.HeldGunSensor;
 
 import java.util.function.Supplier;
@@ -18,6 +19,8 @@ public class ModBrainSensors {
             .register("held_gun", () -> new SensorType<>(HeldGunSensor::new));
     public static final Supplier<SensorType<HeldGunSensor>> HELD_GUN_RAPID = SENSOR_TYPES
             .register("held_gun_rapid", () -> new SensorType<>(() -> new HeldGunSensor(1)));
+    public static final Supplier<SensorType<CustomGunSensor>> CUSTOM_GUN = SENSOR_TYPES
+            .register("custom_gun", () -> new SensorType<>(CustomGunSensor::new));
 
     public static void register(IEventBus modEventBus) {
         SENSOR_TYPES.register(modEventBus);
