@@ -17,6 +17,8 @@ public class ModEffects {
     
     public static final RegistryObject<WhalerRegenEffect> WHALER_REGEN_EFFECT = MOB_EFFECTS.register("whaler_regen_effect", () -> new WhalerRegenEffect(MobEffectCategory.BENEFICIAL, 0x00FF00));
 
+    public static final RegistryObject<StunnedEffect> STUNNED_EFFECT = MOB_EFFECTS.register("stunned", () -> new StunnedEffect(MobEffectCategory.HARMFUL, 0x000000));
+
     public static void register(IEventBus eventBus){
         MOB_EFFECTS.register(eventBus);
     }
