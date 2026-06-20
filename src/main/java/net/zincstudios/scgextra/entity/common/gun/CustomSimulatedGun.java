@@ -46,6 +46,7 @@ public class CustomSimulatedGun implements SimulatedGun {
     private int nextAttack = 0;  // tickCount timestamp
     private int ammoCount = 0;
     private int nextReload = 0;  // tickCount timestamp
+    private boolean reloading = false;
 
     protected CustomSimulatedGun(Gun gunBase, int fireRate, int burstAmount, int burstInterval,
                                  double projectileSpeed, float projectileDamage, float idealRange,
@@ -69,42 +70,42 @@ public class CustomSimulatedGun implements SimulatedGun {
     public boolean tickFire(LivingEntity shooter, Vec3 targetPos, float accuracyModifier, boolean firing) {
         int tickCount = shooter.tickCount;
 
-        if (this.nextReload >= tickCount) return false;
-
-        if (this.ammoCount <= 0) {
-            this.reloadAmmo();
-            this.burstLeft = 0;
-            this.nextReload = tickCount + this.reloadTime;
-            return false;
-        }
-
-        if (this.burstLeft > 0 && --this.burstCooldown <= 0) {
-            fireProjectiles(shooter, targetPos, accuracyModifier);
-            this.burstLeft--;
-            this.burstCooldown = this.burstInterval;
-
-            if (shooter instanceof Gunner gunner) {
-                gunner.onGunFire(this ,targetPos);
-            }
-            this.ammoCount--;
-            return true;
-        }
-
-        if (this.nextAttack <= tickCount && firing) {
-            fireProjectiles(shooter, targetPos, accuracyModifier);
-            this.nextAttack = tickCount + this.fireRate;
-            if (this.burstAmount > 1) {
-                this.burstLeft = this.burstAmount-1;
+        if (this.ammoCount > 0) {
+            if (this.burstLeft > 0 && --this.burstCooldown <= 0) {
+                fireProjectiles(shooter, targetPos, accuracyModifier);
+                this.burstLeft--;
                 this.burstCooldown = this.burstInterval;
+
+                if (shooter instanceof Gunner gunner) {
+                    gunner.onGunFire(this ,targetPos);
+                }
+                this.ammoCount--;
+                return true;
             }
 
-            if (shooter instanceof Gunner gunner) {
-                gunner.onGunFire(this ,targetPos);
+            if (this.nextAttack <= tickCount && firing) {
+                fireProjectiles(shooter, targetPos, accuracyModifier);
+                this.nextAttack = tickCount + this.fireRate;
+                if (this.burstAmount > 1) {
+                    this.burstLeft = this.burstAmount-1;
+                    this.burstCooldown = this.burstInterval;
+                }
+
+                if (shooter instanceof Gunner gunner) {
+                    gunner.onGunFire(this ,targetPos);
+                }
+                this.ammoCount--;
+                return true;
             }
-            this.ammoCount--;
-            return true;
+        } else {
+            if (!this.reloading) {
+                this.reloading = true;
+                this.burstLeft = 0;
+                this.nextReload = tickCount + this.reloadTime;
+            } else if (this.nextReload >= tickCount) {
+                this.reloadAmmo();
+            }
         }
-
         return false;
     }
 
