@@ -1,30 +1,27 @@
 package net.zincstudios.scgextra.entity.cog.bombardier;
 
+import com.mojang.serialization.Dynamic;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.SCGExtra;
-import net.zincstudios.scgextra.entity.Faction;
-import net.zincstudios.scgextra.entity.cog.venator.FleeTargetGoal;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.Stunnable;
-import net.zincstudios.scgextra.entity.common.goal.HurtByNonFactionGoal;
-import net.zincstudios.scgextra.entity.common.goal.StunnedWithVisualGoal;
+import net.zincstudios.scgextra.entity.common.gun.CustomGunHolder;
+import net.zincstudios.scgextra.entity.common.gun.CustomSimulatedGun;
+import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
 import net.zincstudios.scgextra.sounds.CogSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -33,17 +30,19 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import top.ribs.scguns.init.ModItems;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CogBombardierEntity extends GunnerEntity implements GeoEntity, Stunnable, HeadShotHandler {
+public class CogBombardierEntity extends GunnerEntity implements GeoEntity, Stunnable, HeadShotHandler, CustomGunHolder {
 
     private static final int STUN_DURATION = 60;
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
+    private final SimulatedGun customGun;
 
     // Server-side only for stunnable handling
     private int headshotCounter = 0;
@@ -52,30 +51,15 @@ public class CogBombardierEntity extends GunnerEntity implements GeoEntity, Stun
 
     public CogBombardierEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
-    }
-
-    @Override
-    protected void registerGoals() {
-        this.goalSelector.addGoal(1, new StunnedWithVisualGoal<>(this));
-        this.goalSelector.addGoal(2, new FleeTargetGoal(this, 10));
-        this.goalSelector.addGoal(3, new CogBombardierAlertFactionGoal(this)
-                .cooldown(600)
-                .recovery(35)
-        );
-        this.goalSelector.addGoal(4, new CogBombardierAttackGoal(this, 120, 6)
+        this.customGun = new CustomSimulatedGun.Builder(ModItems.ROCKET_RIFLE.get().getGun())
+                .projectileDamage(10)
+                .fireRate(10)
                 .maxRange(25)
-                .approachDist(20)
-                .attackInterval(10)
-        );
-        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
-
-        this.targetSelector.addGoal(2, new HurtByNonFactionGoal(this));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, true,
-                player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
-                entity -> Faction.isEnemies(this, entity)));
+                .idealRange(20)
+                .ammoCapacity(6)
+                .reloadTime(120)
+                .velocityModifier(vec -> new Vec3(vec.x/4, (vec.y/4) * 1.2 + 0.1, vec.z/4))
+                .build();
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -92,6 +76,28 @@ public class CogBombardierEntity extends GunnerEntity implements GeoEntity, Stun
         }
 
         return super.hurt(source, amount);
+    }
+
+    protected Brain<?> makeBrain(Dynamic<?> dynamic) {
+        return CogBombardierAi.makeBrain(this, this.brainProvider().makeBrain(dynamic));
+    }
+
+    @SuppressWarnings("unchecked")
+    public Brain<CogBombardierEntity> getBrain() {
+        return (Brain<CogBombardierEntity>) super.getBrain();
+    }
+
+    protected Brain.Provider<CogBombardierEntity> brainProvider() {
+        return Brain.provider(CogBombardierAi.MEMORY_TYPES, CogBombardierAi.SENSOR_TYPES);
+    }
+
+    @Override
+    protected void customServerAiStep() {
+        this.level().getProfiler().push("cogVenatorBrain");
+        this.getBrain().tick((ServerLevel)this.level(), this);
+        CogBombardierAi.updateActivity(this);
+        this.level().getProfiler().pop();
+        super.customServerAiStep();
     }
 
     @Override
@@ -131,6 +137,11 @@ public class CogBombardierEntity extends GunnerEntity implements GeoEntity, Stun
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.geocache;
+    }
+
+    @Override
+    public SimulatedGun getCustomGun() {
+        return this.customGun;
     }
 
     @Override

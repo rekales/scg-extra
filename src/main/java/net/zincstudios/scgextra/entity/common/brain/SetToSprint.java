@@ -18,7 +18,7 @@ public class SetToSprint extends Behavior<LivingEntity> {
     public SetToSprint() {
         super(ImmutableMap.of(
                 MemoryModuleType.WALK_TARGET, MemoryStatus.VALUE_PRESENT
-        ), 20);
+        ), 10);
     }
 
     @Override
