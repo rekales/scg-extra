@@ -17,14 +17,6 @@ public class BrainCommons {
         );
     }
 
-    public static void initGunnerCoreActivity(Brain<? extends Mob> brain) {
-        brain.addActivity(Activity.CORE, 0, ImmutableList.of(
-                new HandleSimulatedGun(3.2F),
-                new LookAtTargetSink(45, 90),
-                new MoveToTargetSink()
-        ));
-    }
-
     // Not for flying and swimming mobs
     public static void initIdleActivity(Brain<? extends PathfinderMob> brain) {
         brain.addActivity(Activity.IDLE, 10, ImmutableList.of(
