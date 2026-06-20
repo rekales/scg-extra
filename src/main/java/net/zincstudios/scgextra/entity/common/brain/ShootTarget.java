@@ -11,7 +11,6 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
-import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.gun.MarkovTriggerSampler;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
 import net.zincstudios.scgextra.entity.common.gun.TriggerStateSampler;
@@ -65,7 +64,6 @@ public class ShootTarget extends Behavior<Mob> {
         LivingEntity target = brain.getMemory(MemoryModuleType.ATTACK_TARGET).get();
         int aimTicks = brain.getMemory(ModBrainMemories.AIM_TICKS.get()).get();
         SimulatedGun simGun = brain.getMemory(ModBrainMemories.SIMULATED_GUN.get()).get();
-        boolean firedGun;
         Vec3 targetPos = SimulatedGun.getCenterMassPos(target);
 
         if (aimTicks >= this.aimThreshold && this.triggerSampler.next(mob.getRandom())) {

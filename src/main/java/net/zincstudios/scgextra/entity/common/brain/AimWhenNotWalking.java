@@ -14,6 +14,8 @@ import net.zincstudios.scgextra.entity.ModBrainMemories;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import java.util.function.Predicate;
+
 import static net.zincstudios.scgextra.entity.ModBrainMemories.MAX_AIM_TICKS;
 import static net.zincstudios.scgextra.entity.ModBrainMemories.MIN_AIM_TICKS;
 
@@ -21,18 +23,31 @@ import static net.zincstudios.scgextra.entity.ModBrainMemories.MIN_AIM_TICKS;
 @MethodsReturnNonnullByDefault
 public class AimWhenNotWalking extends Behavior<LivingEntity> {
 
+    private final Predicate<LivingEntity> canAim;
+
     public AimWhenNotWalking() {
+        this(entity -> true);
+    }
+
+    public AimWhenNotWalking(Predicate<LivingEntity> canAim) {
         super(ImmutableMap.of(
                 MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED,
                 MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT,
                 MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED,
                 ModBrainMemories.AIM_TICKS.get(), MemoryStatus.REGISTERED
         ));
+        this.canAim = canAim;
+    }
+
+    @Override
+    protected boolean checkExtraStartConditions(ServerLevel level, LivingEntity entity) {
+        return this.canAim.test(entity);
     }
 
     @Override
     protected boolean canStillUse(ServerLevel level, LivingEntity entity, long gameTime) {
-        return entity.getBrain().hasMemoryValue(MemoryModuleType.ATTACK_TARGET);
+        return this.canAim.test(entity)
+                && entity.getBrain().hasMemoryValue(MemoryModuleType.ATTACK_TARGET);
     }
 
     @Override
