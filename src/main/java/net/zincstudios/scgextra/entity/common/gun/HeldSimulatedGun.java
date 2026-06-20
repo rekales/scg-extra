@@ -29,6 +29,7 @@ import top.ribs.scguns.util.GunModifierHelper;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
+// Doesn't do reload logic
 @ParametersAreNonnullByDefault
 public class HeldSimulatedGun implements SimulatedGun {
 
@@ -83,6 +84,10 @@ public class HeldSimulatedGun implements SimulatedGun {
         if (this.nextAttack <= tickCount && firing) {
             fireProjectiles(shooter, targetPos, accuracyModifier);
             this.nextAttack = tickCount + this.fireRate;
+            if (this.burstAmount > 1) {
+                this.burstLeft = this.burstAmount-1;
+                this.burstCooldown = this.burstInterval;
+            }
 
             if (shooter instanceof Gunner gunner) {
                 gunner.onGunFire(this ,targetPos);
@@ -187,4 +192,17 @@ public class HeldSimulatedGun implements SimulatedGun {
     public float getIdealRange() {
         return this.idealRange;
     }
+
+    @Override
+    public int getAmmoCapacity() {
+        return 1;
+    }
+
+    @Override
+    public int getAmmoCount() {
+        return 1;
+    }
+
+    @Override
+    public void setAmmoCount(int ammoCount) {}
 }

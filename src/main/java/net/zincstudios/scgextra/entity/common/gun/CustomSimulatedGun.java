@@ -28,30 +28,37 @@ import java.util.function.Function;
 
 public class CustomSimulatedGun implements SimulatedGun {
 
-    protected final Gun gunBase;
-    protected final int fireRate;
-    protected final int burstAmount;
-    protected final int burstInterval;
-    protected final double projectileSpeed;
-    protected final float additionalDamage;
-    protected final float idealRange;
-    protected final float maxRange;
-    protected final ProjectileFactory projectileFactory;
-    protected final Function<Vec3, Vec3> velocityModifier;
+    private final Gun gunBase;
+    private final int fireRate;
+    private final int burstAmount;
+    private final int burstInterval;
+    private final double projectileSpeed;
+    private final float additionalDamage;
+    private final int ammoCapacity;
+    private final int reloadTime;
+    private final float idealRange;
+    private final float maxRange;
+    private final ProjectileFactory projectileFactory;
+    private final Function<Vec3, Vec3> velocityModifier;
 
-    protected int burstCooldown = 0;
-    protected int burstLeft = 0;
-    protected int nextAttack = 0;  // tickCount timestamp
+    private int burstCooldown = 0;
+    private int burstLeft = 0;
+    private int nextAttack = 0;  // tickCount timestamp
+    private int ammoCount = 0;
+    private int nextReload = 0;  // tickCount timestamp
 
     protected CustomSimulatedGun(Gun gunBase, int fireRate, int burstAmount, int burstInterval,
-                              double projectileSpeed, float projectileDamage, float idealRange,
-                              float maxRange, ProjectileFactory projectileFactory, Function<Vec3, Vec3> velocityModifier) {
+                                 double projectileSpeed, float projectileDamage, float idealRange,
+                                 float maxRange, ProjectileFactory projectileFactory, Function<Vec3, Vec3> velocityModifier,
+                                 int ammoCapacity, int reloadTime) {
         this.gunBase = gunBase;
         this.fireRate = fireRate;
         this.burstAmount = burstAmount;
         this.burstInterval = burstInterval;
         this.projectileSpeed = projectileSpeed;
         this.additionalDamage = projectileDamage - gunBase.getProjectile().getDamage();
+        this.ammoCapacity = ammoCapacity;
+        this.reloadTime = reloadTime;
         this.idealRange = idealRange;
         this.maxRange = maxRange;
         this.projectileFactory = projectileFactory;
@@ -62,7 +69,16 @@ public class CustomSimulatedGun implements SimulatedGun {
     public boolean tickFire(LivingEntity shooter, Vec3 targetPos, float accuracyModifier, boolean firing) {
         int tickCount = shooter.tickCount;
 
-        if (this.burstLeft > 0 && this.burstCooldown-- <= 0) {
+        if (this.nextReload >= tickCount) return false;
+
+        if (this.ammoCount <= 0) {
+            this.reloadAmmo();
+            this.burstLeft = 0;
+            this.nextReload = tickCount + this.reloadTime;
+            return false;
+        }
+
+        if (this.burstLeft > 0 && --this.burstCooldown <= 0) {
             fireProjectiles(shooter, targetPos, accuracyModifier);
             this.burstLeft--;
             this.burstCooldown = this.burstInterval;
@@ -70,16 +86,22 @@ public class CustomSimulatedGun implements SimulatedGun {
             if (shooter instanceof Gunner gunner) {
                 gunner.onGunFire(this ,targetPos);
             }
+            this.ammoCount--;
             return true;
         }
 
         if (this.nextAttack <= tickCount && firing) {
             fireProjectiles(shooter, targetPos, accuracyModifier);
             this.nextAttack = tickCount + this.fireRate;
+            if (this.burstAmount > 1) {
+                this.burstLeft = this.burstAmount-1;
+                this.burstCooldown = this.burstInterval;
+            }
 
             if (shooter instanceof Gunner gunner) {
                 gunner.onGunFire(this ,targetPos);
             }
+            this.ammoCount--;
             return true;
         }
 
@@ -174,6 +196,21 @@ public class CustomSimulatedGun implements SimulatedGun {
         return this.idealRange;
     }
 
+    @Override
+    public int getAmmoCapacity() {
+        return this.ammoCapacity;
+    }
+
+    @Override
+    public int getAmmoCount() {
+        return this.ammoCount;
+    }
+
+    @Override
+    public void setAmmoCount(int ammoCount) {
+        this.ammoCount = ammoCount;
+    }
+
     // because java is shit and without named default parameters
     @SuppressWarnings("unused")
     public static class Builder {
@@ -183,6 +220,8 @@ public class CustomSimulatedGun implements SimulatedGun {
         private int burstInterval;
         private double projectileSpeed;
         private float projectileDamage;
+        private int ammoCapacity;
+        private int reloadTime;
         private float idealRange;
         private float maxRange;
         private ProjectileFactory projectileFactory;
@@ -195,6 +234,8 @@ public class CustomSimulatedGun implements SimulatedGun {
             this.burstInterval = gunBase.getGeneral().getBurstCooldown();
             this.projectileSpeed = gunBase.getProjectile().getSpeed();
             this.projectileDamage = gunBase.getProjectile().getDamage();
+            this.ammoCapacity = Integer.MAX_VALUE;
+            this.reloadTime = 1;
             this.idealRange = (float) gunBase.getIdealAttackRange();
             this.maxRange = this.idealRange * 1.5f;
             IProjectileFactory projFac = ProjectileManager.getInstance().getFactory(
@@ -225,6 +266,12 @@ public class CustomSimulatedGun implements SimulatedGun {
         public Builder maxRange(float maxRange) {
             this.maxRange = maxRange; return this;
         }
+        public Builder ammoCapacity(int ammoCapacity) {
+            this.ammoCapacity = ammoCapacity; return this;
+        }
+        public Builder reloadTime(int reloadTime) {
+            this.reloadTime = reloadTime; return this;
+        }
         public Builder projectileFactory(ProjectileFactory projectileFactory) {
             this.projectileFactory = projectileFactory; return this;
         }
@@ -234,7 +281,8 @@ public class CustomSimulatedGun implements SimulatedGun {
 
         public CustomSimulatedGun build() {
             return new CustomSimulatedGun(this.gunBase, this.fireRate, this.burstAmount, this.burstInterval,
-                    this.projectileSpeed, this.projectileDamage, this.idealRange, this.maxRange, this.projectileFactory, this.velocityModifier);
+                    this.projectileSpeed, this.projectileDamage, this.idealRange, this.maxRange, this.projectileFactory,
+                    this.velocityModifier, this.ammoCapacity, this.reloadTime);
         }
     }
 }

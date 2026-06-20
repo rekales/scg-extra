@@ -22,6 +22,16 @@ public interface SimulatedGun {
 
     float getIdealRange();
 
+    int getAmmoCapacity();
+
+    int getAmmoCount();
+
+    void setAmmoCount(int ammoCount);
+
+    default void reloadAmmo() {
+        this.setAmmoCount(this.getAmmoCapacity());
+    }
+
     static float getMobDamageMultiplier(Level level) {
         float difficultyDamageMultiplier = getDifficultyDamageMultiplier(level.getDifficulty());
         float configDamageMultiplier = Config.COMMON.gameplay.mobGunDamageMultiplier.get().floatValue();
