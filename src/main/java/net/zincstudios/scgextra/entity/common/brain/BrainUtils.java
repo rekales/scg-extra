@@ -2,7 +2,6 @@ package net.zincstudios.scgextra.entity.common.brain;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
@@ -14,11 +13,8 @@ import net.minecraft.world.entity.ai.memory.NearestVisibleLivingEntities;
 import net.minecraft.world.entity.schedule.Activity;
 import net.zincstudios.scgextra.entity.Faction;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 public class BrainUtils {
 
     public static class Standard {

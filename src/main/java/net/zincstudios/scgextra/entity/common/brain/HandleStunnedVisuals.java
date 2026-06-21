@@ -2,7 +2,6 @@ package net.zincstudios.scgextra.entity.common.brain;
 
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.ChatFormatting;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -13,10 +12,6 @@ import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 public class HandleStunnedVisuals extends Behavior<LivingEntity> {
 
     public static final String TEAM_NAME = "stunned_red_outline";

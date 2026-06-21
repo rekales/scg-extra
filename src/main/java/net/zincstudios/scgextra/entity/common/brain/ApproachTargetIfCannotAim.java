@@ -1,7 +1,6 @@
 package net.zincstudios.scgextra.entity.common.brain;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -13,7 +12,6 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.memory.WalkTarget;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Function;
 
 import static net.zincstudios.scgextra.entity.ModBrainMemories.MIN_AIM_TICKS;
@@ -21,8 +19,6 @@ import static net.zincstudios.scgextra.entity.ModBrainMemories.MIN_AIM_TICKS;
 /**
  * Gets closer to the target when not visible for some time
  */
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 public class ApproachTargetIfCannotAim extends Behavior<LivingEntity> {
 
     private final Function<LivingEntity, Float> speedModifier;

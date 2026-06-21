@@ -1,7 +1,6 @@
 package net.zincstudios.scgextra.entity.common.brain;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -15,11 +14,8 @@ import net.zincstudios.scgextra.entity.common.gun.MarkovTriggerSampler;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
 import net.zincstudios.scgextra.entity.common.gun.TriggerStateSampler;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Function;
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 public class ShootTarget extends Behavior<Mob> {
 
     private final int aimThreshold;

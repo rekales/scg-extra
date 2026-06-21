@@ -1,7 +1,6 @@
 package net.zincstudios.scgextra.entity.common.brain;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
@@ -12,11 +11,8 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.memory.WalkTarget;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Function;
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 public class WalkUpToIdealRange extends Behavior<LivingEntity> {
 
     private final Function<LivingEntity, Float> speedModifier;

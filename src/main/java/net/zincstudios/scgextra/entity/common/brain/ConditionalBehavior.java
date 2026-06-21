@@ -1,22 +1,17 @@
 package net.zincstudios.scgextra.entity.common.brain;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.behavior.BehaviorControl;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
-import net.zincstudios.scgextra.SCGExtra;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 public class ConditionalBehavior<E extends LivingEntity> implements BehaviorControl<E> {
 
     private final Map<MemoryModuleType<?>, MemoryStatus> runCondition;

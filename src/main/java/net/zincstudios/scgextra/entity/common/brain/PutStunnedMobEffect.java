@@ -1,7 +1,6 @@
 package net.zincstudios.scgextra.entity.common.brain;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -9,11 +8,6 @@ import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.zincstudios.scgextra.effects.ModEffects;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 
 // TODO: Placeholder for later
 public class PutStunnedMobEffect extends Behavior<LivingEntity> {

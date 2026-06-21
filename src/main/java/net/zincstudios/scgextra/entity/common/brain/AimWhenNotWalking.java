@@ -1,7 +1,6 @@
 package net.zincstudios.scgextra.entity.common.brain;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,15 +11,11 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import java.util.function.Predicate;
 
 import static net.zincstudios.scgextra.entity.ModBrainMemories.MAX_AIM_TICKS;
 import static net.zincstudios.scgextra.entity.ModBrainMemories.MIN_AIM_TICKS;
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 public class AimWhenNotWalking extends Behavior<LivingEntity> {
 
     private final Predicate<LivingEntity> canAim;

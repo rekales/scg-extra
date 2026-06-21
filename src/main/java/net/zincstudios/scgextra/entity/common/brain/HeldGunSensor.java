@@ -1,7 +1,6 @@
 package net.zincstudios.scgextra.entity.common.brain;
 
 import com.google.common.collect.ImmutableSet;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
@@ -12,12 +11,9 @@ import net.zincstudios.scgextra.entity.common.gun.HeldSimulatedGun;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
 import top.ribs.scguns.item.GunItem;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 import java.util.Set;
 
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
 public class HeldGunSensor extends Sensor<LivingEntity> {
 
     // I think we can afford a quicker scan rate for something this simple
