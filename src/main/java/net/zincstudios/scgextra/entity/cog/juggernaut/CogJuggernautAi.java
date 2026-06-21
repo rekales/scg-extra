@@ -28,7 +28,6 @@ public class CogJuggernautAi {
             MemoryModuleType.ATTACK_TARGET,
             MemoryModuleType.NEAREST_LIVING_ENTITIES,
             MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES,
-            MemoryModuleType.NEAREST_VISIBLE_PLAYER,
             MemoryModuleType.NEAREST_VISIBLE_ATTACKABLE_PLAYER,
             MemoryModuleType.LOOK_TARGET,
             MemoryModuleType.WALK_TARGET,
