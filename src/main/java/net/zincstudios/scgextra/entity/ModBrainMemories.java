@@ -31,8 +31,6 @@ public class ModBrainMemories {
             .register("stunned_cooling_down", () -> new MemoryModuleType<>(Optional.of(Codec.BOOL)));
     public static final Supplier<MemoryModuleType<Integer>> HEADSHOT_COUNT = MEMORY_MODULE_TYPES
             .register("headshot_count", () -> new MemoryModuleType<>(Optional.of(Codec.INT)));
-    public static final Supplier<MemoryModuleType<Boolean>> ABILITY_COOLING_DOWN = MEMORY_MODULE_TYPES
-            .register("ability_cooling_down", () -> new MemoryModuleType<>(Optional.of(Codec.BOOL)));
     public static final Supplier<MemoryModuleType<AbilityState>> ABILITY_STATE = MEMORY_MODULE_TYPES
             .register("ability_state", () -> new MemoryModuleType<>(Optional.of(AbilityState.CODEC)));
     public static final Supplier<MemoryModuleType<PositionTracker>> RELOCATE_TARGET = MEMORY_MODULE_TYPES

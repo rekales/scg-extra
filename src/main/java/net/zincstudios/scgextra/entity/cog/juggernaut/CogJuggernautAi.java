@@ -38,7 +38,6 @@ public class CogJuggernautAi {
             ModBrainMemories.WEAPON_IDEAL_RANGE.get(),
             ModBrainMemories.WEAPON_MAX_RANGE.get(),
             ModBrainMemories.ABILITY_STATE.get(),
-            ModBrainMemories.ABILITY_COOLING_DOWN.get(),
             ModBrainMemories.RELOCATE_TARGET.get(),
             ModBrainMemories.JET_BOOTS_COOLING_DOWN.get()
     );

@@ -28,8 +28,9 @@ public class RocketBarrageAbility extends Behavior<CogJuggernautEntity> {
     private final SimulatedGun gun;
 
     private int rocketsLeft = 0;
-    private long startTime = 0;
+    private long startTime = 0;  // gameTime timestamp
     private int recoveryTimer = 0;
+    private long cooldownEnd = 0;  // gameTime timestamp
 
     public RocketBarrageAbility() {
         this(DEFAULT_COOLDOWN_DURATION_TICKS);
@@ -40,7 +41,6 @@ public class RocketBarrageAbility extends Behavior<CogJuggernautEntity> {
                 MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED,
                 MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT,
                 ModBrainMemories.AIM_TICKS.get(), MemoryStatus.REGISTERED,
-                ModBrainMemories.ABILITY_COOLING_DOWN.get(), MemoryStatus.VALUE_ABSENT,
                 ModBrainMemories.ABILITY_STATE.get(), MemoryStatus.REGISTERED
         ), 40);
         this.cooldownDuration = cooldownDuration;
@@ -54,14 +54,13 @@ public class RocketBarrageAbility extends Behavior<CogJuggernautEntity> {
     @Override
     protected boolean checkExtraStartConditions(ServerLevel level, CogJuggernautEntity mob) {
         int aimTicks = mob.getBrain().getMemory(ModBrainMemories.AIM_TICKS.get()).orElse(0);
-        return aimTicks >= 40;
+        return aimTicks >= 40 && this.cooldownEnd > level.getGameTime();
     }
 
     @Override
     protected boolean canStillUse(ServerLevel level, CogJuggernautEntity mob, long gameTime) {
         Brain<?> brain = mob.getBrain();
         return brain.hasMemoryValue(MemoryModuleType.ATTACK_TARGET)
-                && !brain.hasMemoryValue(ModBrainMemories.ABILITY_COOLING_DOWN.get())
                 && brain.hasMemoryValue(ModBrainMemories.ABILITY_STATE.get())
                 && this.recoveryTimer > 0;
     }
@@ -81,7 +80,7 @@ public class RocketBarrageAbility extends Behavior<CogJuggernautEntity> {
     @Override
     protected void stop(ServerLevel level, CogJuggernautEntity mob, long gameTime) {
         Brain<?> brain = mob.getBrain();
-        brain.setMemoryWithExpiry(ModBrainMemories.ABILITY_COOLING_DOWN.get(), true, this.cooldownDuration);
+        this.cooldownEnd = gameTime + this.cooldownDuration;
         brain.eraseMemory(ModBrainMemories.ABILITY_STATE.get());
     }
 
