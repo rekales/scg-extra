@@ -84,7 +84,7 @@ public class CogBombardierAi {
 
     private static void initStunnedActivity(Brain<CogBombardierEntity> brain) {
         brain.addActivityAndRemoveMemoryWhenStopped(ModBrainActivities.STUNNED.get(), 10, ImmutableList.of(
-                new PutStunnedMobEffect()
+                new HandleStunnedVisuals()
                 ), ModBrainMemories.STUNNED.get()
         );
     }
