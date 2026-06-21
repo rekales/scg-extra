@@ -39,8 +39,8 @@ public class CogVultureAi {
     );
 
     protected static Brain<?> makeBrain(CogVultureEntity mob, Brain<CogVultureEntity> brain) {
-        BrainUtils.Standard.initCoreActivity(brain);
-        BrainUtils.Standard.initIdleActivity(brain);
+        BrainCommons.initCoreActivity(brain);
+        BrainCommons.initIdleActivity(brain);
         initFightActivity(mob, brain);
         brain.setCoreActivities(ImmutableSet.of(Activity.CORE));
         brain.setDefaultActivity(Activity.IDLE);

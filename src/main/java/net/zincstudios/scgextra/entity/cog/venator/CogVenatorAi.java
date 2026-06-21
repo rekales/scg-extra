@@ -44,8 +44,8 @@ public class CogVenatorAi {
     );
 
     protected static Brain<?> makeBrain(CogVenatorEntity mob, Brain<CogVenatorEntity> brain) {
-        BrainUtils.Standard.initCoreActivity(brain);
-        BrainUtils.Standard.initIdleActivity(brain);
+        BrainCommons.initCoreActivity(brain);
+        BrainCommons.initIdleActivity(brain);
         initFightActivity(mob, brain);
         initAvoidActivity(brain);
         brain.setCoreActivities(ImmutableSet.of(Activity.CORE));

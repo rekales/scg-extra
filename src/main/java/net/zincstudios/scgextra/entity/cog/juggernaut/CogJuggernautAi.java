@@ -44,8 +44,8 @@ public class CogJuggernautAi {
     );
 
     protected static Brain<?> makeBrain(CogJuggernautEntity mob, Brain<CogJuggernautEntity> brain) {
-        BrainUtils.Standard.initCoreActivity(brain);
-        BrainUtils.Standard.initIdleActivity(brain);
+        BrainCommons.initCoreActivity(brain);
+        BrainCommons.initIdleActivity(brain);
         initFightActivity(mob, brain);
         initRelocateActivity(brain);
         brain.setCoreActivities(ImmutableSet.of(Activity.CORE));

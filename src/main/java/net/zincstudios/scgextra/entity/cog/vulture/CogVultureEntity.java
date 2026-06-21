@@ -8,7 +8,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -17,7 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.asgharian.BulletSpawnOffset;
 import net.zincstudios.scgextra.entity.common.Gunner;
-import net.zincstudios.scgextra.entity.common.brain.BrainUtils;
+import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
 import net.zincstudios.scgextra.entity.common.gun.CustomGunHolder;
 import net.zincstudios.scgextra.entity.common.gun.CustomSimulatedGun;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
@@ -80,7 +79,7 @@ public class CogVultureEntity extends Monster implements GeoEntity, Gunner, Bull
     protected void customServerAiStep() {
         this.level().getProfiler().push("cogVultureBrain");
         this.getBrain().tick((ServerLevel)this.level(), this);
-        BrainUtils.Standard.updateActivity(this);
+        BrainCommons.updateActivity(this);
         this.level().getProfiler().pop();
         super.customServerAiStep();
     }

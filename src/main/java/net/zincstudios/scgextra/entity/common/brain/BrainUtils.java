@@ -4,46 +4,16 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.behavior.*;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.NearestVisibleLivingEntities;
-import net.minecraft.world.entity.schedule.Activity;
 import net.zincstudios.scgextra.entity.Faction;
 
 import java.util.Optional;
 
 public class BrainUtils {
-
-    public static class Standard {
-
-        public static void initCoreActivity(Brain<? extends Mob> brain) {
-            brain.addActivity(Activity.CORE, 0, ImmutableList.of(
-                    new LookAtTargetSink(45, 90),
-                    new MoveToTargetSink())
-            );
-        }
-
-        // Not for flying and swimming mobs
-        public static void initIdleActivity(Brain<? extends PathfinderMob> brain) {
-            brain.addActivity(Activity.IDLE, 10, ImmutableList.of(
-                    StartAttacking.create(BrainUtils::getHurtBy),
-                    StartAttacking.create(BrainUtils::findNearestVisibleAttackablePlayer),
-                    StartAttacking.create(BrainUtils::findNearestAttackableFactionEnemy),
-                    new RunOne<>(ImmutableList.of(
-                            Pair.of(RandomStroll.stroll(1.0F), 2),
-                            Pair.of(SetWalkTargetFromLookTarget.create(1.0F, 3), 2),
-                            Pair.of(new DoNothing(30, 60), 1)
-                    ))
-            ));
-        }
-
-        public static void updateActivity(Mob mob) {
-            mob.getBrain().setActiveActivityToFirstValid(ImmutableList.of(Activity.FIGHT, Activity.IDLE));
-        }
-    }
 
     public static Optional<? extends LivingEntity> findNearestAttackableFactionEnemy(LivingEntity mob) {
         Brain<? extends LivingEntity> brain = mob.getBrain();
