@@ -14,11 +14,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.zincstudios.scgextra.CommonConfig;
-import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
-import net.zincstudios.scgextra.entity.common.HeadShotHandler;
-import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.gun.CustomGunHolder;
 import net.zincstudios.scgextra.entity.common.gun.CustomSimulatedGun;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
@@ -37,17 +33,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CogBombardierEntity extends GunnerEntity implements GeoEntity, Stunnable, HeadShotHandler, CustomGunHolder {
-
-    private static final int STUN_DURATION = 60;
+public class CogBombardierEntity extends GunnerEntity implements GeoEntity, CustomGunHolder {
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
     private final SimulatedGun customGun;
-
-    // Server-side only for stunnable handling
-    private int headshotCounter = 0;
-    private boolean stunCooldown = false;
-    private boolean stunned = false;
 
     public CogBombardierEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -64,7 +53,7 @@ public class CogBombardierEntity extends GunnerEntity implements GeoEntity, Stun
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.FOLLOW_RANGE, 35.0D)
+                .add(Attributes.FOLLOW_RANGE, 48.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25F)
                 .add(Attributes.MAX_HEALTH, 40.0D);
     }
@@ -93,7 +82,7 @@ public class CogBombardierEntity extends GunnerEntity implements GeoEntity, Stun
 
     @Override
     protected void customServerAiStep() {
-        this.level().getProfiler().push("cogVenatorBrain");
+        this.level().getProfiler().push("cogBombardierBrain");
         this.getBrain().tick((ServerLevel)this.level(), this);
         CogBombardierAi.updateActivity(this);
         this.level().getProfiler().pop();
@@ -142,56 +131,6 @@ public class CogBombardierEntity extends GunnerEntity implements GeoEntity, Stun
     @Override
     public SimulatedGun getCustomGun() {
         return this.customGun;
-    }
-
-    @Override
-    public boolean headshot(DamageSource source, float amount) {
-        if (this.headshotCounter < CommonConfig.abilityWeaknessHeadshots-1 || !this.stunCooldown) {
-            this.headshotCounter++;
-        }
-
-        SCGExtra.LOGGER.debug(this.headshotCounter + "");
-
-        return false;
-    }
-
-    @Override
-    public int shouldStun() {
-        if (!CommonConfig.enableAbilityWeakness) return 0;
-
-        if (this.headshotCounter >= CommonConfig.abilityWeaknessHeadshots) {
-            return STUN_DURATION;
-        }
-
-        return 0;
-    }
-
-    @Override
-    public void setStunned(boolean stunned) {
-        this.stunned = stunned;
-        if (stunned) {
-            this.triggerAnim("behaviour", "stun");
-        } else {
-            this.headshotCounter = 0;
-        }
-    }
-
-    @Override
-    public void setStunCooldown(boolean stunCooldown) {
-        this.stunCooldown = stunCooldown;
-    }
-
-    @Override
-    public boolean isStunned() {
-        return this.stunned;
-    }
-
-    @Override
-    public boolean tickStunned(int ticksLeft) {
-        if (ticksLeft == 10) {
-            this.triggerAnim("behaviour", "end_stun");
-        }
-        return false;
     }
 
     @Override

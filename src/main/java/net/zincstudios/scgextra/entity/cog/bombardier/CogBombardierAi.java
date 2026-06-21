@@ -5,8 +5,10 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.Brain;
-import net.minecraft.world.entity.ai.behavior.SetWalkTargetAwayFrom;
+import net.minecraft.world.entity.ai.behavior.LookAtTargetSink;
+import net.minecraft.world.entity.ai.behavior.MoveToTargetSink;
 import net.minecraft.world.entity.ai.behavior.StopAttackingIfTargetInvalid;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
@@ -41,19 +43,31 @@ public class CogBombardierAi {
             MemoryModuleType.AVOID_TARGET,
             ModBrainMemories.AIM_TICKS.get(),
             ModBrainMemories.WEAPON_IDEAL_RANGE.get(),
-            ModBrainMemories.WEAPON_MAX_RANGE.get()
+            ModBrainMemories.WEAPON_MAX_RANGE.get(),
+            ModBrainMemories.STUNNED.get(),
+            ModBrainMemories.STUNNED_COOLING_DOWN.get(),
+            ModBrainMemories.HEADSHOT_COUNT.get()
     );
 
     protected static Brain<?> makeBrain(CogBombardierEntity mob, Brain<CogBombardierEntity> brain) {
-        BrainUtils.Standard.initCoreActivity(brain);
-        BrainUtils.Standard.initIdleActivity(brain);
+        initCoreActivity(brain);
+        BrainCommons.initIdleActivity(brain);
         initFightActivity(mob, brain);
-        initAvoidActivity(brain);
-        initStunnedActivity(brain);
+        BrainCommons.initStunnedActivity(brain);
+        BrainCommons.initAvoidActivity(brain, 12);
+
         brain.setCoreActivities(ImmutableSet.of(Activity.CORE));
         brain.setDefaultActivity(Activity.IDLE);
         brain.useDefaultActivity();
         return brain;
+    }
+
+    private static void initCoreActivity(Brain<? extends Mob> brain) {
+        brain.addActivity(Activity.CORE, 0, ImmutableList.of(
+                new LookAtTargetSink(45, 90),
+                new MoveToTargetSink(),
+                new CheckHeadshotStun(5, 60, 200)
+        ));
     }
 
     private static void initFightActivity(CogBombardierEntity mob, Brain<CogBombardierEntity> brain) {
@@ -71,22 +85,6 @@ public class CogBombardierAi {
                 )
         );
 
-    }
-
-    private static void initAvoidActivity(Brain<CogBombardierEntity> brain) {
-        brain.addActivityAndRemoveMemoryWhenStopped(Activity.AVOID, 10, ImmutableList.of(
-                        new SetToSprint(),
-                        SetWalkTargetAwayFrom.entity(MemoryModuleType.AVOID_TARGET, 1F, 15, true)
-                ),
-                MemoryModuleType.AVOID_TARGET
-        );
-    }
-
-    private static void initStunnedActivity(Brain<CogBombardierEntity> brain) {
-        brain.addActivityAndRemoveMemoryWhenStopped(ModBrainActivities.STUNNED.get(), 10, ImmutableList.of(
-                new HandleStunnedVisuals()
-                ), ModBrainMemories.STUNNED.get()
-        );
     }
 
     public static void updateActivity(CogBombardierEntity mob) {

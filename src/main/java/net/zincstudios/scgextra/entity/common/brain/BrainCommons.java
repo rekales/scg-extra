@@ -2,11 +2,15 @@ package net.zincstudios.scgextra.entity.common.brain;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.*;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.schedule.Activity;
+import net.zincstudios.scgextra.entity.ModBrainActivities;
+import net.zincstudios.scgextra.entity.ModBrainMemories;
 
 public class BrainCommons {
 
@@ -29,6 +33,22 @@ public class BrainCommons {
                         Pair.of(new DoNothing(30, 60), 1)
                 ))
         ));
+    }
+
+    public static void initStunnedActivity(Brain<? extends LivingEntity> brain) {
+        brain.addActivityAndRemoveMemoryWhenStopped(ModBrainActivities.STUNNED.get(), 10, ImmutableList.of(
+                        new HandleStunnedVisuals()
+                ), ModBrainMemories.STUNNED.get()
+        );
+    }
+
+    public static void initAvoidActivity(Brain<? extends PathfinderMob> brain, float fleeDistance) {
+        brain.addActivityAndRemoveMemoryWhenStopped(Activity.AVOID, 10, ImmutableList.of(
+                        new SetToSprint(),
+                        SetWalkTargetAwayFrom.entity(MemoryModuleType.AVOID_TARGET, 1F, (int) fleeDistance, true)
+                ),
+                MemoryModuleType.AVOID_TARGET
+        );
     }
 
     public static void updateActivity(Mob mob) {
