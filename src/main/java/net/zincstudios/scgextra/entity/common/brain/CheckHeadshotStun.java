@@ -12,7 +12,7 @@ import net.zincstudios.scgextra.entity.ModBrainMemories;
 public class CheckHeadshotStun extends Behavior<LivingEntity> {
 
     private final int headshotThreshold;
-    private final int headshotDuration;
+    private final int stunDuration;
     private final int stunCooldown;
 
     private int headshots = 0;
@@ -25,7 +25,7 @@ public class CheckHeadshotStun extends Behavior<LivingEntity> {
                 ModBrainMemories.STUNNED_COOLING_DOWN.get(), MemoryStatus.REGISTERED
         ));
         this.headshotThreshold = headshotThreshold;
-        this.headshotDuration = headshotsDuration;
+        this.stunDuration = headshotsDuration;
         this.stunCooldown = stunCooldown;
     }
 
@@ -50,8 +50,8 @@ public class CheckHeadshotStun extends Behavior<LivingEntity> {
     @Override
     protected void start(ServerLevel level, LivingEntity entity, long gameTime) {
         Brain<?> brain = entity.getBrain();
-        brain.setMemoryWithExpiry(ModBrainMemories.STUNNED.get(), true, this.headshotDuration);
+        brain.setMemoryWithExpiry(ModBrainMemories.STUNNED.get(), true, this.stunDuration);
         brain.setMemoryWithExpiry(ModBrainMemories.STUNNED_COOLING_DOWN.get(), true,
-                this.headshotDuration + this.stunCooldown);
+                this.stunDuration + this.stunCooldown);
     }
 }

@@ -45,6 +45,10 @@ import java.util.Objects;
 
 public class MobUtil {
 
+    // Common Constants
+    public static final int DEFAULT_STUN_DURATION = 60;
+
+
     public static SoundEvent getSound(RandomSource random, SoundEvent... sounds){
         if(sounds.length<=0){
             return SoundEvents.ALLAY_HURT;//cause why not

@@ -17,8 +17,16 @@ public class BrainCommons {
     public static void initCoreActivity(Brain<? extends Mob> brain) {
         brain.addActivity(Activity.CORE, 0, ImmutableList.of(
                 new LookAtTargetSink(45, 90),
-                new MoveToTargetSink())
-        );
+                new MoveToTargetSink()
+        ));
+    }
+
+    public static void initCoreWithStunActivity(Brain<? extends Mob> brain, int stunDuration) {
+        brain.addActivity(Activity.CORE, 0, ImmutableList.of(
+                new LookAtTargetSink(45, 90),
+                new MoveToTargetSink(),
+                new CheckHeadshotStun(5, stunDuration, 200)
+        ));
     }
 
     // Not for flying and swimming mobs
@@ -48,6 +56,13 @@ public class BrainCommons {
                         SetWalkTargetAwayFrom.entity(MemoryModuleType.AVOID_TARGET, 1F, (int) fleeDistance, true)
                 ),
                 MemoryModuleType.AVOID_TARGET
+        );
+    }
+
+    public static void initAlertActivity(Brain<? extends LivingEntity> brain) {
+        brain.addActivityAndRemoveMemoryWhenStopped(ModBrainActivities.ALERT.get(), 10, ImmutableList.of(
+                        new AlertNearbyFactionMobs()
+                ), ModBrainMemories.TO_ALERT.get()
         );
     }
 
