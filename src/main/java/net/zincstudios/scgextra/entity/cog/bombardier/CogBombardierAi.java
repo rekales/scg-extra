@@ -24,7 +24,7 @@ public class CogBombardierAi {
 
     protected static final ImmutableList<? extends SensorType<? extends Sensor<? super CogBombardierEntity>>> SENSOR_TYPES = ImmutableList.of(
             SensorType.NEAREST_LIVING_ENTITIES,
-            SensorType.NEAREST_PLAYERS,
+            ModBrainSensors.LONG_RANGE_PLAYER.get(),
             SensorType.HURT_BY,
             ModBrainSensors.CUSTOM_GUN.get()
     );

@@ -18,7 +18,7 @@ public class CogVultureAi {
 
     protected static final ImmutableList<? extends SensorType<? extends Sensor<? super CogVultureEntity>>> SENSOR_TYPES = ImmutableList.of(
             SensorType.NEAREST_LIVING_ENTITIES,
-            SensorType.NEAREST_PLAYERS,
+            ModBrainSensors.MEDIUM_RANGE_PLAYER.get(),
             SensorType.HURT_BY,
             ModBrainSensors.CUSTOM_GUN.get()
     );
