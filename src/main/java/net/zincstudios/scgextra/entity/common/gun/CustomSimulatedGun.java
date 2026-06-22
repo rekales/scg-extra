@@ -44,7 +44,7 @@ public class CustomSimulatedGun implements SimulatedGun {
     private int burstCooldown = 0;
     private int burstLeft = 0;
     private int nextAttack = 0;  // tickCount timestamp
-    private int ammoCount = 0;
+    private int ammoCount;
     private int nextReload = 0;  // tickCount timestamp
     private boolean reloading = false;
 
@@ -59,6 +59,7 @@ public class CustomSimulatedGun implements SimulatedGun {
         this.projectileSpeed = projectileSpeed;
         this.additionalDamage = projectileDamage - gunBase.getProjectile().getDamage();
         this.ammoCapacity = ammoCapacity;
+        this.ammoCount = this.ammoCapacity;
         this.reloadTime = reloadTime;
         this.idealRange = idealRange;
         this.maxRange = maxRange;
@@ -102,7 +103,8 @@ public class CustomSimulatedGun implements SimulatedGun {
                 this.reloading = true;
                 this.burstLeft = 0;
                 this.nextReload = tickCount + this.reloadTime;
-            } else if (this.nextReload >= tickCount) {
+            } else if (tickCount > this.nextReload) {
+                this.reloading = false;
                 this.reloadAmmo();
             }
         }

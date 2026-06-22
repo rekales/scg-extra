@@ -8,6 +8,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -17,6 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
+import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.gun.CustomGunHolder;
 import net.zincstudios.scgextra.entity.common.gun.CustomSimulatedGun;
@@ -36,7 +38,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CogBombardierEntity extends GunnerEntity implements GeoEntity, CustomGunHolder {
+public class CogBombardierEntity extends Monster implements GeoEntity, CustomGunHolder, Gunner {
 
     static final int STUN_RECOVERY_TICKS = 12;
     static final int ALERT_ANIM_TICKS = 38;
@@ -152,7 +154,7 @@ public class CogBombardierEntity extends GunnerEntity implements GeoEntity, Cust
     }
 
     @Override
-    public void onGunAttack(LivingEntity target, ItemStack itemStack) {
+    public void onGunFire(SimulatedGun gun, Vec3 targetPos) {
         this.triggerAnim("gun", "fire");
     }
 
