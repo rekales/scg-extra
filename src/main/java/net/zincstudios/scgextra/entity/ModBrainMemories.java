@@ -1,6 +1,7 @@
 package net.zincstudios.scgextra.entity;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.behavior.PositionTracker;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -9,9 +10,13 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+// TODO: replace boolean with unit
+// AbilityState exists as a general purpose container for abilities to use since
+// they are all run exclusively with one another (or at least seem to be).
 public class ModBrainMemories {
 
     private static final DeferredRegister<MemoryModuleType<?>> MEMORY_MODULE_TYPES = DeferredRegister
@@ -27,6 +32,8 @@ public class ModBrainMemories {
             .register("simulated_gun", () -> new MemoryModuleType<>(Optional.empty()));
     public static final Supplier<MemoryModuleType<Boolean>> STUNNED = MEMORY_MODULE_TYPES
             .register("stunned", () -> new MemoryModuleType<>(Optional.of(Codec.BOOL)));
+    public static final Supplier<MemoryModuleType<List<LivingEntity>>> TO_ALERT = MEMORY_MODULE_TYPES
+            .register("to_alert", () -> new MemoryModuleType<>(Optional.empty()));
     public static final Supplier<MemoryModuleType<Boolean>> STUNNED_COOLING_DOWN = MEMORY_MODULE_TYPES
             .register("stunned_cooling_down", () -> new MemoryModuleType<>(Optional.of(Codec.BOOL)));
     public static final Supplier<MemoryModuleType<Integer>> HEADSHOT_COUNT = MEMORY_MODULE_TYPES
