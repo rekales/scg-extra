@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.Brain;
@@ -19,6 +18,7 @@ import net.zincstudios.scgextra.entity.ModBrainActivities;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.ModBrainSensors;
 import net.zincstudios.scgextra.entity.common.brain.*;
+import net.zincstudios.scgextra.entity.common.gun.IdentityTriggerSampler;
 
 public class CogBombardierAi {
 
@@ -76,12 +76,12 @@ public class CogBombardierAi {
                         StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValid(mob, target, false)),
                         AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), true),
                         new RunOneOrdered<>(ImmutableList.of(
-                                AvoidTargetIfClose.create(10, UniformInt.of(60, 80)),
+                                new AvoidTargetIfClose(10),
                                 new CheckShouldAlert(CogBombardierEntity.ALERT_ANIM_TICKS)
                         )),
                         new WalkUpToIdealRange(1.0F),
                         new AimWhenNotWalking(),
-                        new ShootTarget(30)
+                        new ShootTarget(30, entity -> 3.2F, new IdentityTriggerSampler())
                 )), ImmutableSet.of(
                         Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT)
                 ), ImmutableSet.of(

@@ -3,7 +3,6 @@ package net.zincstudios.scgextra.entity.cog.venator;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.SetWalkTargetAwayFrom;
@@ -57,7 +56,7 @@ public class CogVenatorAi {
         brain.addActivityAndRemoveMemoriesWhenStopped(Activity.FIGHT, BrainUtils.createPriorityPairs(10, ImmutableList.of(
                 StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValid(mob, target, false)),
                 AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), true),
-                AvoidTargetIfClose.create(10, UniformInt.of(60, 80)),
+                new AvoidTargetIfClose(10),
                 new WalkUpToIdealRange(1.0F),
                 new AimWhenNotWalking(),
                 new ShootTarget(30)
