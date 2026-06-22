@@ -34,8 +34,10 @@ public class CogJuggernautAi {
             MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE,
             MemoryModuleType.PATH,
             ModBrainMemories.AIM_TICKS.get(),
+            ModBrainMemories.SIMULATED_GUN.get(),
             ModBrainMemories.WEAPON_IDEAL_RANGE.get(),
             ModBrainMemories.WEAPON_MAX_RANGE.get(),
+            ModBrainMemories.HOLD_FIRE.get(),
             ModBrainMemories.ABILITY_STATE.get(),
             ModBrainMemories.RELOCATE_TARGET.get(),
             ModBrainMemories.JET_BOOTS_COOLING_DOWN.get()

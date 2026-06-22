@@ -38,7 +38,8 @@ public class ShootTarget extends Behavior<Mob> {
         super(ImmutableMap.of(
                 MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT,
                 ModBrainMemories.AIM_TICKS.get(), MemoryStatus.VALUE_PRESENT,
-                ModBrainMemories.SIMULATED_GUN.get(), MemoryStatus.VALUE_PRESENT
+                ModBrainMemories.SIMULATED_GUN.get(), MemoryStatus.VALUE_PRESENT,
+                ModBrainMemories.HOLD_FIRE.get(), MemoryStatus.REGISTERED
         ));
         this.aimThreshold = aimThreshold;
         this.accuracyFunc = accuracyFunc;
@@ -57,6 +58,8 @@ public class ShootTarget extends Behavior<Mob> {
     @Override
     protected void tick(ServerLevel level, Mob mob, long gameTime) {
         Brain<?> brain = mob.getBrain();
+        if (brain.hasMemoryValue(ModBrainMemories.HOLD_FIRE.get())) return;
+
         LivingEntity target = brain.getMemory(MemoryModuleType.ATTACK_TARGET).get();
         int aimTicks = brain.getMemory(ModBrainMemories.AIM_TICKS.get()).get();
         SimulatedGun simGun = brain.getMemory(ModBrainMemories.SIMULATED_GUN.get()).get();
