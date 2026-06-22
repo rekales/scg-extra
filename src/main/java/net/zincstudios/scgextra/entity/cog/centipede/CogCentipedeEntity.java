@@ -15,6 +15,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.PartEntity;
+import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.gun.CustomGunHolder;
 import net.zincstudios.scgextra.entity.common.gun.CustomSimulatedGun;
@@ -36,7 +37,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 public class CogCentipedeEntity extends Monster implements GeoEntity, CustomGunHolder, Gunner {
 
+    static final int STUN_RECOVERY_TICKS = 12;
     static final int STUN_DURATION = 80;
+    static final int SLAM_DAMAGE_DELAY = 18;
+    static final int SLAM_DURATION = 25;
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
     private final SimulatedGun customGun;
@@ -113,6 +117,16 @@ public class CogCentipedeEntity extends Monster implements GeoEntity, CustomGunH
     public void tick() {
         super.tick();
         updateSubEntities();
+
+        if (brain.getTimeUntilExpiry(ModBrainMemories.DELAYED_MELEE.get()) == SLAM_DURATION) {
+            this.triggerAnim("behaviour", "slam");
+        }
+        if (brain.getTimeUntilExpiry(ModBrainMemories.STUNNED.get()) == STUN_DURATION) {
+            this.triggerAnim("behaviour", "stun");
+        }
+        if (brain.getTimeUntilExpiry(ModBrainMemories.STUNNED.get()) == STUN_RECOVERY_TICKS) {
+            this.triggerAnim("behaviour", "end_stun");
+        }
     }
 
     protected void updateSubEntities() {

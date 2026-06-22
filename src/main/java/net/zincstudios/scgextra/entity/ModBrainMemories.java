@@ -16,8 +16,13 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 // TODO: replace boolean with unit
-// AbilityState exists as a general purpose container for abilities to use since
-// they are all run exclusively with one another (or at least seem to be).
+/*
+AbilityState exists as a general purpose container for abilities to use since they are all run
+exclusively with one another (or at least seem to be).
+
+DELAYED_MELEE long value is for when the damage will take place (gameTime timestamp). It is intended to have an
+expiry time, that will tell the brain how long does the whole melee sequence lasts.
+ */
 public class ModBrainMemories {
 
     private static final DeferredRegister<MemoryModuleType<?>> MEMORY_MODULE_TYPES = DeferredRegister
@@ -43,6 +48,8 @@ public class ModBrainMemories {
             .register("ability_state", () -> new MemoryModuleType<>(Optional.of(AbilityState.CODEC)));
     public static final Supplier<MemoryModuleType<PositionTracker>> RELOCATE_TARGET = MEMORY_MODULE_TYPES
             .register("relocate_target", () -> new MemoryModuleType<>(Optional.empty()));
+    public static final Supplier<MemoryModuleType<Long>> DELAYED_MELEE = MEMORY_MODULE_TYPES
+            .register("delayed_melee", () -> new MemoryModuleType<>(Optional.of(Codec.LONG)));
 
     // Mob Specific Memories
     public static final Supplier<MemoryModuleType<Boolean>> JET_BOOTS_COOLING_DOWN = MEMORY_MODULE_TYPES

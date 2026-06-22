@@ -36,12 +36,14 @@ public class CogCentipedeAi {
             MemoryModuleType.WALK_TARGET,
             MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE,
             MemoryModuleType.PATH,
+            MemoryModuleType.ATTACK_COOLING_DOWN,
             ModBrainMemories.AIM_TICKS.get(),
             ModBrainMemories.WEAPON_IDEAL_RANGE.get(),
             ModBrainMemories.WEAPON_MAX_RANGE.get(),
             ModBrainMemories.STUNNED.get(),
             ModBrainMemories.STUNNED_COOLING_DOWN.get(),
-            ModBrainMemories.HEADSHOT_COUNT.get()
+            ModBrainMemories.HEADSHOT_COUNT.get(),
+            ModBrainMemories.DELAYED_MELEE.get()
     );
 
     protected static Brain<?> makeBrain(CogCentipedeEntity mob, Brain<CogCentipedeEntity> brain) {
@@ -57,13 +59,16 @@ public class CogCentipedeAi {
     }
 
     private static void initFightActivity(CogCentipedeEntity mob, Brain<CogCentipedeEntity> brain) {
-        brain.addActivityAndRemoveMemoriesWhenStopped(Activity.FIGHT, BrainUtils.createPriorityPairs(10, ImmutableList.of(
+        brain.addActivityAndRemoveMemoriesWhenStopped(Activity.FIGHT, BrainUtils.createPriorityPairs(10,
+                ImmutableList.of(
                         StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValid(mob, target, false)),
                         AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), true),
+                        new SlamAttack(CogCentipedeEntity.SLAM_DAMAGE_DELAY, CogCentipedeEntity.SLAM_DURATION, 4, 80),
                         new ApproachTargetIfCannotAim(1.0F),
                         new AimWhenNotWalking(),
                         new ShootTarget(20, entity -> 3.2F,
-                                entity -> true, new IdentityTriggerSampler())
+                                entity -> !entity.getBrain().hasMemoryValue(ModBrainMemories.DELAYED_MELEE.get()),
+                                new IdentityTriggerSampler())
                 )), ImmutableSet.of(
                         Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT)
                 ), ImmutableSet.of(
