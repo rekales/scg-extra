@@ -5,11 +5,10 @@ import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.Brain;
-import net.minecraft.world.entity.ai.behavior.LookAtTargetSink;
-import net.minecraft.world.entity.ai.behavior.MoveToTargetSink;
-import net.minecraft.world.entity.ai.behavior.StopAttackingIfTargetInvalid;
+import net.minecraft.world.entity.ai.behavior.*;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.sensing.Sensor;
@@ -34,7 +33,6 @@ public class CogBombardierAi {
             MemoryModuleType.ATTACK_TARGET,
             MemoryModuleType.NEAREST_LIVING_ENTITIES,
             MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES,
-            MemoryModuleType.NEAREST_VISIBLE_PLAYER,
             MemoryModuleType.NEAREST_VISIBLE_ATTACKABLE_PLAYER,
             MemoryModuleType.LOOK_TARGET,
             MemoryModuleType.WALK_TARGET,
@@ -46,15 +44,18 @@ public class CogBombardierAi {
             ModBrainMemories.WEAPON_MAX_RANGE.get(),
             ModBrainMemories.STUNNED.get(),
             ModBrainMemories.STUNNED_COOLING_DOWN.get(),
-            ModBrainMemories.HEADSHOT_COUNT.get()
+            ModBrainMemories.HEADSHOT_COUNT.get(),
+            ModBrainMemories.ABILITY_STATE.get(),
+            ModBrainMemories.TO_ALERT.get()
     );
 
     protected static Brain<?> makeBrain(CogBombardierEntity mob, Brain<CogBombardierEntity> brain) {
         initCoreActivity(brain);
         BrainCommons.initIdleActivity(brain);
         initFightActivity(mob, brain);
-        BrainCommons.initStunnedActivity(brain);
+        initAlertActivity(brain);
         BrainCommons.initAvoidActivity(brain, 12);
+        BrainCommons.initStunnedActivity(brain);
 
         brain.setCoreActivities(ImmutableSet.of(Activity.CORE));
         brain.setDefaultActivity(Activity.IDLE);
@@ -74,7 +75,10 @@ public class CogBombardierAi {
         brain.addActivityAndRemoveMemoriesWhenStopped(Activity.FIGHT, BrainUtils.createPriorityPairs(10, ImmutableList.of(
                         StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValid(mob, target, false)),
                         AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), true),
-                        AvoidTargetIfClose.create(10, UniformInt.of(60, 80)),
+                        new RunOneOrdered<>(ImmutableList.of(
+                                AvoidTargetIfClose.create(10, UniformInt.of(60, 80)),
+                                new CheckShouldAlert(CogBombardierEntity.ALERT_ANIM_TICKS)
+                        )),
                         new WalkUpToIdealRange(1.0F),
                         new AimWhenNotWalking(),
                         new ShootTarget(30)
@@ -84,7 +88,13 @@ public class CogBombardierAi {
                         ModBrainMemories.AIM_TICKS.get()
                 )
         );
+    }
 
+    private static void initAlertActivity(Brain<? extends LivingEntity> brain) {
+        brain.addActivityAndRemoveMemoryWhenStopped(ModBrainActivities.ALERT.get(), 10, ImmutableList.of(
+                new AlertNearbyFactionMobs()
+                ), ModBrainMemories.TO_ALERT.get()
+        );
     }
 
     public static void updateActivity(CogBombardierEntity mob) {
@@ -93,12 +103,15 @@ public class CogBombardierAi {
         brain.setActiveActivityToFirstValid(ImmutableList.of(
                 ModBrainActivities.STUNNED.get(),
                 Activity.AVOID,
+                ModBrainActivities.ALERT.get(),
                 Activity.FIGHT,
                 Activity.IDLE
         ));
-        Activity newActivity = brain.getActiveNonCoreActivity().orElse(null);
 
-        if (newActivity == ModBrainActivities.STUNNED.get() && oldActivity != newActivity) {
+        Activity newActivity = brain.getActiveNonCoreActivity().orElse(null);
+        if (oldActivity != newActivity
+                && (newActivity == ModBrainActivities.STUNNED.get()
+                || newActivity == ModBrainActivities.ALERT.get())) {
             brain.stopAll((ServerLevel) mob.level(), mob);
             mob.getNavigation().stop();
         }

@@ -7,13 +7,16 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.gun.CustomGunHolder;
 import net.zincstudios.scgextra.entity.common.gun.CustomSimulatedGun;
@@ -34,6 +37,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class CogBombardierEntity extends GunnerEntity implements GeoEntity, CustomGunHolder {
+
+    static final int STUN_RECOVERY_TICKS = 12;
+    static final int ALERT_ANIM_TICKS = 38;
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
     private final SimulatedGun customGun;
@@ -59,11 +65,23 @@ public class CogBombardierEntity extends GunnerEntity implements GeoEntity, Cust
     }
 
     @Override
+    public void tick() {
+        super.tick();
+
+        Brain<?> brain = this.getBrain();
+        if (brain.getTimeUntilExpiry(ModBrainMemories.TO_ALERT.get()) == ALERT_ANIM_TICKS) {
+            this.triggerAnim("behaviour", "alert");
+        }
+        if (brain.getTimeUntilExpiry(ModBrainMemories.STUNNED.get()) == STUN_RECOVERY_TICKS) {
+            this.triggerAnim("behaviour", "end_stun");
+        }
+    }
+
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (source.getEntity() == this) {
             return super.hurt(source, amount * 0.2f);
         }
-
         return super.hurt(source, amount);
     }
 
@@ -131,6 +149,11 @@ public class CogBombardierEntity extends GunnerEntity implements GeoEntity, Cust
     @Override
     public SimulatedGun getCustomGun() {
         return this.customGun;
+    }
+
+    @Override
+    public void onGunAttack(LivingEntity target, ItemStack itemStack) {
+        this.triggerAnim("gun", "fire");
     }
 
     @Override
