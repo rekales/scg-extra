@@ -62,7 +62,8 @@ public class CogCentipedeAi {
                         AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), true),
                         new ApproachTargetIfCannotAim(1.0F),
                         new AimWhenNotWalking(),
-                        new ShootTarget(30, entity -> 3.2F, new IdentityTriggerSampler())
+                        new ShootTarget(20, entity -> 3.2F,
+                                entity -> true, new IdentityTriggerSampler())
                 )), ImmutableSet.of(
                         Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT)
                 ), ImmutableSet.of(

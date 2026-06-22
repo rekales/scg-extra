@@ -39,8 +39,7 @@ public class CogVenatorAi {
             ModBrainMemories.AIM_TICKS.get(),
             ModBrainMemories.SIMULATED_GUN.get(),
             ModBrainMemories.WEAPON_IDEAL_RANGE.get(),
-            ModBrainMemories.WEAPON_MAX_RANGE.get(),
-            ModBrainMemories.HOLD_FIRE.get()
+            ModBrainMemories.WEAPON_MAX_RANGE.get()
     );
 
     protected static Brain<?> makeBrain(CogVenatorEntity mob, Brain<CogVenatorEntity> brain) {

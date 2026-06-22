@@ -15,6 +15,7 @@ import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.schedule.Activity;
 import net.zincstudios.scgextra.entity.*;
 import net.zincstudios.scgextra.entity.common.brain.*;
+import net.zincstudios.scgextra.entity.common.gun.MarkovTriggerSampler;
 
 public class CogJuggernautAi {
 
@@ -37,7 +38,6 @@ public class CogJuggernautAi {
             ModBrainMemories.SIMULATED_GUN.get(),
             ModBrainMemories.WEAPON_IDEAL_RANGE.get(),
             ModBrainMemories.WEAPON_MAX_RANGE.get(),
-            ModBrainMemories.HOLD_FIRE.get(),
             ModBrainMemories.ABILITY_STATE.get(),
             ModBrainMemories.RELOCATE_TARGET.get(),
             ModBrainMemories.JET_BOOTS_COOLING_DOWN.get()
@@ -62,10 +62,11 @@ public class CogJuggernautAi {
                 new AimWhenTargetVisible(),
                 JetBootsRelocate.create(),
                 new RocketBarrageAbility(),
-                new ConditionalBehavior<>(
-                        ImmutableMap.of(ModBrainMemories.ABILITY_STATE.get(), MemoryStatus.VALUE_ABSENT),
-                        ImmutableList.of(new ShootTarget(20))
-                ))), ImmutableSet.of(
+                new ShootTarget(20,
+                        entity -> ShootTarget.DEFAULT_ACCURACY,
+                        entity -> !entity.getBrain().hasMemoryValue(ModBrainMemories.ABILITY_STATE.get()),
+                        new MarkovTriggerSampler(0.93f, 0.94f, 15, 80))
+                )), ImmutableSet.of(
                         Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT)
                 ), ImmutableSet.of(
                         ModBrainMemories.AIM_TICKS.get()

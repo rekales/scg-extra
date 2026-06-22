@@ -29,8 +29,6 @@ public class ModBrainMemories {
             .register("approach_dist", () -> new MemoryModuleType<>(Optional.of(Codec.FLOAT)));
     public static final Supplier<MemoryModuleType<Float>> WEAPON_MAX_RANGE = MEMORY_MODULE_TYPES
             .register("weapon_range", () -> new MemoryModuleType<>(Optional.of(Codec.FLOAT)));
-    public static final Supplier<MemoryModuleType<Unit>> HOLD_FIRE = MEMORY_MODULE_TYPES
-            .register("hold_fire", () -> new MemoryModuleType<>(Optional.of(Codec.unit(Unit.INSTANCE))));
     public static final Supplier<MemoryModuleType<SimulatedGun>> SIMULATED_GUN = MEMORY_MODULE_TYPES
             .register("simulated_gun", () -> new MemoryModuleType<>(Optional.empty()));
     public static final Supplier<MemoryModuleType<Boolean>> STUNNED = MEMORY_MODULE_TYPES

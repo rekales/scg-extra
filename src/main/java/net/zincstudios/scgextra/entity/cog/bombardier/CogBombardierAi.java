@@ -44,7 +44,6 @@ public class CogBombardierAi {
             ModBrainMemories.SIMULATED_GUN.get(),
             ModBrainMemories.WEAPON_IDEAL_RANGE.get(),
             ModBrainMemories.WEAPON_MAX_RANGE.get(),
-            ModBrainMemories.HOLD_FIRE.get(),
             ModBrainMemories.STUNNED.get(),
             ModBrainMemories.STUNNED_COOLING_DOWN.get(),
             ModBrainMemories.HEADSHOT_COUNT.get(),
@@ -76,7 +75,8 @@ public class CogBombardierAi {
                         )),
                         new WalkUpToIdealRange(1.0F),
                         new AimWhenNotWalking(),
-                        new ShootTarget(30, entity -> 3.2F, new IdentityTriggerSampler())
+                        new ShootTarget(30, entity -> 3.2F,
+                                entity -> true, new IdentityTriggerSampler())
                 )), ImmutableSet.of(
                         Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT)
                 ), ImmutableSet.of(

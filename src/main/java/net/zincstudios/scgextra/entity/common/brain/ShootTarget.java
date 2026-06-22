@@ -15,40 +15,44 @@ import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
 import net.zincstudios.scgextra.entity.common.gun.TriggerStateSampler;
 
 import java.util.function.Function;
+import java.util.function.Predicate;
 
-public class ShootTarget extends Behavior<Mob> {
+public class ShootTarget extends Behavior<LivingEntity> {
 
+    public static final float DEFAULT_ACCURACY = 3.2F;
     private final int aimThreshold;
     private final Function<LivingEntity, Float> accuracyFunc;
+    private final Predicate<LivingEntity> canShoot;
     private final TriggerStateSampler triggerSampler;
 
     public ShootTarget(int aimThreshold) {
-        this(aimThreshold, 3.2f);
+        this(aimThreshold, DEFAULT_ACCURACY);
     }
 
     public ShootTarget(int aimThreshold, float accuracy) {
         this(
                 aimThreshold,
                 entity -> accuracy,
+                entity -> true,
                 new MarkovTriggerSampler(0.93f, 0.94f, 15, 80)
         );
     }
 
-    public ShootTarget(int aimThreshold, Function<LivingEntity, Float> accuracyFunc, TriggerStateSampler triggerSampler) {
+    public ShootTarget(int aimThreshold, Function<LivingEntity, Float> accuracyFunc, Predicate<LivingEntity> canShoot, TriggerStateSampler triggerSampler) {
         super(ImmutableMap.of(
                 MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT,
                 ModBrainMemories.AIM_TICKS.get(), MemoryStatus.VALUE_PRESENT,
-                ModBrainMemories.SIMULATED_GUN.get(), MemoryStatus.VALUE_PRESENT,
-                ModBrainMemories.HOLD_FIRE.get(), MemoryStatus.REGISTERED
+                ModBrainMemories.SIMULATED_GUN.get(), MemoryStatus.VALUE_PRESENT
         ));
         this.aimThreshold = aimThreshold;
         this.accuracyFunc = accuracyFunc;
+        this.canShoot = canShoot;
         this.triggerSampler = triggerSampler;
     }
 
     @Override
-    protected boolean canStillUse(ServerLevel level, Mob mob, long gameTime) {
-        Brain<?> brain = mob.getBrain();
+    protected boolean canStillUse(ServerLevel level, LivingEntity entity, long gameTime) {
+        Brain<?> brain = entity.getBrain();
         return brain.hasMemoryValue(MemoryModuleType.ATTACK_TARGET)
                 && brain.hasMemoryValue(ModBrainMemories.AIM_TICKS.get())
                 && brain.hasMemoryValue(ModBrainMemories.SIMULATED_GUN.get());
@@ -56,19 +60,19 @@ public class ShootTarget extends Behavior<Mob> {
 
     @SuppressWarnings({"OptionalGetWithoutIsPresent", "RedundantIfStatement"}) // because already handled on canStillUse
     @Override
-    protected void tick(ServerLevel level, Mob mob, long gameTime) {
-        Brain<?> brain = mob.getBrain();
-        if (brain.hasMemoryValue(ModBrainMemories.HOLD_FIRE.get())) return;
+    protected void tick(ServerLevel level, LivingEntity entity, long gameTime) {
+        Brain<?> brain = entity.getBrain();
+        if (!canShoot.test(entity)) return;
 
         LivingEntity target = brain.getMemory(MemoryModuleType.ATTACK_TARGET).get();
         int aimTicks = brain.getMemory(ModBrainMemories.AIM_TICKS.get()).get();
         SimulatedGun simGun = brain.getMemory(ModBrainMemories.SIMULATED_GUN.get()).get();
         Vec3 targetPos = SimulatedGun.getCenterMassPos(target);
 
-        if (aimTicks >= this.aimThreshold && this.triggerSampler.next(mob.getRandom())) {
-            simGun.tickFire(mob, targetPos, this.accuracyFunc.apply(mob), true);
+        if (aimTicks >= this.aimThreshold && this.triggerSampler.next(entity.getRandom())) {
+            simGun.tickFire(entity, targetPos, this.accuracyFunc.apply(entity), true);
         } else {
-            simGun.tickFire(mob, targetPos, this.accuracyFunc.apply(mob), false);
+            simGun.tickFire(entity, targetPos, this.accuracyFunc.apply(entity), false);
         }
     }
 }
