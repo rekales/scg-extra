@@ -163,7 +163,7 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity, Gu
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.FOLLOW_RANGE, 35.0D)
+                .add(Attributes.FOLLOW_RANGE, 48.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.20F)
                 .add(Attributes.ARMOR, 16.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0)

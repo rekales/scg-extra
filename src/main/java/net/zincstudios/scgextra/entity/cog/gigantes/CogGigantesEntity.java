@@ -86,7 +86,7 @@ public class CogGigantesEntity extends FlyingMob implements GeoEntity, Stunnable
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.FOLLOW_RANGE, 35.0D)
+                .add(Attributes.FOLLOW_RANGE, 48.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25F)
                 .add(Attributes.FLYING_SPEED, 2F)
                 .add(Attributes.ARMOR, 4.0D)

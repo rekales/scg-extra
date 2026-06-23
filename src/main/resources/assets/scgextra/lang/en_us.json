@@ -139,8 +139,10 @@
   "scgextra.raid.label.rrc":  "RRC",
   "scgextra.raid.label.fac":  "FAC",
   "scgextra.raid.label.asgharian":  "Asgharian",
+  "scgextra.raid.label.cog":  "COG",
   "scgextra.raid.announcement.whaler":  "The Leviathan Syndicate is attacking from the depths!",
   "scgextra.raid.announcement.rrc":  "The Remnants of Rust Ridge are raiding!",
   "scgextra.raid.announcement.fac":  "The Remnants of Federal Armaments Consortium is launching an assault!",
-  "scgextra.raid.announcement.asgharian":  "The Asgharian Legion is marching!"
+  "scgextra.raid.announcement.asgharian":  "The Asgharian Legion is marching!",
+  "scgextra.raid.announcement.cog":  "The COG Battalion is advancing!"
 }

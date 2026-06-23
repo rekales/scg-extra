@@ -10,6 +10,10 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.ai.behavior.EntityTracker;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.ai.memory.WalkTarget;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.phys.Vec3;
@@ -173,7 +177,17 @@ public class WaveRaidManager extends SavedData {
                 }
                 Vec3 pos = WaveRaidUtil.findMobSpawnPos(level, waveCenter, RAID_SPAWN_RADIUS);
                 mob.setPos(pos);
-                mob.setTarget(player);
+
+                if (mob.getBrain().checkMemory(MemoryModuleType.ATTACK_TARGET, MemoryStatus.REGISTERED) && player != null) {
+                    mob.getBrain().setMemory(MemoryModuleType.ATTACK_TARGET, player);
+                    if (mob.getBrain().checkMemory(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED)) {
+                        mob.getBrain().setMemoryWithExpiry(MemoryModuleType.WALK_TARGET, new WalkTarget(
+                                new EntityTracker(player, false), 1.2f, 16
+                        ), 200);
+                    }
+                } else {
+                    mob.setTarget(player);
+                }
                 boolean finalize = raidData.handleRaiderEdgeCase(mob);
                 if (finalize) {
                     ForgeEventFactory.onFinalizeSpawn(
