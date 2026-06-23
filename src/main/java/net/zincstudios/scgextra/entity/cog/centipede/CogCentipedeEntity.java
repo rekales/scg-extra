@@ -119,13 +119,13 @@ public class CogCentipedeEntity extends Monster implements GeoEntity, CustomGunH
         updateSubEntities();
 
         if (brain.getTimeUntilExpiry(ModBrainMemories.DELAYED_MELEE.get()) == SLAM_DURATION) {
-            this.triggerAnim("behaviour", "slam");
+            this.triggerAnim("behavior", "slam");
         }
         if (brain.getTimeUntilExpiry(ModBrainMemories.STUNNED.get()) == STUN_DURATION) {
-            this.triggerAnim("behaviour", "stun");
+            this.triggerAnim("behavior", "stun");
         }
         if (brain.getTimeUntilExpiry(ModBrainMemories.STUNNED.get()) == STUN_RECOVERY_TICKS) {
-            this.triggerAnim("behaviour", "end_stun");
+            this.triggerAnim("behavior", "end_stun");
         }
     }
 
@@ -160,7 +160,7 @@ public class CogCentipedeEntity extends Monster implements GeoEntity, CustomGunH
                 .triggerableAnim("fire", RawAnimation.begin().thenPlay("fire"))
         );
 
-        controllers.add(new AnimationController<>(this, "behaviour", 0, state -> PlayState.STOP)
+        controllers.add(new AnimationController<>(this, "behavior", 0, state -> PlayState.STOP)
                 .triggerableAnim("stun", RawAnimation.begin().thenPlayAndHold("stun_start"))
                 .triggerableAnim("end_stun", RawAnimation.begin().thenPlay("stun_end"))
                 .triggerableAnim("slam", RawAnimation.begin().thenPlay("slam"))

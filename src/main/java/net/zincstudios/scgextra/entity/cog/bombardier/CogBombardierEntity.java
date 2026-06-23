@@ -68,10 +68,10 @@ public class CogBombardierEntity extends Monster implements GeoEntity, CustomGun
 
         Brain<?> brain = this.getBrain();
         if (brain.getTimeUntilExpiry(ModBrainMemories.TO_ALERT.get()) == ALERT_ANIM_TICKS) {
-            this.triggerAnim("behaviour", "alert");
+            this.triggerAnim("behavior", "alert");
         }
         if (brain.getTimeUntilExpiry(ModBrainMemories.STUNNED.get()) == STUN_RECOVERY_TICKS) {
-            this.triggerAnim("behaviour", "end_stun");
+            this.triggerAnim("behavior", "end_stun");
         }
     }
 
@@ -125,7 +125,7 @@ public class CogBombardierEntity extends Monster implements GeoEntity, CustomGun
                 .triggerableAnim("fire", RawAnimation.begin().thenPlay("fire"))
         );
 
-        controllers.add(new AnimationController<>(this, "behaviour", 0, state -> PlayState.STOP)
+        controllers.add(new AnimationController<>(this, "behavior", 0, state -> PlayState.STOP)
                 .triggerableAnim("stun", RawAnimation.begin().thenPlayAndHold("stun_start"))
                 .triggerableAnim("end_stun", RawAnimation.begin().thenPlay("stun_end"))
                 .triggerableAnim("alert", RawAnimation.begin().thenPlay("alert"))
