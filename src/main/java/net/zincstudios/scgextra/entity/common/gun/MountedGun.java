@@ -50,6 +50,8 @@ public class MountedGun {
 
     // checks if the mounted gun is currently pointing at the target
     protected boolean shouldShoot(Vec3 targetPos) {
+        if (!this.getGunPos().closerThan(targetPos, this.gun.getMaxRange())) return false;
+
         Vec3 delta = targetPos.subtract(this.getGunPos());
         float targetYaw = -((float)(Mth.atan2(delta.x, delta.z) * 180.0F / Math.PI));
         float targetPitch = -((float)(Mth.atan2(delta.y, delta.horizontalDistance()) * 180.0F / Math.PI));
@@ -57,7 +59,7 @@ public class MountedGun {
         float yawDiff = Mth.wrapDegrees(targetYaw - this.yaw);
         float pitchDiff = Mth.wrapDegrees(targetPitch - this.pitch);
 
-        return (Math.abs(yawDiff) < 12.0f && Math.abs(pitchDiff) < 12.0f);
+        return (Math.abs(yawDiff) < 20.0f && Math.abs(pitchDiff) < 20.0f);
     }
 
     protected Vec3 getGunPos() {

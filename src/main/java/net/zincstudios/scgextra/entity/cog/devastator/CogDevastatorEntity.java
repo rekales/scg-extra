@@ -1,24 +1,30 @@
 package net.zincstudios.scgextra.entity.cog.devastator;
 
+import com.mojang.serialization.Dynamic;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.asgharian.BulletSpawnOffset;
+import net.zincstudios.scgextra.entity.cog.centipede.CogCentipedeAi;
+import net.zincstudios.scgextra.entity.cog.centipede.CogCentipedeEntity;
 import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.brain.BrainUtils;
@@ -97,13 +103,6 @@ public class CogDevastatorEntity extends GunnerEntity implements GeoEntity, Gunn
         );
     }
 
-    @Override
-    protected void registerGoals() {
-        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 16.0F, 1.0f, false));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, true,
-                player -> !player.isSpectator()));
-    }
-
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
@@ -111,6 +110,29 @@ public class CogDevastatorEntity extends GunnerEntity implements GeoEntity, Gunn
                 .add(Attributes.ARMOR, 4.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.8)
                 .add(Attributes.MAX_HEALTH, 400.0D);
+    }
+
+    protected Brain<?> makeBrain(Dynamic<?> dynamic) {
+        return CogDevastatorAi.makeBrain(this, this.brainProvider().makeBrain(dynamic));
+    }
+
+    @SuppressWarnings("unchecked")
+    public Brain<CogDevastatorEntity> getBrain() {
+        return (Brain<CogDevastatorEntity>) super.getBrain();
+    }
+
+    protected Brain.Provider<CogDevastatorEntity> brainProvider() {
+        return Brain.provider(CogDevastatorAi.MEMORY_TYPES, CogDevastatorAi.SENSOR_TYPES);
+    }
+
+    @Override
+    protected void customServerAiStep() {
+        this.level().getProfiler().push("cogDevastatorBrain");
+        this.getBrain().tick((ServerLevel)this.level(), this);
+        CogDevastatorAi.updateActivity(this);
+        this.setTarget(this.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).orElse(null));
+        this.level().getProfiler().pop();
+        super.customServerAiStep();
     }
 
     @Override
@@ -134,9 +156,7 @@ public class CogDevastatorEntity extends GunnerEntity implements GeoEntity, Gunn
 
     @Override
     public void setTarget(@Nullable LivingEntity target) {
-        if (target instanceof Player player && (player.isCreative() || player.isSpectator())) {
-            target = null;
-        }
+        if (this.getTarget() == target) return;
         super.setTarget(target);
         this.entityData.set(TARGET_ID, target == null ? 0 : target.getId());
     }

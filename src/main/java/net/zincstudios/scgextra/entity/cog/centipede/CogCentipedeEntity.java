@@ -96,7 +96,7 @@ public class CogCentipedeEntity extends Monster implements GeoEntity, CustomGunH
 
     @Override
     protected void customServerAiStep() {
-        this.level().getProfiler().push("cogBombardierBrain");
+        this.level().getProfiler().push("cogCentipedeBrain");
         this.getBrain().tick((ServerLevel)this.level(), this);
         CogCentipedeAi.updateActivity(this);
         this.level().getProfiler().pop();
