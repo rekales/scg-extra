@@ -60,7 +60,7 @@ public class CogJuggernautAi {
                 AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), true),
                 GetCloseToTarget.create(5, 1.0F),
                 new AimWhenTargetVisible(),
-                JetBootsRelocate.create(),
+                new JetBootsCheckRelocate(),
                 new RocketBarrageAbility(),
                 new ShootTarget(20,
                         entity -> ShootTarget.DEFAULT_ACCURACY,

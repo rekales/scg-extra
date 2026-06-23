@@ -103,10 +103,10 @@ public class JetBootsAbility extends Behavior<CogJuggernautEntity> {
 
         double horizontalDist = getHorizontalDistance(target.currentPosition(), mob.position());
         double verticalAccel = 0.04F + 0.06F
-                * ((12 - getDistanceToGround(mob, 8)) / 12)
+                * ((16 - getDistanceToGround(mob, 12)) / 16)
                 * Math.min(horizontalDist / 4f, 1);
-        double horizontalAccel = 0.03F
-                * Mth.clamp((durationTicks - this.jetStartTicks) / 15f, 0, 1)
+        double horizontalAccel = 0.05F
+                * Mth.clamp((durationTicks - this.jetStartTicks) / 20f, 0, 1)
                 * Math.min(horizontalDist / 4f, 1);
 
         Vec3 delta = target.currentPosition().subtract(mob.position());
