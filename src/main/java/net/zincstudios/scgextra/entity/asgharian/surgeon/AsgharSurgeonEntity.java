@@ -169,7 +169,7 @@ public class AsgharSurgeonEntity extends GunnerEntity implements GeoEntity, Goal
     }
 
     @Override
-    public Vec3 getBulletSpawnOffset() {
+    public Vec3 getBulletSpawnOffset(int gunIndex) {
         return new Vec3(1.25,2,0.75).yRot(-this.yBodyRot * Mth.DEG_TO_RAD);
     }
 

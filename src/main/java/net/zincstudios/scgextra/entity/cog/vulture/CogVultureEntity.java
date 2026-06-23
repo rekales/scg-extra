@@ -118,7 +118,7 @@ public class CogVultureEntity extends Monster implements GeoEntity, Gunner, Bull
     }
 
     @Override
-    public Vec3 getBulletSpawnOffset() {
+    public Vec3 getBulletSpawnOffset(int gunIndex) {
         if (this.bulletSpawnLeft) {
             return CogVultureEntity.LEFT_GUN_OFFSET.yRot(-this.yBodyRot * Mth.DEG_TO_RAD);
         } else {

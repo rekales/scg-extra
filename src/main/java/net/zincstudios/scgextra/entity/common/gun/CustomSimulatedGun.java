@@ -26,6 +26,7 @@ import top.ribs.scguns.particles.TrailData;
 import java.util.Objects;
 import java.util.function.Function;
 
+// TODO: make abstract for extension with both this class and HeldSimulatedGun
 public class CustomSimulatedGun implements SimulatedGun {
 
     private final Gun gunBase;
@@ -38,6 +39,7 @@ public class CustomSimulatedGun implements SimulatedGun {
     private final int reloadTime;
     private final float idealRange;
     private final float maxRange;
+    private final int gunIndex;
     private final ProjectileFactory projectileFactory;
     private final Function<Vec3, Vec3> velocityModifier;
 
@@ -51,7 +53,7 @@ public class CustomSimulatedGun implements SimulatedGun {
     protected CustomSimulatedGun(Gun gunBase, int fireRate, int burstAmount, int burstInterval,
                                  double projectileSpeed, float projectileDamage, float idealRange,
                                  float maxRange, ProjectileFactory projectileFactory, Function<Vec3, Vec3> velocityModifier,
-                                 int ammoCapacity, int reloadTime) {
+                                 int ammoCapacity, int reloadTime, int gunIndex) {
         this.gunBase = gunBase;
         this.fireRate = fireRate;
         this.burstAmount = burstAmount;
@@ -63,6 +65,7 @@ public class CustomSimulatedGun implements SimulatedGun {
         this.reloadTime = reloadTime;
         this.idealRange = idealRange;
         this.maxRange = maxRange;
+        this.gunIndex = gunIndex;
         this.projectileFactory = projectileFactory;
         this.velocityModifier = velocityModifier;
     }
@@ -116,7 +119,7 @@ public class CustomSimulatedGun implements SimulatedGun {
         Gun gun = this.gunBase;
 
         Vec3 startPos = shooter instanceof BulletSpawnOffset bso
-                ? shooter.position().add(bso.getBulletSpawnOffset())
+                ? shooter.position().add(bso.getBulletSpawnOffset(this.gunIndex))
                 : shooter.getEyePosition();
         Vec3 aimDir = SimulatedGun.getDirectionVector(startPos, targetPos);
         aimDir = SimulatedGun.addAimError(shooter, aimDir, accuracyModifier);
@@ -227,6 +230,7 @@ public class CustomSimulatedGun implements SimulatedGun {
         private int reloadTime;
         private float idealRange;
         private float maxRange;
+        private int gunIndex;
         private ProjectileFactory projectileFactory;
         private Function<Vec3, Vec3> velocityModifier;
 
@@ -241,6 +245,7 @@ public class CustomSimulatedGun implements SimulatedGun {
             this.reloadTime = 1;
             this.idealRange = (float) gunBase.getIdealAttackRange();
             this.maxRange = this.idealRange * 1.5f;
+            this.gunIndex = 0;
             IProjectileFactory projFac = ProjectileManager.getInstance().getFactory(
                     ForgeRegistries.ITEMS.getKey(Objects.requireNonNull(gunBase.getProjectile().getItem())));
             this.projectileFactory = (level, entity, gun) ->
@@ -275,6 +280,9 @@ public class CustomSimulatedGun implements SimulatedGun {
         public Builder reloadTime(int reloadTime) {
             this.reloadTime = reloadTime; return this;
         }
+        public Builder gunIndex(int gunIndex) {
+            this.gunIndex = gunIndex; return this;
+        }
         public Builder projectileFactory(ProjectileFactory projectileFactory) {
             this.projectileFactory = projectileFactory; return this;
         }
@@ -285,7 +293,7 @@ public class CustomSimulatedGun implements SimulatedGun {
         public CustomSimulatedGun build() {
             return new CustomSimulatedGun(this.gunBase, this.fireRate, this.burstAmount, this.burstInterval,
                     this.projectileSpeed, this.projectileDamage, this.idealRange, this.maxRange, this.projectileFactory,
-                    this.velocityModifier, this.ammoCapacity, this.reloadTime);
+                    this.velocityModifier, this.ammoCapacity, this.reloadTime, this.gunIndex);
         }
     }
 }
