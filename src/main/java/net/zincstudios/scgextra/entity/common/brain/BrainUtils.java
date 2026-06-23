@@ -10,6 +10,7 @@ import net.minecraft.world.entity.ai.behavior.*;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.NearestVisibleLivingEntities;
 import net.zincstudios.scgextra.entity.Faction;
+import net.zincstudios.scgextra.entity.ModBrainMemories;
 
 import java.util.Optional;
 
@@ -56,6 +57,14 @@ public class BrainUtils {
         }
 
         return builder.build();
+    }
+
+    public static boolean isStunned(LivingEntity entity) {
+        return entity.getBrain().hasMemoryValue(ModBrainMemories.STUNNED.get());
+    }
+
+    public static boolean isNotStunned(LivingEntity entity) {
+        return !isStunned(entity);
     }
 
     private static boolean isWithinRange(LivingEntity entity, LivingEntity target) {

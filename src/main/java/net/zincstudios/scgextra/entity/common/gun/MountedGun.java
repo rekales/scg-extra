@@ -11,10 +11,10 @@ import java.util.function.Predicate;
 @SuppressWarnings("SuspiciousNameCombination")
 public class MountedGun {
 
-    private final LivingEntity parent;
-    private final SimulatedGun gun;
-    private final Vec3 spawnOffset;
-    private final Predicate<LivingEntity> isActive;
+    protected final LivingEntity parent;
+    protected final SimulatedGun gun;
+    protected final Vec3 spawnOffset;
+    protected final Predicate<LivingEntity> isActive;
 
     public float yaw = 0;
     public float pitch = 0;
@@ -61,7 +61,7 @@ public class MountedGun {
     }
 
     protected Vec3 getGunPos() {
-        return this.parent.position().add(this.spawnOffset.yRot(-this.parent.yBodyRot * Mth.DEG_TO_RAD)) ;  // TODO: override with yHeadRot later
+        return this.parent.position().add(this.spawnOffset.yRot(-this.parent.yBodyRot * Mth.DEG_TO_RAD));
     }
 
     public float getYaw() {
