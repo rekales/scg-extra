@@ -163,7 +163,7 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity, Gu
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.FOLLOW_RANGE, 48.0D)
+                .add(Attributes.FOLLOW_RANGE, 64.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.20F)
                 .add(Attributes.ARMOR, 6.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0)
@@ -201,7 +201,7 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity, Gu
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (source.is(DamageTypes.FALL) && this.isJetActive()) return false;
+        if (source.is(DamageTypes.FALL) && source.is(DamageTypes.ON_FIRE) && this.isJetActive()) return false;
         return super.hurt(source, amount);
     }
 
@@ -218,6 +218,16 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity, Gu
     @Override
     public boolean isOnFire() {
         return false;
+    }
+
+    @Override
+    protected void tickDeath() {
+        // Override to only extend death time
+        ++this.deathTime;
+        if (this.deathTime >= 30 && !this.level().isClientSide() && !this.isRemoved()) {
+            this.level().broadcastEntityEvent(this, (byte)60);
+            this.remove(Entity.RemovalReason.KILLED);
+        }
     }
 
     @Override
