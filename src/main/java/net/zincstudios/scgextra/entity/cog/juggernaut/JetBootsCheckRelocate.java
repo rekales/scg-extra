@@ -58,7 +58,7 @@ public class JetBootsCheckRelocate extends Behavior<CogJuggernautEntity> {
             this.accDistDelta = Math.min(0, this.accDistDelta+0.05f);
         }
 
-        float effectiveDist = dist + (isLookingAwayFrom(target, mob.position()) ? 4 : 0);;
+        float effectiveDist = dist + (isLookingAwayFrom(target, mob.position()) ? 4 : 0);
         effectiveDist += this.accDistDelta * (target.isSprinting() ? 1.3f : 1);
 
         if (effectiveDist < TOO_CLOSE_DIST) {

@@ -105,7 +105,7 @@ public class JetBootsAbility extends Behavior<CogJuggernautEntity> {
         double verticalAccel = 0.04F + 0.06F
                 * ((16 - getDistanceToGround(mob, 12)) / 16)
                 * Math.min(horizontalDist / 4f, 1);
-        double horizontalAccel = 0.05F
+        double horizontalAccel = 0.04F
                 * Mth.clamp((durationTicks - this.jetStartTicks) / 20f, 0, 1)
                 * Math.min(horizontalDist / 4f, 1);
 
