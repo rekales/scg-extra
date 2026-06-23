@@ -19,7 +19,7 @@ public class ModBrainSensors {
     public static final Supplier<SensorType<HeldGunSensor>> HELD_GUN = SENSOR_TYPES
             .register("held_gun", () -> new SensorType<>(HeldGunSensor::new));
     public static final Supplier<SensorType<HeldGunSensor>> HELD_GUN_RAPID = SENSOR_TYPES
-            .register("held_gun_rapid", () -> new SensorType<>(() -> new HeldGunSensor(1)));
+            .register("held_gun_rapid", () -> new SensorType<>(() -> new HeldGunSensor(2)));
     public static final Supplier<SensorType<CustomGunSensor>> CUSTOM_GUN = SENSOR_TYPES
             .register("custom_gun", () -> new SensorType<>(CustomGunSensor::new));
 

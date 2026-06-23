@@ -22,7 +22,7 @@ public class CogJuggernautAi {
             SensorType.NEAREST_LIVING_ENTITIES,
             ModBrainSensors.LONG_RANGE_PLAYER.get(),
             SensorType.HURT_BY,
-            ModBrainSensors.HELD_GUN.get()
+            ModBrainSensors.HELD_GUN_RAPID.get()
     );
     protected static final ImmutableList<? extends MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(
             MemoryModuleType.ATTACK_TARGET,
@@ -57,12 +57,13 @@ public class CogJuggernautAi {
         brain.addActivityAndRemoveMemoriesWhenStopped(Activity.FIGHT, BrainUtils.createPriorityPairs(10, ImmutableList.of(
                 StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValid(mob, target, false)),
                 AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), true),
+                new DynamicWeaponSwitching(),
                 GetCloseToTarget.create(5, 1.0F),
                 new AimWhenTargetVisible(),
                 new JetBootsCheckRelocate(),
                 new RocketBarrageAbility(),
                 new ShootTarget(20,
-                        entity -> ShootTarget.DEFAULT_ACCURACY,
+                        entity -> 2.4f,
                         entity -> !entity.getBrain().hasMemoryValue(ModBrainMemories.ABILITY_STATE.get()),
                         new MarkovTriggerSampler(0.93f, 0.94f, 15, 80))
                 )), ImmutableSet.of(

@@ -180,7 +180,7 @@ public class HeldSimulatedGun implements SimulatedGun {
 
     @Override
     public boolean hasChanged(LivingEntity entity) {
-        return ItemStack.matches(entity.getMainHandItem(), this.gunStack);
+        return !ItemStack.matches(entity.getMainHandItem(), this.gunStack);
     }
 
     @Override

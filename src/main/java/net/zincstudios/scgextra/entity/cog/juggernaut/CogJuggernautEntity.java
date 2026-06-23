@@ -216,6 +216,11 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity, Gu
     }
 
     @Override
+    public boolean isOnFire() {
+        return false;
+    }
+
+    @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "main", 2, state -> {
                 if (state.getAnimatable().isAggressive()) {
