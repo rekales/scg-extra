@@ -7,6 +7,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import top.ribs.scguns.Config;
 
+@SuppressWarnings("unused")
 public interface SimulatedGun {
 
     float BASE_AIM_ERROR = 5.0F;
@@ -15,6 +16,10 @@ public interface SimulatedGun {
      * @return true if fired a projectile
      */
     boolean tickFire(LivingEntity shooter, Vec3 targetPos, float accuracyModifier, boolean firing);
+
+    default boolean tickFire(LivingEntity shooter, Vec3 targetPos, float accuracyModifier) {
+        return this.tickFire(shooter, targetPos, accuracyModifier, true);
+    }
 
     boolean hasChanged(LivingEntity entity);
 

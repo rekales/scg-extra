@@ -11,14 +11,12 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -87,6 +85,16 @@ public class MobUtil {
 
     public static float rotFromVec(Vec3 vec) {
         return (float) Mth.atan2(-vec.x, vec.z) * Mth.RAD_TO_DEG;
+    }
+
+    public static Vec3 toVec(float yaw, float pitch) {
+        double yawRad   = Math.toRadians(yaw);
+        double pitchRad = Math.toRadians(pitch);
+        double x = -Math.sin(yawRad) * Math.cos(pitchRad);
+        double y = -Math.sin(pitchRad);
+        double z =  Math.cos(yawRad) * Math.cos(pitchRad);
+
+        return new Vec3(x, y, z);
     }
 
     // NOTE: Copied and edited from AIGunEvent, check for when scguns does a major update
@@ -195,7 +203,4 @@ public class MobUtil {
 
         return var10000;
     }
-
-
-
 }
