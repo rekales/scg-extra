@@ -1,7 +1,6 @@
 package net.zincstudios.scgextra.entity.cog.juggernaut;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.entity.LivingEntity;

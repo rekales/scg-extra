@@ -165,9 +165,9 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity, Gu
         return Monster.createMonsterAttributes()
                 .add(Attributes.FOLLOW_RANGE, 48.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.20F)
-                .add(Attributes.ARMOR, 16.0D)
+                .add(Attributes.ARMOR, 6.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0)
-                .add(Attributes.MAX_HEALTH, 1200.0D);
+                .add(Attributes.MAX_HEALTH, 1000.0D);
     }
 
     protected Brain<?> makeBrain(Dynamic<?> dynamic) {

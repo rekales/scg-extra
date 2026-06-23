@@ -13,7 +13,6 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -61,8 +60,6 @@ public class JetBootsCheckRelocate extends Behavior<CogJuggernautEntity> {
 
         float effectiveDist = dist + (isLookingAwayFrom(target, mob.position()) ? 4 : 0);;
         effectiveDist += this.accDistDelta * (target.isSprinting() ? 1.3f : 1);
-
-        SCGExtra.LOGGER.debug(String.format("%.5f  %.5f", effectiveDist, this.accDistDelta));
 
         if (effectiveDist < TOO_CLOSE_DIST) {
             Vec3 targetPos = mob.getEyePosition()
