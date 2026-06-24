@@ -87,7 +87,7 @@ public class JetBootsCheckRelocate extends Behavior<CogJuggernautEntity> {
             Vec3 targetPos = target.getEyePosition()
                     .subtract(mob.getEyePosition())
                     .normalize()
-                    .scale(effectiveDist - 6)
+                    .scale(effectiveDist - 4)
                     .add(mob.position());
 
             BlockHitResult result = level.clip(new ClipContext(
