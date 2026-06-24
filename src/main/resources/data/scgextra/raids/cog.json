@@ -58,9 +58,6 @@
   "boss" : [
     {
       "entity_id": "scgextra:cog_juggernaut"
-    },
-    {
-      "entity_id": "scguns:scamp_tank"
     }
   ]
 }
