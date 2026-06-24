@@ -2,22 +2,23 @@
   "raid_id" : "whaler",
   "raid_original_id" : "ocean",
 
-  "raid_profile" : {
-    "first_wave" : {
+  "waves" : [
+    {
       "infantry": 7
     },
-    "second_wave" : {
+    {
       "infantry": 2,
       "elite": 4
     },
-    "third_wave" : {
+    {
       "infantry": 2,
       "elite": 4,
       "miniboss": 1
     },
-    "boss_wave" : {
+    {
+      "boss": 1
     }
-  },
+  ],
 
   "infantry" : [
     {

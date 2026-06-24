@@ -2,22 +2,23 @@
   "raid_id" : "asgharian",
   "raid_original_id" : "diamond_steel",
 
-  "raid_profile" : {
-    "first_wave" : {
+  "waves" : [
+    {
       "infantry": 10
     },
-    "second_wave" : {
+    {
       "infantry": 6,
       "elite": 5
     },
-    "third_wave" : {
+    {
       "infantry": 4,
       "elite": 5,
       "miniboss": 1
     },
-    "boss_wave" : {
+    {
+      "boss": 1
     }
-  },
+  ],
 
   "infantry" : [
     {

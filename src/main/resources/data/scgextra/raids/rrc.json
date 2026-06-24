@@ -2,22 +2,23 @@
   "raid_id" : "rrc",
   "raid_original_id" : "copper",
 
-  "raid_profile" : {
-    "first_wave" : {
+  "waves" : [
+    {
       "infantry": 4
     },
-    "second_wave" : {
+    {
       "infantry": 3,
       "elite": 1
     },
-    "third_wave" : {
+    {
       "infantry": 2,
       "elite": 2,
       "miniboss": 1
     },
-    "boss_wave" : {
+    {
+      "boss": 1
     }
-  },
+  ],
 
   "infantry" : [
     {

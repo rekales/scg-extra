@@ -2,22 +2,23 @@
   "raid_id" : "cog",
   "raid_original_id" : "treated_brass",
 
-  "raid_profile" : {
-    "first_wave" : {
+  "waves" : [
+    {
       "infantry": 10
     },
-    "second_wave" : {
+    {
       "infantry": 6,
       "elite": 4
     },
-    "third_wave" : {
+    {
       "infantry": 4,
       "elite": 3,
       "miniboss": 1
     },
-    "boss_wave" : {
+    {
+      "boss": 1
     }
-  },
+  ],
 
   "infantry" : [
     {

@@ -2,22 +2,23 @@
   "raid_id" : "fac",
   "raid_original_id" : "iron",
 
-  "raid_profile" : {
-    "first_wave" : {
+  "waves" : [
+    {
       "infantry": 8
     },
-    "second_wave" : {
+    {
       "infantry": 5,
       "elite": 2
     },
-    "third_wave" : {
+    {
       "infantry": 3,
       "elite": 3,
       "miniboss": 1
     },
-    "boss_wave" : {
+    {
+      "boss": 1
     }
-  },
+  ],
 
   "infantry" : [
     {
