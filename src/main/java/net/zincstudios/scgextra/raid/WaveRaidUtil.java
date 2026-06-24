@@ -7,16 +7,44 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
+import net.zincstudios.scgextra.SCGExtra;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-// because WaveRaidManager is getting too big
 @ParametersAreNonnullByDefault
 public final class WaveRaidUtil {
 
     public static final int FIND_SPAWN_LOCATION_ATTEMPTS = 25;
     public static final double MIN_SPAWN_PLAYER_DISTANCE = 32;
+
+    public static Component getBossBarLabel(WaveRaidData raidData, int currentWave) {
+//        if (raidData.isFinalWave(currentWave) && this.raiderUUIDs.size() == 1) {
+//            UUID bossId = this.raiderUUIDs.iterator().next();
+//            Entity entity = this.level.getEntity(bossId);
+//            if (entity instanceof LivingEntity bossEntity) {
+//                return bossEntity.getDisplayName();
+//            }
+//        }
+
+        String wave = switch (currentWave) {
+            case 0 -> "wave_1";
+            case 1 -> "wave_2";
+            case 2 -> "wave_3";
+            case 3 -> "wave_4";
+            case 4 -> "wave_5";
+            case 5 -> "wave_6";
+            case 6 -> "wave_7";
+            case 7 -> "wave_8";
+            case 8 -> "wave_9";
+            default -> "";
+        };
+        if (raidData.isFinalWave(currentWave)) wave = "last_wave";
+
+        return Component.translatable(SCGExtra.MOD_ID+".raid.label."+raidData.id())
+                .append(" ")
+                .append(Component.translatable(SCGExtra.MOD_ID+".raid.label."+wave));
+    }
 
     public static void announceToNearbyPlayers(ServerLevel level, Component message, Vec3 pos, double radius) {
         for(ServerPlayer player : level.getPlayers((player) -> player.position().distanceTo(pos) <= radius)) {

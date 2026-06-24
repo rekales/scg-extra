@@ -3,7 +3,6 @@ package net.zincstudios.scgextra.mixin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.raid.WaveRaidData;
 import net.zincstudios.scgextra.raid.WaveRaidManager;
 import org.spongepowered.asm.mixin.Final;
@@ -31,17 +30,15 @@ public class RaidManagerMixin {
     @Inject(method = "startRaidFromPlayer", at = @At("HEAD"), cancellable = true)
     private void onStartRaidFromPlayer(RaidConfig.RaidData config, ServerLevel level, ServerPlayer player, CallbackInfo ci) {
         RaidManager self = (RaidManager) (Object) this;
+        if (self.hasActiveRaid()) return;
 
-        if (!self.hasActiveRaid()) {
-            Vec3 playerPos = player.position();
-//            Vec3 spawnPos = WaveRaidUtil.findRaidSpawnLocation(level, playerPos);
-            WaveRaidData waveRaidData = WaveRaidData.getWaveRaidFromOriginal(config.raidId());
-            if (waveRaidData != null) {
-                WaveRaidManager waveRaidManager = WaveRaidManager.get(level);
-                waveRaidManager.startRaid(waveRaidData, level, playerPos);  // NOTE: centering to player might not be ideal.
-                ci.cancel();
-            }
-        }
+        WaveRaidData waveRaidData = WaveRaidData.getWaveRaidFromOriginal(config.raidId());
+        if (waveRaidData == null) return;
+
+        // TODO: intercept from the item instead to allow custom flare handling and refunds
+        WaveRaidManager waveRaidManager = WaveRaidManager.get(level);
+        waveRaidManager.startRaid(waveRaidData, level, player);
+        ci.cancel();
     }
 
     @Inject(method = "hasActiveRaid", at = @At("HEAD"), cancellable = true)
@@ -59,7 +56,7 @@ public class RaidManagerMixin {
     @Inject(method = "surrenderRaid", at = @At("HEAD"))
     private static void onSurrenderRaid(ServerLevel level, CallbackInfo ci) {
         WaveRaidManager manager = WaveRaidManager.get(level);
-        manager.surrenderRaid(level);
+        manager.endRaid(level, false);
     }
 
     @Unique
