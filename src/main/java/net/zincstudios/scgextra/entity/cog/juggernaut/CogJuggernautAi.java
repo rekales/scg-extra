@@ -55,7 +55,7 @@ public class CogJuggernautAi {
 
     private static void initFightActivity(CogJuggernautEntity mob, Brain<CogJuggernautEntity> brain) {
         brain.addActivityAndRemoveMemoriesWhenStopped(Activity.FIGHT, BrainUtils.createPriorityPairs(10, ImmutableList.of(
-                StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValid(mob, target, false)),
+                StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValidNonFriendlies(mob, target, false)),
                 AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), true),
                 new DynamicWeaponSwitching(),
                 GetCloseToTarget.create(5, 1.0F),

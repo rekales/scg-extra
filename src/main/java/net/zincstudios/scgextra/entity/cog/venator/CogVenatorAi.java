@@ -55,8 +55,8 @@ public class CogVenatorAi {
 
     private static void initFightActivity(CogVenatorEntity mob, Brain<CogVenatorEntity> brain) {
         brain.addActivityAndRemoveMemoriesWhenStopped(Activity.FIGHT, BrainUtils.createPriorityPairs(10, ImmutableList.of(
-                StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValid(mob, target, false)),
-                AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), true),
+                StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValidNonFriendlies(mob, target, false)),
+                AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), false),
                 new AvoidTargetIfClose(10),
                 new WalkUpToIdealRange(1.0F),
                 new AimWhenNotWalking(),

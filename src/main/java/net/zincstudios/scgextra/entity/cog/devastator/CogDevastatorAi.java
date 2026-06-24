@@ -55,8 +55,8 @@ public class CogDevastatorAi {
     private static void initFightActivity(CogDevastatorEntity mob, Brain<CogDevastatorEntity> brain) {
         brain.addActivityAndRemoveMemoriesWhenStopped(Activity.FIGHT, BrainUtils.createPriorityPairs(10,
                         ImmutableList.of(
-                                StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValid(mob, target, false)),
-                                AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), true),
+                                StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValidNonFriendlies(mob, target, false)),
+                                AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), false),
                                 GetCloseToTarget.create(4 ,1.0F)
                         )), ImmutableSet.of(
                         Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT)

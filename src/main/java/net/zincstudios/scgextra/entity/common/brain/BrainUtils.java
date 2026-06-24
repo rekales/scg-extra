@@ -35,6 +35,10 @@ public class BrainUtils {
                 .filter(entity -> isWithinRange(mob, entity));
     }
 
+    public static Optional<LivingEntity> getHurtByNonFriendlies(LivingEntity mob) {
+        return getHurtBy(mob).filter(entity -> !Faction.isFriendlies(mob, entity));
+    }
+
     // Sensor.isEntityAttackable is shit and doesn't account for the follow range attribute
     @SuppressWarnings({"RedundantIfStatement", "BooleanMethodIsAlwaysInverted"})  // for readability
     public static boolean isTargetStillValid(LivingEntity entity, LivingEntity target, boolean needLineOfSight) {
@@ -42,9 +46,15 @@ public class BrainUtils {
         if (!target.canBeSeenByAnyone()) return false;
         if (!entity.canAttack(target) || !entity.canAttackType(target.getType()) || entity.isAlliedTo(target)) return false;
         if (!isWithinRange(entity, target)) return false;
-        if (needLineOfSight && entity instanceof Mob mob && !mob.getSensing().hasLineOfSight(target)) return false;
+        if (needLineOfSight && entity instanceof Mob mob && !mob.getSensing().hasLineOfSight(target)) return false;  // TODO: profile, might be performance intensive
         return true;
     }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public static boolean isTargetStillValidNonFriendlies(LivingEntity entity, LivingEntity target, boolean needLineOfSight) {
+        return isTargetStillValid(entity, target, needLineOfSight) && !Faction.isFriendlies(entity, target);
+    }
+
 
     // public static copy of Brain#createPriorityPairs
     public static <E extends LivingEntity> ImmutableList<? extends Pair<Integer, ? extends BehaviorControl<? super E>>> createPriorityPairs(

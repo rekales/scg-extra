@@ -61,8 +61,8 @@ public class CogCentipedeAi {
     private static void initFightActivity(CogCentipedeEntity mob, Brain<CogCentipedeEntity> brain) {
         brain.addActivityAndRemoveMemoriesWhenStopped(Activity.FIGHT, BrainUtils.createPriorityPairs(10,
                 ImmutableList.of(
-                        StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValid(mob, target, false)),
-                        AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), true),
+                        StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValidNonFriendlies(mob, target, false)),
+                        AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), false),
                         new SlamAttack(CogCentipedeEntity.SLAM_DAMAGE_DELAY, CogCentipedeEntity.SLAM_DURATION, 4, 80),
                         new ApproachTargetIfCannotAim(1.0F),
                         new AimWhenNotWalking(),

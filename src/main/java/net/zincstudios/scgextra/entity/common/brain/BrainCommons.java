@@ -32,7 +32,7 @@ public class BrainCommons {
     // Not for flying and swimming mobs
     public static void initIdleActivity(Brain<? extends PathfinderMob> brain) {
         brain.addActivity(Activity.IDLE, 10, ImmutableList.of(
-                StartAttacking.create(BrainUtils::getHurtBy),
+                StartAttacking.create(BrainUtils::getHurtByNonFriendlies),
                 StartAttacking.create(BrainUtils::findNearestVisibleAttackablePlayer),
                 StartAttacking.create(BrainUtils::findNearestAttackableFactionEnemy),
                 new RunOne<>(ImmutableList.of(

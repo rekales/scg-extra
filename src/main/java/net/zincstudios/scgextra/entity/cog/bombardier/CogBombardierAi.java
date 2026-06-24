@@ -4,8 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.*;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -67,8 +65,8 @@ public class CogBombardierAi {
 
     private static void initFightActivity(CogBombardierEntity mob, Brain<CogBombardierEntity> brain) {
         brain.addActivityAndRemoveMemoriesWhenStopped(Activity.FIGHT, BrainUtils.createPriorityPairs(10, ImmutableList.of(
-                        StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValid(mob, target, false)),
-                        AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), true),
+                        StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValidNonFriendlies(mob, target, false)),
+                        AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), false),
                         new RunOneOrdered<>(ImmutableList.of(
                                 new AvoidTargetIfClose(10),
                                 new CheckShouldAlert(CogBombardierEntity.ALERT_ANIM_TICKS)

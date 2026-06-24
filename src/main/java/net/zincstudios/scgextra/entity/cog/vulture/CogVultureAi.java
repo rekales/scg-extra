@@ -11,7 +11,6 @@ import net.minecraft.world.entity.schedule.Activity;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.ModBrainSensors;
-import net.zincstudios.scgextra.entity.cog.juggernaut.*;
 import net.zincstudios.scgextra.entity.common.brain.*;
 
 public class CogVultureAi {
@@ -50,8 +49,8 @@ public class CogVultureAi {
 
     private static void initFightActivity(CogVultureEntity mob, Brain<CogVultureEntity> brain) {
         brain.addActivityAndRemoveMemoryWhenStopped(Activity.FIGHT, 10, ImmutableList.of(
-                StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValid(mob, target, false)),
-                AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), true),
+                StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValidNonFriendlies(mob, target, false)),
+                AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), false),
                 new ApproachTargetIfCannotAim(1.0F),
                 new AimWhenNotWalking(),
                 // TODO: add flank behavior
