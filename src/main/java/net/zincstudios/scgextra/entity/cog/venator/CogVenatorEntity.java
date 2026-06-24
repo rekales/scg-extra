@@ -9,8 +9,11 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.gun.CustomGunHolder;
 import net.zincstudios.scgextra.entity.common.gun.CustomSimulatedGun;
@@ -28,9 +31,11 @@ import top.ribs.scguns.init.ModItems;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import static net.zincstudios.scgextra.entity.common.brain.AvoidTargetIfClose.AVOID_TARGET_TTL;
+
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CogVenatorEntity extends GunnerEntity implements GeoEntity, CustomGunHolder {
+public class CogVenatorEntity extends GunnerEntity implements GeoEntity, CustomGunHolder, Gunner {
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
     private final SimulatedGun customGun;
@@ -50,6 +55,15 @@ public class CogVenatorEntity extends GunnerEntity implements GeoEntity, CustomG
                 .add(Attributes.FOLLOW_RANGE, 35.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25F)
                 .add(Attributes.MAX_HEALTH, 15.0D);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (brain.getTimeUntilExpiry(MemoryModuleType.AVOID_TARGET) == AVOID_TARGET_TTL-5) {
+            this.playSound(COGSounds.COG_VENATOR_RUN.get());
+        }
     }
 
     protected Brain<?> makeBrain(Dynamic<?> dynamic) {
@@ -104,6 +118,18 @@ public class CogVenatorEntity extends GunnerEntity implements GeoEntity, CustomG
     }
 
     @Override
+    public SimulatedGun getCustomGun() {
+        return this.customGun;
+    }
+
+    @Override
+    public void onGunFire(SimulatedGun gun, Vec3 targetPos) {
+        if (this.getRandom().nextBoolean()) {
+            this.playSound(this.getAttackSound());
+        }
+    }
+
+    @Override
     protected @Nullable SoundEvent getAmbientSound() {
         return COGSounds.GENERAL_IDLE.get();
     }
@@ -113,8 +139,7 @@ public class CogVenatorEntity extends GunnerEntity implements GeoEntity, CustomG
         return COGSounds.GENERAL_LIGHT_HURT.get();
     }
 
-    @Override
-    public SimulatedGun getCustomGun() {
-        return this.customGun;
+    protected SoundEvent getAttackSound() {
+        return COGSounds.COG_VENATOR_ATTACK.get();
     }
 }

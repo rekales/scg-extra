@@ -9,6 +9,8 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus;
 
 public class AvoidTargetIfClose extends Behavior<LivingEntity> {
 
+    public static final int AVOID_TARGET_TTL = 60;
+
     private final float avoidDist;
 
     public AvoidTargetIfClose(float avoidDist) {
@@ -30,6 +32,6 @@ public class AvoidTargetIfClose extends Behavior<LivingEntity> {
     @Override
     protected void start(ServerLevel level, LivingEntity entity, long gameTime) {
         LivingEntity target = entity.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).get();
-        entity.getBrain().setMemoryWithExpiry(MemoryModuleType.AVOID_TARGET, target, 60);
+        entity.getBrain().setMemoryWithExpiry(MemoryModuleType.AVOID_TARGET, target, AVOID_TARGET_TTL);
     }
 }
