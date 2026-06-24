@@ -63,7 +63,7 @@ public class WaveRaidState {
     }
 
     public void advanceWave() {
-        if (!WaveRaidData.Profile.isFinalWave(this.currentWave)) {
+        if (!this.waveRaidData.isFinalWave(this.currentWave)) {
             this.currentWave++;
             this.nextWaveDelay = NEXT_WAVE_DELAY;
             this.totalWaveSpawned = 0;
@@ -107,7 +107,7 @@ public class WaveRaidState {
     }
 
     public void endRaid() {
-        this.endRaid(this.isRaidersEliminated() && WaveRaidData.Profile.isFinalWave(this.currentWave));
+        this.endRaid(this.isRaidersEliminated() && this.waveRaidData.isFinalWave(this.currentWave));
     }
 
     public void endRaid(boolean success) {
@@ -126,7 +126,7 @@ public class WaveRaidState {
         if (this.active) {
             this.updateRaiders();
             if (this.isRaidersEliminated()) {
-                if (WaveRaidData.Profile.isFinalWave(this.currentWave) && !this.hasEnded() && this.nextWaveDelay <= 0) {
+                if (this.waveRaidData.isFinalWave(this.currentWave) && !this.hasEnded() && this.nextWaveDelay <= 0) {
                     this.endRaid(true);
                 } else {
                     this.nextWaveDelay--;
@@ -169,7 +169,7 @@ public class WaveRaidState {
 
     public boolean isNextWaveReady() {
         return this.active
-                && !WaveRaidData.Profile.isFinalWave(this.currentWave)
+                && !this.waveRaidData.isFinalWave(this.currentWave)
                 && this.isRaidersEliminated()
                 && this.nextWaveDelay <= 0 ;
     }
@@ -179,7 +179,7 @@ public class WaveRaidState {
     }
 
     public float getBossBarProgress() {
-        if (WaveRaidData.Profile.isFinalWave(this.currentWave) && this.raiderUUIDs.size() == 1) {
+        if (this.waveRaidData.isFinalWave(this.currentWave) && this.raiderUUIDs.size() == 1) {
             UUID bossId = this.raiderUUIDs.iterator().next();
             Entity entity = this.level.getEntity(bossId);
             if (entity instanceof LivingEntity bossEntity) {
@@ -192,7 +192,7 @@ public class WaveRaidState {
     }
 
     public Component getBossBarLabel() {
-        if (WaveRaidData.Profile.isFinalWave(this.currentWave) && this.raiderUUIDs.size() == 1) {
+        if (this.waveRaidData.isFinalWave(this.currentWave) && this.raiderUUIDs.size() == 1) {
             UUID bossId = this.raiderUUIDs.iterator().next();
             Entity entity = this.level.getEntity(bossId);
             if (entity instanceof LivingEntity bossEntity) {
@@ -205,8 +205,15 @@ public class WaveRaidState {
             case 2 -> "wave_2";
             case 3 -> "wave_3";
             case 4 -> "wave_4";
+            case 5 -> "wave_5";
+            case 6 -> "wave_6";
+            case 7 -> "wave_7";
+            case 8 -> "wave_8";
+            case 9 -> "wave_9";
             default -> "";
         };
+        if (this.waveRaidData.isFinalWave(this.currentWave)) wave = "last_wave";
+
         return Component.translatable(SCGExtra.MOD_ID+".raid.label."+this.waveRaidData.id())
                 .append(" ")
                 .append(Component.translatable(SCGExtra.MOD_ID+".raid.label."+wave));

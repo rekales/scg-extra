@@ -20,7 +20,7 @@ import java.util.*;
 @ParametersAreNonnullByDefault
 @FieldsAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public record WaveRaidData(String id, String originalId, Profile profile, List<RaiderEntry> infantry, List<RaiderEntry> elite,
+public record WaveRaidData(String id, String originalId, List<Wave> waves, List<RaiderEntry> infantry, List<RaiderEntry> elite,
                            List<RaiderEntry> miniboss, List<RaiderEntry> boss) {
 
     private static final Map<String, WaveRaidData> RAIDS = new HashMap<>();  // Key: raid id
@@ -42,6 +42,20 @@ public record WaveRaidData(String id, String originalId, Profile profile, List<R
         if (infantry.isEmpty() || elite.isEmpty() || miniboss.isEmpty() || boss.isEmpty()) {
             throw new IllegalArgumentException("entries cannot be empty");
         }
+        for (Wave wave : waves) {
+            if (wave.getTotal() == 0) {
+                throw new IllegalArgumentException("waves cannot be empty");
+            }
+        }
+        // TODO: complex check if there's enough max_spawns for the wave.
+    }
+
+    public static @Nullable WaveRaidData getWaveRaidFromOriginal(String originalId) {
+        return REPLACED_RAIDS.get(originalId);
+    }
+
+    public static @Nullable WaveRaidData getWaveRaid(String id) {
+        return RAIDS.get(id);
     }
 
     public enum Rank {
@@ -57,16 +71,9 @@ public record WaveRaidData(String id, String originalId, Profile profile, List<R
         };
     }
 
-    public static @Nullable WaveRaidData getWaveRaidFromOriginal(String originalId) {
-        return REPLACED_RAIDS.get(originalId);
-    }
-
-    public static @Nullable WaveRaidData getWaveRaid(String id) {
-        return RAIDS.get(id);
-    }
 
     public List<RaiderEntry> generateRaiders(int currentWave, RandomSource random) {
-        return this.generateRaiders(this.profile.getWave(currentWave), random);
+        return this.generateRaiders(this.waves.get(currentWave), random);
     }
 
     public List<RaiderEntry> generateRaiders(Wave wave, RandomSource random) {
@@ -74,10 +81,7 @@ public record WaveRaidData(String id, String originalId, Profile profile, List<R
         spawnList.addAll(sampleRandomRaiders(this.getRaiderEntries(Rank.INFANTRY), wave.infantry, random));
         spawnList.addAll(sampleRandomRaiders(this.getRaiderEntries(Rank.ELITE), wave.elite, random));
         spawnList.addAll(sampleRandomRaiders(this.getRaiderEntries(Rank.MINIBOSS), wave.miniboss, random));
-
-        if (wave == this.profile.boss) {
-            spawnList.addAll(sampleRandomRaiders(this.getRaiderEntries(Rank.BOSS), 1, random));
-        }
+        spawnList.addAll(sampleRandomRaiders(this.getRaiderEntries(Rank.BOSS), wave.boss, random));
 
         return spawnList;
     }
@@ -120,10 +124,10 @@ public record WaveRaidData(String id, String originalId, Profile profile, List<R
 
         public RaiderEntry {
             if (weight <= 0) {
-                throw new IllegalArgumentException("weight cannot zero or lower");
+                throw new IllegalArgumentException("weight cannot be zero or lower");
             }
             if (value <= 0) {
-                throw new IllegalArgumentException("value cannot zero or lower");
+                throw new IllegalArgumentException("value cannot be zero or lower");
             }
             if (maxCount <= 0) {
                 maxCount = DEFAULT_MAX_SPAWNS;
@@ -147,32 +151,14 @@ public record WaveRaidData(String id, String originalId, Profile profile, List<R
         }
     }
 
-    public record Profile(Wave first, Wave second, Wave third, Wave boss) {
-        public Profile {
-            if (first.getTotal() == 0 || second.getTotal() == 0 || third.getTotal() == 0) {
-                throw new IllegalArgumentException("non-boss waves cannot be empty");
-            }
-            // TODO: complex check if there's enough max_spawns for the wave.
-        }
-
-        public Wave getWave(int currentWave) {
-            return switch (currentWave) {
-                case 2 -> second;
-                case 3 -> third;
-                case 4 -> boss;
-                default -> first;
-            };
-        }
-
-        public static boolean isFinalWave(int currentWave) {
-            return currentWave == 4;
+    public record Wave(int infantry, int elite, int miniboss, int boss) {
+        public int getTotal() {
+            return this.infantry + this.elite + this.miniboss + this.boss;
         }
     }
 
-    public record Wave(int infantry, int elite, int miniboss) {
-        public int getTotal() {
-            return this.infantry + this.elite + this.miniboss;
-        }
+    public boolean isFinalWave(int currentWave) {
+        return this.waves.size()-1 == currentWave;
     }
 
     @SuppressWarnings("RedundantIfStatement")
