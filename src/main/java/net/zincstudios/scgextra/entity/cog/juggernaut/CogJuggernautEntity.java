@@ -224,7 +224,7 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity, Gu
     protected void tickDeath() {
         // Override to only extend death time
         ++this.deathTime;
-        if (this.deathTime >= 30 && !this.level().isClientSide() && !this.isRemoved()) {
+        if (this.deathTime >= 35 && !this.level().isClientSide() && !this.isRemoved()) {
             this.level().broadcastEntityEvent(this, (byte)60);
             this.remove(Entity.RemovalReason.KILLED);
         }

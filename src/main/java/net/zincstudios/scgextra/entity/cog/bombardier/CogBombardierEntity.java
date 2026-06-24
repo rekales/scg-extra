@@ -10,6 +10,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -101,6 +102,7 @@ public class CogBombardierEntity extends Monster implements GeoEntity, CustomGun
         this.level().getProfiler().push("cogBombardierBrain");
         this.getBrain().tick((ServerLevel)this.level(), this);
         CogBombardierAi.updateActivity(this);
+        this.setAggressive(this.getBrain().hasMemoryValue(MemoryModuleType.ATTACK_TARGET));
         this.level().getProfiler().pop();
         super.customServerAiStep();
     }

@@ -185,6 +185,11 @@ public class CogCentipedeEntity extends Monster implements GeoEntity, CustomGunH
     }
 
     @Override
+    public void onGunFire(SimulatedGun gun, Vec3 targetPos) {
+        this.triggerAnim("gun", "fire");
+    }
+
+    @Override
     protected void tickDeath() {
         // Override to only extend death time
         ++this.deathTime;
