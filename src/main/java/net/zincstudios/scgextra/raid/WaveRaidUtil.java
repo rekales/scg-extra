@@ -1,6 +1,7 @@
 package net.zincstudios.scgextra.raid;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
@@ -16,6 +17,12 @@ public final class WaveRaidUtil {
 
     public static final int FIND_SPAWN_LOCATION_ATTEMPTS = 25;
     public static final double MIN_SPAWN_PLAYER_DISTANCE = 32;
+
+    public static void announceToNearbyPlayers(ServerLevel level, Component message, Vec3 pos, double radius) {
+        for(ServerPlayer player : level.getPlayers((player) -> player.position().distanceTo(pos) <= radius)) {
+            player.sendSystemMessage(message);
+        }
+    }
 
     public static @Nullable ServerPlayer findNearestPlayer(ServerLevel level, Vec3 pos) {
         ServerPlayer nearest = null;

@@ -16,6 +16,7 @@ import net.zincstudios.scgextra.SCGExtra;
 import javax.annotation.Nullable;
 import java.util.*;
 
+// TODO: remove logic and possible reference to serverlevel
 @SuppressWarnings("unused")
 public class WaveRaidState {
 
@@ -38,7 +39,7 @@ public class WaveRaidState {
         this.raidId = UUID.randomUUID();
         this.startTime = level.getGameTime();
         this.level = level;
-        this.currentWave = 1;
+        this.currentWave = 0;
         this.waveRaidData = waveRaidData;
         this.spawnCenter = spawnCenter;
         this.active = true;
@@ -114,10 +115,12 @@ public class WaveRaidState {
         this.active = false;
 
         if (success) {
-            this.announceToNearbyPlayers(Component.translatable("raid.scguns.defeated"), 64.0F);
+            WaveRaidUtil.announceToNearbyPlayers(this.level,
+                    Component.translatable("raid.scguns.defeated"), this.spawnCenter, 64);
         } else {
             this.discardRaiders();
-            this.announceToNearbyPlayers(Component.translatable("raid.scguns.failed"), 64.0F);
+            WaveRaidUtil.announceToNearbyPlayers(this.level,
+                    Component.translatable("raid.scguns.failed"), this.spawnCenter, 64);
         }
     }
 
@@ -132,7 +135,7 @@ public class WaveRaidState {
                     this.nextWaveDelay--;
                 }
             }
-            if (this.checkTimeout()) {
+            if (this.isTimedOut()) {
                 this.endRaid(false);
             }
             ServerPlayer player = this.getTargetPlayer();
@@ -142,14 +145,8 @@ public class WaveRaidState {
         }
     }
 
-    private boolean checkTimeout() {
+    private boolean isTimedOut() {
         return this.level.getGameTime() > this.startTime + RAID_TIMEOUT_TICKS;
-    }
-
-    public void announceToNearbyPlayers(Component message, double radius) {
-        for(ServerPlayer player : this.level.getPlayers((player) -> player.position().distanceTo(this.spawnCenter) <= radius)) {
-            player.sendSystemMessage(message);
-        }
     }
 
     private void updateRaiders() {
@@ -201,15 +198,15 @@ public class WaveRaidState {
         }
 
         String wave = switch (this.currentWave) {
-            case 1 -> "wave_1";
-            case 2 -> "wave_2";
-            case 3 -> "wave_3";
-            case 4 -> "wave_4";
-            case 5 -> "wave_5";
-            case 6 -> "wave_6";
-            case 7 -> "wave_7";
-            case 8 -> "wave_8";
-            case 9 -> "wave_9";
+            case 0 -> "wave_1";
+            case 1 -> "wave_2";
+            case 2 -> "wave_3";
+            case 3 -> "wave_4";
+            case 4 -> "wave_5";
+            case 5 -> "wave_6";
+            case 6 -> "wave_7";
+            case 7 -> "wave_8";
+            case 8 -> "wave_9";
             default -> "";
         };
         if (this.waveRaidData.isFinalWave(this.currentWave)) wave = "last_wave";
@@ -217,11 +214,6 @@ public class WaveRaidState {
         return Component.translatable(SCGExtra.MOD_ID+".raid.label."+this.waveRaidData.id())
                 .append(" ")
                 .append(Component.translatable(SCGExtra.MOD_ID+".raid.label."+wave));
-    }
-
-    // NOTE: maybe on WaveRaidData instead?
-    public Component getAnnouncement() {
-        return Component.translatable(SCGExtra.MOD_ID+".raid.announcement."+this.waveRaidData.id());
     }
 
     public CompoundTag serialize() {

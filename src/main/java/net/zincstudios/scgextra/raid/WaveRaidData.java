@@ -2,6 +2,7 @@ package net.zincstudios.scgextra.raid;
 
 import net.minecraft.FieldsAreNonnullByDefault;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
@@ -9,6 +10,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.zincstudios.scgextra.SCGExtra;
 import top.ribs.scguns.entity.monster.DissidentEntity;
 
 import javax.annotation.Nullable;
@@ -170,6 +172,10 @@ public record WaveRaidData(
 
     public boolean isFinalWave(int waveIndex) {
         return this.waves.size()-1 == waveIndex;
+    }
+
+    public Component getAnnouncement() {
+        return Component.translatable(SCGExtra.MOD_ID+".raid.announcement."+this.id);
     }
 
     @SuppressWarnings("RedundantIfStatement")

@@ -77,7 +77,7 @@ public class WaveRaidManager extends SavedData {
         this.raidState = raid;
         spawnCurrentWaveMobs(raid, level);
         for(ServerPlayer player : level.getPlayers((player) -> player.position().distanceTo(spawnCenter) <= RAID_BOSS_BAR_RADIUS)) {
-            player.sendSystemMessage(raid.getAnnouncement());
+            player.sendSystemMessage(raidData.getAnnouncement());
         }
     }
 
