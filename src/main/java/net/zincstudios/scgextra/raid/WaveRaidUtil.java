@@ -12,7 +12,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 // because WaveRaidManager is getting too big
 @ParametersAreNonnullByDefault
-public class WaveRaidUtil {
+public final class WaveRaidUtil {
 
     public static final int FIND_SPAWN_LOCATION_ATTEMPTS = 25;
     public static final double MIN_SPAWN_PLAYER_DISTANCE = 32;
@@ -152,47 +152,4 @@ public class WaveRaidUtil {
 
         return center;  // TODO: better fallback
     }
-
-    // Copied and adjusted from Fassiss' old raid wave code
-//    private static Vec3 findRaidSpawnCenter2(
-//            RaidManagerInvoker invoker,
-//            ActiveRaid raid,
-//            ServerLevel level,
-//            Vec3 raidOrigin,
-//            RaidConfig.HenchmenData henchmenData,
-//            RandomSource random
-//    ) {
-//        int raidSpawnRadius = scaledRaidSpawnRadius(RAID_SPAWN_RADIUS, RAID_SPAWN_RADIUS_MIN, RAID_SPAWN_RADIUS_MULTIPLIER);
-//        int outerRadius = Math.max(GROUP_MAX_DISTANCE_FROM_ORIGIN, raidSpawnRadius);
-//        for (int i = 0; i < GROUP_CENTER_FIND_ATTEMPTS; i++) {
-//            double angle = random.nextDouble() * Math.PI * 2.0;
-//            double distance = GROUP_MIN_DISTANCE_FROM_ORIGIN + random.nextDouble() * (GROUP_MAX_DISTANCE_FROM_ORIGIN - GROUP_MIN_DISTANCE_FROM_ORIGIN);
-//            Vec3 probe = new Vec3(
-//                    raidOrigin.x + Math.cos(angle) * distance,
-//                    raidOrigin.y,
-//                    raidOrigin.z + Math.sin(angle) * distance
-//            );
-//            Vec3 center = this.findSpawnPosWithFallback(invoker, raid, level, probe, GROUP_HALF_SIZE_BLOCKS, random);
-//            if (this.isWithinGroupBand(center, raidOrigin) && this.isOutsidePlayerSafetyRadius(level, center)) return center;
-//            if (DEBUG_RAID_SPAWN_LOGS && i < 8) {
-//                SCGExtra.LOGGER.debug("[SCGEXTRA RAID] group center reject (ring attempt {}) raid={} uuid={} probe={} got={} dist={} nearestPlayerDist={}",
-//                        i + 1, raid.getConfig().raidId(), raid.getRaidId(),
-//                        this.scgextra$fmtVec(probe), this.scgextra$fmtVec(center),
-//                        center == null ? "null" : this.scgextra$fmtDistance(this.scgextra$distance2D(center, raidOrigin)),
-//                        center == null ? "null" : this.scgextra$fmtDistance(this.nearestValidPlayerDistance2D(level, center)));
-//            }
-//        }
-//        for (int i = 0; i < 8; i++) {
-//            Vec3 fallback = this.findSpawnPosWithFallback(invoker, raid, level, raidOrigin, outerRadius, random);
-//            if (this.isWithinGroupBand(fallback, raidOrigin) && this.isOutsidePlayerSafetyRadius(level, fallback)) return fallback;
-//            if (DEBUG_RAID_SPAWN_LOGS) {
-//                SCGExtra.LOGGER.debug("[SCGEXTRA RAID] group center reject (fallback {}) raid={} uuid={} got={} dist={} nearestPlayerDist={}",
-//                        i + 1, raid.getConfig().raidId(), raid.getRaidId(),
-//                        this.scgextra$fmtVec(fallback),
-//                        fallback == null ? "null" : this.scgextra$fmtDistance(this.scgextra$distance2D(fallback, raidOrigin)),
-//                        fallback == null ? "null" : this.scgextra$fmtDistance(this.nearestValidPlayerDistance2D(level, fallback)));
-//            }
-//        }
-//        return null;
-//    }
 }

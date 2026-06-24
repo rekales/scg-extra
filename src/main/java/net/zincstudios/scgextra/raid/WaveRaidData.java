@@ -15,12 +15,24 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 
-@SuppressWarnings("unused")
+/**
+ * Holds the parsed raid data and provides methods for querying and generating data such as WaveRaidData#generateRaiders
+ * <br/>
+ * Deprecated fields are not intended to be accessed directly outside the class unless actually needed.
+ */
+@SuppressWarnings({"unused", "deprecation"})
 @ParametersAreNonnullByDefault
 @FieldsAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public record WaveRaidData(String id, String originalId, List<Wave> waves, List<RaiderEntry> infantry, List<RaiderEntry> elite,
-                           List<RaiderEntry> miniboss, List<RaiderEntry> boss) {
+public record WaveRaidData(
+        String id,
+        String originalId,
+        @Deprecated List<Wave> waves,
+        @Deprecated List<RaiderEntry> infantry,
+        @Deprecated List<RaiderEntry> elite,
+        @Deprecated List<RaiderEntry> miniboss,
+        @Deprecated List<RaiderEntry> boss
+) {
 
     private static final Map<String, WaveRaidData> RAIDS = new HashMap<>();  // Key: raid id
     private static final Map<String, WaveRaidData> REPLACED_RAIDS = new HashMap<>();  // Key: original raid id
