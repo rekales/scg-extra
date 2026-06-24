@@ -26,7 +26,7 @@ public class CheckShouldAlert extends Behavior<LivingEntity> {
     private boolean firstAlert = true;
 
     public CheckShouldAlert(int alertDuration) {
-        this(alertDuration, 200, 64);
+        this(alertDuration, 20, 64);
     }
 
     public CheckShouldAlert(int alertDuration, int alertCooldown, float radius) {
@@ -45,40 +45,36 @@ public class CheckShouldAlert extends Behavior<LivingEntity> {
     }
 
     @Override
-    protected boolean canStillUse(ServerLevel level, LivingEntity entity, long gameTime) {
-        return !entity.getBrain().hasMemoryValue(ModBrainMemories.TO_ALERT.get())
-                && entity.getBrain().hasMemoryValue(MemoryModuleType.ATTACK_TARGET);
-    }
+    protected boolean checkExtraStartConditions(ServerLevel level, LivingEntity entity) {
+        if (this.cooldownEnd > level.getGameTime()) return false;
+        if (!this.firstAlert && level.getGameTime() % 40 != 1) return false;
 
-    @Override
-    protected void tick(ServerLevel level, LivingEntity entity, long gameTime) {
-        if (this.cooldownEnd > gameTime) return;
+        Brain<?> brain = entity.getBrain();
+        AABB aabb = entity.getBoundingBox().inflate(this.radius, this.radius/2, this.radius);
+        List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, aabb,
+                other -> other != entity && other.isAlive() && Faction.isFriendlies(entity, other)
+        );
 
-        if (this.firstAlert || gameTime % 40 == 1) {
-            Brain<?> brain = entity.getBrain();
-            AABB aabb = entity.getBoundingBox().inflate(this.radius, this.radius/2, this.radius);
-            List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, aabb,
-                    other -> other != entity && other.isAlive() && Faction.isFriendlies(entity, other)
-            );
-
-            List<LivingEntity> toAlert = new ArrayList<>();
-            for (LivingEntity other : entities) {
-                if (brain.checkMemory(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_ABSENT)) {
-                    toAlert.add(other);
-                } else if (other instanceof Mob mob && mob.getTarget() == null) {
-                    toAlert.add(other);
-                }
-            }
-
-            if (this.firstAlert) {
-                this.firstAlert = false;
-                toAlert.add(entity); // can't put empty list on memory for some reason, so put self
-            }
-
-            if (!toAlert.isEmpty()) {
-                brain.setMemoryWithExpiry(ModBrainMemories.TO_ALERT.get(), toAlert, this.alertDuration);
-                this.cooldownEnd = gameTime + this.alertDuration + this.alertCooldown;
+        List<LivingEntity> toAlert = new ArrayList<>();
+        for (LivingEntity other : entities) {
+            if (brain.checkMemory(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_ABSENT)) {
+                toAlert.add(other);
+            } else if (other instanceof Mob mob && mob.getTarget() == null) {
+                toAlert.add(other);
             }
         }
+
+        if (this.firstAlert) {
+            this.firstAlert = false;
+            toAlert.add(entity); // can't put empty list on memory for some reason, so put self
+        }
+
+        if (!toAlert.isEmpty()) {
+            brain.setMemoryWithExpiry(ModBrainMemories.TO_ALERT.get(), toAlert, this.alertDuration);
+            this.cooldownEnd = level.getGameTime() + this.alertDuration + this.alertCooldown;
+            return true;
+        }
+
+        return false;
     }
 }

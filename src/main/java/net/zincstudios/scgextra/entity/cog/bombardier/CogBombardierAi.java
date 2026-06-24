@@ -54,7 +54,7 @@ public class CogBombardierAi {
         BrainCommons.initIdleActivity(brain);
         initFightActivity(mob, brain);
         BrainCommons.initAlertActivity(brain);
-        BrainCommons.initAvoidActivity(brain, 12);
+        BrainCommons.initAvoidActivity(brain, 14);
         BrainCommons.initStunnedActivity(brain);
 
         brain.setCoreActivities(ImmutableSet.of(Activity.CORE));
