@@ -62,10 +62,10 @@ public class RaidDataLoader extends SimpleJsonResourceReloadListener {
 
             List<WaveRaidData.Wave> waves = parseWaves(obj.getAsJsonArray("waves"));
 
-            List<WaveRaidData.RaiderEntry> infantry = parseRaiders(obj.getAsJsonArray("infantry"));
-            List<WaveRaidData.RaiderEntry> elite = parseRaiders(obj.getAsJsonArray("elite"));
-            List<WaveRaidData.RaiderEntry> miniboss = parseRaiders(obj.getAsJsonArray("miniboss"));
-            List<WaveRaidData.RaiderEntry> boss = parseRaiders(obj.getAsJsonArray("boss"));
+            Set<WaveRaidData.RaiderEntry> infantry = parseRaiders(obj.getAsJsonArray("infantry"));
+            Set<WaveRaidData.RaiderEntry> elite = parseRaiders(obj.getAsJsonArray("elite"));
+            Set<WaveRaidData.RaiderEntry> miniboss = parseRaiders(obj.getAsJsonArray("miniboss"));
+            Set<WaveRaidData.RaiderEntry> boss = parseRaiders(obj.getAsJsonArray("boss"));
 
             return new WaveRaidData(id, originalId, waves, infantry, elite, miniboss, boss);
         }
@@ -85,8 +85,8 @@ public class RaidDataLoader extends SimpleJsonResourceReloadListener {
             return waves;
         }
 
-        private List<WaveRaidData.RaiderEntry> parseRaiders(com.google.gson.JsonArray array) {
-            List<WaveRaidData.RaiderEntry> entries = new ArrayList<>();
+        private Set<WaveRaidData.RaiderEntry> parseRaiders(com.google.gson.JsonArray array) {
+            Set<WaveRaidData.RaiderEntry> entries = new HashSet<>();
 
             array.forEach(element -> {
                 JsonObject raiderObj = element.getAsJsonObject();
