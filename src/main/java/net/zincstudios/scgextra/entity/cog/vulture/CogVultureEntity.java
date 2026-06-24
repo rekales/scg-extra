@@ -47,7 +47,7 @@ public class CogVultureEntity extends Monster implements GeoEntity, Gunner, Bull
 
     public CogVultureEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
-        this.customGun = new CustomSimulatedGun.Builder(ModItems.PRUSH_GUN.get().getGun())
+        this.customGun = new CustomSimulatedGun.Builder(ModItems.GREASER_SMG.get().getGun())
                 .projectileDamage(3)
                 .fireRate(2)
                 .maxRange(10)

@@ -66,7 +66,7 @@ public class CogDevastatorEntity extends GunnerEntity implements GeoEntity, Gunn
     public CogDevastatorEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
         this.mountedMachineGun = new HeadAttachedMountedGun(this,
-                new CustomSimulatedGun.Builder(ModItems.PRUSH_GUN.get().getGun())
+                new CustomSimulatedGun.Builder(ModItems.GREASER_SMG.get().getGun())
                         .burstAmount(16)
                         .burstInterval(2)
                         .fireRate(70)
