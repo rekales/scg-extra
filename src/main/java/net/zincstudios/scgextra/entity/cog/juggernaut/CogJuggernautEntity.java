@@ -31,7 +31,7 @@ import net.zincstudios.scgextra.entity.AbilityState;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.EquippedEntity;
 import net.zincstudios.scgextra.entity.common.Gunner;
-import net.zincstudios.scgextra.sounds.CogSounds;
+import net.zincstudios.scgextra.sounds.COGSounds;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -305,16 +305,16 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity, Gu
 
     @Override
     protected @Nullable SoundEvent getAmbientSound() {
-        return CogSounds.GENERAL_IDLE.get();
+        return COGSounds.GENERAL_IDLE.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return CogSounds.COG_JUGGERNAUT_HURT.get();
+        return COGSounds.COG_JUGGERNAUT_HURT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return CogSounds.COG_JUGGERNAUT_DEAD.get();
+        return COGSounds.COG_JUGGERNAUT_DEAD.get();
     }
 }

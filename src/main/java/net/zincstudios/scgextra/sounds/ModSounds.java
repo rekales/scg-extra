@@ -15,7 +15,7 @@ public class ModSounds {
         FACSounds.init();
         AsgharianSounds.init();
         NeutralSounds.init();
-        CogSounds.init();
+        COGSounds.init();
 
         SOUND_EVENTS.register(eventbus);
     }

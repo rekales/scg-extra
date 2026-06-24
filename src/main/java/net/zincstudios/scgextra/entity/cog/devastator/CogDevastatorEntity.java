@@ -26,7 +26,7 @@ import net.zincstudios.scgextra.entity.common.brain.BrainUtils;
 import net.zincstudios.scgextra.entity.common.gun.CustomSimulatedGun;
 import net.zincstudios.scgextra.entity.common.gun.HeadAttachedMountedGun;
 import net.zincstudios.scgextra.entity.common.gun.MountedGun;
-import net.zincstudios.scgextra.sounds.CogSounds;
+import net.zincstudios.scgextra.sounds.COGSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -219,12 +219,12 @@ public class CogDevastatorEntity extends GunnerEntity implements GeoEntity, Gunn
 
     @Override
     protected @Nullable SoundEvent getAmbientSound() {
-        return CogSounds.COG_DEVASTATOR_IDLE.get();
+        return COGSounds.COG_DEVASTATOR_IDLE.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return CogSounds.GENERAL_HEAVY_HURT.get();
+        return COGSounds.GENERAL_HEAVY_HURT.get();
     }
 
     @Override

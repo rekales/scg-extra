@@ -6,7 +6,7 @@ import net.zincstudios.scgextra.SCGExtra;
 
 import static net.zincstudios.scgextra.sounds.ModSounds.SOUND_EVENTS;
 
-public class CogSounds {
+public final class COGSounds {
 
     public static final RegistryObject<SoundEvent> GENERAL_HEAVY_HURT = SOUND_EVENTS.register("cog_general.heavy_hurt",
             () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("cog_general.heavy_hurt")));

@@ -20,7 +20,7 @@ import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.gun.CustomGunHolder;
 import net.zincstudios.scgextra.entity.common.gun.CustomSimulatedGun;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
-import net.zincstudios.scgextra.sounds.CogSounds;
+import net.zincstudios.scgextra.sounds.COGSounds;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -201,11 +201,11 @@ public class CogCentipedeEntity extends Monster implements GeoEntity, CustomGunH
 
     @Override
     protected @Nullable SoundEvent getAmbientSound() {
-        return CogSounds.COG_CENTIPEDE_IDLE.get();
+        return COGSounds.COG_CENTIPEDE_IDLE.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return CogSounds.GENERAL_HEAVY_HURT.get();
+        return COGSounds.GENERAL_HEAVY_HURT.get();
     }
 }

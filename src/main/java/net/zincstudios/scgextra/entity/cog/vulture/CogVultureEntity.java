@@ -20,7 +20,7 @@ import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
 import net.zincstudios.scgextra.entity.common.gun.CustomGunHolder;
 import net.zincstudios.scgextra.entity.common.gun.CustomSimulatedGun;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
-import net.zincstudios.scgextra.sounds.CogSounds;
+import net.zincstudios.scgextra.sounds.COGSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -104,12 +104,12 @@ public class CogVultureEntity extends Monster implements GeoEntity, Gunner, Bull
 
     @Override
     protected @Nullable SoundEvent getAmbientSound() {
-        return CogSounds.GENERAL_IDLE.get();
+        return COGSounds.GENERAL_IDLE.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return CogSounds.GENERAL_LIGHT_HURT.get();
+        return COGSounds.GENERAL_LIGHT_HURT.get();
     }
 
     @Override

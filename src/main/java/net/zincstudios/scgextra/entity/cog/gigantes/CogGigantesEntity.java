@@ -25,7 +25,7 @@ import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.goal.MobHurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.goal.StunnedWithVisualGoal;
-import net.zincstudios.scgextra.sounds.CogSounds;
+import net.zincstudios.scgextra.sounds.COGSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -189,16 +189,16 @@ public class CogGigantesEntity extends FlyingMob implements GeoEntity, Stunnable
 
     @Override
     protected @Nullable SoundEvent getAmbientSound() {
-        return CogSounds.COG_GIGANTES_IDLE.get();
+        return COGSounds.COG_GIGANTES_IDLE.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return CogSounds.GENERAL_HEAVY_HURT.get();
+        return COGSounds.GENERAL_HEAVY_HURT.get();
     }
 
     protected SoundEvent getStepSound() {
-        return CogSounds.COG_GIGANTES_FLY.get();
+        return COGSounds.COG_GIGANTES_FLY.get();
     }
 
     @Override

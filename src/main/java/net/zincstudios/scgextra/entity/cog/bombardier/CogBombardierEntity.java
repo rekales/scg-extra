@@ -20,7 +20,7 @@ import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.gun.CustomGunHolder;
 import net.zincstudios.scgextra.entity.common.gun.CustomSimulatedGun;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
-import net.zincstudios.scgextra.sounds.CogSounds;
+import net.zincstudios.scgextra.sounds.COGSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -158,16 +158,16 @@ public class CogBombardierEntity extends Monster implements GeoEntity, CustomGun
 
     @Override
     protected @Nullable SoundEvent getAmbientSound() {
-        return CogSounds.COG_DEVASTATOR_IDLE.get();
+        return COGSounds.COG_DEVASTATOR_IDLE.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return CogSounds.GENERAL_LIGHT_HURT.get();
+        return COGSounds.GENERAL_LIGHT_HURT.get();
     }
 
     protected SoundEvent getStepSound() {
-        return CogSounds.COG_BOMBARDIER_WALK.get();
+        return COGSounds.COG_BOMBARDIER_WALK.get();
     }
 
     @Override
