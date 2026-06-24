@@ -19,8 +19,8 @@ import java.util.*;
 @ParametersAreNonnullByDefault
 @FieldsAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public record WaveRaidData(String id, String originalId, List<Wave> waves, Set<RaiderEntry> infantry, Set<RaiderEntry> elite,
-                           Set<RaiderEntry> miniboss, Set<RaiderEntry> boss) {
+public record WaveRaidData(String id, String originalId, List<Wave> waves, List<RaiderEntry> infantry, List<RaiderEntry> elite,
+                           List<RaiderEntry> miniboss, List<RaiderEntry> boss) {
 
     private static final Map<String, WaveRaidData> RAIDS = new HashMap<>();  // Key: raid id
     private static final Map<String, WaveRaidData> REPLACED_RAIDS = new HashMap<>();  // Key: original raid id
@@ -61,7 +61,7 @@ public record WaveRaidData(String id, String originalId, List<Wave> waves, Set<R
         INFANTRY, ELITE, MINIBOSS, BOSS
     }
 
-    public Set<RaiderEntry> getRaiderEntries(Rank rank) {
+    public List<RaiderEntry> getRaiderEntries(Rank rank) {
         return switch (rank) {
             case INFANTRY -> infantry;
             case ELITE -> elite;
@@ -71,8 +71,8 @@ public record WaveRaidData(String id, String originalId, List<Wave> waves, Set<R
     }
 
 
-    public List<RaiderEntry> generateRaiders(int currentWave, RandomSource random) {
-        return this.generateRaiders(this.waves.get(currentWave), random);
+    public List<RaiderEntry> generateRaiders(int waveIndex, RandomSource random) {
+        return this.generateRaiders(this.waves.get(waveIndex), random);
     }
 
     public List<RaiderEntry> generateRaiders(Wave wave, RandomSource random) {
@@ -85,7 +85,7 @@ public record WaveRaidData(String id, String originalId, List<Wave> waves, Set<R
         return spawnList;
     }
 
-    private static List<RaiderEntry> sampleRandomRaiders(Set<RaiderEntry> entries, int value, RandomSource random) {
+    private static List<RaiderEntry> sampleRandomRaiders(List<RaiderEntry> entries, int value, RandomSource random) {
         Map<RaiderEntry, Integer> availableEntries = new HashMap<>();  // entry to spawns remaining pair
         for (RaiderEntry entry : entries) {
             availableEntries.put(entry, entry.maxCount);
@@ -156,8 +156,8 @@ public record WaveRaidData(String id, String originalId, List<Wave> waves, Set<R
         }
     }
 
-    public boolean isFinalWave(int currentWave) {
-        return this.waves.size()-1 == currentWave;
+    public boolean isFinalWave(int waveIndex) {
+        return this.waves.size()-1 == waveIndex;
     }
 
     @SuppressWarnings("RedundantIfStatement")
