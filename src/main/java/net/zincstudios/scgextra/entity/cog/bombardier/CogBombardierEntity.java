@@ -70,6 +70,7 @@ public class CogBombardierEntity extends Monster implements GeoEntity, CustomGun
         Brain<?> brain = this.getBrain();
         if (brain.getTimeUntilExpiry(ModBrainMemories.TO_ALERT.get()) == ALERT_ANIM_TICKS) {
             this.triggerAnim("behavior", "alert");
+            this.playSound(COGSounds.COG_BOMBARDIER_SCAN.get(), 1.2f, 1.0f);
         }
         if (brain.getTimeUntilExpiry(ModBrainMemories.STUNNED.get()) == STUN_RECOVERY_TICKS) {
             this.triggerAnim("behavior", "end_stun");

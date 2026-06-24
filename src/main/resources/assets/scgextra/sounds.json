@@ -1307,7 +1307,10 @@
   "cog_bombardier.scan": {
     "category": "hostile",
     "sounds": [
-      "scgextra:cog/cog_bombardier/scan"
+      {
+        "name" : "scgextra:cog/cog_bombardier/scan",
+        "attenuation_distance": 32
+      }
     ]
   },
   "cog_gigantes.fly": {
