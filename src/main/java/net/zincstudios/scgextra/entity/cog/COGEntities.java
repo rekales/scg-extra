@@ -39,7 +39,7 @@ public class COGEntities {
 
     public static final RegistryObject<EntityType<CogVultureEntity>> VULTURE = ENTITY_TYPES
             .register("cog_vulture", () -> EntityType.Builder.of(CogVultureEntity::new, MobCategory.MONSTER)
-                    .sized(0.75F, 1.7F)
+                    .sized(0.85F, 1.7F)
                     .build("cog_vulture"));
 
     public static final RegistryObject<EntityType<CogDevastatorEntity>> DEVASTATOR = ENTITY_TYPES
@@ -112,11 +112,12 @@ public class COGEntities {
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
-//        BoundingBoxManager.registerHeadshotBox(COGEntities.BOMBARDIER.get(), new BasicHeadshotBox<>(8, 36));
         BoundingBoxManager.registerHeadshotBox(COGEntities.BOMBARDIER.get(), new RotatedHeadshotBox<>(8, 36, 6, false, true));
         WeakPointBoxManager.registerWeakPointBox(COGEntities.BOMBARDIER.get(), new WeakPointBox<>(new RotatedHeadshotBox<>(8, 36, -6, false, true)));
         BoundingBoxManager.registerHeadshotBox(COGEntities.GIGANTES.get(), new RotatedHeadshotBox<>(8, 18, 18, false, true));
         BoundingBoxManager.registerHeadshotBox(COGEntities.CENTIPEDE.get(), new BasicHeadshotBox<>(1,0));
+        BoundingBoxManager.registerHeadshotBox(COGEntities.VENATOR.get(), new BasicHeadshotBox<>(0,0));
+        BoundingBoxManager.registerHeadshotBox(COGEntities.VULTURE.get(), new BasicHeadshotBox<>(10,16));
     }
 
     @OnlyIn(value = Dist.CLIENT)

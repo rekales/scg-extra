@@ -14,12 +14,14 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.entity.PartEntity;
 import net.zincstudios.scgextra.entity.asgharian.BulletSpawnOffset;
 import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
 import net.zincstudios.scgextra.entity.common.gun.CustomGunHolder;
 import net.zincstudios.scgextra.entity.common.gun.CustomSimulatedGun;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
+import net.zincstudios.scgextra.entity.common.part.RotatedSegmentPartEntity;
 import net.zincstudios.scgextra.sounds.COGSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -42,11 +44,17 @@ public class CogVultureEntity extends Monster implements GeoEntity, Gunner, Bull
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
     private final SimulatedGun customGun;
+    private final PartEntity<?>[] subEntities;
 
     private boolean bulletSpawnLeft = false;
 
     public CogVultureEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
+        this.subEntities = new PartEntity[] {
+                new RotatedSegmentPartEntity<>(this, new Vec3(0, 0, -0.85), 0.8f, 1.9f),
+                new RotatedSegmentPartEntity<>(this, new Vec3(0, 0, 0.65), 0.8f, 1f),
+                new RotatedSegmentPartEntity<>(this, new Vec3(0, 0,  1.3), 0.8f, 1f)
+        };
         this.customGun = new CustomSimulatedGun.Builder(ModItems.GREASER_SMG.get().getGun())
                 .projectileDamage(3)
                 .fireRate(2)
@@ -58,7 +66,7 @@ public class CogVultureEntity extends Monster implements GeoEntity, Gunner, Bull
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
                 .add(Attributes.FOLLOW_RANGE, 48.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.4F)
+                .add(Attributes.MOVEMENT_SPEED, 0.35F)
                 .add(Attributes.MAX_HEALTH, 15.0D);
     }
 
@@ -82,6 +90,32 @@ public class CogVultureEntity extends Monster implements GeoEntity, Gunner, Bull
         BrainCommons.updateActivity(this);
         this.level().getProfiler().pop();
         super.customServerAiStep();
+    }
+
+    @Override
+    public PartEntity<?>[] getParts() {
+        return this.subEntities;
+    }
+
+    @Override
+    public boolean isMultipartEntity() {
+        return true;
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        this.setYRot(this.getYRot()+1);
+        this.setYBodyRot(this.getYRot());
+
+        this.tickSubEntities();
+    }
+
+    protected void tickSubEntities() {
+        for(PartEntity<?> partEntity : this.getParts()) {
+            partEntity.tick();
+        }
     }
 
     @Override
