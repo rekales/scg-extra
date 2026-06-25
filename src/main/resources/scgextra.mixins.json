@@ -15,7 +15,8 @@
     "OceanMonumentEntryRoomMixin",
     "ProjectileEntityMixin",
     "RaidManagerMixin",
-    "RaidSaveDataAccessor"
+    "RaidSaveDataAccessor",
+    "SignalBeaconEntityMixin"
   ],
   "minVersion": "0.8.5"
 }
