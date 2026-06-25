@@ -16,6 +16,7 @@ import net.minecraftforge.entity.PartEntity;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.UUID;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -80,6 +81,16 @@ public class RotatedSegmentPartEntity <T extends LivingEntity> extends PartEntit
     @Override
     public PushReaction getPistonPushReaction() {
         return PushReaction.IGNORE;
+    }
+
+    @Override
+    public UUID getUUID() {
+        return this.getParent().getUUID();
+    }
+
+    @Override
+    public String getStringUUID() {
+        return this.getParent().getStringUUID();
     }
 
     @Override
