@@ -56,11 +56,12 @@ public class CogVultureEntity extends Monster implements GeoEntity, Gunner, Bull
                 new RotatedSegmentPartEntity<>(this, new Vec3(0, 0, 0.65), 0.8f, 1f),
                 new RotatedSegmentPartEntity<>(this, new Vec3(0, 0,  1.3), 0.8f, 1f)
         };
-        this.customGun = new CustomSimulatedGun.Builder(ModItems.GREASER_SMG.get().getGun())
-                .projectileDamage(3)
+        this.customGun = new CustomSimulatedGun.Builder(ModItems.VALORA.get().getGun())
+                .projectileDamage(1.5f)
                 .fireRate(2)
                 .maxRange(10)
                 .idealRange(8)
+                .velocityModifier(vec -> vec.scale(1/3f))
                 .build();
     }
 

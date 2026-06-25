@@ -48,6 +48,10 @@ public class CogVenatorEntity extends GunnerEntity implements GeoEntity, CustomG
                 .maxRange(25)
                 .idealRange(20)
                 .build();
+
+        // because it's getting stuck somehow
+        this.setDeltaMovement(this.getDeltaMovement().add(0.02, 0.1, 0.02));
+        this.hasImpulse = true;
     }
 
     public static AttributeSupplier.Builder createAttributes() {

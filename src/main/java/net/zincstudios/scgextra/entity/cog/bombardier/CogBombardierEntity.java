@@ -103,14 +103,17 @@ public class CogBombardierEntity extends Monster implements GeoEntity, CustomGun
         this.level().getProfiler().push("cogBombardierBrain");
         this.getBrain().tick((ServerLevel)this.level(), this);
         CogBombardierAi.updateActivity(this);
-        this.setAggressive(this.getBrain().hasMemoryValue(MemoryModuleType.ATTACK_TARGET));
+        this.setAggressive(this.getBrain().hasMemoryValue(MemoryModuleType.ATTACK_TARGET) && this.customGun.getAmmoCount() > 0);
+        if (this.isAggressive()) {
+            this.setYBodyRot(this.getYHeadRot());
+        }
         this.level().getProfiler().pop();
         super.customServerAiStep();
     }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "main", 2, state -> {
+        controllers.add(new AnimationController<>(this, "main", 4, state -> {
                     if (state.getAnimatable().isSprinting()) {
                         state.setAnimation(RawAnimation.begin().thenLoop("run"));
                     } else if (state.isMoving()) {

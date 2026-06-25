@@ -27,7 +27,6 @@ import java.util.Objects;
 import java.util.function.Function;
 
 // TODO: make abstract for extension with both this class and HeldSimulatedGun
-// TODO: Use gun data to fill firerate, burst, ammo, and other fields
 public class CustomSimulatedGun implements SimulatedGun {
 
     private final Gun gunBase;
