@@ -73,7 +73,7 @@ public class CogBombardierAi {
                         )),
                         new WalkUpToIdealRange(1.0F),
                         new AimWhenNotWalking(),
-                        new ShootTarget(30, entity -> 3.2F,
+                        new ShootTarget(30, (simGun, entity) -> 2.4F,
                                 entity -> true, new IdentityTriggerSampler())
                 )), ImmutableSet.of(
                         Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT)

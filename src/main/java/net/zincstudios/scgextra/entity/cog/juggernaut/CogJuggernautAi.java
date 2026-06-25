@@ -63,7 +63,7 @@ public class CogJuggernautAi {
                 new JetBootsCheckRelocate(),
                 new RocketBarrageAbility(),
                 new ShootTarget(20,
-                        entity -> 2.4f,
+                        (entity, firing) -> 2.4f,
                         entity -> !entity.getBrain().hasMemoryValue(ModBrainMemories.ABILITY_STATE.get()),
                         new MarkovTriggerSampler(0.93f, 0.94f, 15, 80))
                 )), ImmutableSet.of(

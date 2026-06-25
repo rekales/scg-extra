@@ -7,6 +7,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import top.ribs.scguns.Config;
 
+// TODO: remove accuracyModifier, handle it outside the gun.
 @SuppressWarnings("unused")
 public interface SimulatedGun {
 

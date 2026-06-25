@@ -15,6 +15,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.PartEntity;
+import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.asgharian.BulletSpawnOffset;
 import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
@@ -39,8 +40,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 public class CogVultureEntity extends Monster implements GeoEntity, Gunner, BulletSpawnOffset, CustomGunHolder {
 
-    public static final Vec3 LEFT_GUN_OFFSET = new Vec3(0.45,1.3,-0.4);
-    public static final Vec3 RIGHT_GUN_OFFSET = new Vec3(-0.45,1.3,-0.4);
+    public static final Vec3 LEFT_GUN_OFFSET = new Vec3(0.45,1.4,-0.4);
+    public static final Vec3 RIGHT_GUN_OFFSET = new Vec3(-0.45,1.5,-0.4);
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
     private final SimulatedGun customGun;
@@ -88,6 +89,9 @@ public class CogVultureEntity extends Monster implements GeoEntity, Gunner, Bull
         this.level().getProfiler().push("cogVultureBrain");
         this.getBrain().tick((ServerLevel)this.level(), this);
         BrainCommons.updateActivity(this);
+        if (this.getBrain().getMemory(ModBrainMemories.AIM_TICKS.get()).filter(aim -> aim > 5).isPresent()) {
+            this.setYBodyRot(this.getYHeadRot());
+        }
         this.level().getProfiler().pop();
         super.customServerAiStep();
     }
@@ -105,10 +109,6 @@ public class CogVultureEntity extends Monster implements GeoEntity, Gunner, Bull
     @Override
     public void tick() {
         super.tick();
-
-        this.setYRot(this.getYRot()+1);
-        this.setYBodyRot(this.getYRot());
-
         this.tickSubEntities();
     }
 
@@ -116,6 +116,12 @@ public class CogVultureEntity extends Monster implements GeoEntity, Gunner, Bull
         for(PartEntity<?> partEntity : this.getParts()) {
             partEntity.tick();
         }
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.getEntity() == this) return false;
+        return super.hurt(source, amount);
     }
 
     @Override

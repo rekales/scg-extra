@@ -66,7 +66,8 @@ public class CogCentipedeAi {
                         new SlamAttack(CogCentipedeEntity.SLAM_DAMAGE_DELAY, CogCentipedeEntity.SLAM_DURATION, 4, 80),
                         new ApproachTargetIfCannotAim(1.0F),
                         new AimWhenNotWalking(),
-                        new ShootTarget(20, entity -> 3.2F,
+                        new ShootTarget(20,
+                                (entity, firing) -> 3.2F,
                                 entity -> !entity.getBrain().hasMemoryValue(ModBrainMemories.DELAYED_MELEE.get()),
                                 new IdentityTriggerSampler())
                 )), ImmutableSet.of(
