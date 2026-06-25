@@ -68,7 +68,7 @@ public class WaveRaidManager extends SavedData {
         if (waveCenter == null) return;
 
         this.raidState = new WaveRaidState(raidData, level, raidCenter);
-        this.raidState.spawnCurrentWaveMobs(waveCenter, WAVE_SPAWN_RADIUS);
+        this.raidState.spawnCurrentWaveMobs(waveCenter, WAVE_SPAWN_RADIUS, player);
         WaveRaidUtil.announceToNearbyPlayers(level, raidData.getAnnouncement(), raidCenter, RAID_RADIUS);
         this.nextWaveDelay = NEXT_WAVE_DELAY;
     }
@@ -84,25 +84,23 @@ public class WaveRaidManager extends SavedData {
 
         if (level.getGameTime() > this.raidState.getStartTime() + RAID_TIMEOUT_TICKS) {
             this.endRaid(level, false);
-            this.raidState = null;
         }
         else if (this.raidState.raidersLeft() > 0) {
             this.raidState.updateRaiders();
         }
         else if (this.raidState.isFinalWave()) {
             this.endRaid(level, true);
-            this.raidState = null;
         }
         else {
             if (this.nextWaveDelay-- < 0) {
                 this.nextWaveDelay = NEXT_WAVE_DELAY;
                 this.raidState.advanceWave();
 
-                ServerPlayer player = this.raidState.getTargetPlayer();
+                ServerPlayer player = WaveRaidUtil.findNearestPlayer(level, this.raidState.getCenter(), RAID_RADIUS);
                 Vec3 waveCenter = WaveRaidUtil.findWaveSpawnLocation(level, raidState.getCenter(),
                         player == null ? null : player.position());
                 if (waveCenter == null) return;  // TODO: crash or something
-                this.raidState.spawnCurrentWaveMobs(this.raidState.getCenter(), WAVE_SPAWN_RADIUS);
+                this.raidState.spawnCurrentWaveMobs(this.raidState.getCenter(), WAVE_SPAWN_RADIUS, player);
             }
         }
     }
@@ -162,6 +160,7 @@ public class WaveRaidManager extends SavedData {
             WaveRaidUtil.announceToNearbyPlayers(level,
                     Component.translatable("raid.scguns.failed"), this.raidState.getCenter(), 64);
         }
+        this.raidState = null;
     }
 
     public static void onLevelTick(TickEvent.LevelTickEvent event) {

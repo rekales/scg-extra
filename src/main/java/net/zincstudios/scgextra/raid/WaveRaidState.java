@@ -5,7 +5,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -14,7 +13,6 @@ import net.minecraft.world.entity.ai.behavior.EntityTracker;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.memory.WalkTarget;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.zincstudios.scgextra.SCGExtra;
@@ -34,7 +32,6 @@ public class WaveRaidState {
 
     private Vec3 spawnCenter;
     private int currentWave;
-    private UUID targetPlayerUUID = null;
     private int totalWaveSpawned = 0;
 
     public WaveRaidState(WaveRaidData waveRaidData, ServerLevel level, Vec3 spawnCenter) {
@@ -74,11 +71,6 @@ public class WaveRaidState {
     private void addRaider(Mob mob) {
         this.raiders.put(mob.getUUID(), mob);
         this.totalWaveSpawned = this.raiders.size();
-    }
-
-    public @Nullable ServerPlayer getTargetPlayer() {
-        if (this.level == null || this.targetPlayerUUID == null) return null;
-        return this.level.getServer().getPlayerList().getPlayer(this.targetPlayerUUID);
     }
 
     public void discardRaiders() {
@@ -130,8 +122,7 @@ public class WaveRaidState {
         return this.waveRaidData.isFinalWave(this.currentWave);
     }
 
-    public void spawnCurrentWaveMobs(Vec3 waveCenter, float waveSpawnRadius) {
-        Player player = this.getTargetPlayer();
+    public void spawnCurrentWaveMobs(Vec3 waveCenter, float waveSpawnRadius, @Nullable LivingEntity target) {
         WaveRaidData raidData = this.getWaveRaidData();
         List<WaveRaidData.RaiderEntry> spawnList = raidData.generateRaiders(this.getCurrentWave(), level.getRandom());
 
@@ -146,15 +137,15 @@ public class WaveRaidState {
                 Vec3 pos = WaveRaidUtil.findMobSpawnPos(level, waveCenter, waveSpawnRadius);
                 mob.setPos(pos);
 
-                if (mob.getBrain().checkMemory(MemoryModuleType.ATTACK_TARGET, MemoryStatus.REGISTERED) && player != null) {
-                    mob.getBrain().setMemory(MemoryModuleType.ATTACK_TARGET, player);
+                if (mob.getBrain().checkMemory(MemoryModuleType.ATTACK_TARGET, MemoryStatus.REGISTERED) && target != null) {
+                    mob.getBrain().setMemory(MemoryModuleType.ATTACK_TARGET, target);
                     if (mob.getBrain().checkMemory(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED)) {
                         mob.getBrain().setMemoryWithExpiry(MemoryModuleType.WALK_TARGET, new WalkTarget(
-                                new EntityTracker(player, false), 1.2f, 16
+                                new EntityTracker(target, false), 1.2f, 16
                         ), 200);
                     }
                 } else {
-                    mob.setTarget(player);
+                    mob.setTarget(target);
                 }
                 mob.setPersistenceRequired();
                 boolean finalize = raidData.handleRaiderEdgeCase(mob);
@@ -197,11 +188,6 @@ public class WaveRaidState {
         tag.putDouble("SpawnZ", this.spawnCenter.z);
         tag.putString("WaveRaidData", this.waveRaidData.id());
         tag.putInt("CurrentWave", this.currentWave);
-
-        if (this.targetPlayerUUID != null) {
-            tag.putUUID("TargetPlayer", this.targetPlayerUUID);
-        }
-
         tag.putInt("TotalWaveSpawned", this.totalWaveSpawned);
 
         return tag;
@@ -231,13 +217,11 @@ public class WaveRaidState {
         }
 
         int currentWave = tag.getInt("CurrentWave");
-        UUID targetPlayer = tag.contains("TargetPlayer") ? tag.getUUID("TargetPlayer") : null;
         int totalWaveSpawned = tag.getInt("TotalWaveSpawned");
 
         WaveRaidState state = new WaveRaidState(level, raidId, waveRaidData, startTime, spawnCenter);
         raiders.forEach(raiderId -> state.raiders.put(raiderId, null));
         state.currentWave = currentWave;
-        state.targetPlayerUUID = targetPlayer;
         state.totalWaveSpawned = totalWaveSpawned;
         return state;
     }

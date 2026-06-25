@@ -52,9 +52,9 @@ public final class WaveRaidUtil {
         }
     }
 
-    public static @Nullable ServerPlayer findNearestPlayer(ServerLevel level, Vec3 pos) {
+    public static @Nullable ServerPlayer findNearestPlayer(ServerLevel level, Vec3 pos, float radius) {
         ServerPlayer nearest = null;
-        double nearestDist = Double.MAX_VALUE;
+        double nearestDist = radius;
 
         for(ServerPlayer player : level.players()) {
             if (!player.isSpectator() && !player.isCreative()) {
@@ -67,40 +67,6 @@ public final class WaveRaidUtil {
         }
 
         return nearest;
-    }
-
-    // Copied from RaidManager#findRaidSpawnLocation
-    @SuppressWarnings("deprecation")
-    public static @Nullable Vec3 findRaidSpawnLocation(ServerLevel level, Vec3 center) {
-        RandomSource random = level.getRandom();
-        int playerY = (int)center.y;
-        boolean isUnderground = playerY < 50 && !level.canSeeSky(BlockPos.containing(center));
-
-        for(int attempt = 0; attempt < FIND_SPAWN_LOCATION_ATTEMPTS; ++attempt) {
-            double angle = random.nextDouble() * Math.PI * (double)2.0F;
-            double distance = (double)25.0F + random.nextDouble() * (double)15.0F;
-            double x = center.x + Math.cos(angle) * distance;
-            double z = center.z + Math.sin(angle) * distance;
-            BlockPos pos = new BlockPos((int)x, playerY, (int)z);
-            BlockPos groundPos;
-            if (isUnderground) {
-                groundPos = findNearestValidCaveSpawn(level, pos, playerY);
-                if (groundPos == null) {
-                    continue;
-                }
-            } else {
-                groundPos = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, pos);
-            }
-
-            if (level.getBlockState(groundPos.below()).isSolid()
-                    && level.getBlockState(groundPos).isAir()
-                    && level.getBlockState(groundPos.above()).isAir()
-                    && level.getBlockState(groundPos.above(2)).isAir()) {
-                return new Vec3((double)groundPos.getX() + (double)0.5F, groundPos.getY(), (double)groundPos.getZ() + (double)0.5F);
-            }
-        }
-
-        return null;
     }
 
     // Copied from RaidManager#findRaidSpawnLocation
@@ -125,7 +91,7 @@ public final class WaveRaidUtil {
             } else {
                 groundPos = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, pos);
                 if (playerPos != null && playerPos.closerThan(Vec3.atCenterOf(groundPos), MIN_SPAWN_PLAYER_DISTANCE)) {
-//                    SCGExtra.LOGGER.warn("Too close: " + groundPos);
+                    SCGExtra.LOGGER.warn("Too close: " + groundPos);
                     continue;
                 }
             }
