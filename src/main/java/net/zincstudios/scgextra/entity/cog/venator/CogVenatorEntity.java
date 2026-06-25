@@ -13,11 +13,13 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.entity.PartEntity;
 import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.gun.CustomGunHolder;
 import net.zincstudios.scgextra.entity.common.gun.CustomSimulatedGun;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
+import net.zincstudios.scgextra.entity.common.part.RotatedSegmentPartEntity;
 import net.zincstudios.scgextra.sounds.COGSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -39,6 +41,7 @@ public class CogVenatorEntity extends GunnerEntity implements GeoEntity, CustomG
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
     private final SimulatedGun customGun;
+    private final PartEntity<?>[] subEntities;
 
     public CogVenatorEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -48,6 +51,13 @@ public class CogVenatorEntity extends GunnerEntity implements GeoEntity, CustomG
                 .maxRange(25)
                 .idealRange(20)
                 .build();
+        this.subEntities = new PartEntity[] {
+                new RotatedSegmentPartEntity<>(this, new Vec3(0, 0.92, 0.7), 0.4f, 0.4f),
+                new RotatedSegmentPartEntity<>(this, new Vec3(0, 1, 1.05), 0.25f, 0.25f),
+                new RotatedSegmentPartEntity<>(this, new Vec3(0, 1, 1.3), 0.25f, 0.25f),
+                new RotatedSegmentPartEntity<>(this, new Vec3(0, 1, 1.55), 0.25f, 0.25f),
+                new RotatedSegmentPartEntity<>(this, new Vec3(0, 1, 1.8), 0.25f, 0.25f)
+        };
 
         // because it's getting stuck somehow
         this.setDeltaMovement(this.getDeltaMovement().add(0.02, 0.1, 0.02));
@@ -64,7 +74,7 @@ public class CogVenatorEntity extends GunnerEntity implements GeoEntity, CustomG
     @Override
     public void tick() {
         super.tick();
-
+        this.tickSubEntities();
         if (brain.getTimeUntilExpiry(MemoryModuleType.AVOID_TARGET) == AVOID_TARGET_TTL-5) {
             this.playSound(COGSounds.COG_VENATOR_RUN.get());
         }
@@ -90,6 +100,22 @@ public class CogVenatorEntity extends GunnerEntity implements GeoEntity, CustomG
         CogVenatorAi.updateActivity(this);
         this.level().getProfiler().pop();
         super.customServerAiStep();
+    }
+
+    @Override
+    public PartEntity<?>[] getParts() {
+        return this.subEntities;
+    }
+
+    @Override
+    public boolean isMultipartEntity() {
+        return true;
+    }
+
+    protected void tickSubEntities() {
+        for(PartEntity<?> partEntity : this.getParts()) {
+            partEntity.tick();
+        }
     }
 
     @Override
