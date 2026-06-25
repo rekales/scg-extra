@@ -15,7 +15,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public final class WaveRaidUtil {
 
-    public static final int FIND_SPAWN_LOCATION_ATTEMPTS = 25;
+    public static final int FIND_SPAWN_LOCATION_ATTEMPTS = 40;
     public static final double MIN_SPAWN_PLAYER_DISTANCE = 32;
 
     public static Component getBossBarLabel(WaveRaidData raidData, int currentWave) {
@@ -90,9 +90,14 @@ public final class WaveRaidUtil {
                 }
             } else {
                 groundPos = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, pos);
-                if (playerPos != null && playerPos.closerThan(Vec3.atCenterOf(groundPos), MIN_SPAWN_PLAYER_DISTANCE)) {
-                    SCGExtra.LOGGER.warn("Too close: " + groundPos);
-                    continue;
+                if (playerPos != null) {
+                    if (playerPos.closerThan(Vec3.atCenterOf(groundPos), MIN_SPAWN_PLAYER_DISTANCE)) {
+                        SCGExtra.LOGGER.warn("Too close: " + groundPos);
+                        continue;
+                    } else if (!playerPos.closerThan(Vec3.atCenterOf(groundPos), MIN_SPAWN_PLAYER_DISTANCE*1.5)) {
+                        SCGExtra.LOGGER.warn("Too far: " + groundPos);
+                        continue;
+                    }
                 }
             }
             if (level.getBlockState(groundPos.below()).isSolid()

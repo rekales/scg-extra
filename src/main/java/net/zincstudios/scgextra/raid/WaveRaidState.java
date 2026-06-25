@@ -20,6 +20,7 @@ import net.zincstudios.scgextra.SCGExtra;
 import javax.annotation.Nullable;
 import java.util.*;
 
+// TODO: check raid center location
 //@SuppressWarnings("unused")
 public class WaveRaidState {
 
