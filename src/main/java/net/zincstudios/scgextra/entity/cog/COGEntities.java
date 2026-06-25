@@ -44,32 +44,32 @@ public class COGEntities {
 
     public static final RegistryObject<EntityType<CogDevastatorEntity>> DEVASTATOR = ENTITY_TYPES
             .register("cog_devastator", () -> EntityType.Builder.of(CogDevastatorEntity::new, MobCategory.MONSTER)
-                    .sized(1.6F, 3.25F)
+                    .sized(1.9F, 3.25F)
                     .build("cog_devastator"));
 
     public static final RegistryObject<EntityType<CogBombardierEntity>> BOMBARDIER = ENTITY_TYPES
             .register("cog_bombardier", () -> EntityType.Builder.of(CogBombardierEntity::new, MobCategory.MONSTER)
-                    .sized(1.6F, 2.8F)
+                    .sized(2.5F, 2.9F)
                     .build("cog_bombardier"));
 
     public static final RegistryObject<EntityType<CogGigantesEntity>> GIGANTES = ENTITY_TYPES
             .register("cog_gigantes", () -> EntityType.Builder.of(CogGigantesEntity::new, MobCategory.MONSTER)
-                    .sized(2F, 3F)
+                    .sized(1.95F, 3F)
                     .build("cog_gigantes"));
 
     public static final RegistryObject<EntityType<CogVenatorEntity>> VENATOR = ENTITY_TYPES
             .register("cog_venator", () -> EntityType.Builder.of(CogVenatorEntity::new, MobCategory.MONSTER)
-                    .sized(0.75F, 1.5F)
+                    .sized(0.92F, 1.5F)
                     .build("cog_venator"));
 
     public static final RegistryObject<EntityType<CogCentipedeEntity>> CENTIPEDE = ENTITY_TYPES
             .register("cog_centipede", () -> EntityType.Builder.of(CogCentipedeEntity::new, MobCategory.MONSTER)
-                    .sized(2F, 2.2F)
+                    .sized(2F, 2.9F)
                     .build("cog_centipede"));
 
     public static final RegistryObject<EntityType<CogJuggernautEntity>> JUGGERNAUT = ENTITY_TYPES
             .register("cog_juggernaut", () -> EntityType.Builder.of(CogJuggernautEntity::new, MobCategory.MONSTER)
-                    .sized(1.6F, 3.0F)
+                    .sized(1.9F, 3.0F)
                     .setUpdateInterval(1)
                     .build("cog_juggernaut"));
 

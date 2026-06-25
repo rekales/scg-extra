@@ -232,11 +232,11 @@ public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHan
     }
 
     public boolean isMovingForward() {
-        Vec3 oldPos = new Vec3(this.xOld, this.yOld, this.zOld);
+//        Vec3 oldPos = new Vec3(this.xOld, this.yOld, this.zOld);
         Vec3 dir = this.position().subtract(new Vec3(this.xOld, this.yOld, this.zOld));
 
 //        SCGExtra.LOGGER.debug("dev: " + dir.length());
-        float deltaRot = MobUtil.rotFromVec(this.getDeltaMovement());
+//        float deltaRot = MobUtil.rotFromVec(this.getDeltaMovement());
 
         float oldRot = MobUtil.rotFromVec(dir);
 
