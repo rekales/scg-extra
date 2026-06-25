@@ -4,7 +4,6 @@ import com.mojang.serialization.Dynamic;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -20,6 +19,8 @@ import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.gun.CustomGunHolder;
 import net.zincstudios.scgextra.entity.common.gun.CustomSimulatedGun;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
+import net.zincstudios.scgextra.entity.common.part.RotatedSegmentPartEntity;
+import net.zincstudios.scgextra.entity.common.part.RotatedWeakPointPartEntity;
 import net.zincstudios.scgextra.sounds.COGSounds;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -44,23 +45,15 @@ public class CogCentipedeEntity extends Monster implements GeoEntity, CustomGunH
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
     private final SimulatedGun customGun;
-    private final CogCentipedeSegmentPartEntity headPart;
-    private final CogCentipedeSegmentPartEntity midPart;
-    private final CogCentipedeSegmentPartEntity tailPart;
-    private final CogCentipedeWeakpointPartEntity eyePart;
-    private final CogCentipedeSegmentPartEntity[] subEntities;
+    private final PartEntity<?>[] subEntities;
 
     public CogCentipedeEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
-        this.headPart = new CogCentipedeSegmentPartEntity(this, 24/16f, 24/16f);
-        this.midPart = new CogCentipedeSegmentPartEntity(this, 28/16f, 30/16f);
-        this.tailPart = new CogCentipedeSegmentPartEntity(this, 22/16f, 24/16f);
-        this.eyePart = new CogCentipedeWeakpointPartEntity(this, 9/16f, 9/16f);
-        this.subEntities = new CogCentipedeSegmentPartEntity[] {
-                this.headPart,
-                this.midPart,
-                this.tailPart,
-                this.eyePart
+        this.subEntities = new PartEntity[] {
+                new RotatedSegmentPartEntity<>(this, new Vec3(0, 0, 1.5), 24/16f, 24/16f),
+                new RotatedSegmentPartEntity<>(this, new Vec3(0, 0, -28/16f), 28/16f, 30/16f),
+                new RotatedSegmentPartEntity<>(this, new Vec3(0, 0, -28/16f - 24/16f), 22/16f, 24/16f),
+                new RotatedWeakPointPartEntity<>(this, new Vec3(0, 11/16f, 2.2), 9/16f, 9/16f)
         };
         this.customGun = new CustomSimulatedGun.Builder(ModItems.LIBERTAS.get().getGun())
                 .projectileDamage(15)
@@ -104,7 +97,7 @@ public class CogCentipedeEntity extends Monster implements GeoEntity, CustomGunH
     }
 
     @Override
-    public @Nullable PartEntity<?>[] getParts() {
+    public PartEntity<?>[] getParts() {
         return this.subEntities;
     }
 
@@ -116,7 +109,7 @@ public class CogCentipedeEntity extends Monster implements GeoEntity, CustomGunH
     @Override
     public void tick() {
         super.tick();
-        updateSubEntities();
+        this.tickSubEntities();
 
         if (brain.getTimeUntilExpiry(ModBrainMemories.DELAYED_MELEE.get()) == SLAM_DURATION) {
             this.triggerAnim("behavior", "slam");
@@ -129,20 +122,10 @@ public class CogCentipedeEntity extends Monster implements GeoEntity, CustomGunH
         }
     }
 
-    protected void updateSubEntities() {
-        this.headPart.setOldPosAndRot();
-        this.midPart.setOldPosAndRot();
-        this.tailPart.setOldPosAndRot();
-        this.eyePart.setOldPosAndRot();
-
-        Vec3 headOffset = new Vec3(0, 0, 1.5);
-        this.headPart.setPos(this.position().add(headOffset.yRot(-this.yBodyRot * Mth.DEG_TO_RAD)));
-        Vec3 midOffset = new Vec3(0, 0, -28/16f);
-        this.midPart.setPos(this.position().add(midOffset.yRot(-this.yBodyRot * Mth.DEG_TO_RAD)));
-        Vec3 tailOffset = new Vec3(0, 0, -28/16f - 24/16f);
-        this.tailPart.setPos(this.position().add(tailOffset.yRot(-this.yBodyRot * Mth.DEG_TO_RAD)));
-        Vec3 eyeOffset = new Vec3(0, 11/16f, 2.2);
-        this.eyePart.setPos(this.position().add(eyeOffset.yRot(-this.yBodyRot * Mth.DEG_TO_RAD)));
+    protected void tickSubEntities() {
+        for(PartEntity<?> partEntity : this.getParts()) {
+            partEntity.tick();
+        }
     }
 
     @Override

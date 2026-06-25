@@ -1,14 +1,17 @@
-package net.zincstudios.scgextra.entity.cog.centipede;
+package net.zincstudios.scgextra.entity.common.part;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.PartEntity;
 
 import javax.annotation.Nullable;
@@ -16,14 +19,22 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CogCentipedeSegmentPartEntity extends PartEntity<CogCentipedeEntity> {
+public class RotatedSegmentPartEntity <T extends LivingEntity> extends PartEntity<T> {
 
     private final EntityDimensions size;
+    private final Vec3 offset;
 
-    public CogCentipedeSegmentPartEntity(CogCentipedeEntity parent, float width, float height) {
+    public RotatedSegmentPartEntity(T parent, Vec3 offset, float width, float height) {
         super(parent);
         this.size = EntityDimensions.fixed(width, height);
         this.refreshDimensions();
+        this.offset = offset;
+    }
+
+    @Override
+    public void tick() {
+        this.setOldPosAndRot();
+        this.setPos(this.getParent().position().add(this.offset.yRot(-this.getParent().yBodyRot * Mth.DEG_TO_RAD)));
     }
 
     @Override
@@ -65,6 +76,7 @@ public class CogCentipedeSegmentPartEntity extends PartEntity<CogCentipedeEntity
     public boolean canBeCollidedWith() {
         return this.isAlive();
     }
+
     @Override
     public PushReaction getPistonPushReaction() {
         return PushReaction.IGNORE;
@@ -72,16 +84,13 @@ public class CogCentipedeSegmentPartEntity extends PartEntity<CogCentipedeEntity
 
     @Override
     protected void defineSynchedData() {
-
     }
 
     @Override
     protected void readAdditionalSaveData(CompoundTag compound) {
-
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag compound) {
-
     }
 }
