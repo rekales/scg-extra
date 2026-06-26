@@ -43,4 +43,7 @@ public class MedalItem extends Item {
     public void onInventoryTick(ItemStack stack, Level level, Player player, int slotIndex, int selectedIndex) {
         this.tickEffect(player);
     }
+
+
+
 }

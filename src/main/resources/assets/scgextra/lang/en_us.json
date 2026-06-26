@@ -122,6 +122,16 @@
   "item.scgextra.walker_mg":  "Mounted Walker MG",
   "item.scgextra.end_shell":  "End Shell",
 
+  "item.scgextra.medal_of_survivor":  "Medal of Survivor",
+  "item.scgextra.medal_of_iron_will":  "Medal of Iron Will",
+  "item.scgextra.medal_of_defiance":  "Medal of Defiance",
+  "item.scgextra.medal_of_wonder":  "Medal of Wonder",
+  "item.scgextra.medal_of_fiery_rage":  "Medal of Fiery Rage",
+  "item.scgextra.medal_of_obedience":  "Medal of Obedience",
+  "item.scgextra.medal_of_cruelty":  "Medal of Cruelty",
+  "item.scgextra.medal_of_enlightenment":  "Medal of Enlightenment",
+  "item.scgextra.medal_of_conqueror":  "Medal of Conqueror",
+
   "itemGroup.scgextra.tab":  "SCG Extra",
 
 

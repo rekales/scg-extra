@@ -2,11 +2,20 @@ package net.zincstudios.scgextra.datagen;
 
 
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SpawnEggItem;
+import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
+import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.item.ModItems;
 
+import java.util.Objects;
 
+@SuppressWarnings({"UnusedReturnValue", "unused", "removal"})
 public class ModItemModelProvider extends ItemModelProvider {
 
     public ModItemModelProvider(PackOutput output, String modid, ExistingFileHelper existingFileHelper) {
@@ -17,6 +26,16 @@ public class ModItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
         basicItem(ModItems.WALKER_MG.get());
         basicItem(ModItems.END_SHELL.get());
+
+        basicItem("medal/", ModItems.MEDAL_OF_SURVIVOR);
+        basicItem("medal/", ModItems.MEDAL_OF_IRON_WILL);
+        basicItem("medal/", ModItems.MEDAL_OF_DEFIANCE);
+        basicItem("medal/", ModItems.MEDAL_OF_WONDER);
+        basicItem("medal/", ModItems.MEDAL_OF_FIERY_RAGE);
+        basicItem("medal/", ModItems.MEDAL_OF_OBEDIENCE);
+        basicItem("medal/", ModItems.MEDAL_OF_CRUELTY);
+        basicItem("medal/", ModItems.MEDAL_OF_ENLIGHTENMENT);
+        basicItem("medal/", ModItems.MEDAL_OF_CONQUEROR);
 
         basicItem(ModItems.FISH_FOLK_SPAWN_EGG.get());
         basicItem(ModItems.TURTLEMAN_SPAWN_EGG.get());
@@ -77,8 +96,26 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.COG_JUGGERNAUT_SPAWN_EGG.get());
     }
 
-//    private void spawnEgg(RegistryObject<SpawnEggItem> item) {
-//        if (item.getId() == null) return;
-//        withExistingParent(item.getId().getPath(), mcLoc("item/template_spawn_egg"));
-//    }
+    public ItemModelBuilder basicItem(RegistryObject<? extends Item> item) {
+        return basicItem(item.get());
+    }
+
+    public ItemModelBuilder basicItem(String prefix, RegistryObject<? extends Item> item) {
+        return basicItem(prefix, item.get());
+    }
+
+    public ItemModelBuilder basicItem(String prefix, Item item) {
+        return basicItem(prefix, Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item)));
+    }
+
+    public ItemModelBuilder basicItem(String prefix, ResourceLocation item) {
+        return getBuilder(item.toString())
+                .parent(new ModelFile.UncheckedModelFile("item/generated"))
+                .texture("layer0", new ResourceLocation(item.getNamespace(), "item/" + prefix + item.getPath()));
+    }
+
+    private void spawnEgg(RegistryObject<SpawnEggItem> item) {
+        if (item.getId() == null) return;
+        withExistingParent(item.getId().getPath(), mcLoc("item/template_spawn_egg"));
+    }
 }

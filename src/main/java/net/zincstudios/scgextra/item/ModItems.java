@@ -3,6 +3,7 @@ package net.zincstudios.scgextra.item;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.*;
@@ -54,10 +55,45 @@ public class ModItems {
             () -> new Item(new Item.Properties())
     );
 
-    public static final RegistryObject<MedalItem> MEDAL_OF_ENLIGHTENMENT = ITEMS.register("medal_of_enlightenment",
-            () -> new MedalItem(
+    public static final RegistryObject<MedalItem>
+            MEDAL_OF_SURVIVOR = ITEMS.register("medal_of_survivor", () -> new MedalItem(
+                    new Item.Properties().stacksTo(1),
+                    () -> new MobEffectInstance(ModEffects.SURVIVOR_MEDAL_EFFECT.get(), 35, 0, true, false)
+            )),
+            MEDAL_OF_IRON_WILL = ITEMS.register("medal_of_iron_will", () -> new MedalItem( // TODO
                     new Item.Properties().stacksTo(1),
                     () -> new MobEffectInstance(ModEffects.ENLIGHTENMENT_MEDAL_EFFECT.get(), 115, 1, true, true)
+            )),
+            MEDAL_OF_DEFIANCE = ITEMS.register("medal_of_defiance", () -> new MedalItem(
+                    new Item.Properties().stacksTo(1),
+                    () -> new MobEffectInstance(ModEffects.DEFIANCE_MEDAL_EFFECT.get(), 115, 0, true, false)
+            )),
+            MEDAL_OF_WONDER = ITEMS.register("medal_of_wonder", () -> new MedalItem(
+                    new Item.Properties().stacksTo(1),
+                    () -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 115, 0, true, true)
+            )),
+            MEDAL_OF_FIERY_RAGE = ITEMS.register("medal_of_fiery_rage", () -> new MedalItem(
+                    new Item.Properties().stacksTo(1),
+                    entity -> {
+                        entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 115, 1, true, true));
+                        entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 115, 0, true, true));
+                    }
+            )),
+            MEDAL_OF_OBEDIENCE = ITEMS.register("medal_of_obedience", () -> new MedalItem(
+                    new Item.Properties().stacksTo(1),
+                    () -> new MobEffectInstance(ModEffects.OBEDIENCE_MEDAL_EFFECT.get(), 115, 0, true, false)
+            )),
+            MEDAL_OF_CRUELTY = ITEMS.register("medal_of_cruelty", () -> new MedalItem(
+                    new Item.Properties().stacksTo(1),
+                    () -> new MobEffectInstance(ModEffects.CRUELTY_MEDAL_EFFECT.get(), 115, 0, true, true)
+            )),
+            MEDAL_OF_ENLIGHTENMENT = ITEMS.register("medal_of_enlightenment", () -> new MedalItem(
+                    new Item.Properties().stacksTo(1),
+                    () -> new MobEffectInstance(ModEffects.ENLIGHTENMENT_MEDAL_EFFECT.get(), 115, 1, true, true)
+            )),
+            MEDAL_OF_CONQUEROR = ITEMS.register("medal_of_conqueror", () -> new MedalItem( // TODO
+                    new Item.Properties().stacksTo(1),
+                    () -> new MobEffectInstance(ModEffects.ENLIGHTENMENT_MEDAL_EFFECT.get(), 115, 0, true, true)
             ));
 
     public static final RegistryObject<SpawnEggItem>
