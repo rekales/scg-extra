@@ -10,6 +10,7 @@
     "GunAttackGoalAccessor",
     "GunnerMobSpawnerMixin",
     "LightningProjectileEntityMixin",
+    "LivingEntityMixin",
     "MineUnitBlockEntityMixin",
     "ModCommandsMixin",
     "OceanMonumentEntryRoomMixin",

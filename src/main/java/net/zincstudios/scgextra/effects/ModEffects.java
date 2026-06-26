@@ -10,6 +10,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.zincstudios.scgextra.attributes.SCGEAttributes;
 import top.ribs.scguns.attributes.SCAttributes;
 
 public final class ModEffects {
@@ -25,8 +26,8 @@ public final class ModEffects {
     public static final RegistryObject<MobEffect> SURVIVOR_MEDAL_EFFECT = MOB_EFFECTS.register("survivor_medal", () -> new AttributeMobEffect(MobEffectCategory.BENEFICIAL, 0x000000)
             .addAttributeModifier(Attributes.ARMOR, "C5E68250-B0F7-47A9-810A-5891E0ECA52D", 10, AttributeModifier.Operation.ADDITION));
 
-    //    public static final RegistryObject<MobEffect> IRON_WILL_MEDAL_EFFECT = MOB_EFFECTS.register("survivor_medal", () -> new MedalAttributeEffect(MobEffectCategory.BENEFICIAL, 0x000000)
-//            .addAttributeModifier(Attributes.ARMOR, "C5E68250-B0F7-47A9-810A-5891E0ECA52D", 10, AttributeModifier.Operation.ADDITION));
+    public static final RegistryObject<MobEffect> IRON_WILL_MEDAL_EFFECT = MOB_EFFECTS.register("iron_will_medal", () -> new AttributeMobEffect(MobEffectCategory.BENEFICIAL, 0x000000)
+            .addAttributeModifier(SCGEAttributes.BULLET_DAMAGE_TAKEN_MULT.get(), "F76E3688-487E-4E90-AFD7-00241D06E3F2", -0.2, AttributeModifier.Operation.ADDITION));
 
     public static final RegistryObject<MobEffect> DEFIANCE_MEDAL_EFFECT = MOB_EFFECTS.register("defiance_medal", () -> new AttributeMobEffect(MobEffectCategory.BENEFICIAL, 0x000000)
             .addAttributeModifier(Attributes.MOVEMENT_SPEED, "AA1F4B52-6840-46D5-ABD5-2D887904434C", 0.2, AttributeModifier.Operation.MULTIPLY_TOTAL)

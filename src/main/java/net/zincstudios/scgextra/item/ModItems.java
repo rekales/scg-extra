@@ -60,9 +60,9 @@ public class ModItems {
                     new Item.Properties().stacksTo(1),
                     () -> new MobEffectInstance(ModEffects.SURVIVOR_MEDAL_EFFECT.get(), 35, 0, true, false)
             )),
-            MEDAL_OF_IRON_WILL = ITEMS.register("medal_of_iron_will", () -> new MedalItem( // TODO
+            MEDAL_OF_IRON_WILL = ITEMS.register("medal_of_iron_will", () -> new MedalItem(
                     new Item.Properties().stacksTo(1),
-                    () -> new MobEffectInstance(ModEffects.ENLIGHTENMENT_MEDAL_EFFECT.get(), 115, 1, true, true)
+                    () -> new MobEffectInstance(ModEffects.IRON_WILL_MEDAL_EFFECT.get(), 115, 0, true, true)
             )),
             MEDAL_OF_DEFIANCE = ITEMS.register("medal_of_defiance", () -> new MedalItem(
                     new Item.Properties().stacksTo(1),

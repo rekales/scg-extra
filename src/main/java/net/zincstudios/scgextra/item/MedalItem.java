@@ -29,21 +29,13 @@ public class MedalItem extends Item {
         this.interval = interval;
     }
 
-    public void tickEffect(LivingEntity entity) {
-        if (entity.level().getGameTime()%this.interval == 0) {
-            this.applyEffect(entity);
+    @Override
+    public void onInventoryTick(ItemStack stack, Level level, Player player, int slotIndex, int selectedIndex) {
+        super.onInventoryTick(stack, level, player, slotIndex, selectedIndex);
+        if (player.level().getGameTime()%this.interval == 0) {
+            this.effectApplicator.accept(player);
         }
     }
 
-    public void applyEffect(LivingEntity entity) {
-        this.effectApplicator.accept(entity);
-    }
-
-    @Override
-    public void onInventoryTick(ItemStack stack, Level level, Player player, int slotIndex, int selectedIndex) {
-        this.tickEffect(player);
-    }
-
-
-
+//    public record EffectProfile(MobEffect effect, int amp, boolean visible) {}
 }
