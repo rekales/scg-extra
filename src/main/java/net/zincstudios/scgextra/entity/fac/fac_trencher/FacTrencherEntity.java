@@ -1,115 +1,96 @@
 package net.zincstudios.scgextra.entity.fac.fac_trencher;
 
+import com.mojang.serialization.Dynamic;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.zincstudios.scgextra.entity.EntityTypeTags;
-import net.zincstudios.scgextra.entity.Faction;
+import net.zincstudios.scgextra.entity.ModBrainMemories;
+import net.zincstudios.scgextra.entity.common.EquippedEntity;
+import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
-import net.zincstudios.scgextra.entity.common.goal.HurtByNonFactionGoal;
-import net.zincstudios.scgextra.entity.rrc.scout.ScoutEntity;
+import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
 import net.zincstudios.scgextra.sounds.FACSounds;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class FacTrencherEntity extends ScoutEntity {
-    private static final int ATTACK_POSE_TRANSITION_TICKS = 7;
-    private static final int AIMING_GRACE_TICKS = 14;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+// TODO: equipment
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class FacTrencherEntity extends EquippedEntity implements GeoEntity, Gunner {
+
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
-    private static final RawAnimation IDLE_ATTACK = RawAnimation.begin().thenPlayAndHold("idle_attack");
-    private static final RawAnimation ATTACK_IDLE = RawAnimation.begin().thenPlayAndHold("attack_idle");
-    private static final RawAnimation HOLD_ATTACK = RawAnimation.begin().thenLoop("hold_attack");
-    private static final RawAnimation WALK_ATTACK = RawAnimation.begin().thenLoop("walk_attack");
-    private boolean attackPoseActive = false;
-    private boolean enteringAttackPose = false;
-    private int attackPoseTransitionTicks = 0;
-    private int aimingGraceTicks = 0;
+    private static final RawAnimation IDLE_AIM = RawAnimation.begin().thenLoop("idle_aim");
+    private static final RawAnimation WALK_AIM = RawAnimation.begin().thenLoop("walk_aim");
 
-    public FacTrencherEntity(EntityType<? extends GunnerEntity> entityType, Level level) {
+    private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+
+    public FacTrencherEntity(EntityType<? extends EquippedEntity> entityType, Level level) {
         super(entityType, level);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.FOLLOW_RANGE, 20.0D)
+                .add(Attributes.FOLLOW_RANGE, 48.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.23F)
-                .add(Attributes.ATTACK_DAMAGE, 2.0D)
                 .add(Attributes.ARMOR, 2.0D)
                 .add(Attributes.MAX_HEALTH, 20.0D);
     }
 
-    @Override
-    protected void registerGoals() {
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
-
-        this.targetSelector.addGoal(0, new HurtByNonFactionGoal(this));
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, 1, true, false,
-                player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, 1, true, false,
-                this::isHostileFactionTarget));
+    protected Brain<?> makeBrain(Dynamic<?> dynamic) {
+        return BrainCommons.BasicGunner.makeBrain(this, this.brainProvider().makeBrain(dynamic));
     }
 
-    private boolean isHostileFactionTarget(LivingEntity entity) {
-        if (entity == this) {
-            return false;
-        }
+    @SuppressWarnings("unchecked")
+    public Brain<FacTrencherEntity> getBrain() {
+        return (Brain<FacTrencherEntity>) super.getBrain();
+    }
 
-        if (Faction.isEnemies(this, entity)) {
-            return true;
-        }
+    protected Brain.Provider<FacTrencherEntity> brainProvider() {
+        return BrainCommons.BasicGunner.brainProvider();
+    }
 
-        return entity.getType().is(EntityTypeTags.RRC);
+    @Override
+    protected void customServerAiStep() {
+        this.level().getProfiler().push("facTrencherBrain");
+        this.getBrain().tick((ServerLevel)this.level(), this);
+        BrainCommons.updateActivity(this);
+        BrainCommons.updateMaxRangeAggressive(this);
+        if (this.getBrain().getMemory(ModBrainMemories.AIM_TICKS.get()).filter(aim -> aim > 5).isPresent()) {
+            this.setYBodyRot(this.getYHeadRot());
+        }
+        this.level().getProfiler().pop();
+        super.customServerAiStep();
     }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "walk/idle/aim", 2, state -> {
-            boolean moving = state.isMoving() || this.isActuallyMoving() || this.getNavigation().isInProgress();
-            boolean aimingNow = state.getAnimatable().isAiming();
-            if (aimingNow) {
-                this.aimingGraceTicks = AIMING_GRACE_TICKS;
-            } else if (this.aimingGraceTicks > 0) {
-                this.aimingGraceTicks--;
+        controllers.add(new AnimationController<>(this, "main", 8, state -> {
+            if (state.getAnimatable().isAggressive()) {
+                return state.setAndContinue(state.isMoving() ? WALK_AIM : IDLE_AIM);
+            } else {
+                return state.setAndContinue(state.isMoving() ? WALK : IDLE);
             }
-
-            boolean wantsAttackPose = aimingNow || this.aimingGraceTicks > 0;
-            if (wantsAttackPose != this.attackPoseActive) {
-                this.attackPoseActive = wantsAttackPose;
-                this.enteringAttackPose = wantsAttackPose;
-                this.attackPoseTransitionTicks = ATTACK_POSE_TRANSITION_TICKS;
-            }
-
-            if (this.attackPoseTransitionTicks > 0) {
-                this.attackPoseTransitionTicks--;
-                return state.setAndContinue(this.enteringAttackPose ? IDLE_ATTACK : ATTACK_IDLE);
-            }
-
-            if (this.attackPoseActive) {
-                return state.setAndContinue(moving ? WALK_ATTACK : HOLD_ATTACK);
-            }
-            return state.setAndContinue(moving ? WALK : IDLE);
-        }).setAnimationSpeed(1.0));
+        }));
     }
 
-    private boolean isActuallyMoving() {
-        double dx = this.getX() - this.xo;
-        double dz = this.getZ() - this.zo;
-        return dx * dx + dz * dz > 0.000001D;
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.geoCache;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSource) {

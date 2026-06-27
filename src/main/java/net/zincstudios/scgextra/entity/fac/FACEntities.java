@@ -27,7 +27,6 @@ import net.zincstudios.scgextra.entity.fac.fac_tank.FacTankRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_tank_buster.FacTankBusterEntity;
 import net.zincstudios.scgextra.entity.fac.fac_tank_buster.FacTankBusterRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_trencher.FacTrencherEntity;
-import net.zincstudios.scgextra.entity.fac.fac_trencher.FacTrencherRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_walker.FacWalkerEntity;
 import net.zincstudios.scgextra.entity.fac.shovel_knight.ShovelKnightEntity;
 import net.zincstudios.scgextra.entity.fac.trench_goblin.TrenchGoblinEntity;
@@ -134,8 +133,8 @@ public class FACEntities {
 
     @OnlyIn(value = Dist.CLIENT)
     private static void onClientSetup(FMLClientSetupEvent event) {
-        EntityRenderers.register(FACEntities.FAC_TRENCHER.get(), (ctx) -> new FacTrencherRenderer(ctx).noDeathTilt());
-
+        EntityRenderers.register(FACEntities.FAC_TRENCHER.get(), (ctx) -> new GunHoldingMobRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_trencher"))));
         EntityRenderers.register(FACEntities.FAC_BLUECOAT.get(), (ctx) -> new GunHoldingMobRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_bluecoat"))));
 
