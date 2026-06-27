@@ -10,18 +10,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 public class GunHoldingMobRenderer<T extends Mob & GeoEntity> extends BaseEntityRenderer<T> {
 
-    protected final float gunTilt;
-
     public GunHoldingMobRenderer(EntityRendererProvider.Context renderManager, GeoModel<T> model, float gunTilt) {
         super(renderManager, model);
-        this.gunTilt = gunTilt;
-    }
-
-    public GunHoldingMobRenderer(EntityRendererProvider.Context renderManager, GeoModel<T> model) {
-        this(renderManager, model, 0);
-    }
-
-    protected void addRenderLayers(EntityRendererProvider.Context context) {
-        addRenderLayer(new HeldGunGeoLayer<>(this, this.gunTilt));
+        this.addRenderLayer(new HeldGunGeoLayer<>(this, gunTilt));
     }
 }

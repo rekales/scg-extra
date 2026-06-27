@@ -1,5 +1,6 @@
 package net.zincstudios.scgextra.entity.common.client;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -7,6 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -25,11 +27,6 @@ public class BaseEntityRenderer <T extends LivingEntity & GeoEntity> extends Geo
     public BaseEntityRenderer(EntityRendererProvider.Context context, GeoModel<T> model) {
         super(context, model);
         this.shadowRadius = 0;  // no way to get the entity type on construction
-
-        addRenderLayers(context);
-    }
-
-    protected void addRenderLayers(EntityRendererProvider.Context context) {
     }
 
     @Override

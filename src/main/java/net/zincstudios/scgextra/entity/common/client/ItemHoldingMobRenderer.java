@@ -13,9 +13,6 @@ public class ItemHoldingMobRenderer <T extends Mob & GeoEntity> extends BaseEnti
 
     public ItemHoldingMobRenderer(EntityRendererProvider.Context context, GeoModel<T> model) {
         super(context, model);
-    }
-
-    protected void addRenderLayers(EntityRendererProvider.Context context) {
-        addRenderLayer(new HeldItemGeoLayer<>(this));
+        this.addRenderLayer(new HeldItemGeoLayer<>(this));
     }
 }
