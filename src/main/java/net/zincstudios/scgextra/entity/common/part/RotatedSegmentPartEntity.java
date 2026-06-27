@@ -24,12 +24,18 @@ public class RotatedSegmentPartEntity <T extends LivingEntity> extends PartEntit
 
     private final EntityDimensions size;
     private final Vec3 offset;
+    private final boolean collision;
 
     public RotatedSegmentPartEntity(T parent, Vec3 offset, float width, float height) {
+        this(parent, offset, width, height, true);
+    }
+
+    public RotatedSegmentPartEntity(T parent, Vec3 offset, float width, float height, boolean collision) {
         super(parent);
         this.size = EntityDimensions.fixed(width, height);
         this.refreshDimensions();
         this.offset = offset;
+        this.collision = collision;
     }
 
     @Override
@@ -75,7 +81,7 @@ public class RotatedSegmentPartEntity <T extends LivingEntity> extends PartEntit
 
     @Override
     public boolean canBeCollidedWith() {
-        return this.isAlive();
+        return this.collision && getParent().isAlive();
     }
 
     @Override

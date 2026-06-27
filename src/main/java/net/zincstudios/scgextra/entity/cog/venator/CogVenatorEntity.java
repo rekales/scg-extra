@@ -52,11 +52,11 @@ public class CogVenatorEntity extends GunnerEntity implements GeoEntity, CustomG
                 .idealRange(20)
                 .build();
         this.subEntities = new PartEntity[] {
-                new RotatedSegmentPartEntity<>(this, new Vec3(0, 0.92, 0.7), 0.4f, 0.4f),
-                new RotatedSegmentPartEntity<>(this, new Vec3(0, 1, 1.05), 0.25f, 0.25f),
-                new RotatedSegmentPartEntity<>(this, new Vec3(0, 1, 1.3), 0.25f, 0.25f),
-                new RotatedSegmentPartEntity<>(this, new Vec3(0, 1, 1.55), 0.25f, 0.25f),
-                new RotatedSegmentPartEntity<>(this, new Vec3(0, 1, 1.8), 0.25f, 0.25f)
+                new RotatedSegmentPartEntity<>(this, new Vec3(0, 0.92, 0.7), 0.4f, 0.4f, false),
+                new RotatedSegmentPartEntity<>(this, new Vec3(0, 1, 1.05), 0.25f, 0.25f, false),
+                new RotatedSegmentPartEntity<>(this, new Vec3(0, 1, 1.3), 0.25f, 0.25f, false),
+                new RotatedSegmentPartEntity<>(this, new Vec3(0, 1, 1.55), 0.25f, 0.25f, false),
+                new RotatedSegmentPartEntity<>(this, new Vec3(0, 1, 1.8), 0.25f, 0.25f, false)
         };
 
         // because it's getting stuck somehow
