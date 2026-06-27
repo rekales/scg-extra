@@ -58,7 +58,7 @@ public class ModItems {
     public static final RegistryObject<MedalItem>
             MEDAL_OF_SURVIVOR = ITEMS.register("medal_of_survivor", () -> new MedalItem(
                     new Item.Properties().stacksTo(1),
-                    () -> new MobEffectInstance(ModEffects.SURVIVOR_MEDAL_EFFECT.get(), 35, 0, true, false)
+                    () -> new MobEffectInstance(ModEffects.SURVIVOR_MEDAL_EFFECT.get(), 35, 0, true, false, false)
             )),
             MEDAL_OF_IRON_WILL = ITEMS.register("medal_of_iron_will", () -> new MedalItem(
                     new Item.Properties().stacksTo(1),
@@ -66,7 +66,7 @@ public class ModItems {
             )),
             MEDAL_OF_DEFIANCE = ITEMS.register("medal_of_defiance", () -> new MedalItem(
                     new Item.Properties().stacksTo(1),
-                    () -> new MobEffectInstance(ModEffects.DEFIANCE_MEDAL_EFFECT.get(), 115, 0, true, false)
+                    () -> new MobEffectInstance(ModEffects.DEFIANCE_MEDAL_EFFECT.get(), 115, 0, true, false, false)
             )),
             MEDAL_OF_WONDER = ITEMS.register("medal_of_wonder", () -> new MedalItem(
                     new Item.Properties().stacksTo(1),
@@ -81,7 +81,7 @@ public class ModItems {
             )),
             MEDAL_OF_OBEDIENCE = ITEMS.register("medal_of_obedience", () -> new MedalItem(
                     new Item.Properties().stacksTo(1),
-                    () -> new MobEffectInstance(ModEffects.OBEDIENCE_MEDAL_EFFECT.get(), 115, 0, true, false)
+                    () -> new MobEffectInstance(ModEffects.OBEDIENCE_MEDAL_EFFECT.get(), 115, 0, true, false, false)
             )),
             MEDAL_OF_CRUELTY = ITEMS.register("medal_of_cruelty", () -> new MedalItem(
                     new Item.Properties().stacksTo(1),

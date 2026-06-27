@@ -35,8 +35,7 @@ public final class ModEffects {
 
     public static final RegistryObject<MobEffect> OBEDIENCE_MEDAL_EFFECT = MOB_EFFECTS.register("obedience_medal", () -> new AttributeMobEffect(MobEffectCategory.BENEFICIAL, 0x000000)
             .addAttributeModifier(Attributes.ARMOR_TOUGHNESS, "8EF994CC-7346-4756-926C-3D7ADF093ABD", 3, AttributeModifier.Operation.ADDITION)
-            .addAttributeModifier(SCAttributes.RELOAD_SPEED.get(), "E433E6CF-8E83-4798-AE32-037789D3EB19", -0.3, AttributeModifier.Operation.MULTIPLY_TOTAL));
-// TODO: recoil reduction attrib
+            .addAttributeModifier(SCGEAttributes.RECOIL_MULT.get(), "E433E6CF-8E83-4798-AE32-037789D3EB19", -0.3, AttributeModifier.Operation.MULTIPLY_TOTAL));
 
     public static final RegistryObject<MobEffect> CRUELTY_MEDAL_EFFECT = MOB_EFFECTS.register("cruelty_medal", () -> new AttributeMobEffect(MobEffectCategory.BENEFICIAL, 0x000000)
             .addAttributeModifier(SCAttributes.BULLET_DAMAGE_MULTIPLIER.get(), "5A5737FF-A94F-459E-B578-A7163904104E", 0.1, AttributeModifier.Operation.MULTIPLY_TOTAL));

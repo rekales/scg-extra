@@ -17,6 +17,7 @@
     "ProjectileEntityMixin",
     "RaidManagerMixin",
     "RaidSaveDataAccessor",
+    "RecoilHandlerMixin",
     "SignalBeaconEntityMixin"
   ],
   "minVersion": "0.8.5"
