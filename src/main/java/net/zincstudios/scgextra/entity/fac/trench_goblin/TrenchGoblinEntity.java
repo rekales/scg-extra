@@ -1,23 +1,21 @@
 package net.zincstudios.scgextra.entity.fac.trench_goblin;
 
+import com.mojang.serialization.Dynamic;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.zincstudios.scgextra.entity.Faction;
+import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
-import net.zincstudios.scgextra.entity.common.goal.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
+import net.zincstudios.scgextra.entity.common.client.ExpandedAnimationController;
 import net.zincstudios.scgextra.sounds.FACSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -27,33 +25,25 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class TrenchGoblinEntity extends GunnerEntity implements GeoEntity {
+
+    static final int MELEE_DAMAGE_DELAY = 10;
+    static final int MELEE_DURATION = 18;
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
     private static final RawAnimation WALK_ATTACK = RawAnimation.begin().thenLoop("walk_attack");
     private static final RawAnimation ATTACK = RawAnimation.begin().thenPlay("attack");
+    private static final RawAnimation ATTACK_NO_LEGS = RawAnimation.begin().thenPlay("attack_no_legs");
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
-    private LivingEntity delayedHitTarget;
-    private int delayedHitTicks = -1;
 
     public TrenchGoblinEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
-    }
-
-    @Override
-    protected void registerGoals() {
-        this.goalSelector.addGoal(3, new TrenchGoblinMeleeGoal(this, 1.1D, false));
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.9D));
-        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
-
-        this.targetSelector.addGoal(0, new HurtByNonFactionGoal(this));
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true,
-                player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
-                entity -> Faction.isEnemies(this, entity)));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -65,93 +55,56 @@ public class TrenchGoblinEntity extends GunnerEntity implements GeoEntity {
                 .add(Attributes.MAX_HEALTH, 30.0D);
     }
 
-    public void scheduleDelayedHit(LivingEntity target, int delayTicks) {
-        if (target == null || !target.isAlive()) {
-            this.clearDelayedHit();
-            return;
-        }
-
-        this.delayedHitTarget = target;
-        this.delayedHitTicks = Math.max(0, delayTicks);
+    protected Brain<?> makeBrain(Dynamic<?> dynamic) {
+        return TrenchGoblinAi.makeBrain(this, this.brainProvider().makeBrain(dynamic));
     }
 
-    private void clearDelayedHit() {
-        this.delayedHitTarget = null;
-        this.delayedHitTicks = -1;
+    @SuppressWarnings("unchecked")
+    public Brain<TrenchGoblinEntity> getBrain() {
+        return (Brain<TrenchGoblinEntity>) super.getBrain();
     }
 
-    private void processDelayedHit() {
-        if (this.level().isClientSide() || this.delayedHitTicks < 0) {
-            return;
-        }
-
-        if (this.delayedHitTicks > 0) {
-            this.delayedHitTicks--;
-            return;
-        }
-
-        LivingEntity target = this.delayedHitTarget;
-        this.clearDelayedHit();
-        if (target == null || !target.isAlive()) {
-            return;
-        }
-
-        double reachSqr = this.getBbWidth() * 2.0F * this.getBbWidth() * 2.0F + target.getBbWidth();
-        if (this.distanceToSqr(target) <= reachSqr && this.hasLineOfSight(target)) {
-            this.doHurtTarget(target);
-        }
+    protected Brain.Provider<TrenchGoblinEntity> brainProvider() {
+        return Brain.provider(TrenchGoblinAi.MEMORY_TYPES, TrenchGoblinAi.SENSOR_TYPES);
     }
 
-    private boolean hasLiveTarget() {
-        LivingEntity target = this.getTarget();
-        return target != null && target.isAlive();
+    @Override
+    protected void customServerAiStep() {
+        this.level().getProfiler().push("cogTrenchGoblinBrain");
+        this.getBrain().tick((ServerLevel)this.level(), this);
+        BrainCommons.updateActivity(this);
+        this.level().getProfiler().pop();
+        super.customServerAiStep();
     }
 
     @Override
     public void tick() {
         super.tick();
-        this.processDelayedHit();
+
+        if (!this.level().isClientSide && brain.getTimeUntilExpiry(ModBrainMemories.DELAYED_MELEE.get()) == MELEE_DURATION) {
+            this.triggerAnim("attack", "melee");
+        }
     }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "walk/idle", 2, state -> {
-            boolean moving = state.isMoving() || this.getNavigation().isInProgress();
-            if (state.getAnimatable().hasLiveTarget()) {
-                state.getController().setAnimationSpeed(1.2);
-                return state.setAndContinue(moving ? WALK_ATTACK : IDLE);
-            }
-            if (moving) {
-                state.getController().setAnimationSpeed(1.5);
-                return state.setAndContinue(WALK);
-            }
-            state.getController().setAnimationSpeed(1.0);
-            return state.setAndContinue(IDLE);
-        }));
+        controllers.add(new ExpandedAnimationController<>(this, "main", 2, state ->
+                state.setAndContinue(state.isMoving() ? WALK : IDLE))
+        );
 
-        controllers.add(new AnimationController<>(this, "attack", 0, state -> PlayState.STOP)
-                .triggerableAnim("attack", ATTACK)
-                .setAnimationSpeed(1.8)
+        controllers.add(new ExpandedAnimationController<>(this, "attack", 0, state -> PlayState.STOP)
+                .triggerableAnim("melee", (ctr) -> {
+                    TrenchGoblinEntity entity = (TrenchGoblinEntity) ctr.getAnimatable();
+                    AnimationController<?> mainCtr = entity.getAnimatableInstanceCache().getManagerForId(entity.getId()).getAnimationControllers().get("main");
+                    return mainCtr.getCurrentRawAnimation() == WALK ? ATTACK_NO_LEGS : ATTACK;
+                })
+                .setAnimationSpeed(1.4f)
         );
     }
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.geoCache;
-    }
-
-    @Override
-    public boolean doHurtTarget(Entity target) {
-        boolean hit = super.doHurtTarget(target);
-        if (hit) {
-            this.playSound(MobUtil.getSound(
-                    this.random,
-                    FACSounds.TRENCH_GOBLIN_ATTACK_1.get(),
-                    FACSounds.TRENCH_GOBLIN_ATTACK_2.get(),
-                    FACSounds.TRENCH_GOBLIN_ATTACK_3.get()
-            ), 1.0F, 1.0F);
-        }
-        return hit;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSource) {

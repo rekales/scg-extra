@@ -17,6 +17,7 @@ import net.zincstudios.scgextra.entity.common.WeakPointBox;
 import net.zincstudios.scgextra.entity.common.WeakPointBoxManager;
 import net.zincstudios.scgextra.entity.common.client.GunHoldingMobRenderer;
 import net.zincstudios.scgextra.entity.common.client.GunnerRenderer;
+import net.zincstudios.scgextra.entity.common.client.ItemHoldingMobRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_bluecoat.FacBluecoatEntity;
 import net.zincstudios.scgextra.entity.fac.fac_commissar.FacCommissarEntity;
 import net.zincstudios.scgextra.entity.fac.fac_commissar.FacCommissarRenderer;
@@ -30,7 +31,6 @@ import net.zincstudios.scgextra.entity.fac.fac_trencher.FacTrencherEntity;
 import net.zincstudios.scgextra.entity.fac.fac_walker.FacWalkerEntity;
 import net.zincstudios.scgextra.entity.fac.shovel_knight.ShovelKnightEntity;
 import net.zincstudios.scgextra.entity.fac.trench_goblin.TrenchGoblinEntity;
-import net.zincstudios.scgextra.entity.fac.trench_goblin.TrenchGoblinRenderer;
 import net.zincstudios.scgextra.entity.fac.trench_sniper.TrenchSniperEntity;
 import net.zincstudios.scgextra.entity.fac.trench_sniper.TrenchSniperRenderer;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
@@ -137,9 +137,10 @@ public class FACEntities {
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_trencher"))));
         EntityRenderers.register(FACEntities.FAC_BLUECOAT.get(), (ctx) -> new GunHoldingMobRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_bluecoat"))));
-
-        EntityRenderers.register(FACEntities.TRENCH_GOBLIN.get(), (ctx) -> new TrenchGoblinRenderer(ctx).noDeathTilt());
+        EntityRenderers.register(FACEntities.TRENCH_GOBLIN.get(), (ctx) -> new ItemHoldingMobRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_trench_goblin"))));
         EntityRenderers.register(FACEntities.TRENCH_SNIPER.get(), (ctx) -> new TrenchSniperRenderer(ctx).noDeathTilt());
+
         EntityRenderers.register(FACEntities.SHOVEL_KNIGHT.get(), (ctx) -> new GunnerRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_shovel_knight")), -10).noDeathTilt());
         EntityRenderers.register(FACEntities.FAC_TANK_BUSTER.get(), (ctx) -> new FacTankBusterRenderer(ctx).noDeathTilt());
