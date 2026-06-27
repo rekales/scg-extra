@@ -15,9 +15,9 @@ import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.common.OffsetRotatedHeadshotBox;
 import net.zincstudios.scgextra.entity.common.WeakPointBox;
 import net.zincstudios.scgextra.entity.common.WeakPointBoxManager;
+import net.zincstudios.scgextra.entity.common.client.GunHoldingMobRenderer;
 import net.zincstudios.scgextra.entity.common.client.GunnerRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_bluecoat.FacBluecoatEntity;
-import net.zincstudios.scgextra.entity.fac.fac_bluecoat.FacBluecoatRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_commissar.FacCommissarEntity;
 import net.zincstudios.scgextra.entity.fac.fac_commissar.FacCommissarRenderer;
 import net.zincstudios.scgextra.entity.fac.fac_lion.FacLionEntity;
@@ -135,7 +135,10 @@ public class FACEntities {
     @OnlyIn(value = Dist.CLIENT)
     private static void onClientSetup(FMLClientSetupEvent event) {
         EntityRenderers.register(FACEntities.FAC_TRENCHER.get(), (ctx) -> new FacTrencherRenderer(ctx).noDeathTilt());
-        EntityRenderers.register(FACEntities.FAC_BLUECOAT.get(), (ctx) -> new FacBluecoatRenderer(ctx).noDeathTilt());
+
+        EntityRenderers.register(FACEntities.FAC_BLUECOAT.get(), (ctx) -> new GunHoldingMobRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_bluecoat"))));
+
         EntityRenderers.register(FACEntities.TRENCH_GOBLIN.get(), (ctx) -> new TrenchGoblinRenderer(ctx).noDeathTilt());
         EntityRenderers.register(FACEntities.TRENCH_SNIPER.get(), (ctx) -> new TrenchSniperRenderer(ctx).noDeathTilt());
         EntityRenderers.register(FACEntities.SHOVEL_KNIGHT.get(), (ctx) -> new GunnerRenderer<>(ctx,
