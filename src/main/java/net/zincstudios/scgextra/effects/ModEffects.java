@@ -43,8 +43,9 @@ public final class ModEffects {
     public static final RegistryObject<MobEffect> ENLIGHTENMENT_MEDAL_EFFECT = MOB_EFFECTS.register("enlightenment_medal", () -> new EnlightenmentHealthBoostMobEffect(MobEffectCategory.BENEFICIAL, 0x000000)
             .addAttributeModifier(Attributes.MAX_HEALTH, EnlightenmentHealthBoostMobEffect.EFFECT_ID, 4.0D, AttributeModifier.Operation.ADDITION));
 
-//    public static final RegistryObject<MobEffect> CONQUEROR_MEDAL_EFFECT = MOB_EFFECTS.register("survivor_medal", () -> new MedalAttributeEffect(MobEffectCategory.BENEFICIAL, 0x000000)
-//            .addAttributeModifier(Attributes.ARMOR, "C5E68250-B0F7-47A9-810A-5891E0ECA52D", 10, AttributeModifier.Operation.ADDITION));
+    public static final RegistryObject<MobEffect> CONQUEROR_MEDAL_EFFECT = MOB_EFFECTS.register("conqueror_medal", () -> new AttributeMobEffect(MobEffectCategory.BENEFICIAL, 0x000000)
+            .addAttributeModifier(SCGEAttributes.BULLET_ADDITIONAL_CRIT_CHANCE.get(), "441F22FC-4788-4661-B220-2AD214752137", 0.2, AttributeModifier.Operation.ADDITION)
+            .addAttributeModifier(SCGEAttributes.BULLET_GRAVITY_MULT.get(), "FFC2674B-C0CF-44DA-8B52-5F800817327D", -0.2, AttributeModifier.Operation.MULTIPLY_TOTAL));
 
     public static void register(IEventBus eventBus){
         MOB_EFFECTS.register(eventBus);

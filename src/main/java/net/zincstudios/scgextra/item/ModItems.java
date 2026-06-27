@@ -91,9 +91,9 @@ public class ModItems {
                     new Item.Properties().stacksTo(1),
                     () -> new MobEffectInstance(ModEffects.ENLIGHTENMENT_MEDAL_EFFECT.get(), 115, 1, true, true)
             )),
-            MEDAL_OF_CONQUEROR = ITEMS.register("medal_of_conqueror", () -> new MedalItem( // TODO
+            MEDAL_OF_CONQUEROR = ITEMS.register("medal_of_conqueror", () -> new MedalItem(
                     new Item.Properties().stacksTo(1),
-                    () -> new MobEffectInstance(ModEffects.ENLIGHTENMENT_MEDAL_EFFECT.get(), 115, 0, true, true)
+                    () -> new MobEffectInstance(ModEffects.CONQUEROR_MEDAL_EFFECT.get(), 115, 0, false, false, false)
             ));
 
     public static final RegistryObject<SpawnEggItem>
