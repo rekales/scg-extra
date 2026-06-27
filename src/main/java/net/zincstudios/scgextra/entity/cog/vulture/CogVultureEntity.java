@@ -40,8 +40,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 public class CogVultureEntity extends Monster implements GeoEntity, Gunner, BulletSpawnOffset, CustomGunHolder {
 
-    public static final Vec3 LEFT_GUN_OFFSET = new Vec3(0.45,1.4,-0.4);
-    public static final Vec3 RIGHT_GUN_OFFSET = new Vec3(-0.45,1.5,-0.4);
+    private static final Vec3 LEFT_GUN_OFFSET = new Vec3(0.45,1.4,-0.4);
+    private static final Vec3 RIGHT_GUN_OFFSET = new Vec3(-0.45,1.5,-0.4);
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
     private final SimulatedGun customGun;

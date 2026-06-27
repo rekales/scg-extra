@@ -4,6 +4,7 @@ import com.mojang.serialization.Dynamic;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.Brain;
@@ -14,6 +15,8 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.PartEntity;
+import net.zincstudios.scgextra.entity.ModBrainMemories;
+import net.zincstudios.scgextra.entity.asgharian.BulletSpawnOffset;
 import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.gun.CustomGunHolder;
@@ -37,7 +40,9 @@ import static net.zincstudios.scgextra.entity.common.brain.AvoidTargetIfClose.AV
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CogVenatorEntity extends GunnerEntity implements GeoEntity, CustomGunHolder, Gunner {
+public class CogVenatorEntity extends GunnerEntity implements GeoEntity, CustomGunHolder, Gunner, BulletSpawnOffset {
+
+    private static final Vec3 GUN_OFFSET = new Vec3(0, 1.1, 2.1);
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
     private final SimulatedGun customGun;
@@ -98,6 +103,9 @@ public class CogVenatorEntity extends GunnerEntity implements GeoEntity, CustomG
         this.level().getProfiler().push("cogVenatorBrain");
         this.getBrain().tick((ServerLevel)this.level(), this);
         CogVenatorAi.updateActivity(this);
+        if (this.getBrain().getMemory(ModBrainMemories.AIM_TICKS.get()).filter(aim -> aim > 5).isPresent()) {
+            this.setYBodyRot(this.getYHeadRot());
+        }
         this.level().getProfiler().pop();
         super.customServerAiStep();
     }
@@ -171,5 +179,10 @@ public class CogVenatorEntity extends GunnerEntity implements GeoEntity, CustomG
 
     protected SoundEvent getAttackSound() {
         return COGSounds.COG_VENATOR_ATTACK.get();
+    }
+
+    @Override
+    public Vec3 getBulletSpawnOffset(int gunIndex) {
+        return GUN_OFFSET.yRot(-this.yBodyRot * Mth.DEG_TO_RAD);
     }
 }
