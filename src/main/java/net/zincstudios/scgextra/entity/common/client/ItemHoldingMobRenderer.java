@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.asgharian;
+package net.zincstudios.scgextra.entity.common.client;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.world.entity.Mob;

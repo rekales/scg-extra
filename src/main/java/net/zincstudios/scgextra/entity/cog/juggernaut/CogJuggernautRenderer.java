@@ -1,8 +1,8 @@
 package net.zincstudios.scgextra.entity.cog.juggernaut;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.zincstudios.scgextra.entity.asgharian.BaseEntityRenderer;
-import net.zincstudios.scgextra.entity.asgharian.HeldGunGeoLayer;
+import net.zincstudios.scgextra.entity.common.client.BaseEntityRenderer;
+import net.zincstudios.scgextra.entity.common.client.HeldGunGeoLayer;
 import software.bernie.geckolib.model.GeoModel;
 
 import javax.annotation.ParametersAreNonnullByDefault;

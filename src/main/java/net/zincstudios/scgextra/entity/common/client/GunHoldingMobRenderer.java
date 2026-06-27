@@ -1,23 +1,23 @@
-package net.zincstudios.scgextra.entity.asgharian;
+package net.zincstudios.scgextra.entity.common.client;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.zincstudios.scgextra.entity.common.EquippedEntity;
+import net.minecraft.world.entity.Mob;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.model.GeoModel;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
-public class GunnerRenderer <T extends EquippedEntity & GeoEntity> extends BaseEntityRenderer<T> {
+public class GunHoldingMobRenderer<T extends Mob & GeoEntity> extends BaseEntityRenderer<T> {
 
     protected final float gunTilt;
 
-    public GunnerRenderer(EntityRendererProvider.Context renderManager, GeoModel<T> model, float gunTilt) {
+    public GunHoldingMobRenderer(EntityRendererProvider.Context renderManager, GeoModel<T> model, float gunTilt) {
         super(renderManager, model);
         this.gunTilt = gunTilt;
     }
 
-    public GunnerRenderer(EntityRendererProvider.Context renderManager, GeoModel<T> model) {
+    public GunHoldingMobRenderer(EntityRendererProvider.Context renderManager, GeoModel<T> model) {
         this(renderManager, model, 0);
     }
 

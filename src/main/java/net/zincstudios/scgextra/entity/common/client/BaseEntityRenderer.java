@@ -1,9 +1,9 @@
-package net.zincstudios.scgextra.entity.asgharian;
+package net.zincstudios.scgextra.entity.common.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.LivingEntity;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
@@ -16,7 +16,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
  */
 @SuppressWarnings("unused")
 @ParametersAreNonnullByDefault
-public class BaseEntityRenderer <T extends Mob & GeoEntity> extends GeoEntityRenderer<T> {
+public class BaseEntityRenderer <T extends LivingEntity & GeoEntity> extends GeoEntityRenderer<T> {
 
     protected boolean noDeathTilt = false;
     protected boolean noDeathRedTint = false;  // NOTE: can't be assed to do it since nothing uses it yet.

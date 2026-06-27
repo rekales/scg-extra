@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.asgharian;
+package net.zincstudios.scgextra.entity.common.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;

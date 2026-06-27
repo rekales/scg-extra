@@ -13,19 +13,19 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.SCGExtra;
-import net.zincstudios.scgextra.entity.asgharian.BaseEntityRenderer;
+import net.zincstudios.scgextra.entity.common.client.BaseEntityRenderer;
 import net.zincstudios.scgextra.entity.cog.bombardier.CogBombardierEntity;
 import net.zincstudios.scgextra.entity.cog.centipede.CogCentipedeEntity;
 import net.zincstudios.scgextra.entity.cog.centipede.PlasmaCannonProjectileEntity;
 import net.zincstudios.scgextra.entity.cog.devastator.CogDevastatorEntity;
 import net.zincstudios.scgextra.entity.cog.gigantes.CogGigantesEntity;
 import net.zincstudios.scgextra.entity.cog.juggernaut.CogJuggernautEntity;
-import net.zincstudios.scgextra.entity.cog.juggernaut.CogJuggernautRenderer;
 import net.zincstudios.scgextra.entity.cog.juggernaut.RocketBarrageProjectileEntity;
 import net.zincstudios.scgextra.entity.cog.venator.CogVenatorEntity;
 import net.zincstudios.scgextra.entity.cog.vulture.CogVultureEntity;
 import net.zincstudios.scgextra.entity.common.WeakPointBox;
 import net.zincstudios.scgextra.entity.common.WeakPointBoxManager;
+import net.zincstudios.scgextra.entity.common.client.GunHoldingMobRenderer;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import top.ribs.scguns.client.render.entity.ProjectileRenderer;
 import top.ribs.scguns.client.render.entity.RocketRenderer;
@@ -134,8 +134,8 @@ public class COGEntities {
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_venator"))).noDeathTilt());
         EntityRenderers.register(COGEntities.CENTIPEDE.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_centipede"))).noDeathTilt());
-        EntityRenderers.register(COGEntities.JUGGERNAUT.get(), (ctx) -> new CogJuggernautRenderer(ctx,
-                new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_juggernaut"), "chest")).noDeathTilt());
+        EntityRenderers.register(COGEntities.JUGGERNAUT.get(), (ctx) -> new GunHoldingMobRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_juggernaut"), "chest"), -60).noDeathTilt());
 
         EntityRenderers.register(COGEntities.PLASMA_CANNON_PROJECTILE.get(), ProjectileRenderer::new);
         EntityRenderers.register(COGEntities.ROCKET_BARRAGE_PROJECTILE.get(), RocketRenderer::new);

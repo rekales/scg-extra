@@ -22,6 +22,9 @@ import net.zincstudios.scgextra.entity.asgharian.worker.AsgharWorkerEntity;
 import net.zincstudios.scgextra.entity.asgharian.worker.AsgharWorkerRenderer;
 import net.zincstudios.scgextra.entity.common.WeakPointBox;
 import net.zincstudios.scgextra.entity.common.WeakPointBoxManager;
+import net.zincstudios.scgextra.entity.common.client.BaseEntityRenderer;
+import net.zincstudios.scgextra.entity.common.client.GunHoldingMobRenderer;
+import net.zincstudios.scgextra.entity.common.client.ItemHoldingMobRenderer;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import top.ribs.scguns.common.BoundingBoxManager;
 import top.ribs.scguns.common.headshot.BasicHeadshotBox;
@@ -100,7 +103,7 @@ public class AsgharianEntities {
         EntityRenderers.register(AsgharianEntities.ASGHAR_SURGEON.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("asgharian/asghar_surgeon"))).noDeathTilt());
         EntityRenderers.register(AsgharianEntities.ASGHAR_WORKER.get(), AsgharWorkerRenderer::new);
-        EntityRenderers.register(AsgharianEntities.ASGHAR_FLAMER.get(), (ctx) -> new GunnerRenderer<>(ctx,
+        EntityRenderers.register(AsgharianEntities.ASGHAR_FLAMER.get(), (ctx) -> new GunHoldingMobRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("asgharian/asghar_flamer")), 10).noDeathTilt());
         EntityRenderers.register(AsgharianEntities.CANDLE_FIEND.get(), CandleFiendRenderer::new);
         EntityRenderers.register(AsgharianEntities.SOUL_RIPPER.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
