@@ -1,10 +1,10 @@
 {
-  "id": "scgextra:shovel_knight",
+  "id": "scgextra:fac_trench_goblin",
   "equipment_chance": 1.0,
   "items": [
     {
-      "item": "scgextra:spear_shovel",
-      "weight": 10.0,
+      "item": "scguns:anthralite_axe",
+      "weight": 1.0,
       "drop_chance": 0.0,
       "min_durability": 0.2,
       "max_durability": 0.5,
@@ -12,3 +12,4 @@
     }
   ]
 }
+
