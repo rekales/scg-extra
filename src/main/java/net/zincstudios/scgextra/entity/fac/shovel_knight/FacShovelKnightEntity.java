@@ -46,7 +46,7 @@ public class FacShovelKnightEntity extends GunnerEntity implements GeoEntity {
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
                 .add(Attributes.FOLLOW_RANGE, 28.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.19F)
+                .add(Attributes.MOVEMENT_SPEED, 0.20F)
                 .add(Attributes.ATTACK_DAMAGE, 8.0D)
                 .add(Attributes.ARMOR, 6.0D)
                 .add(Attributes.MAX_HEALTH, 50.0D);

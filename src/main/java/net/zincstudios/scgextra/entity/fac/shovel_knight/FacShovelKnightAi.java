@@ -56,8 +56,8 @@ public final class FacShovelKnightAi {
                 StartAttacking.create(BrainUtils::findNearestVisibleAttackablePlayer),
                 StartAttacking.create(BrainUtils::findNearestAttackableFactionEnemy),
                 new RunOne<>(ImmutableList.of(
-                        Pair.of(RandomStroll.stroll(0.9F), 2),
-                        Pair.of(SetWalkTargetFromLookTarget.create(0.9F, 3), 2),
+                        Pair.of(RandomStroll.stroll(0.8F), 2),
+                        Pair.of(SetWalkTargetFromLookTarget.create(0.8F, 3), 2),
                         Pair.of(new DoNothing(30, 60), 5)
                 ))
         ));
@@ -68,7 +68,7 @@ public final class FacShovelKnightAi {
                 StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValidNonFriendlies(mob, target, false)),
                 AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), false),
                 SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(1.0F),
-                new DelayedMeleeAttack(FacShovelKnightEntity.MELEE_DAMAGE_DELAY, FacShovelKnightEntity.MELEE_DURATION, 1.8f, 10)
+                new DelayedMeleeAttack(FacShovelKnightEntity.MELEE_DAMAGE_DELAY, FacShovelKnightEntity.MELEE_DURATION, 2.0f, 10)
         ), MemoryModuleType.ATTACK_TARGET);
     }
 }
