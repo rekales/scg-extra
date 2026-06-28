@@ -38,11 +38,11 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "scguns:anthralite_nugget"
+          "name": "scguns:anthralite_ingot"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "scgextra:entities/trench_goblin"
+  "random_sequence": "scgextra:entities/fac_shovel_knight"
 }
