@@ -1,95 +1,46 @@
 package net.zincstudios.scgextra.entity.fac.shovel_knight;
 
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.InteractionHand;
+import com.mojang.serialization.Dynamic;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.zincstudios.scgextra.entity.Faction;
+import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
-import net.zincstudios.scgextra.entity.common.goal.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
+import net.zincstudios.scgextra.entity.common.client.ExpandedAnimationController;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class FacShovelKnightEntity extends GunnerEntity implements GeoEntity {
 
-    private static final int SWING_ANIM_DURATION_TICKS = 12;
+    static final int MELEE_DAMAGE_DELAY = 10;
+    static final int MELEE_DURATION = 22;
+
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
-    private static final RawAnimation AGRO_RUN = RawAnimation.begin().thenLoop("agro_run");
-    private static final RawAnimation SWING = RawAnimation.begin().thenLoop("swing4");
-    private static final EntityDataAccessor<Integer> SWING_ANIM_TICKS =
-            SynchedEntityData.defineId(FacShovelKnightEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Boolean> COMBAT_ANIM =
-            SynchedEntityData.defineId(FacShovelKnightEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final RawAnimation IDLE_AGGRO = RawAnimation.begin().thenLoop("idle_aggro");
+    private static final RawAnimation RUN_AGGRO = RawAnimation.begin().thenLoop("run_aggro");
+    private static final RawAnimation ATTACK = RawAnimation.begin().thenPlay("attack");
+    private static final RawAnimation ATTACK_NO_LEGS = RawAnimation.begin().thenPlay("attack_no_legs");
+
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
     public FacShovelKnightEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
-    }
-
-    @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(SWING_ANIM_TICKS, 0);
-        this.entityData.define(COMBAT_ANIM, false);
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-        if (!this.level().isClientSide()) {
-            LivingEntity target = this.getTarget();
-            if (target != null && !target.isAlive()) {
-                this.setTarget(null);
-                target = null;
-            }
-
-            int swingTicks = this.entityData.get(SWING_ANIM_TICKS);
-            if (swingTicks > 0) {
-                this.entityData.set(SWING_ANIM_TICKS, swingTicks - 1);
-            }
-
-            boolean hasTarget = target != null && target.isAlive();
-            this.entityData.set(COMBAT_ANIM, hasTarget);
-        }
-    }
-
-    @Override
-    public void swing(InteractionHand hand) {
-        super.swing(hand);
-        if (!this.level().isClientSide() && hand == InteractionHand.MAIN_HAND) {
-            this.entityData.set(SWING_ANIM_TICKS, SWING_ANIM_DURATION_TICKS);
-        }
-    }
-
-    @Override
-    protected void registerGoals() {
-        this.goalSelector.addGoal(2, new ShovelKnightDigGoal(this));
-        this.goalSelector.addGoal(3, new ShovelKnightMeleeAttackGoal(this, 1.45D, true));
-        this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 0.9D));
-        this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
-
-        this.targetSelector.addGoal(0, new HurtByNonFactionGoal(this));
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true,
-                player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
-                entity -> Faction.isEnemies(this, entity)));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -101,41 +52,67 @@ public class FacShovelKnightEntity extends GunnerEntity implements GeoEntity {
                 .add(Attributes.MAX_HEALTH, 50.0D);
     }
 
-    private boolean hasLiveTarget() {
-        LivingEntity target = this.getTarget();
-        return target != null && target.isAlive();
+    protected Brain<?> makeBrain(Dynamic<?> dynamic) {
+        return FacShovelKnightAi.makeBrain(this, this.brainProvider().makeBrain(dynamic));
     }
 
-    private boolean isSwingAnimating() {
-        return this.entityData.get(SWING_ANIM_TICKS) > 0;
+    @SuppressWarnings("unchecked")
+    public Brain<FacShovelKnightEntity> getBrain() {
+        return (Brain<FacShovelKnightEntity>) super.getBrain();
     }
 
-    private boolean isCombatAnimating() {
-        return this.entityData.get(COMBAT_ANIM);
+    protected Brain.Provider<FacShovelKnightEntity> brainProvider() {
+        return Brain.provider(FacShovelKnightAi.MEMORY_TYPES, FacShovelKnightAi.SENSOR_TYPES);
     }
 
-    private boolean isActuallyMoving() {
-        double dx = this.getX() - this.xo;
-        double dz = this.getZ() - this.zo;
-        return dx * dx + dz * dz > 0.000001D;
+    @Override
+    protected void customServerAiStep() {
+        this.level().getProfiler().push("cogShovelKnightBrain");
+        this.getBrain().tick((ServerLevel)this.level(), this);
+        BrainCommons.updateActivity(this);
+        BrainCommons.updateHasTargetAggressive(this);
+        this.setSprinting(this.isAggressive());
+        this.level().getProfiler().pop();
+        super.customServerAiStep();
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (!this.level().isClientSide && brain.getTimeUntilExpiry(ModBrainMemories.DELAYED_MELEE.get()) == MELEE_DURATION) {
+            this.triggerAnim("attack", "melee");
+        }
     }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "main", 2, state -> {
-            if (state.getAnimatable().isSwingAnimating()) {
-                return state.setAndContinue(SWING);
+        controllers.add(new ExpandedAnimationController<>(this, "main", 3, state -> {
+            if (state.getAnimatable().isAggressive()) {
+                if (state.isMoving()) {
+                    state.setControllerSpeed(0.9f);
+                    return state.setAndContinue(RUN_AGGRO);
+                } else {
+                    return state.setAndContinue(IDLE_AGGRO);
+                }
+            } else {
+                if (state.isMoving()) {
+                    state.setControllerSpeed(1.6f);
+                    return state.setAndContinue(WALK);
+                } else {
+                    return state.setAndContinue(IDLE);
+                }
             }
+        }
+        ));
 
-            boolean moving = state.isMoving() || this.isActuallyMoving() || this.getNavigation().isInProgress();
-            if (state.getAnimatable().isCombatAnimating() && moving) {
-                return state.setAndContinue(AGRO_RUN);
-            }
-            if (moving) {
-                return state.setAndContinue(WALK);
-            }
-            return state.setAndContinue(IDLE);
-        }).setAnimationSpeed(1.0));
+        controllers.add(new ExpandedAnimationController<>(this, "attack", 2, state -> PlayState.STOP)
+                .triggerableAnim("melee", (ctr) -> {
+                    FacShovelKnightEntity entity = (FacShovelKnightEntity) ctr.getAnimatable();
+                    AnimationController<?> mainCtr = entity.getAnimatableInstanceCache().getManagerForId(entity.getId()).getAnimationControllers().get("main");
+                    return mainCtr.getCurrentRawAnimation() == RUN_AGGRO ? ATTACK_NO_LEGS : ATTACK;
+                })
+        );
     }
 
     @Override
