@@ -36,7 +36,6 @@ public class TrenchGoblinEntity extends GunnerEntity implements GeoEntity {
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
-    private static final RawAnimation WALK_ATTACK = RawAnimation.begin().thenLoop("walk_attack");
     private static final RawAnimation ATTACK = RawAnimation.begin().thenPlay("attack");
     private static final RawAnimation ATTACK_NO_LEGS = RawAnimation.begin().thenPlay("attack_no_legs");
 
@@ -88,9 +87,16 @@ public class TrenchGoblinEntity extends GunnerEntity implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new ExpandedAnimationController<>(this, "main", 2, state ->
-                state.setAndContinue(state.isMoving() ? WALK : IDLE))
-        );
+        controllers.add(new ExpandedAnimationController<>(this, "main", 2, state -> {
+                    if (state.isMoving()) {
+                        state.setControllerSpeed(1.5f);
+                        return state.setAndContinue(WALK);
+                    } else {
+                        state.setControllerSpeed(0.8f);
+                        return state.setAndContinue(IDLE);
+                    }
+                }
+        ));
 
         controllers.add(new ExpandedAnimationController<>(this, "attack", 0, state -> PlayState.STOP)
                 .triggerableAnim("melee", (ctr) -> {

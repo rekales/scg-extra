@@ -51,7 +51,7 @@ public final class TrenchGoblinAi {
                 StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValidNonFriendlies(mob, target, false)),
                 AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), false),
                 SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(1.0F),
-                new DelayedMeleeAttack(TrenchGoblinEntity.MELEE_DAMAGE_DELAY, TrenchGoblinEntity.MELEE_DURATION, 2, 10)
+                new DelayedMeleeAttack(TrenchGoblinEntity.MELEE_DAMAGE_DELAY, TrenchGoblinEntity.MELEE_DURATION, 1.4f, 10)
         ), MemoryModuleType.ATTACK_TARGET);
     }
 }
