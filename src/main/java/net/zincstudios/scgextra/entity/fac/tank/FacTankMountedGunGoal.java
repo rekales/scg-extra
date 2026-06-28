@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.fac.fac_tank;
+package net.zincstudios.scgextra.entity.fac.tank;
 
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;

@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.fac.fac_bluecoat;
+package net.zincstudios.scgextra.entity.fac.bluecoat;
 
 import com.mojang.serialization.Dynamic;
 import net.minecraft.MethodsReturnNonnullByDefault;

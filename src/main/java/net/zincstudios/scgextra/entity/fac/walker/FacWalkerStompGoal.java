@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.fac.fac_walker;
+package net.zincstudios.scgextra.entity.fac.walker;
 
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.world.entity.LivingEntity;

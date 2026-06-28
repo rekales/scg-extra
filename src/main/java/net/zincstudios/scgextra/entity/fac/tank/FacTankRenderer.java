@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.fac.fac_tank;
+package net.zincstudios.scgextra.entity.fac.tank;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;

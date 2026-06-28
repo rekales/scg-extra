@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.fac.fac_commissar;
+package net.zincstudios.scgextra.entity.fac.commissar;
 
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.zincstudios.scgextra.item.ModItems;

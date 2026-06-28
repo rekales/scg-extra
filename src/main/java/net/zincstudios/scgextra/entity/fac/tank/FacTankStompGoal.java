@@ -1,20 +1,21 @@
-package net.zincstudios.scgextra.entity.fac.fac_lion;
+package net.zincstudios.scgextra.entity.fac.tank;
 
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.zincstudios.scgextra.sounds.FACSounds;
 
 import java.util.EnumSet;
 
-public class FacLionShieldBashGoal extends Goal {
+public class FacTankStompGoal extends Goal {
+    private static final int STOMP_ANIMATION_TICKS = 20;
+    private static final int STOMP_HIT_TICK = 6;
 
-    private final FacLionEntity parent;
+    private final FacTankEntity parent;
     private int cooldown = 0;
     private int ticks = 0;
     private boolean attacked = false;
 
-    public FacLionShieldBashGoal(FacLionEntity mob) {
+    public FacTankStompGoal(FacTankEntity mob) {
         this.parent = mob;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
@@ -29,23 +30,25 @@ public class FacLionShieldBashGoal extends Goal {
         return target != null
                 && target.isAlive()
                 && this.cooldown <= 0
-                && this.parent.distanceToSqr(target) <= 9.0D;
+                && !this.parent.isStunned()
+                && !this.parent.isActionLocked()
+                && this.parent.distanceToSqr(target) <= 10.0D;
     }
 
     @Override
     public boolean canContinueToUse() {
-        LivingEntity target = this.parent.getTarget();
-        return target != null && target.isAlive() && this.ticks <= 14;
+        return this.ticks < STOMP_ANIMATION_TICKS && !this.parent.isStunned();
     }
 
     @Override
     public void start() {
         super.start();
-        this.cooldown = 50;
+        this.cooldown = 45;
         this.ticks = 0;
         this.attacked = false;
-        this.parent.setShieldBashing(true);
-        this.parent.triggerAnim("shield_bash", "shield_bash");
+        this.parent.startStompLock(STOMP_ANIMATION_TICKS);
+        this.parent.getNavigation().stop();
+        this.parent.triggerAnim("attack", "stomp");
     }
 
     @Override
@@ -54,31 +57,28 @@ public class FacLionShieldBashGoal extends Goal {
         this.ticks++;
 
         LivingEntity target = this.parent.getTarget();
-        if (target == null) {
-            return;
+        this.parent.getNavigation().stop();
+        if (target != null && target.isAlive()) {
+            this.parent.lookAt(EntityAnchorArgument.Anchor.EYES, target.position());
         }
 
-        this.parent.lookAt(EntityAnchorArgument.Anchor.EYES, target.position());
-        if (this.parent.distanceToSqr(target) > 2.89D) {
-            this.parent.getNavigation().moveTo(target, 1.0D);
-        } else {
-            this.parent.getNavigation().stop();
-        }
-
-        if (!this.attacked && this.ticks >= 5 && this.parent.distanceToSqr(target) <= 12.25D) {
+        if (!this.attacked
+                && this.ticks >= STOMP_HIT_TICK
+                && target != null
+                && target.isAlive()
+                && this.parent.distanceToSqr(target) <= 10.0D) {
             this.attacked = true;
-            target.hurt(this.parent.damageSources().mobAttack(this.parent), 15.0F);
-            this.parent.playSound(FACSounds.FAC_LION_ATTACK_1.get(), 1.0F, 1.0F);
+            target.hurt(this.parent.damageSources().mobAttack(this.parent), 20.0F);
             double dx = this.parent.getX() - target.getX();
             double dz = this.parent.getZ() - target.getZ();
-            target.knockback(2.0D, dx, dz);
+            target.knockback(1.0D, dx, dz);
         }
     }
 
     @Override
     public void stop() {
         super.stop();
+        this.parent.clearStompLock();
         this.parent.getNavigation().stop();
-        this.parent.setShieldBashing(false);
     }
 }

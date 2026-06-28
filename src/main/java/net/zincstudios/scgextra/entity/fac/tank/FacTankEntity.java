@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.fac.fac_tank;
+package net.zincstudios.scgextra.entity.fac.tank;
 
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;

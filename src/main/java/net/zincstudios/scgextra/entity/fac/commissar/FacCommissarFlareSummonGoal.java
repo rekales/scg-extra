@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.fac.fac_commissar;
+package net.zincstudios.scgextra.entity.fac.commissar;
 
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;

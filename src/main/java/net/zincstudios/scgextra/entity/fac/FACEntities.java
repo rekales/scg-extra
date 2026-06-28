@@ -18,17 +18,17 @@ import net.zincstudios.scgextra.entity.common.WeakPointBoxManager;
 import net.zincstudios.scgextra.entity.common.client.GunHoldingMobRenderer;
 import net.zincstudios.scgextra.entity.common.client.GunnerRenderer;
 import net.zincstudios.scgextra.entity.common.client.ItemHoldingMobRenderer;
-import net.zincstudios.scgextra.entity.fac.fac_bluecoat.FacBluecoatEntity;
-import net.zincstudios.scgextra.entity.fac.fac_commissar.FacCommissarEntity;
-import net.zincstudios.scgextra.entity.fac.fac_commissar.FacCommissarRenderer;
-import net.zincstudios.scgextra.entity.fac.fac_lion.FacLionEntity;
-import net.zincstudios.scgextra.entity.fac.fac_lion.FacLionRenderer;
-import net.zincstudios.scgextra.entity.fac.fac_tank.FacTankEntity;
-import net.zincstudios.scgextra.entity.fac.fac_tank.FacTankRenderer;
-import net.zincstudios.scgextra.entity.fac.fac_tank_buster.FacTankBusterEntity;
-import net.zincstudios.scgextra.entity.fac.fac_tank_buster.FacTankBusterRenderer;
-import net.zincstudios.scgextra.entity.fac.fac_trencher.FacTrencherEntity;
-import net.zincstudios.scgextra.entity.fac.fac_walker.FacWalkerEntity;
+import net.zincstudios.scgextra.entity.fac.bluecoat.FacBluecoatEntity;
+import net.zincstudios.scgextra.entity.fac.commissar.FacCommissarEntity;
+import net.zincstudios.scgextra.entity.fac.commissar.FacCommissarRenderer;
+import net.zincstudios.scgextra.entity.fac.lion.FacLionEntity;
+import net.zincstudios.scgextra.entity.fac.lion.FacLionRenderer;
+import net.zincstudios.scgextra.entity.fac.tank.FacTankEntity;
+import net.zincstudios.scgextra.entity.fac.tank.FacTankRenderer;
+import net.zincstudios.scgextra.entity.fac.tank_buster.FacTankBusterEntity;
+import net.zincstudios.scgextra.entity.fac.tank_buster.FacTankBusterRenderer;
+import net.zincstudios.scgextra.entity.fac.trencher.FacTrencherEntity;
+import net.zincstudios.scgextra.entity.fac.walker.FacWalkerEntity;
 import net.zincstudios.scgextra.entity.fac.shovel_knight.ShovelKnightEntity;
 import net.zincstudios.scgextra.entity.fac.trench_goblin.TrenchGoblinEntity;
 import net.zincstudios.scgextra.entity.fac.trench_sniper.TrenchSniperEntity;
@@ -53,19 +53,19 @@ public class FACEntities {
                     .build("fac_bluecoat"));
 
     public static final RegistryObject<EntityType<TrenchGoblinEntity>> TRENCH_GOBLIN = ENTITY_TYPES
-            .register("trench_goblin", () -> EntityType.Builder.of(TrenchGoblinEntity::new, MobCategory.MONSTER)
+            .register("fac_trench_goblin", () -> EntityType.Builder.of(TrenchGoblinEntity::new, MobCategory.MONSTER)
                     .sized(0.72F, 1.72F)
-                    .build("trench_goblin"));
+                    .build("fac_trench_goblin"));
 
     public static final RegistryObject<EntityType<TrenchSniperEntity>> TRENCH_SNIPER = ENTITY_TYPES
-            .register("trench_sniper", () -> EntityType.Builder.of(TrenchSniperEntity::new, MobCategory.MONSTER)
+            .register("fac_trench_sniper", () -> EntityType.Builder.of(TrenchSniperEntity::new, MobCategory.MONSTER)
                     .sized(0.72F, 2.22F)
-                    .build("trench_sniper"));
+                    .build("fac_trench_sniper"));
 
     public static final RegistryObject<EntityType<ShovelKnightEntity>> SHOVEL_KNIGHT = ENTITY_TYPES
-            .register("shovel_knight", () -> EntityType.Builder.of(ShovelKnightEntity::new, MobCategory.MONSTER)
+            .register("fac_shovel_knight", () -> EntityType.Builder.of(ShovelKnightEntity::new, MobCategory.MONSTER)
                     .sized(0.78F, 2.08F)
-                    .build("shovel_knight"));
+                    .build("fac_shovel_knight"));
 
     public static final RegistryObject<EntityType<FacTankBusterEntity>> FAC_TANK_BUSTER = ENTITY_TYPES
             .register("fac_tank_buster", () -> EntityType.Builder.of(FacTankBusterEntity::new, MobCategory.MONSTER)

@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.fac.fac_tank_buster;
+package net.zincstudios.scgextra.entity.fac.tank_buster;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;

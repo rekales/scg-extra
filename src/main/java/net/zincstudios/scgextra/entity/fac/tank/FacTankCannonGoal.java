@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.fac.fac_tank;
+package net.zincstudios.scgextra.entity.fac.tank;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;

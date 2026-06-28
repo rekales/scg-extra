@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.fac.fac_lion;
+package net.zincstudios.scgextra.entity.fac.lion;
 
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;

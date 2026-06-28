@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.fac.fac_tank_buster;
+package net.zincstudios.scgextra.entity.fac.tank_buster;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;

@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.fac.fac_commissar;
+package net.zincstudios.scgextra.entity.fac.commissar;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;

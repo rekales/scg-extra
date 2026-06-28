@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.fac.fac_lion;
+package net.zincstudios.scgextra.entity.fac.lion;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
