@@ -9,6 +9,7 @@ import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.phys.AABB;
+import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 
@@ -25,8 +26,12 @@ public class CheckShouldAlert extends Behavior<LivingEntity> {
     private long cooldownEnd = 0;  // I highly doubt other behaviors needs this, turn to a memory if so.
     private boolean firstAlert = true;
 
+    public CheckShouldAlert() {
+        this(10);
+    }
+
     public CheckShouldAlert(int alertDuration) {
-        this(alertDuration, 20, 64);
+        this(alertDuration, 100, 64);
     }
 
     public CheckShouldAlert(int alertDuration, int alertCooldown, float radius) {
@@ -49,11 +54,15 @@ public class CheckShouldAlert extends Behavior<LivingEntity> {
         if (this.cooldownEnd > level.getGameTime()) return false;
         if (!this.firstAlert && level.getGameTime() % 40 != 1) return false;
 
+        SCGExtra.LOGGER.debug("checking alert: ");
+
         Brain<?> brain = entity.getBrain();
         AABB aabb = entity.getBoundingBox().inflate(this.radius, this.radius/2, this.radius);
         List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, aabb,
                 other -> other != entity && other.isAlive() && Faction.isFriendlies(entity, other)
         );
+
+        SCGExtra.LOGGER.debug("to alert: " + entities);
 
         List<LivingEntity> toAlert = new ArrayList<>();
         for (LivingEntity other : entities) {

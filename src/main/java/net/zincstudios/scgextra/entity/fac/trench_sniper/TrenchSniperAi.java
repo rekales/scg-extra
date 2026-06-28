@@ -37,6 +37,7 @@ public final class TrenchSniperAi {
             ModBrainMemories.SIMULATED_GUN.get(),
             ModBrainMemories.WEAPON_IDEAL_RANGE.get(),
             ModBrainMemories.WEAPON_MAX_RANGE.get(),
+            ModBrainMemories.ABILITY_STATE.get(),
             ModBrainMemories.TO_ALERT.get()
     );
 

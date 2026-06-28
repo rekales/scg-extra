@@ -45,6 +45,7 @@ public class CogBombardierAi {
             ModBrainMemories.STUNNED.get(),
             ModBrainMemories.STUNNED_COOLING_DOWN.get(),
             ModBrainMemories.HEADSHOT_COUNT.get(),
+            ModBrainMemories.ABILITY_STATE.get(),
             ModBrainMemories.TO_ALERT.get()
     );
 
