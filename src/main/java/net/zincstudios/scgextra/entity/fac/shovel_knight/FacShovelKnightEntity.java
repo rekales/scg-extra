@@ -25,7 +25,7 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class ShovelKnightEntity extends GunnerEntity implements GeoEntity {
+public class FacShovelKnightEntity extends GunnerEntity implements GeoEntity {
 
     private static final int SWING_ANIM_DURATION_TICKS = 12;
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
@@ -33,12 +33,12 @@ public class ShovelKnightEntity extends GunnerEntity implements GeoEntity {
     private static final RawAnimation AGRO_RUN = RawAnimation.begin().thenLoop("agro_run");
     private static final RawAnimation SWING = RawAnimation.begin().thenLoop("swing4");
     private static final EntityDataAccessor<Integer> SWING_ANIM_TICKS =
-            SynchedEntityData.defineId(ShovelKnightEntity.class, EntityDataSerializers.INT);
+            SynchedEntityData.defineId(FacShovelKnightEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> COMBAT_ANIM =
-            SynchedEntityData.defineId(ShovelKnightEntity.class, EntityDataSerializers.BOOLEAN);
+            SynchedEntityData.defineId(FacShovelKnightEntity.class, EntityDataSerializers.BOOLEAN);
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
-    public ShovelKnightEntity(EntityType<? extends Monster> entityType, Level level) {
+    public FacShovelKnightEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
     }
 

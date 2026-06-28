@@ -27,11 +27,11 @@ import net.zincstudios.scgextra.entity.fac.tank.FacTankEntity;
 import net.zincstudios.scgextra.entity.fac.tank.FacTankRenderer;
 import net.zincstudios.scgextra.entity.fac.tank_buster.FacTankBusterEntity;
 import net.zincstudios.scgextra.entity.fac.tank_buster.FacTankBusterRenderer;
+import net.zincstudios.scgextra.entity.fac.trench_sniper.FacTrenchSniperEntity;
 import net.zincstudios.scgextra.entity.fac.trencher.FacTrencherEntity;
 import net.zincstudios.scgextra.entity.fac.walker.FacWalkerEntity;
-import net.zincstudios.scgextra.entity.fac.shovel_knight.ShovelKnightEntity;
-import net.zincstudios.scgextra.entity.fac.trench_goblin.TrenchGoblinEntity;
-import net.zincstudios.scgextra.entity.fac.trench_sniper.TrenchSniperEntity;
+import net.zincstudios.scgextra.entity.fac.shovel_knight.FacShovelKnightEntity;
+import net.zincstudios.scgextra.entity.fac.trench_goblin.FacTrenchGoblinEntity;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import top.ribs.scguns.common.BoundingBoxManager;
 import top.ribs.scguns.common.headshot.BasicHeadshotBox;
@@ -51,18 +51,18 @@ public class FACEntities {
                     .sized(0.6F, 1.95F)
                     .build("fac_bluecoat"));
 
-    public static final RegistryObject<EntityType<TrenchGoblinEntity>> TRENCH_GOBLIN = ENTITY_TYPES
-            .register("fac_trench_goblin", () -> EntityType.Builder.of(TrenchGoblinEntity::new, MobCategory.MONSTER)
+    public static final RegistryObject<EntityType<FacTrenchGoblinEntity>> TRENCH_GOBLIN = ENTITY_TYPES
+            .register("fac_trench_goblin", () -> EntityType.Builder.of(FacTrenchGoblinEntity::new, MobCategory.MONSTER)
                     .sized(0.72F, 1.72F)
                     .build("fac_trench_goblin"));
 
-    public static final RegistryObject<EntityType<TrenchSniperEntity>> TRENCH_SNIPER = ENTITY_TYPES
-            .register("fac_trench_sniper", () -> EntityType.Builder.of(TrenchSniperEntity::new, MobCategory.MONSTER)
+    public static final RegistryObject<EntityType<FacTrenchSniperEntity>> TRENCH_SNIPER = ENTITY_TYPES
+            .register("fac_trench_sniper", () -> EntityType.Builder.of(FacTrenchSniperEntity::new, MobCategory.MONSTER)
                     .sized(0.72F, 2.22F)
                     .build("fac_trench_sniper"));
 
-    public static final RegistryObject<EntityType<ShovelKnightEntity>> SHOVEL_KNIGHT = ENTITY_TYPES
-            .register("fac_shovel_knight", () -> EntityType.Builder.of(ShovelKnightEntity::new, MobCategory.MONSTER)
+    public static final RegistryObject<EntityType<FacShovelKnightEntity>> SHOVEL_KNIGHT = ENTITY_TYPES
+            .register("fac_shovel_knight", () -> EntityType.Builder.of(FacShovelKnightEntity::new, MobCategory.MONSTER)
                     .sized(0.78F, 2.08F)
                     .build("fac_shovel_knight"));
 
@@ -104,9 +104,9 @@ public class FACEntities {
     private static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(FACEntities.FAC_TRENCHER.get(), FacTrencherEntity.createAttributes().build());
         event.put(FACEntities.FAC_BLUECOAT.get(), FacBluecoatEntity.createAttributes().build());
-        event.put(FACEntities.TRENCH_GOBLIN.get(), TrenchGoblinEntity.createAttributes().build());
-        event.put(FACEntities.TRENCH_SNIPER.get(), TrenchSniperEntity.createAttributes().build());
-        event.put(FACEntities.SHOVEL_KNIGHT.get(), ShovelKnightEntity.createAttributes().build());
+        event.put(FACEntities.TRENCH_GOBLIN.get(), FacTrenchGoblinEntity.createAttributes().build());
+        event.put(FACEntities.TRENCH_SNIPER.get(), FacTrenchSniperEntity.createAttributes().build());
+        event.put(FACEntities.SHOVEL_KNIGHT.get(), FacShovelKnightEntity.createAttributes().build());
         event.put(FACEntities.FAC_TANK_BUSTER.get(), FacTankBusterEntity.createAttributes().build());
         event.put(FACEntities.FAC_LION.get(), FacLionEntity.createAttributes().build());
         event.put(FACEntities.FAC_COMMISSAR.get(), FacCommissarEntity.createAttributes().build());

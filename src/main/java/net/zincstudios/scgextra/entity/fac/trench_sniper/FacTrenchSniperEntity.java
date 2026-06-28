@@ -12,8 +12,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
+import net.zincstudios.scgextra.entity.common.EquippedEntity;
 import net.zincstudios.scgextra.entity.common.Gunner;
-import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
 import net.zincstudios.scgextra.sounds.FACSounds;
@@ -28,7 +28,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TrenchSniperEntity extends GunnerEntity implements GeoEntity, Gunner {
+public class FacTrenchSniperEntity extends EquippedEntity implements GeoEntity, Gunner {
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
@@ -37,7 +37,7 @@ public class TrenchSniperEntity extends GunnerEntity implements GeoEntity, Gunne
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
-    public TrenchSniperEntity(EntityType<? extends Monster> entityType, Level level) {
+    public FacTrenchSniperEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
     }
 
@@ -51,16 +51,16 @@ public class TrenchSniperEntity extends GunnerEntity implements GeoEntity, Gunne
     }
 
     protected Brain<?> makeBrain(Dynamic<?> dynamic) {
-        return TrenchSniperAi.makeBrain(this, this.brainProvider().makeBrain(dynamic));
+        return FacTrenchSniperAi.makeBrain(this, this.brainProvider().makeBrain(dynamic));
     }
 
     @SuppressWarnings("unchecked")
-    public Brain<TrenchSniperEntity> getBrain() {
-        return (Brain<TrenchSniperEntity>) super.getBrain();
+    public Brain<FacTrenchSniperEntity> getBrain() {
+        return (Brain<FacTrenchSniperEntity>) super.getBrain();
     }
 
-    protected Brain.Provider<TrenchSniperEntity> brainProvider() {
-        return TrenchSniperAi.brainProvider();
+    protected Brain.Provider<FacTrenchSniperEntity> brainProvider() {
+        return FacTrenchSniperAi.brainProvider();
     }
 
     @Override

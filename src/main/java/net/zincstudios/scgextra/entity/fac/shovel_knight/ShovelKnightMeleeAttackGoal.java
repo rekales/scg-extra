@@ -8,11 +8,11 @@ public class ShovelKnightMeleeAttackGoal extends MeleeAttackGoal {
 
     private static final int HIT_DELAY_TICKS = 6;
 
-    private final ShovelKnightEntity mob;
+    private final FacShovelKnightEntity mob;
     private int windupTicks = 0;
     private LivingEntity pendingTarget;
 
-    public ShovelKnightMeleeAttackGoal(ShovelKnightEntity mob, double speedModifier, boolean followingTargetEvenIfNotSeen) {
+    public ShovelKnightMeleeAttackGoal(FacShovelKnightEntity mob, double speedModifier, boolean followingTargetEvenIfNotSeen) {
         super(mob, speedModifier, followingTargetEvenIfNotSeen);
         this.mob = mob;
     }

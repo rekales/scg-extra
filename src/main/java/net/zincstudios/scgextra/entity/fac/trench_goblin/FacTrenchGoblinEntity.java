@@ -12,7 +12,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
-import net.zincstudios.scgextra.entity.common.GunnerEntity;
+import net.zincstudios.scgextra.entity.common.EquippedEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
 import net.zincstudios.scgextra.entity.common.client.ExpandedAnimationController;
@@ -29,7 +29,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TrenchGoblinEntity extends GunnerEntity implements GeoEntity {
+public class FacTrenchGoblinEntity extends EquippedEntity implements GeoEntity {
 
     static final int MELEE_DAMAGE_DELAY = 10;
     static final int MELEE_DURATION = 18;
@@ -41,7 +41,7 @@ public class TrenchGoblinEntity extends GunnerEntity implements GeoEntity {
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
-    public TrenchGoblinEntity(EntityType<? extends Monster> entityType, Level level) {
+    public FacTrenchGoblinEntity(EntityType<? extends EquippedEntity> entityType, Level level) {
         super(entityType, level);
     }
 
@@ -55,16 +55,16 @@ public class TrenchGoblinEntity extends GunnerEntity implements GeoEntity {
     }
 
     protected Brain<?> makeBrain(Dynamic<?> dynamic) {
-        return TrenchGoblinAi.makeBrain(this, this.brainProvider().makeBrain(dynamic));
+        return FacTrenchGoblinAi.makeBrain(this, this.brainProvider().makeBrain(dynamic));
     }
 
     @SuppressWarnings("unchecked")
-    public Brain<TrenchGoblinEntity> getBrain() {
-        return (Brain<TrenchGoblinEntity>) super.getBrain();
+    public Brain<FacTrenchGoblinEntity> getBrain() {
+        return (Brain<FacTrenchGoblinEntity>) super.getBrain();
     }
 
-    protected Brain.Provider<TrenchGoblinEntity> brainProvider() {
-        return Brain.provider(TrenchGoblinAi.MEMORY_TYPES, TrenchGoblinAi.SENSOR_TYPES);
+    protected Brain.Provider<FacTrenchGoblinEntity> brainProvider() {
+        return Brain.provider(FacTrenchGoblinAi.MEMORY_TYPES, FacTrenchGoblinAi.SENSOR_TYPES);
     }
 
     @Override
@@ -100,7 +100,7 @@ public class TrenchGoblinEntity extends GunnerEntity implements GeoEntity {
 
         controllers.add(new ExpandedAnimationController<>(this, "attack", 0, state -> PlayState.STOP)
                 .triggerableAnim("melee", (ctr) -> {
-                    TrenchGoblinEntity entity = (TrenchGoblinEntity) ctr.getAnimatable();
+                    FacTrenchGoblinEntity entity = (FacTrenchGoblinEntity) ctr.getAnimatable();
                     AnimationController<?> mainCtr = entity.getAnimatableInstanceCache().getManagerForId(entity.getId()).getAnimationControllers().get("main");
                     return mainCtr.getCurrentRawAnimation() == WALK ? ATTACK_NO_LEGS : ATTACK;
                 })

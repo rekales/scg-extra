@@ -15,7 +15,7 @@ import net.zincstudios.scgextra.entity.ModBrainSensors;
 import net.zincstudios.scgextra.entity.common.brain.*;
 import net.zincstudios.scgextra.entity.common.gun.IntervalTriggerSampler;
 
-public final class TrenchSniperAi {
+public final class FacTrenchSniperAi {
 
     private static final ImmutableList<? extends SensorType<? extends Sensor<? super PathfinderMob>>> SENSOR_TYPES = ImmutableList.of(
             SensorType.NEAREST_LIVING_ENTITIES,
