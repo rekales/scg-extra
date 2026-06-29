@@ -27,7 +27,6 @@ import net.zincstudios.scgextra.entity.fac.lion.FacLionRenderer;
 import net.zincstudios.scgextra.entity.fac.tank.FacTankEntity;
 import net.zincstudios.scgextra.entity.fac.tank.FacTankRenderer;
 import net.zincstudios.scgextra.entity.fac.tank_buster.FacTankBusterEntity;
-import net.zincstudios.scgextra.entity.fac.tank_buster.FacTankBusterRenderer;
 import net.zincstudios.scgextra.entity.fac.trench_sniper.FacTrenchSniperEntity;
 import net.zincstudios.scgextra.entity.fac.trencher.FacTrencherEntity;
 import net.zincstudios.scgextra.entity.fac.walker.FacWalkerEntity;
@@ -143,8 +142,9 @@ public class FACEntities {
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_trench_sniper"))));
         EntityRenderers.register(FACEntities.SHOVEL_KNIGHT.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_shovel_knight"))));
+        EntityRenderers.register(FACEntities.FAC_TANK_BUSTER.get(), (ctx) -> new GunHoldingMobRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_tank_buster"))));
 
-        EntityRenderers.register(FACEntities.FAC_TANK_BUSTER.get(), (ctx) -> new FacTankBusterRenderer(ctx).noDeathTilt());
         EntityRenderers.register(FACEntities.FAC_LION.get(), (ctx) -> new FacLionRenderer(ctx).noDeathTilt());
         EntityRenderers.register(FACEntities.FAC_COMMISSAR.get(), (ctx) -> new FacCommissarRenderer(ctx).noDeathTilt());
         EntityRenderers.register(FACEntities.FAC_WALKER.get(), (ctx) -> new GunnerRenderer<>(ctx,

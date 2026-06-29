@@ -77,6 +77,14 @@ public final class BrainCommons {
         mob.getBrain().setActiveActivityToFirstValid(ImmutableList.of(Activity.FIGHT, Activity.IDLE));
     }
 
+    public static void updateAimingAggressive(Mob mob) {
+        boolean aggressive = mob.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).isPresent()
+                && mob.getBrain().getMemory(ModBrainMemories.AIM_TICKS.get()).filter(aim -> aim > 5).isPresent();
+        if (mob.isAggressive() != aggressive) {
+            mob.setAggressive(aggressive);
+        }
+    }
+
     public static void updateHasTargetAggressive(Mob mob) {
         boolean aggressive = mob.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).isPresent();
         if (mob.isAggressive() != aggressive) {

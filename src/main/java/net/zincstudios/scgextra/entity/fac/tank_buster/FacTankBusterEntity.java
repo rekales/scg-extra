@@ -1,23 +1,20 @@
 package net.zincstudios.scgextra.entity.fac.tank_buster;
 
+import com.mojang.serialization.Dynamic;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.zincstudios.scgextra.entity.Faction;
+import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
-import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.MobUtil;
-import net.zincstudios.scgextra.entity.common.goal.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
 import net.zincstudios.scgextra.sounds.FACSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -26,81 +23,70 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class FacTankBusterEntity extends GunnerEntity implements GeoEntity, HeadShotHandler {
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class FacTankBusterEntity extends GunnerEntity implements GeoEntity {
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
-    private static final RawAnimation HOLD_ATTACK = RawAnimation.begin().thenLoop("hold_attack");
-    private static final RawAnimation WALK_ATTACK = RawAnimation.begin().thenLoop("walk_attack");
+    private static final RawAnimation IDLE_AIM = RawAnimation.begin().thenLoop("idle_aim");
+    private static final RawAnimation WALK_AIM = RawAnimation.begin().thenLoop("walk_aim");
+
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
-    private int headshotDamageReductionTicks = 0;
 
     public FacTankBusterEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
     }
 
-    @Override
-    protected void registerGoals() {
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.8D));
-        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
-
-        this.targetSelector.addGoal(0, new HurtByNonFactionGoal(this));
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true,
-                player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
-                entity -> Faction.isEnemies(this, entity)));
-    }
-
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.FOLLOW_RANGE, 30.0D)
+                .add(Attributes.FOLLOW_RANGE, 48.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.17F)
                 .add(Attributes.ATTACK_DAMAGE, 5.0D)
                 .add(Attributes.ARMOR, 12.0D)
                 .add(Attributes.MAX_HEALTH, 40.0D);
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-        if (this.headshotDamageReductionTicks > 0) {
-            this.headshotDamageReductionTicks--;
-        }
+    protected Brain<?> makeBrain(Dynamic<?> dynamic) {
+        return FacTankBusterAi.makeBrain(this, this.brainProvider().makeBrain(dynamic));
+    }
+
+    @SuppressWarnings("unchecked")
+    public Brain<FacTankBusterEntity> getBrain() {
+        return (Brain<FacTankBusterEntity>) super.getBrain();
+    }
+
+    protected Brain.Provider<FacTankBusterEntity> brainProvider() {
+        return FacTankBusterAi.brainProvider();
     }
 
     @Override
-    public boolean headshot(DamageSource source, float amount) {
-        this.headshotDamageReductionTicks = 2;
-        return false;
-    }
-
-    @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (this.headshotDamageReductionTicks > 0) {
-            this.headshotDamageReductionTicks = 0;
-            amount *= 0.5F;
+    protected void customServerAiStep() {
+        this.level().getProfiler().push("facTankBusterBrain");
+        this.getBrain().tick((ServerLevel)this.level(), this);
+        BrainCommons.updateActivity(this);
+        BrainCommons.updateAimingAggressive(this);
+        if (this.getBrain().getMemory(ModBrainMemories.AIM_TICKS.get()).filter(aim -> aim > 5).isPresent()) {
+            this.setYBodyRot(this.getYHeadRot());
         }
-        return super.hurt(source, amount);
+        this.level().getProfiler().pop();
+        super.customServerAiStep();
     }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "walk/idle/aim", 2, state -> {
-            boolean moving = state.isMoving() || this.isActuallyMoving() || this.getNavigation().isInProgress();
-            if (state.getAnimatable().isAiming()) {
-                if (moving) {
-                    return state.setAndContinue(WALK_ATTACK);
-                }
-                return state.setAndContinue(HOLD_ATTACK);
+        controllers.add(new AnimationController<>(this, "main", 8, state -> {
+            if (state.getAnimatable().isAggressive()) {
+                return state.setAndContinue(state.isMoving() || state.getAnimatable().isActuallyMoving()? WALK_AIM : IDLE_AIM);
+            } else {
+                return state.setAndContinue(state.isMoving() || state.getAnimatable().isActuallyMoving() ? WALK : IDLE);
             }
-            if (moving) {
-                return state.setAndContinue(WALK);
-            }
-            return state.setAndContinue(IDLE);
-        }).setAnimationSpeed(1.05));
+        }));
     }
 
+    // needed because this thing moves way too fucking slow for state.isMoving() to be true
     private boolean isActuallyMoving() {
         double dx = this.getX() - this.xo;
         double dz = this.getZ() - this.zo;
@@ -110,6 +96,11 @@ public class FacTankBusterEntity extends GunnerEntity implements GeoEntity, Head
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.geoCache;
+    }
+
+    @Override
+    public boolean isLeftHanded() {
+        return true;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSource) {
