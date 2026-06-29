@@ -3,6 +3,8 @@ package net.zincstudios.scgextra.entity.fac.shovel_knight;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.*;
@@ -10,6 +12,8 @@ import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.schedule.Activity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.ModBrainSensors;
@@ -67,8 +71,22 @@ public final class FacShovelKnightAi {
         brain.addActivityAndRemoveMemoryWhenStopped(Activity.FIGHT, 10, ImmutableList.of(
                 StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValidNonFriendlies(mob, target, false)),
                 AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), false),
+                new BreakBlocksToTarget(FacShovelKnightAi::canBreakWithShovel, 20),
                 SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(1.0F),
                 new DelayedMeleeAttack(FacShovelKnightEntity.MELEE_DAMAGE_DELAY, FacShovelKnightEntity.MELEE_DURATION, 2.0f, 10)
         ), MemoryModuleType.ATTACK_TARGET);
+    }
+
+    private static boolean canBreakWithShovel(Level level, BlockPos pos) {
+        BlockState state = level.getBlockState(pos);
+        if (state.isAir()) return false;
+
+        float hardness = state.getDestroySpeed(level, pos);
+        if (hardness < 0) return false;  // Unbreakable
+        if (hardness >= 5) return false;  // Ex. Iron Block: 5, Stone: 1.5
+
+        return !state.is(BlockTags.NEEDS_STONE_TOOL)
+                && !state.is(BlockTags.NEEDS_IRON_TOOL)
+                && !state.is(BlockTags.NEEDS_DIAMOND_TOOL);
     }
 }
