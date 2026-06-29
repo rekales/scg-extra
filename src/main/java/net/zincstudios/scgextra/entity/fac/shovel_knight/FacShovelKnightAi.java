@@ -85,8 +85,7 @@ public final class FacShovelKnightAi {
         if (hardness < 0) return false;  // Unbreakable
         if (hardness >= 5) return false;  // Ex. Iron Block: 5, Stone: 1.5
 
-        return !state.is(BlockTags.NEEDS_STONE_TOOL)
-                && !state.is(BlockTags.NEEDS_IRON_TOOL)
+        return state.is(BlockTags.MINEABLE_WITH_SHOVEL)
                 && !state.is(BlockTags.NEEDS_DIAMOND_TOOL);
     }
 }
