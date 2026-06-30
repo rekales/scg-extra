@@ -3,7 +3,6 @@ package net.zincstudios.scgextra.entity.common.brain;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
@@ -39,12 +38,7 @@ public class AlertNearbyFactionMobs extends Behavior<LivingEntity> {
         for (LivingEntity other : entities) {
 
             LivingEntity target = brain.getMemory(MemoryModuleType.ATTACK_TARGET).get();
-
-            if (other.getBrain().checkMemory(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_ABSENT)) {
-                other.getBrain().setMemory(MemoryModuleType.ATTACK_TARGET, target);
-            } else if (other instanceof Mob mob && mob.getTarget() == null) {
-                mob.setTarget(target);
-            }
+            BrainUtils.setTarget(other, target);
         }
 
         long duration = brain.getTimeUntilExpiry(ModBrainMemories.TO_ALERT.get());

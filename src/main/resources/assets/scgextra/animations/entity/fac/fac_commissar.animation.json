@@ -2077,6 +2077,9 @@
 						}
 					}
 				}
+			},
+			"timeline": {
+				"1.3333": "spawn_flare;"
 			}
 		},
 		"cape_remove": {

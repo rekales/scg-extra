@@ -19,6 +19,7 @@ import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.ModBrainSensors;
 import net.zincstudios.scgextra.entity.common.brain.*;
 import net.zincstudios.scgextra.entity.common.gun.IntervalTriggerSampler;
+import net.zincstudios.scgextra.entity.fac.FACEntities;
 
 public final class FacCommissarAi {
     private static final ImmutableList<? extends SensorType<? extends Sensor<? super PathfinderMob>>> SENSOR_TYPES = ImmutableList.of(
@@ -76,11 +77,18 @@ public final class FacCommissarAi {
                         StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValidNonFriendlies(mob, target, false)),
                         AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), false),
                         MeleeAttack.create(20),
-                        new CheckShouldAlert(FacCommissarEntity.ALERT_ANIM_TICKS),
+                        new RunOneOrdered<>(ImmutableList.of(
+                                new CheckShouldAlert(FacCommissarEntity.ALERT_ANIM_TICKS),
+                                new FlareSummon(FacCommissarEntity.FLARE_DURATION, 80, FlareSummon.DEFAULT_COOLDOWN,
+                                        FACEntities.FAC_BLUECOAT.get(),
+                                        FACEntities.FAC_TRENCHER.get(),
+                                        FACEntities.TRENCH_GOBLIN.get()
+                                )
+                        )),
                         new ApproachTargetIfCannotAim(1.0F),
                         new AimWhenTargetVisible(),
                         new ShootTarget(20, (simGun, entity) -> 1.6F, entity -> true,
-                                new IntervalTriggerSampler(20, 40, 2, 10))
+                                new IntervalTriggerSampler(20, 40, 2, 7))
                 )), ImmutableSet.of(
                         Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT)
                 ), ImmutableSet.of(
