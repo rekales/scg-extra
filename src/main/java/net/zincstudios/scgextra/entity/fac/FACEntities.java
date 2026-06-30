@@ -40,6 +40,11 @@ import static net.zincstudios.scgextra.entity.ModEntities.ENTITY_TYPES;
 
 public class FACEntities {
 
+    // TODO: sounds
+    // TODO: tags
+    // TODO: equipment
+    // TODO: headshot boxes
+
     public static final RegistryObject<EntityType<FacTrencherEntity>> FAC_TRENCHER = ENTITY_TYPES
             .register("fac_trencher", () -> EntityType.Builder.of(FacTrencherEntity::new, MobCategory.MONSTER)
                     .sized(0.68F, 1.82F)
@@ -122,10 +127,9 @@ public class FACEntities {
         BoundingBoxManager.registerHeadshotBox(FACEntities.FAC_COMMISSAR.get(), new OffsetRotatedHeadshotBox<>(10.0, 18.0, 30.0, 0.0F, 0, false, true));
         BoundingBoxManager.registerHeadshotBox(FACEntities.FAC_TANK_BUSTER.get(), new OffsetRotatedHeadshotBox<>(10.0, 9.0, 24.0, 0.0F, 2.0, false, true));
         BoundingBoxManager.registerHeadshotBox(FACEntities.FAC_LION.get(), new RotatedHeadshotBox<>(10, 36.0, 7.0, false, true));
-        BoundingBoxManager.registerHeadshotBox(FACEntities.FAC_WALKER.get(), new RotatedHeadshotBox<>(14.0, 44.0, 4.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(FACEntities.FAC_WALKER.get(), new RotatedHeadshotBox<>(10, 6, 50, 8, false, true));
         BoundingBoxManager.registerHeadshotBox(FACEntities.FAC_TANK.get(), new OffsetRotatedHeadshotBox<>(13.0, 16.0, 9.0, 0.0F, false, true));
 
-        WeakPointBoxManager.registerWeakPointBox(FACEntities.FAC_WALKER.get(), new WeakPointBox<>(new RotatedHeadshotBox<>(14.0, 44.0, 4.0, false, true)));
         WeakPointBoxManager.registerWeakPointBox(FACEntities.FAC_TANK.get(), new WeakPointBox<>(new OffsetRotatedHeadshotBox<>(13.0, 16.0, 9.0, 0.0F, false, true)));
     }
 
@@ -147,9 +151,9 @@ public class FACEntities {
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_lion"))));
         EntityRenderers.register(FACEntities.FAC_COMMISSAR.get(), (ctx) -> new FacCommissarRenderer(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_commissar"), "head")));
+        EntityRenderers.register(FACEntities.FAC_WALKER.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_walker"), "inner_upper_body")).noDeathTilt());
 
-        EntityRenderers.register(FACEntities.FAC_WALKER.get(), (ctx) -> new GunnerRenderer<>(ctx,
-                new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_walker")), -10).noDeathTilt());
         EntityRenderers.register(FACEntities.FAC_TANK.get(), FacTankRenderer::new);
     }
 }

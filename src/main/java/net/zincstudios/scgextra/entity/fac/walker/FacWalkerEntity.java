@@ -1,36 +1,23 @@
 package net.zincstudios.scgextra.entity.fac.walker;
 
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.sounds.SoundEvent;
+import com.mojang.serialization.Dynamic;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.zincstudios.scgextra.CommonConfig;
-import net.zincstudios.scgextra.entity.Faction;
-import net.zincstudios.scgextra.entity.common.GunnerEntity;
-import net.zincstudios.scgextra.entity.common.HeadShotHandler;
-import net.zincstudios.scgextra.entity.common.MobUtil;
-import net.zincstudios.scgextra.entity.common.Stunnable;
-import net.zincstudios.scgextra.entity.common.goal.HurtByNonFactionGoal;
-import net.zincstudios.scgextra.entity.common.goal.StunnedWithVisualGoal;
-import net.zincstudios.scgextra.sounds.FACSounds;
+import net.zincstudios.scgextra.entity.ModBrainMemories;
+import net.zincstudios.scgextra.entity.asgharian.BulletSpawnOffset;
+import net.zincstudios.scgextra.entity.common.*;
+import net.zincstudios.scgextra.entity.common.gun.CustomGunHolder;
+import net.zincstudios.scgextra.entity.common.gun.CustomScorchedSimGun;
+import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -38,307 +25,119 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import top.ribs.scguns.init.ModItems;
 
-public class FacWalkerEntity extends GunnerEntity implements GeoEntity, Stunnable, HeadShotHandler {
+import javax.annotation.ParametersAreNonnullByDefault;
 
-    private static final int DEATH_ANIMATION_TICKS = 40;
-    private static final int MOUNTED_GUN_FIRE_WINDOW_TICKS = 5 * 20;
-    private static final int MOUNTED_GUN_RELOAD_TICKS = 3 * 20;
-    private static final int MOUNTED_GUN_CYCLE_TICKS = MOUNTED_GUN_FIRE_WINDOW_TICKS + MOUNTED_GUN_RELOAD_TICKS;
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class FacWalkerEntity extends GunnerEntity implements GeoEntity, Gunner, CustomGunHolder, BulletSpawnOffset {
+
+    static final int MELEE_DURATION = 18;
+    static final int MELEE_DAMAGE_DELAY = 10;
+
+    private static final int STUN_RECOVERY_TICKS = 12;
+    private static final int DEATH_ANIM_TICKS = 35;
+    private static final Vec3 LEFT_GUN_OFFSET = new Vec3(0.65,3.5,-0.4);  // TODO: refine
+    private static final Vec3 RIGHT_GUN_OFFSET = new Vec3(-0.65,3.5,-0.4);
+
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
     private static final RawAnimation RUN = RawAnimation.begin().thenLoop("run");
-    private static final RawAnimation IDLE_2 = RawAnimation.begin().thenLoop("scan");
-    private static final RawAnimation STUN = RawAnimation.begin().thenLoop("stun");
-    private static final RawAnimation ATACC = RawAnimation.begin().thenLoop("atacc");
-    private static final RawAnimation STOMP = RawAnimation.begin().thenPlayXTimes("stomp", 1);
+//    private static final RawAnimation SCAN = RawAnimation.begin().thenLoop("scan");
+    private static final RawAnimation STOMP = RawAnimation.begin().thenPlay("stomp");
     private static final RawAnimation DEATH = RawAnimation.begin().thenPlayAndHold("death");
-    private static final EntityDataAccessor<Boolean> STUNNED =
-            SynchedEntityData.defineId(FacWalkerEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Integer> RANGED_ANIM_TICKS =
-            SynchedEntityData.defineId(FacWalkerEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> STOMP_ANIM_TICKS =
-            SynchedEntityData.defineId(FacWalkerEntity.class, EntityDataSerializers.INT);
-
-    // Calibrated from the fac_walker.geo left_turret/right_turret pivots.
-    private static final Vec3 LEFT_TURRET_OFFSET = new Vec3(0.96875D, 3.28125D, 0.0625D);
-    private static final Vec3 RIGHT_TURRET_OFFSET = new Vec3(-0.96875D, 3.28125D, 0.0625D);
-    private static final double TURRET_MUZZLE_FORWARD_OFFSET = 0.75D;
+    private static final RawAnimation STUN_START = RawAnimation.begin().thenPlayAndHold("stun_start");
+    private static final RawAnimation STUN_END = RawAnimation.begin().thenPlay("stun_end");
+//    private static final RawAnimation FIRE = RawAnimation.begin().thenLoop("fire");
+    private static final RawAnimation EXHAUST = RawAnimation.begin().thenLoop("exhaust");
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+    private final SimulatedGun customGun;
 
-    private int headshotCounter = 0;
-    private boolean stunCooldown = false;
-    private int stompLockTicks = 0;
-    private int mountedGunCycleTick = 0;
+    private boolean bulletSpawnLeft = false;
 
     public FacWalkerEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
+        this.customGun = new CustomScorchedSimGun.Builder(ModItems.BIRDFEEDER.get().getGun())
+                .projectileDamage(4f)
+                .fireRate(2)
+                .maxRange(16)
+                .idealRange(12)
+                .velocityModifier(vec -> vec.scale(1/2f))
+                .build();
     }
 
-    @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(STUNNED, false);
-        this.entityData.define(RANGED_ANIM_TICKS, 0);
-        this.entityData.define(STOMP_ANIM_TICKS, 0);
+    public static AttributeSupplier.Builder createAttributes() {
+        return Monster.createMonsterAttributes()
+                .add(Attributes.FOLLOW_RANGE, 48.0D)
+                .add(Attributes.MOVEMENT_SPEED, 0.23F)
+                .add(Attributes.ATTACK_DAMAGE, 15.0D)
+                .add(Attributes.ARMOR, 6.0D)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
+                .add(Attributes.MAX_HEALTH, 250.0D);
     }
 
     @Override
     public void tick() {
         super.tick();
 
-        if (!this.level().isClientSide()) {
-            LivingEntity target = this.getTarget();
-            if (target != null && !target.isAlive()) {
-                this.setTarget(null);
-            }
-
-            if (this.stompLockTicks > 0) {
-                this.stompLockTicks--;
-            }
-            if (target != null && target.isAlive() && !this.isActionLocked()) {
-                this.mountedGunCycleTick = (this.mountedGunCycleTick + 1) % MOUNTED_GUN_CYCLE_TICKS;
-            } else {
-                this.mountedGunCycleTick = 0;
-            }
-            if (this.isActionLocked()) {
-                this.getNavigation().stop();
-            }
-
-            int rangedTicks = this.entityData.get(RANGED_ANIM_TICKS);
-            if (rangedTicks > 0) {
-                this.entityData.set(RANGED_ANIM_TICKS, rangedTicks - 1);
-            }
-
-            int stompAnimTicks = this.entityData.get(STOMP_ANIM_TICKS);
-            if (stompAnimTicks > 0) {
-                this.entityData.set(STOMP_ANIM_TICKS, stompAnimTicks - 1);
-            }
-
+        if (brain.getTimeUntilExpiry(ModBrainMemories.DELAYED_MELEE.get()) == MELEE_DURATION) {
+            this.triggerAnim("behavior", "stomp");
+        }
+        if (brain.getTimeUntilExpiry(ModBrainMemories.STUNNED.get()) == MobUtil.DEFAULT_STUN_DURATION) {
+            this.triggerAnim("behavior", "stun");
+        }
+        if (brain.getTimeUntilExpiry(ModBrainMemories.STUNNED.get()) == STUN_RECOVERY_TICKS) {
+            this.triggerAnim("behavior", "end_stun");
         }
     }
 
-    @Override
-    protected void registerGoals() {
-        this.goalSelector.addGoal(1, new StunnedWithVisualGoal<>(this).smoking(true));
-        this.goalSelector.addGoal(2, new FacWalkerStompGoal(this));
-        this.goalSelector.addGoal(3, new FacWalkerMountedGunGoal(this, 2, 16.0F));
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
-
-        this.targetSelector.addGoal(0, new HurtByNonFactionGoal(this));
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true,
-                player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
-                entity -> Faction.isEnemies(this, entity)));
+    protected Brain<?> makeBrain(Dynamic<?> dynamic) {
+        return FacWalkerAi.makeBrain(this, this.brainProvider().makeBrain(dynamic));
     }
 
-    public static AttributeSupplier.Builder createAttributes() {
-        return Monster.createMonsterAttributes()
-                .add(Attributes.FOLLOW_RANGE, 35.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.26F)
-                .add(Attributes.ATTACK_DAMAGE, 15.0D)
-                .add(Attributes.ARMOR, 20.0D)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
-                .add(Attributes.MAX_HEALTH, 250.0D);
+    @SuppressWarnings("unchecked")
+    public Brain<FacWalkerEntity> getBrain() {
+        return (Brain<FacWalkerEntity>) super.getBrain();
+    }
+
+    protected Brain.Provider<FacWalkerEntity> brainProvider() {
+        return FacWalkerAi.brainProvider();
     }
 
     @Override
-    public int shouldStun() {
-        if (!CommonConfig.enableAbilityWeakness) {
-            return 0;
-        }
-        if (this.headshotCounter >= CommonConfig.abilityWeaknessHeadshots) {
-            return CommonConfig.abilityWeaknessDuration;
-        }
-        return 0;
-    }
-
-    @Override
-    public void setStunned(boolean stunned) {
-        this.entityData.set(STUNNED, stunned);
-        if (!stunned) {
-            this.triggerAnim("behaviour", "end_stun");
-            this.headshotCounter = 0;
-            this.stopRangedAnimation();
-        }
-    }
-
-    @Override
-    public boolean isStunned() {
-        return this.entityData.get(STUNNED);
-    }
-
-    @Override
-    public void setStunCooldown(boolean cooldown) {
-        this.stunCooldown = cooldown;
-    }
-
-    @Override
-    public boolean headshot(DamageSource source, float amount) {
-        if (this.headshotCounter < CommonConfig.abilityWeaknessHeadshots - 1 || !this.stunCooldown) {
-            this.headshotCounter++;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (this.isStunned()) {
-            amount *= (float) CommonConfig.abilityWeaknessDamageMult;
-        }
-        return super.hurt(source, amount);
-    }
-
-    public Vec3 getLeftGunPos() {
-        Vec3 turretPos = LEFT_TURRET_OFFSET.yRot(-this.getYRot() * Mth.DEG_TO_RAD).add(this.position());
-        Vec3 forward = Vec3.directionFromRotation(0.0F, this.getYRot()).scale(TURRET_MUZZLE_FORWARD_OFFSET);
-        return turretPos.add(forward);
-    }
-
-    public Vec3 getRightGunPos() {
-        Vec3 turretPos = RIGHT_TURRET_OFFSET.yRot(-this.getYRot() * Mth.DEG_TO_RAD).add(this.position());
-        Vec3 forward = Vec3.directionFromRotation(0.0F, this.getYRot()).scale(TURRET_MUZZLE_FORWARD_OFFSET);
-        return turretPos.add(forward);
-    }
-
-    public boolean hasClearShot(Vec3 from, LivingEntity target) {
-        Vec3 to = target.getEyePosition();
-        HitResult hit = this.level().clip(new ClipContext(
-                from,
-                to,
-                ClipContext.Block.COLLIDER,
-                ClipContext.Fluid.NONE,
-                this
-        ));
-        return hit.getType() == HitResult.Type.MISS;
-    }
-
-    public void startRangedAnimation(int durationTicks) {
-        if (durationTicks <= 0) {
-            return;
-        }
-        int current = this.entityData.get(RANGED_ANIM_TICKS);
-        if (current < durationTicks) {
-            this.entityData.set(RANGED_ANIM_TICKS, durationTicks);
-        }
-    }
-
-    public void stopRangedAnimation() {
-        this.entityData.set(RANGED_ANIM_TICKS, 0);
-    }
-
-    public boolean isRangedPoseActive() {
-        return this.entityData.get(RANGED_ANIM_TICKS) > 0;
-    }
-
-    public boolean canUseMountedGun() {
-        return this.mountedGunCycleTick < MOUNTED_GUN_FIRE_WINDOW_TICKS;
-    }
-
-    public void startStompLock(int durationTicks) {
-        this.stompLockTicks = Math.max(this.stompLockTicks, durationTicks);
-        int current = this.entityData.get(STOMP_ANIM_TICKS);
-        if (current < durationTicks) {
-            this.entityData.set(STOMP_ANIM_TICKS, durationTicks);
-        }
-    }
-
-    public void clearStompLock() {
-        this.stompLockTicks = 0;
-    }
-
-    public boolean isStompLocked() {
-        return this.stompLockTicks > 0;
-    }
-
-    public boolean isStompAnimationActive() {
-        return this.entityData.get(STOMP_ANIM_TICKS) > 0;
-    }
-
-    public boolean isActionLocked() {
-        return this.isStompLocked() || this.isStunned();
-    }
-
-    private boolean hasLiveTarget() {
-        LivingEntity target = this.getTarget();
-        return target != null && target.isAlive();
-    }
-
-    private boolean isActuallyMoving() {
-        double dx = this.getX() - this.xo;
-        double dz = this.getZ() - this.zo;
-        return dx * dx + dz * dz > 0.000001D;
-    }
-
-    private boolean shouldPlayRunAnimation() {
-        return this.hasLiveTarget() && !this.isStunned() && !this.isRangedPoseActive() && !this.isStompAnimationActive();
-    }
-
-    @Override
-    protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return MobUtil.getSound(
-                this.random,
-                FACSounds.FAC_WALKER_HURT_1.get(),
-                FACSounds.FAC_WALKER_HURT_2.get()
-        );
-    }
-
-    @Override
-    protected SoundEvent getAmbientSound() {
-        return MobUtil.getSound(
-                this.random,
-                FACSounds.FAC_WALKER_IDLE_1.get(),
-                FACSounds.FAC_WALKER_IDLE_2.get(),
-                FACSounds.FAC_WALKER_IDLE_3.get()
-        );
-    }
-
-    @Override
-    protected void playStepSound(BlockPos pos, BlockState state) {
-        SoundEvent step = this.shouldPlayRunAnimation()
-                ? FACSounds.FAC_WALKER_RUN.get()
-                : FACSounds.FAC_WALKER_WALK.get();
-        this.playSound(step, 0.85F, 0.95F + this.random.nextFloat() * 0.1F);
+    protected void customServerAiStep() {
+        this.level().getProfiler().push("facWalkerBrain");
+        this.getBrain().tick((ServerLevel)this.level(), this);
+        FacWalkerAi.updateActivity(this);
+        this.setSprinting(this.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET)
+                .filter(target -> !target.closerThan(this, 20))
+                .isPresent() && !this.getBrain().hasMemoryValue(ModBrainMemories.STUNNED.get()));
+        this.level().getProfiler().pop();
+        super.customServerAiStep();
     }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "main", 1, state -> {
-            if (state.getAnimatable().isStunned()) {
-                return state.setAndContinue(STUN);
+        controllers.add(new AnimationController<>(this, "main", 4, state -> {
+            if (state.isMoving()) {
+                state.setAnimation(state.getAnimatable().isSprinting() ? RUN : WALK);
+            } else {
+                state.setAnimation(IDLE);
             }
-            if (state.getAnimatable().isStompAnimationActive()) {
-                return state.setAndContinue(IDLE);
-            }
-            if (state.getAnimatable().isRangedPoseActive()) {
-                return state.setAndContinue(ATACC);
-            }
-            boolean moving = state.isMoving() || this.isActuallyMoving() || this.getNavigation().isInProgress();
-            if (state.getAnimatable().shouldPlayRunAnimation() && (moving || state.getAnimatable().hasLiveTarget())) {
-                return state.setAndContinue(RUN);
-            }
-            if (moving) {
-                return state.setAndContinue(WALK);
-            }
-            int idle2Phase = (state.getAnimatable().tickCount + state.getAnimatable().getId() * 23) % 320;
-            if (!state.getAnimatable().hasLiveTarget() && idle2Phase >= 180 && idle2Phase < 260) {
-                return state.setAndContinue(IDLE_2);
-            }
-            return state.setAndContinue(IDLE);
+            return PlayState.CONTINUE;
         }));
 
-        controllers.add(new AnimationController<>(this, "behaviour", 0, state -> PlayState.STOP)
-                .triggerableAnim("end_stun", IDLE)
-        );
-
-        controllers.add(new AnimationController<>(this, "attack", 0, state -> PlayState.STOP)
+        controllers.add(new AnimationController<>(this, "behavior", 0, state -> PlayState.STOP)
+                .triggerableAnim("stun", STUN_START)
+                .triggerableAnim("end_stun", STUN_END)
                 .triggerableAnim("stomp", STOMP)
         );
 
-        controllers.add(new AnimationController<>(this, "death", 0, state -> {
+        controllers.add(new AnimationController<>(this, "exhaust", 2, state -> state.setAndContinue(EXHAUST)));
+
+        controllers.add(new AnimationController<>(this, "death", 2, state -> {
             if (state.getAnimatable().isDeadOrDying()) {
                 return state.setAndContinue(DEATH);
             }
@@ -347,16 +146,36 @@ public class FacWalkerEntity extends GunnerEntity implements GeoEntity, Stunnabl
     }
 
     @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.geoCache;
+    }
+
+    @Override
+    public void onGunFire(SimulatedGun gun, Vec3 targetPos) {
+        this.bulletSpawnLeft = !this.bulletSpawnLeft;
+    }
+
+    @Override
+    public Vec3 getBulletSpawnOffset(int gunIndex) {
+        if (this.bulletSpawnLeft) {
+            return LEFT_GUN_OFFSET.yRot(-this.yHeadRot * Mth.DEG_TO_RAD);
+        } else {
+            return RIGHT_GUN_OFFSET.yRot(-this.yHeadRot * Mth.DEG_TO_RAD);
+        }
+    }
+
+    @Override
+    public SimulatedGun getCustomGun() {
+        return this.customGun;
+    }
+
+    @Override
     protected void tickDeath() {
         ++this.deathTime;
-        if (this.deathTime >= DEATH_ANIMATION_TICKS && !this.level().isClientSide()) {
+        if (this.deathTime >= DEATH_ANIM_TICKS && !this.level().isClientSide()) {
             this.level().broadcastEntityEvent(this, (byte) 60);
             this.remove(RemovalReason.KILLED);
         }
     }
 
-    @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return this.geoCache;
-    }
 }
