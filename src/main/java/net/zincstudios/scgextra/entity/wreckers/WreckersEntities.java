@@ -25,6 +25,7 @@ import net.zincstudios.scgextra.entity.wreckers.wrecker_helicube.WreckerHelicube
 import net.zincstudios.scgextra.entity.wreckers.wrecker_jumbo.WreckerJumboEntity;
 import net.zincstudios.scgextra.entity.wreckers.wrecker_red.WreckerRedEntity;
 import net.zincstudios.scgextra.entity.wreckers.wrecker_turret.WreckerTurretEntity;
+import net.zincstudios.scgextra.entity.wreckers.wrecker_turret.WreckerTurretRenderer;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import top.ribs.scguns.common.BoundingBoxManager;
 import top.ribs.scguns.common.headshot.BasicHeadshotBox;
@@ -110,8 +111,7 @@ public class WreckersEntities {
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("wreckers/wrecker_green"))).noDeathTilt());
         EntityRenderers.register(WRECKER_JUMBO.get(), (ctx) -> new GunnerRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("wreckers/wrecker_jumbo"))).noDeathTilt());
-        EntityRenderers.register(WRECKER_TURRET.get(), (ctx) -> new GunnerRenderer<>(ctx,
-                new DefaultedEntityGeoModel<>(SCGExtra.asResource("wreckers/wrecker_turret"))).noDeathTilt());
+        EntityRenderers.register(WRECKER_TURRET.get(), WreckerTurretRenderer::new);
         EntityRenderers.register(WRECKER_HELICUBE.get(), WreckerHelicubeRenderer::new);
         EntityRenderers.register(WRECKER_DOZER.get(), WreckerDozerRenderer::new);
     }
