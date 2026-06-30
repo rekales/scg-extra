@@ -1,0 +1,118 @@
+package net.zincstudios.scgextra.entity.wreckers;
+
+import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.registries.RegistryObject;
+import net.zincstudios.scgextra.SCGExtra;
+import net.zincstudios.scgextra.entity.common.OffsetRotatedHeadshotBox;
+import net.zincstudios.scgextra.entity.common.WeakPointBox;
+import net.zincstudios.scgextra.entity.common.WeakPointBoxManager;
+import net.zincstudios.scgextra.entity.common.client.GunnerRenderer;
+import net.zincstudios.scgextra.entity.wreckers.wrecker_blue.WreckerBlueEntity;
+import net.zincstudios.scgextra.entity.wreckers.wrecker_dozer.WreckerDozerEntity;
+import net.zincstudios.scgextra.entity.wreckers.wrecker_dozer.WreckerDozerRenderer;
+import net.zincstudios.scgextra.entity.wreckers.wrecker_green.WreckerGreenEntity;
+import net.zincstudios.scgextra.entity.wreckers.wrecker_helicube.WreckerHelicubeEntity;
+import net.zincstudios.scgextra.entity.wreckers.wrecker_helicube.WreckerHelicubeRenderer;
+import net.zincstudios.scgextra.entity.wreckers.wrecker_jumbo.WreckerJumboEntity;
+import net.zincstudios.scgextra.entity.wreckers.wrecker_red.WreckerRedEntity;
+import net.zincstudios.scgextra.entity.wreckers.wrecker_turret.WreckerTurretEntity;
+import software.bernie.geckolib.model.DefaultedEntityGeoModel;
+import top.ribs.scguns.common.BoundingBoxManager;
+import top.ribs.scguns.common.headshot.BasicHeadshotBox;
+
+import static net.zincstudios.scgextra.entity.ModEntities.ENTITY_TYPES;
+
+public class WreckersEntities {
+
+    public static final RegistryObject<EntityType<WreckerRedEntity>> WRECKER_RED = ENTITY_TYPES
+            .register("wrecker_red", () -> EntityType.Builder.of(WreckerRedEntity::new, MobCategory.MONSTER)
+                    .sized(0.6F, 1.95F)
+                    .build("wrecker_red"));
+
+    public static final RegistryObject<EntityType<WreckerBlueEntity>> WRECKER_BLUE = ENTITY_TYPES
+            .register("wrecker_blue", () -> EntityType.Builder.of(WreckerBlueEntity::new, MobCategory.MONSTER)
+                    .sized(0.7F, 1.9F)
+                    .build("wrecker_blue"));
+
+    public static final RegistryObject<EntityType<WreckerGreenEntity>> WRECKER_GREEN = ENTITY_TYPES
+            .register("wrecker_green", () -> EntityType.Builder.of(WreckerGreenEntity::new, MobCategory.MONSTER)
+                    .sized(0.7F, 2.0F)
+                    .build("wrecker_green"));
+
+    public static final RegistryObject<EntityType<WreckerJumboEntity>> WRECKER_JUMBO = ENTITY_TYPES
+            .register("wrecker_jumbo", () -> EntityType.Builder.of(WreckerJumboEntity::new, MobCategory.MONSTER)
+                    .sized(1.4F, 3.0F)
+                    .build("wrecker_jumbo"));
+
+    public static final RegistryObject<EntityType<WreckerHelicubeEntity>> WRECKER_HELICUBE = ENTITY_TYPES
+            .register("wrecker_helicube", () -> EntityType.Builder.of(WreckerHelicubeEntity::new, MobCategory.MONSTER)
+                    .sized(0.9F, 0.9F)
+                    .updateInterval(1)
+                    .build("wrecker_helicube"));
+
+    public static final RegistryObject<EntityType<WreckerTurretEntity>> WRECKER_TURRET = ENTITY_TYPES
+            .register("wrecker_turret", () -> EntityType.Builder.of(WreckerTurretEntity::new, MobCategory.MONSTER)
+                    .sized(1.0F, 1.6F)
+                    .build("wrecker_turret"));
+
+    public static final RegistryObject<EntityType<WreckerDozerEntity>> WRECKER_DOZER = ENTITY_TYPES
+            .register("wrecker_dozer", () -> EntityType.Builder.of(WreckerDozerEntity::new, MobCategory.MONSTER)
+                    .setUpdateInterval(1)
+                    .sized(4.0F, 3.5F)
+                    .build("wrecker_dozer"));
+
+    public static void register(IEventBus modEventBus) {
+        modEventBus.addListener(WreckersEntities::registerAttributes);
+        modEventBus.addListener(WreckersEntities::onCommonSetup);
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            modEventBus.addListener(WreckersEntities::onClientSetup);
+        }
+    }
+
+    private static void registerAttributes(EntityAttributeCreationEvent event) {
+        event.put(WRECKER_RED.get(), WreckerRedEntity.createAttributes().build());
+        event.put(WRECKER_BLUE.get(), WreckerBlueEntity.createAttributes().build());
+        event.put(WRECKER_GREEN.get(), WreckerGreenEntity.createAttributes().build());
+        event.put(WRECKER_JUMBO.get(), WreckerJumboEntity.createAttributes().build());
+        event.put(WRECKER_HELICUBE.get(), WreckerHelicubeEntity.createAttributes().build());
+        event.put(WRECKER_TURRET.get(), WreckerTurretEntity.createAttributes().build());
+        event.put(WRECKER_DOZER.get(), WreckerDozerEntity.createAttributes().build());
+    }
+
+    private static void onCommonSetup(FMLCommonSetupEvent event) {
+        BoundingBoxManager.registerHeadshotBox(WRECKER_RED.get(), new BasicHeadshotBox<>(9.0, 22.0));
+        BoundingBoxManager.registerHeadshotBox(WRECKER_BLUE.get(), new BasicHeadshotBox<>(9.0, 21.0));
+        BoundingBoxManager.registerHeadshotBox(WRECKER_GREEN.get(), new BasicHeadshotBox<>(9.0, 23.0));
+        BoundingBoxManager.registerHeadshotBox(WRECKER_JUMBO.get(), new BasicHeadshotBox<>(12.0, 34.0));
+        BoundingBoxManager.registerHeadshotBox(WRECKER_TURRET.get(), new BasicHeadshotBox<>(10.0, 18.0));
+        BoundingBoxManager.registerHeadshotBox(WRECKER_DOZER.get(),
+                new OffsetRotatedHeadshotBox<>(13.0, 16.0, 9.0, 0.0F, false, true));
+        WeakPointBoxManager.registerWeakPointBox(WRECKER_DOZER.get(),
+                new WeakPointBox<>(new OffsetRotatedHeadshotBox<>(13.0, 16.0, 9.0, 0.0F, false, true)));
+    }
+
+    @OnlyIn(value = Dist.CLIENT)
+    private static void onClientSetup(FMLClientSetupEvent event) {
+        EntityRenderers.register(WRECKER_RED.get(), (ctx) -> new GunnerRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("wreckers/wrecker_red"))).noDeathTilt());
+        EntityRenderers.register(WRECKER_BLUE.get(), (ctx) -> new GunnerRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("wreckers/wrecker_blue"))).noDeathTilt());
+        EntityRenderers.register(WRECKER_GREEN.get(), (ctx) -> new GunnerRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("wreckers/wrecker_green"))).noDeathTilt());
+        EntityRenderers.register(WRECKER_JUMBO.get(), (ctx) -> new GunnerRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("wreckers/wrecker_jumbo"))).noDeathTilt());
+        EntityRenderers.register(WRECKER_TURRET.get(), (ctx) -> new GunnerRenderer<>(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("wreckers/wrecker_turret"))).noDeathTilt());
+        EntityRenderers.register(WRECKER_HELICUBE.get(), WreckerHelicubeRenderer::new);
+        EntityRenderers.register(WRECKER_DOZER.get(), WreckerDozerRenderer::new);
+    }
+}

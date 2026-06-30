@@ -1,0 +1,30 @@
+{
+  "id": "scgextra:wrecker_red",
+  "equipment_chance": 1.0,
+  "items": [
+    {
+      "item": "scguns:combat_shotgun",
+      "weight": 6.0,
+      "drop_chance": 0.0,
+      "min_durability": 0.2,
+      "max_durability": 0.5,
+      "slot": "mainhand"
+    },
+    {
+      "item": "scguns:super_shotgun",
+      "weight": 2.0,
+      "drop_chance": 0.0,
+      "min_durability": 0.2,
+      "max_durability": 0.5,
+      "slot": "mainhand"
+    },
+    {
+      "item": "scguns:m3_carabine",
+      "weight": 2.0,
+      "drop_chance": 0.0,
+      "min_durability": 0.2,
+      "max_durability": 0.5,
+      "slot": "mainhand"
+    }
+  ]
+}

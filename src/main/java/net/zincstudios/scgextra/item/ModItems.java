@@ -18,6 +18,7 @@ import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
 import net.zincstudios.scgextra.entity.fac.FACEntities;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
+import net.zincstudios.scgextra.entity.wreckers.WreckersEntities;
 
 @SuppressWarnings("unused")
 public class ModItems {
@@ -108,7 +109,16 @@ public class ModItems {
             COG_GIGANTES_SPAWN_EGG = basicSpawnEgg(COGEntities.GIGANTES),
             COG_VENATOR_SPAWN_EGG = basicSpawnEgg(COGEntities.VENATOR),
             COG_CENTIPEDE_SPAWN_EGG = basicSpawnEgg(COGEntities.CENTIPEDE),
-            COG_JUGGERNAUT_SPAWN_EGG = basicSpawnEgg(COGEntities.JUGGERNAUT);
+            COG_JUGGERNAUT_SPAWN_EGG = basicSpawnEgg(COGEntities.JUGGERNAUT),
+
+            // Wreckers
+            WRECKER_RED_SPAWN_EGG = basicSpawnEgg(WreckersEntities.WRECKER_RED),
+            WRECKER_BLUE_SPAWN_EGG = basicSpawnEgg(WreckersEntities.WRECKER_BLUE),
+            WRECKER_GREEN_SPAWN_EGG = basicSpawnEgg(WreckersEntities.WRECKER_GREEN),
+            WRECKER_JUMBO_SPAWN_EGG = basicSpawnEgg(WreckersEntities.WRECKER_JUMBO),
+            WRECKER_HELICUBE_SPAWN_EGG = basicSpawnEgg(WreckersEntities.WRECKER_HELICUBE),
+            WRECKER_TURRET_SPAWN_EGG = basicSpawnEgg(WreckersEntities.WRECKER_TURRET),
+            WRECKER_DOZER_SPAWN_EGG = basicSpawnEgg(WreckersEntities.WRECKER_DOZER);
 
 
     public static void register(IEventBus modEventBus) {

@@ -11,6 +11,7 @@ import net.zincstudios.scgextra.entity.fac.FACEntities;
 import net.zincstudios.scgextra.entity.neutral.NeutralEntities;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
+import net.zincstudios.scgextra.entity.wreckers.WreckersEntities;
 import org.jetbrains.annotations.Nullable;
 import top.ribs.scguns.init.ModTags;
 
@@ -78,6 +79,15 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
                 .add(WhalerEntities.ARMORED_WHALE.get())
                 .add(top.ribs.scguns.init.ModEntities.FINFORCER.get());
 
+        tag(EntityTypeTags.WRECKERS)
+                .add(WreckersEntities.WRECKER_RED.get())
+                .add(WreckersEntities.WRECKER_BLUE.get())
+                .add(WreckersEntities.WRECKER_GREEN.get())
+                .add(WreckersEntities.WRECKER_JUMBO.get())
+                .add(WreckersEntities.WRECKER_HELICUBE.get())
+                .add(WreckersEntities.WRECKER_TURRET.get())
+                .add(WreckersEntities.WRECKER_DOZER.get());
+
         tag(EntityTypeTags.RRC)
                 .add(RRCEntities.DRONE.get())
                 .add(RRCEntities.TALLMAN.get())
@@ -95,6 +105,9 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
                 .add(FACEntities.FAC_TANK.get())
                 .add(FACEntities.FAC_WALKER.get())
                 .add(NeutralEntities.HEAD_HUNTER.get())
+                .add(WreckersEntities.WRECKER_HELICUBE.get())
+                .add(WreckersEntities.WRECKER_TURRET.get())
+                .add(WreckersEntities.WRECKER_DOZER.get())
                 .add(COGEntities.VULTURE.get())
                 .add(COGEntities.DEVASTATOR.get())
                 .add(COGEntities.BOMBARDIER.get())
@@ -116,6 +129,8 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
         tag(ModTags.Entities.HEAVY)
                 .add(WhalerEntities.TURTLEMAN.get())
                 .add(WhalerEntities.SALMONSAUR.get())
+                .add(WreckersEntities.WRECKER_JUMBO.get())
+                .add(WreckersEntities.WRECKER_DOZER.get())
                 .add(COGEntities.DEVASTATOR.get())
                 .add(COGEntities.BOMBARDIER.get())
                 .add(COGEntities.GIGANTES.get())
@@ -129,6 +144,9 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
 
         tag(ModTags.Entities.BOT)
                 .add(AsgharianEntities.ASGHAR_WORKER.get())
+                .add(WreckersEntities.WRECKER_HELICUBE.get())
+                .add(WreckersEntities.WRECKER_TURRET.get())
+                .add(WreckersEntities.WRECKER_DOZER.get())
                 .add(COGEntities.VULTURE.get())
                 .add(COGEntities.DEVASTATOR.get())
                 .add(COGEntities.BOMBARDIER.get())

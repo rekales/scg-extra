@@ -75,6 +75,14 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.COG_VENATOR_SPAWN_EGG.get());
         basicItem(ModItems.COG_CENTIPEDE_SPAWN_EGG.get());
         basicItem(ModItems.COG_JUGGERNAUT_SPAWN_EGG.get());
+
+        basicItem(ModItems.WRECKER_RED_SPAWN_EGG.get());
+        basicItem(ModItems.WRECKER_BLUE_SPAWN_EGG.get());
+        basicItem(ModItems.WRECKER_GREEN_SPAWN_EGG.get());
+        basicItem(ModItems.WRECKER_JUMBO_SPAWN_EGG.get());
+        basicItem(ModItems.WRECKER_HELICUBE_SPAWN_EGG.get());
+        basicItem(ModItems.WRECKER_TURRET_SPAWN_EGG.get());
+        basicItem(ModItems.WRECKER_DOZER_SPAWN_EGG.get());
     }
 
 //    private void spawnEgg(RegistryObject<SpawnEggItem> item) {

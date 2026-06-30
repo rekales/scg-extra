@@ -19,6 +19,7 @@ import net.zincstudios.scgextra.entity.cog.COGEntities;
 import net.zincstudios.scgextra.entity.fac.FACEntities;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
+import net.zincstudios.scgextra.entity.wreckers.WreckersEntities;
 import top.ribs.scguns.init.ModBlocks;
 import top.ribs.scguns.init.ModItems;
 
@@ -100,6 +101,24 @@ public class ModEntityLootTableProvider extends EntityLootSubProvider {
                 .range(Items.IRON_BLOCK, 1, 3)
                 .range(Items.COAL_BLOCK, 1, 3)
                 .range(ModItems.ANTHRALITE_INGOT.get(), 1, 3);
+
+        basicLoot(WreckersEntities.WRECKER_RED.get())
+                .range(Items.IRON_NUGGET, 1, 3);
+        basicLoot(WreckersEntities.WRECKER_BLUE.get())
+                .range(Items.IRON_NUGGET, 1, 3);
+        basicLoot(WreckersEntities.WRECKER_GREEN.get())
+                .range(Items.IRON_NUGGET, 1, 3);
+        basicLoot(WreckersEntities.WRECKER_JUMBO.get())
+                .range(Items.IRON_INGOT, 1, 3);
+        basicLoot(WreckersEntities.WRECKER_HELICUBE.get())
+                .range(Items.IRON_NUGGET, 1, 3);
+        basicLoot(WreckersEntities.WRECKER_TURRET.get())
+                .range(Items.IRON_NUGGET, 1, 3)
+                .range(Items.GUNPOWDER, 1, 3);
+        basicLoot(WreckersEntities.WRECKER_DOZER.get())
+                .range(Items.IRON_INGOT, 3, 6)
+                .range(ModBlocks.SUPPLY_CRATE.get().asItem(), 3, 6)
+                .constant(ModItems.SNAPPED_COGWHEEL.get(), 1);
 
         basicLoot(RRCEntities.COPPER_KNIGHT.get())
                 .range(Items.COPPER_INGOT, 1, 3)

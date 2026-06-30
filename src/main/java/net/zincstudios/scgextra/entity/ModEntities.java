@@ -29,6 +29,7 @@ import net.zincstudios.scgextra.entity.projectile.net.NetEntity;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntityRenderer;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
+import net.zincstudios.scgextra.entity.wreckers.WreckersEntities;
 import top.ribs.scguns.entity.client.EnemyProjectileRenderer;
 
 public class ModEntities {
@@ -77,6 +78,7 @@ public class ModEntities {
         AsgharianEntities.register(modEventBus);
         NeutralEntities.register(modEventBus);
         COGEntities.register(modEventBus);
+        WreckersEntities.register(modEventBus);
 
         ModBrainMemories.register(modEventBus);
         ModBrainSensors.register(modEventBus);
