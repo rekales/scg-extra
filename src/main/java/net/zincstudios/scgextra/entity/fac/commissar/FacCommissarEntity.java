@@ -14,6 +14,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
+import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
@@ -30,7 +31,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class FacCommissarEntity extends GunnerEntity implements GeoEntity {
+public class FacCommissarEntity extends GunnerEntity implements GeoEntity, Gunner {
+
+    static final int ALERT_ANIM_TICKS = 30;
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
@@ -40,6 +43,7 @@ public class FacCommissarEntity extends GunnerEntity implements GeoEntity {
     private static final RawAnimation MELEE = RawAnimation.begin().thenPlay("melee");
     private static final RawAnimation MELEE_NO_LEGS = RawAnimation.begin().thenPlay("melee_no_legs");
     private static final RawAnimation FLARE = RawAnimation.begin().thenPlay("flare");
+    private static final RawAnimation ALERT = RawAnimation.begin().thenPlay("alert");
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
@@ -54,6 +58,17 @@ public class FacCommissarEntity extends GunnerEntity implements GeoEntity {
                 .add(Attributes.ATTACK_DAMAGE, 8.0D)
                 .add(Attributes.ARMOR, 6.0D)
                 .add(Attributes.MAX_HEALTH, 100.0D);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (this.level().isClientSide) return;
+        Brain<?> brain = this.getBrain();
+        if (brain.getTimeUntilExpiry(ModBrainMemories.TO_ALERT.get()) == ALERT_ANIM_TICKS) {
+            this.triggerAnim("behavior", "alert");
+        }
     }
 
     protected Brain<?> makeBrain(Dynamic<?> dynamic) {
@@ -73,8 +88,8 @@ public class FacCommissarEntity extends GunnerEntity implements GeoEntity {
     protected void customServerAiStep() {
         this.level().getProfiler().push("facCommissarBrain");
         this.getBrain().tick((ServerLevel)this.level(), this);
-        BrainCommons.updateActivity(this);
-        BrainCommons.updateMaxRangeAggressive(this);
+        FacCommissarAi.updateActivity(this);
+        BrainCommons.updateAimingAggressive(this);
         if (this.getBrain().getMemory(ModBrainMemories.AIM_TICKS.get()).filter(aim -> aim > 5).isPresent()) {
             this.setYBodyRot(this.getYHeadRot());
         }
@@ -113,6 +128,10 @@ public class FacCommissarEntity extends GunnerEntity implements GeoEntity {
 
         controllers.add(new AnimationController<>(this, "attack", 2, state -> PlayState.STOP)
                 .triggerableAnim("melee", MELEE)
+        );
+
+        controllers.add(new AnimationController<>(this, "behavior", 0, state -> PlayState.STOP)
+                .triggerableAnim("alert", ALERT)
         );
     }
 
