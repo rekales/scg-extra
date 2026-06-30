@@ -2,57 +2,34 @@ package net.zincstudios.scgextra.entity.fac.commissar;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.zincstudios.scgextra.SCGExtra;
-import net.zincstudios.scgextra.entity.common.client.GunnerRenderer;
-import net.zincstudios.scgextra.item.ModItems;
+import net.zincstudios.scgextra.entity.common.client.BaseEntityRenderer;
+import net.zincstudios.scgextra.entity.common.client.HeldItemGeoLayer;
+import net.zincstudios.scgextra.item.CavalrySaberItem;
 import software.bernie.geckolib.cache.object.GeoBone;
-import software.bernie.geckolib.model.DefaultedEntityGeoModel;
-import software.bernie.geckolib.renderer.layer.BlockAndItemGeoLayer;
+import software.bernie.geckolib.model.GeoModel;
 
-public class FacCommissarRenderer extends GunnerRenderer<FacCommissarEntity> {
+public class FacCommissarRenderer extends BaseEntityRenderer<FacCommissarEntity> {
 
-    public FacCommissarRenderer(EntityRendererProvider.Context context) {
-        super(context, new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_commissar")), true);
-        addRenderLayer(new BlockAndItemGeoLayer<>(this) {
-            @Override
-            protected ItemStack getStackForBone(GeoBone bone, FacCommissarEntity animatable) {
-                ItemStack stack = animatable.getMainHandItem();
-                if (stack.isEmpty()) {
-                    return null;
-                }
-
-                if (stack.is(ModItems.CAVALRY_SABER.get())) {
-                    return "left_hand".equals(bone.getName()) ? stack : null;
-                }
-
-                return "right_hand".equals(bone.getName()) ? stack : null;
-            }
-
-            @Override
-            protected ItemDisplayContext getTransformTypeForStack(GeoBone bone, ItemStack stack, FacCommissarEntity animatable) {
-                if (stack.is(ModItems.CAVALRY_SABER.get())) {
-                    return ItemDisplayContext.THIRD_PERSON_LEFT_HAND;
-                }
-                return ItemDisplayContext.THIRD_PERSON_RIGHT_HAND;
-            }
-
+    public FacCommissarRenderer(EntityRendererProvider.Context context, GeoModel<FacCommissarEntity> model) {
+        super(context, model);
+        this.addRenderLayer(new HeldItemGeoLayer<>(this) {
             @Override
             protected void renderStackForBone(PoseStack poseStack, GeoBone bone, ItemStack stack, FacCommissarEntity animatable, MultiBufferSource bufferSource, float partialTick, int packedLight, int packedOverlay) {
                 poseStack.pushPose();
-
-                // Move saber closer to wrist and slightly outward from the body.
-                if (stack.is(ModItems.CAVALRY_SABER.get())) {
-                    poseStack.translate(0D, -0.30D, -0.5D);
+                if (stack.getItem() instanceof CavalrySaberItem) {
+                    poseStack.translate(0, -0.25F, -0.2);
+                    poseStack.mulPose(Axis.XP.rotationDegrees(180));
+                    poseStack.mulPose(Axis.ZP.rotationDegrees(180));
                 } else {
-                    // Preserve old gun tilt for firearms.
-                    poseStack.mulPose(Axis.XP.rotationDegrees(-100.0F));
+                    poseStack.mulPose(Axis.XP.rotationDegrees(-90F));
                 }
-
-                super.renderStackForBone(poseStack, bone, stack, animatable, bufferSource, partialTick, packedLight, packedOverlay);
+                Minecraft.getInstance().getItemRenderer().renderStatic(animatable, stack,
+                        getTransformTypeForStack(bone, stack, animatable), false, poseStack, bufferSource, animatable.level(),
+                        packedLight, packedOverlay, animatable.getId());
                 poseStack.popPose();
             }
         });

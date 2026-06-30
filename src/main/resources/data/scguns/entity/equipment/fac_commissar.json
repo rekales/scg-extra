@@ -4,7 +4,7 @@
   "items": [
     {
       "item": "scguns:defender_pistol",
-      "weight": 8.0,
+      "weight": 10.0,
       "drop_chance": 0.0,
       "min_durability": 0.2,
       "max_durability": 0.5,
@@ -12,11 +12,11 @@
     },
     {
       "item": "scgextra:cavalry_saber",
-      "weight": 2.0,
+      "weight": 10.0,
       "drop_chance": 0.0,
       "min_durability": 0.2,
       "max_durability": 0.5,
-      "slot": "mainhand"
+      "slot": "offhand"
     }
   ]
 }

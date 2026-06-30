@@ -140,13 +140,14 @@ public class FACEntities {
         EntityRenderers.register(FACEntities.TRENCH_SNIPER.get(), (ctx) -> new GunHoldingMobRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_trench_sniper"))));
         EntityRenderers.register(FACEntities.SHOVEL_KNIGHT.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
-                new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_shovel_knight"))));
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_shovel_knight"))));  // TODO: check head bones
         EntityRenderers.register(FACEntities.FAC_TANK_BUSTER.get(), (ctx) -> new GunHoldingMobRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_tank_buster"))));
         EntityRenderers.register(FACEntities.FAC_LION.get(), (ctx) -> new GunHoldingMobRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_lion"))));
+        EntityRenderers.register(FACEntities.FAC_COMMISSAR.get(), (ctx) -> new FacCommissarRenderer(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_commissar"), "head")));
 
-        EntityRenderers.register(FACEntities.FAC_COMMISSAR.get(), (ctx) -> new FacCommissarRenderer(ctx).noDeathTilt());
         EntityRenderers.register(FACEntities.FAC_WALKER.get(), (ctx) -> new GunnerRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_walker")), -10).noDeathTilt());
         EntityRenderers.register(FACEntities.FAC_TANK.get(), FacTankRenderer::new);
