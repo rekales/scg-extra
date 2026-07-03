@@ -10,10 +10,10 @@ group = project.properties["mod_group"]!!
 
 repositories {
     mavenLocal()
-
     maven("https://maven.neoforged.net/#/releases/")
     maven("https://www.cursemaven.com")
     maven("https://api.modrinth.com/maven")
+    maven("https://maven.minecraftforge.net/")  // TerraBlender
     maven("https://modmaven.dev") // JEI
     maven("https://maven.theillusivec4.top/") // Curios
     maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/") // GeckoLib
@@ -26,6 +26,7 @@ dependencies {
 
     modImplementation("curse.maven:scorchedguns-802940:7232063")  // 0.5.5
     modImplementation("curse.maven:framework-549225:5692398")  // 0.7.8
+    modImplementation("com.github.glitchfiend:TerraBlender-forge:${property("minecraft_version")}-${property("terrablender_version")}")
 
 //    modImplementation("curse.maven:scorched-guns-oregunized-1447333:7540971")  // 1.0.0
 //    modImplementation("curse.maven:oreganized-769203:7707202")  // 4.3.2
