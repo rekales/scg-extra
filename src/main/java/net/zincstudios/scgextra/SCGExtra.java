@@ -23,6 +23,7 @@ import net.zincstudios.scgextra.item.ModItems;
 import net.zincstudios.scgextra.particle.ModParticleTypes;
 import net.zincstudios.scgextra.raid.WaveRaidManager;
 import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.worldgen.biome.ModTerrablender;
 
 import org.slf4j.Logger;
 
@@ -43,6 +44,7 @@ public class SCGExtra
         ModItems.register(modEventBus);
         ModSounds.register(modEventBus);
         ModParticleTypes.register(modEventBus);
+        ModTerrablender.registerBiomes();
 
         modEventBus.addListener(this::addCreative);
 

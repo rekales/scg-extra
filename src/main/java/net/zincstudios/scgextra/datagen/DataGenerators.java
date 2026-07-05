@@ -33,5 +33,7 @@ public class DataGenerators {
                 new LootTableProvider(output, Collections.emptySet(), List.of(
                         new LootTableProvider.SubProviderEntry(ModEntityLootTableProvider::new, LootContextParamSets.ENTITY)
                 )));
+
+        generator.addProvider(event.includeServer(), new ModWorldGenProvider(output, lookupProvider));
     }
 }
