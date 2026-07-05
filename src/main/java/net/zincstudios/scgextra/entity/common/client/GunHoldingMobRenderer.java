@@ -13,5 +13,6 @@ public class GunHoldingMobRenderer<T extends Mob & GeoEntity> extends BaseEntity
     public GunHoldingMobRenderer(EntityRendererProvider.Context renderManager, GeoModel<T> model, float gunTilt) {
         super(renderManager, model);
         this.addRenderLayer(new HeldGunGeoLayer<>(this, gunTilt));
+        this.addRenderLayer(new HeldGunFlashLayer<>(this, gunTilt));
     }
 }

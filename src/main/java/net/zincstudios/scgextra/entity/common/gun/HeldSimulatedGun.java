@@ -12,6 +12,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.zincstudios.scgextra.entity.asgharian.BulletSpawnOffset;
 import net.zincstudios.scgextra.entity.common.Gunner;
+import net.zincstudios.scgextra.network.GunFlashMessage;
+import net.zincstudios.scgextra.network.SCGEPacketHandler;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.client.util.PropertyHelper;
 import top.ribs.scguns.common.Gun;
@@ -144,11 +146,7 @@ public class HeldSimulatedGun implements SimulatedGun {
         S2CMessageBulletTrail messageBulletTrail = new S2CMessageBulletTrail(projectiles, gun.getProjectile(), shooter.getId(), data, isVisible);
         PacketHandler.getPlayChannel().sendToNearbyPlayers(() -> LevelLocation.create(level, radius, y1, z1, r), messageBulletTrail);
         if (gun.getDisplay().getFlash() != null) {
-            float randomValue = level.random.nextFloat();
-            Vec3 weaponOrigin = PropertyHelper.getModelOrigin(this.gunStack, PropertyHelper.GUN_DEFAULT_ORIGIN);
-            Vec3 flashPosition = PropertyHelper.getMuzzleFlashPosition(this.gunStack, gun).subtract(weaponOrigin);
-            S2CMessageEntityMuzzleFlash flashMessage = new S2CMessageEntityMuzzleFlash(shooter.getId(), randomValue, flashPosition, false);
-            PacketHandler.getPlayChannel().sendToNearbyPlayers(() -> LevelLocation.create(level, radius, y1, z1, r), flashMessage);
+            SCGEPacketHandler.sendToNearbyPlayers(() -> LevelLocation.create(level, radius, y1, z1, r), new GunFlashMessage(shooter.getId(), 0));
         }
 
         if (Config.COMMON.gameplay.spawnCasings.get() && gun.getProjectile().ejectsCasing() && !gun.getProjectile().ejectDuringReload()) {

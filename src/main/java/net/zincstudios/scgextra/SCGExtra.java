@@ -8,6 +8,7 @@ import net.zincstudios.scgextra.debug.DevTestCommands;
 import net.zincstudios.scgextra.effects.ModEffects;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.ModEntities;
+import net.zincstudios.scgextra.entity.common.client.GunFlashHandler;
 import net.zincstudios.scgextra.entity.neutral.head_hunter.HeadHunterSpawnReplacement;
 
 import com.mojang.logging.LogUtils;
@@ -20,6 +21,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import net.zincstudios.scgextra.item.ModItems;
+import net.zincstudios.scgextra.network.SCGEPacketHandler;
 import net.zincstudios.scgextra.particle.ModParticleTypes;
 import net.zincstudios.scgextra.raid.WaveRaidManager;
 import net.zincstudios.scgextra.sounds.ModSounds;
@@ -44,12 +46,11 @@ public class SCGExtra
         ModSounds.register(modEventBus);
         ModParticleTypes.register(modEventBus);
 
-        modEventBus.addListener(this::addCreative);
-
         context.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
         modEventBus.addListener(CommonConfig::onLoad);
         modEventBus.addListener(CommonConfig::onReload);
 
+        MinecraftForge.EVENT_BUS.addListener(GunFlashHandler::onTick);
         MinecraftForge.EVENT_BUS.addListener(WaveRaidManager::onLevelTick);
         MinecraftForge.EVENT_BUS.addListener(WaveRaidManager::onLevelLoad);
         MinecraftForge.EVENT_BUS.addListener(Faction::onTagsUpdated);
@@ -60,12 +61,8 @@ public class SCGExtra
         modEventBus.addListener(DataGenerators::gatherData);
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event)
-    {
-    }
-
-    private void addCreative(BuildCreativeModeTabContentsEvent event)
-    {
+    private void commonSetup(final FMLCommonSetupEvent event) {
+        SCGEPacketHandler.init();
     }
 
     @SuppressWarnings("removal")
