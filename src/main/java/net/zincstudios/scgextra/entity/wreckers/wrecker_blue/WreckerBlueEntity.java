@@ -47,7 +47,7 @@ public class WreckerBlueEntity extends GunnerEntity implements GeoEntity {
         return Monster.createMonsterAttributes()
                 .add(Attributes.FOLLOW_RANGE, 24.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.34F)
-                .add(Attributes.ATTACK_DAMAGE, 5.0D)
+                .add(Attributes.ATTACK_DAMAGE, 4.0D)
                 .add(Attributes.ARMOR, 0.0D)
                 .add(Attributes.MAX_HEALTH, 22.0D);
     }
@@ -99,11 +99,6 @@ public class WreckerBlueEntity extends GunnerEntity implements GeoEntity {
         }
     }
 
-    private boolean hasLiveTarget() {
-        LivingEntity target = this.getTarget();
-        return target != null && target.isAlive();
-    }
-
     @Override
     public void tick() {
         super.tick();
@@ -115,8 +110,11 @@ public class WreckerBlueEntity extends GunnerEntity implements GeoEntity {
         boolean hit = super.doHurtTarget(target);
         if (hit) {
             this.playSound(MobUtil.getSound(this.random,
-                    WreckersSounds.BLUE_ATTACK_1.get(), WreckersSounds.BLUE_ATTACK_2.get(),
-                    WreckersSounds.BLUE_ATTACK_3.get(), WreckersSounds.BLUE_ATTACK_4.get()), 1.0F, 1.0F);
+                    WreckersSounds.BLUE_ATTACK_1.get(),
+                    WreckersSounds.BLUE_ATTACK_2.get(),
+                    WreckersSounds.BLUE_ATTACK_3.get(),
+                    WreckersSounds.BLUE_ATTACK_4.get()
+            ), 0.5F, 1.0F);
         }
         return hit;
     }
@@ -124,17 +122,13 @@ public class WreckerBlueEntity extends GunnerEntity implements GeoEntity {
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "main", 2, state -> {
-            boolean moving = state.isMoving() || this.getNavigation().isInProgress();
-            if (this.hasLiveTarget()) {
+            boolean moving = state.isMoving();
+            if (this.isAggressive()) {
                 state.getController().setAnimationSpeed(1.3);
                 return state.setAndContinue(moving ? RUN : IDLE);
             }
-            if (moving) {
-                state.getController().setAnimationSpeed(1.0);
-                return state.setAndContinue(WALK);
-            }
             state.getController().setAnimationSpeed(1.0);
-            return state.setAndContinue(IDLE);
+            return state.setAndContinue(moving ? WALK : IDLE);
         }));
 
         controllers.add(new AnimationController<>(this, "attack", 0, state -> PlayState.STOP)
@@ -152,6 +146,11 @@ public class WreckerBlueEntity extends GunnerEntity implements GeoEntity {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.geoCache;
+    }
+
+    @Override
+    protected float getSoundVolume() {
+        return 0.85F;
     }
 
     @Override

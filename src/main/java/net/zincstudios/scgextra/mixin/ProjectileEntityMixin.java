@@ -4,13 +4,17 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.PartEntity;
+import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.entity.asgharian.WeakPointPart;
+import net.zincstudios.scgextra.entity.common.BulletProofParts;
 import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.WeakPointBox;
 import net.zincstudios.scgextra.entity.common.WeakPointBoxManager;
@@ -20,6 +24,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.entity.projectile.ProjectileEntity;
+import top.ribs.scguns.entity.projectile.RocketEntity;
 import top.ribs.scguns.init.ModDamageTypes;
 import top.ribs.scguns.util.math.ExtendedEntityRayTraceResult;
 
@@ -40,6 +45,16 @@ public class ProjectileEntityMixin {
                          Operation<Void> original, @Local(name = "entityHitResult") ExtendedEntityRayTraceResult entityHitResult) {
         ProjectileEntity self = (ProjectileEntity) (Object) this;
         DamageSource source = ModDamageTypes.Sources.projectile(self.level().registryAccess(), self, self.getShooter());
+
+        if (CommonConfig.enableAbilityBulletproof && !headshot
+                && !(self instanceof RocketEntity)
+                && entityHitResult.getEntity() instanceof BulletProofParts bulletProofParts
+                && bulletProofParts.isBulletProofHit(hitVec)) {
+            self.level().playSound(null, hitVec.x, hitVec.y, hitVec.z,
+                    SoundEvents.ANVIL_LAND, SoundSource.HOSTILE, 0.3F, 1.5F + self.level().random.nextFloat() * 0.4F);
+            self.remove(Entity.RemovalReason.KILLED);
+            return;
+        }
 
         if (entityHitResult.getEntity() instanceof PartEntity<?> partEntity && partEntity instanceof WeakPointPart) {
             headshot = true;

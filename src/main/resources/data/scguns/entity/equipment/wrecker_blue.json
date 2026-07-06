@@ -1,11 +1,11 @@
 {
-  "id": "scgextra:wrecker_turret",
+  "id": "scgextra:wrecker_blue",
   "equipment_chance": 1.0,
   "items": [
     {
-      "item": "scguns:shotgun_turret",
+      "item": "scgextra:wrecking_tool",
       "weight": 10.0,
-      "drop_chance": 0.0,
+      "drop_chance": 0.1,
       "min_durability": 0.2,
       "max_durability": 0.5,
       "slot": "mainhand"

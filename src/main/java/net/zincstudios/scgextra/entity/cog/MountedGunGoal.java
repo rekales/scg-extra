@@ -11,6 +11,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.common.MobUtil;
+import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.item.GunItem;
@@ -31,6 +32,7 @@ public class MountedGunGoal<T extends Mob> extends Goal {
     protected Vec3 spawnOffset;
     protected boolean constantFire = false;
     protected float accuracyModifier = 2.0F;
+    protected float spreadDegrees = 0F;
 
     protected int attackCooldown = 0;
     protected int burstCooldown = 0;
@@ -109,7 +111,12 @@ public class MountedGunGoal<T extends Mob> extends Goal {
     protected void fireGun(LivingEntity target) {
         Gun gun = this.gunItem.getModifiedGun(this.gunStack);
         Vec3 spawnPosOffset = this.getSpawnOffset();
-        MobUtil.performGunAttack(this.mob, target, this.gunStack, gun, this.getAccuracyModifier(), spawnPosOffset);
+        if (this.spreadDegrees > 0F) {
+            MobUtil.performGunAttack(this.mob, target, this.gunStack, gun,
+                    () -> this.computeFireDirection(target, gun, spawnPosOffset), spawnPosOffset);
+        } else {
+            MobUtil.performGunAttack(this.mob, target, this.gunStack, gun, this.getAccuracyModifier(), spawnPosOffset);
+        }
 
         ResourceLocation fireSound = gun.getSounds().getFire();
         if (fireSound != null) {
@@ -124,6 +131,16 @@ public class MountedGunGoal<T extends Mob> extends Goal {
 
     protected float getAccuracyModifier() {
         return this.accuracyModifier;
+    }
+
+    protected Vec3 computeFireDirection(LivingEntity target, Gun gun, Vec3 spawnPosOffset) {
+        Vec3 muzzle = this.mob.position().add(spawnPosOffset);
+        Vec3 targetPos = target.position().add(0.0D, target.getBbHeight() * 0.6D, 0.0D);
+        double speed = Math.max(gun.getProjectile().getSpeed(), 0.1D);
+        double timeToHit = targetPos.distanceTo(muzzle) / speed;
+        Vec3 predicted = targetPos.add(target.getDeltaMovement().scale(timeToHit));
+        Vec3 dir = predicted.subtract(muzzle).normalize();
+        return SimulatedGun.addWeaponSpread(this.mob, dir, this.spreadDegrees);
     }
 
     protected Vec3 getSpawnOffset() {
@@ -168,6 +185,11 @@ public class MountedGunGoal<T extends Mob> extends Goal {
 
     public MountedGunGoal<T> accuracyModifier(float accuracyModifier) {
         this.accuracyModifier = accuracyModifier;
+        return this;
+    }
+
+    public MountedGunGoal<T> spread(float spreadDegrees) {
+        this.spreadDegrees = spreadDegrees;
         return this;
     }
 }

@@ -19,6 +19,8 @@ import net.zincstudios.scgextra.entity.fac.FACEntities;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
 import net.zincstudios.scgextra.entity.wreckers.WreckersEntities;
+import top.ribs.scguns.item.AmmoItem;
+import top.ribs.scguns.item.GunItem;
 
 @SuppressWarnings("unused")
 public class ModItems {
@@ -37,6 +39,22 @@ public class ModItems {
 
     public static final RegistryObject<SpearShovelItem> SPEAR_SHOVEL = ITEMS.register("spear_shovel",
             () -> new SpearShovelItem(Tiers.IRON, 2.5F, -2.8F, new Item.Properties())
+    );
+
+    public static final RegistryObject<WreckingToolItem> WRECKING_TOOL = ITEMS.register("wrecking_tool",
+            () -> new WreckingToolItem(Tiers.IRON, -1, 0.0F, -0.5D, new Item.Properties().durability(50))
+    );
+
+    public static final RegistryObject<WreckerSledgeHammerItem> WRECKER_SLEDGE_HAMMER = ITEMS.register("wrecker_sledge_hammer",
+            () -> new WreckerSledgeHammerItem(Tiers.IRON, 5, -3.4F, 1.0D, new Item.Properties().durability(50))
+    );
+
+    public static final RegistryObject<GunItem> WRECKER_RPG = ITEMS.register("wrecker_rpg",
+            () -> new GunItem(new Item.Properties().stacksTo(1).durability(100))
+    );
+
+    public static final RegistryObject<Item> WRECKER_ROCKET = ITEMS.register("wrecker_rocket",
+            () -> new AmmoItem(new Item.Properties().stacksTo(16))
     );
 
     public static final RegistryObject<Item> WALKER_MG = ITEMS.register("walker_mg",

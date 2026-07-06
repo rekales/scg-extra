@@ -19,12 +19,15 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import net.zincstudios.scgextra.entity.projectile.WreckerRocketEntity;
+import net.zincstudios.scgextra.item.ArmorPiercingHandler;
 import net.zincstudios.scgextra.item.ModItems;
 import net.zincstudios.scgextra.particle.ModParticleTypes;
 import net.zincstudios.scgextra.raid.WaveRaidManager;
 import net.zincstudios.scgextra.sounds.ModSounds;
 
 import org.slf4j.Logger;
+import top.ribs.scguns.common.ProjectileManager;
 
 @SuppressWarnings("unused")
 @Mod(SCGExtra.MOD_ID)
@@ -56,12 +59,17 @@ public class SCGExtra
         MinecraftForge.EVENT_BUS.addListener(HeadHunterSpawnReplacement::onFinalizeSpawn);
         MinecraftForge.EVENT_BUS.addListener(RaidDataLoader::onAddReloadListeners);
         MinecraftForge.EVENT_BUS.addListener(DevTestCommands::registerCommands);
+        MinecraftForge.EVENT_BUS.addListener(ArmorPiercingHandler::onLivingHurt);
+        MinecraftForge.EVENT_BUS.addListener(ArmorPiercingHandler::onLivingDamage);
 
         modEventBus.addListener(DataGenerators::gatherData);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
+        event.enqueueWork(() -> ProjectileManager.getInstance().registerFactory(ModItems.WRECKER_ROCKET.get(),
+                (level, shooter, weapon, item, modifiedGun) ->
+                        new WreckerRocketEntity(ModEntities.WRECKER_ROCKET.get(), level, shooter, weapon, item, modifiedGun)));
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event)

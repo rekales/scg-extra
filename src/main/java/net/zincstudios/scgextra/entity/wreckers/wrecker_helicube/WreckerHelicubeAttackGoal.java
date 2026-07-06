@@ -13,6 +13,11 @@ public class WreckerHelicubeAttackGoal extends MountedGunGoal<WreckerHelicubeEnt
     }
 
     @Override
+    public boolean canUse() {
+        return !this.mob.isArmVariant() && super.canUse();
+    }
+
+    @Override
     public void stop() {
         super.stop();
         this.mob.setFiring(false);

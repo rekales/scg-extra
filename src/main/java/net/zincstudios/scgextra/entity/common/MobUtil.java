@@ -42,6 +42,7 @@ import top.ribs.scguns.util.GunModifierHelper;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 public class MobUtil {
 
@@ -87,18 +88,26 @@ public class MobUtil {
 
     // NOTE: Copied and edited from AIGunEvent, check for when scguns does a major update
     public static void performGunAttack(Mob shooter, LivingEntity target, ItemStack itemStack, Gun modifiedGun, float accuracyModifier, Vec3 spawnOffset) {
+        if (shooter.hasEffect(ModEffects.DEAFENED.get()) || shooter.hasEffect(ModEffects.BLINDED.get())) {
+            accuracyModifier *= 0.5F;
+        }
+
+        if (target.hasEffect(ModEffects.DEAFENED.get())) {
+            accuracyModifier *= 0.75F;
+        }
+
+        float finalAccuracyModifier = accuracyModifier;
+        performGunAttack(shooter, target, itemStack, modifiedGun,
+                () -> AIGunEvent.getDirection(shooter, target, itemStack, (GunItem)itemStack.getItem(), modifiedGun, finalAccuracyModifier),
+                spawnOffset);
+    }
+
+    public static void performGunAttack(Mob shooter, LivingEntity target, ItemStack itemStack, Gun modifiedGun, Supplier<Vec3> directionSupplier, Vec3 spawnOffset) {
         Level level = shooter.level();
         if (!level.isClientSide()) {
             int count = modifiedGun.getProjectile().getProjectileAmount();
             Gun.Projectile projectileProps = modifiedGun.getProjectile();
             ProjectileEntity[] spawnedProjectiles = new ProjectileEntity[count];
-            if (shooter.hasEffect(ModEffects.DEAFENED.get()) || shooter.hasEffect(ModEffects.BLINDED.get())) {
-                accuracyModifier *= 0.5F;
-            }
-
-            if (target.hasEffect(ModEffects.DEAFENED.get())) {
-                accuracyModifier *= 0.75F;
-            }
 
             float difficultyDamageMultiplier = getDifficultyDamageMultiplier(level.getDifficulty());
             float configDamageMultiplier = Config.COMMON.gameplay.mobGunDamageMultiplier.get().floatValue();
@@ -112,7 +121,7 @@ public class MobUtil {
                 float scaledDamage = originalDamage * finalDamageMultiplier;
                 projectileEntity.setAdditionalDamage(scaledDamage);
                 projectileEntity.getPersistentData().putFloat("AIDamageScale", finalDamageMultiplier);
-                Vec3 dir = AIGunEvent.getDirection(shooter, target, itemStack, (GunItem)itemStack.getItem(), modifiedGun, accuracyModifier);
+                Vec3 dir = directionSupplier.get();
                 double speedModifier = GunEnchantmentHelper.getProjectileSpeedModifier(itemStack);
                 double speed = GunModifierHelper.getModifiedProjectileSpeed(itemStack, projectileEntity.getProjectile().getSpeed() * speedModifier);
                 projectileEntity.setDeltaMovement(dir.x * speed, dir.y * speed, dir.z * speed);

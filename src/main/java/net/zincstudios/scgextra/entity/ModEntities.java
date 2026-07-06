@@ -25,11 +25,13 @@ import net.zincstudios.scgextra.entity.projectile.ArmoredWhaleProjectileEntity;
 import net.zincstudios.scgextra.entity.projectile.FireProjectile;
 import net.zincstudios.scgextra.entity.projectile.SoulFireBallRenderer;
 import net.zincstudios.scgextra.entity.projectile.SoulFireball;
+import net.zincstudios.scgextra.entity.projectile.WreckerRocketEntity;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntity;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntityRenderer;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
 import net.zincstudios.scgextra.entity.wreckers.WreckersEntities;
+import top.ribs.scguns.client.render.entity.RocketRenderer;
 import top.ribs.scguns.entity.client.EnemyProjectileRenderer;
 
 public class ModEntities {
@@ -71,6 +73,18 @@ public class ModEntities {
                     .updateInterval(3)
                     .build("soul_fireball"));
 
+    public static final RegistryObject<EntityType<WreckerRocketEntity>> WRECKER_ROCKET = ENTITY_TYPES
+            .register("wrecker_rocket", () -> EntityType.Builder.of(
+                    (EntityType<WreckerRocketEntity> type, Level level) -> new WreckerRocketEntity(type, level), MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .setTrackingRange(100)
+                    .setUpdateInterval(1)
+                    .noSummon()
+                    .fireImmune()
+                    .noSave()
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build("wrecker_rocket"));
+
     public static void register(IEventBus modEventBus) {
         WhalerEntities.register(modEventBus);
         RRCEntities.register(modEventBus);
@@ -104,5 +118,6 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.FIRE_PROJECTILE.get(), EnemyProjectileRenderer::new);
         EntityRenderers.register(ModEntities.RAID_SUMMONER.get(), RaidSummonerRenderer::new);
         EntityRenderers.register(ModEntities.LARGE_SOUL_FIREBALL.get(), SoulFireBallRenderer::new);
+        EntityRenderers.register(ModEntities.WRECKER_ROCKET.get(), RocketRenderer::new);
     }
 }

@@ -44,7 +44,10 @@ public class WreckerGreenEntity extends GunnerEntity implements GeoEntity {
 
     private static final EntityDataAccessor<Integer> SHOOT_TICKS =
             SynchedEntityData.defineId(WreckerGreenEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> ROCKET_HIDDEN_TICKS =
+            SynchedEntityData.defineId(WreckerGreenEntity.class, EntityDataSerializers.INT);
 
+    private static final int ROCKET_HIDDEN_DURATION = 70;
     private static final float EXPLOSION_RADIUS = 2.0F;
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
@@ -67,6 +70,11 @@ public class WreckerGreenEntity extends GunnerEntity implements GeoEntity {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(SHOOT_TICKS, 0);
+        this.entityData.define(ROCKET_HIDDEN_TICKS, 0);
+    }
+
+    public boolean isRocketHidden() {
+        return this.entityData.get(ROCKET_HIDDEN_TICKS) > 0;
     }
 
     @Override
@@ -85,6 +93,7 @@ public class WreckerGreenEntity extends GunnerEntity implements GeoEntity {
     @Override
     public void onGunAttack(LivingEntity target, ItemStack itemStack) {
         this.entityData.set(SHOOT_TICKS, 5);
+        this.entityData.set(ROCKET_HIDDEN_TICKS, ROCKET_HIDDEN_DURATION);
     }
 
     @Override
@@ -94,6 +103,10 @@ public class WreckerGreenEntity extends GunnerEntity implements GeoEntity {
             int shootTicks = this.entityData.get(SHOOT_TICKS);
             if (shootTicks > 0) {
                 this.entityData.set(SHOOT_TICKS, shootTicks - 1);
+            }
+            int rocketHiddenTicks = this.entityData.get(ROCKET_HIDDEN_TICKS);
+            if (rocketHiddenTicks > 0) {
+                this.entityData.set(ROCKET_HIDDEN_TICKS, rocketHiddenTicks - 1);
             }
         }
     }
@@ -134,6 +147,11 @@ public class WreckerGreenEntity extends GunnerEntity implements GeoEntity {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.geoCache;
+    }
+
+    @Override
+    protected float getSoundVolume() {
+        return 0.85F;
     }
 
     @Override

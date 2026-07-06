@@ -54,7 +54,7 @@ public class ApproachTargetGoal extends Goal {
             // NOTE: maybe cache pathfinding if necessary
             this.mob.getNavigation().moveTo(target, this.speedModifier);
 //            this.setGoalState(APPROACH_STATE);
-        }  if (distSqr <= this.approachDist) {
+        }  if (distSqr <= this.approachDist*this.approachDist) {
             this.mob.getNavigation().stop();
         }
     }

@@ -1,9 +1,9 @@
 {
-  "id": "scgextra:wrecker_green",
+  "id": "scgextra:wrecker_jumbo",
   "equipment_chance": 1.0,
   "items": [
     {
-      "item": "scgextra:wrecker_rpg",
+      "item": "scgextra:wrecker_sledge_hammer",
       "weight": 10.0,
       "drop_chance": 0.1,
       "min_durability": 0.2,

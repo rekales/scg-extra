@@ -27,6 +27,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.server.level.ServerBossEvent;
 import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.entity.Faction;
+import net.zincstudios.scgextra.entity.cog.ApproachTargetGoal;
 import net.zincstudios.scgextra.entity.cog.MountedGunGoal;
 import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.MobUtil;
@@ -66,6 +67,7 @@ public class WreckerDozerEntity extends Monster implements GeoEntity, Stunnable,
     public WreckerDozerEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
         this.xpReward = 50;
+        this.setMaxUpStep(1.0F);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -89,13 +91,19 @@ public class WreckerDozerEntity extends Monster implements GeoEntity, Stunnable,
         this.goalSelector.addGoal(1, new StunnedWithVisualGoal<>(this).smoking(true));
         this.goalSelector.addGoal(2, new WreckerDozerChargeGoal(this, 200, 5.0F, 20.0F));
         this.goalSelector.addGoal(3, new WreckerDozerSummonGoal(this, 100, 3));
+        this.goalSelector.addGoal(4, new ApproachTargetGoal(this, 5.0, 3.5, 1.0) {
+            @Override
+            public boolean canUse() {
+                return !WreckerDozerEntity.this.isStunned() && super.canUse();
+            }
+        });
         this.goalSelector.addGoal(4, new MountedGunGoal<>(this, (GunItem) top.ribs.scguns.init.ModItems.GREASER_SMG.get())
                 .maxRange(8)
                 .burstAmount(10)
                 .burstIntervalTicks(1)
                 .attackInterval(30)
-                .accuracyModifier(2.5F)
-                .spawnOffset(new Vec3(0.0D, 2.5D, 1.5D)));
+                .spawnOffset(new Vec3(0.0D, 3.2D, 1.0D))
+                .spread(10.0F));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.5D));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
@@ -264,7 +272,7 @@ public class WreckerDozerEntity extends Monster implements GeoEntity, Stunnable,
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
-        this.playSound(WreckersSounds.DOZER_MOVE.get(), 0.9F, 0.9F + this.random.nextFloat() * 0.1F);
+        this.playSound(WreckersSounds.DOZER_MOVE.get(), 0.5F, 0.9F + this.random.nextFloat() * 0.1F);
     }
 
     @Override

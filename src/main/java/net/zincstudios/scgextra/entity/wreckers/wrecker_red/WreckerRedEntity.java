@@ -120,6 +120,11 @@ public class WreckerRedEntity extends GunnerEntity implements GeoEntity {
     }
 
     @Override
+    protected float getSoundVolume() {
+        return 0.85F;
+    }
+
+    @Override
     protected SoundEvent getAmbientSound() {
         return MobUtil.getSound(this.random,
                 WreckersSounds.GANG_IDLE_1.get(), WreckersSounds.GANG_IDLE_2.get(),

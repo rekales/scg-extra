@@ -1,0 +1,63 @@
+{
+  "display": {
+    "flash": {
+      "size": 1.3,
+      "yOffset": 4.5,
+      "zOffset": -8.0,
+      "textureLocation": "muzzle_flash_1"
+    }
+  },
+  "general": {
+    "weaponType": "heavy",
+    "fireMode": "scguns:semi_automatic",
+    "gripType": "scguns:two_handed",
+    "baseGripType": "scguns:two_handed",
+    "rate": 12,
+    "meleeDamage": 2.5,
+    "meleeCooldownTicks": 20,
+    "hotBarrelRate": 100
+  },
+  "modules": {
+    "attachments": {
+      "stock": {
+        "scale": 0.0
+      }
+    },
+    "zoom": {
+      "fovModifier": 0.6,
+      "yOffset": 5.9,
+      "zOffset": 0.75
+    }
+  },
+  "projectile": {
+    "recoilAngle": 6.7,
+    "recoilKick": 2.22,
+    "spread": 2.5,
+    "criticalChance": 0.05,
+    "playerKnockBack": true,
+    "playerKnockBackStrength": 0.2,
+    "visible": true,
+    "advantage": "scguns:none",
+    "damage": 15.0,
+    "ejectsCasing": false,
+    "gravity": true,
+    "item": "scgextra:wrecker_rocket",
+    "life": 70,
+    "size": 0.05,
+    "speed": 4.0,
+    "trailLengthMultiplier": 2.0
+  },
+  "reloads": {
+    "emptyMagTimer": 30,
+    "maxAmmo": 1,
+    "reloadItem": "scgextra:wrecker_rocket",
+    "reloadTimer": 40,
+    "reloadType": "scguns:mag_fed"
+  },
+  "sounds": {
+    "cock": "scguns:item.pistol.cock",
+    "enchantedFire": "scguns:item.rocket_rifle.fire_2",
+    "fire": "scguns:item.rocket_rifle.fire_2",
+    "reload": "scguns:item.gauss.reload"
+  }
+}

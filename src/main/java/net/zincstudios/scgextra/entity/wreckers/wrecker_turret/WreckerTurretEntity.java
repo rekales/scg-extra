@@ -16,6 +16,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
@@ -30,6 +31,7 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import top.ribs.scguns.item.GunItem;
 
 public class WreckerTurretEntity extends GunnerEntity implements GeoEntity {
 
@@ -65,11 +67,18 @@ public class WreckerTurretEntity extends GunnerEntity implements GeoEntity {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 12.0F));
-        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
         if (CommonConfig.enableAbilityAlert) {
             this.goalSelector.addGoal(2, new AlertFactionGoal(this, CommonConfig.abilityAlertCooldown * 20));
         }
+        this.goalSelector.addGoal(3, new WreckerTurretGunGoal(this, (GunItem) top.ribs.scguns.init.ModItems.GREASER_SMG.get())
+                .maxRange(16)
+                .burstAmount(12)
+                .burstIntervalTicks(1)
+                .attackInterval(40)
+                .spawnOffset(new Vec3(0.0D, 1.1D, 0.5D))
+                .spread(8.0F));
+        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 12.0F));
+        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
 
         this.targetSelector.addGoal(0, new HurtByNonFactionGoal(this));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, 1, true, false,
@@ -122,6 +131,11 @@ public class WreckerTurretEntity extends GunnerEntity implements GeoEntity {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.geoCache;
+    }
+
+    @Override
+    protected float getSoundVolume() {
+        return 0.85F;
     }
 
     @Override

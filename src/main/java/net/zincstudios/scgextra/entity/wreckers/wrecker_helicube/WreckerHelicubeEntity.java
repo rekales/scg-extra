@@ -1,15 +1,21 @@
 package net.zincstudios.scgextra.entity.wreckers.wrecker_helicube;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.FlyingMob;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
@@ -19,6 +25,8 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.util.RandomSource;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.cog.gigantes.FlyCloseToTargetGoal;
@@ -35,6 +43,7 @@ import top.ribs.scguns.item.GunItem;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.EnumSet;
 
 @ParametersAreNonnullByDefault
 public class WreckerHelicubeEntity extends FlyingMob implements GeoEntity, Enemy {
@@ -45,6 +54,8 @@ public class WreckerHelicubeEntity extends FlyingMob implements GeoEntity, Enemy
     private static final RawAnimation DEATH = RawAnimation.begin().thenPlayAndHold("death");
 
     private static final EntityDataAccessor<Boolean> FIRING =
+            SynchedEntityData.defineId(WreckerHelicubeEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> ARM_VARIANT =
             SynchedEntityData.defineId(WreckerHelicubeEntity.class, EntityDataSerializers.BOOLEAN);
 
     private static final float EXPLOSION_RADIUS = 1.5F;
@@ -87,8 +98,20 @@ public class WreckerHelicubeEntity extends FlyingMob implements GeoEntity, Enemy
                 .burstIntervalTicks(2)
                 .maxRange(16)
                 .attackInterval(200)
-                .accuracyModifier(2.0F));
-        this.goalSelector.addGoal(4, new FlyCloseToTargetGoal(this, 1.0F, 16.0F, 6.0F));
+                .spread(12.0F));
+        this.goalSelector.addGoal(4, new FlyCloseToTargetGoal(this, 1.0F, 16.0F, 6.0F) {
+            @Override
+            public boolean canUse() {
+                return !WreckerHelicubeEntity.this.isArmVariant() && super.canUse();
+            }
+        });
+        this.goalSelector.addGoal(4, new FlyCloseToTargetGoal(this, 1.2F, 1.8F, 0.0F) {
+            @Override
+            public boolean canUse() {
+                return WreckerHelicubeEntity.this.isArmVariant() && super.canUse();
+            }
+        });
+        this.goalSelector.addGoal(7, new RandomFloatAroundGoal(this));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
 
         this.targetSelector.addGoal(2, new MobHurtByNonFactionGoal(this));
@@ -102,6 +125,34 @@ public class WreckerHelicubeEntity extends FlyingMob implements GeoEntity, Enemy
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(FIRING, false);
+        this.entityData.define(ARM_VARIANT, false);
+    }
+
+    @Override
+    public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason,
+                                                  @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
+        this.setArmVariant(level.getRandom().nextBoolean());
+        return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putBoolean("ArmVariant", this.isArmVariant());
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.setArmVariant(tag.getBoolean("ArmVariant"));
+    }
+
+    public void setArmVariant(boolean armVariant) {
+        this.entityData.set(ARM_VARIANT, armVariant);
+    }
+
+    public boolean isArmVariant() {
+        return this.entityData.get(ARM_VARIANT);
     }
 
     public void setFiring(boolean firing) {
@@ -120,6 +171,9 @@ public class WreckerHelicubeEntity extends FlyingMob implements GeoEntity, Enemy
         }
         if (this.clawCooldown > 0) {
             this.clawCooldown--;
+        }
+        if (!this.isArmVariant()) {
+            return;
         }
         LivingEntity target = this.getTarget();
         if (target != null && target.isAlive() && this.clawCooldown <= 0
@@ -166,6 +220,11 @@ public class WreckerHelicubeEntity extends FlyingMob implements GeoEntity, Enemy
     }
 
     @Override
+    protected float getSoundVolume() {
+        return 0.7F;
+    }
+
+    @Override
     protected @Nullable SoundEvent getAmbientSound() {
         return WreckersSounds.HELICUBE_IDLE.get();
     }
@@ -173,5 +232,46 @@ public class WreckerHelicubeEntity extends FlyingMob implements GeoEntity, Enemy
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
         return MobUtil.getSound(this.random, WreckersSounds.HELICUBE_HURT_1.get(), WreckersSounds.HELICUBE_HURT_2.get());
+    }
+
+    static class RandomFloatAroundGoal extends Goal {
+
+        private final WreckerHelicubeEntity helicube;
+
+        RandomFloatAroundGoal(WreckerHelicubeEntity helicube) {
+            this.helicube = helicube;
+            this.setFlags(EnumSet.of(Flag.MOVE));
+        }
+
+        @Override
+        public boolean canUse() {
+            LivingEntity target = this.helicube.getTarget();
+            if (target != null && target.isAlive()) {
+                return false;
+            }
+            MoveControl moveControl = this.helicube.getMoveControl();
+            if (!moveControl.hasWanted()) {
+                return true;
+            }
+            double dx = moveControl.getWantedX() - this.helicube.getX();
+            double dy = moveControl.getWantedY() - this.helicube.getY();
+            double dz = moveControl.getWantedZ() - this.helicube.getZ();
+            double distSqr = dx * dx + dy * dy + dz * dz;
+            return distSqr < 1.0D || distSqr > 3600.0D;
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return false;
+        }
+
+        @Override
+        public void start() {
+            RandomSource random = this.helicube.getRandom();
+            double x = this.helicube.getX() + (random.nextFloat() * 2.0F - 1.0F) * 10.0F;
+            double y = this.helicube.getY() + (random.nextFloat() * 2.0F - 1.0F) * 4.0F;
+            double z = this.helicube.getZ() + (random.nextFloat() * 2.0F - 1.0F) * 10.0F;
+            this.helicube.getMoveControl().setWantedPosition(x, y, z, 0.9D);
+        }
     }
 }
