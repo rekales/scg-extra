@@ -117,7 +117,7 @@
 				{
 					"name": "barrel_end",
 					"parent": "barrel",
-					"pivot": [0, 40.5, -23]
+					"pivot": [0, 40.5, -23.5]
 				},
 				{
 					"name": "wheel",

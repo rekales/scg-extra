@@ -50,12 +50,12 @@
 				{
 					"name": "left_flash",
 					"parent": "body",
-					"pivot": [7, 19.5, -2]
+					"pivot": [7, 19.5, -2.2]
 				},
 				{
 					"name": "right_flash",
 					"parent": "body",
-					"pivot": [-7, 19.5, -2]
+					"pivot": [-7, 19.5, -2.2]
 				},
 				{
 					"name": "head",
