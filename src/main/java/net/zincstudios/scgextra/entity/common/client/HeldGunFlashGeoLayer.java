@@ -6,18 +6,16 @@ import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import net.zincstudios.scgextra.SCGExtra;
-import org.joml.Matrix4f;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 import software.bernie.geckolib.util.RenderUtils;
 import top.ribs.scguns.ScorchedGuns;
-import top.ribs.scguns.client.GunRenderType;
 import top.ribs.scguns.client.util.PropertyHelper;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.item.GunItem;
@@ -43,21 +41,25 @@ public class HeldGunFlashGeoLayer<T extends Mob & GeoAnimatable> extends GeoRend
 
         if (!GunFlashHandler.hasFlashToRender(animatable.getId(), 0)) return;
 
-        poseStack.pushPose();
-
         ItemStack stack = animatable.getMainHandItem();
         if (!(stack.getItem() instanceof GunItem gunItem)) return;
         Gun gun = gunItem.getModifiedGun(stack);
         Gun.Display.Flash flash = gun.getDisplay().getFlash();
         if (flash == null) return;
 
+        poseStack.pushPose();
+
         RenderUtils.translateAndRotateMatrixForBone(poseStack, bone);
 
         poseStack.mulPose(Axis.XP.rotationDegrees(-90 + this.gunTilt));
 
         // These set of translations seems to make it work properly, most of the time
+        // TODO: review base to check how they figure out how they position the flash
         Vec3 weaponOrigin = PropertyHelper.getModelOrigin(stack, PropertyHelper.GUN_DEFAULT_ORIGIN);
         Vec3 flashPosition = PropertyHelper.getMuzzleFlashPosition(stack, gun).subtract(weaponOrigin);
+
+        RandomSource rand = RandomSource.create(animatable.level().getGameTime());
+        flashPosition = flashPosition.add((rand.nextFloat()-0.5)*0.07, (rand.nextFloat()-0.5)*0.07, 0);
 
         poseStack.translate(weaponOrigin.x * 0.0625, weaponOrigin.y * 0.0625, weaponOrigin.z * 0.0625);
         poseStack.translate(flashPosition.x * 0.0625, flashPosition.y * 0.0625, flashPosition.z * 0.0625);
@@ -73,24 +75,8 @@ public class HeldGunFlashGeoLayer<T extends Mob & GeoAnimatable> extends GeoRend
 
         ResourceLocation flashTexture = ResourceLocation.fromNamespaceAndPath(ScorchedGuns.MODID,
                 "textures/effect/" + flash.getTextureLocation() + ".png");
-        renderMuzzleFlash(poseStack, renderType, bufferSource, flashTexture, stack.isEnchanted());
+        MobRenderUtils.drawMuzzleFlash(poseStack, renderType, bufferSource, flashTexture, stack.isEnchanted());
 
         poseStack.popPose();
-    }
-
-    private void renderMuzzleFlash(PoseStack poseStack, RenderType renderType, MultiBufferSource buffer, ResourceLocation flashTexture, boolean enchanted) {
-        float minU = enchanted ? 0.5F : 0.0F;
-        float maxU = enchanted ? 1.0F : 0.5F;
-
-        Matrix4f matrix = poseStack.last().pose();
-        VertexConsumer builder = buffer.getBuffer(GunRenderType.getMuzzleFlash(flashTexture));
-
-        builder.vertex(matrix, 0, 0, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(maxU, 1.0F).uv2(15728880).endVertex();
-        builder.vertex(matrix, 1, 0, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(minU, 1.0F).uv2(15728880).endVertex();
-        builder.vertex(matrix, 1, 1, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(minU, 0).uv2(15728880).endVertex();
-        builder.vertex(matrix, 0, 1, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(maxU, 0).uv2(15728880).endVertex();
-
-        // needed to reset to previous buffer because it leaks to the rest of the model
-        buffer.getBuffer(renderType);
     }
 }
