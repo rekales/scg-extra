@@ -22,11 +22,15 @@ import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.util.GunModifierHelper;
 
-public class HeldGunFlashLayer<T extends Mob & GeoAnimatable> extends GeoRenderLayer<T> {
+public class HeldGunFlashGeoLayer<T extends Mob & GeoAnimatable> extends GeoRenderLayer<T> {
 
     private final float gunTilt;
 
-    public HeldGunFlashLayer(GeoRenderer<T> renderer, float gunTilt) {
+    public HeldGunFlashGeoLayer(GeoRenderer<T> renderer) {
+        this(renderer, 0);
+    }
+
+    public HeldGunFlashGeoLayer(GeoRenderer<T> renderer, float gunTilt) {
         super(renderer);
         this.gunTilt = gunTilt;
     }

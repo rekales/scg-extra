@@ -7,9 +7,9 @@ import software.bernie.geckolib.model.GeoModel;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-
+// intended to be non-extendable, extend base and add the layers there instead
 @ParametersAreNonnullByDefault
-public class ItemHoldingMobRenderer <T extends Mob & GeoEntity> extends BaseEntityRenderer<T> {
+public final class ItemHoldingMobRenderer <T extends Mob & GeoEntity> extends BaseEntityRenderer<T> {
 
     public ItemHoldingMobRenderer(EntityRendererProvider.Context context, GeoModel<T> model) {
         super(context, model);
