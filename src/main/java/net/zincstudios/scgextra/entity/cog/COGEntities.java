@@ -14,6 +14,7 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.cog.juggernaut.CogJuggernautRenderer;
+import net.zincstudios.scgextra.entity.cog.vulture.CogVultureRenderer;
 import net.zincstudios.scgextra.entity.common.client.BaseEntityRenderer;
 import net.zincstudios.scgextra.entity.cog.bombardier.CogBombardierEntity;
 import net.zincstudios.scgextra.entity.cog.centipede.CogCentipedeEntity;
@@ -122,7 +123,7 @@ public class COGEntities {
 
     @OnlyIn(value = Dist.CLIENT)
     private static void onClientSetup(FMLClientSetupEvent event) {
-        EntityRenderers.register(COGEntities.VULTURE.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
+        EntityRenderers.register(COGEntities.VULTURE.get(), (ctx) -> new CogVultureRenderer(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_vulture"))).noDeathTilt());
         EntityRenderers.register(COGEntities.DEVASTATOR.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_devastator"), "chest")).noDeathTilt());

@@ -66,6 +66,7 @@ public class CogJuggernautRenderer extends BaseEntityRenderer<CogJuggernautEntit
             return;
         }
 
+        // TODO: redo to match with vulture renderer
         RandomSource rand = RandomSource.create(animatable.level().getGameTime()/2 * animatable.getId());
         rand.nextFloat();  // because it's the same value on first get
         poseStack.translate((rand.nextFloat()-0.5)*0.07, (rand.nextFloat()-0.5)*0.07, 0);

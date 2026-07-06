@@ -18,11 +18,14 @@ import net.minecraftforge.entity.PartEntity;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.asgharian.BulletSpawnOffset;
 import net.zincstudios.scgextra.entity.common.Gunner;
+import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
 import net.zincstudios.scgextra.entity.common.gun.CustomGunHolder;
 import net.zincstudios.scgextra.entity.common.gun.CustomSimulatedGun;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
 import net.zincstudios.scgextra.entity.common.part.RotatedSegmentPartEntity;
+import net.zincstudios.scgextra.network.GunFlashMessage;
+import net.zincstudios.scgextra.network.SCGEPacketHandler;
 import net.zincstudios.scgextra.sounds.COGSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -61,6 +64,7 @@ public class CogVultureEntity extends Monster implements GeoEntity, Gunner, Bull
                 .fireRate(2)
                 .maxRange(10)
                 .idealRange(8)
+                .noGunFlash() // handled on onGunFire instead
                 .velocityModifier(vec -> vec.scale(1/3f))
                 .build();
     }
@@ -156,6 +160,10 @@ public class CogVultureEntity extends Monster implements GeoEntity, Gunner, Bull
     @Override
     public void onGunFire(SimulatedGun gun, Vec3 targetPos) {
         this.bulletSpawnLeft = !this.bulletSpawnLeft;
+        SCGEPacketHandler.sendToNearbyPlayers(
+                () -> MobUtil.levelLocationFromEntity(this),
+                new GunFlashMessage(this.getId(), this.bulletSpawnLeft ? 0 : 1)
+        );
     }
 
     @Override

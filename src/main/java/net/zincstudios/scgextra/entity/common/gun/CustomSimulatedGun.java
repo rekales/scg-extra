@@ -13,6 +13,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.zincstudios.scgextra.entity.asgharian.BulletSpawnOffset;
 import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.item.ModItems;
+import net.zincstudios.scgextra.network.GunFlashMessage;
+import net.zincstudios.scgextra.network.SCGEPacketHandler;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.common.ProjectileManager;
@@ -40,6 +42,7 @@ public class CustomSimulatedGun implements SimulatedGun {
     private final float idealRange;
     private final float maxRange;
     private final int gunIndex;
+    private final boolean gunFlash;
     private final ProjectileFactory projectileFactory;
     private final Function<Vec3, Vec3> velocityModifier;
 
@@ -53,7 +56,7 @@ public class CustomSimulatedGun implements SimulatedGun {
     protected CustomSimulatedGun(Gun gunBase, int fireRate, int burstAmount, int burstInterval,
                                  double projectileSpeed, float projectileDamage, float idealRange,
                                  float maxRange, ProjectileFactory projectileFactory, Function<Vec3, Vec3> velocityModifier,
-                                 int ammoCapacity, int reloadTime, int gunIndex) {
+                                 int ammoCapacity, int reloadTime, int gunIndex, boolean gunFlash) {
         this.gunBase = gunBase;
         this.fireRate = fireRate;
         this.burstAmount = burstAmount;
@@ -66,6 +69,7 @@ public class CustomSimulatedGun implements SimulatedGun {
         this.idealRange = idealRange;
         this.maxRange = maxRange;
         this.gunIndex = gunIndex;
+        this.gunFlash = gunFlash;
         this.projectileFactory = projectileFactory;
         this.velocityModifier = velocityModifier;
     }
@@ -154,13 +158,9 @@ public class CustomSimulatedGun implements SimulatedGun {
         S2CMessageBulletTrail messageBulletTrail = new S2CMessageBulletTrail(projectiles, gun.getProjectile(), shooter.getId(), data, isVisible);
         PacketHandler.getPlayChannel().sendToNearbyPlayers(() -> LevelLocation.create(level, radius, y1, z1, r), messageBulletTrail);
 
-//        if (gun.getDisplay().getFlash() != null) {
-//            float randomValue = level.random.nextFloat();
-//            Vec3 weaponOrigin = PropertyHelper.getModelOrigin(this.gunStack, PropertyHelper.GUN_DEFAULT_ORIGIN);
-//            Vec3 flashPosition = PropertyHelper.getMuzzleFlashPosition(this.gunStack, gun).subtract(weaponOrigin);
-//            S2CMessageEntityMuzzleFlash flashMessage = new S2CMessageEntityMuzzleFlash(shooter.getId(), randomValue, flashPosition, false);
-//            PacketHandler.getPlayChannel().sendToNearbyPlayers(() -> LevelLocation.create(level, radius, y1, z1, r), flashMessage);
-//        }
+        if (gun.getDisplay().getFlash() != null && this.gunFlash) {
+            SCGEPacketHandler.sendToNearbyPlayers(() -> LevelLocation.create(level, radius, y1, z1, r), new GunFlashMessage(shooter.getId(), this.gunIndex));
+        }
 
         if (Config.COMMON.gameplay.spawnCasings.get() && gun.getProjectile().ejectsCasing() && !gun.getProjectile().ejectDuringReload()) {
             ResourceLocation particleLocation = gun.getProjectile().getCasingParticle();
@@ -231,6 +231,7 @@ public class CustomSimulatedGun implements SimulatedGun {
         private float idealRange;
         private float maxRange;
         private int gunIndex;
+        private boolean gunFlash;
         private ProjectileFactory projectileFactory;
         private Function<Vec3, Vec3> velocityModifier;
 
@@ -246,6 +247,7 @@ public class CustomSimulatedGun implements SimulatedGun {
             this.idealRange = (float) gunBase.getIdealAttackRange();
             this.maxRange = this.idealRange * 1.5f;
             this.gunIndex = 0;
+            this.gunFlash = true;
             IProjectileFactory projFac = ProjectileManager.getInstance().getFactory(
                     ForgeRegistries.ITEMS.getKey(Objects.requireNonNull(gunBase.getProjectile().getItem())));
             this.projectileFactory = (level, entity, gun) ->
@@ -289,11 +291,14 @@ public class CustomSimulatedGun implements SimulatedGun {
         public Builder velocityModifier(Function<Vec3, Vec3> velocityModifier) {
             this.velocityModifier = velocityModifier; return this;
         }
+        public Builder noGunFlash() {
+            this.gunFlash = false; return this;
+        }
 
         public CustomSimulatedGun build() {
             return new CustomSimulatedGun(this.gunBase, this.fireRate, this.burstAmount, this.burstInterval,
                     this.projectileSpeed, this.projectileDamage, this.idealRange, this.maxRange, this.projectileFactory,
-                    this.velocityModifier, this.ammoCapacity, this.reloadTime, this.gunIndex);
+                    this.velocityModifier, this.ammoCapacity, this.reloadTime, this.gunIndex, this.gunFlash);
         }
     }
 }

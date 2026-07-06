@@ -54,6 +54,16 @@ public class MobUtil {
         return sounds[random.nextInt(sounds.length)];
     }
 
+    public static LevelLocation levelLocationFromEntity(LivingEntity entity) {
+        return LevelLocation.create(
+                entity.level(),
+                entity.getX(),
+                entity.getY(),
+                entity.getZ(),
+                Config.COMMON.network.projectileTrackingRange.get()
+        );
+    }
+
     /**
      * Used to gradually turn an entity to a direction. Intended to be invoked every tick when being used.
      */
