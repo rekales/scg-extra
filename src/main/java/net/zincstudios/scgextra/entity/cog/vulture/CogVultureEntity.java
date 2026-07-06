@@ -3,6 +3,7 @@ package net.zincstudios.scgextra.entity.cog.vulture;
 
 import com.mojang.serialization.Dynamic;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
@@ -34,6 +35,8 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import top.ribs.scguns.ScorchedGuns;
+import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.init.ModItems;
 
 import javax.annotation.Nullable;
@@ -160,10 +163,13 @@ public class CogVultureEntity extends Monster implements GeoEntity, Gunner, Bull
     @Override
     public void onGunFire(SimulatedGun gun, Vec3 targetPos) {
         this.bulletSpawnLeft = !this.bulletSpawnLeft;
-        SCGEPacketHandler.sendToNearbyPlayers(
-                () -> MobUtil.levelLocationFromEntity(this),
-                new GunFlashMessage(this.getId(), this.bulletSpawnLeft ? 0 : 1)
-        );
+
+        Gun.Display.Flash flash = ModItems.VALORA.get().getGun().getDisplay().getFlash();
+        if (flash == null) return;
+        ResourceLocation flashTexture = ResourceLocation.fromNamespaceAndPath(ScorchedGuns.MODID,
+                "textures/effect/" + flash.getTextureLocation() + ".png");
+        SCGEPacketHandler.sendToNearbyPlayers(() -> MobUtil.levelLocationFromEntity(this),
+                new GunFlashMessage(this.getId(), this.bulletSpawnLeft ? 0 : 1, flashTexture, false, 0.5F));
     }
 
     @Override

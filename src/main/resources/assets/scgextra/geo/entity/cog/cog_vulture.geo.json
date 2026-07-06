@@ -48,6 +48,16 @@
 					]
 				},
 				{
+					"name": "left_flash",
+					"parent": "body",
+					"pivot": [7, 19.5, -2]
+				},
+				{
+					"name": "right_flash",
+					"parent": "body",
+					"pivot": [-7, 19.5, -2]
+				},
+				{
 					"name": "head",
 					"parent": "body",
 					"pivot": [0, 16.67911, 9.2262],
