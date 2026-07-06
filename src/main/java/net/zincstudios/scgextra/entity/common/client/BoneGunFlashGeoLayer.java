@@ -40,7 +40,7 @@ public class BoneGunFlashGeoLayer<T extends LivingEntity & GeoEntity> extends Ge
         Set<GunFlashHandler.FlashData> flashes = GunFlashHandler.getFlashesToRender(animatable.getId());
         if (flashes.isEmpty()) return;
 
-        RandomSource rand = RandomSource.create(animatable.level().getGameTime()/2 * animatable.getId());
+        RandomSource rand = RandomSource.create(animatable.level().getGameTime() * animatable.getId());
         rand.nextFloat();  // because it's the same value on first get
 
         for(GunFlashHandler.FlashData flashData : flashes) {
