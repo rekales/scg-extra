@@ -44,6 +44,7 @@ public class ModBiomes {
         BiomeDefaultFeatures.addFerns(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         BiomeDefaultFeatures.addExtraGold(biomeBuilder);
+        BiomeDefaultFeatures.addDesertVegetation(biomeBuilder);
 
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
 
