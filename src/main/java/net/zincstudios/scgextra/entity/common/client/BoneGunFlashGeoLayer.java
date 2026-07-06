@@ -29,6 +29,11 @@ public class BoneGunFlashGeoLayer<T extends LivingEntity & GeoEntity> extends Ge
         this.flashBones = flashBones;
     }
 
+    public BoneGunFlashGeoLayer(GeoRenderer<T> renderer, String boneName) {
+        super(renderer);
+        this.flashBones = Map.of(0, boneName);
+    }
+
     @Override
     public void render(PoseStack poseStack, T animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource,
                        VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
@@ -40,7 +45,7 @@ public class BoneGunFlashGeoLayer<T extends LivingEntity & GeoEntity> extends Ge
 
         for(GunFlashHandler.FlashData flashData : flashes) {
             poseStack.pushPose();
-            poseStack.mulPose(Axis.YP.rotationDegrees(-Mth.lerp(partialTick, animatable.yRotO, animatable.getYRot())));
+            poseStack.mulPose(Axis.YP.rotationDegrees(180 - Mth.lerp(partialTick, animatable.yBodyRotO, animatable.yBodyRot)));
             if (!this.flashBones.containsKey(flashData.posIndex())) continue;
             Optional<GeoBone> bone = bakedModel.getBone(this.flashBones.get(flashData.posIndex()));
             if (bone.isEmpty()) continue;
@@ -49,7 +54,6 @@ public class BoneGunFlashGeoLayer<T extends LivingEntity & GeoEntity> extends Ge
 //            animatable.level().addParticle(ParticleTypes.SMALL_FLAME, pos.x, pos.y, pos.z, 0,0,0);
 
             RenderUtils.translateAndRotateMatrixForBone(poseStack, bone.get());
-            poseStack.translate(0, 0, 0.5 * flashData.scale());
             MobRenderUtils.renderMuzzleFlash(poseStack, renderType, bufferSource,
                     flashData.flashLoc(), flashData.enchanted(), rand, flashData.scale());
             poseStack.popPose();

@@ -14,6 +14,7 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.cog.juggernaut.CogJuggernautRenderer;
+import net.zincstudios.scgextra.entity.cog.venator.CogVenatorRenderer;
 import net.zincstudios.scgextra.entity.cog.vulture.CogVultureRenderer;
 import net.zincstudios.scgextra.entity.common.client.BaseEntityRenderer;
 import net.zincstudios.scgextra.entity.cog.bombardier.CogBombardierEntity;
@@ -131,7 +132,7 @@ public class COGEntities {
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_bombardier"))).noDeathTilt());
         EntityRenderers.register(COGEntities.GIGANTES.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_gigantes"))).noDeathTilt());
-        EntityRenderers.register(COGEntities.VENATOR.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
+        EntityRenderers.register(COGEntities.VENATOR.get(), (ctx) -> new CogVenatorRenderer(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_venator"))).noDeathTilt());
         EntityRenderers.register(COGEntities.CENTIPEDE.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_centipede"))).noDeathTilt());
