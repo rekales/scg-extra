@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import net.zincstudios.scgextra.SCGExtra;
 import org.joml.Matrix4f;
 import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
@@ -37,10 +38,10 @@ public class HeldGunFlashGeoLayer<T extends Mob & GeoAnimatable> extends GeoRend
 
     @Override
     public void renderForBone(PoseStack poseStack, T animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
-        if (!GunFlashHandler.hasFlash(animatable.getId(), 0)) return;
-
-        if (animatable.isLeftHanded() && !bone.getName().equals("left_hand")) return;
         if (!animatable.isLeftHanded() && !bone.getName().equals("right_hand")) return;
+        if (animatable.isLeftHanded() && !bone.getName().equals("left_hand")) return;
+
+        if (!GunFlashHandler.hasFlashToRender(animatable.getId(), 0)) return;
 
         poseStack.pushPose();
 
