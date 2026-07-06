@@ -16,6 +16,7 @@ import net.zincstudios.scgextra.item.ModItems;
 import net.zincstudios.scgextra.network.GunFlashMessage;
 import net.zincstudios.scgextra.network.SCGEPacketHandler;
 import top.ribs.scguns.Config;
+import top.ribs.scguns.ScorchedGuns;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.common.ProjectileManager;
 import top.ribs.scguns.entity.projectile.ProjectileEntity;
@@ -159,7 +160,10 @@ public class CustomSimulatedGun implements SimulatedGun {
         PacketHandler.getPlayChannel().sendToNearbyPlayers(() -> LevelLocation.create(level, radius, y1, z1, r), messageBulletTrail);
 
         if (gun.getDisplay().getFlash() != null && this.gunFlash) {
-            SCGEPacketHandler.sendToNearbyPlayers(() -> LevelLocation.create(level, radius, y1, z1, r), new GunFlashMessage(shooter.getId(), this.gunIndex));
+            ResourceLocation flashTexture = ResourceLocation.fromNamespaceAndPath(ScorchedGuns.MODID,
+                    "textures/effect/" + gun.getDisplay().getFlash().getTextureLocation() + ".png");
+            SCGEPacketHandler.sendToNearbyPlayers(() -> LevelLocation.create(level, radius, y1, z1, r),
+                    new GunFlashMessage(shooter.getId(), this.gunIndex, flashTexture));
         }
 
         if (Config.COMMON.gameplay.spawnCasings.get() && gun.getProjectile().ejectsCasing() && !gun.getProjectile().ejectDuringReload()) {

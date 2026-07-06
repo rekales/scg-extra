@@ -39,7 +39,7 @@ public class HeldGunFlashGeoLayer<T extends Mob & GeoAnimatable> extends GeoRend
         if (!animatable.isLeftHanded() && !bone.getName().equals("right_hand")) return;
         if (animatable.isLeftHanded() && !bone.getName().equals("left_hand")) return;
 
-        if (!GunFlashHandler.hasFlashToRender(animatable.getId(), 0)) return;
+        if (!GunFlashHandler.hasFlashToRender(animatable.getId())) return;
 
         ItemStack stack = animatable.getMainHandItem();
         if (!(stack.getItem() instanceof GunItem gunItem)) return;

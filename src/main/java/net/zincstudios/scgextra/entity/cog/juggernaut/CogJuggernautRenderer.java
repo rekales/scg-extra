@@ -42,7 +42,7 @@ public class CogJuggernautRenderer extends BaseEntityRenderer<CogJuggernautEntit
     private void renderMuzzleFlash(PoseStack poseStack, CogJuggernautEntity animatable, GeoBone bone, RenderType renderType, MultiBufferSource bufferSource) {
         if (!animatable.isLeftHanded() && !bone.getName().equals("right_hand")) return;
         if (animatable.isLeftHanded() && !bone.getName().equals("left_hand")) return;
-        if (!GunFlashHandler.hasFlashToRender(animatable.getId(), 0)) return;
+        if (!GunFlashHandler.hasFlashToRender(animatable.getId())) return;
 
         ItemStack stack = animatable.getMainHandItem();
         if (!(stack.getItem() instanceof GunItem gunItem)) return;
