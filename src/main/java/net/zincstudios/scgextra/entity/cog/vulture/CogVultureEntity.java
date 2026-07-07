@@ -22,7 +22,7 @@ import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
 import net.zincstudios.scgextra.entity.common.gun.CustomGunHolder;
-import net.zincstudios.scgextra.entity.common.gun.CustomSimulatedGun;
+import net.zincstudios.scgextra.entity.common.gun.CustomScorchedSimGun;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
 import net.zincstudios.scgextra.entity.common.part.RotatedSegmentPartEntity;
 import net.zincstudios.scgextra.network.GunFlashMessage;
@@ -62,7 +62,7 @@ public class CogVultureEntity extends Monster implements GeoEntity, Gunner, Bull
                 new RotatedSegmentPartEntity<>(this, new Vec3(0, 0, 0.65), 0.8f, 1f),
                 new RotatedSegmentPartEntity<>(this, new Vec3(0, 0,  1.3), 0.8f, 1f)
         };
-        this.customGun = new CustomSimulatedGun.Builder(ModItems.VALORA.get().getGun())
+        this.customGun = new CustomScorchedSimGun.Builder(ModItems.VALORA.get().getGun())
                 .projectileDamage(1.5f)
                 .fireRate(2)
                 .maxRange(10)

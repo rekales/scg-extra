@@ -7,7 +7,7 @@ import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.sensing.Sensor;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
-import net.zincstudios.scgextra.entity.common.gun.HeldSimulatedGun;
+import net.zincstudios.scgextra.entity.common.gun.HeldScorchedSimGun;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
 import top.ribs.scguns.item.GunItem;
 
@@ -41,8 +41,8 @@ public class HeldGunSensor extends Sensor<LivingEntity> {
         Optional<SimulatedGun> optional = brain.getMemory(ModBrainMemories.SIMULATED_GUN.get());
 
         if ((optional.isEmpty() || optional.get().hasChanged(entity))
-                && entity.getMainHandItem().getItem() instanceof GunItem gunItem) {
-            SimulatedGun simGun = new HeldSimulatedGun(gunItem);
+                && entity.getMainHandItem().getItem() instanceof GunItem) {
+            SimulatedGun simGun = new HeldScorchedSimGun(entity.getMainHandItem());
             brain.setMemory(ModBrainMemories.SIMULATED_GUN.get(), simGun);
             brain.setMemory(ModBrainMemories.WEAPON_IDEAL_RANGE.get(), simGun.getIdealRange());
             brain.setMemory(ModBrainMemories.WEAPON_MAX_RANGE.get(), simGun.getMaxRange());
