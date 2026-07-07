@@ -121,8 +121,11 @@
   "item.scgextra.spear_shovel":  "Spear Shovel",
   "item.scgextra.walker_mg":  "Mounted Walker MG",
   "item.scgextra.end_shell":  "End Shell",
-
+  
   "itemGroup.scgextra.tab":  "SCG Extra",
+  
+
+  "block.scgextra.barbed_wires":  "Barbed Wires",
 
 
   "effect.scgextra.ink_effect":  "Ink Effect",

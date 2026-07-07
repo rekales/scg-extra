@@ -2,6 +2,7 @@ package net.zincstudios.scgextra;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.config.ModConfig;
+import net.zincstudios.scgextra.blocks.ModBlocks;
 import net.zincstudios.scgextra.data.RaidDataLoader;
 import net.zincstudios.scgextra.datagen.DataGenerators;
 import net.zincstudios.scgextra.debug.DevTestCommands;
@@ -44,6 +45,7 @@ public class SCGExtra
         ModItems.register(modEventBus);
         ModSounds.register(modEventBus);
         ModParticleTypes.register(modEventBus);
+        ModBlocks.register(modEventBus);
         ModTerrablender.registerBiomes();
 
         modEventBus.addListener(this::addCreative);

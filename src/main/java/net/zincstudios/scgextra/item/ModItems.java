@@ -25,7 +25,7 @@ import java.util.Set;
 @SuppressWarnings("unused")
 public class ModItems {
 
-    private static final DeferredRegister<Item> ITEMS = DeferredRegister
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister
             .create(ForgeRegistries.ITEMS, SCGExtra.MOD_ID);
 
     public static final RegistryObject<GunItem> PLACEHOLDER_GUN = ITEMS.register("placeholder_gun",
