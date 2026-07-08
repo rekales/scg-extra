@@ -72,6 +72,8 @@ public class ModItems {
             )),
             MEDAL_OF_WONDER = ITEMS.register("medal_of_wonder", () -> new MedalItem(new MedalItem.Traits()
                     .effect(MobEffects.DAMAGE_RESISTANCE, 0)
+                    .resistance(MobEffects.POISON)
+                    .resistance(top.ribs.scguns.init.ModEffects.SULFUR_POISONING.get())
             )),
             MEDAL_OF_FIERY_RAGE = ITEMS.register("medal_of_fiery_rage", () -> new MedalItem(new MedalItem.Traits()
                     .effect(MobEffects.DAMAGE_BOOST, 1)
@@ -164,6 +166,7 @@ public class ModItems {
         modEventBus.addListener(ModItems::buildContents);
 
         MinecraftForge.EVENT_BUS.addListener(MedalItem::onPlayerTick);
+        MinecraftForge.EVENT_BUS.addListener(MedalItem::onMobEffectApplicable);
     }
 
     private static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister

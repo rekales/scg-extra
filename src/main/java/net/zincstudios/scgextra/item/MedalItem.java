@@ -9,17 +9,19 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.MobEffectEvent;
+import net.minecraftforge.eventbus.api.Event;
 
 import java.util.*;
 
 public class MedalItem extends Item {
 
     private static final int TICK_INTERVAL = 10;
-
     private static final Map<UUID, Attribute> ALL_MODIFIER_ATTRIBUTES = new HashMap<>();
 
     private final Map<Attribute, AttributeModifier> modifiers;
     private final Map<MobEffect, Integer> effects;
+    private final Set<MobEffect> resistances;
 
     public MedalItem(MedalItem.Traits traits) {
         this(new Item.Properties().stacksTo(1), traits);
@@ -29,6 +31,7 @@ public class MedalItem extends Item {
         super(properties);
         this.modifiers = Map.copyOf(traits.modifiers);
         this.effects = Map.copyOf(traits.effects);
+        this.resistances = Set.copyOf(traits.resistances);
         for (Map.Entry<Attribute, AttributeModifier> e : traits.modifiers.entrySet()) {
             ALL_MODIFIER_ATTRIBUTES.put(e.getValue().getId(), e.getKey());
         }
@@ -43,14 +46,17 @@ public class MedalItem extends Item {
 
         Map<UUID, AttributeModifier> desiredModifiers = new HashMap<>();
 
-        for (ItemStack stack : player.getInventory().items) { // .items is the main 27+9 slots
+        for (ItemStack stack : player.getInventory().items) {
             if (!(stack.getItem() instanceof MedalItem medalItem)) continue;
 
+            for (Map.Entry<Attribute, AttributeModifier> entry : medalItem.modifiers.entrySet()) {
+                desiredModifiers.put(entry.getValue().getId(), entry.getValue());
+            }
             for (Map.Entry<MobEffect, Integer> entry : medalItem.effects.entrySet()) {
                 player.addEffect(new MobEffectInstance(entry.getKey(), 115, entry.getValue(), true, true));
             }
-            for (Map.Entry<Attribute, AttributeModifier> entry : medalItem.modifiers.entrySet()) {
-                desiredModifiers.put(entry.getValue().getId(), entry.getValue());
+            for (MobEffect effect : medalItem.resistances) {
+                player.removeEffect(effect);
             }
         }
 
@@ -70,10 +76,23 @@ public class MedalItem extends Item {
         }
     }
 
+    public static void onMobEffectApplicable(MobEffectEvent.Applicable event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+
+        for (ItemStack stack : player.getInventory().items) {
+            if (!(stack.getItem() instanceof MedalItem medalItem)) continue;
+            if (medalItem.resistances.contains(event.getEffectInstance().getEffect())) {
+                event.setResult(Event.Result.DENY);
+            }
+        }
+    }
+
     // for cleaner registration
     public static class Traits {
         private final Map<Attribute, AttributeModifier> modifiers = new HashMap<>();
         private final Map<MobEffect, Integer> effects = new HashMap<>();
+        private final Set<MobEffect> resistances = new HashSet<>();
+
 
         public MedalItem.Traits modifier(Attribute attribute, AttributeModifier modifier) {
             this.modifiers.put(attribute, modifier);
@@ -82,6 +101,11 @@ public class MedalItem extends Item {
 
         public MedalItem.Traits effect(MobEffect effect, int amplifier) {
             this.effects.put(effect, amplifier);
+            return this;
+        }
+
+        public MedalItem.Traits resistance(MobEffect effect) {
+            this.resistances.add(effect);
             return this;
         }
     }
