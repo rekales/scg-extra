@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.item;
+package net.zincstudios.scgextra.item.armor;
 
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;

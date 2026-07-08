@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.item;
+package net.zincstudios.scgextra.item.armor;
 
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;

@@ -4,8 +4,8 @@ import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.zincstudios.scgextra.item.ArmorSet;
-import net.zincstudios.scgextra.item.ArmorSets;
+import net.zincstudios.scgextra.item.armor.ArmorSet;
+import net.zincstudios.scgextra.item.armor.ArmorSets;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(value = Entity.class)
