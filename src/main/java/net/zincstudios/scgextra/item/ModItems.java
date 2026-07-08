@@ -2,18 +2,21 @@ package net.zincstudios.scgextra.item;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.*;
 import net.minecraftforge.common.ForgeSpawnEggItem;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.SCGExtra;
+import net.zincstudios.scgextra.attributes.SCGEAttributes;
 import net.zincstudios.scgextra.effects.ModEffects;
 import net.zincstudios.scgextra.entity.cog.COGEntities;
 import net.zincstudios.scgextra.entity.neutral.NeutralEntities;
@@ -21,6 +24,7 @@ import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
 import net.zincstudios.scgextra.entity.fac.FACEntities;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
+import top.ribs.scguns.attributes.SCAttributes;
 import top.ribs.scguns.item.GunItem;
 
 import java.util.Set;
@@ -56,44 +60,36 @@ public class ModItems {
     );
 
     public static final RegistryObject<MedalItem>
-            MEDAL_OF_SURVIVOR = ITEMS.register("medal_of_survivor", () -> new MedalItem(
-                    new Item.Properties().stacksTo(1),
-                    () -> new MobEffectInstance(ModEffects.SURVIVOR_MEDAL_EFFECT.get(), 35, 0, true, false, false)
+            MEDAL_OF_SURVIVOR = ITEMS.register("medal_of_survivor", () -> new MedalItem(new MedalItem.Traits()
+                    .modifier(Attributes.ARMOR, new AttributeModifier("survivor_medal_armor", 10, AttributeModifier.Operation.ADDITION))
             )),
-            MEDAL_OF_IRON_WILL = ITEMS.register("medal_of_iron_will", () -> new MedalItem(
-                    new Item.Properties().stacksTo(1),
-                    () -> new MobEffectInstance(ModEffects.IRON_WILL_MEDAL_EFFECT.get(), 115, 0, true, true)
+            MEDAL_OF_IRON_WILL = ITEMS.register("medal_of_iron_will", () -> new MedalItem(new MedalItem.Traits()
+                    .modifier(SCGEAttributes.BULLET_DAMAGE_TAKEN_MULT.get(), new AttributeModifier("iron_will_medal_bullet_damage_taken", -0.2, AttributeModifier.Operation.ADDITION))
             )),
-            MEDAL_OF_DEFIANCE = ITEMS.register("medal_of_defiance", () -> new MedalItem(
-                    new Item.Properties().stacksTo(1),
-                    () -> new MobEffectInstance(ModEffects.DEFIANCE_MEDAL_EFFECT.get(), 115, 0, true, false, false)
+            MEDAL_OF_DEFIANCE = ITEMS.register("medal_of_defiance", () -> new MedalItem(new MedalItem.Traits()
+                    .modifier(Attributes.MOVEMENT_SPEED, new AttributeModifier("defiance_medal_movement_speed", 0.2, AttributeModifier.Operation.MULTIPLY_TOTAL))
+                    .modifier(SCAttributes.RELOAD_SPEED.get(), new AttributeModifier("defiance_medal_reload_speed", 0.2, AttributeModifier.Operation.MULTIPLY_TOTAL))
             )),
-            MEDAL_OF_WONDER = ITEMS.register("medal_of_wonder", () -> new MedalItem(
-                    new Item.Properties().stacksTo(1),
-                    () -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 115, 0, true, true)
+            MEDAL_OF_WONDER = ITEMS.register("medal_of_wonder", () -> new MedalItem(new MedalItem.Traits()
+                    .effect(MobEffects.DAMAGE_RESISTANCE, 0)
             )),
-            MEDAL_OF_FIERY_RAGE = ITEMS.register("medal_of_fiery_rage", () -> new MedalItem(
-                    new Item.Properties().stacksTo(1),
-                    entity -> {
-                        entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 115, 1, true, true));
-                        entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 115, 0, true, true));
-                    }
+            MEDAL_OF_FIERY_RAGE = ITEMS.register("medal_of_fiery_rage", () -> new MedalItem(new MedalItem.Traits()
+                    .effect(MobEffects.DAMAGE_BOOST, 1)
+                    .effect(MobEffects.REGENERATION, 0)
             )),
-            MEDAL_OF_OBEDIENCE = ITEMS.register("medal_of_obedience", () -> new MedalItem(
-                    new Item.Properties().stacksTo(1),
-                    () -> new MobEffectInstance(ModEffects.OBEDIENCE_MEDAL_EFFECT.get(), 115, 0, true, false, false)
+            MEDAL_OF_OBEDIENCE = ITEMS.register("medal_of_obedience", () -> new MedalItem(new MedalItem.Traits()
+                    .modifier(Attributes.ARMOR_TOUGHNESS, new AttributeModifier("obedience_medal_armor_toughness", 3, AttributeModifier.Operation.ADDITION))
+                    .modifier(SCGEAttributes.RECOIL_MULT.get(), new AttributeModifier("obedience_medal_recoil", -0.3, AttributeModifier.Operation.MULTIPLY_TOTAL))
             )),
-            MEDAL_OF_CRUELTY = ITEMS.register("medal_of_cruelty", () -> new MedalItem(
-                    new Item.Properties().stacksTo(1),
-                    () -> new MobEffectInstance(ModEffects.CRUELTY_MEDAL_EFFECT.get(), 115, 0, true, true)
+            MEDAL_OF_CRUELTY = ITEMS.register("medal_of_cruelty", () -> new MedalItem(new MedalItem.Traits()
+                    .modifier(SCAttributes.BULLET_DAMAGE_MULTIPLIER.get(), new AttributeModifier("cruelty_medal_bullet_damage", 0.1, AttributeModifier.Operation.MULTIPLY_TOTAL))
             )),
-            MEDAL_OF_ENLIGHTENMENT = ITEMS.register("medal_of_enlightenment", () -> new MedalItem(
-                    new Item.Properties().stacksTo(1),
-                    () -> new MobEffectInstance(ModEffects.ENLIGHTENMENT_MEDAL_EFFECT.get(), 115, 1, true, true)
+            MEDAL_OF_ENLIGHTENMENT = ITEMS.register("medal_of_enlightenment", () -> new MedalItem(new MedalItem.Traits()
+                    .effect(ModEffects.ENLIGHTENMENT_MEDAL_EFFECT.get(), 1)
             )),
-            MEDAL_OF_CONQUEROR = ITEMS.register("medal_of_conqueror", () -> new MedalItem(
-                    new Item.Properties().stacksTo(1),
-                    () -> new MobEffectInstance(ModEffects.CONQUEROR_MEDAL_EFFECT.get(), 115, 0, false, false, false)
+            MEDAL_OF_CONQUEROR = ITEMS.register("medal_of_conqueror", () -> new MedalItem(new MedalItem.Traits()
+                    .modifier(SCGEAttributes.BULLET_ADDITIONAL_CRIT_CHANCE.get(), new AttributeModifier("conqueror_medal_crit_chance", 0.2, AttributeModifier.Operation.ADDITION))
+                    .modifier(SCGEAttributes.BULLET_GRAVITY_MULT.get(), new AttributeModifier("conqueror_medal_gravity", -0.2, AttributeModifier.Operation.MULTIPLY_TOTAL))
             ));
 
     public static final RegistryObject<SpawnEggItem>
@@ -166,6 +162,8 @@ public class ModItems {
         ITEMS.register(modEventBus);
         CREATIVE_TABS.register(modEventBus);
         modEventBus.addListener(ModItems::buildContents);
+
+        MinecraftForge.EVENT_BUS.addListener(MedalItem::onPlayerTick);
     }
 
     private static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister
