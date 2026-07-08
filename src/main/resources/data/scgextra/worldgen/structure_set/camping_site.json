@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "scgextra:camping_site",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 8,
+    "separation": 2,
+    "spread_type": "linear",
+    "salt": 83618946,
+    "frequency_reduction_method": "default",
+    "frequency": 1
+  }
+}
