@@ -1,16 +1,16 @@
 {
   "structures": [
     {
-      "structure": "scgextra:trenches",
+      "structure": "scgextra:mine_trench",
       "weight": 1
     }
   ],
   "placement": {
     "type": "minecraft:random_spread",
-    "spacing": 8,
-    "separation": 3,
+    "spacing": 14,
+    "separation": 8,
     "spread_type": "linear",
-    "salt": 7546378,
+    "salt": 4546535,
     "frequency_reduction_method": "default",
     "frequency": 1
   }
