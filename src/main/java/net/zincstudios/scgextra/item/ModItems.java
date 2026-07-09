@@ -15,6 +15,7 @@ import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.cog.COGEntities;
 import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
 import net.zincstudios.scgextra.entity.fac.FACEntities;
+import net.zincstudios.scgextra.entity.neutral.NeutralEntities;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
 import top.ribs.scguns.item.GunItem;
@@ -97,8 +98,10 @@ public class ModItems {
             COG_GIGANTES_SPAWN_EGG = basicSpawnEgg(COGEntities.GIGANTES),
             COG_VENATOR_SPAWN_EGG = basicSpawnEgg(COGEntities.VENATOR),
             COG_CENTIPEDE_SPAWN_EGG = basicSpawnEgg(COGEntities.CENTIPEDE),
-            COG_JUGGERNAUT_SPAWN_EGG = basicSpawnEgg(COGEntities.JUGGERNAUT);
-
+            COG_JUGGERNAUT_SPAWN_EGG = basicSpawnEgg(COGEntities.JUGGERNAUT),
+            
+            // COG
+            INFLICTED_BOAR_SPAWN_EGG = basicSpawnEgg(NeutralEntities.INFLICTED_BOAR);
 
     public static void register(IEventBus modEventBus) {
         ITEMS.register(modEventBus);
