@@ -100,13 +100,85 @@ public class ModItems {
 
     public static final RegistryObject<ArmorSetPartItem>
             OPPRESSOR_HELMET = ITEMS.register("oppressor_helmet", () ->
-            new ArmorSetPartItem(ModArmorMaterials.OPPRESSOR, ArmorItem.Type.HELMET, ArmorSets.OPPRESSOR)),
+                    new ArmorSetPartItem(ModArmorMaterials.OPPRESSOR, ArmorItem.Type.HELMET, ArmorSets.OPPRESSOR)),
             OPPRESSOR_CHESTPLATE = ITEMS.register("oppressor_chestplate", () ->
-            new ArmorSetPartItem(ModArmorMaterials.OPPRESSOR, ArmorItem.Type.CHESTPLATE, ArmorSets.OPPRESSOR)),
+                    new ArmorSetPartItem(ModArmorMaterials.OPPRESSOR, ArmorItem.Type.CHESTPLATE, ArmorSets.OPPRESSOR)),
             OPPRESSOR_LEGGINGS = ITEMS.register("oppressor_leggings", () ->
-            new ArmorSetPartItem(ModArmorMaterials.OPPRESSOR, ArmorItem.Type.LEGGINGS, ArmorSets.OPPRESSOR)),
+                    new ArmorSetPartItem(ModArmorMaterials.OPPRESSOR, ArmorItem.Type.LEGGINGS, ArmorSets.OPPRESSOR)),
             OPPRESSOR_BOOTS = ITEMS.register("oppressor_boots", () ->
-            new ArmorSetPartItem(ModArmorMaterials.OPPRESSOR, ArmorItem.Type.BOOTS, ArmorSets.OPPRESSOR));
+                    new ArmorSetPartItem(ModArmorMaterials.OPPRESSOR, ArmorItem.Type.BOOTS, ArmorSets.OPPRESSOR)),
+
+            COMMISSAR_HELMET = ITEMS.register("commissar_helmet", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.COMMISSAR, ArmorItem.Type.HELMET, ArmorSets.COMMISSAR)),
+            COMMISSAR_CHESTPLATE = ITEMS.register("commissar_chestplate", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.COMMISSAR, ArmorItem.Type.CHESTPLATE, ArmorSets.COMMISSAR)),
+            COMMISSAR_LEGGINGS = ITEMS.register("commissar_leggings", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.COMMISSAR, ArmorItem.Type.LEGGINGS, ArmorSets.COMMISSAR)),
+            COMMISSAR_BOOTS = ITEMS.register("commissar_boots", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.COMMISSAR, ArmorItem.Type.BOOTS, ArmorSets.COMMISSAR)),
+
+            TREATED_IRON_HELMET = ITEMS.register("treated_iron_helmet", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.TREATED_IRON, ArmorItem.Type.HELMET, ArmorSets.TREATED_IRON)),
+            TREATED_IRON_CHESTPLATE = ITEMS.register("treated_iron_chestplate", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.TREATED_IRON, ArmorItem.Type.CHESTPLATE, ArmorSets.TREATED_IRON)),
+            TREATED_IRON_LEGGINGS = ITEMS.register("treated_iron_leggings", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.TREATED_IRON, ArmorItem.Type.LEGGINGS, ArmorSets.TREATED_IRON)),
+            TREATED_IRON_BOOTS = ITEMS.register("treated_iron_boots", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.TREATED_IRON, ArmorItem.Type.BOOTS, ArmorSets.TREATED_IRON)),
+
+            LEVIATHAN_HELMET = ITEMS.register("leviathan_helmet", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.LEVIATHAN, ArmorItem.Type.HELMET, ArmorSets.LEVIATHAN)),
+            LEVIATHAN_CHESTPLATE = ITEMS.register("leviathan_chestplate", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.LEVIATHAN, ArmorItem.Type.CHESTPLATE, ArmorSets.LEVIATHAN)),
+            LEVIATHAN_LEGGINGS = ITEMS.register("leviathan_leggings", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.LEVIATHAN, ArmorItem.Type.LEGGINGS, ArmorSets.LEVIATHAN)),
+            LEVIATHAN_BOOTS = ITEMS.register("leviathan_boots", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.LEVIATHAN, ArmorItem.Type.BOOTS, ArmorSets.LEVIATHAN)),
+
+            GOLDEN_IDOL_HELMET = ITEMS.register("golden_idol_helmet", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.GOLDEN_IDOL, ArmorItem.Type.HELMET, ArmorSets.GOLDEN_IDOL)),
+            GOLDEN_IDOL_CHESTPLATE = ITEMS.register("golden_idol_chestplate", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.GOLDEN_IDOL, ArmorItem.Type.CHESTPLATE, ArmorSets.GOLDEN_IDOL)),
+            GOLDEN_IDOL_LEGGINGS = ITEMS.register("golden_idol_leggings", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.GOLDEN_IDOL, ArmorItem.Type.LEGGINGS, ArmorSets.GOLDEN_IDOL)),
+            GOLDEN_IDOL_BOOTS = ITEMS.register("golden_idol_boots", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.GOLDEN_IDOL, ArmorItem.Type.BOOTS, ArmorSets.GOLDEN_IDOL)),
+
+            ENLIGHTENED_HELMET = ITEMS.register("enlightened_helmet", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.ENLIGHTENED, ArmorItem.Type.HELMET, ArmorSets.ENLIGHTENED)),
+            ENLIGHTENED_CHESTPLATE = ITEMS.register("enlightened_chestplate", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.ENLIGHTENED, ArmorItem.Type.CHESTPLATE, ArmorSets.ENLIGHTENED)),
+            ENLIGHTENED_LEGGINGS = ITEMS.register("enlightened_leggings", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.ENLIGHTENED, ArmorItem.Type.LEGGINGS, ArmorSets.ENLIGHTENED)),
+            ENLIGHTENED_BOOTS = ITEMS.register("enlightened_boots", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.ENLIGHTENED, ArmorItem.Type.BOOTS, ArmorSets.ENLIGHTENED)),
+
+            JUGGERNAUT_HELMET = ITEMS.register("juggernaut_helmet", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.JUGGERNAUT, ArmorItem.Type.HELMET, ArmorSets.JUGGERNAUT)),
+            JUGGERNAUT_CHESTPLATE = ITEMS.register("juggernaut_chestplate", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.JUGGERNAUT, ArmorItem.Type.CHESTPLATE, ArmorSets.JUGGERNAUT)),
+            JUGGERNAUT_LEGGINGS = ITEMS.register("juggernaut_leggings", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.JUGGERNAUT, ArmorItem.Type.LEGGINGS, ArmorSets.JUGGERNAUT)),
+            JUGGERNAUT_BOOTS = ITEMS.register("juggernaut_boots", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.JUGGERNAUT, ArmorItem.Type.BOOTS, ArmorSets.JUGGERNAUT)),
+
+            RITUAL_HELMET = ITEMS.register("ritual_helmet", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.RITUAL, ArmorItem.Type.HELMET, ArmorSets.RITUAL)),
+            RITUAL_CHESTPLATE = ITEMS.register("ritual_chestplate", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.RITUAL, ArmorItem.Type.CHESTPLATE, ArmorSets.RITUAL)),
+            RITUAL_LEGGINGS = ITEMS.register("ritual_leggings", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.RITUAL, ArmorItem.Type.LEGGINGS, ArmorSets.RITUAL)),
+            RITUAL_BOOTS = ITEMS.register("ritual_boots", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.RITUAL, ArmorItem.Type.BOOTS, ArmorSets.RITUAL)),
+
+            PIONEER_HELMET = ITEMS.register("pioneer_helmet", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.PIONEER, ArmorItem.Type.HELMET, ArmorSets.PIONEER)),
+            PIONEER_CHESTPLATE = ITEMS.register("pioneer_chestplate", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.PIONEER, ArmorItem.Type.CHESTPLATE, ArmorSets.PIONEER)),
+            PIONEER_LEGGINGS = ITEMS.register("pioneer_leggings", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.PIONEER, ArmorItem.Type.LEGGINGS, ArmorSets.PIONEER)),
+            PIONEER_BOOTS = ITEMS.register("pioneer_boots", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.PIONEER, ArmorItem.Type.BOOTS, ArmorSets.PIONEER));
 
     public static final RegistryObject<SpawnEggItem>
             // Whaler

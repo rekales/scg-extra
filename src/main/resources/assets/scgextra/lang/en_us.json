@@ -132,6 +132,51 @@
   "item.scgextra.medal_of_enlightenment":  "Medal of Enlightenment",
   "item.scgextra.medal_of_conqueror":  "Medal of Conqueror",
 
+  "item.scgextra.oppressor_helmet" : "Oppressor Helmet",
+  "item.scgextra.oppressor_chestplate" : "Oppressor Chestplate",
+  "item.scgextra.oppressor_leggings" : "Oppressor Leggings",
+  "item.scgextra.oppressor_boots" : "Oppressor Boots",
+
+  "item.scgextra.commissar_helmet" : "Commissar Helmet",
+  "item.scgextra.commissar_chestplate" : "Commissar Chestplate",
+  "item.scgextra.commissar_leggings" : "Commissar Leggings",
+  "item.scgextra.commissar_boots" : "Commissar Boots",
+
+  "item.scgextra.treated_iron_helmet" : "Treated Iron Helmet",
+  "item.scgextra.treated_iron_chestplate" : "Treated Iron Chestplate",
+  "item.scgextra.treated_iron_leggings" : "Treated Iron Leggings",
+  "item.scgextra.treated_iron_boots" : "Treated Iron Boots",
+
+  "item.scgextra.leviathan_helmet" : "Leviathan Helmet",
+  "item.scgextra.leviathan_chestplate" : "Leviathan Chestplate",
+  "item.scgextra.leviathan_leggings" : "Leviathan Leggings",
+  "item.scgextra.leviathan_boots" : "Leviathan Boots",
+
+  "item.scgextra.golden_idol_helmet" : "Golden Idol Helmet",
+  "item.scgextra.golden_idol_chestplate" : "Golden Idol Chestplate",
+  "item.scgextra.golden_idol_leggings" : "Golden Idol Leggings",
+  "item.scgextra.golden_idol_boots" : "Golden Idol Boots",
+
+  "item.scgextra.enlightened_helmet" : "Enlightened Helmet",
+  "item.scgextra.enlightened_chestplate" : "Enlightened Chestplate",
+  "item.scgextra.enlightened_leggings" : "Enlightened Leggings",
+  "item.scgextra.enlightened_boots" : "Enlightened Boots",
+
+  "item.scgextra.juggernaut_helmet" : "Juggernaut Helmet",
+  "item.scgextra.juggernaut_chestplate" : "Juggernaut Chestplate",
+  "item.scgextra.juggernaut_leggings" : "Juggernaut Leggings",
+  "item.scgextra.juggernaut_boots" : "Juggernaut Boots",
+
+  "item.scgextra.ritual_helmet" : "Ritual Helmet",
+  "item.scgextra.ritual_chestplate" : "Ritual Chestplate",
+  "item.scgextra.ritual_leggings" : "Ritual Leggings",
+  "item.scgextra.ritual_boots" : "Ritual Boots",
+
+  "item.scgextra.pioneer_helmet" : "Pioneer Helmet",
+  "item.scgextra.pioneer_chestplate" : "Pioneer Chestplate",
+  "item.scgextra.pioneer_leggings" : "Pioneer Leggings",
+  "item.scgextra.pioneer_boots" : "Pioneer Boots",
+
   "itemGroup.scgextra.tab":  "SCG Extra",
 
 
