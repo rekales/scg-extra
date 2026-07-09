@@ -26,8 +26,7 @@ public final class ArmorSets {
             .effect(MobEffects.DOLPHINS_GRACE, 0)
     );
 
-    // TODO: area regen
-    public static final ArmorSet GOLDEN_IDOL = new ArmorSet(new ArmorSet.Traits()
+    public static final ArmorSet GOLDEN_IDOL = new GoldenIdolArmorSet(new ArmorSet.Traits()
             .effect(MobEffects.FIRE_RESISTANCE, 0)
     );
 
@@ -39,7 +38,6 @@ public final class ArmorSets {
             .resistance(ModEffects.LACERATED.get())
     );
 
-    // TODO: totem revive, write cooldown to helmet nbt
     public static final ArmorSet RITUAL = new RitualArmorSet(new ArmorSet.Traits());
 
     // TODO: elytra flying

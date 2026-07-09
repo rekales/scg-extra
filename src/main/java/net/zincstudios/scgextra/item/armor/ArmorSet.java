@@ -17,7 +17,7 @@ import java.util.*;
 
 public class ArmorSet {
 
-    private static final int TICK_INTERVAL = 10;
+    public static final int TICK_INTERVAL = 10;
     private static final Map<UUID, Attribute> ALL_MODIFIER_ATTRIBUTES = new HashMap<>();
 
     private final Map<Attribute, AttributeModifier> modifiers;
@@ -78,6 +78,7 @@ public class ArmorSet {
         return null;
     }
 
+    // TODO: no interval check, maybe cache result.
     // change to LivingEntity tick if needed
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.phase != TickEvent.Phase.END) return;
