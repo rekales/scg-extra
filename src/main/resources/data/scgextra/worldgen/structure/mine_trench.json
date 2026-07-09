@@ -7,7 +7,7 @@
     "start_height": {
         "absolute": -11
     },
-    "project_start_to_heightmap": "WORLD_SURFACE",
+    "project_start_to_heightmap": "MOTION_BLOCKING_NO_LEAVES",
     "step": "surface_structures",
     "terrain_adaptation": "beard_thin",
     "biomes": [
