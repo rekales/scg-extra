@@ -37,32 +37,18 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem("medal/", ModItems.MEDAL_OF_ENLIGHTENMENT);
         basicItem("medal/", ModItems.MEDAL_OF_CONQUEROR);
 
-        withExistingParent("oppressor_helmet", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_helmet"));
-        withExistingParent("oppressor_chestplate", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_chestplate"));
-        withExistingParent("oppressor_leggings", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_leggings"));
-        withExistingParent("oppressor_boots", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_boots"));
-
-        withExistingParent("commissar_helmet", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_helmet"));
-        withExistingParent("commissar_chestplate", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_chestplate"));
-        withExistingParent("commissar_leggings", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_leggings"));
-        withExistingParent("commissar_boots", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_boots"));
-
-        withExistingParent("treated_iron_helmet", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_helmet"));
-        withExistingParent("treated_iron_chestplate", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_chestplate"));
-        withExistingParent("treated_iron_leggings", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_leggings"));
-        withExistingParent("treated_iron_boots", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_boots"));
+        basicItem("armor/", ModItems.OPPRESSOR_HELMET);
+        basicItem("armor/", ModItems.OPPRESSOR_CHESTPLATE);
+        basicItem("armor/", ModItems.OPPRESSOR_LEGGINGS);
+        basicItem("armor/", ModItems.OPPRESSOR_BOOTS);
+        basicItem("armor/", ModItems.COMMISSAR_HELMET);
+        basicItem("armor/", ModItems.COMMISSAR_CHESTPLATE);
+        basicItem("armor/", ModItems.COMMISSAR_LEGGINGS);
+        basicItem("armor/", ModItems.COMMISSAR_BOOTS);
+        basicItem("armor/", ModItems.TREATED_IRON_HELMET);
+        basicItem("armor/", ModItems.TREATED_IRON_CHESTPLATE);
+        basicItem("armor/", ModItems.TREATED_IRON_LEGGINGS);
+        basicItem("armor/", ModItems.TREATED_IRON_BOOTS);
 
         withExistingParent("leviathan_helmet", mcLoc("item/generated"))
                 .texture("layer0", mcLoc("item/iron_helmet"));
