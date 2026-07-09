@@ -1,8 +1,11 @@
 package net.zincstudios.scgextra.item.armor;
 
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.zincstudios.scgextra.attributes.SCGEAttributes;
 import top.ribs.scguns.init.ModEffects;
 
@@ -16,7 +19,6 @@ public final class ArmorSets {
             .modifier(SCGEAttributes.BULLET_DAMAGE_TAKEN_MULT.get(), new AttributeModifier("commissar_set_bullet_damage_taken", -0.1, AttributeModifier.Operation.ADDITION))
     );
 
-    // TODO: laceration infliction
     public static final ArmorSet TREATED_IRON = new ArmorSet(new ArmorSet.Traits());
 
     public static final ArmorSet LEVIATHAN = new ArmorSet(new ArmorSet.Traits()
@@ -44,4 +46,17 @@ public final class ArmorSets {
     public static final ArmorSet PIONEER = new ArmorSet(new ArmorSet.Traits()
             .resistance(MobEffects.LEVITATION)
     );
+
+    public static void onEntityHurt(LivingHurtEvent event) {
+        LivingEntity entity = event.getEntity();
+        if (!(event.getSource().getDirectEntity() instanceof LivingEntity hurter)) return;
+
+        if (ArmorSet.getArmorSet(hurter) == TREATED_IRON) {
+            entity.addEffect(new MobEffectInstance(ModEffects.LACERATED.get(), 120));
+        }
+
+        if (ArmorSet.getArmorSet(entity) == TREATED_IRON) {
+            hurter.addEffect(new MobEffectInstance(ModEffects.LACERATED.get(), 120));
+        }
+    }
 }
