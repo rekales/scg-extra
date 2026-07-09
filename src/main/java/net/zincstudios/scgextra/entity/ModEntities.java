@@ -20,7 +20,6 @@ import net.zincstudios.scgextra.entity.cog.COGEntities;
 import net.zincstudios.scgextra.entity.common.raid_summoner.RaidSummonerEntity;
 import net.zincstudios.scgextra.entity.common.raid_summoner.RaidSummonerRenderer;
 import net.zincstudios.scgextra.entity.fac.FACEntities;
-import net.zincstudios.scgextra.entity.neutral.NeutralEntities;
 import net.zincstudios.scgextra.entity.projectile.ArmoredWhaleProjectileEntity;
 import net.zincstudios.scgextra.entity.projectile.FireProjectile;
 import net.zincstudios.scgextra.entity.projectile.SoulFireBallRenderer;
@@ -75,7 +74,6 @@ public class ModEntities {
         RRCEntities.register(modEventBus);
         FACEntities.register(modEventBus);
         AsgharianEntities.register(modEventBus);
-        NeutralEntities.register(modEventBus);
         COGEntities.register(modEventBus);
 
         ModBrainMemories.register(modEventBus);

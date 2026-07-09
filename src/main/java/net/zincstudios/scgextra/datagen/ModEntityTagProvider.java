@@ -8,7 +8,6 @@ import net.zincstudios.scgextra.entity.EntityTypeTags;
 import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
 import net.zincstudios.scgextra.entity.cog.COGEntities;
 import net.zincstudios.scgextra.entity.fac.FACEntities;
-import net.zincstudios.scgextra.entity.neutral.NeutralEntities;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
 import org.jetbrains.annotations.Nullable;
@@ -94,7 +93,6 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
                 .add(AsgharianEntities.ASGHAR_WORKER.get())
                 .add(FACEntities.FAC_TANK.get())
                 .add(FACEntities.FAC_WALKER.get())
-                .add(NeutralEntities.HEAD_HUNTER.get())
                 .add(COGEntities.VULTURE.get())
                 .add(COGEntities.DEVASTATOR.get())
                 .add(COGEntities.BOMBARDIER.get())
@@ -137,24 +135,10 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
                 .add(COGEntities.CENTIPEDE.get())
                 .add(COGEntities.JUGGERNAUT.get());
 
-        tag(ModTags.Entities.FIRE)
-                .add(NeutralEntities.HEAD_HUNTER.get())
-                .add(NeutralEntities.NETHERITE_EATER.get())
-                .add(NeutralEntities.NITRO_BEETLE.get());
-
-        tag(ModTags.Entities.UNDEAD)
-                .add(NeutralEntities.BIG_LUMP.get())
-                .add(NeutralEntities.INFLICTED_BOAR.get())
-                .add(NeutralEntities.INFLICTED_WOLF.get());
-
-        tag(ModTags.Entities.WITHER)
-                .add(NeutralEntities.HEAD_HUNTER.get());
-
         tag(ModTags.Entities.WHITE_BLOOD)
                 .add(WhalerEntities.GUARDIAN_STATUE.get());
 
         tag(ModTags.Entities.BLACK_BLOOD)
-                .add(NeutralEntities.HEAD_HUNTER.get())
                 .add(COGEntities.VULTURE.get())
                 .add(COGEntities.DEVASTATOR.get())
                 .add(COGEntities.BOMBARDIER.get())
@@ -162,16 +146,5 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
                 .add(COGEntities.VENATOR.get())
                 .add(COGEntities.CENTIPEDE.get())
                 .add(COGEntities.JUGGERNAUT.get());
-
-        tag(ModTags.Entities.GREEN_BLOOD)
-                .add(NeutralEntities.END_STONE_CRAB.get())
-                .add(NeutralEntities.END_DWELLER.get());
-
-        tag(ModTags.Entities.PURPLE_BLOOD)
-                .add(NeutralEntities.END_POD.get())
-                .add(NeutralEntities.END_SCORPION.get());
-
-        tag(ModTags.Entities.YELLOW_BLOOD)
-                .add(NeutralEntities.NITRO_BEETLE.get());
     }
 }

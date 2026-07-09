@@ -36,19 +36,6 @@
   "entity.scgextra.candle_fiend":  "Candle Fiend",
   "entity.scgextra.soul_ripper":  "Soul Ripper",
 
-  "entity.scgextra.inflicted_boar":  "Inflicted Boar",
-  "entity.scgextra.inflicted_wolf":  "Inflicted Wolf",
-  "entity.scgextra.ammo_goblin":  "Ammo Goblin",
-  "entity.scgextra.big_lump":  "Big Lump",
-  "entity.scgextra.mutant_bat":  "Mutant Bat",
-  "entity.scgextra.nitro_beetle":  "Nitro Beetle",
-  "entity.scgextra.head_hunter":  "Head Hunter",
-  "entity.scgextra.netherite_eater":  "Netherite Eater",
-  "entity.scgextra.end_pod":  "End Pod",
-  "entity.scgextra.end_dweller":  "End Dweller",
-  "entity.scgextra.end_stone_crab":  "End Stone Crab",
-  "entity.scgextra.end_scorpion":  "End Scorpion",
-
   "entity.scgextra.cog_vulture":  "COG Vulture",
   "entity.scgextra.cog_devastator": "COG Devastator",
   "entity.scgextra.cog_bombardier": "COG Bombardier",
@@ -120,7 +107,6 @@
   "item.scgextra.cavalry_saber":  "Cavalry Saber",
   "item.scgextra.spear_shovel":  "Spear Shovel",
   "item.scgextra.walker_mg":  "Mounted Walker MG",
-  "item.scgextra.end_shell":  "End Shell",
 
   "itemGroup.scgextra.tab":  "SCG Extra",
 
