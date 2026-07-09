@@ -21,6 +21,8 @@ public final class ModEffects {
 
     public static final RegistryObject<StunnedEffect> STUNNED_EFFECT = MOB_EFFECTS.register("stunned", () -> new StunnedEffect(MobEffectCategory.HARMFUL, 0x000000));
 
+    public static final RegistryObject<MobEffect> MORTAL = MOB_EFFECTS.register("mortal", () -> new MortalMobEffect(MobEffectCategory.NEUTRAL, 0x2C366D));
+
     public static final RegistryObject<MobEffect> ENLIGHTENMENT_MEDAL_EFFECT = MOB_EFFECTS.register("enlightenment_medal", () -> new EnlightenmentHealthBoostMobEffect(MobEffectCategory.BENEFICIAL, 0x000000)
             .addAttributeModifier(Attributes.MAX_HEALTH, EnlightenmentHealthBoostMobEffect.EFFECT_ID, 4.0D, AttributeModifier.Operation.ADDITION));
 

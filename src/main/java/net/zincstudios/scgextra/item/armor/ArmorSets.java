@@ -40,7 +40,7 @@ public final class ArmorSets {
     );
 
     // TODO: totem revive, write cooldown to helmet nbt
-    public static final ArmorSet RITUAL = new ArmorSet(new ArmorSet.Traits());
+    public static final ArmorSet RITUAL = new RitualArmorSet(new ArmorSet.Traits());
 
     // TODO: elytra flying
     public static final ArmorSet PIONEER = new ArmorSet(new ArmorSet.Traits()

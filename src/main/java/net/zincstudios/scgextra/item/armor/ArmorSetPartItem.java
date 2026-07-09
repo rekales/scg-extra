@@ -4,7 +4,7 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import org.jetbrains.annotations.NotNull;
 
-public class ArmorSetPartItem extends ArmorItem implements ArmorSetPart{
+public class ArmorSetPartItem extends ArmorItem implements ArmorSetPart {
 
     private final ArmorSet armorSet;
 

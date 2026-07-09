@@ -33,6 +33,39 @@ public class ArmorSet {
         }
     }
 
+    // Only ticks every interval and on server side
+    public void onTick(LivingEntity entity) {
+        Map<UUID, AttributeModifier> desiredModifiers = new HashMap<>();
+
+        ArmorSet armorSet = getArmorSet(entity);
+        if (armorSet != null) {
+            for (Map.Entry<Attribute, AttributeModifier> entry : armorSet.modifiers.entrySet()) {
+                desiredModifiers.put(entry.getValue().getId(), entry.getValue());
+            }
+            for (Map.Entry<MobEffect, Integer> entry : armorSet.effects.entrySet()) {
+                entity.addEffect(new MobEffectInstance(entry.getKey(), 115, entry.getValue(), true, true));
+            }
+            for (MobEffect effect : armorSet.resistances) {
+                entity.removeEffect(effect);
+            }
+        }
+
+        for (Map.Entry<UUID, Attribute> entry : ALL_MODIFIER_ATTRIBUTES.entrySet()) {
+            UUID uuid = entry.getKey();
+            AttributeInstance attr = entity.getAttribute(entry.getValue());
+            if (attr == null) continue;
+
+            boolean shouldHave = desiredModifiers.containsKey(uuid);
+            boolean hasModifier = attr.getModifier(uuid) != null;
+
+            if (shouldHave && !hasModifier) {
+                attr.addTransientModifier(desiredModifiers.get(uuid));
+            } else if (!shouldHave && hasModifier) {
+                attr.removeModifier(uuid);
+            }
+        }
+    }
+
     @Nullable
     public static ArmorSet getArmorSet(LivingEntity entity) {
         if (!(entity.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof ArmorSetPart headPart)) return null;
@@ -45,6 +78,7 @@ public class ArmorSet {
         return null;
     }
 
+    // change to LivingEntity tick if needed
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.phase != TickEvent.Phase.END) return;
         if (event.player.level().isClientSide()) return;
@@ -52,35 +86,10 @@ public class ArmorSet {
 
         if (event.player.tickCount % TICK_INTERVAL != 0) return;
 
-        Map<UUID, AttributeModifier> desiredModifiers = new HashMap<>();
-
         ArmorSet armorSet = getArmorSet(player);
-        if (armorSet != null) {
-            for (Map.Entry<Attribute, AttributeModifier> entry : armorSet.modifiers.entrySet()) {
-                desiredModifiers.put(entry.getValue().getId(), entry.getValue());
-            }
-            for (Map.Entry<MobEffect, Integer> entry : armorSet.effects.entrySet()) {
-                player.addEffect(new MobEffectInstance(entry.getKey(), 115, entry.getValue(), true, true));
-            }
-            for (MobEffect effect : armorSet.resistances) {
-                player.removeEffect(effect);
-            }
-        }
+        if (armorSet == null) return;
 
-        for (Map.Entry<UUID, Attribute> entry : ALL_MODIFIER_ATTRIBUTES.entrySet()) {
-            UUID uuid = entry.getKey();
-            AttributeInstance attr = player.getAttribute(entry.getValue());
-            if (attr == null) continue;
-
-            boolean shouldHave = desiredModifiers.containsKey(uuid);
-            boolean hasModifier = attr.getModifier(uuid) != null;
-
-            if (shouldHave && !hasModifier) {
-                attr.addTransientModifier(desiredModifiers.get(uuid));
-            } else if (!shouldHave && hasModifier) {
-                attr.removeModifier(uuid);
-            }
-        }
+        armorSet.onTick(player);
     }
 
     public static void onMobEffectApplicable(MobEffectEvent.Applicable event) {
