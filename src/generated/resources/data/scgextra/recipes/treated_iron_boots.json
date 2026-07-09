@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "C": {
+      "item": "scguns:snapped_cogwheel"
+    },
+    "T": {
+      "item": "scguns:treated_iron_ingot"
+    }
+  },
+  "pattern": [
+    "TCT",
+    "A A"
+  ],
+  "result": {
+    "item": "scgextra:treated_iron_boots"
+  },
+  "show_notification": false
+}

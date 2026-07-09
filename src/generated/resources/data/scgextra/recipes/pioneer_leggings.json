@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": {
+      "item": "scguns:shulker_core"
+    },
+    "L": {
+      "item": "scguns:diamond_steel_lamp"
+    },
+    "P": {
+      "item": "minecraft:purpur_block"
+    },
+    "S": {
+      "item": "scguns:diamond_steel_ingot"
+    }
+  },
+  "pattern": [
+    "LCL",
+    "S S",
+    "P P"
+  ],
+  "result": {
+    "item": "scgextra:pioneer_leggings"
+  },
+  "show_notification": false
+}
