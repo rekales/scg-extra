@@ -26,6 +26,7 @@ public class DataGenerators {
                 new ModEntityTagProvider(output, lookupProvider, SCGExtra.MOD_ID, existingFileHelper));
         generator.addProvider(event.includeServer(),
                 new ModItemModelProvider(output, SCGExtra.MOD_ID, existingFileHelper));
+        generator.addProvider(event.includeServer(), new ModRecipeProvider(output));
         generator.addProvider(event.includeClient(),
                 new ModItemTagProvider(output, lookupProvider, CompletableFuture.completedFuture(TagsProvider.TagLookup.empty()), SCGExtra.MOD_ID, existingFileHelper));
 
