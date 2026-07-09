@@ -9,6 +9,7 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import top.ribs.scguns.init.ModItems;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.EnumMap;
@@ -19,7 +20,7 @@ import java.util.function.Supplier;
 public enum ModArmorMaterials implements StringRepresentable, ArmorMaterial {
 
     OPPRESSOR("oppressor",
-            45,
+            50,
             Util.make(new EnumMap<>(ArmorItem.Type.class),
             map -> {
                 map.put(ArmorItem.Type.HELMET, 5);
@@ -34,7 +35,7 @@ public enum ModArmorMaterials implements StringRepresentable, ArmorMaterial {
             () -> Ingredient.of(Items.COPPER_BLOCK, Items.EXPOSED_COPPER, Items.OXIDIZED_COPPER)
     ),
     COMMISSAR("commissar",
-            36,
+            40,
             Util.make(new EnumMap<>(ArmorItem.Type.class),
             map -> {
                 map.put(ArmorItem.Type.HELMET, 3);
@@ -47,14 +48,119 @@ public enum ModArmorMaterials implements StringRepresentable, ArmorMaterial {
             3.0F,
             0.05F,
             () -> Ingredient.of(Items.IRON_INGOT)
+    ),
+    TREATED_IRON("treated_iron",
+            30,
+            Util.make(new EnumMap<>(ArmorItem.Type.class),
+                    map -> {
+                        map.put(ArmorItem.Type.HELMET, 5);
+                        map.put(ArmorItem.Type.CHESTPLATE, 9);
+                        map.put(ArmorItem.Type.LEGGINGS, 7);
+                        map.put(ArmorItem.Type.BOOTS, 4);
+                    }),
+            10,
+            SoundEvents.ARMOR_EQUIP_IRON,
+            1.0F,
+            0.2F,
+            () -> Ingredient.of(ModItems.TREATED_IRON_INGOT.get())
+    ),
+    LEVIATHAN("leviathan",
+            40,
+            Util.make(new EnumMap<>(ArmorItem.Type.class),
+                    map -> {
+                        map.put(ArmorItem.Type.HELMET, 7);
+                        map.put(ArmorItem.Type.CHESTPLATE, 8);
+                        map.put(ArmorItem.Type.LEGGINGS, 4);
+                        map.put(ArmorItem.Type.BOOTS, 3);
+                    }),
+            16,
+            SoundEvents.ARMOR_EQUIP_TURTLE,
+            3.0F,
+            0.1F,
+            () -> Ingredient.of(Items.PRISMARINE, Items.PRISMARINE_BRICKS)
+    ),
+    GOLDEN_IDOL("golden_idol",
+            30,
+            Util.make(new EnumMap<>(ArmorItem.Type.class),
+                    map -> {
+                        map.put(ArmorItem.Type.HELMET, 4);
+                        map.put(ArmorItem.Type.CHESTPLATE, 7);
+                        map.put(ArmorItem.Type.LEGGINGS, 5);
+                        map.put(ArmorItem.Type.BOOTS, 3);
+                    }),
+            24,
+            SoundEvents.ARMOR_EQUIP_GOLD,
+            3.0F,
+            0.1F,
+            () -> Ingredient.of(Items.GOLD_INGOT)
+    ),
+    ENLIGHTENED("enlightened",
+            40,
+            Util.make(new EnumMap<>(ArmorItem.Type.class),
+                    map -> {
+                        map.put(ArmorItem.Type.HELMET, 6);
+                        map.put(ArmorItem.Type.CHESTPLATE, 8);
+                        map.put(ArmorItem.Type.LEGGINGS, 6);
+                        map.put(ArmorItem.Type.BOOTS, 4);
+                    }),
+            16,
+            SoundEvents.ARMOR_EQUIP_LEATHER,
+            3.0F,
+            0.05F,
+            () -> Ingredient.of(Items.IRON_INGOT)
+    ),
+    JUGGERNAUT("juggernaut",
+            65,
+            Util.make(new EnumMap<>(ArmorItem.Type.class),
+                    map -> {
+                        map.put(ArmorItem.Type.HELMET, 5);
+                        map.put(ArmorItem.Type.CHESTPLATE, 9);
+                        map.put(ArmorItem.Type.LEGGINGS, 6);
+                        map.put(ArmorItem.Type.BOOTS, 4);
+                    }),
+            16,
+            SoundEvents.ARMOR_EQUIP_NETHERITE,
+            4.0F,
+            0.2F,
+            () -> Ingredient.of(ModItems.TREATED_BRASS_INGOT.get())
+    ),
+    RITUAL("ritual",
+            50,
+            Util.make(new EnumMap<>(ArmorItem.Type.class),
+                    map -> {
+                        map.put(ArmorItem.Type.HELMET, 4);
+                        map.put(ArmorItem.Type.CHESTPLATE, 8);
+                        map.put(ArmorItem.Type.LEGGINGS, 6);
+                        map.put(ArmorItem.Type.BOOTS, 4);
+                    }),
+            12,
+            SoundEvents.ARMOR_EQUIP_DIAMOND,
+            4.0F,
+            0.1F,
+            () -> Ingredient.of(ModItems.DIAMOND_STEEL_INGOT.get())
+    ),
+    PIONEER("pioneer",
+            50,
+            Util.make(new EnumMap<>(ArmorItem.Type.class),
+                    map -> {
+                        map.put(ArmorItem.Type.HELMET, 4);
+                        map.put(ArmorItem.Type.CHESTPLATE, 9);
+                        map.put(ArmorItem.Type.LEGGINGS, 7);
+                        map.put(ArmorItem.Type.BOOTS, 4);
+                    }),
+            12,
+            SoundEvents.ARMOR_EQUIP_LEATHER,
+            4.0F,
+            0.2F,
+            () -> Ingredient.of(Items.SHULKER_SHELL, ModItems.DIAMOND_STEEL_INGOT.get())
     );
 
 
     private static final EnumMap<ArmorItem.Type, Integer> HEALTH_FUNCTION_FOR_TYPE = Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
-        map.put(ArmorItem.Type.HELMET, 11);
-        map.put(ArmorItem.Type.CHESTPLATE, 16);
-        map.put(ArmorItem.Type.LEGGINGS, 15);
-        map.put(ArmorItem.Type.BOOTS, 13);
+        map.put(ArmorItem.Type.HELMET, 10);
+        map.put(ArmorItem.Type.CHESTPLATE, 14);
+        map.put(ArmorItem.Type.LEGGINGS, 13);
+        map.put(ArmorItem.Type.BOOTS, 12);
     });
 
     private final String name;
