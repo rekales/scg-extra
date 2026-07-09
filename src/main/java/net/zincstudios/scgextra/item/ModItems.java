@@ -171,7 +171,7 @@ public class ModItems {
             PIONEER_HELMET = ITEMS.register("pioneer_helmet", () ->
                     new ArmorSetPartItem(ModArmorMaterials.PIONEER, ArmorItem.Type.HELMET, ArmorSets.PIONEER)),
             PIONEER_CHESTPLATE = ITEMS.register("pioneer_chestplate", () ->
-                    new ArmorSetPartItem(ModArmorMaterials.PIONEER, ArmorItem.Type.CHESTPLATE, ArmorSets.PIONEER)),
+                    new PioneerChestplateItem(ModArmorMaterials.PIONEER, ArmorItem.Type.CHESTPLATE, ArmorSets.PIONEER)),
             PIONEER_LEGGINGS = ITEMS.register("pioneer_leggings", () ->
                     new ArmorSetPartItem(ModArmorMaterials.PIONEER, ArmorItem.Type.LEGGINGS, ArmorSets.PIONEER)),
             PIONEER_BOOTS = ITEMS.register("pioneer_boots", () ->

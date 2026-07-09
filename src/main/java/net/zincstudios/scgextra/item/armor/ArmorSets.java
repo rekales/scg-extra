@@ -40,7 +40,6 @@ public final class ArmorSets {
 
     public static final ArmorSet RITUAL = new RitualArmorSet(new ArmorSet.Traits());
 
-    // TODO: elytra flying
     public static final ArmorSet PIONEER = new ArmorSet(new ArmorSet.Traits()
             .resistance(MobEffects.LEVITATION)
     );

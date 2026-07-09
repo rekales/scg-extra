@@ -1,7 +1,6 @@
 package net.zincstudios.scgextra.item.armor;
 
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorMaterial;
