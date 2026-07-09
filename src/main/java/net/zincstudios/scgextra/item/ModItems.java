@@ -24,10 +24,7 @@ import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
 import net.zincstudios.scgextra.entity.fac.FACEntities;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
-import net.zincstudios.scgextra.item.armor.ArmorSet;
-import net.zincstudios.scgextra.item.armor.ArmorSetPartItem;
-import net.zincstudios.scgextra.item.armor.ArmorSets;
-import net.zincstudios.scgextra.item.armor.ModArmorMaterials;
+import net.zincstudios.scgextra.item.armor.*;
 import top.ribs.scguns.attributes.SCAttributes;
 import top.ribs.scguns.item.GunItem;
 
@@ -100,13 +97,13 @@ public class ModItems {
 
     public static final RegistryObject<ArmorSetPartItem>
             OPPRESSOR_HELMET = ITEMS.register("oppressor_helmet", () ->
-                    new ArmorSetPartItem(ModArmorMaterials.OPPRESSOR, ArmorItem.Type.HELMET, ArmorSets.OPPRESSOR)),
+                    new GeoArmorSetPartItem(ModArmorMaterials.OPPRESSOR, ArmorItem.Type.HELMET, ArmorSets.OPPRESSOR)),
             OPPRESSOR_CHESTPLATE = ITEMS.register("oppressor_chestplate", () ->
-                    new ArmorSetPartItem(ModArmorMaterials.OPPRESSOR, ArmorItem.Type.CHESTPLATE, ArmorSets.OPPRESSOR)),
+                    new GeoArmorSetPartItem(ModArmorMaterials.OPPRESSOR, ArmorItem.Type.CHESTPLATE, ArmorSets.OPPRESSOR)),
             OPPRESSOR_LEGGINGS = ITEMS.register("oppressor_leggings", () ->
-                    new ArmorSetPartItem(ModArmorMaterials.OPPRESSOR, ArmorItem.Type.LEGGINGS, ArmorSets.OPPRESSOR)),
+                    new GeoArmorSetPartItem(ModArmorMaterials.OPPRESSOR, ArmorItem.Type.LEGGINGS, ArmorSets.OPPRESSOR)),
             OPPRESSOR_BOOTS = ITEMS.register("oppressor_boots", () ->
-                    new ArmorSetPartItem(ModArmorMaterials.OPPRESSOR, ArmorItem.Type.BOOTS, ArmorSets.OPPRESSOR)),
+                    new GeoArmorSetPartItem(ModArmorMaterials.OPPRESSOR, ArmorItem.Type.BOOTS, ArmorSets.OPPRESSOR)),
 
             COMMISSAR_HELMET = ITEMS.register("commissar_helmet", () ->
                     new ArmorSetPartItem(ModArmorMaterials.COMMISSAR, ArmorItem.Type.HELMET, ArmorSets.COMMISSAR)),
