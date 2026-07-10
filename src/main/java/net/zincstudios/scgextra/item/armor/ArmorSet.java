@@ -1,5 +1,6 @@
 package net.zincstudios.scgextra.item.armor;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -20,11 +21,13 @@ public class ArmorSet {
     public static final int TICK_INTERVAL = 10;
     private static final Map<UUID, Attribute> ALL_MODIFIER_ATTRIBUTES = new HashMap<>();
 
+    private final ResourceLocation resLoc;
     private final Map<Attribute, AttributeModifier> modifiers;
     private final Map<MobEffect, Integer> effects;
     private final Set<MobEffect> resistances;
 
-    public ArmorSet(ArmorSet.Traits traits) {
+    public ArmorSet(ResourceLocation resLoc, ArmorSet.Traits traits) {
+        this.resLoc = resLoc;
         this.modifiers = Map.copyOf(traits.modifiers);
         this.effects = Map.copyOf(traits.effects);
         this.resistances = Set.copyOf(traits.resistances);
@@ -64,6 +67,10 @@ public class ArmorSet {
                 attr.removeModifier(uuid);
             }
         }
+    }
+
+    public ResourceLocation getResourceLocation() {
+        return this.resLoc;
     }
 
     @Nullable

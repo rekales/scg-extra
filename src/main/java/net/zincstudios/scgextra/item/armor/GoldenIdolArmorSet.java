@@ -1,5 +1,6 @@
 package net.zincstudios.scgextra.item.armor;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -11,8 +12,8 @@ public class GoldenIdolArmorSet extends ArmorSet {
 
     public static final float RADIUS = 5F;
 
-    public GoldenIdolArmorSet(Traits traits) {
-        super(traits);
+    public GoldenIdolArmorSet(ResourceLocation resLoc, Traits traits) {
+        super(resLoc, traits);
     }
 
     @Override

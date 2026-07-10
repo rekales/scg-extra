@@ -1,6 +1,7 @@
 package net.zincstudios.scgextra.item.armor;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.zincstudios.scgextra.SCGExtra;
@@ -10,8 +11,8 @@ public class RitualArmorSet extends ArmorSet {
 
     public static final int COOLDOWN_DURATION = 20 * 60 * 20;
 
-    public RitualArmorSet(Traits traits) {
-        super(traits);
+    public RitualArmorSet(ResourceLocation resLoc, Traits traits) {
+        super(resLoc, traits);
     }
 
     @Override
