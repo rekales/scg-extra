@@ -1,0 +1,15 @@
+{
+  "name": "scgextra:destroyed_mine",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "scgextra:fac_destroyed_mine/fac_destroyed_mine",
+        "processors": "minecraft:empty",
+	      "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}
