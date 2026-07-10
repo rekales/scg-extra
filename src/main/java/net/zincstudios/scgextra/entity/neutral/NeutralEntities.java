@@ -16,11 +16,32 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.entity.neutral.inflicted_boar.InflictedBoarEntity;
 import net.zincstudios.scgextra.entity.neutral.inflicted_boar.InflictedBoarRenderer;
+import net.zincstudios.scgextra.entity.neutral.inflicted_wolf.InflictedWolfEntity;
+import net.zincstudios.scgextra.entity.neutral.inflicted_wolf.InflictedWolfRenderer;
 import top.ribs.scguns.common.BoundingBoxManager;
 
 public class NeutralEntities {
-    public static final RegistryObject<EntityType<InflictedBoarEntity>> INFLICTED_BOAR = ENTITY_TYPES.register("inflicted_boar", () -> EntityType.Builder.of(InflictedBoarEntity::new, MobCategory.MONSTER).sized(1.3964844F, 1.4F).clientTrackingRange(8).build("inflicted_boar"));
     
+    public static final RegistryObject<EntityType<InflictedBoarEntity>> INFLICTED_BOAR = ENTITY_TYPES.register(
+        "inflicted_boar", 
+        () -> EntityType.Builder.of(
+            InflictedBoarEntity::new, 
+            MobCategory.MONSTER
+        )
+        .sized(1.3964844F, 1.4F)
+        .clientTrackingRange(8)
+        .build("inflicted_boar")
+    );
+    
+    public static final RegistryObject<EntityType<InflictedWolfEntity>> INFLICTED_WOLF = ENTITY_TYPES.register(
+        "inflicted_wolf", 
+        () -> EntityType.Builder.of(
+            InflictedWolfEntity::new, 
+            MobCategory.MONSTER
+        )
+        .sized(1.3964844F, 1.4F)
+        .build("inflicted_wolf")
+    );
     
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(NeutralEntities::registerAttributes);
@@ -31,13 +52,32 @@ public class NeutralEntities {
     }
     private static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(NeutralEntities.INFLICTED_BOAR.get(), InflictedBoarEntity.createAttributes().build());
+        event.put(NeutralEntities.INFLICTED_WOLF.get(), InflictedBoarEntity.createAttributes().build());
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
-        BoundingBoxManager.registerHeadshotBox(NeutralEntities.INFLICTED_BOAR.get(), new OffsetRotatedHeadshotBox<>(8, 9.5, 28.0, 0.0F, 2.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(NeutralEntities.INFLICTED_BOAR.get(), new OffsetRotatedHeadshotBox<>(
+            8, 
+            9.5, 
+            15.0, 
+            0.0F, 
+            8.0, 
+            false, 
+            true
+        ));
+        BoundingBoxManager.registerHeadshotBox(NeutralEntities.INFLICTED_WOLF.get(), new OffsetRotatedHeadshotBox<>(
+            8, 
+            9.5, 
+            15.0, 
+            0.0F, 
+            10.0, 
+            false, 
+            true
+        ));
     }
     @OnlyIn(value = Dist.CLIENT)
     private static void onClientSetup(FMLClientSetupEvent event) {
         EntityRenderers.register(NeutralEntities.INFLICTED_BOAR.get(), InflictedBoarRenderer::new);
+        EntityRenderers.register(NeutralEntities.INFLICTED_WOLF.get(), InflictedWolfRenderer::new);
     }
 }

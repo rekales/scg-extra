@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.neutral.inflicted_boar;
+package net.zincstudios.scgextra.entity.neutral.inflicted_wolf;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -11,7 +11,9 @@ import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -22,19 +24,19 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class InflictedBoarEntity extends Monster implements GeoEntity{
+public class InflictedWolfEntity extends Monster implements GeoEntity{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
-    public InflictedBoarEntity(EntityType<? extends Monster> entityType, Level level) {
+    public InflictedWolfEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-        .add(Attributes.MAX_HEALTH, 40.0)
+        .add(Attributes.MAX_HEALTH, 30.0)
         .add(Attributes.MOVEMENT_SPEED, 0.5)
-        .add(Attributes.KNOCKBACK_RESISTANCE, 0.6)
-        .add(Attributes.ATTACK_KNOCKBACK, 2)
-        .add(Attributes.ATTACK_DAMAGE, 6)
+        .add(Attributes.KNOCKBACK_RESISTANCE, 0.2)
+        .add(Attributes.ATTACK_KNOCKBACK, 1)
+        .add(Attributes.ATTACK_DAMAGE, 8)
         .add(Attributes.ARMOR, 2);
     }
 
@@ -45,15 +47,17 @@ public class InflictedBoarEntity extends Monster implements GeoEntity{
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 0.5));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Sheep.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Skeleton.class, true));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.goalSelector.addGoal(2, new InflictedBoarAttackGoal(this, 0.7, true));
+        this.goalSelector.addGoal(2, new InflictedWolfAttackGoal(this, 0.7, true));
     }
 
     @Override
     public void registerControllers(ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "controller", 0, state -> {
-            if (((this.getX() - this.xo)*(this.getX() - this.xo))+((this.getZ() - this.zo)*(this.getZ() - this.zo))>0.0002) {
+            if (((this.getX() - this.xo)*(this.getX() - this.xo))+((this.getZ() - this.zo)*(this.getZ() - this.zo))>0.00015) {
                 state.setAndContinue(RawAnimation.begin().thenLoop("walk"));
             } else {
                 state.setAndContinue(RawAnimation.begin().thenLoop("idle"));
@@ -74,19 +78,19 @@ public class InflictedBoarEntity extends Monster implements GeoEntity{
         return geoCache;
     }
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return SoundEvents.HOGLIN_HURT;
+        return SoundEvents.WOLF_HURT;
     };
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.HOGLIN_AMBIENT;
+        return SoundEvents.WOLF_AMBIENT;
     };
     protected SoundEvent getDeathSound() {
-        return SoundEvents.HOGLIN_DEATH;
+        return SoundEvents.WOLF_DEATH;
     };
     protected float getSoundVolume() {
         return 0.8F;
     };
     protected void playStepSound(net.minecraft.core.BlockPos pPos, net.minecraft.world.level.block.state.BlockState pState) {
-        this.playSound(SoundEvents.HOGLIN_STEP, this.getSoundVolume(), this.getVoicePitch());
+        this.playSound(SoundEvents.WOLF_STEP, this.getSoundVolume(), this.getVoicePitch());
     };
     @Override
     protected void tickDeath() {
