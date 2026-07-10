@@ -24,7 +24,7 @@ public class SuperRaidFlareItem extends RaidFlareItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.translatable("raid.scguns." + this.baseRaidId + ".name").withStyle(ChatFormatting.GOLD));
-        tooltip.add(Component.translatable("item.scguns.raid_flare.requires_pistol").withStyle(new ChatFormatting[]{ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC}));
+        tooltip.add(Component.translatable("item.scguns.raid_flare.requires_pistol").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
     }
 
     @Override

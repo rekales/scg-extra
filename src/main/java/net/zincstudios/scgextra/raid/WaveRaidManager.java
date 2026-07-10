@@ -63,6 +63,8 @@ public class WaveRaidManager extends SavedData {
     }
 
     public void startRaid(WaveRaidData raidData, ServerLevel level, ServerPlayer player) {
+        if (hasActiveRaid()) return;
+
         Vec3 raidCenter = player.position();
         Vec3 waveCenter = WaveRaidUtil.findWaveSpawnLocation(level, raidCenter, raidCenter);
         if (waveCenter == null) return;

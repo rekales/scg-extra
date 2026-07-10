@@ -16,6 +16,7 @@
     "ModCommandsMixin",
     "OceanMonumentEntryRoomMixin",
     "ProjectileEntityMixin",
+    "RaidFlareEntityMixin",
     "RaidManagerMixin",
     "RaidSaveDataAccessor",
     "RecoilHandlerMixin",

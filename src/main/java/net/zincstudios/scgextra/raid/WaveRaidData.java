@@ -37,18 +37,18 @@ public record WaveRaidData(
 ) {
 
     private static final Map<String, WaveRaidData> RAIDS = new HashMap<>();  // Key: raid id
-    private static final Map<String, WaveRaidData> REPLACED_RAIDS = new HashMap<>();  // Key: original raid id
+    private static final Map<String, WaveRaidData> FLARE_RAIDS = new HashMap<>();  // Key: original raid id
 
     public static void addWaveRaid(WaveRaidData raid) {
         RAIDS.put(raid.id, raid);
         if (!raid.flare_raid_id.isEmpty()) {
-            REPLACED_RAIDS.put(raid.flare_raid_id, raid);
+            FLARE_RAIDS.put(raid.flare_raid_id, raid);
         }
     }
 
     public static void clearWaveRaids() {
         RAIDS.clear();
-        REPLACED_RAIDS.clear();
+        FLARE_RAIDS.clear();
     }
 
     public WaveRaidData {
@@ -63,8 +63,8 @@ public record WaveRaidData(
         // TODO: complex check if there's enough max_spawns for the wave.
     }
 
-    public static @Nullable WaveRaidData getWaveRaidFromOriginal(String originalId) {
-        return REPLACED_RAIDS.get(originalId);
+    public static @Nullable WaveRaidData getWaveRaidFromFlareRaid(String flareRaidId) {
+        return FLARE_RAIDS.get(flareRaidId);
     }
 
     public static @Nullable WaveRaidData getWaveRaid(String id) {
