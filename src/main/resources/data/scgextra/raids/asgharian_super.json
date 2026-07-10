@@ -1,0 +1,69 @@
+{
+  "raid_id" : "asgharian_super",
+  "flare_raid_id" : "diamond_steel_super",
+
+  "waves" : [
+    {
+      "infantry": 10
+    },
+    {
+      "infantry": 10,
+      "elite": 3
+    },
+    {
+      "infantry": 12,
+      "elite": 4,
+      "miniboss": 1
+    },
+    {
+      "infantry": 10,
+      "elite": 6,
+      "miniboss": 3
+    },
+    {
+      "infantry": 6,
+      "elite": 2,
+      "boss": 2
+    }
+  ],
+
+  "infantry" : [
+    {
+      "entity_id": "scgextra:failed_one"
+    },
+    {
+      "entity_id": "scguns:dissident",
+      "max_count": 3
+    }
+  ],
+  "elite" : [
+    {
+      "entity_id": "scgextra:asghar_worker"
+    },
+    {
+      "entity_id": "scgextra:asghar_flamer"
+    },
+    {
+      "entity_id": "scguns:adjudicator"
+    },
+    {
+      "entity_id": "scguns:subjugator"
+    }
+  ],
+  "miniboss" : [
+    {
+      "entity_id": "scgextra:asghar_surgeon"
+    },
+    {
+      "entity_id": "scguns:praetor"
+    }
+  ],
+  "boss" : [
+    {
+      "entity_id": "scgextra:candle_fiend"
+    },
+    {
+      "entity_id": "scgextra:soul_ripper"
+    }
+  ]
+}
