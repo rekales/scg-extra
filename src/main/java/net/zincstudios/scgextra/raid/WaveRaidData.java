@@ -28,7 +28,7 @@ import java.util.*;
 @MethodsReturnNonnullByDefault
 public record WaveRaidData(
         String id,
-        String originalId,
+        String flare_raid_id,
         @Deprecated List<Wave> waves,
         @Deprecated List<RaiderEntry> infantry,
         @Deprecated List<RaiderEntry> elite,
@@ -41,8 +41,8 @@ public record WaveRaidData(
 
     public static void addWaveRaid(WaveRaidData raid) {
         RAIDS.put(raid.id, raid);
-        if (!raid.originalId.isEmpty()) {
-            REPLACED_RAIDS.put(raid.originalId, raid);
+        if (!raid.flare_raid_id.isEmpty()) {
+            REPLACED_RAIDS.put(raid.flare_raid_id, raid);
         }
     }
 

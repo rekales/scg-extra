@@ -1,6 +1,6 @@
 {
   "raid_id" : "whaler",
-  "raid_original_id" : "ocean",
+  "flare_raid_id" : "ocean",
 
   "waves" : [
     {

@@ -57,7 +57,7 @@ public class RaidDataLoader extends SimpleJsonResourceReloadListener {
         @Override
         public WaveRaidData deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
             JsonObject obj = jsonElement.getAsJsonObject();
-            String originalId = obj.get("raid_original_id").getAsString();
+            String originalId = obj.get("flare_raid_id").getAsString();
             String id = obj.get("raid_id").getAsString();
 
             List<WaveRaidData.Wave> waves = parseWaves(obj.getAsJsonArray("waves"));
