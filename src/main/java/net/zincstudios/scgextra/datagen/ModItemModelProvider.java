@@ -49,60 +49,30 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem("armor/", ModItems.TREATED_IRON_CHESTPLATE);
         basicItem("armor/", ModItems.TREATED_IRON_LEGGINGS);
         basicItem("armor/", ModItems.TREATED_IRON_BOOTS);
-
-        withExistingParent("leviathan_helmet", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_helmet"));
-        withExistingParent("leviathan_chestplate", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_chestplate"));
-        withExistingParent("leviathan_leggings", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_leggings"));
-        withExistingParent("leviathan_boots", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_boots"));
-
-        withExistingParent("golden_idol_helmet", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_helmet"));
-        withExistingParent("golden_idol_chestplate", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_chestplate"));
-        withExistingParent("golden_idol_leggings", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_leggings"));
-        withExistingParent("golden_idol_boots", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_boots"));
-
-        withExistingParent("enlightened_helmet", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_helmet"));
-        withExistingParent("enlightened_chestplate", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_chestplate"));
-        withExistingParent("enlightened_leggings", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_leggings"));
-        withExistingParent("enlightened_boots", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_boots"));
-
-        withExistingParent("juggernaut_helmet", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_helmet"));
-        withExistingParent("juggernaut_chestplate", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_chestplate"));
-        withExistingParent("juggernaut_leggings", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_leggings"));
-        withExistingParent("juggernaut_boots", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_boots"));
-
-        withExistingParent("ritual_helmet", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_helmet"));
-        withExistingParent("ritual_chestplate", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_chestplate"));
-        withExistingParent("ritual_leggings", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_leggings"));
-        withExistingParent("ritual_boots", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_boots"));
-
-        withExistingParent("pioneer_helmet", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_helmet"));
-        withExistingParent("pioneer_chestplate", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_chestplate"));
-        withExistingParent("pioneer_leggings", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_leggings"));
-        withExistingParent("pioneer_boots", mcLoc("item/generated"))
-                .texture("layer0", mcLoc("item/iron_boots"));
+        basicItem("armor/", ModItems.LEVIATHAN_HELMET);
+        basicItem("armor/", ModItems.LEVIATHAN_CHESTPLATE);
+        basicItem("armor/", ModItems.LEVIATHAN_LEGGINGS);
+        basicItem("armor/", ModItems.LEVIATHAN_BOOTS);
+        basicItem("armor/", ModItems.GOLDEN_IDOL_HELMET);
+        basicItem("armor/", ModItems.GOLDEN_IDOL_CHESTPLATE);
+        basicItem("armor/", ModItems.GOLDEN_IDOL_LEGGINGS);
+        basicItem("armor/", ModItems.GOLDEN_IDOL_BOOTS);
+        basicItem("armor/", ModItems.ENLIGHTENED_HELMET);
+        basicItem("armor/", ModItems.ENLIGHTENED_CHESTPLATE);
+        basicItem("armor/", ModItems.ENLIGHTENED_LEGGINGS);
+        basicItem("armor/", ModItems.ENLIGHTENED_BOOTS);
+        basicItem("armor/", ModItems.JUGGERNAUT_HELMET);
+        basicItem("armor/", ModItems.JUGGERNAUT_CHESTPLATE);
+        basicItem("armor/", ModItems.JUGGERNAUT_LEGGINGS);
+        basicItem("armor/", ModItems.JUGGERNAUT_BOOTS);
+        basicItem("armor/", ModItems.RITUAL_HELMET);
+        basicItem("armor/", ModItems.RITUAL_CHESTPLATE);
+        basicItem("armor/", ModItems.RITUAL_LEGGINGS);
+        basicItem("armor/", ModItems.RITUAL_BOOTS);
+        basicItem("armor/", ModItems.PIONEER_HELMET);
+        basicItem("armor/", ModItems.PIONEER_CHESTPLATE);
+        basicItem("armor/", ModItems.PIONEER_LEGGINGS);
+        basicItem("armor/", ModItems.PIONEER_BOOTS);
 
         basicItem(ModItems.FISH_FOLK_SPAWN_EGG.get());
         basicItem(ModItems.TURTLEMAN_SPAWN_EGG.get());

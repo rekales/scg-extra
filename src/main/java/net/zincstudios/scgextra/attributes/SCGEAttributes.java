@@ -34,8 +34,5 @@ public final class SCGEAttributes {
         event.add(EntityType.PLAYER, BULLET_DAMAGE_TAKEN_MULT.get());
         event.add(EntityType.PLAYER, BULLET_ADDITIONAL_CRIT_CHANCE.get());
         event.add(EntityType.PLAYER, BULLET_GRAVITY_MULT.get());
-        //Disabled
-        //event.add(EntityType.PLAYER, SCAttributes.BULLET_RESISTANCE.get());
-        //event.add(EntityType.PLAYER, SCAttributes.FIRE_RATE_MULTIPLIER.get());
     }
 }
