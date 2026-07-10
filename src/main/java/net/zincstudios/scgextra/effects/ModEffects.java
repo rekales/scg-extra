@@ -23,8 +23,8 @@ public final class ModEffects {
 
     public static final RegistryObject<MobEffect> MORTAL = MOB_EFFECTS.register("mortal", () -> new MortalMobEffect(MobEffectCategory.NEUTRAL, 0x2C366D));
 
-    public static final RegistryObject<MobEffect> ENLIGHTENMENT_MEDAL_EFFECT = MOB_EFFECTS.register("enlightenment_medal", () -> new EnlightenmentHealthBoostMobEffect(MobEffectCategory.BENEFICIAL, 0x000000)
-            .addAttributeModifier(Attributes.MAX_HEALTH, EnlightenmentHealthBoostMobEffect.EFFECT_ID, 4.0D, AttributeModifier.Operation.ADDITION));
+    public static final RegistryObject<MobEffect> ENLIGHTENMENT = MOB_EFFECTS.register("enlightenment", () -> new EnlightenmentHealthBoostMobEffect(MobEffectCategory.BENEFICIAL, 0x000000)
+            .addAttributeModifier(Attributes.MAX_HEALTH, EnlightenmentHealthBoostMobEffect.EFFECT_ID, 8.0D, AttributeModifier.Operation.ADDITION));
 
     public static void register(IEventBus eventBus){
         MOB_EFFECTS.register(eventBus);

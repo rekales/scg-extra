@@ -24,7 +24,7 @@ public class RitualArmorSet extends ArmorSet {
         if (cooldownTicks > 0) {
             if (effectInstance == null ||  effectInstance.getDuration() != cooldownTicks) {
                 SCGExtra.LOGGER.debug("refreshed");
-                entity.addEffect(new MobEffectInstance(ModEffects.MORTAL.get(), cooldownTicks));
+                entity.addEffect(new MobEffectInstance(ModEffects.MORTAL.get(), cooldownTicks, 0, true, true));
             }
         } else if (effectInstance != null) {
             entity.removeEffect(ModEffects.MORTAL.get());

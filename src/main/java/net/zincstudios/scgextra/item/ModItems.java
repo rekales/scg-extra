@@ -88,7 +88,7 @@ public class ModItems {
                     .modifier(SCAttributes.BULLET_DAMAGE_MULTIPLIER.get(), new AttributeModifier("cruelty_medal_bullet_damage", 0.1, AttributeModifier.Operation.MULTIPLY_TOTAL))
             )),
             MEDAL_OF_ENLIGHTENMENT = ITEMS.register("medal_of_enlightenment", () -> new MedalItem(new MedalItem.Traits()
-                    .effect(ModEffects.ENLIGHTENMENT_MEDAL_EFFECT.get(), 1)
+                    .effect(ModEffects.ENLIGHTENMENT.get(), 0)
             )),
             MEDAL_OF_CONQUEROR = ITEMS.register("medal_of_conqueror", () -> new MedalItem(new MedalItem.Traits()
                     .modifier(SCGEAttributes.BULLET_ADDITIONAL_CRIT_CHANCE.get(), new AttributeModifier("conqueror_medal_crit_chance", 0.2, AttributeModifier.Operation.ADDITION))
