@@ -3,7 +3,9 @@ package net.zincstudios.scgextra.datagen;
 
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
@@ -26,6 +28,19 @@ public class ModItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
         basicItem(ModItems.WALKER_MG.get());
         basicItem(ModItems.END_SHELL.get());
+
+        basicItem("medal/", ModItems.MEDAL_OF_SURVIVOR);
+
+        copyTexture(ModItems.ANTIQUE_SUPER_FLARE, top.ribs.scguns.init.ModItems.ANTIQUE_FLARE);
+        copyTexture(ModItems.FRONTIER_SUPER_FLARE, top.ribs.scguns.init.ModItems.FRONTIER_FLARE);
+        copyTexture(ModItems.COPPER_SUPER_FLARE, top.ribs.scguns.init.ModItems.COPPER_FLARE);
+        copyTexture(ModItems.IRON_SUPER_FLARE, top.ribs.scguns.init.ModItems.IRON_FLARE);
+        copyTexture(ModItems.WRECKER_SUPER_FLARE, top.ribs.scguns.init.ModItems.WRECKER_FLARE);
+        copyTexture(ModItems.DIAMOND_STEEL_SUPER_FLARE, top.ribs.scguns.init.ModItems.DIAMOND_STEEL_FLARE);
+        copyTexture(ModItems.TREATED_BRASS_SUPER_FLARE, top.ribs.scguns.init.ModItems.TREATED_BRASS_FLARE);
+        copyTexture(ModItems.GOLD_SUPER_FLARE, top.ribs.scguns.init.ModItems.GOLD_FLARE);
+        copyTexture(ModItems.SCULK_SUPER_FLARE, top.ribs.scguns.init.ModItems.SCULK_FLARE);
+        copyTexture(ModItems.OCEAN_SUPER_FLARE, top.ribs.scguns.init.ModItems.OCEAN_FLARE);
 
         basicItem("medal/", ModItems.MEDAL_OF_SURVIVOR);
         basicItem("medal/", ModItems.MEDAL_OF_IRON_WILL);
@@ -145,10 +160,29 @@ public class ModItemModelProvider extends ItemModelProvider {
         return basicItem(prefix, Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item)));
     }
 
-    public ItemModelBuilder basicItem(String prefix, ResourceLocation item) {
-        return getBuilder(item.toString())
+    public ItemModelBuilder basicItem(String prefix, ResourceLocation loc) {
+        return getBuilder(loc.toString())
                 .parent(new ModelFile.UncheckedModelFile("item/generated"))
-                .texture("layer0", new ResourceLocation(item.getNamespace(), "item/" + prefix + item.getPath()));
+                .texture("layer0", new ResourceLocation(loc.getNamespace(), "item/" + prefix + loc.getPath()));
+    }
+
+    public ItemModelBuilder copyTexture(RegistryObject<? extends Item> item, RegistryObject<? extends Item> copiedItem) {
+        return copyTexture(item.get(), copiedItem.get());
+    }
+
+    public ItemModelBuilder copyTexture(Item item, Item copiedItem) {
+        return copyTexture(
+                Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item)),
+                Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(copiedItem))
+        );
+    }
+
+    public ItemModelBuilder copyTexture(ResourceLocation itemLoc, ResourceLocation copiedLoc) {
+        existingFileHelper.trackGenerated(new ResourceLocation(copiedLoc.getNamespace(), "item/" + copiedLoc.getPath()),
+                PackType.CLIENT_RESOURCES, ".png", "textures");
+        return getBuilder(itemLoc.toString())
+                .parent(new ModelFile.UncheckedModelFile("item/generated"))
+                .texture("layer0", new ResourceLocation(copiedLoc.getNamespace(), "item/" + copiedLoc.getPath()));
     }
 
     private void spawnEgg(RegistryObject<SpawnEggItem> item) {

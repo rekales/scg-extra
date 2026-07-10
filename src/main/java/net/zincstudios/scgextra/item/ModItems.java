@@ -60,6 +60,29 @@ public class ModItems {
             () -> new Item(new Item.Properties())
     );
 
+    public static final RegistryObject<Item>
+            ANTIQUE_SUPER_FLARE = ITEMS.register("antique_super_flare", () ->
+            new SuperRaidFlareItem(new Item.Properties().stacksTo(16), "antique_super", "antique")),
+            FRONTIER_SUPER_FLARE = ITEMS.register("frontier_super_flare", () ->
+                    new SuperRaidFlareItem(new Item.Properties().stacksTo(16), "frontier_super", "frontier")),
+            COPPER_SUPER_FLARE = ITEMS.register("copper_super_flare", () ->
+                    new SuperRaidFlareItem(new Item.Properties().stacksTo(16), "copper_super", "copper")),
+            IRON_SUPER_FLARE = ITEMS.register("iron_super_flare", () ->
+                    new SuperRaidFlareItem(new Item.Properties().stacksTo(16), "iron_super", "iron")),
+            WRECKER_SUPER_FLARE = ITEMS.register("wrecker_super_flare", () ->
+                    new SuperRaidFlareItem(new Item.Properties().stacksTo(16), "wrecker_super", "wrecker")),
+            DIAMOND_STEEL_SUPER_FLARE = ITEMS.register("diamond_steel_super_flare", () ->
+                    new SuperRaidFlareItem(new Item.Properties().stacksTo(16), "diamond_steel_super", "diamond_steel")),
+            TREATED_BRASS_SUPER_FLARE = ITEMS.register("treated_brass_super_flare", () ->
+                    new SuperRaidFlareItem(new Item.Properties().stacksTo(16), "treated_brass_super", "treated_brass")),
+            GOLD_SUPER_FLARE = ITEMS.register("gold_super_flare", () ->
+                    new SuperRaidFlareItem(new Item.Properties().stacksTo(16), "piglin_super", "piglin")),
+            SCULK_SUPER_FLARE = ITEMS.register("sculk_super_flare", () ->
+                    new SuperRaidFlareItem(new Item.Properties().stacksTo(16), "sculk_super", "sculk")),
+            OCEAN_SUPER_FLARE = ITEMS.register("ocean_super_flare", () ->
+                    new SuperRaidFlareItem(new Item.Properties().stacksTo(16), "ocean_super", "ocean"));
+
+
     public static final RegistryObject<MedalItem>
             MEDAL_OF_SURVIVOR = ITEMS.register("medal_of_survivor", () -> new MedalItem(new MedalItem.Traits()
                     .modifier(Attributes.ARMOR, new AttributeModifier("survivor_medal_armor", 10, AttributeModifier.Operation.ADDITION))

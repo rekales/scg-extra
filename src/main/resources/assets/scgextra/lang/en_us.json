@@ -177,6 +177,17 @@
   "item.scgextra.pioneer_leggings" : "Pioneer Leggings",
   "item.scgextra.pioneer_boots" : "Pioneer Boots",
 
+  "item.scgextra.antique_super_flare": "Antique Super Flare",
+  "item.scgextra.frontier_super_flare": "Frontier Super Flare",
+  "item.scgextra.copper_super_flare": "Copper Super Flare",
+  "item.scgextra.iron_super_flare": "Iron Super Flare",
+  "item.scgextra.wrecker_super_flare": "Wrecker Super Flare",
+  "item.scgextra.diamond_steel_super_flare": "Diamond Steel Super Flare",
+  "item.scgextra.treated_brass_super_flare": "Treated Brass Super Flare",
+  "item.scgextra.gold_super_flare": "Gold Super Flare",
+  "item.scgextra.sculk_super_flare": "Sculk Super Flare",
+  "item.scgextra.ocean_super_flare": "Ocean Super Flare",
+
   "itemGroup.scgextra.tab":  "SCG Extra",
 
 
