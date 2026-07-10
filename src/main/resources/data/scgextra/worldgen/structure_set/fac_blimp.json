@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "scgextra:fac_blimp",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 20,
+    "separation": 15,
+    "spread_type": "linear",
+    "salt": 4639572,
+    "frequency_reduction_method": "default",
+    "frequency": 1
+  }
+}

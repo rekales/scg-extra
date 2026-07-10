@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "scgextra:fac_tower",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 30,
+    "separation": 15,
+    "spread_type": "linear",
+    "salt": 57628573,
+    "frequency_reduction_method": "default",
+    "frequency": 1
+  }
+}

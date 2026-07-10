@@ -7,9 +7,9 @@
     "start_height": {
       "absolute": -3
     },
-    "step": "surface_structures",
     "project_start_to_heightmap": "MOTION_BLOCKING_NO_LEAVES",
-    "terrain_adaptation": "bury",
+    "step": "surface_structures",
+    "terrain_adaptation": "beard_thin",
     "biomes": "scgextra:warzone_biome",
     "use_expansion_hack": false
 }
