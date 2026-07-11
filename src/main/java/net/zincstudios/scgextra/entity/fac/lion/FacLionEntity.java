@@ -69,7 +69,7 @@ public class FacLionEntity extends GunnerEntity implements GeoEntity, Gunner {
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
                 .add(Attributes.FOLLOW_RANGE, 48.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.18F)
+                .add(Attributes.MOVEMENT_SPEED, 0.17F)
                 .add(Attributes.ATTACK_DAMAGE, 15.0D)
                 .add(Attributes.ARMOR, 12.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.8D)

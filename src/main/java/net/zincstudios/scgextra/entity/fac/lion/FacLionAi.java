@@ -57,7 +57,7 @@ public final class FacLionAi {
                 StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValidNonFriendlies(mob, target, false)),
                 AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), false),
                 new WeaponRangeOverride(7, 10),
-                new ApproachTargetIfCannotAim(1.0F),
+                new ApproachTargetIfCannotAim(1.2F),
                 new AimWhenNotWalking(),
                 new ShootTarget(20, (simGun, entity) -> 1.6F, entity -> true,
                         new IntervalTriggerSampler(30, 50, 5, 30))
