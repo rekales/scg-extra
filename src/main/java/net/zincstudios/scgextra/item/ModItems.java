@@ -165,13 +165,13 @@ public class ModItems {
                     new ArmorSetPartItem(ModArmorMaterials.GOLDEN_IDOL, ArmorItem.Type.BOOTS, ArmorSets.GOLDEN_IDOL)),
 
             ENLIGHTENED_HELMET = ITEMS.register("enlightened_helmet", () ->
-                    new ArmorSetPartItem(ModArmorMaterials.ENLIGHTENED, ArmorItem.Type.HELMET, ArmorSets.ENLIGHTENED)),
+                    new GeoArmorSetPartItem(ModArmorMaterials.ENLIGHTENED, ArmorItem.Type.HELMET, ArmorSets.ENLIGHTENED)),
             ENLIGHTENED_CHESTPLATE = ITEMS.register("enlightened_chestplate", () ->
-                    new ArmorSetPartItem(ModArmorMaterials.ENLIGHTENED, ArmorItem.Type.CHESTPLATE, ArmorSets.ENLIGHTENED)),
+                    new GeoArmorSetPartItem(ModArmorMaterials.ENLIGHTENED, ArmorItem.Type.CHESTPLATE, ArmorSets.ENLIGHTENED)),
             ENLIGHTENED_LEGGINGS = ITEMS.register("enlightened_leggings", () ->
-                    new ArmorSetPartItem(ModArmorMaterials.ENLIGHTENED, ArmorItem.Type.LEGGINGS, ArmorSets.ENLIGHTENED)),
+                    new GeoArmorSetPartItem(ModArmorMaterials.ENLIGHTENED, ArmorItem.Type.LEGGINGS, ArmorSets.ENLIGHTENED)),
             ENLIGHTENED_BOOTS = ITEMS.register("enlightened_boots", () ->
-                    new ArmorSetPartItem(ModArmorMaterials.ENLIGHTENED, ArmorItem.Type.BOOTS, ArmorSets.ENLIGHTENED)),
+                    new GeoArmorSetPartItem(ModArmorMaterials.ENLIGHTENED, ArmorItem.Type.BOOTS, ArmorSets.ENLIGHTENED)),
 
             JUGGERNAUT_HELMET = ITEMS.register("juggernaut_helmet", () ->
                     new ArmorSetPartItem(ModArmorMaterials.JUGGERNAUT, ArmorItem.Type.HELMET, ArmorSets.JUGGERNAUT)),
