@@ -61,10 +61,10 @@ public class ModItems {
     );
 
     public static final RegistryObject<Item>
-            ANTIQUE_SUPER_FLARE = ITEMS.register("antique_super_flare", () ->
-            new SuperRaidFlareItem(new Item.Properties().stacksTo(16), "antique_super", "antique")),
-            FRONTIER_SUPER_FLARE = ITEMS.register("frontier_super_flare", () ->
-                    new SuperRaidFlareItem(new Item.Properties().stacksTo(16), "frontier_super", "frontier")),
+//            ANTIQUE_SUPER_FLARE = ITEMS.register("antique_super_flare", () ->
+//                    new SuperRaidFlareItem(new Item.Properties().stacksTo(16), "antique_super", "antique")),
+//            FRONTIER_SUPER_FLARE = ITEMS.register("frontier_super_flare", () ->
+//                    new SuperRaidFlareItem(new Item.Properties().stacksTo(16), "frontier_super", "frontier")),
             COPPER_SUPER_FLARE = ITEMS.register("copper_super_flare", () ->
                     new SuperRaidFlareItem(new Item.Properties().stacksTo(16), "copper_super", "copper")),
             IRON_SUPER_FLARE = ITEMS.register("iron_super_flare", () ->

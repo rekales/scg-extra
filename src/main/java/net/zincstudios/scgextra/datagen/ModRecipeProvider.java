@@ -23,8 +23,8 @@ public class ModRecipeProvider extends RecipeProvider {
     @Override
     protected void buildRecipes(Consumer<FinishedRecipe> writer) {
 
-        superFlare(writer, ModItems.ANTIQUE_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.ANTIQUE_FLARE.get());
-        superFlare(writer, ModItems.FRONTIER_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.FRONTIER_FLARE.get());
+//        superFlare(writer, ModItems.ANTIQUE_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.ANTIQUE_FLARE.get());
+//        superFlare(writer, ModItems.FRONTIER_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.FRONTIER_FLARE.get());
         superFlare(writer, ModItems.COPPER_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.COPPER_FLARE.get());
         superFlare(writer, ModItems.IRON_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.IRON_FLARE.get());
         superFlare(writer, ModItems.WRECKER_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.WRECKER_FLARE.get());
