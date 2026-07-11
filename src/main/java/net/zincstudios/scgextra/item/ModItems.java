@@ -85,7 +85,7 @@ public class ModItems {
 
     public static final RegistryObject<MedalItem>
             MEDAL_OF_SURVIVOR = ITEMS.register("medal_of_survivor", () -> new MedalItem(new MedalItem.Traits()
-                    .modifier(Attributes.ARMOR, new AttributeModifier("survivor_medal_armor", 10, AttributeModifier.Operation.ADDITION))
+                    .modifier(Attributes.ARMOR, new AttributeModifier("survivor_medal_armor", 5, AttributeModifier.Operation.ADDITION))
             )),
             MEDAL_OF_IRON_WILL = ITEMS.register("medal_of_iron_will", () -> new MedalItem(new MedalItem.Traits()
                     .modifier(SCGEAttributes.BULLET_DAMAGE_TAKEN_MULT.get(), new AttributeModifier("iron_will_medal_bullet_damage_taken", -0.2, AttributeModifier.Operation.ADDITION))
