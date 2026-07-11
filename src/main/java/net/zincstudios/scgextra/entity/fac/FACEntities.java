@@ -17,7 +17,6 @@ import net.zincstudios.scgextra.entity.common.WeakPointBox;
 import net.zincstudios.scgextra.entity.common.WeakPointBoxManager;
 import net.zincstudios.scgextra.entity.common.client.BaseEntityRenderer;
 import net.zincstudios.scgextra.entity.common.client.GunHoldingMobRenderer;
-import net.zincstudios.scgextra.entity.common.client.GunnerRenderer;
 import net.zincstudios.scgextra.entity.common.client.ItemHoldingMobRenderer;
 import net.zincstudios.scgextra.entity.fac.bluecoat.FacBluecoatEntity;
 import net.zincstudios.scgextra.entity.fac.commissar.FacCommissarEntity;
@@ -77,7 +76,7 @@ public class FACEntities {
 
     public static final RegistryObject<EntityType<FacLionEntity>> FAC_LION = ENTITY_TYPES
             .register("fac_lion", () -> EntityType.Builder.of(FacLionEntity::new, MobCategory.MONSTER)
-                    .sized(1.3F, 2.9F)
+                    .sized(1.8F, 3F)
                     .build("fac_lion"));
 
     public static final RegistryObject<EntityType<FacCommissarEntity>> FAC_COMMISSAR = ENTITY_TYPES

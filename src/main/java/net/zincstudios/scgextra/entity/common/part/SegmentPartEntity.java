@@ -2,7 +2,6 @@ package net.zincstudios.scgextra.entity.common.part;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
@@ -11,7 +10,6 @@ import net.minecraft.world.entity.Pose;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.PartEntity;
 
 import javax.annotation.Nullable;
@@ -20,33 +18,20 @@ import java.util.UUID;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class RotatedSegmentPartEntity<T extends LivingEntity> extends PartEntity<T> {
+public abstract class SegmentPartEntity <T extends LivingEntity> extends PartEntity<T> {
 
     private final EntityDimensions size;
     private final boolean collision;
 
-    private Vec3 offset;
-
-    public RotatedSegmentPartEntity(T parent, Vec3 offset, float width, float height) {
-        this(parent, offset, width, height, true);
+    public SegmentPartEntity(T parent, float width, float height) {
+        this(parent, width, height, true);
     }
 
-    public RotatedSegmentPartEntity(T parent, Vec3 offset, float width, float height, boolean collision) {
+    public SegmentPartEntity(T parent, float width, float height, boolean collision) {
         super(parent);
         this.size = EntityDimensions.fixed(width, height);
         this.refreshDimensions();
-        this.offset = offset;
         this.collision = collision;
-    }
-
-    public void setOffset(Vec3 offset) {
-        this.offset = offset;
-    }
-
-    @Override
-    public void tick() {
-        this.setOldPosAndRot();
-        this.setPos(this.getParent().position().add(this.offset.yRot(-this.getParent().yBodyRot * Mth.DEG_TO_RAD)));
     }
 
     @Override
@@ -115,4 +100,5 @@ public class RotatedSegmentPartEntity<T extends LivingEntity> extends PartEntity
     @Override
     protected void addAdditionalSaveData(CompoundTag compound) {
     }
+
 }

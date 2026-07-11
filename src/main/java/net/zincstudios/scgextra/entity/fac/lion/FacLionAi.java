@@ -56,7 +56,7 @@ public final class FacLionAi {
         brain.addActivityAndRemoveMemoryWhenStopped(Activity.FIGHT, 10, ImmutableList.of(
                 StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValidNonFriendlies(mob, target, false)),
                 AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), false),
-                new WeaponRangeOverride(5f, 8),
+                new WeaponRangeOverride(7, 10),
                 new ApproachTargetIfCannotAim(1.0F),
                 new AimWhenNotWalking(),
                 new ShootTarget(20, (simGun, entity) -> 1.6F, entity -> true,

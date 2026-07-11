@@ -16,11 +16,14 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.entity.PartEntity;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
+import net.zincstudios.scgextra.entity.common.part.RotatedBulletProofPartEntity;
 import net.zincstudios.scgextra.sounds.FACSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -36,6 +39,11 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 public class FacLionEntity extends GunnerEntity implements GeoEntity, Gunner {
 
+    private static final Vec3 LEFT_SHIELD_DOWN = new Vec3(0.7, 0.2, 0.9);
+    private static final Vec3 RIGHT_SHIELD_DOWN = new Vec3(0.7 + 0.7f, 0.2, 0.9);
+    private static final Vec3 LEFT_SHIELD_UP = new Vec3(-0.35, 0.4, 1.3);
+    private static final Vec3 RIGHT_SHIELD_UP = new Vec3(-0.35 + 0.7f, 0.4, 1.3);
+
     private static final EntityDataAccessor<Boolean> SHIELD_UP =
             SynchedEntityData.defineId(FacLionEntity.class, EntityDataSerializers.BOOLEAN);
 
@@ -48,9 +56,14 @@ public class FacLionEntity extends GunnerEntity implements GeoEntity, Gunner {
     private static final RawAnimation DEATH = RawAnimation.begin().thenPlayAndHold("death");
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+    private final RotatedBulletProofPartEntity<?>[] subEntities;
 
     public FacLionEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
+        this.subEntities = new RotatedBulletProofPartEntity[] {
+                new RotatedBulletProofPartEntity<>(this, LEFT_SHIELD_DOWN, 0.7f, 2f),
+                new RotatedBulletProofPartEntity<>(this, RIGHT_SHIELD_DOWN, 0.7f, 2f),
+        };
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -102,8 +115,37 @@ public class FacLionEntity extends GunnerEntity implements GeoEntity, Gunner {
     }
 
     @Override
+    public PartEntity<?>[] getParts() {
+        return this.subEntities;
+    }
+
+    @Override
+    public boolean isMultipartEntity() {
+        return true;
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        this.tickSubEntities();
+    }
+
+    protected void tickSubEntities() {
+        if (this.isShieldUp()) {
+            ((RotatedBulletProofPartEntity<?>)this.getParts()[0]).setOffset(LEFT_SHIELD_UP);
+            ((RotatedBulletProofPartEntity<?>)this.getParts()[1]).setOffset(RIGHT_SHIELD_UP);
+        } else {
+            ((RotatedBulletProofPartEntity<?>)this.getParts()[0]).setOffset(LEFT_SHIELD_DOWN);
+            ((RotatedBulletProofPartEntity<?>)this.getParts()[1]).setOffset(RIGHT_SHIELD_DOWN);
+        }
+        for(PartEntity<?> partEntity : this.getParts()) {
+            partEntity.tick();
+        }
+    }
+
+    @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "main", 6, state -> {
+        controllers.add(new AnimationController<>(this, "main", 5, state -> {
             if (state.isMoving() || state.getAnimatable().isActuallyMoving()) {
                 return state.setAndContinue(state.getAnimatable().isShieldUp() ? WALK_SHIELD : WALK);
             } else if (state.getAnimatable().isAggressive()) {
@@ -111,7 +153,7 @@ public class FacLionEntity extends GunnerEntity implements GeoEntity, Gunner {
             } else {
                 return state.setAndContinue(state.getAnimatable().isShieldUp() ? IDLE_SHIELD : IDLE);
             }
-        }));
+        }).setAnimationSpeed(1.2));
 
         controllers.add(new AnimationController<>(this, "attack", 3, state -> PlayState.STOP)
                 .triggerableAnim("melee", SHIELD_BASH)

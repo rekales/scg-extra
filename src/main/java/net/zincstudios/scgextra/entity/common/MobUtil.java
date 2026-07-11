@@ -46,6 +46,13 @@ public class MobUtil {
     // Common Constants
     public static final int DEFAULT_STUN_DURATION = 60;
 
+    public static Vec3 lerpVec(Vec3 a, Vec3 b, double t) {
+        return new Vec3(
+                Mth.lerp(t, a.x, b.x),
+                Mth.lerp(t, a.y, b.y),
+                Mth.lerp(t, a.z, b.z)
+        );
+    }
 
     public static SoundEvent getSound(RandomSource random, SoundEvent... sounds){
         if(sounds.length<=0){
