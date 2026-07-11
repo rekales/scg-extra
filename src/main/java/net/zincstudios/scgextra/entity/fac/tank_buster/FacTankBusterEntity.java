@@ -5,6 +5,7 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -41,6 +42,8 @@ public class FacTankBusterEntity extends GunnerEntity implements GeoEntity {
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private final PartEntity<?>[] subEntities;
+
+    private DamageSource deathDamage = null;
 
     public FacTankBusterEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -107,8 +110,22 @@ public class FacTankBusterEntity extends GunnerEntity implements GeoEntity {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        return super.hurt(source, amount);
+    protected void dropAllDeathLoot(DamageSource damageSource) {
+        if (this.deathTime < 18) {
+            this.deathDamage = damageSource;
+        } else {
+            super.dropAllDeathLoot(damageSource);
+        }
+    }
+
+    @Override
+    protected void tickDeath() {
+        if (this.deathTime == 17 && !this.level().isClientSide() && !this.isRemoved()) {
+            this.level().explode(this, this.getX(), this.getY(), this.getZ(), 3F, Level.ExplosionInteraction.NONE);
+        } else if (this.deathTime == 18 && !this.level().isClientSide() && !this.isRemoved() && this.deathDamage != null) {
+            this.dropAllDeathLoot(this.deathDamage);
+        }
+        super.tickDeath();
     }
 
     @Override
