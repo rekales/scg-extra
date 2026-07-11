@@ -1,5 +1,6 @@
 package net.zincstudios.scgextra.entity.neutral.inflicted_boar;
 
+import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -53,7 +54,7 @@ public class InflictedBoarEntity extends Monster implements GeoEntity{
     @Override
     public void registerControllers(ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "controller", 0, state -> {
-            if (((this.getX() - this.xo)*(this.getX() - this.xo))+((this.getZ() - this.zo)*(this.getZ() - this.zo))>0.0002) {
+            if (state.isMoving()) {
                 state.setAndContinue(RawAnimation.begin().thenLoop("walk"));
             } else {
                 state.setAndContinue(RawAnimation.begin().thenLoop("idle"));
@@ -90,11 +91,6 @@ public class InflictedBoarEntity extends Monster implements GeoEntity{
     };
     @Override
     protected void tickDeath() {
-        // Override to only extend death time
-        ++this.deathTime;
-        if (this.deathTime >= 30 && !this.level().isClientSide() && !this.isRemoved()) {
-            this.level().broadcastEntityEvent(this, (byte)60);
-            this.remove(RemovalReason.KILLED);
-        }
+        MobUtil.tickDeath(this, 30);
     }
 }

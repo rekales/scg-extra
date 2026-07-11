@@ -102,7 +102,8 @@ public class ModItems {
             
             // Neutral
             INFLICTED_BOAR_SPAWN_EGG = basicSpawnEgg(NeutralEntities.INFLICTED_BOAR),
-            INFLICTED_WOLF_SPAWN_EGG = basicSpawnEgg(NeutralEntities.INFLICTED_WOLF);
+            INFLICTED_WOLF_SPAWN_EGG = basicSpawnEgg(NeutralEntities.INFLICTED_WOLF),
+            AMMO_GOBLIN_SPAWN_EGG = basicSpawnEgg(NeutralEntities.AMMO_GOBLIN);
 
     public static void register(IEventBus modEventBus) {
         ITEMS.register(modEventBus);
@@ -113,7 +114,7 @@ public class ModItems {
     private static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister
             .create(Registries.CREATIVE_MODE_TAB, SCGExtra.MOD_ID);
 
-    public static final RegistryObject<CreativeModeTab> CREATIVE_TAB = CREATIVE_TABS.register("your_tab",
+    public static final RegistryObject<CreativeModeTab> CREATIVE_TAB = CREATIVE_TABS.register("scgextra_tab",//pretty sure this shouldn't be 'your_tab'
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup."+SCGExtra.MOD_ID+".tab"))
                     .icon(() -> new ItemStack(FISH_FOLK_SPAWN_EGG.get()))

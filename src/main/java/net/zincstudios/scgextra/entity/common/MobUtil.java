@@ -11,6 +11,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Item;
@@ -212,5 +213,13 @@ public class MobUtil {
         }
 
         return var10000;
+    }
+    public static void tickDeath(LivingEntity entity, int tick) {
+        // Override to only extend death time
+        ++entity.deathTime;
+        if (entity.deathTime >= tick && !entity.level().isClientSide() && !entity.isRemoved()) {
+            entity.level().broadcastEntityEvent(entity, (byte)60);
+            entity.remove(RemovalReason.KILLED);
+        }
     }
 }

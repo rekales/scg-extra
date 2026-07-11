@@ -14,6 +14,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
+import net.zincstudios.scgextra.entity.neutral.ammo_goblin.AmmoGoblinEntity;
+import net.zincstudios.scgextra.entity.neutral.ammo_goblin.AmmoGoblinRenderer;
 import net.zincstudios.scgextra.entity.neutral.inflicted_boar.InflictedBoarEntity;
 import net.zincstudios.scgextra.entity.neutral.inflicted_boar.InflictedBoarRenderer;
 import net.zincstudios.scgextra.entity.neutral.inflicted_wolf.InflictedWolfEntity;
@@ -43,6 +45,16 @@ public class NeutralEntities {
         .build("inflicted_wolf")
     );
     
+    public static final RegistryObject<EntityType<AmmoGoblinEntity>> AMMO_GOBLIN = ENTITY_TYPES.register(
+        "ammo_goblin", 
+        () -> EntityType.Builder.of(
+            AmmoGoblinEntity::new, 
+            MobCategory.MONSTER
+        )
+        .sized(0.6F, 1.4F)
+        .build("ammo_goblin")
+    );
+    
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(NeutralEntities::registerAttributes);
         modEventBus.addListener(NeutralEntities::onCommonSetup);
@@ -53,6 +65,7 @@ public class NeutralEntities {
     private static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(NeutralEntities.INFLICTED_BOAR.get(), InflictedBoarEntity.createAttributes().build());
         event.put(NeutralEntities.INFLICTED_WOLF.get(), InflictedBoarEntity.createAttributes().build());
+        event.put(NeutralEntities.AMMO_GOBLIN.get(), AmmoGoblinEntity.createAttributes().build());
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
@@ -74,10 +87,20 @@ public class NeutralEntities {
             false, 
             true
         ));
+        BoundingBoxManager.registerHeadshotBox(NeutralEntities.AMMO_GOBLIN.get(), new OffsetRotatedHeadshotBox<>(
+            8, 
+            9.5, 
+            15.0, 
+            0.0F, 
+            5.0, 
+            false, 
+            true
+        ));
     }
     @OnlyIn(value = Dist.CLIENT)
     private static void onClientSetup(FMLClientSetupEvent event) {
         EntityRenderers.register(NeutralEntities.INFLICTED_BOAR.get(), InflictedBoarRenderer::new);
         EntityRenderers.register(NeutralEntities.INFLICTED_WOLF.get(), InflictedWolfRenderer::new);
+        EntityRenderers.register(NeutralEntities.AMMO_GOBLIN.get(), AmmoGoblinRenderer::new);
     }
 }
