@@ -2,6 +2,7 @@ package net.zincstudios.scgextra.entity.fac.walker;
 
 import com.mojang.serialization.Dynamic;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
@@ -18,6 +19,8 @@ import net.zincstudios.scgextra.entity.common.*;
 import net.zincstudios.scgextra.entity.common.gun.CustomGunHolder;
 import net.zincstudios.scgextra.entity.common.gun.CustomScorchedSimGun;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
+import net.zincstudios.scgextra.network.GunFlashMessage;
+import net.zincstudios.scgextra.network.SCGEPacketHandler;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -25,6 +28,8 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import top.ribs.scguns.ScorchedGuns;
+import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.init.ModItems;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -81,6 +86,7 @@ public class FacWalkerEntity extends GunnerEntity implements GeoEntity, Gunner, 
     @Override
     public void tick() {
         super.tick();
+        this.setXRot(0);
 
         if (brain.getTimeUntilExpiry(ModBrainMemories.DELAYED_MELEE.get()) == MELEE_DURATION) {
             this.triggerAnim("behavior", "stomp");
@@ -153,6 +159,13 @@ public class FacWalkerEntity extends GunnerEntity implements GeoEntity, Gunner, 
     @Override
     public void onGunFire(SimulatedGun gun, Vec3 targetPos) {
         this.bulletSpawnLeft = !this.bulletSpawnLeft;
+
+        Gun.Display.Flash flash = ModItems.BIRDFEEDER.get().getGun().getDisplay().getFlash();
+        if (flash == null) return;
+        ResourceLocation flashTexture = ResourceLocation.fromNamespaceAndPath(ScorchedGuns.MODID,
+                "textures/effect/" + flash.getTextureLocation() + ".png");
+        SCGEPacketHandler.sendToNearbyPlayers(() -> MobUtil.levelLocationFromEntity(this),
+                new GunFlashMessage(this.getId(), this.bulletSpawnLeft ? 0 : 1, flashTexture, false, 1.2F));
     }
 
     @Override

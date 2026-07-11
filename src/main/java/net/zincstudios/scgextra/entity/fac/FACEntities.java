@@ -30,6 +30,7 @@ import net.zincstudios.scgextra.entity.fac.trencher.FacTrencherEntity;
 import net.zincstudios.scgextra.entity.fac.walker.FacWalkerEntity;
 import net.zincstudios.scgextra.entity.fac.shovel_knight.FacShovelKnightEntity;
 import net.zincstudios.scgextra.entity.fac.trench_goblin.FacTrenchGoblinEntity;
+import net.zincstudios.scgextra.entity.fac.walker.FacWalkerRenderer;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import top.ribs.scguns.common.BoundingBoxManager;
 import top.ribs.scguns.common.headshot.BasicHeadshotBox;
@@ -150,7 +151,7 @@ public class FACEntities {
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_lion"))));
         EntityRenderers.register(FACEntities.FAC_COMMISSAR.get(), (ctx) -> new FacCommissarRenderer(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_commissar"), "head")));
-        EntityRenderers.register(FACEntities.FAC_WALKER.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
+        EntityRenderers.register(FACEntities.FAC_WALKER.get(), (ctx) -> new FacWalkerRenderer(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_walker"), "inner_upper_body")).noDeathTilt());
 
         EntityRenderers.register(FACEntities.FAC_TANK.get(), FacTankRenderer::new);
