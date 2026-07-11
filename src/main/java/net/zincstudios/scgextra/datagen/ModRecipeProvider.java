@@ -5,6 +5,7 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.zincstudios.scgextra.item.ModItems;
 import top.ribs.scguns.init.ModBlocks;
@@ -21,6 +22,18 @@ public class ModRecipeProvider extends RecipeProvider {
 
     @Override
     protected void buildRecipes(Consumer<FinishedRecipe> writer) {
+
+        superFlare(writer, ModItems.ANTIQUE_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.ANTIQUE_FLARE.get());
+        superFlare(writer, ModItems.FRONTIER_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.FRONTIER_FLARE.get());
+        superFlare(writer, ModItems.COPPER_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.COPPER_FLARE.get());
+        superFlare(writer, ModItems.IRON_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.IRON_FLARE.get());
+        superFlare(writer, ModItems.WRECKER_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.WRECKER_FLARE.get());
+        superFlare(writer, ModItems.DIAMOND_STEEL_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.DIAMOND_STEEL_FLARE.get());
+        superFlare(writer, ModItems.TREATED_BRASS_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.TREATED_BRASS_FLARE.get());
+        superFlare(writer, ModItems.GOLD_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.GOLD_FLARE.get());
+        superFlare(writer, ModItems.SCULK_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.SCULK_FLARE.get());
+        superFlare(writer, ModItems.OCEAN_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.OCEAN_FLARE.get());
+
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.OPPRESSOR_HELMET.get())
                 .pattern(" C ")
                 .pattern("CMC")
@@ -158,7 +171,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('P', Items.PRISMARINE_BRICKS)
                 .define('A', top.ribs.scguns.init.ModItems.ANTHRALITE_INGOT.get())
                 .define('T', top.ribs.scguns.init.ModItems.LEVIATHAN_TOOTH.get())
-                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
+                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.LEVIATHAN_TOOTH.get()))
                 .showNotification(false)
                 .save(writer);
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.LEVIATHAN_CHESTPLATE.get())
@@ -169,7 +182,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('P', Items.PRISMARINE_BRICKS)
                 .define('A', top.ribs.scguns.init.ModItems.ANTHRALITE_INGOT.get())
                 .define('T', top.ribs.scguns.init.ModItems.LEVIATHAN_TOOTH.get())
-                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
+                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.LEVIATHAN_TOOTH.get()))
                 .showNotification(false)
                 .save(writer);
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.LEVIATHAN_LEGGINGS.get())
@@ -179,7 +192,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('P', Items.PRISMARINE_BRICKS)
                 .define('A', top.ribs.scguns.init.ModItems.ANTHRALITE_INGOT.get())
                 .define('T', top.ribs.scguns.init.ModItems.LEVIATHAN_TOOTH.get())
-                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
+                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.LEVIATHAN_TOOTH.get()))
                 .showNotification(false)
                 .save(writer);
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.LEVIATHAN_BOOTS.get())
@@ -188,7 +201,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('P', Items.PRISMARINE_BRICKS)
                 .define('A', top.ribs.scguns.init.ModItems.ANTHRALITE_INGOT.get())
                 .define('T', top.ribs.scguns.init.ModItems.LEVIATHAN_TOOTH.get())
-                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
+                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.LEVIATHAN_TOOTH.get()))
                 .showNotification(false)
                 .save(writer);
 
@@ -199,7 +212,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('B', Items.GOLD_BLOCK)
                 .define('A', top.ribs.scguns.init.ModItems.ANTHRALITE_INGOT.get())
                 .define('I', top.ribs.scguns.init.ModItems.GOLD_IDOL.get())
-                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
+                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.GOLD_IDOL.get()))
                 .showNotification(false)
                 .save(writer);
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.GOLDEN_IDOL_CHESTPLATE.get())
@@ -209,7 +222,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('B', Items.GOLD_BLOCK)
                 .define('A', top.ribs.scguns.init.ModItems.ANTHRALITE_INGOT.get())
                 .define('I', top.ribs.scguns.init.ModItems.GOLD_IDOL.get())
-                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
+                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.GOLD_IDOL.get()))
                 .showNotification(false)
                 .save(writer);
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.GOLDEN_IDOL_LEGGINGS.get())
@@ -220,7 +233,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('G', Items.GOLD_INGOT)
                 .define('A', top.ribs.scguns.init.ModItems.ANTHRALITE_INGOT.get())
                 .define('I', top.ribs.scguns.init.ModItems.GOLD_IDOL.get())
-                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
+                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.GOLD_IDOL.get()))
                 .showNotification(false)
                 .save(writer);
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.GOLDEN_IDOL_BOOTS.get())
@@ -229,7 +242,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('B', Items.GOLD_BLOCK)
                 .define('A', top.ribs.scguns.init.ModItems.ANTHRALITE_INGOT.get())
                 .define('I', top.ribs.scguns.init.ModItems.GOLD_IDOL.get())
-                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
+                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.GOLD_IDOL.get()))
                 .showNotification(false)
                 .save(writer);
 
@@ -241,7 +254,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('C', Items.SCULK_CATALYST)
                 .define('A', top.ribs.scguns.init.ModItems.ANTHRALITE_INGOT.get())
                 .define('T', top.ribs.scguns.init.ModItems.SCULK_TOME.get())
-                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
+                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SCULK_TOME.get()))
                 .showNotification(false)
                 .save(writer);
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.ENLIGHTENED_CHESTPLATE.get())
@@ -252,7 +265,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('C', Items.SCULK_CATALYST)
                 .define('A', top.ribs.scguns.init.ModItems.ANTHRALITE_INGOT.get())
                 .define('T', top.ribs.scguns.init.ModItems.SCULK_TOME.get())
-                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
+                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SCULK_TOME.get()))
                 .showNotification(false)
                 .save(writer);
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.ENLIGHTENED_LEGGINGS.get())
@@ -262,7 +275,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('C', Items.SCULK_CATALYST)
                 .define('A', top.ribs.scguns.init.ModItems.ANTHRALITE_INGOT.get())
                 .define('T', top.ribs.scguns.init.ModItems.SCULK_TOME.get())
-                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
+                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SCULK_TOME.get()))
                 .showNotification(false)
                 .save(writer);
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.ENLIGHTENED_BOOTS.get())
@@ -271,7 +284,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('C', Items.SCULK_CATALYST)
                 .define('A', top.ribs.scguns.init.ModItems.ANTHRALITE_INGOT.get())
                 .define('T', top.ribs.scguns.init.ModItems.SCULK_TOME.get())
-                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
+                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SCULK_TOME.get()))
                 .showNotification(false)
                 .save(writer);
 
@@ -283,7 +296,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('B', top.ribs.scguns.init.ModItems.TREATED_BRASS_INGOT.get())
                 .define('A', top.ribs.scguns.init.ModItems.ANTHRALITE_INGOT.get())
                 .define('H', top.ribs.scguns.init.ModItems.COG_HEART.get())
-                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
+                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.COG_HEART.get()))
                 .showNotification(false)
                 .save(writer);
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.JUGGERNAUT_CHESTPLATE.get())
@@ -295,7 +308,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('B', top.ribs.scguns.init.ModItems.TREATED_BRASS_INGOT.get())
                 .define('A', top.ribs.scguns.init.ModItems.ANTHRALITE_INGOT.get())
                 .define('H', top.ribs.scguns.init.ModItems.COG_HEART.get())
-                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
+                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.COG_HEART.get()))
                 .showNotification(false)
                 .save(writer);
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.JUGGERNAUT_LEGGINGS.get())
@@ -306,7 +319,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('B', top.ribs.scguns.init.ModItems.TREATED_BRASS_INGOT.get())
                 .define('A', top.ribs.scguns.init.ModItems.ANTHRALITE_INGOT.get())
                 .define('H', top.ribs.scguns.init.ModItems.COG_HEART.get())
-                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
+                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.COG_HEART.get()))
                 .showNotification(false)
                 .save(writer);
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.JUGGERNAUT_BOOTS.get())
@@ -317,7 +330,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('B', top.ribs.scguns.init.ModItems.TREATED_BRASS_INGOT.get())
                 .define('A', top.ribs.scguns.init.ModItems.ANTHRALITE_INGOT.get())
                 .define('H', top.ribs.scguns.init.ModItems.COG_HEART.get())
-                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
+                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.COG_HEART.get()))
                 .showNotification(false)
                 .save(writer);
 
@@ -329,7 +342,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('S', top.ribs.scguns.init.ModItems.DIAMOND_STEEL_INGOT.get())
                 .define('A', top.ribs.scguns.init.ModItems.ANTHRALITE_INGOT.get())
                 .define('C', top.ribs.scguns.init.ModItems.CERIMONIAL_COD.get())
-                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
+                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.CERIMONIAL_COD.get()))
                 .showNotification(false)
                 .save(writer);
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.RITUAL_CHESTPLATE.get())
@@ -341,7 +354,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('S', top.ribs.scguns.init.ModItems.DIAMOND_STEEL_INGOT.get())
                 .define('A', top.ribs.scguns.init.ModItems.ANTHRALITE_INGOT.get())
                 .define('C', top.ribs.scguns.init.ModItems.CERIMONIAL_COD.get())
-                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
+                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.CERIMONIAL_COD.get()))
                 .showNotification(false)
                 .save(writer);
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.RITUAL_LEGGINGS.get())
@@ -352,7 +365,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('S', top.ribs.scguns.init.ModItems.DIAMOND_STEEL_INGOT.get())
                 .define('A', top.ribs.scguns.init.ModItems.ANTHRALITE_INGOT.get())
                 .define('C', top.ribs.scguns.init.ModItems.CERIMONIAL_COD.get())
-                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
+                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.CERIMONIAL_COD.get()))
                 .showNotification(false)
                 .save(writer);
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.RITUAL_BOOTS.get())
@@ -363,7 +376,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('S', top.ribs.scguns.init.ModItems.DIAMOND_STEEL_INGOT.get())
                 .define('A', top.ribs.scguns.init.ModItems.ANTHRALITE_INGOT.get())
                 .define('C', top.ribs.scguns.init.ModItems.CERIMONIAL_COD.get())
-                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
+                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.CERIMONIAL_COD.get()))
                 .showNotification(false)
                 .save(writer);
 
@@ -375,7 +388,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('L', ModBlocks.DIAMOND_STEEL_LAMP.get())
                 .define('S', top.ribs.scguns.init.ModItems.DIAMOND_STEEL_INGOT.get())
                 .define('C', top.ribs.scguns.init.ModItems.SHULKER_CORE.get())
-                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
+                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SHULKER_CORE.get()))
                 .showNotification(false)
                 .save(writer);
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.PIONEER_CHESTPLATE.get())
@@ -386,7 +399,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('L', ModBlocks.DIAMOND_STEEL_LAMP.get())
                 .define('S', top.ribs.scguns.init.ModItems.DIAMOND_STEEL_INGOT.get())
                 .define('C', top.ribs.scguns.init.ModItems.SHULKER_CORE.get())
-                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
+                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SHULKER_CORE.get()))
                 .showNotification(false)
                 .save(writer);
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.PIONEER_LEGGINGS.get())
@@ -397,7 +410,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('L', ModBlocks.DIAMOND_STEEL_LAMP.get())
                 .define('S', top.ribs.scguns.init.ModItems.DIAMOND_STEEL_INGOT.get())
                 .define('C', top.ribs.scguns.init.ModItems.SHULKER_CORE.get())
-                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
+                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SHULKER_CORE.get()))
                 .showNotification(false)
                 .save(writer);
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.PIONEER_BOOTS.get())
@@ -406,7 +419,19 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('P', Items.PURPUR_BLOCK)
                 .define('S', top.ribs.scguns.init.ModItems.DIAMOND_STEEL_INGOT.get())
                 .define('C', top.ribs.scguns.init.ModItems.SHULKER_CORE.get())
-                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
+                .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SHULKER_CORE.get()))
+                .showNotification(false)
+                .save(writer);
+    }
+
+    private void superFlare(Consumer<FinishedRecipe> writer, Item superFlare , Item flare) {
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, superFlare)
+                .pattern("FBF")
+                .pattern("BFB")
+                .pattern("FBF")
+                .define('F', flare)
+                .define('B', top.ribs.scguns.init.ModItems.BLUEPRINT_SCRAP.get())
+                .unlockedBy("has_flare_ingredient", has(flare))
                 .showNotification(false)
                 .save(writer);
     }

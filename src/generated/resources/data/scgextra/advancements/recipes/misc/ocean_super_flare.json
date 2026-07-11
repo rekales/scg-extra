@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_armor_ingredient": {
+    "has_flare_ingredient": {
       "conditions": {
         "items": [
           {
             "items": [
-              "scguns:ceremonial_cod"
+              "scguns:ocean_flare"
             ]
           }
         ]
@@ -15,20 +15,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "scgextra:ritual_leggings"
+        "recipe": "scgextra:ocean_super_flare"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_armor_ingredient",
+      "has_flare_ingredient",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "scgextra:ritual_leggings"
+      "scgextra:ocean_super_flare"
     ]
   },
   "sends_telemetry_event": false

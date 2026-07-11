@@ -1,12 +1,12 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "equipment",
+  "category": "misc",
   "key": {
     "B": {
       "item": "scguns:blueprint_scrap"
     },
     "F": {
-      "item": "scguns:antique_flare"
+      "item": "scguns:copper_flare"
     }
   },
   "pattern": [
@@ -15,7 +15,7 @@
     "FBF"
   ],
   "result": {
-    "item": "scgextra:pioneer_boots"
+    "item": "scgextra:copper_super_flare"
   },
   "show_notification": false
 }
