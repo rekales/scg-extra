@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.world.item.ItemStack;
 import net.zincstudios.scgextra.entity.common.client.BaseEntityRenderer;
+import net.zincstudios.scgextra.entity.common.client.HeldGunFlashGeoLayer;
 import net.zincstudios.scgextra.entity.common.client.HeldItemGeoLayer;
 import net.zincstudios.scgextra.item.CavalrySaberItem;
 import software.bernie.geckolib.cache.object.GeoBone;
@@ -33,5 +34,6 @@ public class FacCommissarRenderer extends BaseEntityRenderer<FacCommissarEntity>
                 poseStack.popPose();
             }
         });
+        this.addRenderLayer(new HeldGunFlashGeoLayer<>(this, 0));
     }
 }

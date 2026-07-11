@@ -64,18 +64,13 @@ public class HeldGunFlashGeoLayer<T extends Mob & GeoAnimatable> extends GeoRend
         poseStack.translate(weaponOrigin.x * 0.0625, weaponOrigin.y * 0.0625, weaponOrigin.z * 0.0625);
         poseStack.translate(flashPosition.x * 0.0625, flashPosition.y * 0.0625, flashPosition.z * 0.0625);
         poseStack.translate(flashPosition.x * 0.0625, flashPosition.y * 0.0625, flashPosition.z * 0.0625 * 1.25);
+        float scale = (float)(PropertyHelper.getMuzzleFlashScale(stack, gun).x * GunModifierHelper.getMuzzleFlashScale(stack, 1.0));
         poseStack.translate(-0.5F, -0.5F, -0.5F);
-        Vec3 flashScale = PropertyHelper.getMuzzleFlashScale(stack, gun);
-        float scaleX = (float) flashScale.x;
-        float scaleY = (float) flashScale.y;
-        poseStack.scale(scaleX, scaleY, 1.0F);
-        float scaleModifier = (float) GunModifierHelper.getMuzzleFlashScale(stack, 1.0);
-        poseStack.scale(scaleModifier, scaleModifier, 1.0F);
-        poseStack.translate(-0.5F, -0.5F, 0.0F);
 
         ResourceLocation flashTexture = ResourceLocation.fromNamespaceAndPath(ScorchedGuns.MODID,
                 "textures/effect/" + flash.getTextureLocation() + ".png");
-        MobRenderUtils.drawMuzzleFlash(poseStack, renderType, bufferSource, flashTexture, stack.isEnchanted());
+        MobRenderUtils.renderMuzzleFlash(poseStack, renderType, bufferSource,
+                flashTexture, stack.isEnchanted(), rand, scale);
 
         poseStack.popPose();
     }
