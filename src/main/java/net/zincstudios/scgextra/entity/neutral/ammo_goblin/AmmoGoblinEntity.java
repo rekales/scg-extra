@@ -16,6 +16,7 @@ import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -26,14 +27,14 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class AmmoGoblinEntity extends PathfinderMob implements GeoEntity{
+public class AmmoGoblinEntity extends Monster implements GeoEntity{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private static final EntityDataAccessor<Boolean> IS_RUNNING =
             SynchedEntityData.defineId(AmmoGoblinEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DISAPPEAR =
             SynchedEntityData.defineId(AmmoGoblinEntity.class, EntityDataSerializers.INT);
 
-    public AmmoGoblinEntity(EntityType<? extends PathfinderMob> entityType, Level level) {
+    public AmmoGoblinEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
     }
 
