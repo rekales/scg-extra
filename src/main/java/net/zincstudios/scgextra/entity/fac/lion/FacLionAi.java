@@ -2,8 +2,10 @@ package net.zincstudios.scgextra.entity.fac.lion;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.behavior.MeleeAttack;
 import net.minecraft.world.entity.ai.behavior.StopAttackingIfTargetInvalid;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.sensing.Sensor;
@@ -32,6 +34,7 @@ public final class FacLionAi {
             MemoryModuleType.WALK_TARGET,
             MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE,
             MemoryModuleType.PATH,
+            MemoryModuleType.ATTACK_COOLING_DOWN,
             ModBrainMemories.AIM_TICKS.get(),
             ModBrainMemories.SIMULATED_GUN.get(),
             ModBrainMemories.WEAPON_IDEAL_RANGE.get(),
@@ -56,11 +59,16 @@ public final class FacLionAi {
         brain.addActivityAndRemoveMemoryWhenStopped(Activity.FIGHT, 10, ImmutableList.of(
                 StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValidNonFriendlies(mob, target, false)),
                 AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), false),
+                MeleeAttack.create(50),
                 new WeaponRangeOverride(7, 10),
                 new ApproachTargetIfCannotAim(1.2F),
                 new AimWhenNotWalking(),
-                new ShootTarget(20, (simGun, entity) -> 1.6F, entity -> true,
+                new ShootTarget(20, (simGun, entity) -> 1.6F, FacLionAi::canShoot,
                         new IntervalTriggerSampler(30, 50, 5, 30))
         ), MemoryModuleType.ATTACK_TARGET);
+    }
+
+    private static boolean canShoot(LivingEntity entity) {
+        return entity.getBrain().getTimeUntilExpiry(MemoryModuleType.ATTACK_COOLING_DOWN) < 20;
     }
 }

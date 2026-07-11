@@ -7,7 +7,9 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
@@ -144,6 +146,27 @@ public class FacLionEntity extends GunnerEntity implements GeoEntity, Gunner {
     }
 
     @Override
+    public boolean doHurtTarget(Entity other) {
+        boolean res = super.doHurtTarget(other);
+        if (res && other instanceof LivingEntity target) {
+            double dx = this.getX() - target.getX();
+            double dz = this.getZ() - target.getZ();
+            target.knockback(1, dx, dz);
+        }
+        return res;
+    }
+
+    @Override
+    public void swing(InteractionHand hand, boolean updateSelf) {
+        this.triggerAnim("main", "melee");
+        this.setYBodyRot(this.getYHeadRot());
+    }
+
+    public double getMeleeAttackRangeSqr(LivingEntity target) {
+        return this.getBbWidth() * this.getBbWidth() * 1.4F * 1.4F + target.getBbWidth();
+    }
+
+    @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "main", 5, state -> {
             if (state.isMoving() || state.getAnimatable().isActuallyMoving()) {
@@ -153,11 +176,9 @@ public class FacLionEntity extends GunnerEntity implements GeoEntity, Gunner {
             } else {
                 return state.setAndContinue(state.getAnimatable().isShieldUp() ? IDLE_SHIELD : IDLE);
             }
-        }).setAnimationSpeed(1.2));
-
-        controllers.add(new AnimationController<>(this, "attack", 3, state -> PlayState.STOP)
+        })
                 .triggerableAnim("melee", SHIELD_BASH)
-        );
+                .setAnimationSpeed(1.2));
 
         controllers.add(new AnimationController<>(this, "death", 3, state -> {
             if (state.getAnimatable().isDeadOrDying()) {
