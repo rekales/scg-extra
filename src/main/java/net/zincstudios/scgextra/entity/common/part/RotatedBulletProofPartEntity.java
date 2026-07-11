@@ -8,9 +8,12 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 public class RotatedBulletProofPartEntity<T extends LivingEntity> extends RotatedSegmentPartEntity<T> {
-
     public RotatedBulletProofPartEntity(T parent, Vec3 offset, float width, float height) {
         super(parent, offset, width, height);
+    }
+
+    public RotatedBulletProofPartEntity(T parent, Vec3 offset, float width, float height, boolean collision) {
+        super(parent, offset, width, height, collision);
     }
 
     @Override

@@ -11,10 +11,15 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.entity.PartEntity;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
+import net.zincstudios.scgextra.entity.common.part.DebugRotatedPartEntity;
+import net.zincstudios.scgextra.entity.common.part.RotatedBulletProofPartEntity;
+import net.zincstudios.scgextra.entity.common.part.RotatedDamageMultPartEntity;
 import net.zincstudios.scgextra.sounds.FACSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -35,9 +40,13 @@ public class FacTankBusterEntity extends GunnerEntity implements GeoEntity {
     private static final RawAnimation WALK_AIM = RawAnimation.begin().thenLoop("walk_aim");
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+    private final PartEntity<?>[] subEntities;
 
     public FacTankBusterEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
+        this.subEntities = new PartEntity[] {
+                new RotatedDamageMultPartEntity<>(this, 0.5F, new Vec3(0,1.35,0), 1.05F, 0.85f, false),
+        };
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -73,6 +82,33 @@ public class FacTankBusterEntity extends GunnerEntity implements GeoEntity {
         }
         this.level().getProfiler().pop();
         super.customServerAiStep();
+    }
+
+    @Override
+    public PartEntity<?>[] getParts() {
+        return this.subEntities;
+    }
+
+    @Override
+    public boolean isMultipartEntity() {
+        return true;
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        this.tickSubEntities();
+    }
+
+    protected void tickSubEntities() {
+        for(PartEntity<?> partEntity : this.getParts()) {
+            partEntity.tick();
+        }
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        return super.hurt(source, amount);
     }
 
     @Override

@@ -44,6 +44,7 @@ public class FACEntities {
     // TODO: tags
     // TODO: equipment
     // TODO: headshot boxes
+    // TODO: hitboxes
 
     public static final RegistryObject<EntityType<FacTrencherEntity>> FAC_TRENCHER = ENTITY_TYPES
             .register("fac_trencher", () -> EntityType.Builder.of(FacTrencherEntity::new, MobCategory.MONSTER)
@@ -72,7 +73,7 @@ public class FACEntities {
 
     public static final RegistryObject<EntityType<FacTankBusterEntity>> FAC_TANK_BUSTER = ENTITY_TYPES
             .register("fac_tank_buster", () -> EntityType.Builder.of(FacTankBusterEntity::new, MobCategory.MONSTER)
-                    .sized(1.02F, 2.02F)
+                    .sized(0.98F, 2.1F)
                     .build("fac_tank_buster"));
 
     public static final RegistryObject<EntityType<FacLionEntity>> FAC_LION = ENTITY_TYPES
@@ -125,7 +126,7 @@ public class FACEntities {
         BoundingBoxManager.registerHeadshotBox(FACEntities.TRENCH_SNIPER.get(), new OffsetRotatedHeadshotBox<>(9.0, 9.0, 30.0, 0.0F, 2.0, false, true));
         BoundingBoxManager.registerHeadshotBox(FACEntities.SHOVEL_KNIGHT.get(), new BasicHeadshotBox<>(9.0, 24.0));
         BoundingBoxManager.registerHeadshotBox(FACEntities.FAC_COMMISSAR.get(), new OffsetRotatedHeadshotBox<>(10.0, 18.0, 30.0, 0.0F, 0, false, true));
-        BoundingBoxManager.registerHeadshotBox(FACEntities.FAC_TANK_BUSTER.get(), new OffsetRotatedHeadshotBox<>(10.0, 9.0, 24.0, 0.0F, 2.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(FACEntities.FAC_TANK_BUSTER.get(), new BasicHeadshotBox<>(0.0, 0.0));
         BoundingBoxManager.registerHeadshotBox(FACEntities.FAC_LION.get(), new RotatedHeadshotBox<>(10, 36.0, 7.0, false, true));
         BoundingBoxManager.registerHeadshotBox(FACEntities.FAC_WALKER.get(), new RotatedHeadshotBox<>(10, 6, 50, 8, false, true));
         BoundingBoxManager.registerHeadshotBox(FACEntities.FAC_TANK.get(), new OffsetRotatedHeadshotBox<>(13.0, 16.0, 9.0, 0.0F, false, true));
