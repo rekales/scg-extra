@@ -33,6 +33,7 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import top.ribs.scguns.init.ModItems;
 
 public class BigLumpEntity extends Monster implements GeoEntity{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
@@ -146,7 +147,7 @@ public class BigLumpEntity extends Monster implements GeoEntity{
     }
     @Override
     protected float getSoundVolume() {
-        return super.getSoundVolume();
+        return 2;
     }
     @Override
     protected @Nullable SoundEvent getAmbientSound() {

@@ -201,7 +201,7 @@ public class AmmoGoblinEntity extends Monster implements GeoEntity{
     }
     @Override
     protected float getSoundVolume() {
-        return super.getSoundVolume();
+        return 2;
     }
     @Override
     protected @Nullable SoundEvent getAmbientSound() {
