@@ -22,7 +22,9 @@ public class InflictedWolfAttackGoal extends MeleeAttackGoal{
     @Override
     public void tick() {
         super.tick();
-        this.ticksUntilNextAttack = Math.max(this.ticksUntilNextAttack - 1, 0);
+        if(entity.getTarget()!=null){
+            this.ticksUntilNextAttack = Math.max(this.ticksUntilNextAttack - 1, 0);
+        }
     }
     @Override
     protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {

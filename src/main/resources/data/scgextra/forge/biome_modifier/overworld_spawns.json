@@ -4,7 +4,13 @@
   "spawners": [
     {
       "type": "scgextra:ammo_goblin",
-      "weight": 5,
+      "weight": 150,
+      "minCount": 1,
+      "maxCount": 1
+    },
+    {
+      "type": "scgextra:big_lump",
+      "weight": 1,
       "minCount": 1,
       "maxCount": 1
     }

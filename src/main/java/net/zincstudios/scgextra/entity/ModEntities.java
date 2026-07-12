@@ -22,6 +22,7 @@ import net.zincstudios.scgextra.entity.common.raid_summoner.RaidSummonerRenderer
 import net.zincstudios.scgextra.entity.fac.FACEntities;
 import net.zincstudios.scgextra.entity.neutral.NeutralEntities;
 import net.zincstudios.scgextra.entity.projectile.ArmoredWhaleProjectileEntity;
+import net.zincstudios.scgextra.entity.projectile.BigLumpProjectileEntity;
 import net.zincstudios.scgextra.entity.projectile.FireProjectile;
 import net.zincstudios.scgextra.entity.projectile.SoulFireBallRenderer;
 import net.zincstudios.scgextra.entity.projectile.SoulFireball;
@@ -53,6 +54,14 @@ public class ModEntities {
                     .setUpdateInterval(1)
                     .setShouldReceiveVelocityUpdates(true)
                     .build("whale_tank_projectile"));
+
+    public static final RegistryObject<EntityType<ArmoredWhaleProjectileEntity>> BIG_LUMP_PROJECTILE = ENTITY_TYPES
+            .register("big_lump_projectile", () -> EntityType.Builder.of(BigLumpProjectileEntity::create, MobCategory.MISC)
+                    .sized(0.5F, 0.5F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(1)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build("big_lump_projectile"));
 
     public static final RegistryObject<EntityType<FireProjectile>> FIRE_PROJECTILE = ENTITY_TYPES
             .register("fire_projectile", () -> EntityType.Builder.of(FireProjectile::create, MobCategory.MISC)
@@ -99,6 +108,7 @@ public class ModEntities {
     private static void onClientSetup(FMLClientSetupEvent event) {
         EntityRenderers.register(ModEntities.NET.get(), NetEntityRenderer::new);
         EntityRenderers.register(ModEntities.WHALE_PROJECTILE.get(), EnemyProjectileRenderer::new);
+        EntityRenderers.register(ModEntities.BIG_LUMP_PROJECTILE.get(), EnemyProjectileRenderer::new);
         EntityRenderers.register(ModEntities.FIRE_PROJECTILE.get(), EnemyProjectileRenderer::new);
         EntityRenderers.register(ModEntities.RAID_SUMMONER.get(), RaidSummonerRenderer::new);
         EntityRenderers.register(ModEntities.LARGE_SOUL_FIREBALL.get(), SoulFireBallRenderer::new);
