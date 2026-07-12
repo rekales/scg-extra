@@ -41,6 +41,7 @@ import static net.zincstudios.scgextra.entity.ModEntities.ENTITY_TYPES;
 public class FACEntities {
 
     // TODO: sounds
+    // TODO: weapon attachments
 
     public static final RegistryObject<EntityType<FacTrencherEntity>> FAC_TRENCHER = ENTITY_TYPES
             .register("fac_trencher", () -> EntityType.Builder.of(FacTrencherEntity::new, MobCategory.MONSTER)

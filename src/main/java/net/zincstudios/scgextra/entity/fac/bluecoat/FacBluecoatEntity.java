@@ -14,7 +14,6 @@ import net.minecraft.world.level.Level;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.EquippedEntity;
 import net.zincstudios.scgextra.entity.common.Gunner;
-import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
 import net.zincstudios.scgextra.sounds.FACSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -92,30 +91,15 @@ public class FacBluecoatEntity extends EquippedEntity implements GeoEntity, Gunn
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return MobUtil.getSound(
-                this.random,
-                FACSounds.FAC_BLUECOAT_HURT_1.get(),
-                FACSounds.FAC_BLUECOAT_HURT_2.get(),
-                FACSounds.FAC_BLUECOAT_HURT_3.get()
-        );
+        return FACSounds.FAC_BLUECOAT_HURT.get();
     }
 
     protected SoundEvent getAmbientSound() {
-        return MobUtil.getSound(
-                this.random,
-                FACSounds.FAC_BLUECOAT_IDLE_1.get(),
-                FACSounds.FAC_BLUECOAT_IDLE_2.get(),
-                FACSounds.FAC_BLUECOAT_IDLE_3.get()
-        );
+        return FACSounds.FAC_BLUECOAT_IDLE.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return MobUtil.getSound(
-                this.random,
-                FACSounds.FAC_BLUECOAT_DEATH_1.get(),
-                FACSounds.FAC_BLUECOAT_DEATH_2.get(),
-                FACSounds.FAC_BLUECOAT_DEATH_3.get()
-        );
+        return FACSounds.FAC_BLUECOAT_DEATH.get();
     }
 }
 

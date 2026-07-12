@@ -22,8 +22,6 @@ import net.zincstudios.scgextra.entity.AbilityState;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.EquippedEntity;
 import net.zincstudios.scgextra.entity.common.Gunner;
-import net.zincstudios.scgextra.entity.common.GunnerEntity;
-import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
 import net.zincstudios.scgextra.entity.common.brain.FlareSummon;
 import net.zincstudios.scgextra.entity.common.client.ExpandedAnimationController;
@@ -194,31 +192,14 @@ public class FacCommissarEntity extends EquippedEntity implements GeoEntity, Gun
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return MobUtil.getSound(
-                this.random,
-                FACSounds.FAC_COMMISSAR_HURT_1.get(),
-                FACSounds.FAC_COMMISSAR_HURT_2.get(),
-                FACSounds.FAC_COMMISSAR_HURT_3.get(),
-                FACSounds.FAC_COMMISSAR_HURT_4.get()
-        );
+        return FACSounds.FAC_COMMISSAR_HURT.get();
     }
 
     protected SoundEvent getAmbientSound() {
-        return MobUtil.getSound(
-                this.random,
-                FACSounds.FAC_COMMISSAR_IDLE_1.get(),
-                FACSounds.FAC_COMMISSAR_IDLE_2.get(),
-                FACSounds.FAC_COMMISSAR_IDLE_3.get(),
-                FACSounds.FAC_COMMISSAR_IDLE_4.get(),
-                FACSounds.FAC_COMMISSAR_LINE_2.get()
-        );
+        return FACSounds.FAC_COMMISSAR_IDLE.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return MobUtil.getSound(
-                this.random,
-                FACSounds.FAC_COMMISSAR_DEATH_1.get(),
-                FACSounds.FAC_COMMISSAR_DEATH_2.get()
-        );
+        return FACSounds.FAC_COMMISSAR_DEATH.get();
     }
 }

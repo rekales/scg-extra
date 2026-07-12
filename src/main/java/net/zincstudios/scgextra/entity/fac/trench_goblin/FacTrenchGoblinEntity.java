@@ -13,7 +13,6 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.EquippedEntity;
-import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
 import net.zincstudios.scgextra.entity.common.client.ExpandedAnimationController;
 import net.zincstudios.scgextra.sounds.FACSounds;
@@ -114,29 +113,15 @@ public class FacTrenchGoblinEntity extends EquippedEntity implements GeoEntity {
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return MobUtil.getSound(
-                this.random,
-                FACSounds.TRENCH_GOBLIN_HURT_1.get(),
-                FACSounds.TRENCH_GOBLIN_HURT_2.get(),
-                FACSounds.TRENCH_GOBLIN_HURT_3.get()
-        );
+        return FACSounds.FAC_TRENCH_GOBLIN_HURT.get();
     }
 
     protected SoundEvent getAmbientSound() {
-        return MobUtil.getSound(
-                this.random,
-                FACSounds.TRENCH_GOBLIN_IDLE_1.get(),
-                FACSounds.TRENCH_GOBLIN_IDLE_2.get(),
-                FACSounds.TRENCH_GOBLIN_IDLE_3.get()
-        );
+        return FACSounds.FAC_TRENCH_GOBLIN_IDLE.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return MobUtil.getSound(
-                this.random,
-                FACSounds.TRENCH_GOBLIN_DEATH_1.get(),
-                FACSounds.TRENCH_GOBLIN_DEATH_2.get()
-        );
+        return FACSounds.FAC_TRENCH_GOBLIN_DEATH.get();
     }
 }
 

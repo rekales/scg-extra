@@ -14,7 +14,6 @@ import net.minecraft.world.level.Level;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.EquippedEntity;
 import net.zincstudios.scgextra.entity.common.Gunner;
-import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
 import net.zincstudios.scgextra.sounds.FACSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -98,29 +97,14 @@ public class FacTrenchSniperEntity extends EquippedEntity implements GeoEntity, 
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return MobUtil.getSound(
-                this.random,
-                FACSounds.TRENCH_SNIPER_ALERT_1.get(),
-                FACSounds.TRENCH_SNIPER_ALERT_2.get(),
-                FACSounds.TRENCH_SNIPER_ALERT_3.get()
-        );
+        return FACSounds.FAC_TRENCHER_HURT.get();
     }
 
     protected SoundEvent getAmbientSound() {
-        return MobUtil.getSound(
-                this.random,
-                FACSounds.TRENCH_SNIPER_IDLE_1.get(),
-                FACSounds.TRENCH_SNIPER_IDLE_2.get(),
-                FACSounds.TRENCH_SNIPER_IDLE_3.get(),
-                FACSounds.TRENCH_SNIPER_IDLE_4.get()
-        );
+        return FACSounds.FAC_TRENCH_SNIPER_IDLE.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return MobUtil.getSound(
-                this.random,
-                FACSounds.TRENCH_SNIPER_DEATH_1.get(),
-                FACSounds.TRENCH_SNIPER_DEATH_2.get()
-        );
+        return FACSounds.FAC_TRENCH_SNIPER_DEATH.get();
     }
 }

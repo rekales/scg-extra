@@ -2,9 +2,12 @@ package net.zincstudios.scgextra.entity.fac.walker;
 
 import com.mojang.serialization.Dynamic;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -12,6 +15,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.asgharian.BulletSpawnOffset;
@@ -21,6 +25,7 @@ import net.zincstudios.scgextra.entity.common.gun.CustomScorchedSimGun;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
 import net.zincstudios.scgextra.network.GunFlashMessage;
 import net.zincstudios.scgextra.network.SCGEPacketHandler;
+import net.zincstudios.scgextra.sounds.FACSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -192,4 +197,24 @@ public class FacWalkerEntity extends Monster implements GeoEntity, Gunner, Custo
         }
     }
 
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return FACSounds.FAC_WALKER_HURT.get();
+    }
+
+    protected SoundEvent getAmbientSound() {
+        return FACSounds.FAC_WALKER_IDLE.get();
+    }
+
+    protected SoundEvent getDeathSound() {
+        return FACSounds.FAC_WALKER_DEATH.get();
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState state) {
+        if (this.isSprinting()) {
+            this.playSound(FACSounds.FAC_WALKER_RUN.get(), 0.3F, 1F);
+        } else {
+            this.playSound(FACSounds.FAC_WALKER_WALK.get(), 0.3F, 1F);
+        }
+    }
 }

@@ -5,7 +5,6 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -17,11 +16,7 @@ import net.minecraftforge.entity.PartEntity;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.EquippedEntity;
 import net.zincstudios.scgextra.entity.common.Gunner;
-import net.zincstudios.scgextra.entity.common.GunnerEntity;
-import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
-import net.zincstudios.scgextra.entity.common.part.DebugRotatedPartEntity;
-import net.zincstudios.scgextra.entity.common.part.RotatedBulletProofPartEntity;
 import net.zincstudios.scgextra.entity.common.part.RotatedDamageMultPartEntity;
 import net.zincstudios.scgextra.sounds.FACSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -159,29 +154,14 @@ public class FacTankBusterEntity extends EquippedEntity implements GeoEntity, Gu
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return MobUtil.getSound(
-                this.random,
-                FACSounds.FAC_TANK_BUSTER_HURT_1.get(),
-                FACSounds.FAC_TANK_BUSTER_HURT_2.get(),
-                FACSounds.FAC_TANK_BUSTER_HURT_3.get()
-        );
+        return FACSounds.FAC_TANK_BUSTER_HURT.get();
     }
 
     protected SoundEvent getAmbientSound() {
-        return MobUtil.getSound(
-                this.random,
-                FACSounds.FAC_TANK_BUSTER_IDLE_1.get(),
-                FACSounds.FAC_TANK_BUSTER_IDLE_2.get(),
-                FACSounds.FAC_TANK_BUSTER_IDLE_3.get()
-        );
+        return FACSounds.FAC_TANK_BUSTER_IDLE.get();
     }
 
     protected SoundEvent getDeathSound() {
-        return MobUtil.getSound(
-                this.random,
-                FACSounds.FAC_TANK_BUSTER_DEATH_1.get(),
-                FACSounds.FAC_TANK_BUSTER_DEATH_2.get(),
-                FACSounds.FAC_TANK_BUSTER_DEATH_3.get()
-        );
+        return FACSounds.FAC_TANK_BUSTER_DEATH.get();
     }
 }

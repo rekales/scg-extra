@@ -97,7 +97,7 @@ public class FacTankEntity extends Monster implements GeoEntity, Gunner, CustomG
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
                 .add(Attributes.FOLLOW_RANGE, 60.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.18D)
+                .add(Attributes.MOVEMENT_SPEED, 0.17D)
                 .add(Attributes.ATTACK_DAMAGE, 20.0D)
                 .add(Attributes.ARMOR, 6.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
@@ -158,7 +158,7 @@ public class FacTankEntity extends Monster implements GeoEntity, Gunner, CustomG
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "main", 4,
                 state -> {
-                    if (state.isMoving()) {
+                    if (state.isMoving() || state.getAnimatable().isActuallyMoving()) {
                         state.setAnimation(WALK);
                     } else {
                         state.setAnimation(IDLE);
@@ -200,6 +200,13 @@ public class FacTankEntity extends Monster implements GeoEntity, Gunner, CustomG
             }
             return PlayState.STOP;
         }));
+    }
+
+    // needed because this thing moves way too fucking slow for state.isMoving() to be true
+    private boolean isActuallyMoving() {
+        double dx = this.getX() - this.xo;
+        double dz = this.getZ() - this.zo;
+        return dx * dx + dz * dz > 0.000001D;
     }
 
     @Override
@@ -267,24 +274,20 @@ public class FacTankEntity extends Monster implements GeoEntity, Gunner, CustomG
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return MobUtil.getSound(
-                this.random,
-                FACSounds.FAC_TANK_HURT_1.get(),
-                FACSounds.FAC_TANK_HURT_2.get()
-        );
+        return FACSounds.FAC_TANK_HURT.get();
     }
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return MobUtil.getSound(
-                this.random,
-                FACSounds.FAC_TANK_IDLE_1.get(),
-                FACSounds.FAC_TANK_IDLE_2.get()
-        );
+        return FACSounds.FAC_TANK_IDLE.get();
+    }
+
+    protected SoundEvent getDeathSound() {
+        return FACSounds.FAC_TANK_DEATH.get();
     }
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
-        this.playSound(FACSounds.FAC_TANK_WALK.get(), 0.95F, 0.95F + this.random.nextFloat() * 0.1F);
+        this.playSound(FACSounds.FAC_TANK_WALK.get(), 0.3F, 1F);
     }
 }
