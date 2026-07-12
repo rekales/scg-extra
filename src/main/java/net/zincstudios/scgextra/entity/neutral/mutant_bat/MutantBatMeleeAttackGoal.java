@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.neutral.big_lump;
+package net.zincstudios.scgextra.entity.neutral.mutant_bat;
 
 import java.util.EnumSet;
 
@@ -10,9 +10,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
 
-public class BigLumpMeleeAttackGoal extends Goal{
+public class MutantBatMeleeAttackGoal extends Goal{
     //mostly from base MeleeAttackGoal
-    protected final BigLumpEntity mob;
+    protected final MutantBatEntity mob;
     private final double speedModifier;
     private final boolean followingTargetEvenIfNotSeen;
     private Path path;
@@ -26,7 +26,7 @@ public class BigLumpMeleeAttackGoal extends Goal{
     private boolean canPenalize = false;
     private int cooldown = 0;
 
-    public BigLumpMeleeAttackGoal(BigLumpEntity mob, double speedModifier, boolean followingTargetEvenIfNotSeen) {
+    public MutantBatMeleeAttackGoal(MutantBatEntity mob, double speedModifier, boolean followingTargetEvenIfNotSeen) {
         this.mob = mob;
         this.speedModifier = speedModifier;
         this.followingTargetEvenIfNotSeen = followingTargetEvenIfNotSeen;
@@ -37,6 +37,9 @@ public class BigLumpMeleeAttackGoal extends Goal{
         if(this.cooldown>0)
         {
             this.cooldown--;
+            return false;
+        }
+        if(this.mob.isScreaming()){
             return false;
         }
         long i = this.mob.level().getGameTime();
@@ -70,6 +73,9 @@ public class BigLumpMeleeAttackGoal extends Goal{
 
     public boolean canContinueToUse() {
         if(this.cooldown>0){
+            return false;
+        }
+        if(this.mob.isScreaming()){
             return false;
         }
         LivingEntity livingentity = this.mob.getTarget();
@@ -158,6 +164,7 @@ public class BigLumpMeleeAttackGoal extends Goal{
         }
         if (distToEnemySqr <= d0 && this.ticksUntilNextAttack <= 0) {
             this.resetAttackCooldown();
+            this.mob.swing(InteractionHand.MAIN_HAND);
             this.mob.doHurtTarget(enemy);
             this.cooldown = 20;
             stop();

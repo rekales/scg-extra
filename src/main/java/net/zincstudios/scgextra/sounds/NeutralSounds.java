@@ -25,6 +25,18 @@ public class NeutralSounds {
 
     public static final RegistryObject<SoundEvent> BIG_LUMP_DEAD = SOUND_EVENTS.register("big_lump.dead",
             () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("big_lump.dead")));
+    
+    public static final RegistryObject<SoundEvent> MUTANT_BAT_IDLE = SOUND_EVENTS.register("mutant_bat.idle",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("mutant_bat.idle")));
+
+    public static final RegistryObject<SoundEvent> MUTANT_BAT_HURT = SOUND_EVENTS.register("mutant_bat.hurt",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("mutant_bat.hurt")));
+
+    public static final RegistryObject<SoundEvent> MUTANT_BAT_DEAD = SOUND_EVENTS.register("mutant_bat.dead",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("mutant_bat.dead")));
+
+    public static final RegistryObject<SoundEvent> MUTANT_BAT_SCREAM = SOUND_EVENTS.register("mutant_bat.scream",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("mutant_bat.scream")));
 
     public static void init() {}
 

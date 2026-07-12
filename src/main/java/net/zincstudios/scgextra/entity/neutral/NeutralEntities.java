@@ -2,7 +2,6 @@ package net.zincstudios.scgextra.entity.neutral;
 
 import static net.zincstudios.scgextra.entity.ModEntities.ENTITY_TYPES;
 
-import net.zincstudios.scgextra.entity.common.OffsetRotatedHeadshotBox;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -22,6 +21,9 @@ import net.zincstudios.scgextra.entity.neutral.inflicted_boar.InflictedBoarEntit
 import net.zincstudios.scgextra.entity.neutral.inflicted_boar.InflictedBoarRenderer;
 import net.zincstudios.scgextra.entity.neutral.inflicted_wolf.InflictedWolfEntity;
 import net.zincstudios.scgextra.entity.neutral.inflicted_wolf.InflictedWolfRenderer;
+import net.zincstudios.scgextra.entity.neutral.mutant_bat.MutantBatEntity;
+import net.zincstudios.scgextra.entity.neutral.mutant_bat.MutantBatRenderer;
+import net.zincstudios.scgextra.entity.common.OffsetRotatedHeadshotBox;
 import top.ribs.scguns.common.BoundingBoxManager;
 
 public class NeutralEntities {
@@ -67,6 +69,16 @@ public class NeutralEntities {
         .build("big_lump")
     );
     
+    public static final RegistryObject<EntityType<MutantBatEntity>> MUTANT_BAT = ENTITY_TYPES.register(
+        "mutant_bat", 
+        () -> EntityType.Builder.of(
+            MutantBatEntity::new, 
+            MobCategory.MONSTER
+        )
+        .sized(1.5F, 1.5F)
+        .build("mutant_bat")
+    );
+    
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(NeutralEntities::registerAttributes);
         modEventBus.addListener(NeutralEntities::onCommonSetup);
@@ -79,6 +91,7 @@ public class NeutralEntities {
         event.put(NeutralEntities.INFLICTED_WOLF.get(), InflictedBoarEntity.createAttributes().build());
         event.put(NeutralEntities.AMMO_GOBLIN.get(), AmmoGoblinEntity.createAttributes().build());
         event.put(NeutralEntities.BIG_LUMP.get(), BigLumpEntity.createAttributes().build());
+        event.put(NeutralEntities.MUTANT_BAT.get(), MutantBatEntity.createAttributes().build());
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
@@ -118,6 +131,15 @@ public class NeutralEntities {
             false, 
             true
         ));
+        BoundingBoxManager.registerHeadshotBox(NeutralEntities.MUTANT_BAT.get(), new OffsetRotatedHeadshotBox<>(
+            8, 
+            9.5, 
+            30.0, 
+            0.0F, 
+            15.0, 
+            false, 
+            true
+        ));
     }
     @OnlyIn(value = Dist.CLIENT)
     private static void onClientSetup(FMLClientSetupEvent event) {
@@ -125,5 +147,6 @@ public class NeutralEntities {
         EntityRenderers.register(NeutralEntities.INFLICTED_WOLF.get(), InflictedWolfRenderer::new);
         EntityRenderers.register(NeutralEntities.AMMO_GOBLIN.get(), AmmoGoblinRenderer::new);
         EntityRenderers.register(NeutralEntities.BIG_LUMP.get(), BigLumpRenderer::new);
+        EntityRenderers.register(NeutralEntities.MUTANT_BAT.get(), MutantBatRenderer::new);
     }
 }

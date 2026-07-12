@@ -1403,5 +1403,31 @@
       "scgextra:neutral/big_lump/idle_02",
       "scgextra:neutral/big_lump/idle_03"
     ]
+  },
+  "mutant_bat.dead": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/mutant_bat/death"
+    ]
+  },
+  "mutant_bat.hurt": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/mutant_bat/hurt"
+    ]
+  },
+  "mutant_bat.idle": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/mutant_bat/idle_01",
+      "scgextra:neutral/mutant_bat/idle_02",
+      "scgextra:neutral/mutant_bat/idle_03"
+    ]
+  },
+  "mutant_bat.scream": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/mutant_bat/scream"
+    ]
   }
 }
