@@ -159,7 +159,7 @@ public class BigLumpMeleeAttackGoal extends Goal{
             this.resetAttackCooldown();
             this.mob.swing(InteractionHand.MAIN_HAND);
             this.mob.doHurtTarget(enemy);
-            this.cooldown = 40;
+            this.cooldown = 20;
             stop();
         }
     }

@@ -2,10 +2,16 @@ package net.zincstudios.scgextra.entity.neutral.big_lump;
 
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.part.RotatedWeakPointPartEntity;
+
+import javax.annotation.Nullable;
+
+import net.zincstudios.scgextra.sounds.NeutralSounds;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -137,5 +143,22 @@ public class BigLumpEntity extends Monster implements GeoEntity{
     }
     public float getInaccuracy(){
         return this.entityData.get(INACCURACY);
+    }
+    @Override
+    protected float getSoundVolume() {
+        return super.getSoundVolume();
+    }
+    @Override
+    protected @Nullable SoundEvent getAmbientSound() {
+        return NeutralSounds.BIG_LUMP_IDLE.get();
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return NeutralSounds.BIG_LUMP_HURT.get();
+    }
+    @Override
+    protected SoundEvent getDeathSound() {
+        return NeutralSounds.BIG_LUMP_DEAD.get();
     }
 }

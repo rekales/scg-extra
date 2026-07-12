@@ -1,11 +1,15 @@
 package net.zincstudios.scgextra.entity.neutral.ammo_goblin;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -19,6 +23,7 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.zincstudios.scgextra.sounds.NeutralSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
@@ -193,5 +198,22 @@ public class AmmoGoblinEntity extends Monster implements GeoEntity{
         else{
             this.setDisappearingTick(this.getDisappearingTick()-1);
         }
+    }
+    @Override
+    protected float getSoundVolume() {
+        return super.getSoundVolume();
+    }
+    @Override
+    protected @Nullable SoundEvent getAmbientSound() {
+        return NeutralSounds.AMMO_GOBLIN_IDLE.get();
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return NeutralSounds.AMMO_GOBLIN_HURT.get();
+    }
+    @Override
+    protected SoundEvent getDeathSound() {
+        return NeutralSounds.AMMO_GOBLIN_DEAD.get();
     }
 }

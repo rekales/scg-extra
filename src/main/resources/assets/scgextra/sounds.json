@@ -1361,5 +1361,47 @@
       "scgextra:cog/cog_juggernaut/hurt2",
       "scgextra:cog/cog_juggernaut/hurt3"
     ]
+  },
+  "ammo_goblin.dead": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/ammo_goblin/dead"
+    ]
+  },
+  "ammo_goblin.hurt": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/ammo_goblin/hurt_01",
+      "scgextra:neutral/ammo_goblin/hurt_02",
+      "scgextra:neutral/ammo_goblin/hurt_03"
+    ]
+  },
+  "ammo_goblin.idle": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/ammo_goblin/idle_01",
+      "scgextra:neutral/ammo_goblin/idle_02"
+    ]
+  },
+  "big_lump.dead": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/big_lump/death"
+    ]
+  },
+  "big_lump.hurt": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/big_lump/hurt_01",
+      "scgextra:neutral/big_lump/hurt_02"
+    ]
+  },
+  "big_lump.idle": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/big_lump/idle_01",
+      "scgextra:neutral/big_lump/idle_02",
+      "scgextra:neutral/big_lump/idle_03"
+    ]
   }
 }
