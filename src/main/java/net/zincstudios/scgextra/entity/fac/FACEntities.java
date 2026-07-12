@@ -23,6 +23,7 @@ import net.zincstudios.scgextra.entity.fac.commissar.FacCommissarEntity;
 import net.zincstudios.scgextra.entity.fac.commissar.FacCommissarRenderer;
 import net.zincstudios.scgextra.entity.fac.lion.FacLionEntity;
 import net.zincstudios.scgextra.entity.fac.tank.FacTankEntity;
+//import net.zincstudios.scgextra.entity.fac.tank.FacTankRenderer;
 import net.zincstudios.scgextra.entity.fac.tank.FacTankRenderer;
 import net.zincstudios.scgextra.entity.fac.tank_buster.FacTankBusterEntity;
 import net.zincstudios.scgextra.entity.fac.trench_sniper.FacTrenchSniperEntity;
@@ -154,7 +155,7 @@ public class FACEntities {
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_commissar"), "head")));
         EntityRenderers.register(FACEntities.FAC_WALKER.get(), (ctx) -> new FacWalkerRenderer(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_walker"), "inner_upper_body")).noDeathTilt());
-
-        EntityRenderers.register(FACEntities.FAC_TANK.get(), FacTankRenderer::new);
+        EntityRenderers.register(FACEntities.FAC_TANK.get(), (ctx) -> new FacTankRenderer(ctx,
+                new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_tank"))).noDeathTilt());
     }
 }

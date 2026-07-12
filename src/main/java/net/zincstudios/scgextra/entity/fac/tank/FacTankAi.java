@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.fac.walker;
+package net.zincstudios.scgextra.entity.fac.tank;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -16,13 +16,11 @@ import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.ModBrainActivities;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.ModBrainSensors;
-import net.zincstudios.scgextra.entity.cog.centipede.CogCentipedeEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.brain.*;
-import net.zincstudios.scgextra.entity.common.gun.IdentityTriggerSampler;
 import net.zincstudios.scgextra.entity.common.gun.IntervalTriggerSampler;
 
-public final class FacWalkerAi {
+public final class FacTankAi {
     private static final ImmutableList<? extends SensorType<? extends Sensor<? super PathfinderMob>>> SENSOR_TYPES = ImmutableList.of(
             SensorType.NEAREST_LIVING_ENTITIES,
             ModBrainSensors.MEDIUM_RANGE_PLAYER.get(),
@@ -67,17 +65,17 @@ public final class FacWalkerAi {
 
     public static <T extends PathfinderMob> void initFightActivity(T mob, Brain<T> brain) {
         brain.addActivityAndRemoveMemoriesWhenStopped(Activity.FIGHT, BrainUtils.createPriorityPairs(10,
-                ImmutableList.of(
-                        StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValidNonFriendlies(mob, target, false)),
-                        AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), false),
-                        new DelayedMeleeAttack(FacWalkerEntity.MELEE_DAMAGE_DELAY, FacWalkerEntity.MELEE_DURATION, 3, 60),
-                        new ApproachTargetIfCannotAim(1F),
-                        new AimWhenNotWalking(),
-                        new ShootTarget(20,
-                                (entity, firing) -> 1.0F,
-                                entity -> !entity.getBrain().hasMemoryValue(ModBrainMemories.DELAYED_MELEE.get()),
-                                new IntervalTriggerSampler(40, 60, 30, 50))
-                )), ImmutableSet.of(
+                        ImmutableList.of(
+                                StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValidNonFriendlies(mob, target, false)),
+                                AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), false),
+                                new DelayedMeleeAttack(FacTankEntity.MELEE_DAMAGE_DELAY, FacTankEntity.MELEE_DURATION, 3, 60),
+                                new ApproachTargetIfCannotAim(1F),
+                                new AimWhenNotWalking(),
+                                new ShootTarget(20,
+                                        (entity, firing) -> 1.0F,
+                                        entity -> !entity.getBrain().hasMemoryValue(ModBrainMemories.DELAYED_MELEE.get()),
+                                        new IntervalTriggerSampler(30, 50, 30, 50))
+                        )), ImmutableSet.of(
                         Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT)
                 ), ImmutableSet.of(
                         ModBrainMemories.AIM_TICKS.get()
@@ -85,8 +83,8 @@ public final class FacWalkerAi {
         );
     }
 
-    public static void updateActivity(FacWalkerEntity mob) {
-        Brain<FacWalkerEntity> brain = mob.getBrain();
+    public static void updateActivity(FacTankEntity mob) {
+        Brain<FacTankEntity> brain = mob.getBrain();
         Activity oldActivity = brain.getActiveNonCoreActivity().orElse(null);
         brain.setActiveActivityToFirstValid(ImmutableList.of(
                 ModBrainActivities.STUNNED.get(),
