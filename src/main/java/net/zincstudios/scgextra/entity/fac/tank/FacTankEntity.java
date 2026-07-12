@@ -48,9 +48,9 @@ public class FacTankEntity extends Monster implements GeoEntity, Gunner, CustomG
 
     private static final int STUN_RECOVERY_TICKS = 10;
     private static final int DEATH_ANIMATION_TICKS = 40;
-    private static final Vec3 LEFT_GUN_OFFSET = new Vec3(1.5, 2.2, 1);
-    private static final Vec3 RIGHT_GUN_OFFSET = new Vec3(-1.5, 2.2, 1);
-    private static final Vec3 CANNON_OFFSET = new Vec3(-1.5, 2.2, 1);
+    private static final Vec3 LEFT_GUN_OFFSET = new Vec3(-1.5, 2.2, 1);
+    private static final Vec3 RIGHT_GUN_OFFSET = new Vec3(1.5, 2.2, 1);
+    private static final Vec3 CANNON_OFFSET = new Vec3(-0.7, 2.4, 1.8);
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
@@ -74,20 +74,23 @@ public class FacTankEntity extends Monster implements GeoEntity, Gunner, CustomG
     public FacTankEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
         this.customGun = new CustomScorchedSimGun.Builder(ModItems.BIRDFEEDER.get().getGun())
-                .projectileDamage(6f)
+                .projectileDamage(6F)
                 .fireRate(2)
                 .maxRange(16)
                 .idealRange(12)
                 .gunIndex(0)
-                .velocityModifier(vec -> vec.scale(1/2f))
+                .noGunFlash() // handled on onGunFire instead
+                .velocityModifier(vec -> vec.scale(1/2F))
                 .build();
-        this.mainCannon = new CustomScorchedSimGun.Builder(ModItems.HULLBREAKER.get().getGun())
-                .projectileDamage(4f)
+        this.mainCannon = new CustomScorchedSimGun.Builder(ModItems.DOZIER_RL.get().getGun())
+                .projectileDamage(20F)
                 .fireRate(20)
                 .maxRange(20)
                 .idealRange(16)
                 .gunIndex(1)
-                .velocityModifier(vec -> vec.scale(1/5f))
+                .noGunFlash() // handled on onGunFire instead
+                .velocityModifier(vec -> vec.scale(1/5F).add(0, 0.1F, 0))
+                .projectileFactory(TankCannonProjectile::new)
                 .build();
     }
 
@@ -134,7 +137,7 @@ public class FacTankEntity extends Monster implements GeoEntity, Gunner, CustomG
 
         this.getBrain().getMemory(ModBrainMemories.ABILITY_STATE.get()).ifPresent(abilityState -> {
             if (abilityState.isSame(TankCannonFire.ABILITY_ID)) {
-                if (abilityState.getDuration(this.level()) == 5) {
+                if (abilityState.getDuration(this.level()) == 10) {
                     this.triggerAnim("effects", "eye_flash");
                 }
             }
@@ -208,11 +211,21 @@ public class FacTankEntity extends Monster implements GeoEntity, Gunner, CustomG
     public void onGunFire(SimulatedGun gun, Vec3 targetPos) {
         this.bulletSpawnLeft = !this.bulletSpawnLeft;
 
+        if (gun == this.mainCannon) {
+            Gun.Display.Flash flash = ModItems.HULLBREAKER.get().getGun().getDisplay().getFlash();
+            if (flash == null) return;
+            this.triggerAnim("cannon", "fire");
+            ResourceLocation flashTexture = ResourceLocation.fromNamespaceAndPath(ScorchedGuns.MODID,
+                    "textures/effect/" + flash.getTextureLocation() + ".png");
+            SCGEPacketHandler.sendToNearbyPlayers(() -> MobUtil.levelLocationFromEntity(this),
+                    new GunFlashMessage(this.getId(), this.bulletSpawnLeft ? 0 : 1, flashTexture, false, 1.2F));
+            return;
+        }
+
         if (this.bulletSpawnLeft) {
             this.triggerAnim("left_gun", "fire");
         } else {
             this.triggerAnim("right_gun", "fire");
-
         }
         Gun.Display.Flash flash = ModItems.BIRDFEEDER.get().getGun().getDisplay().getFlash();
         if (flash == null) return;
@@ -224,14 +237,17 @@ public class FacTankEntity extends Monster implements GeoEntity, Gunner, CustomG
 
     @Override
     public Vec3 getBulletSpawnOffset(int gunIndex) {
+        if (gunIndex == 1) {
+            return CANNON_OFFSET.yRot(-this.yBodyRot * Mth.DEG_TO_RAD);
+        }
         if (this.bulletSpawnLeft) {
-            return LEFT_GUN_OFFSET.yRot(-this.yHeadRot * Mth.DEG_TO_RAD);
+            return LEFT_GUN_OFFSET.yRot(-this.yBodyRot * Mth.DEG_TO_RAD);
         } else {
-            return RIGHT_GUN_OFFSET.yRot(-this.yHeadRot * Mth.DEG_TO_RAD);
+            return RIGHT_GUN_OFFSET.yRot(-this.yBodyRot * Mth.DEG_TO_RAD);
         }
     }
 
-    SimulatedGun getMainCannon() {
+    public SimulatedGun getMainCannon() {
         return this.mainCannon;
     }
 

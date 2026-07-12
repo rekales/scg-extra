@@ -3,6 +3,7 @@ package net.zincstudios.scgextra.entity.fac;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -23,8 +24,8 @@ import net.zincstudios.scgextra.entity.fac.commissar.FacCommissarEntity;
 import net.zincstudios.scgextra.entity.fac.commissar.FacCommissarRenderer;
 import net.zincstudios.scgextra.entity.fac.lion.FacLionEntity;
 import net.zincstudios.scgextra.entity.fac.tank.FacTankEntity;
-//import net.zincstudios.scgextra.entity.fac.tank.FacTankRenderer;
 import net.zincstudios.scgextra.entity.fac.tank.FacTankRenderer;
+import net.zincstudios.scgextra.entity.fac.tank.TankCannonProjectile;
 import net.zincstudios.scgextra.entity.fac.tank_buster.FacTankBusterEntity;
 import net.zincstudios.scgextra.entity.fac.trench_sniper.FacTrenchSniperEntity;
 import net.zincstudios.scgextra.entity.fac.trencher.FacTrencherEntity;
@@ -33,6 +34,7 @@ import net.zincstudios.scgextra.entity.fac.shovel_knight.FacShovelKnightEntity;
 import net.zincstudios.scgextra.entity.fac.trench_goblin.FacTrenchGoblinEntity;
 import net.zincstudios.scgextra.entity.fac.walker.FacWalkerRenderer;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
+import top.ribs.scguns.client.render.entity.ShotballRenderer;
 import top.ribs.scguns.common.BoundingBoxManager;
 import top.ribs.scguns.common.headshot.BasicHeadshotBox;
 import top.ribs.scguns.common.headshot.RotatedHeadshotBox;
@@ -99,6 +101,18 @@ public class FACEntities {
                     .sized(2.5F, 3.7F)
                     .build("fac_tank"));
 
+    public static final RegistryObject<EntityType<TankCannonProjectile>> TANK_CANNON_PROJECTILE = ENTITY_TYPES
+            .register("tank_cannon_projectile", () -> EntityType.Builder.of(
+                            (EntityType<TankCannonProjectile> type, Level level) -> new TankCannonProjectile(type, level), MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .setTrackingRange(100)
+                    .setUpdateInterval(1)
+                    .noSummon()
+                    .fireImmune()
+                    .noSave()
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build("tank_cannon_projectile"));
+
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(FACEntities::registerAttributes);
         modEventBus.addListener(FACEntities::onCommonSetup);
@@ -157,5 +171,6 @@ public class FACEntities {
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_walker"), "inner_upper_body")).noDeathTilt());
         EntityRenderers.register(FACEntities.FAC_TANK.get(), (ctx) -> new FacTankRenderer(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_tank"))).noDeathTilt());
+        EntityRenderers.register(FACEntities.TANK_CANNON_PROJECTILE.get(), ShotballRenderer::new);
     }
 }

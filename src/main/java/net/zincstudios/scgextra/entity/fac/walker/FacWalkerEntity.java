@@ -43,8 +43,8 @@ public class FacWalkerEntity extends Monster implements GeoEntity, Gunner, Custo
 
     private static final int STUN_RECOVERY_TICKS = 12;
     private static final int DEATH_ANIM_TICKS = 35;
-    private static final Vec3 LEFT_GUN_OFFSET = new Vec3(0.65,3.5,-0.4);  // TODO: refine
-    private static final Vec3 RIGHT_GUN_OFFSET = new Vec3(-0.65,3.5,-0.4);
+    private static final Vec3 LEFT_GUN_OFFSET = new Vec3(-0.65,3.5,-0.4);  // TODO: refine
+    private static final Vec3 RIGHT_GUN_OFFSET = new Vec3(0.65,3.5,-0.4);
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
@@ -69,6 +69,7 @@ public class FacWalkerEntity extends Monster implements GeoEntity, Gunner, Custo
                 .fireRate(2)
                 .maxRange(16)
                 .idealRange(12)
+                .noGunFlash() // handled on onGunFire instead
                 .velocityModifier(vec -> vec.scale(1/2f))
                 .build();
     }

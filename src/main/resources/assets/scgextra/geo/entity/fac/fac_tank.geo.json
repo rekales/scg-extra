@@ -7,8 +7,8 @@
 				"texture_width": 256,
 				"texture_height": 256,
 				"visible_bounds_width": 6,
-				"visible_bounds_height": 4.5,
-				"visible_bounds_offset": [0, 1.75, 0]
+				"visible_bounds_height": 5.5,
+				"visible_bounds_offset": [0, 2.25, 0]
 			},
 			"bones": [
 				{
@@ -136,6 +136,11 @@
 						{"origin": [-16.5, 32.5, -30], "size": [10, 10, 13], "pivot": [-11.5, 37.5, -22], "rotation": [0, 0, 45], "uv": [66, 101]},
 						{"origin": [-14.5, 34.5, -30], "size": [6, 6, 2], "pivot": [-11.5, 37.5, -22], "rotation": [0, 0, 45], "uv": [86, 156]}
 					]
+				},
+				{
+					"name": "cannon_flash",
+					"parent": "cannon",
+					"pivot": [-11.5, 37.5, -30]
 				},
 				{
 					"name": "left_exhaust",

@@ -13,7 +13,8 @@ public class FacTankRenderer extends BaseEntityRenderer<FacTankEntity> {
         super(context, model);
         this.addRenderLayer(new BoneGunFlashGeoLayer<>(this, Map.of(
                 0, "left_flash",
-                1, "right_flash"
+                1, "right_flash",
+                2, "cannon_flash"
         )));
     }
 }
