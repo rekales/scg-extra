@@ -613,6 +613,27 @@
       "scgextra:fac/fac_lion/idle3"
     ]
   },
+  "fac_shovel_knight.death": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:fac/fac_shovel_knight/death"
+    ]
+  },
+  "fac_shovel_knight.hurt": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:fac/fac_shovel_knight/hurt1",
+      "scgextra:fac/fac_shovel_knight/hurt2",
+      "scgextra:fac/fac_shovel_knight/hurt3"
+    ]
+  },
+  "fac_shovel_knight.idle": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:fac/fac_shovel_knight/idle1",
+      "scgextra:fac/fac_shovel_knight/idle2"
+    ]
+  },
   "fac_tank.cannon_charge": {
     "category": "hostile",
     "sounds": [

@@ -3,6 +3,8 @@ package net.zincstudios.scgextra.entity.fac.shovel_knight;
 import com.mojang.serialization.Dynamic;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -12,6 +14,7 @@ import net.minecraft.world.level.Level;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
 import net.zincstudios.scgextra.entity.common.client.ExpandedAnimationController;
+import net.zincstudios.scgextra.sounds.FACSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -117,5 +120,17 @@ public class FacShovelKnightEntity extends Monster implements GeoEntity {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.geoCache;
+    }
+
+    protected SoundEvent getHurtSound(DamageSource damageSource) {
+        return FACSounds.FAC_SHOVEL_KNIGHT_HURT.get();
+    }
+
+    protected SoundEvent getAmbientSound() {
+        return FACSounds.FAC_SHOVEL_KNIGHT_IDLE.get();
+    }
+
+    protected SoundEvent getDeathSound() {
+        return FACSounds.FAC_SHOVEL_KNIGHT_DEATH.get();
     }
 }

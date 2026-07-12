@@ -8,8 +8,6 @@ import static net.zincstudios.scgextra.sounds.ModSounds.SOUND_EVENTS;
 
 public class FACSounds {
 
-    // TODO: shovel knight sounds
-
     public static final RegistryObject<SoundEvent> FAC_BLUECOAT_DEATH = SOUND_EVENTS.register("fac_bluecoat.death",
             () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("fac_bluecoat.death")));
     public static final RegistryObject<SoundEvent> FAC_BLUECOAT_HURT = SOUND_EVENTS.register("fac_bluecoat.hurt",
@@ -34,6 +32,13 @@ public class FACSounds {
             () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("fac_lion.hurt")));
     public static final RegistryObject<SoundEvent> FAC_LION_IDLE = SOUND_EVENTS.register("fac_lion.idle",
             () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("fac_lion.idle")));
+
+    public static final RegistryObject<SoundEvent> FAC_SHOVEL_KNIGHT_DEATH = SOUND_EVENTS.register("fac_shovel_knight.death",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("fac_shovel_knight.death")));
+    public static final RegistryObject<SoundEvent> FAC_SHOVEL_KNIGHT_HURT = SOUND_EVENTS.register("fac_shovel_knight.hurt",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("fac_shovel_knight.hurt")));
+    public static final RegistryObject<SoundEvent> FAC_SHOVEL_KNIGHT_IDLE = SOUND_EVENTS.register("fac_shovel_knight.idle",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("fac_shovel_knight.idle")));
 
     public static final RegistryObject<SoundEvent> FAC_TANK_CANNON_CHARGE = SOUND_EVENTS.register("fac_tank.cannon_charge",
             () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("fac_tank.cannon_charge")));
