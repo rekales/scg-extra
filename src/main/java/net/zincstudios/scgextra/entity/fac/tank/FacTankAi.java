@@ -45,10 +45,11 @@ public final class FacTankAi {
             ModBrainMemories.STUNNED.get(),
             ModBrainMemories.STUNNED_COOLING_DOWN.get(),
             ModBrainMemories.HEADSHOT_COUNT.get(),
-            ModBrainMemories.DELAYED_MELEE.get()
+            ModBrainMemories.DELAYED_MELEE.get(),
+            ModBrainMemories.ABILITY_STATE.get()
     );
 
-    public static <T extends PathfinderMob> Brain<?> makeBrain(T mob, Brain<T> brain) {
+    public static <T extends FacTankEntity> Brain<?> makeBrain(T mob, Brain<T> brain) {
         BrainCommons.initCoreWithStunActivity(brain, MobUtil.DEFAULT_STUN_DURATION);
         BrainCommons.initIdleActivity(brain);
         initFightActivity(mob, brain);
@@ -63,14 +64,15 @@ public final class FacTankAi {
         return Brain.provider(MEMORY_TYPES, SENSOR_TYPES);
     }
 
-    public static <T extends PathfinderMob> void initFightActivity(T mob, Brain<T> brain) {
+    public static <T extends FacTankEntity> void initFightActivity(T mob, Brain<T> brain) {
         brain.addActivityAndRemoveMemoriesWhenStopped(Activity.FIGHT, BrainUtils.createPriorityPairs(10,
                         ImmutableList.of(
                                 StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValidNonFriendlies(mob, target, false)),
                                 AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), false),
+                                new TankCannonFire(),
                                 new DelayedMeleeAttack(FacTankEntity.MELEE_DAMAGE_DELAY, FacTankEntity.MELEE_DURATION, 3, 60),
                                 new ApproachTargetIfCannotAim(1F),
-                                new AimWhenNotWalking(),
+                                new AimWhenTargetVisible(),
                                 new ShootTarget(20,
                                         (entity, firing) -> 1.0F,
                                         entity -> !entity.getBrain().hasMemoryValue(ModBrainMemories.DELAYED_MELEE.get()),

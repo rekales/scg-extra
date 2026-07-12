@@ -50,10 +50,10 @@ public class FacTankEntity extends Monster implements GeoEntity, Gunner, CustomG
     private static final int DEATH_ANIMATION_TICKS = 40;
     private static final Vec3 LEFT_GUN_OFFSET = new Vec3(1.5, 2.2, 1);
     private static final Vec3 RIGHT_GUN_OFFSET = new Vec3(-1.5, 2.2, 1);
+    private static final Vec3 CANNON_OFFSET = new Vec3(-1.5, 2.2, 1);
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
-    private static final RawAnimation RUN = RawAnimation.begin().thenPlay("stomp");
     private static final RawAnimation STOMP = RawAnimation.begin().thenPlay("stomp");
     private static final RawAnimation DEATH = RawAnimation.begin().thenPlayAndHold("death");
     private static final RawAnimation STUN_START = RawAnimation.begin().thenPlayAndHold("stun_start");
@@ -78,14 +78,16 @@ public class FacTankEntity extends Monster implements GeoEntity, Gunner, CustomG
                 .fireRate(2)
                 .maxRange(16)
                 .idealRange(12)
+                .gunIndex(0)
                 .velocityModifier(vec -> vec.scale(1/2f))
                 .build();
-        this.mainCannon = new CustomScorchedSimGun.Builder(ModItems.BIRDFEEDER.get().getGun())
+        this.mainCannon = new CustomScorchedSimGun.Builder(ModItems.HULLBREAKER.get().getGun())
                 .projectileDamage(4f)
-                .fireRate(2)
-                .maxRange(16)
-                .idealRange(12)
-                .velocityModifier(vec -> vec.scale(1/4f))
+                .fireRate(20)
+                .maxRange(20)
+                .idealRange(16)
+                .gunIndex(1)
+                .velocityModifier(vec -> vec.scale(1/5f))
                 .build();
     }
 
@@ -127,6 +129,16 @@ public class FacTankEntity extends Monster implements GeoEntity, Gunner, CustomG
     @Override
     public void tick() {
         super.tick();
+
+        if (this.level().isClientSide) return;
+
+        this.getBrain().getMemory(ModBrainMemories.ABILITY_STATE.get()).ifPresent(abilityState -> {
+            if (abilityState.isSame(TankCannonFire.ABILITY_ID)) {
+                if (abilityState.getDuration(this.level()) == 5) {
+                    this.triggerAnim("effects", "eye_flash");
+                }
+            }
+        });
 
         if (brain.getTimeUntilExpiry(ModBrainMemories.DELAYED_MELEE.get()) == MELEE_DURATION) {
             this.triggerAnim("main", "stomp");
@@ -217,6 +229,10 @@ public class FacTankEntity extends Monster implements GeoEntity, Gunner, CustomG
         } else {
             return RIGHT_GUN_OFFSET.yRot(-this.yHeadRot * Mth.DEG_TO_RAD);
         }
+    }
+
+    SimulatedGun getMainCannon() {
+        return this.mainCannon;
     }
 
     @Override
