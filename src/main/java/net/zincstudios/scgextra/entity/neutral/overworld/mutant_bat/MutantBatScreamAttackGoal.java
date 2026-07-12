@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.neutral.mutant_bat;
+package net.zincstudios.scgextra.entity.neutral.overworld.mutant_bat;
 
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;

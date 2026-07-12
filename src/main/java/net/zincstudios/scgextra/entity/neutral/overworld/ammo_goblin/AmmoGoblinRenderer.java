@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.neutral.ammo_goblin;
+package net.zincstudios.scgextra.entity.neutral.overworld.ammo_goblin;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;

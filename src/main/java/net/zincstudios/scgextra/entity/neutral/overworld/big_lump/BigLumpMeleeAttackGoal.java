@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.neutral.big_lump;
+package net.zincstudios.scgextra.entity.neutral.overworld.big_lump;
 
 import java.util.EnumSet;
 

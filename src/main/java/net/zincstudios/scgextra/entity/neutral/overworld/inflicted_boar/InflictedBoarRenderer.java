@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.neutral.big_lump;
+package net.zincstudios.scgextra.entity.neutral.overworld.inflicted_boar;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -9,19 +9,19 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
-public class BigLumpRenderer extends GeoEntityRenderer<BigLumpEntity> {
+public class InflictedBoarRenderer extends GeoEntityRenderer<InflictedBoarEntity> {
 
-    public BigLumpRenderer(Context context) {
-        super(context, new BigLumpModel());
-        this.shadowRadius = 1F;
+    public InflictedBoarRenderer(Context context) {
+        super(context, new InflictedBoarModel());
+        this.shadowRadius = 0.8F;
     }
 
     @Override
-    public ResourceLocation getTextureLocation(BigLumpEntity pEntity) {
-        return SCGExtra.asResource("textures/entity/neutral/big_lump.png");
+    public ResourceLocation getTextureLocation(InflictedBoarEntity pEntity) {
+        return SCGExtra.asResource("textures/entity/neutral/inflicted_boar.png");
     }
     @Override
-    protected void applyRotations(BigLumpEntity animatable, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTick) {
+    protected void applyRotations(InflictedBoarEntity animatable, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTick) {
         super.applyRotations(animatable, poseStack, ageInTicks, rotationYaw, partialTick);
 
         if (animatable != null && animatable.deathTime > 0) {

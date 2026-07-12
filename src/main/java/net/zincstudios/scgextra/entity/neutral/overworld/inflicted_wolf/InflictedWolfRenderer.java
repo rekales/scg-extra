@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.neutral.inflicted_boar;
+package net.zincstudios.scgextra.entity.neutral.overworld.inflicted_wolf;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -9,19 +9,19 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
-public class InflictedBoarRenderer extends GeoEntityRenderer<InflictedBoarEntity> {
+public class InflictedWolfRenderer extends GeoEntityRenderer<InflictedWolfEntity> {
 
-    public InflictedBoarRenderer(Context context) {
-        super(context, new InflictedBoarModel());
+    public InflictedWolfRenderer(Context context) {
+        super(context, new InflictedWolfModel());
         this.shadowRadius = 0.8F;
     }
 
     @Override
-    public ResourceLocation getTextureLocation(InflictedBoarEntity pEntity) {
-        return SCGExtra.asResource("textures/entity/neutral/inflicted_boar.png");
+    public ResourceLocation getTextureLocation(InflictedWolfEntity pEntity) {
+        return SCGExtra.asResource("textures/entity/neutral/inflicted_wolf.png");
     }
     @Override
-    protected void applyRotations(InflictedBoarEntity animatable, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTick) {
+    protected void applyRotations(InflictedWolfEntity animatable, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTick) {
         super.applyRotations(animatable, poseStack, ageInTicks, rotationYaw, partialTick);
 
         if (animatable != null && animatable.deathTime > 0) {

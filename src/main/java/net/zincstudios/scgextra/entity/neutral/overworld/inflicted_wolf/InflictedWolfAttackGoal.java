@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.neutral.inflicted_wolf;
+package net.zincstudios.scgextra.entity.neutral.overworld.inflicted_wolf;
 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;

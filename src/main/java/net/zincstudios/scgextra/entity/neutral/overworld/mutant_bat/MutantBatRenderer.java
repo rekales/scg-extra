@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.neutral.inflicted_wolf;
+package net.zincstudios.scgextra.entity.neutral.overworld.mutant_bat;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -9,19 +9,19 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
-public class InflictedWolfRenderer extends GeoEntityRenderer<InflictedWolfEntity> {
+public class MutantBatRenderer extends GeoEntityRenderer<MutantBatEntity> {
 
-    public InflictedWolfRenderer(Context context) {
-        super(context, new InflictedWolfModel());
-        this.shadowRadius = 0.8F;
+    public MutantBatRenderer(Context context) {
+        super(context, new MutantBatModel());
+        this.shadowRadius = 1F;
     }
 
     @Override
-    public ResourceLocation getTextureLocation(InflictedWolfEntity pEntity) {
-        return SCGExtra.asResource("textures/entity/neutral/inflicted_wolf.png");
+    public ResourceLocation getTextureLocation(MutantBatEntity pEntity) {
+        return SCGExtra.asResource("textures/entity/neutral/mutant_bat.png");
     }
     @Override
-    protected void applyRotations(InflictedWolfEntity animatable, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTick) {
+    protected void applyRotations(MutantBatEntity animatable, PoseStack poseStack, float ageInTicks, float rotationYaw, float partialTick) {
         super.applyRotations(animatable, poseStack, ageInTicks, rotationYaw, partialTick);
 
         if (animatable != null && animatable.deathTime > 0) {

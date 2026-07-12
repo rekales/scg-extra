@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.neutral.ammo_goblin;
+package net.zincstudios.scgextra.entity.neutral.overworld.ammo_goblin;
 
 import net.zincstudios.scgextra.SCGExtra;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;

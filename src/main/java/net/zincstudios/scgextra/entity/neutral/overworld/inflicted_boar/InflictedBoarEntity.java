@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.neutral.inflicted_boar;
+package net.zincstudios.scgextra.entity.neutral.overworld.inflicted_boar;
 
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.minecraft.sounds.SoundEvent;

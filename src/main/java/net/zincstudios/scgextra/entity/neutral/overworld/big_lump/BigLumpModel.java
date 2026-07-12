@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.neutral.big_lump;
+package net.zincstudios.scgextra.entity.neutral.overworld.big_lump;
 
 import net.zincstudios.scgextra.SCGExtra;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
