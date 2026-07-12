@@ -39,7 +39,7 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class FacTankEntity extends Monster implements GeoEntity, Stunnable, HeadShotHandler {
+public class FacTankEntity extends Monster implements GeoEntity, GeoEntity {
     private static final int DEATH_ANIMATION_TICKS = 40;
     private static final int SIDE_GUN_FIRE_WINDOW_TICKS = 8 * 20;
     private static final int SIDE_GUN_RELOAD_TICKS = 3 * 20;

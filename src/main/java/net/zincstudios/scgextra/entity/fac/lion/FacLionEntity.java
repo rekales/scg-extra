@@ -21,6 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.PartEntity;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
+import net.zincstudios.scgextra.entity.common.EquippedEntity;
 import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
@@ -39,7 +40,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class FacLionEntity extends GunnerEntity implements GeoEntity, Gunner {
+public class FacLionEntity extends EquippedEntity implements GeoEntity, Gunner {
 
     private static final Vec3 LEFT_SHIELD_DOWN = new Vec3(0.7, 0.2, 0.9);
     private static final Vec3 RIGHT_SHIELD_DOWN = new Vec3(0.7 + 0.7f, 0.2, 0.9);

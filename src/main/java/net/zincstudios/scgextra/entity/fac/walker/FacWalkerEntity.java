@@ -36,7 +36,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class FacWalkerEntity extends GunnerEntity implements GeoEntity, Gunner, CustomGunHolder, BulletSpawnOffset {
+public class FacWalkerEntity extends Monster implements GeoEntity, Gunner, CustomGunHolder, BulletSpawnOffset {
 
     static final int MELEE_DURATION = 18;
     static final int MELEE_DAMAGE_DELAY = 10;

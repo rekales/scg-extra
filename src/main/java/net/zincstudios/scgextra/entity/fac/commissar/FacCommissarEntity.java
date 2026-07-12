@@ -20,6 +20,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.zincstudios.scgextra.entity.AbilityState;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
+import net.zincstudios.scgextra.entity.common.EquippedEntity;
 import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
@@ -40,7 +41,7 @@ import java.util.Optional;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class FacCommissarEntity extends GunnerEntity implements GeoEntity, Gunner {
+public class FacCommissarEntity extends EquippedEntity implements GeoEntity, Gunner {
 
     static final int FLARE_DURATION = 200;
     static final int ALERT_ANIM_TICKS = 30;
