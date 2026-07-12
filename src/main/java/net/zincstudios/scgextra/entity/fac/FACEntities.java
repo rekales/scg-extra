@@ -13,9 +13,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.SCGExtra;
-import net.zincstudios.scgextra.entity.common.OffsetRotatedHeadshotBox;
-import net.zincstudios.scgextra.entity.common.WeakPointBox;
-import net.zincstudios.scgextra.entity.common.WeakPointBoxManager;
 import net.zincstudios.scgextra.entity.common.client.BaseEntityRenderer;
 import net.zincstudios.scgextra.entity.common.client.GunHoldingMobRenderer;
 import net.zincstudios.scgextra.entity.common.client.ItemHoldingMobRenderer;
@@ -44,12 +41,10 @@ import static net.zincstudios.scgextra.entity.ModEntities.ENTITY_TYPES;
 public class FACEntities {
 
     // TODO: sounds
-    // TODO: headshot boxes
-    // TODO: hitboxes
 
     public static final RegistryObject<EntityType<FacTrencherEntity>> FAC_TRENCHER = ENTITY_TYPES
             .register("fac_trencher", () -> EntityType.Builder.of(FacTrencherEntity::new, MobCategory.MONSTER)
-                    .sized(0.68F, 1.82F)
+                    .sized(0.6F, 1.8F)
                     .build("fac_trencher"));
 
     public static final RegistryObject<EntityType<FacBluecoatEntity>> FAC_BLUECOAT = ENTITY_TYPES
@@ -59,17 +54,17 @@ public class FACEntities {
 
     public static final RegistryObject<EntityType<FacTrenchGoblinEntity>> TRENCH_GOBLIN = ENTITY_TYPES
             .register("fac_trench_goblin", () -> EntityType.Builder.of(FacTrenchGoblinEntity::new, MobCategory.MONSTER)
-                    .sized(0.72F, 1.72F)
+                    .sized(0.7F, 1.7F)
                     .build("fac_trench_goblin"));
 
     public static final RegistryObject<EntityType<FacTrenchSniperEntity>> TRENCH_SNIPER = ENTITY_TYPES
             .register("fac_trench_sniper", () -> EntityType.Builder.of(FacTrenchSniperEntity::new, MobCategory.MONSTER)
-                    .sized(0.72F, 2.22F)
+                    .sized(0.7F, 2.2F)
                     .build("fac_trench_sniper"));
 
     public static final RegistryObject<EntityType<FacShovelKnightEntity>> SHOVEL_KNIGHT = ENTITY_TYPES
             .register("fac_shovel_knight", () -> EntityType.Builder.of(FacShovelKnightEntity::new, MobCategory.MONSTER)
-                    .sized(0.78F, 2.08F)
+                    .sized(0.8F, 2.0F)
                     .build("fac_shovel_knight"));
 
     public static final RegistryObject<EntityType<FacTankBusterEntity>> FAC_TANK_BUSTER = ENTITY_TYPES
@@ -84,7 +79,7 @@ public class FACEntities {
 
     public static final RegistryObject<EntityType<FacCommissarEntity>> FAC_COMMISSAR = ENTITY_TYPES
             .register("fac_commissar", () -> EntityType.Builder.of(FacCommissarEntity::new, MobCategory.MONSTER)
-                    .sized(0.96F, 2.22F)
+                    .sized(0.85F, 2.4F)
                     .build("fac_commissar"));
 
     public static final RegistryObject<EntityType<FacWalkerEntity>> FAC_WALKER = ENTITY_TYPES
@@ -96,7 +91,7 @@ public class FACEntities {
     public static final RegistryObject<EntityType<FacTankEntity>> FAC_TANK = ENTITY_TYPES
             .register("fac_tank", () -> EntityType.Builder.of(FacTankEntity::new, MobCategory.MONSTER)
                     .setUpdateInterval(1)
-                    .sized(2.5F, 3.7F)
+                    .sized(2.5F, 3.3F)
                     .build("fac_tank"));
 
     public static final RegistryObject<EntityType<TankCannonProjectile>> TANK_CANNON_PROJECTILE = ENTITY_TYPES
@@ -134,17 +129,15 @@ public class FACEntities {
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
         BoundingBoxManager.registerHeadshotBox(FACEntities.FAC_TRENCHER.get(), new BasicHeadshotBox<>(9.0, 20.0));
-        BoundingBoxManager.registerHeadshotBox(FACEntities.FAC_BLUECOAT.get(), new BasicHeadshotBox<>(9.0, 22.0));
-        BoundingBoxManager.registerHeadshotBox(FACEntities.TRENCH_GOBLIN.get(), new OffsetRotatedHeadshotBox<>(8.0, 7.0, 21.0, 0.5F, 5.0, false, true));
-        BoundingBoxManager.registerHeadshotBox(FACEntities.TRENCH_SNIPER.get(), new OffsetRotatedHeadshotBox<>(9.0, 9.0, 30.0, 0.0F, 2.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(FACEntities.FAC_BLUECOAT.get(), new BasicHeadshotBox<>(11.0, 20.0));
+        BoundingBoxManager.registerHeadshotBox(FACEntities.TRENCH_GOBLIN.get(), new RotatedHeadshotBox<>(8.0, 7.0, 21.0, 7.0, false, true));
+        BoundingBoxManager.registerHeadshotBox(FACEntities.TRENCH_SNIPER.get(), new RotatedHeadshotBox<>(9.0, 11.0, 30.0, 2.0, false, true));
         BoundingBoxManager.registerHeadshotBox(FACEntities.SHOVEL_KNIGHT.get(), new BasicHeadshotBox<>(9.0, 24.0));
-        BoundingBoxManager.registerHeadshotBox(FACEntities.FAC_COMMISSAR.get(), new OffsetRotatedHeadshotBox<>(10.0, 18.0, 30.0, 0.0F, 0, false, true));
+        BoundingBoxManager.registerHeadshotBox(FACEntities.FAC_COMMISSAR.get(), new BasicHeadshotBox<>(10.0, 17.0, 30.0));
         BoundingBoxManager.registerHeadshotBox(FACEntities.FAC_TANK_BUSTER.get(), new BasicHeadshotBox<>(0.0, 0.0));
         BoundingBoxManager.registerHeadshotBox(FACEntities.FAC_LION.get(), new RotatedHeadshotBox<>(10, 36.0, 7.0, false, true));
         BoundingBoxManager.registerHeadshotBox(FACEntities.FAC_WALKER.get(), new RotatedHeadshotBox<>(10, 6, 50, 8, false, true));
-        BoundingBoxManager.registerHeadshotBox(FACEntities.FAC_TANK.get(), new OffsetRotatedHeadshotBox<>(13.0, 16.0, 9.0, 0.0F, false, true));
-
-        WeakPointBoxManager.registerWeakPointBox(FACEntities.FAC_TANK.get(), new WeakPointBox<>(new OffsetRotatedHeadshotBox<>(13.0, 16.0, 9.0, 0.0F, false, true)));
+        BoundingBoxManager.registerHeadshotBox(FACEntities.FAC_TANK.get(), new RotatedHeadshotBox<>(14.0, 12.0, 13.0, 20.0, false, true));
     }
 
     @OnlyIn(value = Dist.CLIENT)
