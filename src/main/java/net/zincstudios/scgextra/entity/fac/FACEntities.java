@@ -44,7 +44,6 @@ import static net.zincstudios.scgextra.entity.ModEntities.ENTITY_TYPES;
 public class FACEntities {
 
     // TODO: sounds
-    // TODO: tags
     // TODO: equipment
     // TODO: headshot boxes
     // TODO: hitboxes
