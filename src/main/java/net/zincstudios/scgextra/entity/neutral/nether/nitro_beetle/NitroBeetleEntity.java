@@ -1,14 +1,12 @@
 package net.zincstudios.scgextra.entity.neutral.nether.nitro_beetle;
 
+import java.util.EnumSet;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -18,15 +16,21 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.util.AirAndWaterRandomPos;
+import net.minecraft.world.entity.ai.util.HoverRandomPos;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
@@ -39,13 +43,13 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import net.minecraft.world.entity.animal.FlyingAnimal;
 
-public class NitroBeetleEntity extends Monster implements GeoEntity{
+public class NitroBeetleEntity extends Monster implements GeoEntity, FlyingAnimal{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
-    private static final EntityDataAccessor<Boolean> IS_FLYING =
-            SynchedEntityData.defineId(NitroBeetleEntity.class, EntityDataSerializers.BOOLEAN);
     public NitroBeetleEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
+        this.moveControl = new FlyingMoveControl(this, 20, true);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -56,14 +60,16 @@ public class NitroBeetleEntity extends Monster implements GeoEntity{
         .add(Attributes.ARMOR, 12)
         .add(Attributes.ATTACK_DAMAGE, 3)
         .add(Attributes.ATTACK_KNOCKBACK, 0.1)
+        .add(Attributes.FLYING_SPEED, 0.6)
+        
         ;
     }
 
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(2, new WaterAvoidingRandomStrollGoal(this, 0.5));
+        this.goalSelector.addGoal(5, new FloatGoal(this));
+        this.goalSelector.addGoal(2, new NitroBeetleWanderGoal());
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0.4, true));
@@ -92,20 +98,13 @@ public class NitroBeetleEntity extends Monster implements GeoEntity{
         }));
     }
 
-    @Override
-    public void aiStep() {
-        super.aiStep();
-        Vec3 vec3 = this.getDeltaMovement();
-        if (!this.onGround() && vec3.y < (double)0.0F) {
-            this.setFlying(true);
-            this.setDeltaMovement(vec3.multiply((double)1.0F, 0.6, (double)1.0F));
-        }else{
-            this.setFlying(false);
-        }
-        if(!this.onGround()){
-            this.setFlying(true);
-        }
-    }
+    protected PathNavigation createNavigation(Level p_level) {
+        FlyingPathNavigation navigation = new FlyingPathNavigation(this, p_level);
+        navigation.setCanOpenDoors(false);
+        navigation.setCanFloat(true);
+        navigation.setCanPassDoors(true);
+        return navigation;
+   }
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
@@ -147,32 +146,6 @@ public class NitroBeetleEntity extends Monster implements GeoEntity{
         return true;
     }
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(IS_FLYING, false);
-    }
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putBoolean("IS_FLYING", this.isFlying());
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        if (compound.contains("IS_FLYING")) {
-            this.setFlying(compound.getBoolean("IS_FLYING"));
-        }
-    }
-    
-    public boolean isFlying(){
-        return this.entityData.get(IS_FLYING);
-    }
-
-    public void setFlying(boolean flying){
-        this.entityData.set(IS_FLYING, flying);
-    }
-    @Override
     public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
         return false;
     }
@@ -198,5 +171,40 @@ public class NitroBeetleEntity extends Monster implements GeoEntity{
             return true;
         }
         return super.canSwimInFluidType(type);
+    }
+    public float getWalkTargetValue(BlockPos pos, LevelReader level) {
+      return level.getBlockState(pos).isAir() ? 10.0F : 0.0F;
+   }
+    class NitroBeetleWanderGoal extends Goal {
+        NitroBeetleWanderGoal() {
+            this.setFlags(EnumSet.of(Flag.MOVE));
+        }
+
+        public boolean canUse() {
+            return NitroBeetleEntity.this.navigation.isDone() && NitroBeetleEntity.this.random.nextInt(10) == 0;
+        }
+
+        public boolean canContinueToUse() {
+            return NitroBeetleEntity.this.navigation.isInProgress();
+        }
+
+        public void start() {
+            Vec3 vec3 = this.findPos();
+            if (vec3 != null) {
+                NitroBeetleEntity.this.navigation.moveTo(NitroBeetleEntity.this.navigation.createPath(BlockPos.containing(vec3), 1), (double)1.0F);
+            }
+
+        }
+
+        @Nullable
+        private Vec3 findPos() {
+            Vec3 vec3 = NitroBeetleEntity.this.getViewVector(0.0F);
+            Vec3 vec32 = HoverRandomPos.getPos(NitroBeetleEntity.this, 8, 7, vec3.x, vec3.z, ((float)Math.PI / 2F), 3, 1);
+            return vec32 != null ? vec32 : AirAndWaterRandomPos.getPos(NitroBeetleEntity.this, 8, 4, -2, vec3.x, vec3.z, (double)((float)Math.PI / 2F));
+        }
+   }
+    @Override
+    public boolean isFlying() {
+        return !this.onGround();
     }
 }
