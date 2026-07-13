@@ -16,6 +16,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
+import net.zincstudios.scgextra.entity.neutral.nether.head_hunter.HeadHunterEntity;
+import net.zincstudios.scgextra.entity.neutral.nether.head_hunter.HeadHunterRenderer;
 import net.zincstudios.scgextra.entity.neutral.nether.nitro_beetle.NitroBeetleEntity;
 import net.zincstudios.scgextra.entity.neutral.nether.nitro_beetle.NitroBeetleRenderer;
 import net.zincstudios.scgextra.entity.neutral.overworld.ammo_goblin.AmmoGoblinEntity;
@@ -94,6 +96,16 @@ public class NeutralEntities {
         .build("nitro_beetle")
     );
     
+    public static final RegistryObject<EntityType<HeadHunterEntity>> HEAD_HUNTER = ENTITY_TYPES.register(
+        "head_hunter", 
+        () -> EntityType.Builder.of(
+            HeadHunterEntity::new, 
+            MobCategory.MONSTER
+        )
+        .sized(0.8F, 2.5F)
+        .build("head_hunter")
+    );
+    
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(NeutralEntities::registerAttributes);
         modEventBus.addListener(NeutralEntities::onCommonSetup);
@@ -109,6 +121,7 @@ public class NeutralEntities {
         event.put(NeutralEntities.BIG_LUMP.get(), BigLumpEntity.createAttributes().build());
         event.put(NeutralEntities.MUTANT_BAT.get(), MutantBatEntity.createAttributes().build());
         event.put(NeutralEntities.NITRO_BEETLE.get(), NitroBeetleEntity.createAttributes().build());
+        event.put(NeutralEntities.HEAD_HUNTER.get(), HeadHunterEntity.createAttributes().build());
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
@@ -157,6 +170,15 @@ public class NeutralEntities {
             false, 
             true
         ));
+        BoundingBoxManager.registerHeadshotBox(NeutralEntities.HEAD_HUNTER.get(), new OffsetRotatedHeadshotBox<>(
+            8, 
+            9.5, 
+            30.0, 
+            0.0F, 
+            0.0, 
+            false, 
+            true
+        ));
     }
     //mostly to stop them from spawning in water
     public static void registerSpawnPlacements(SpawnPlacementRegisterEvent event) {
@@ -181,6 +203,13 @@ public class NeutralEntities {
             NitroBeetleEntity::checkMonsterSpawnRules,
             SpawnPlacementRegisterEvent.Operation.OR
         );
+        event.register(
+            NeutralEntities.HEAD_HUNTER.get(),
+            SpawnPlacements.Type.ON_GROUND,
+            Heightmap.Types.WORLD_SURFACE,
+            HeadHunterEntity::checkMonsterSpawnRules,
+            SpawnPlacementRegisterEvent.Operation.OR
+        );
     }
     @OnlyIn(value = Dist.CLIENT)
     private static void onClientSetup(FMLClientSetupEvent event) {
@@ -190,6 +219,7 @@ public class NeutralEntities {
         EntityRenderers.register(NeutralEntities.BIG_LUMP.get(), BigLumpRenderer::new);
         EntityRenderers.register(NeutralEntities.MUTANT_BAT.get(), MutantBatRenderer::new);
         EntityRenderers.register(NeutralEntities.NITRO_BEETLE.get(), NitroBeetleRenderer::new);
+        EntityRenderers.register(NeutralEntities.HEAD_HUNTER.get(), HeadHunterRenderer::new);
     }
 
 }
