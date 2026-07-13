@@ -1,6 +1,8 @@
 package net.zincstudios.scgextra.entity.cog.centipede;
 
 import com.mojang.serialization.Dynamic;
+
+import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -174,12 +176,7 @@ public class CogCentipedeEntity extends Monster implements GeoEntity, CustomGunH
 
     @Override
     protected void tickDeath() {
-        // Override to only extend death time
-        ++this.deathTime;
-        if (this.deathTime >= 42 && !this.level().isClientSide() && !this.isRemoved()) {
-            this.level().broadcastEntityEvent(this, (byte)60);
-            this.remove(Entity.RemovalReason.KILLED);
-        }
+        MobUtil.tickDeath(this, 42);
     }
 
     @Override

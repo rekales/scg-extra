@@ -414,11 +414,7 @@ public class FlamingHeadEntity extends Monster implements GeoEntity, Stunnable, 
 
     @Override
     protected void tickDeath() {
-        ++this.deathTime;
-        if (this.deathTime >= 20 && !this.level().isClientSide() && !this.isRemoved()) {
-            this.level().broadcastEntityEvent(this, (byte)60);
-            this.remove(RemovalReason.KILLED);
-        }
+        MobUtil.tickDeath(this, 20);
     }
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
         return RRCSounds.RRC_FLAMING_HEAD_DEAD_1.get();

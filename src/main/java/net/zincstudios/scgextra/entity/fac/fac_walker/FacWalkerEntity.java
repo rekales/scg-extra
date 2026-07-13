@@ -348,11 +348,7 @@ public class FacWalkerEntity extends GunnerEntity implements GeoEntity, Stunnabl
 
     @Override
     protected void tickDeath() {
-        ++this.deathTime;
-        if (this.deathTime >= DEATH_ANIMATION_TICKS && !this.level().isClientSide()) {
-            this.level().broadcastEntityEvent(this, (byte) 60);
-            this.remove(RemovalReason.KILLED);
-        }
+        MobUtil.tickDeath(this, DEATH_ANIMATION_TICKS);
     }
 
     @Override
