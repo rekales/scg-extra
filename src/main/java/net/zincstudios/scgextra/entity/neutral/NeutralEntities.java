@@ -5,14 +5,19 @@ import static net.zincstudios.scgextra.entity.ModEntities.ENTITY_TYPES;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
+import net.zincstudios.scgextra.entity.neutral.nether.nitro_beetle.NitroBeetleEntity;
+import net.zincstudios.scgextra.entity.neutral.nether.nitro_beetle.NitroBeetleRenderer;
 import net.zincstudios.scgextra.entity.neutral.overworld.ammo_goblin.AmmoGoblinEntity;
 import net.zincstudios.scgextra.entity.neutral.overworld.ammo_goblin.AmmoGoblinRenderer;
 import net.zincstudios.scgextra.entity.neutral.overworld.big_lump.BigLumpEntity;
@@ -79,9 +84,20 @@ public class NeutralEntities {
         .build("mutant_bat")
     );
     
+    public static final RegistryObject<EntityType<NitroBeetleEntity>> NITRO_BEETLE = ENTITY_TYPES.register(
+        "nitro_beetle", 
+        () -> EntityType.Builder.of(
+            NitroBeetleEntity::new, 
+            MobCategory.MONSTER
+        )
+        .sized(0.5F, 0.5F)
+        .build("nitro_beetle")
+    );
+    
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(NeutralEntities::registerAttributes);
         modEventBus.addListener(NeutralEntities::onCommonSetup);
+        modEventBus.addListener(NeutralEntities::registerSpawnPlacements);
         if (FMLEnvironment.dist == Dist.CLIENT) {
             modEventBus.addListener(NeutralEntities::onClientSetup);
         }
@@ -92,6 +108,7 @@ public class NeutralEntities {
         event.put(NeutralEntities.AMMO_GOBLIN.get(), AmmoGoblinEntity.createAttributes().build());
         event.put(NeutralEntities.BIG_LUMP.get(), BigLumpEntity.createAttributes().build());
         event.put(NeutralEntities.MUTANT_BAT.get(), MutantBatEntity.createAttributes().build());
+        event.put(NeutralEntities.NITRO_BEETLE.get(), NitroBeetleEntity.createAttributes().build());
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
@@ -141,6 +158,30 @@ public class NeutralEntities {
             true
         ));
     }
+    //mostly to stop them from spawning in water
+    public static void registerSpawnPlacements(SpawnPlacementRegisterEvent event) {
+        event.register(
+            NeutralEntities.AMMO_GOBLIN.get(),
+            SpawnPlacements.Type.ON_GROUND,
+            Heightmap.Types.WORLD_SURFACE,
+            AmmoGoblinEntity::checkMonsterSpawnRules,
+            SpawnPlacementRegisterEvent.Operation.OR
+        );
+        event.register(
+            NeutralEntities.BIG_LUMP.get(),
+            SpawnPlacements.Type.ON_GROUND,
+            Heightmap.Types.WORLD_SURFACE,
+            BigLumpEntity::checkMonsterSpawnRules,
+            SpawnPlacementRegisterEvent.Operation.OR
+        );
+        event.register(
+            NeutralEntities.NITRO_BEETLE.get(),
+            SpawnPlacements.Type.ON_GROUND,
+            Heightmap.Types.WORLD_SURFACE,
+            NitroBeetleEntity::checkMonsterSpawnRules,
+            SpawnPlacementRegisterEvent.Operation.OR
+        );
+    }
     @OnlyIn(value = Dist.CLIENT)
     private static void onClientSetup(FMLClientSetupEvent event) {
         EntityRenderers.register(NeutralEntities.INFLICTED_BOAR.get(), InflictedBoarRenderer::new);
@@ -148,5 +189,7 @@ public class NeutralEntities {
         EntityRenderers.register(NeutralEntities.AMMO_GOBLIN.get(), AmmoGoblinRenderer::new);
         EntityRenderers.register(NeutralEntities.BIG_LUMP.get(), BigLumpRenderer::new);
         EntityRenderers.register(NeutralEntities.MUTANT_BAT.get(), MutantBatRenderer::new);
+        EntityRenderers.register(NeutralEntities.NITRO_BEETLE.get(), NitroBeetleRenderer::new);
     }
+
 }
