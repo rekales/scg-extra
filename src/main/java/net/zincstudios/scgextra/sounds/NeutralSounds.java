@@ -37,6 +37,18 @@ public class NeutralSounds {
 
     public static final RegistryObject<SoundEvent> MUTANT_BAT_SCREAM = SOUND_EVENTS.register("mutant_bat.scream",
             () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("mutant_bat.scream")));
+    
+    public static final RegistryObject<SoundEvent> NETHERITE_EATER_IDLE = SOUND_EVENTS.register("netherite_eater.idle",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("netherite_eater.idle")));
+
+    public static final RegistryObject<SoundEvent> NETHERITE_EATER_HURT = SOUND_EVENTS.register("netherite_eater.hurt",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("netherite_eater.hurt")));
+
+    public static final RegistryObject<SoundEvent> NETHERITE_EATER_DEAD = SOUND_EVENTS.register("netherite_eater.dead",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("netherite_eater.dead")));
+
+    public static final RegistryObject<SoundEvent> NETHERITE_EATER_BREATH = SOUND_EVENTS.register("netherite_eater.breath",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("netherite_eater.breath")));
 
     public static void init() {}
 

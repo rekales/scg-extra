@@ -1429,5 +1429,33 @@
     "sounds": [
       "scgextra:neutral/mutant_bat/scream"
     ]
+  },
+  "netherite_eater.dead": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/netherite_eater/death"
+    ]
+  },
+  "netherite_eater.hurt": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/netherite_eater/hurt_01",
+      "scgextra:neutral/netherite_eater/hurt_02"
+    ]
+  },
+  "netherite_eater.idle": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/netherite_eater/idle_01",
+      "scgextra:neutral/netherite_eater/idle_02",
+      "scgextra:neutral/netherite_eater/idle_03",
+      "scgextra:neutral/netherite_eater/idle_04"
+    ]
+  },
+  "netherite_eater.breath": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/netherite_eater/breath"
+    ]
   }
 }

@@ -3,6 +3,9 @@ package net.zincstudios.scgextra.entity.neutral.nether.netherite_eater;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -18,6 +21,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.zincstudios.scgextra.entity.common.MobUtil;
+import net.zincstudios.scgextra.sounds.NeutralSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
@@ -140,4 +144,19 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity{
 
         this.entityData.set(DATA_FLAGS_ID, b0);
     }
+    protected SoundEvent getHurtSound(DamageSource pDamageSource) {
+        return NeutralSounds.NETHERITE_EATER_HURT.get();
+    };
+    protected SoundEvent getAmbientSound() {
+        return NeutralSounds.NETHERITE_EATER_IDLE.get();
+    };
+    protected SoundEvent getDeathSound() {
+        return NeutralSounds.NETHERITE_EATER_DEAD.get();
+    };
+    protected float getSoundVolume() {
+        return 0.8F;
+    };
+    protected void playStepSound(net.minecraft.core.BlockPos pPos, net.minecraft.world.level.block.state.BlockState pState) {
+        this.playSound(SoundEvents.HOGLIN_STEP, this.getSoundVolume(), this.getVoicePitch());
+    };
 }

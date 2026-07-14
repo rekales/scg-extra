@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.zincstudios.scgextra.sounds.NeutralSounds;
 
 public class NetheriteEaterFireBreathGoal extends Goal{
     private final NetheriteEaterEntity mob;
@@ -31,6 +32,7 @@ public class NetheriteEaterFireBreathGoal extends Goal{
         this.cooldown = 160;
         this.ticks = 0;
         this.mob.triggerAnim("controller", "fire_breath");
+        this.mob.playSound(NeutralSounds.NETHERITE_EATER_BREATH.get());
     }
     
     @Override
