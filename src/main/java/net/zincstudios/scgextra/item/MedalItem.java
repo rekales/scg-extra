@@ -19,6 +19,8 @@ import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
 import java.util.*;
 
@@ -66,7 +68,25 @@ public class MedalItem extends Item {
 
         Map<UUID, AttributeModifier> desiredModifiers = new HashMap<>();
 
+        List<ItemStack> stacks = new ArrayList<>();
+
+        CuriosApi.getCuriosInventory(player).ifPresent(itemHandler -> {
+            IDynamicStackHandler charms = itemHandler.getCurios().get("charm").getStacks();
+            for (int i = 0; i < charms.getSlots(); i++) {
+                ItemStack stack = charms.getStackInSlot(i);
+                if (!stack.isEmpty()) {
+                    stacks.add(stack);
+                }
+            }
+        });
+
         for (ItemStack stack : player.getInventory().items) {
+            if (!stack.isEmpty()) {
+                stacks.add(stack);
+            }
+        }
+
+        for (ItemStack stack : stacks) {
             if (!(stack.getItem() instanceof MedalItem medalItem)) continue;
 
             for (Map.Entry<Attribute, AttributeModifier> entry : medalItem.modifiers.entrySet()) {
