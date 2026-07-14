@@ -133,6 +133,16 @@
   "item.scgextra.medal_of_enlightenment":  "Medal of Enlightenment",
   "item.scgextra.medal_of_conqueror":  "Medal of Conqueror",
 
+  "item.scgextra.medal_of_survivor.description":  "Provides 2.5 armor",
+  "item.scgextra.medal_of_iron_will.description":  "Provides 20% bullet damage resistance",
+  "item.scgextra.medal_of_defiance.description":  "Increases reload speed and movement speed by 20%",
+  "item.scgextra.medal_of_wonder.description":  "Gives Resistance 1 and immunity to poison and sulfur poison effect",
+  "item.scgextra.medal_of_fiery_rage.description":  "Gives Strength 2 and Regeneration 1",
+  "item.scgextra.medal_of_obedience.description":  "Provides 3 armor toughness and 30% recoil reduction",
+  "item.scgextra.medal_of_cruelty.description":  "Increases bullet damage by 10%",
+  "item.scgextra.medal_of_enlightenment.description":  "Increases max health by 4 hearts",
+  "item.scgextra.medal_of_conqueror.description":  "Increases bullet crit chance by 20% and decreases bullet gravity by 20%",
+
   "item.scgextra.oppressor_helmet" : "Oppressor Helmet",
   "item.scgextra.oppressor_chestplate" : "Oppressor Chestplate",
   "item.scgextra.oppressor_leggings" : "Oppressor Leggings",
@@ -197,8 +207,19 @@
   "effect.scgextra.mortal": "Mortal",
   "effect.scgextra.enlightenment": "Enlightenment",
 
-  "raid.boss.scguns.fac":  "FAC Siege Tank",
-  "raid.announcement.scguns.fac":  "FAC raid sighted nearby!",
+
+  "armorset.full_set_bonus.description" : "Full Set Bonus:",
+  "armorset.scgextra.oppressor.description" : "Provides 100% knockback resistance",
+  "armorset.scgextra.commissar.description" : "Provides 10% bullet damage resistance",
+  "armorset.scgextra.treated_iron.description" : "Inflicts Laceration on enemies when attacking or getting hit",
+  "armorset.scgextra.leviathan.description" : "Gives Water Breathing and Dolphins Grace",
+  "armorset.scgextra.golden_idol.description" : "Gives Fire Resistance and Regenerates allies and neutral mobs in 5 block radius",
+  "armorset.scgextra.enlightened.description" : "Gives Regeneration and makes wearer undetectable by skulk sensors",
+  "armorset.scgextra.juggernaut.description" : "Provides immunity to Laceration",
+  "armorset.scgextra.ritual.description" : "Revives the player on death (20 minute cooldown)",
+  "armorset.scgextra.pioneer.description" : "Provides immunity to Levitation and gives players elytra flight",
+
+
   "scgextra.raid.label.wave_1":  "Wave 1",
   "scgextra.raid.label.wave_2":  "Wave 2",
   "scgextra.raid.label.wave_3":  "Wave 3",
