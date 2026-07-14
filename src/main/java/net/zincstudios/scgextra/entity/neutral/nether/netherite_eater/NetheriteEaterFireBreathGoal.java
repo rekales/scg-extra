@@ -1,9 +1,12 @@
 package net.zincstudios.scgextra.entity.neutral.nether.netherite_eater;
 
+import java.util.EnumSet;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.sounds.NeutralSounds;
 
 public class NetheriteEaterFireBreathGoal extends Goal{
@@ -13,6 +16,7 @@ public class NetheriteEaterFireBreathGoal extends Goal{
 
     public NetheriteEaterFireBreathGoal(NetheriteEaterEntity entity){
         this.mob = entity;
+        this.setFlags(EnumSet.of(Flag.MOVE, Flag.JUMP));
     }
 
     @Override
@@ -33,6 +37,7 @@ public class NetheriteEaterFireBreathGoal extends Goal{
         this.ticks = 0;
         this.mob.triggerAnim("controller", "fire_breath");
         this.mob.playSound(NeutralSounds.NETHERITE_EATER_BREATH.get());
+        this.mob.setBreathingFire(true);
     }
     
     @Override
@@ -40,7 +45,7 @@ public class NetheriteEaterFireBreathGoal extends Goal{
         super.tick();
         this.ticks++;
         this.mob.getNavigation().stop();
-        this.mob.setDeltaMovement(0, 0, 0);
+        this.mob.setDeltaMovement(Vec3.ZERO);
         if(this.ticks<10)return;
         if(this.mob.getTarget()!=null){
             this.mob.getLookControl().setLookAt(this.mob.getTarget());
@@ -82,5 +87,6 @@ public class NetheriteEaterFireBreathGoal extends Goal{
         if(this.mob.getTarget()!=null){
             this.mob.getNavigation().moveTo(this.mob.getTarget(), 0.5);
         }
+        this.mob.setBreathingFire(false);
     }
 }

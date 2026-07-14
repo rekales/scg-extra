@@ -40,7 +40,7 @@ public class NetheriteEaterBreakBlockGoal extends Goal{
             this.lastPos = this.mob.position();
             this.lastPosCheck = this.mob.tickCount;
         }
-        return this.frustration > 20;
+        return this.frustration > 60;
     }
 
     @Override

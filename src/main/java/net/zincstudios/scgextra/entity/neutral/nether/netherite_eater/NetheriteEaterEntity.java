@@ -20,6 +20,7 @@ import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.sounds.NeutralSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -33,6 +34,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 public class NetheriteEaterEntity extends Monster implements GeoEntity{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private static final EntityDataAccessor<Boolean> IS_RUNNING = SynchedEntityData.defineId(NetheriteEaterEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> IS_BREATHING_FIRE = SynchedEntityData.defineId(NetheriteEaterEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Byte> DATA_FLAGS_ID  = SynchedEntityData.defineId(NetheriteEaterEntity.class, EntityDataSerializers.BYTE);
 
     public NetheriteEaterEntity(EntityType<? extends Monster> entityType, Level level) {
@@ -61,7 +63,7 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity{
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true,
             player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.goalSelector.addGoal(2, new NetheriteEaterAttackGoal(this, 0.6, true));
+        // this.goalSelector.addGoal(2, new NetheriteEaterAttackGoal(this, 0.6, true));
         this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 0.5));
         this.goalSelector.addGoal(3, new MoveTowardsTargetGoal(this, 0.5, 10));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 20.0F));
@@ -108,6 +110,7 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity{
         super.defineSynchedData();
         this.entityData.define(IS_RUNNING, false);
         this.entityData.define(DATA_FLAGS_ID, (byte)0);
+        this.entityData.define(IS_BREATHING_FIRE, false);
     }
     public boolean isRunning(){
         return this.entityData.get(IS_RUNNING);
@@ -120,6 +123,13 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity{
     public void setRunning(boolean bool){
         this.entityData.set(IS_RUNNING, bool);
     }
+    public boolean isBreathingFire(){
+        return this.entityData.get(IS_BREATHING_FIRE);
+    }
+
+    public void setBreathingFire(boolean bool){
+        this.entityData.set(IS_BREATHING_FIRE, bool);
+    }
     @Override
     public boolean fireImmune() {
         return true;
@@ -128,6 +138,9 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity{
         super.tick();
         if (!this.level().isClientSide) {
             this.setClimbing(this.horizontalCollision);
+            if(this.isBreathingFire()){
+                this.setDeltaMovement(Vec3.ZERO);
+            }
         }
     }
     public boolean isClimbing() {
