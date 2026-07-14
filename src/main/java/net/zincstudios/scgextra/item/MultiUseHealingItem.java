@@ -10,9 +10,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.init.ModEffects;
-import top.ribs.scguns.item.HealingBandageItem;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -53,9 +51,8 @@ public class MultiUseHealingItem extends Item {
                 }
 
                 if (!player.getAbilities().instabuild) {
-                    stack.hurtAndBreak(1, player, entity -> {
-                        entity.broadcastBreakEvent(player.getUsedItemHand());
-                    });
+                    stack.hurtAndBreak(1, player, entity ->
+                            entity.broadcastBreakEvent(player.getUsedItemHand()));
                 }
             }
         }
@@ -75,7 +72,7 @@ public class MultiUseHealingItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.scguns.healing_bandage.heal", new Object[]{this.healingAmount}).withStyle(ChatFormatting.GREEN));
+        tooltip.add(Component.translatable("item.scguns.healing_bandage.heal", this.healingAmount).withStyle(ChatFormatting.GREEN));
         if (!this.potionEffects.isEmpty()) {
             for(MobEffectInstance effect : this.potionEffects) {
                 if (effect != null) {
