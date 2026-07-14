@@ -185,11 +185,13 @@ public class NeutralEntities {
         ));
         BoundingBoxManager.registerHeadshotBox(NeutralEntities.HEAD_HUNTER.get(), new OffsetRotatedHeadshotBox<>(
             8, 
-            9.5, 
-            30.0, 
-            0.0F, 
-            0.0, 
+            8, 
+            35, 
+            0, 
+            0, 
+            5, 
             false, 
+            true, 
             true
         ));
         BoundingBoxManager.registerHeadshotBox(NeutralEntities.NETHERITE_EATER.get(), new OffsetRotatedHeadshotBox<>(

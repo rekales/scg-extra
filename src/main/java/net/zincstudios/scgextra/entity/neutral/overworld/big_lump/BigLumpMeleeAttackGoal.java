@@ -2,7 +2,6 @@ package net.zincstudios.scgextra.entity.neutral.overworld.big_lump;
 
 import java.util.EnumSet;
 
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;

@@ -1,6 +1,7 @@
 package net.zincstudios.scgextra.entity.neutral.nether.head_hunter;
 
 import net.zincstudios.scgextra.entity.common.MobUtil;
+import net.zincstudios.scgextra.entity.common.part.RotatedWeakPointPartEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -27,6 +28,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.entity.PartEntity;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
@@ -39,9 +42,13 @@ import top.ribs.scguns.init.ModEffects;
 public class HeadHunterEntity extends Monster implements GeoEntity{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private static final EntityDataAccessor<Boolean> IS_RUNNING = SynchedEntityData.defineId(HeadHunterEntity.class, EntityDataSerializers.BOOLEAN);
+    private final PartEntity<?>[] subEntities;
 
     public HeadHunterEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
+        this.subEntities = new PartEntity[] {
+                new RotatedWeakPointPartEntity<>(this, new Vec3(0.5, 1.8, 0), 0.5f, 0.5f),
+        };
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -149,5 +156,24 @@ public class HeadHunterEntity extends Monster implements GeoEntity{
             return false;
         }
         return level.getDifficulty() != Difficulty.PEACEFUL && isDarkEnoughToSpawn(level, pos, random) && checkMobSpawnRules(type, level, spawnType, pos, random);
+    }
+    @Override
+    public void tick() {
+        super.tick();
+        this.tickSubEntities();
+    }
+    protected void tickSubEntities() {
+        for(PartEntity<?> partEntity : this.getParts()) {
+            partEntity.tick();
+        }
+    }
+    @Override
+    public PartEntity<?>[] getParts() {
+        return this.subEntities;
+    }
+
+    @Override
+    public boolean isMultipartEntity() {
+        return true;
     }
 }
