@@ -18,6 +18,8 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.entity.neutral.nether.head_hunter.HeadHunterEntity;
 import net.zincstudios.scgextra.entity.neutral.nether.head_hunter.HeadHunterRenderer;
+import net.zincstudios.scgextra.entity.neutral.nether.netherite_eater.NetheriteEaterEntity;
+import net.zincstudios.scgextra.entity.neutral.nether.netherite_eater.NetheriteEaterRenderer;
 import net.zincstudios.scgextra.entity.neutral.nether.nitro_beetle.NitroBeetleEntity;
 import net.zincstudios.scgextra.entity.neutral.nether.nitro_beetle.NitroBeetleRenderer;
 import net.zincstudios.scgextra.entity.neutral.overworld.ammo_goblin.AmmoGoblinEntity;
@@ -105,6 +107,16 @@ public class NeutralEntities {
         .sized(0.8F, 2.5F)
         .build("head_hunter")
     );
+
+    public static final RegistryObject<EntityType<NetheriteEaterEntity>> NETHERITE_EATER = ENTITY_TYPES.register(
+        "netherite_eater", 
+        () -> EntityType.Builder.of(
+            NetheriteEaterEntity::new, 
+            MobCategory.MONSTER
+        )
+        .sized(1.6F, 2F)
+        .build("netherite_eater")
+    );
     
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(NeutralEntities::registerAttributes);
@@ -122,6 +134,7 @@ public class NeutralEntities {
         event.put(NeutralEntities.MUTANT_BAT.get(), MutantBatEntity.createAttributes().build());
         event.put(NeutralEntities.NITRO_BEETLE.get(), NitroBeetleEntity.createAttributes().build());
         event.put(NeutralEntities.HEAD_HUNTER.get(), HeadHunterEntity.createAttributes().build());
+        event.put(NeutralEntities.NETHERITE_EATER.get(), NetheriteEaterEntity.createAttributes().build());
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
@@ -179,6 +192,15 @@ public class NeutralEntities {
             false, 
             true
         ));
+        BoundingBoxManager.registerHeadshotBox(NeutralEntities.NETHERITE_EATER.get(), new OffsetRotatedHeadshotBox<>(
+            8, 
+            9.5, 
+            30.0, 
+            0.0F, 
+            15.0, 
+            false, 
+            true
+        ));
     }
     //mostly to stop them from spawning in water
     public static void registerSpawnPlacements(SpawnPlacementRegisterEvent event) {
@@ -210,6 +232,13 @@ public class NeutralEntities {
             HeadHunterEntity::checkMonsterSpawnRules,
             SpawnPlacementRegisterEvent.Operation.OR
         );
+        event.register(
+            NeutralEntities.NETHERITE_EATER.get(),
+            SpawnPlacements.Type.ON_GROUND,
+            Heightmap.Types.WORLD_SURFACE,
+            NetheriteEaterEntity::checkMonsterSpawnRules,
+            SpawnPlacementRegisterEvent.Operation.OR
+        );
     }
     @OnlyIn(value = Dist.CLIENT)
     private static void onClientSetup(FMLClientSetupEvent event) {
@@ -220,6 +249,7 @@ public class NeutralEntities {
         EntityRenderers.register(NeutralEntities.MUTANT_BAT.get(), MutantBatRenderer::new);
         EntityRenderers.register(NeutralEntities.NITRO_BEETLE.get(), NitroBeetleRenderer::new);
         EntityRenderers.register(NeutralEntities.HEAD_HUNTER.get(), HeadHunterRenderer::new);
+        EntityRenderers.register(NeutralEntities.NETHERITE_EATER.get(), NetheriteEaterRenderer::new);
     }
 
 }
