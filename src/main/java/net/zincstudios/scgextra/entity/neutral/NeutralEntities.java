@@ -84,7 +84,7 @@ public class NeutralEntities {
             MutantBatEntity::new, 
             MobCategory.MONSTER
         )
-        .sized(1.5F, 1.5F)
+        .sized(2F, 2F)
         .build("mutant_bat")
     );
     
@@ -94,7 +94,7 @@ public class NeutralEntities {
             NitroBeetleEntity::new, 
             MobCategory.MONSTER
         )
-        .sized(0.5F, 0.5F)
+        .sized(1F, 0.5F)
         .build("nitro_beetle")
     );
     
@@ -175,11 +175,11 @@ public class NeutralEntities {
             true
         ));
         BoundingBoxManager.registerHeadshotBox(NeutralEntities.MUTANT_BAT.get(), new OffsetRotatedHeadshotBox<>(
-            8, 
-            9.5, 
-            30.0, 
+            11, 
+            12.5, 
+            20.0, 
             0.0F, 
-            15.0, 
+            5.0, 
             false, 
             true
         ));
@@ -198,6 +198,15 @@ public class NeutralEntities {
             30.0, 
             0.0F, 
             10.0, 
+            false, 
+            true
+        ));
+        BoundingBoxManager.registerHeadshotBox(NeutralEntities.NITRO_BEETLE.get(), new OffsetRotatedHeadshotBox<>(
+            4, 
+            3, 
+            1.5, 
+            0.0F, 
+            3.5,
             false, 
             true
         ));
