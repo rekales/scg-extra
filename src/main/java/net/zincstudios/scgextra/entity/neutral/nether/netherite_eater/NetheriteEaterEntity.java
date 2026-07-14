@@ -63,7 +63,7 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity{
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true,
             player -> !((Player) player).isCreative() && !player.isSpectator()));
-        // this.goalSelector.addGoal(2, new NetheriteEaterAttackGoal(this, 0.6, true));
+        this.goalSelector.addGoal(2, new NetheriteEaterAttackGoal(this, 0.6, true));
         this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 0.5));
         this.goalSelector.addGoal(3, new MoveTowardsTargetGoal(this, 0.5, 10));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 20.0F));
