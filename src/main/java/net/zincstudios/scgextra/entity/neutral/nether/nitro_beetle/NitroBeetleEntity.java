@@ -67,14 +67,14 @@ public class NitroBeetleEntity extends Monster implements GeoEntity, FlyingAnima
 
     @Override
     protected void registerGoals() {
-        // super.registerGoals();
-        // this.goalSelector.addGoal(5, new FloatGoal(this));
-        // this.goalSelector.addGoal(2, new NitroBeetleWanderGoal());
-        // this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true,
-        //         player -> !((Player) player).isCreative() && !player.isSpectator()));
-        // this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0.4, true));
-        // this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
-        // this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 5));
+        super.registerGoals();
+        this.goalSelector.addGoal(5, new FloatGoal(this));
+        this.goalSelector.addGoal(2, new NitroBeetleWanderGoal());
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true,
+                player -> !((Player) player).isCreative() && !player.isSpectator()));
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0.4, true));
+        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 5));
     }
 
     @Override
