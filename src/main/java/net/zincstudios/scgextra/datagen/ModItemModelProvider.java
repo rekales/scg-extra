@@ -25,10 +25,10 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        basicItem(ModItems.WALKER_MG.get());
         basicItem(ModItems.END_SHELL.get());
 
-        basicItem("medal/", ModItems.MEDAL_OF_SURVIVOR);
+        basicItem(ModItems.BANDAGE);
+        basicItem(ModItems.MEDKIT);
 
 //        copyTexture(ModItems.ANTIQUE_SUPER_FLARE, top.ribs.scguns.init.ModItems.ANTIQUE_FLARE);
 //        copyTexture(ModItems.FRONTIER_SUPER_FLARE, top.ribs.scguns.init.ModItems.FRONTIER_FLARE);

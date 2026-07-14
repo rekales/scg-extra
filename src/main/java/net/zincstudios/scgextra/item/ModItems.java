@@ -2,6 +2,7 @@ package net.zincstudios.scgextra.item;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -27,6 +28,7 @@ import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
 import net.zincstudios.scgextra.item.armor.*;
 import top.ribs.scguns.attributes.SCAttributes;
 import top.ribs.scguns.item.GunItem;
+import top.ribs.scguns.item.HealingBandageItem;
 
 import java.util.Set;
 
@@ -53,9 +55,19 @@ public class ModItems {
             () -> new SpearShovelItem(Tiers.IRON, 2.5F, -2.8F, new Item.Properties())
     );
 
-    public static final RegistryObject<Item> WALKER_MG = ITEMS.register("walker_mg",
-            () -> new Item(new Item.Properties().stacksTo(1))
-    );
+    public static final RegistryObject<HealingBandageItem> BANDAGE = ITEMS.register("bandage", () -> new HealingBandageItem(
+            (new Item.Properties()).stacksTo(16),
+            4,
+            new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 200, 0)
+    ));
+
+    public static final RegistryObject<HealingBandageItem> MEDKIT = ITEMS.register("medkit", () -> new HealingBandageItem(
+            (new Item.Properties()).stacksTo(16),
+            4,
+            new MobEffectInstance(MobEffects.REGENERATION, 100, 0),
+            new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 400, 0)
+    ));
+
     public static final RegistryObject<Item> END_SHELL = ITEMS.register("end_shell",
             () -> new Item(new Item.Properties())
     );

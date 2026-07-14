@@ -2,17 +2,19 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "B": {
-      "item": "scguns:blueprint_scrap"
+    "C": {
+      "item": "scguns:shulker_core"
     },
-    "F": {
-      "item": "scguns:antique_flare"
+    "P": {
+      "item": "minecraft:purpur_block"
+    },
+    "S": {
+      "item": "scguns:diamond_steel_ingot"
     }
   },
   "pattern": [
-    "FBF",
-    "BFB",
-    "FBF"
+    "SCS",
+    "P P"
   ],
   "result": {
     "item": "scgextra:pioneer_boots"
