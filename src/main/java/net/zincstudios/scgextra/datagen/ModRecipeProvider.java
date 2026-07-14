@@ -7,6 +7,7 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.common.Tags;
 import net.zincstudios.scgextra.item.ModItems;
 import top.ribs.scguns.init.ModBlocks;
 
@@ -33,6 +34,27 @@ public class ModRecipeProvider extends RecipeProvider {
         superFlare(writer, ModItems.GOLD_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.GOLD_FLARE.get());
         superFlare(writer, ModItems.SCULK_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.SCULK_FLARE.get());
         superFlare(writer, ModItems.OCEAN_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.OCEAN_FLARE.get());
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.BANDAGE.get())
+                .pattern("BP")
+                .pattern("PP")
+                .define('P', Items.PAPER)
+                .define('B', top.ribs.scguns.init.ModItems.BASIC_POULTICE.get())
+                .unlockedBy("has_ingredient", has(top.ribs.scguns.init.ModItems.BASIC_POULTICE.get()))
+                .showNotification(false)
+                .save(writer);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.MEDKIT.get())
+                .pattern("BSE")
+                .pattern("BSE")
+                .pattern("LCL")
+                .define('L', Items.LEATHER)
+                .define('C', Tags.Items.CHESTS)
+                .define('B', top.ribs.scguns.init.ModItems.BASIC_POULTICE.get())
+                .define('S', top.ribs.scguns.init.ModItems.HONEY_SULFUR_POULTICE.get())
+                .define('E', top.ribs.scguns.init.ModItems.ENCHANTED_BANDAGE.get())
+                .unlockedBy("has_ingredient", has(top.ribs.scguns.init.ModItems.BASIC_POULTICE.get()))
+                .showNotification(false)
+                .save(writer);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.OPPRESSOR_HELMET.get())
                 .pattern(" C ")

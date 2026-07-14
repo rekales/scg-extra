@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "scguns:basic_poultice"
+    },
+    "C": {
+      "tag": "forge:chests"
+    },
+    "E": {
+      "item": "scguns:enchanted_bandage"
+    },
+    "L": {
+      "item": "minecraft:leather"
+    },
+    "S": {
+      "item": "scguns:honey_sulfur_poultice"
+    }
+  },
+  "pattern": [
+    "BSE",
+    "BSE",
+    "LCL"
+  ],
+  "result": {
+    "item": "scgextra:medkit"
+  },
+  "show_notification": false
+}
