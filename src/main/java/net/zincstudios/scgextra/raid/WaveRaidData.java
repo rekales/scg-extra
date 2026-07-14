@@ -3,6 +3,7 @@ package net.zincstudios.scgextra.raid;
 import net.minecraft.FieldsAreNonnullByDefault;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
@@ -10,6 +11,10 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.zincstudios.scgextra.SCGExtra;
 import top.ribs.scguns.entity.monster.DissidentEntity;
 
@@ -33,7 +38,8 @@ public record WaveRaidData(
         @Deprecated List<RaiderEntry> infantry,
         @Deprecated List<RaiderEntry> elite,
         @Deprecated List<RaiderEntry> miniboss,
-        @Deprecated List<RaiderEntry> boss
+        @Deprecated List<RaiderEntry> boss,
+        @Deprecated @Nullable ResourceLocation loot
 ) {
 
     private static final Map<String, WaveRaidData> RAIDS = new HashMap<>();  // Key: raid id
@@ -185,5 +191,14 @@ public record WaveRaidData(
         }
 
         return true;
+    }
+
+    public List<ItemStack> rollLoot(ServerLevel level) {
+        if (this.loot == null) return List.of();
+        LootTable table = level.getServer().getLootData().getLootTable(this.loot);
+        LootParams params = new LootParams.Builder(level)
+//                .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(blockPos))
+                .create(LootContextParamSets.EMPTY);
+        return table.getRandomItems(params);
     }
 }

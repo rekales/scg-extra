@@ -59,6 +59,8 @@ public class RaidDataLoader extends SimpleJsonResourceReloadListener {
             JsonObject obj = jsonElement.getAsJsonObject();
             String originalId = obj.get("flare_raid_id").getAsString();
             String id = obj.get("raid_id").getAsString();
+            ResourceLocation lootLoc = ResourceLocation.tryBySeparator(
+                    obj.has("finish_loot") ? obj.get("finish_loot").getAsString() : "", ':');
 
             List<WaveRaidData.Wave> waves = parseWaves(obj.getAsJsonArray("waves"));
 
@@ -67,7 +69,7 @@ public class RaidDataLoader extends SimpleJsonResourceReloadListener {
             List<WaveRaidData.RaiderEntry> miniboss = parseRaiders(obj.getAsJsonArray("miniboss"));
             List<WaveRaidData.RaiderEntry> boss = parseRaiders(obj.getAsJsonArray("boss"));
 
-            return new WaveRaidData(id, originalId, waves, infantry, elite, miniboss, boss);
+            return new WaveRaidData(id, originalId, waves, infantry, elite, miniboss, boss, lootLoc);
         }
 
         private List<WaveRaidData.Wave> parseWaves(com.google.gson.JsonArray array) {

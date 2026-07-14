@@ -8,6 +8,8 @@ import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.BossEvent;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
@@ -157,12 +159,29 @@ public class WaveRaidManager extends SavedData {
         if (success) {
             WaveRaidUtil.announceToNearbyPlayers(level,
                     Component.translatable("raid.scguns.defeated"), this.raidState.getCenter(), 64);
+            giveOrDropLoot(level, this.raidState);
         } else {
             this.raidState.discardRaiders();
             WaveRaidUtil.announceToNearbyPlayers(level,
                     Component.translatable("raid.scguns.failed"), this.raidState.getCenter(), 64);
         }
         this.raidState = null;
+    }
+
+    public static void giveOrDropLoot(ServerLevel level, WaveRaidState raidState) {
+        List<ItemStack> loot = raidState.getWaveRaidData().rollLoot(level);
+        ServerPlayer player = WaveRaidUtil.findNearestPlayer(level, raidState.getCenter(), RAID_RADIUS);
+        if (player != null) {
+            for (ItemStack stack : loot) {
+                player.getInventory().placeItemBackInInventory(stack);
+            }
+        } else {
+            for (ItemStack stack : loot) {
+                Vec3 dropPos = raidState.getLootDropPos();
+                ItemEntity entity = new ItemEntity(level, dropPos.x, dropPos.y, dropPos.z, stack);
+                level.addFreshEntity(entity);
+            }
+        }
     }
 
     public static void onLevelTick(TickEvent.LevelTickEvent event) {

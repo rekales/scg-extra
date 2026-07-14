@@ -1,6 +1,7 @@
 {
   "raid_id" : "asgharian_super",
   "flare_raid_id" : "diamond_steel_super",
+  "finish_loot" : "scgextra:raid/asgharian_super",
 
   "waves" : [
     {

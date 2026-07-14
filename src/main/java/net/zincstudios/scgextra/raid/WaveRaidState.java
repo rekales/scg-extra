@@ -34,6 +34,7 @@ public class WaveRaidState {
     private Vec3 spawnCenter;
     private int currentWave;
     private int totalWaveSpawned = 0;
+    private Vec3 lootDropPos;
 
     public WaveRaidState(WaveRaidData waveRaidData, ServerLevel level, Vec3 spawnCenter) {
         this.raidId = UUID.randomUUID();
@@ -42,6 +43,7 @@ public class WaveRaidState {
         this.currentWave = 0;
         this.waveRaidData = waveRaidData;
         this.spawnCenter = spawnCenter;
+        this.lootDropPos = spawnCenter;
     }
 
     // For nbt deserialization
@@ -109,6 +111,9 @@ public class WaveRaidState {
                     .reduce(Vec3.ZERO, Vec3::add)
                     .scale(1.0 / this.raiders.size());
         }
+        this.raiders.values().stream()
+                .findAny()
+                .ifPresent(raider -> this.lootDropPos = raider.position().add(0, 0.5, 0));
     }
 
     public int getTotalWaveSpawned() {
@@ -121,6 +126,10 @@ public class WaveRaidState {
 
     public boolean isFinalWave() {
         return this.waveRaidData.isFinalWave(this.currentWave);
+    }
+
+    public Vec3 getLootDropPos() {
+        return this.lootDropPos;
     }
 
     public void spawnCurrentWaveMobs(Vec3 waveCenter, float waveSpawnRadius, @Nullable LivingEntity target) {
