@@ -22,7 +22,7 @@ public class NetheriteEaterFireBreathGoal extends Goal{
 
     @Override
     public boolean canContinueToUse() {
-        return this.mob.getTarget()!=null && this.ticks <= 100  && this.mob.distanceToSqr(this.mob.getTarget())<=64;
+        return this.mob.getTarget()!=null && this.ticks <= 50  && this.mob.distanceToSqr(this.mob.getTarget())<=64;
     }
 
     @Override
@@ -37,9 +37,10 @@ public class NetheriteEaterFireBreathGoal extends Goal{
     public void tick() {
         super.tick();
         this.ticks++;
+        this.mob.getNavigation().stop();
+        this.mob.setDeltaMovement(0, 0, 0);
         if(this.ticks<10)return;
         if(this.mob.getTarget()!=null){
-            this.mob.getNavigation().stop();
             this.mob.getLookControl().setLookAt(this.mob.getTarget());
             BlockPos start = this.mob.blockPosition();
             BlockPos end = this.mob.getTarget().blockPosition();

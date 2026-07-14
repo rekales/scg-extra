@@ -12,6 +12,8 @@ import net.minecraft.world.entity.ai.goal.MoveTowardsTargetGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -27,6 +29,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 public class NetheriteEaterEntity extends Monster implements GeoEntity{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private static final EntityDataAccessor<Boolean> IS_RUNNING = SynchedEntityData.defineId(NetheriteEaterEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Byte> DATA_FLAGS_ID  = SynchedEntityData.defineId(NetheriteEaterEntity.class, EntityDataSerializers.BYTE);
 
     public NetheriteEaterEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -41,6 +44,11 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity{
         .add(Attributes.ATTACK_DAMAGE, 10)
         .add(Attributes.ARMOR, 6)
         .add(Attributes.FOLLOW_RANGE, 20);
+    }
+
+    @Override
+    protected PathNavigation createNavigation(Level level) {
+        return new WallClimberNavigation(this, level);
     }
 
     @Override
@@ -95,12 +103,41 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity{
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(IS_RUNNING, false);
+        this.entityData.define(DATA_FLAGS_ID, (byte)0);
     }
     public boolean isRunning(){
         return this.entityData.get(IS_RUNNING);
     }
 
+    public boolean onClimbable() {
+        return this.isClimbing();
+    }
+
     public void setRunning(boolean bool){
         this.entityData.set(IS_RUNNING, bool);
+    }
+    @Override
+    public boolean fireImmune() {
+        return true;
+    }
+    public void tick() {
+        super.tick();
+        if (!this.level().isClientSide) {
+            this.setClimbing(this.horizontalCollision);
+        }
+    }
+    public boolean isClimbing() {
+        return ((Byte)this.entityData.get(DATA_FLAGS_ID) & 1) != 0;
+    }
+
+    public void setClimbing(boolean climbing) {
+        byte b0 = (Byte)this.entityData.get(DATA_FLAGS_ID);
+        if (climbing) {
+            b0 = (byte)(b0 | 1);
+        } else {
+            b0 = (byte)(b0 & -2);
+        }
+
+        this.entityData.set(DATA_FLAGS_ID, b0);
     }
 }

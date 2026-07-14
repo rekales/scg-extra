@@ -114,7 +114,7 @@ public class NeutralEntities {
             NetheriteEaterEntity::new, 
             MobCategory.MONSTER
         )
-        .sized(1.6F, 2F)
+        .sized(1.6F, 2.5F)
         .build("netherite_eater")
     );
     
@@ -193,11 +193,11 @@ public class NeutralEntities {
             true
         ));
         BoundingBoxManager.registerHeadshotBox(NeutralEntities.NETHERITE_EATER.get(), new OffsetRotatedHeadshotBox<>(
-            8, 
-            9.5, 
+            12, 
+            13.5, 
             30.0, 
             0.0F, 
-            15.0, 
+            10.0, 
             false, 
             true
         ));
