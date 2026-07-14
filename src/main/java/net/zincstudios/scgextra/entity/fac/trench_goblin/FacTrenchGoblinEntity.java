@@ -46,7 +46,7 @@ public class FacTrenchGoblinEntity extends EquippedEntity implements GeoEntity {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.FOLLOW_RANGE, 20.0D)
+                .add(Attributes.FOLLOW_RANGE, 48.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.32F)
                 .add(Attributes.ATTACK_DAMAGE, 6.0D)
                 .add(Attributes.ARMOR, 6.0D)
@@ -80,6 +80,9 @@ public class FacTrenchGoblinEntity extends EquippedEntity implements GeoEntity {
         super.tick();
 
         if (!this.level().isClientSide && brain.getTimeUntilExpiry(ModBrainMemories.DELAYED_MELEE.get()) == MELEE_DURATION) {
+            if (this.getRandom().nextFloat() < 0.35F) {
+                this.playSound(FACSounds.FAC_TRENCH_GOBLIN_ATTACK.get());
+            }
             this.triggerAnim("attack", "melee");
         }
     }

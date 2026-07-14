@@ -83,6 +83,7 @@ public class FacCommissarEntity extends EquippedEntity implements GeoEntity, Gun
                 .filter(abilityState -> abilityState.isSame(FlareSummon.ABILITY_ID))
                 .filter(abilityState -> abilityState.getTicksLeft(this.level()) == FLARE_DURATION-1);
         if (optAbility.isPresent()) {
+            this.playSound(FACSounds.FAC_COMMISSAR_FLARE.get());
             this.triggerAnim("behavior", "flare");
         }
     }
@@ -120,6 +121,9 @@ public class FacCommissarEntity extends EquippedEntity implements GeoEntity, Gun
 
     @Override
     public void swing(InteractionHand hand, boolean updateSelf) {
+        if (this.getRandom().nextFloat() < 0.3F) {
+            this.playSound(FACSounds.FAC_COMMISSAR_ATTACK.get());
+        }
         this.triggerAnim("attack", "melee");
         this.setYBodyRot(this.getYHeadRot());
     }

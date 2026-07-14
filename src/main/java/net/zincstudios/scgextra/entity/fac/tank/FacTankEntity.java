@@ -147,6 +147,7 @@ public class FacTankEntity extends Monster implements GeoEntity, Gunner, CustomG
             this.triggerAnim("main", "stomp");
         }
         if (brain.getTimeUntilExpiry(ModBrainMemories.STUNNED.get()) == MobUtil.DEFAULT_STUN_DURATION) {
+            this.playSound(FACSounds.FAC_TANK_STUN.get());
             this.triggerAnim("behavior", "stun");
         }
         if (brain.getTimeUntilExpiry(ModBrainMemories.STUNNED.get()) == STUN_RECOVERY_TICKS) {
