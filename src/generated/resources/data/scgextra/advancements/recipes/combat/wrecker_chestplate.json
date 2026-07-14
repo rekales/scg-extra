@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "scgextra:treated_iron_boots"
+        "recipe": "scgextra:wrecker_chestplate"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "scgextra:treated_iron_boots"
+      "scgextra:wrecker_chestplate"
     ]
   },
   "sends_telemetry_event": false

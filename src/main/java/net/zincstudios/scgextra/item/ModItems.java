@@ -149,14 +149,14 @@ public class ModItems {
             COMMISSAR_BOOTS = ITEMS.register("commissar_boots", () ->
                     new ArmorSetPartItem(ModArmorMaterials.COMMISSAR, ArmorItem.Type.BOOTS, ArmorSets.COMMISSAR)),
 
-            TREATED_IRON_HELMET = ITEMS.register("treated_iron_helmet", () ->
-                    new ArmorSetPartItem(ModArmorMaterials.TREATED_IRON, ArmorItem.Type.HELMET, ArmorSets.TREATED_IRON)),
-            TREATED_IRON_CHESTPLATE = ITEMS.register("treated_iron_chestplate", () ->
-                    new ArmorSetPartItem(ModArmorMaterials.TREATED_IRON, ArmorItem.Type.CHESTPLATE, ArmorSets.TREATED_IRON)),
-            TREATED_IRON_LEGGINGS = ITEMS.register("treated_iron_leggings", () ->
-                    new ArmorSetPartItem(ModArmorMaterials.TREATED_IRON, ArmorItem.Type.LEGGINGS, ArmorSets.TREATED_IRON)),
-            TREATED_IRON_BOOTS = ITEMS.register("treated_iron_boots", () ->
-                    new ArmorSetPartItem(ModArmorMaterials.TREATED_IRON, ArmorItem.Type.BOOTS, ArmorSets.TREATED_IRON)),
+            WRECKER_HELMET = ITEMS.register("wrecker_helmet", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.WRECKER, ArmorItem.Type.HELMET, ArmorSets.WRECKER)),
+            WRECKER_CHESTPLATE = ITEMS.register("wrecker_chestplate", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.WRECKER, ArmorItem.Type.CHESTPLATE, ArmorSets.WRECKER)),
+            WRECKER_LEGGINGS = ITEMS.register("wrecker_leggings", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.WRECKER, ArmorItem.Type.LEGGINGS, ArmorSets.WRECKER)),
+            WRECKER_BOOTS = ITEMS.register("wrecker_boots", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.WRECKER, ArmorItem.Type.BOOTS, ArmorSets.WRECKER)),
 
             LEVIATHAN_HELMET = ITEMS.register("leviathan_helmet", () ->
                     new ArmorSetPartItem(ModArmorMaterials.LEVIATHAN, ArmorItem.Type.HELMET, ArmorSets.LEVIATHAN)),

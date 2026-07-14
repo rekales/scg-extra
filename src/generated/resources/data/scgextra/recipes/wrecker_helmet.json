@@ -8,16 +8,20 @@
     "C": {
       "item": "scguns:snapped_cogwheel"
     },
+    "N": {
+      "item": "scguns:needle"
+    },
     "T": {
       "item": "scguns:treated_iron_ingot"
     }
   },
   "pattern": [
+    "NTN",
     "TCT",
     "A A"
   ],
   "result": {
-    "item": "scgextra:treated_iron_boots"
+    "item": "scgextra:wrecker_helmet"
   },
   "show_notification": false
 }

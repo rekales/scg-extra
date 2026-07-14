@@ -121,7 +121,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .showNotification(false)
                 .save(writer);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.TREATED_IRON_HELMET.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.WRECKER_HELMET.get())
                 .pattern("NTN")
                 .pattern("TCT")
                 .pattern("A A")
@@ -132,7 +132,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
                 .showNotification(false)
                 .save(writer);
-        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.TREATED_IRON_CHESTPLATE.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.WRECKER_CHESTPLATE.get())
                 .pattern("A A")
                 .pattern("TCT")
                 .pattern("TBT")
@@ -143,7 +143,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
                 .showNotification(false)
                 .save(writer);
-        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.TREATED_IRON_LEGGINGS.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.WRECKER_LEGGINGS.get())
                 .pattern("TCT")
                 .pattern("T T")
                 .pattern("A A")
@@ -153,7 +153,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_armor_ingredient", has(top.ribs.scguns.init.ModItems.SNAPPED_COGWHEEL.get()))
                 .showNotification(false)
                 .save(writer);
-        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.TREATED_IRON_BOOTS.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.WRECKER_BOOTS.get())
                 .pattern("TCT")
                 .pattern("A A")
                 .define('T', top.ribs.scguns.init.ModItems.TREATED_IRON_INGOT.get())

@@ -49,7 +49,7 @@ public enum ModArmorMaterials implements StringRepresentable, ArmorMaterial {
             0.05F,
             () -> Ingredient.of(Items.IRON_INGOT)
     ),
-    TREATED_IRON("treated_iron",
+    WRECKER("wrecker",
             30,
             Util.make(new EnumMap<>(ArmorItem.Type.class),
                     map -> {

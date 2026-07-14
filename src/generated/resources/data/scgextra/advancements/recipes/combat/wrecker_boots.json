@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "scgextra:treated_iron_helmet"
+        "recipe": "scgextra:wrecker_boots"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "scgextra:treated_iron_helmet"
+      "scgextra:wrecker_boots"
     ]
   },
   "sends_telemetry_event": false

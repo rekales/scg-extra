@@ -59,10 +59,10 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem("armor/", ModItems.COMMISSAR_CHESTPLATE);
         basicItem("armor/", ModItems.COMMISSAR_LEGGINGS);
         basicItem("armor/", ModItems.COMMISSAR_BOOTS);
-        basicItem("armor/", ModItems.TREATED_IRON_HELMET);
-        basicItem("armor/", ModItems.TREATED_IRON_CHESTPLATE);
-        basicItem("armor/", ModItems.TREATED_IRON_LEGGINGS);
-        basicItem("armor/", ModItems.TREATED_IRON_BOOTS);
+        basicItem("armor/", ModItems.WRECKER_HELMET);
+        basicItem("armor/", ModItems.WRECKER_CHESTPLATE);
+        basicItem("armor/", ModItems.WRECKER_LEGGINGS);
+        basicItem("armor/", ModItems.WRECKER_BOOTS);
         basicItem("armor/", ModItems.LEVIATHAN_HELMET);
         basicItem("armor/", ModItems.LEVIATHAN_CHESTPLATE);
         basicItem("armor/", ModItems.LEVIATHAN_LEGGINGS);

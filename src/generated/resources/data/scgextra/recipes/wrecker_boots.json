@@ -5,9 +5,6 @@
     "A": {
       "item": "scguns:anthralite_ingot"
     },
-    "B": {
-      "item": "scguns:treated_iron_block"
-    },
     "C": {
       "item": "scguns:snapped_cogwheel"
     },
@@ -16,12 +13,11 @@
     }
   },
   "pattern": [
-    "A A",
     "TCT",
-    "TBT"
+    "A A"
   ],
   "result": {
-    "item": "scgextra:treated_iron_chestplate"
+    "item": "scgextra:wrecker_boots"
   },
   "show_notification": false
 }

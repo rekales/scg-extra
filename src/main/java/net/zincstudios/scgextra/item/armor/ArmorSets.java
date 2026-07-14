@@ -21,7 +21,7 @@ public final class ArmorSets {
             .modifier(SCGEAttributes.BULLET_DAMAGE_TAKEN_MULT.get(), new AttributeModifier("commissar_set_bullet_damage_taken", -0.1, AttributeModifier.Operation.ADDITION))
     );
 
-    public static final ArmorSet TREATED_IRON = new ArmorSet(SCGExtra.asResource("treated_iron"), new ArmorSet.Traits());
+    public static final ArmorSet WRECKER = new ArmorSet(SCGExtra.asResource("wrecker"), new ArmorSet.Traits());
 
     public static final ArmorSet LEVIATHAN = new ArmorSet(SCGExtra.asResource("leviathan"), new ArmorSet.Traits()
             .effect(MobEffects.WATER_BREATHING, 0)
@@ -50,11 +50,11 @@ public final class ArmorSets {
         LivingEntity entity = event.getEntity();
         if (!(event.getSource().getDirectEntity() instanceof LivingEntity hurter)) return;
 
-        if (ArmorSet.getArmorSet(hurter) == TREATED_IRON) {
+        if (ArmorSet.getArmorSet(hurter) == WRECKER) {
             entity.addEffect(new MobEffectInstance(ModEffects.LACERATED.get(), 120));
         }
 
-        if (ArmorSet.getArmorSet(entity) == TREATED_IRON) {
+        if (ArmorSet.getArmorSet(entity) == WRECKER) {
             hurter.addEffect(new MobEffectInstance(ModEffects.LACERATED.get(), 120));
         }
     }

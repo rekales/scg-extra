@@ -5,23 +5,23 @@
     "A": {
       "item": "scguns:anthralite_ingot"
     },
+    "B": {
+      "item": "scguns:treated_iron_block"
+    },
     "C": {
       "item": "scguns:snapped_cogwheel"
-    },
-    "N": {
-      "item": "scguns:needle"
     },
     "T": {
       "item": "scguns:treated_iron_ingot"
     }
   },
   "pattern": [
-    "NTN",
+    "A A",
     "TCT",
-    "A A"
+    "TBT"
   ],
   "result": {
-    "item": "scgextra:treated_iron_helmet"
+    "item": "scgextra:wrecker_chestplate"
   },
   "show_notification": false
 }

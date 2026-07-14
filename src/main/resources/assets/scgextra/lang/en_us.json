@@ -153,10 +153,10 @@
   "item.scgextra.commissar_leggings" : "Commissar Leggings",
   "item.scgextra.commissar_boots" : "Commissar Boots",
 
-  "item.scgextra.treated_iron_helmet" : "Treated Iron Helmet",
-  "item.scgextra.treated_iron_chestplate" : "Treated Iron Chestplate",
-  "item.scgextra.treated_iron_leggings" : "Treated Iron Leggings",
-  "item.scgextra.treated_iron_boots" : "Treated Iron Boots",
+  "item.scgextra.wrecker_helmet" : "Wrecker Helmet",
+  "item.scgextra.wrecker_chestplate" : "Wrecker Chestplate",
+  "item.scgextra.wrecker_leggings" : "Wrecker Leggings",
+  "item.scgextra.wrecker_boots" : "Wrecker Boots",
 
   "item.scgextra.leviathan_helmet" : "Leviathan Helmet",
   "item.scgextra.leviathan_chestplate" : "Leviathan Chestplate",
@@ -211,7 +211,7 @@
   "armorset.full_set_bonus.description" : "Full Set Bonus:",
   "armorset.scgextra.oppressor.description" : "Provides 100% knockback resistance",
   "armorset.scgextra.commissar.description" : "Provides 10% bullet damage resistance",
-  "armorset.scgextra.treated_iron.description" : "Inflicts Laceration on enemies when attacking or getting hit",
+  "armorset.scgextra.wrecker.description" : "Inflicts Laceration on enemies when attacking or getting hit",
   "armorset.scgextra.leviathan.description" : "Gives Water Breathing and Dolphins Grace",
   "armorset.scgextra.golden_idol.description" : "Gives Fire Resistance and Regenerates allies and neutral mobs in 5 block radius",
   "armorset.scgextra.enlightened.description" : "Gives Regeneration and makes wearer undetectable by skulk sensors",
