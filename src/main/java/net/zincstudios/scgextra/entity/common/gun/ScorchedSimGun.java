@@ -5,6 +5,8 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -158,7 +160,7 @@ public abstract class ScorchedSimGun implements SimulatedGun {
         Level level = shooter.level();
         Gun gun = this.gunBase;
         Vec3 aimDir = SimulatedGun.getDirectionVector(startPos, targetPos);
-        aimDir = SimulatedGun.addAimError(shooter, aimDir, accuracyModifier);
+        aimDir = addAimError(shooter, aimDir, accuracyModifier);
 
         int count = gun.getProjectile().getProjectileAmount();
         ProjectileEntity[] projectiles = new ProjectileEntity[count];
@@ -167,7 +169,7 @@ public abstract class ScorchedSimGun implements SimulatedGun {
             ProjectileEntity projectileEntity = this.projectileFactory.create(level, shooter, gun);
             projectileEntity.setAdditionalDamage(this.projectileDamage - gun.getProjectile().getDamage());
 
-            Vec3 vec = SimulatedGun.addWeaponSpread(shooter, aimDir, gun.getProjectile().getSpread());
+            Vec3 vec = addWeaponSpread(shooter, aimDir, gun.getProjectile().getSpread());
             vec = vec.scale(this.projectileSpeed);
             vec = this.velocityModifier.apply(vec);
             projectileEntity.setDeltaMovement(vec);
@@ -255,5 +257,68 @@ public abstract class ScorchedSimGun implements SimulatedGun {
     @Override
     public void setAmmoCount(int ammoCount) {
         this.ammoCount = ammoCount;
+    }
+
+    static float getMobDamageMultiplier(Level level) {
+        float difficultyDamageMultiplier = getDifficultyDamageMultiplier(level.getDifficulty());
+        float configDamageMultiplier = Config.COMMON.gameplay.mobGunDamageMultiplier.get().floatValue();
+        return difficultyDamageMultiplier * configDamageMultiplier;
+    }
+
+    static float getDifficultyDamageMultiplier(Difficulty difficulty) {
+        return switch (difficulty) {
+            case PEACEFUL -> 0.05F;
+            case EASY ->  0.35F;
+            case NORMAL -> 0.5F;
+            case HARD -> 0.65F;
+        };
+    }
+
+    static float getDifficultyAimError(Difficulty difficulty) {
+        return switch (difficulty) {
+            case PEACEFUL -> 3.0F;
+            case EASY -> 2.0F;
+            case NORMAL -> 1.5F;
+            case HARD -> 1.0F;
+        };
+    }
+
+    /**
+     * Need to redo the sloppy implementation from original
+     *
+     * @param dir expects a direction unit vector
+     */
+    private static Vec3 addAimError(LivingEntity shooter, Vec3 dir, float accuracyModifier) {
+        float aimError = (BASE_AIM_ERROR * getDifficultyAimError(shooter.level().getDifficulty())) / accuracyModifier;
+        aimError = Math.min(aimError, 25F);
+
+        float aimErrorRad = aimError * Mth.DEG_TO_RAD;
+        float theta1 = shooter.level().random.nextFloat() * 2F * (float) Math.PI;
+        float r1 = Mth.sqrt(shooter.level().random.nextFloat()) * (float) Math.tan(aimErrorRad);
+
+        Vec3 vecUpwards = SimulatedGun.getVectorFromRotation(shooter.getViewXRot(1F) + 90F, shooter.getViewYRot(1F));
+        Vec3 vecSideways = dir.cross(vecUpwards);
+
+        float a1 = Mth.cos(theta1) * r1;
+        float a2 = Mth.sin(theta1) * r1;
+
+        return dir.add(vecSideways.scale(a1)).add(vecUpwards.scale(a2)).normalize();
+    }
+
+    /**
+     * @param dir expects a direction unit vector
+     */
+    private static Vec3 addWeaponSpread(LivingEntity shooter, Vec3 dir, float spread) {
+        spread = Math.min(spread, 170F) * 0.5F * Mth.DEG_TO_RAD;
+        Vec3 spreadUpwards = SimulatedGun.getVectorFromRotation(shooter.getViewXRot(1F) + 90F, shooter.getViewYRot(1F));
+        Vec3 spreadSideways = dir.cross(spreadUpwards);
+
+        float theta2 = shooter.level().random.nextFloat() * 2F * (float) Math.PI;
+        float r2 = Mth.sqrt(shooter.level().random.nextFloat()) * (float) Math.tan(spread);
+
+        float b1 = Mth.cos(theta2) * r2;
+        float b2 = Mth.sin(theta2) * r2;
+
+        return dir.add(spreadSideways.scale(b1)).add(spreadUpwards.scale(b2)).normalize();
     }
 }
