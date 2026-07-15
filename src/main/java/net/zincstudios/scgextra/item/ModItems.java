@@ -49,6 +49,10 @@ public class ModItems {
             () -> new Item(new Item.Properties().stacksTo(1))
     );
 
+    public static final RegistryObject<Item> END_SHELL = ITEMS.register("end_shell",
+            () -> new Item(new Item.Properties().stacksTo(64))
+    );
+
     public static final RegistryObject<SpawnEggItem>
             // Whaler
             FISH_FOLK_SPAWN_EGG = basicSpawnEgg(WhalerEntities.FISH_FOLK),
@@ -108,7 +112,8 @@ public class ModItems {
             MUTANT_BAT_SPAWN_EGG = basicSpawnEgg(NeutralEntities.MUTANT_BAT),
             NITRO_BEETLE_SPAWN_EGG = basicSpawnEgg(NeutralEntities.NITRO_BEETLE),
             HEAD_HUNTER_SPAWN_EGG = basicSpawnEgg(NeutralEntities.HEAD_HUNTER),
-            NETHERITE_EATER_SPAWN_EGG = basicSpawnEgg(NeutralEntities.NETHERITE_EATER)
+            NETHERITE_EATER_SPAWN_EGG = basicSpawnEgg(NeutralEntities.NETHERITE_EATER),
+            END_POD_SPAWN_EGG = basicSpawnEgg(NeutralEntities.END_POD)
             ;
 
     public static void register(IEventBus modEventBus) {

@@ -1457,5 +1457,28 @@
     "sounds": [
       "scgextra:neutral/netherite_eater/breath"
     ]
+  },
+  "end_pod.idle": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_pod/idle_01",
+      "scgextra:neutral/end_pod/idle_02",
+      "scgextra:neutral/end_pod/idle_03",
+      "scgextra:neutral/end_pod/idle_04",
+      "scgextra:neutral/end_pod/idle_05"
+    ]
+  },
+  "end_pod.breed": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_pod/breed"
+    ]
+  },
+  "end_pod.death": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_pod/death_01",
+      "scgextra:neutral/end_pod/death_02"
+    ]
   }
 }

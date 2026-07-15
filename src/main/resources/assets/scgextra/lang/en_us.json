@@ -52,6 +52,7 @@
   "entity.scgextra.nitro_beetle":  "Nitro Beetle",
   "entity.scgextra.head_hunter":  "Head Hunter",
   "entity.scgextra.netherite_eater":  "Netherite Eater",
+  "entity.scgextra.end_pod":  "End Pod",
 
   "item.scgextra.fish_folk_spawn_egg":  "Fish Folk Spawn Egg",
   "item.scgextra.turtleman_spawn_egg":  "Turtleman Spawn Egg",
@@ -102,6 +103,7 @@
   "item.scgextra.end_dweller_spawn_egg":  "End Dweller Spawn Egg",
   "item.scgextra.end_stone_crab_spawn_egg":  "End Stone Crab Spawn Egg",
   "item.scgextra.end_scorpion_spawn_egg":  "End Scorpion Spawn Egg",
+  "item.scgextra.end_shell":  "End Shell",
 
   "item.scgextra.cog_vulture_spawn_egg":  "COG Vulture Spawn Egg",
   "item.scgextra.cog_devastator_spawn_egg": "COG Devastator Spawn Egg",

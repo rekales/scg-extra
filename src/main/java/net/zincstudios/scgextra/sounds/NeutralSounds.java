@@ -50,6 +50,15 @@ public class NeutralSounds {
     public static final RegistryObject<SoundEvent> NETHERITE_EATER_BREATH = SOUND_EVENTS.register("netherite_eater.breath",
             () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("netherite_eater.breath")));
 
+    public static final RegistryObject<SoundEvent> END_POD_IDLE = SOUND_EVENTS.register("end_pod.idle",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_pod.idle")));
+
+    public static final RegistryObject<SoundEvent> END_POD_DEAD = SOUND_EVENTS.register("end_pod.death",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_pod.death")));
+
+    public static final RegistryObject<SoundEvent> END_POD_BREED = SOUND_EVENTS.register("end_pod.breed",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_pod.breed")));
+
     public static void init() {}
 
 }
