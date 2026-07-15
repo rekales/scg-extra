@@ -59,6 +59,15 @@ public class NeutralSounds {
     public static final RegistryObject<SoundEvent> END_POD_BREED = SOUND_EVENTS.register("end_pod.breed",
             () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_pod.breed")));
 
+    public static final RegistryObject<SoundEvent> END_DWELLER_IDLE = SOUND_EVENTS.register("end_dweller.idle",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_dweller.idle")));
+
+    public static final RegistryObject<SoundEvent> END_DWELLER_CHARGING = SOUND_EVENTS.register("end_dweller.charging",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_dweller.charging")));
+
+    public static final RegistryObject<SoundEvent> END_DWELLER_HURT = SOUND_EVENTS.register("end_dweller.hurt",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_dweller.hurt")));
+
     public static void init() {}
 
 }

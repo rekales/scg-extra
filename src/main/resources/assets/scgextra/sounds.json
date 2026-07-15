@@ -1480,5 +1480,26 @@
       "scgextra:neutral/end_pod/death_01",
       "scgextra:neutral/end_pod/death_02"
     ]
+  },
+  "end_dweller.idle": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_dweller/idle_01",
+      "scgextra:neutral/end_dweller/idle_02",
+      "scgextra:neutral/end_dweller/idle_03"
+    ]
+  },
+  "end_dweller.hurt": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_dweller/hurt_01",
+      "scgextra:neutral/end_dweller/hurt_02"
+    ]
+  },
+  "end_dweller.charging": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_dweller/charging"
+    ]
   }
 }

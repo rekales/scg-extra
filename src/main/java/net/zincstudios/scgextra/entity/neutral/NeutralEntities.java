@@ -16,6 +16,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
+import net.zincstudios.scgextra.entity.neutral.end.end_dweller.EndDwellerEntity;
+import net.zincstudios.scgextra.entity.neutral.end.end_dweller.EndDwellerRenderer;
 import net.zincstudios.scgextra.entity.neutral.end.end_pod.EndPodEntity;
 import net.zincstudios.scgextra.entity.neutral.end.end_pod.EndPodRenderer;
 import net.zincstudios.scgextra.entity.neutral.nether.head_hunter.HeadHunterEntity;
@@ -129,6 +131,16 @@ public class NeutralEntities {
         .sized(0.8F, 0.5F)
         .build("end_pod")
     );
+
+    public static final RegistryObject<EntityType<EndDwellerEntity>> END_DWELLER = ENTITY_TYPES.register(
+        "end_dweller", 
+        () -> EntityType.Builder.of(
+            EndDwellerEntity::new, 
+            MobCategory.CREATURE
+        )
+        .sized(1.2F, 1.5F)
+        .build("end_dweller")
+    );
     
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(NeutralEntities::registerAttributes);
@@ -148,6 +160,7 @@ public class NeutralEntities {
         event.put(NeutralEntities.HEAD_HUNTER.get(), HeadHunterEntity.createAttributes().build());
         event.put(NeutralEntities.NETHERITE_EATER.get(), NetheriteEaterEntity.createAttributes().build());
         event.put(NeutralEntities.END_POD.get(), EndPodEntity.createAttributes().build());
+        event.put(NeutralEntities.END_DWELLER.get(), EndDwellerEntity.createAttributes().build());
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
@@ -234,6 +247,15 @@ public class NeutralEntities {
             false, 
             true
         ));
+        BoundingBoxManager.registerHeadshotBox(NeutralEntities.END_DWELLER.get(), new OffsetRotatedHeadshotBox<>(
+            4, 
+            3, 
+            1.5, 
+            0.0F, 
+            3.5,
+            false, 
+            true
+        ));
     }
     //mostly to stop them from spawning in water
     public static void registerSpawnPlacements(SpawnPlacementRegisterEvent event) {
@@ -279,6 +301,13 @@ public class NeutralEntities {
             EndPodEntity::checkMobSpawnRules,
             SpawnPlacementRegisterEvent.Operation.OR
         );
+        event.register(
+            NeutralEntities.END_DWELLER.get(),
+            SpawnPlacements.Type.ON_GROUND,
+            Heightmap.Types.WORLD_SURFACE,
+            EndDwellerEntity::checkMobSpawnRules,
+            SpawnPlacementRegisterEvent.Operation.OR
+        );
     }
     @OnlyIn(value = Dist.CLIENT)
     private static void onClientSetup(FMLClientSetupEvent event) {
@@ -291,6 +320,6 @@ public class NeutralEntities {
         EntityRenderers.register(NeutralEntities.HEAD_HUNTER.get(), HeadHunterRenderer::new);
         EntityRenderers.register(NeutralEntities.NETHERITE_EATER.get(), NetheriteEaterRenderer::new);
         EntityRenderers.register(NeutralEntities.END_POD.get(), EndPodRenderer::new);
+        EntityRenderers.register(NeutralEntities.END_DWELLER.get(), EndDwellerRenderer::new);
     }
-
 }

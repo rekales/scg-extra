@@ -113,7 +113,8 @@ public class ModItems {
             NITRO_BEETLE_SPAWN_EGG = basicSpawnEgg(NeutralEntities.NITRO_BEETLE),
             HEAD_HUNTER_SPAWN_EGG = basicSpawnEgg(NeutralEntities.HEAD_HUNTER),
             NETHERITE_EATER_SPAWN_EGG = basicSpawnEgg(NeutralEntities.NETHERITE_EATER),
-            END_POD_SPAWN_EGG = basicSpawnEgg(NeutralEntities.END_POD)
+            END_POD_SPAWN_EGG = basicSpawnEgg(NeutralEntities.END_POD),
+            END_DWELLER_SPAWN_EGG = basicSpawnEgg(NeutralEntities.END_DWELLER)
             ;
 
     public static void register(IEventBus modEventBus) {
