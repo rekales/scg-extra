@@ -16,6 +16,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
+import net.zincstudios.scgextra.entity.neutral.end.end_stone_crab.EndStoneCrabEntity;
+import net.zincstudios.scgextra.entity.neutral.end.end_stone_crab.EndStoneCrabRenderer;
 import net.zincstudios.scgextra.entity.neutral.end.end_dweller.EndDwellerEntity;
 import net.zincstudios.scgextra.entity.neutral.end.end_dweller.EndDwellerRenderer;
 import net.zincstudios.scgextra.entity.neutral.end.end_pod.EndPodEntity;
@@ -141,6 +143,16 @@ public class NeutralEntities {
         .sized(1.6F, 1.5F)
         .build("end_dweller")
     );
+
+    public static final RegistryObject<EntityType<EndStoneCrabEntity>> END_STONE_CRAB = ENTITY_TYPES.register(
+        "end_stone_crab", 
+        () -> EntityType.Builder.of(
+            EndStoneCrabEntity::new, 
+            MobCategory.MONSTER
+        )
+        .sized(3F, 3F)
+        .build("end_stone_crab")
+    );
     
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(NeutralEntities::registerAttributes);
@@ -161,6 +173,7 @@ public class NeutralEntities {
         event.put(NeutralEntities.NETHERITE_EATER.get(), NetheriteEaterEntity.createAttributes().build());
         event.put(NeutralEntities.END_POD.get(), EndPodEntity.createAttributes().build());
         event.put(NeutralEntities.END_DWELLER.get(), EndDwellerEntity.createAttributes().build());
+        event.put(NeutralEntities.END_STONE_CRAB.get(), EndStoneCrabEntity.createAttributes().build());
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
@@ -256,6 +269,17 @@ public class NeutralEntities {
             false, 
             true
         ));
+        BoundingBoxManager.registerHeadshotBox(NeutralEntities.END_STONE_CRAB.get(), new OffsetRotatedHeadshotBox<>(
+            8, 
+            6, 
+            27,
+            0.0F, 
+            18, 
+            20,
+            false, 
+            true, 
+            true
+        ));
     }
     //mostly to stop them from spawning in water
     public static void registerSpawnPlacements(SpawnPlacementRegisterEvent event) {
@@ -308,6 +332,13 @@ public class NeutralEntities {
             EndDwellerEntity::checkMonsterSpawnRules,
             SpawnPlacementRegisterEvent.Operation.OR
         );
+        event.register(
+            NeutralEntities.END_STONE_CRAB.get(),
+            SpawnPlacements.Type.ON_GROUND,
+            Heightmap.Types.WORLD_SURFACE,
+            EndStoneCrabEntity::checkMonsterSpawnRules,
+            SpawnPlacementRegisterEvent.Operation.OR
+        );
     }
     @OnlyIn(value = Dist.CLIENT)
     private static void onClientSetup(FMLClientSetupEvent event) {
@@ -321,5 +352,6 @@ public class NeutralEntities {
         EntityRenderers.register(NeutralEntities.NETHERITE_EATER.get(), NetheriteEaterRenderer::new);
         EntityRenderers.register(NeutralEntities.END_POD.get(), EndPodRenderer::new);
         EntityRenderers.register(NeutralEntities.END_DWELLER.get(), EndDwellerRenderer::new);
+        EntityRenderers.register(NeutralEntities.END_STONE_CRAB.get(), EndStoneCrabRenderer::new);
     }
 }

@@ -68,6 +68,18 @@ public class NeutralSounds {
     public static final RegistryObject<SoundEvent> END_DWELLER_HURT = SOUND_EVENTS.register("end_dweller.hurt",
             () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_dweller.hurt")));
 
+    public static final RegistryObject<SoundEvent> END_STONE_CRAB_IDLE= SOUND_EVENTS.register("end_stone_crab.idle",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_stone_crab.idle")));
+
+    public static final RegistryObject<SoundEvent> END_STONE_CRAB_HURT = SOUND_EVENTS.register("end_stone_crab.hurt",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_stone_crab.hurt")));
+
+    public static final RegistryObject<SoundEvent> END_STONE_CRAB_DEATH = SOUND_EVENTS.register("end_stone_crab.death",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_stone_crab.death")));
+
+    public static final RegistryObject<SoundEvent> END_STONE_CRAB_ATTACK = SOUND_EVENTS.register("end_stone_crab.attack",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_stone_crab.attack")));
+
     public static void init() {}
 
 }

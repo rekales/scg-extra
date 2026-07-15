@@ -1501,5 +1501,31 @@
     "sounds": [
       "scgextra:neutral/end_dweller/charging"
     ]
+  },
+  "end_stone_crab.death": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_stone_crab/death"
+    ]
+  },
+  "end_stone_crab.idle": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_stone_crab/idle_01",
+      "scgextra:neutral/end_stone_crab/idle_02"
+    ]
+  },
+  "end_stone_crab.hurt": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_stone_crab/hurt_01",
+      "scgextra:neutral/end_stone_crab/hurt_02"
+    ]
+  },
+  "end_stone_crab.attack": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_stone_crab/attack"
+    ]
   }
 }

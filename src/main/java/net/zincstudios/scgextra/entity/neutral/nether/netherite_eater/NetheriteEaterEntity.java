@@ -22,6 +22,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.common.MobUtil;
+import net.zincstudios.scgextra.entity.common.goal.BreakBlocksGoal;
 import net.zincstudios.scgextra.sounds.NeutralSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -70,7 +71,7 @@ public class NetheriteEaterEntity extends Monster implements GeoEntity{
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(3, new NetheriteEaterRunGoal(this, 0.7f));
         this.goalSelector.addGoal(2, new NetheriteEaterFireBreathGoal(this));
-        this.goalSelector.addGoal(4, new NetheriteEaterBreakBlockGoal(this));
+        this.goalSelector.addGoal(4, new BreakBlocksGoal(this, 60));
     }
 
     @Override

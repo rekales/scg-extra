@@ -6,13 +6,19 @@
       "type": "scgextra:end_pod",
       "weight": 150,
       "minCount": 1,
-      "maxCount": 5
+      "maxCount": 1
     },
     {
       "type": "scgextra:end_dweller",
-      "weight": 5,
+      "weight": 150,
       "minCount": 1,
-      "maxCount": 5
+      "maxCount": 1
+    },
+    {
+      "type": "scgextra:end_stone_crab",
+      "weight": 1,
+      "minCount": 1,
+      "maxCount": 1
     }
   ]
 }
