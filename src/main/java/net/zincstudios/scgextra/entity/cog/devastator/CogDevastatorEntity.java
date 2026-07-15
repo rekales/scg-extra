@@ -41,7 +41,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CogDevastatorEntity extends GunnerEntity implements GeoEntity, Gunner, BulletSpawnOffset {
+public class CogDevastatorEntity extends Monster implements GeoEntity, Gunner, BulletSpawnOffset {
 
     public static final Vec3 MACHINE_GUN_OFFSET = new Vec3(-0.7,2.1,0.4);
     public static final Vec3 SHOTGUN_OFFSET = new Vec3(-0.7,2.6,0.5);

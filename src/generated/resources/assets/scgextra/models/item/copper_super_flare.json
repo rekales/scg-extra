@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "scgextra:item/walker_mg"
+    "layer0": "scguns:item/copper_flare"
   }
 }

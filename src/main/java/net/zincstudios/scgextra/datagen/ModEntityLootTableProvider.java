@@ -60,11 +60,23 @@ public class ModEntityLootTableProvider extends EntityLootSubProvider {
                 .range(ModItems.ADVANCED_ROUND.get(), 1, 3)
                 .constant(Items.PUFFERFISH, 1);
         basicLoot(WhalerEntities.GUARDIAN_STATUE.get())
+                .altsChance(List.of(
+                        net.zincstudios.scgextra.item.ModItems.LEVIATHAN_HELMET.get(),
+                        net.zincstudios.scgextra.item.ModItems.LEVIATHAN_CHESTPLATE.get(),
+                        net.zincstudios.scgextra.item.ModItems.LEVIATHAN_LEGGINGS.get(),
+                        net.zincstudios.scgextra.item.ModItems.LEVIATHAN_BOOTS.get()
+                ), 0.3F)
                 .constant(ModItems.OCEAN_FLARE.get(), 1)
                 .range(ModItems.BLUEPRINT_SCRAP.get(), 1, 2)
                 .range(Items.HEART_OF_THE_SEA, 1, 3)
                 .range(Items.PRISMARINE_SHARD, 3, 9);
         basicLoot(WhalerEntities.ARMORED_WHALE.get())
+                .altsChance(List.of(
+                        net.zincstudios.scgextra.item.ModItems.LEVIATHAN_HELMET.get(),
+                        net.zincstudios.scgextra.item.ModItems.LEVIATHAN_CHESTPLATE.get(),
+                        net.zincstudios.scgextra.item.ModItems.LEVIATHAN_LEGGINGS.get(),
+                        net.zincstudios.scgextra.item.ModItems.LEVIATHAN_BOOTS.get()
+                ), 0.3F)
                 .range(ModItems.BLUEPRINT_SCRAP.get(), 1, 2)
                 .constant(ModItems.LEVIATHAN_TOOTH.get(), 1)
                 .range(ModBlocks.SUPPLY_CRATE.get().asItem(), 3, 6);
@@ -90,12 +102,24 @@ public class ModEntityLootTableProvider extends EntityLootSubProvider {
                 .range(Items.IRON_INGOT, 1, 3)
                 .range(ModItems.ANTHRALITE_INGOT.get(), 1, 3);
         basicLoot(FACEntities.FAC_COMMISSAR.get())
+                .altsChance(List.of(
+                        net.zincstudios.scgextra.item.ModItems.COMMISSAR_HELMET.get(),
+                        net.zincstudios.scgextra.item.ModItems.COMMISSAR_CHESTPLATE.get(),
+                        net.zincstudios.scgextra.item.ModItems.COMMISSAR_LEGGINGS.get(),
+                        net.zincstudios.scgextra.item.ModItems.COMMISSAR_BOOTS.get()
+                ), 0.3F)
                 .range(Items.IRON_INGOT, 1, 3)
                 .range(ModItems.BLUEPRINT_SCRAP.get(), 1, 2);
         basicLoot(FACEntities.FAC_WALKER.get())
                 .range(ModItems.ANTHRALITE_INGOT.get(), 1, 3)
                 .range(Items.COAL, 1, 3);
         basicLoot(FACEntities.FAC_TANK.get())
+                .altsChance(List.of(
+                        net.zincstudios.scgextra.item.ModItems.COMMISSAR_HELMET.get(),
+                        net.zincstudios.scgextra.item.ModItems.COMMISSAR_CHESTPLATE.get(),
+                        net.zincstudios.scgextra.item.ModItems.COMMISSAR_LEGGINGS.get(),
+                        net.zincstudios.scgextra.item.ModItems.COMMISSAR_BOOTS.get()
+                ), 0.3F)
                 .constant(ModItems.LABOR_TROPHY.get(), 1)
                 .range(Items.IRON_BLOCK, 1, 3)
                 .range(Items.COAL_BLOCK, 1, 3)
@@ -117,12 +141,24 @@ public class ModEntityLootTableProvider extends EntityLootSubProvider {
         basicLoot(RRCEntities.SCOUT.get())
                 .range(ModItems.SMALL_COPPER_CASING.get(), 1, 3);
         basicLoot(RRCEntities.OPPRESSOR.get())
+                .altsChance(List.of(
+                        net.zincstudios.scgextra.item.ModItems.OPPRESSOR_HELMET.get(),
+                        net.zincstudios.scgextra.item.ModItems.OPPRESSOR_CHESTPLATE.get(),
+                        net.zincstudios.scgextra.item.ModItems.OPPRESSOR_LEGGINGS.get(),
+                        net.zincstudios.scgextra.item.ModItems.OPPRESSOR_BOOTS.get()
+                ), 0.3F)
                 .range(ModItems.BLUEPRINT_SCRAP.get(), 1, 2)
                 .range(Items.COPPER_INGOT, 1, 3);
         basicLoot(RRCEntities.SPRING_JUNKIE.get())
                 .range(Items.GUNPOWDER, 1, 3)
                 .range(ModItems.FLECHETTE.get(), 1, 3);
         basicLoot(RRCEntities.FLAMING_HEAD.get())
+                .altsChance(List.of(
+                        net.zincstudios.scgextra.item.ModItems.OPPRESSOR_HELMET.get(),
+                        net.zincstudios.scgextra.item.ModItems.OPPRESSOR_CHESTPLATE.get(),
+                        net.zincstudios.scgextra.item.ModItems.OPPRESSOR_LEGGINGS.get(),
+                        net.zincstudios.scgextra.item.ModItems.OPPRESSOR_BOOTS.get()
+                ), 0.3F)
                 .constant(ModItems.RUSTY_MEDAL.get(), 1)
                 .range(ModItems.BLAZE_FUEL.get(), 3, 6)
                 .range(Items.COPPER_BLOCK, 1, 3);
@@ -147,10 +183,22 @@ public class ModEntityLootTableProvider extends EntityLootSubProvider {
                 .range(Items.GUNPOWDER, 1, 3)
                 .constant(ModItems.DEPLETED_DIAMOND_STEEL_INGOT.get(), 1);
         basicLoot(AsgharianEntities.CANDLE_FIEND.get())
+                .altsChance(List.of(
+                        net.zincstudios.scgextra.item.ModItems.RITUAL_HELMET.get(),
+                        net.zincstudios.scgextra.item.ModItems.RITUAL_CHESTPLATE.get(),
+                        net.zincstudios.scgextra.item.ModItems.RITUAL_LEGGINGS.get(),
+                        net.zincstudios.scgextra.item.ModItems.RITUAL_BOOTS.get()
+                ), 0.3F)
                 .range(Items.RED_CANDLE, 3, 6)
                 .range(ModItems.BLUEPRINT_SCRAP.get(), 1, 3)
                 .constant(ModItems.CERIMONIAL_COD.get(), 1);
         basicLoot(AsgharianEntities.SOUL_RIPPER.get())
+                .altsChance(List.of(
+                        net.zincstudios.scgextra.item.ModItems.RITUAL_HELMET.get(),
+                        net.zincstudios.scgextra.item.ModItems.RITUAL_CHESTPLATE.get(),
+                        net.zincstudios.scgextra.item.ModItems.RITUAL_LEGGINGS.get(),
+                        net.zincstudios.scgextra.item.ModItems.RITUAL_BOOTS.get()
+                ), 0.3F)
                 .range(Items.SOUL_LANTERN, 1, 3)
                 .range(ModItems.DEPLETED_DIAMOND_STEEL_INGOT.get(), 1, 3)
                 .constant(ModItems.CERIMONIAL_COD.get(), 1);
@@ -173,6 +221,12 @@ public class ModEntityLootTableProvider extends EntityLootSubProvider {
                 .range(ModItems.TREATED_BRASS_INGOT.get(), 1, 3)
                 .range(ModItems.ENERGY_CELL.get(), 1, 3);
         basicLoot(COGEntities.JUGGERNAUT.get())
+                .altsChance(List.of(
+                        net.zincstudios.scgextra.item.ModItems.JUGGERNAUT_HELMET.get(),
+                        net.zincstudios.scgextra.item.ModItems.JUGGERNAUT_CHESTPLATE.get(),
+                        net.zincstudios.scgextra.item.ModItems.JUGGERNAUT_LEGGINGS.get(),
+                        net.zincstudios.scgextra.item.ModItems.JUGGERNAUT_BOOTS.get()
+                ), 0.3F)
                 .constant(ModItems.COG_HEART.get(), 1)
                 .range(ModItems.TREATED_BRASS_INGOT.get(), 1, 3);
     }

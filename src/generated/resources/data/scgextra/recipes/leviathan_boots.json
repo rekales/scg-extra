@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "P": {
+      "item": "minecraft:prismarine_bricks"
+    },
+    "T": {
+      "item": "scguns:leviathan_tooth"
+    }
+  },
+  "pattern": [
+    "PTP",
+    "A A"
+  ],
+  "result": {
+    "item": "scgextra:leviathan_boots"
+  },
+  "show_notification": false
+}

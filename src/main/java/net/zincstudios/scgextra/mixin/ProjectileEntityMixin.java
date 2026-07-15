@@ -4,14 +4,18 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.PartEntity;
+import net.zincstudios.scgextra.attributes.SCGEAttributes;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.asgharian.WeakPointPart;
 import net.zincstudios.scgextra.entity.common.HeadShotHandler;
@@ -33,6 +37,37 @@ import java.util.Optional;
 // TODO: test if GunProjectileHitEvent can be utilized
 @Mixin(value = ProjectileEntity.class, remap = false)
 public class ProjectileEntityMixin {
+
+    @WrapOperation(
+            method = "<init>(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Ltop/ribs/scguns/item/GunItem;Ltop/ribs/scguns/common/Gun;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Ltop/ribs/scguns/util/GunModifierHelper;getModifiedProjectileGravity(Lnet/minecraft/world/item/ItemStack;D)D"
+            )
+    )
+    private double atGetModifiedGravity(ItemStack weapon, double gravity, Operation<Double> original, @Local(argsOnly = true) LivingEntity shooter) {
+        double modifiedGravity = original.call(weapon, gravity);
+        if (shooter instanceof Player player) {
+            modifiedGravity *= (float) player.getAttributeValue(SCGEAttributes.BULLET_GRAVITY_MULT.get());
+        }
+        return modifiedGravity;
+    }
+
+    @WrapOperation(
+            method = "getCriticalDamage",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Ltop/ribs/scguns/util/GunModifierHelper;getCriticalChance(Lnet/minecraft/world/item/ItemStack;)F"
+            ))
+    private float atGetCriticalChance(ItemStack weapon, Operation<Float> original) {
+        ProjectileEntity self = (ProjectileEntity) (Object) this;
+        float chance = original.call(weapon);
+        if (self.getShooter() instanceof Player player) {
+             chance += (float) player.getAttributeValue(SCGEAttributes.BULLET_ADDITIONAL_CRIT_CHANCE.get());
+             return Mth.clamp(chance, 0, 1);
+        }
+        return chance;
+    }
 
     @WrapOperation(
             method = "onHit",

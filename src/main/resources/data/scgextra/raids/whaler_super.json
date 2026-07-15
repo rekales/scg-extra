@@ -1,0 +1,60 @@
+{
+  "raid_id" : "whaler_super",
+  "flare_raid_id" : "ocean_super",
+  "finish_loot" : "scgextra:raid/whaler_super",
+
+  "waves" : [
+    {
+      "infantry": 10
+    },
+    {
+      "infantry": 10,
+      "elite": 3
+    },
+    {
+      "infantry": 12,
+      "elite": 4,
+      "miniboss": 1
+    },
+    {
+      "infantry": 10,
+      "elite": 6,
+      "miniboss": 3
+    },
+    {
+      "infantry": 6,
+      "elite": 2,
+      "boss": 2
+    }
+  ],
+
+  "infantry" : [
+    {
+      "entity_id": "scgextra:fish_folk"
+    }
+  ],
+  "elite" : [
+    {
+      "entity_id": "scgextra:turtleman"
+    },
+    {
+      "entity_id": "scgextra:salmonsaur"
+    },
+    {
+      "entity_id": "scgextra:tentacliator"
+    },
+    {
+      "entity_id": "scgextra:glowing_tentacliator"
+    }
+  ],
+  "miniboss" : [
+    {
+      "entity_id": "scgextra:pufficus"
+    }
+  ],
+  "boss" : [
+    {
+      "entity_id": "scgextra:armored_whale"
+    }
+  ]
+}

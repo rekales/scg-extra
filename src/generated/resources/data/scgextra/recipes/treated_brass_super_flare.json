@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "scguns:blueprint_scrap"
+    },
+    "F": {
+      "item": "scguns:treated_brass_flare"
+    }
+  },
+  "pattern": [
+    "FBF",
+    "BFB",
+    "FBF"
+  ],
+  "result": {
+    "item": "scgextra:treated_brass_super_flare"
+  },
+  "show_notification": false
+}

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "C": {
+      "item": "minecraft:sculk_catalyst"
+    },
+    "S": {
+      "item": "minecraft:sculk_shrieker"
+    },
+    "T": {
+      "item": "scguns:sculk_tome"
+    }
+  },
+  "pattern": [
+    "A A",
+    "STS",
+    "CCC"
+  ],
+  "result": {
+    "item": "scgextra:enlightened_chestplate"
+  },
+  "show_notification": false
+}

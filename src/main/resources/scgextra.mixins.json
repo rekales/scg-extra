@@ -7,15 +7,19 @@
   "mixins": [
     "AIGunEventMixin",
     "EnemyProjectileEntityMixin",
+    "EntityMixin",
     "GunAttackGoalAccessor",
     "GunnerMobSpawnerMixin",
     "LightningProjectileEntityMixin",
+    "LivingEntityMixin",
     "MineUnitBlockEntityMixin",
     "ModCommandsMixin",
     "OceanMonumentEntryRoomMixin",
     "ProjectileEntityMixin",
+    "RaidFlareEntityMixin",
     "RaidManagerMixin",
     "RaidSaveDataAccessor",
+    "RecoilHandlerMixin",
     "SignalBeaconEntityMixin"
   ],
   "minVersion": "0.8.5"

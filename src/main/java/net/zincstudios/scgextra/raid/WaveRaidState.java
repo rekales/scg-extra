@@ -1,48 +1,49 @@
 package net.zincstudios.scgextra.raid;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.ai.behavior.EntityTracker;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.ai.memory.WalkTarget;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.zincstudios.scgextra.SCGExtra;
 
 import javax.annotation.Nullable;
 import java.util.*;
 
-@SuppressWarnings("unused")
+// TODO: check raid center location
+//@SuppressWarnings("unused")
 public class WaveRaidState {
-
-    public static final int RAID_TIMEOUT_TICKS = 12000;  // 10 minutes, TODO: config
-    private static final int NEXT_WAVE_DELAY = 30;
 
     private final UUID raidId;
     private final ServerLevel level;
-    private final Set<UUID> raiderUUIDs = new HashSet<>();
     private final long startTime;  // level gametime timestamp
     private final WaveRaidData waveRaidData;
+
+    private final Map<UUID, LivingEntity> raiders = new HashMap<>();  // saved uuid to cached entity pair
+
     private Vec3 spawnCenter;
     private int currentWave;
-    private UUID targetPlayerUUID = null;
-    private boolean active;
-    private int nextWaveDelay;
     private int totalWaveSpawned = 0;
+    private Vec3 lootDropPos;
 
     public WaveRaidState(WaveRaidData waveRaidData, ServerLevel level, Vec3 spawnCenter) {
         this.raidId = UUID.randomUUID();
         this.startTime = level.getGameTime();
         this.level = level;
-        this.currentWave = 1;
+        this.currentWave = 0;
         this.waveRaidData = waveRaidData;
         this.spawnCenter = spawnCenter;
-        this.active = true;
-        this.nextWaveDelay = NEXT_WAVE_DELAY;
+        this.lootDropPos = spawnCenter;
     }
 
     // For nbt deserialization
@@ -62,159 +63,120 @@ public class WaveRaidState {
         return this.waveRaidData;
     }
 
-    public void advanceWave() {
-        if (!WaveRaidData.Profile.isFinalWave(this.currentWave)) {
-            this.currentWave++;
-            this.nextWaveDelay = NEXT_WAVE_DELAY;
-            this.totalWaveSpawned = 0;
-        }
-    }
-
     public Vec3 getCenter() {
         return this.spawnCenter;
     }
 
     public long getStartTime() {
-        return this.startTime;
+        return startTime;
     }
 
-    public void addRaider(Mob mob) {
-        this.raiderUUIDs.add(mob.getUUID());
-        this.totalWaveSpawned = this.raiderUUIDs.size();
-    }
-
-    public void setTargetPlayer(Player player) {
-        this.targetPlayerUUID = player.getUUID();
-    }
-
-    @Nullable
-    public ServerPlayer getTargetPlayer() {
-        if (this.level == null || this.targetPlayerUUID == null) return null;
-        return this.level.getServer().getPlayerList().getPlayer(this.targetPlayerUUID);
-    }
-
-    public UUID getRaidId() {
-        return this.raidId;
+    private void addRaider(Mob mob) {
+        this.raiders.put(mob.getUUID(), mob);
+        this.totalWaveSpawned = this.raiders.size();
     }
 
     public void discardRaiders() {
-        for (UUID uuid : this.raiderUUIDs) {
-            Entity entity = this.level.getEntity(uuid);
+        this.raiders.forEach((raiderId, raider) -> {
+            Entity entity = raider == null ? this.level.getEntity(raiderId) : raider;
             if (entity != null && !entity.isRemoved()) {
                 entity.discard();
-            }
-        }
-    }
-
-    public void endRaid() {
-        this.endRaid(this.isRaidersEliminated() && WaveRaidData.Profile.isFinalWave(this.currentWave));
-    }
-
-    public void endRaid(boolean success) {
-        this.active = false;
-
-        if (success) {
-            this.announceToNearbyPlayers(Component.translatable("raid.scguns.defeated"), 64.0F);
-        } else {
-            this.discardRaiders();
-            this.announceToNearbyPlayers(Component.translatable("raid.scguns.failed"), 64.0F);
-        }
-    }
-
-    // Maybe the state shouldn't handle logic at all
-    public void tick() {
-        if (this.active) {
-            this.updateRaiders();
-            if (this.isRaidersEliminated()) {
-                if (WaveRaidData.Profile.isFinalWave(this.currentWave) && !this.hasEnded() && this.nextWaveDelay <= 0) {
-                    this.endRaid(true);
-                } else {
-                    this.nextWaveDelay--;
-                }
-            }
-            if (this.checkTimeout()) {
-                this.endRaid(false);
-            }
-            ServerPlayer player = this.getTargetPlayer();
-            if (player != null) {
-                this.spawnCenter = player.position();  // NOTE: centering to player might not be ideal.
-            }
-        }
-    }
-
-    private boolean checkTimeout() {
-        return this.level.getGameTime() > this.startTime + RAID_TIMEOUT_TICKS;
-    }
-
-    public void announceToNearbyPlayers(Component message, double radius) {
-        for(ServerPlayer player : this.level.getPlayers((player) -> player.position().distanceTo(this.spawnCenter) <= radius)) {
-            player.sendSystemMessage(message);
-        }
-    }
-
-    private void updateRaiders() {
-        this.raiderUUIDs.removeIf((uuid) -> {
-            Entity entity = this.level.getEntity(uuid);
-            if (entity != null) {
-                return entity.isRemoved();
-            } else {
-                return true;
             }
         });
     }
 
-    public boolean isRaidersEliminated() {
-        return this.raiderUUIDs.isEmpty();
-    }
-
-    public boolean isNextWaveReady() {
-        return this.active
-                && !WaveRaidData.Profile.isFinalWave(this.currentWave)
-                && this.isRaidersEliminated()
-                && this.nextWaveDelay <= 0 ;
-    }
-
-    public boolean hasEnded() {
-        return !this.active;
-    }
-
-    public float getBossBarProgress() {
-        if (WaveRaidData.Profile.isFinalWave(this.currentWave) && this.raiderUUIDs.size() == 1) {
-            UUID bossId = this.raiderUUIDs.iterator().next();
-            Entity entity = this.level.getEntity(bossId);
-            if (entity instanceof LivingEntity bossEntity) {
-                return bossEntity.getHealth()/bossEntity.getMaxHealth();
-            }
-        } else {
-            return (float)this.raiderUUIDs.size()/this.totalWaveSpawned;
+    public void advanceWave() {
+        if (!this.waveRaidData.isFinalWave(this.currentWave)) {
+            this.currentWave++;
+            this.totalWaveSpawned = 0;
         }
-        return 1f;
     }
 
-    public Component getBossBarLabel() {
-        if (WaveRaidData.Profile.isFinalWave(this.currentWave) && this.raiderUUIDs.size() == 1) {
-            UUID bossId = this.raiderUUIDs.iterator().next();
-            Entity entity = this.level.getEntity(bossId);
-            if (entity instanceof LivingEntity bossEntity) {
-                return bossEntity.getDisplayName();
+    public void updateRaiders() {
+        this.raiders.entrySet().removeIf(entry -> {
+            if (entry.getValue() == null) {
+                Entity entity = this.level.getEntity(entry.getKey());
+                if (entity instanceof LivingEntity living) {
+                    entry.setValue(living);
+                } else {
+                    return true;
+                }
+            }
+            return entry.getValue().isRemoved();
+        });
+
+        if (this.level.getGameTime() % 20 == 1 && !this.raiders.isEmpty()) {
+            this.spawnCenter = this.raiders.values().stream()
+                    .map(Entity::position)
+                    .reduce(Vec3.ZERO, Vec3::add)
+                    .scale(1.0 / this.raiders.size());
+        }
+        this.raiders.values().stream()
+                .findAny()
+                .ifPresent(raider -> this.lootDropPos = raider.position().add(0, 0.5, 0));
+    }
+
+    public int getTotalWaveSpawned() {
+        return this.totalWaveSpawned;
+    }
+
+    public int raidersLeft() {
+        return this.raiders.size();
+    }
+
+    public boolean isFinalWave() {
+        return this.waveRaidData.isFinalWave(this.currentWave);
+    }
+
+    public Vec3 getLootDropPos() {
+        return this.lootDropPos;
+    }
+
+    public void spawnCurrentWaveMobs(Vec3 waveCenter, float waveSpawnRadius, @Nullable LivingEntity target) {
+        WaveRaidData raidData = this.getWaveRaidData();
+        List<WaveRaidData.RaiderEntry> spawnList = raidData.generateRaiders(this.getCurrentWave(), level.getRandom());
+
+        int failedAttemptsLeft = spawnList.size()/2 + 5;
+        while (!spawnList.isEmpty() && failedAttemptsLeft > 0) {
+            for (WaveRaidData.RaiderEntry entry : List.copyOf(spawnList)) {
+                Mob mob = entry.createEntity(level);
+                if (mob == null) {
+                    failedAttemptsLeft--;
+                    continue;
+                }
+                Vec3 pos = WaveRaidUtil.findMobSpawnPos(level, waveCenter, waveSpawnRadius);
+                mob.setPos(pos);
+
+                if (mob.getBrain().checkMemory(MemoryModuleType.ATTACK_TARGET, MemoryStatus.REGISTERED) && target != null) {
+                    mob.getBrain().setMemory(MemoryModuleType.ATTACK_TARGET, target);
+                    if (mob.getBrain().checkMemory(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED)) {
+                        mob.getBrain().setMemoryWithExpiry(MemoryModuleType.WALK_TARGET, new WalkTarget(
+                                new EntityTracker(target, false), 1.2f, 16
+                        ), 200);
+                    }
+                } else {
+                    mob.setTarget(target);
+                }
+                mob.setPersistenceRequired();
+                boolean finalize = raidData.handleRaiderEdgeCase(mob);
+                if (finalize) {
+                    ForgeEventFactory.onFinalizeSpawn(
+                            mob, level,
+                            level.getCurrentDifficultyAt(BlockPos.containing(pos)),
+                            MobSpawnType.EVENT, null, null
+                    );
+                }
+                level.addFreshEntity(mob);
+                this.addRaider(mob);
+                spawnList.remove(entry);
             }
         }
 
-        String wave = switch (this.currentWave) {
-            case 1 -> "wave_1";
-            case 2 -> "wave_2";
-            case 3 -> "wave_3";
-            case 4 -> "wave_4";
-            default -> "";
-        };
-        return Component.translatable(SCGExtra.MOD_ID+".raid.label."+this.waveRaidData.id())
-                .append(" ")
-                .append(Component.translatable(SCGExtra.MOD_ID+".raid.label."+wave));
-    }
-
-    // NOTE: maybe on WaveRaidData instead?
-    public Component getAnnouncement() {
-        return Component.translatable(SCGExtra.MOD_ID+".raid.announcement."+this.waveRaidData.id());
+        if (!spawnList.isEmpty()) {
+            for (WaveRaidData.RaiderEntry entry : spawnList) {
+                SCGExtra.LOGGER.warn("Failed to spawn {}", entry.entityType());
+            }
+        }
     }
 
     public CompoundTag serialize() {
@@ -223,7 +185,7 @@ public class WaveRaidState {
         tag.putUUID("RaidId", this.raidId);
 
         ListTag raiderList = new ListTag();
-        for (UUID uuid : this.raiderUUIDs) {
+        for (UUID uuid : this.raiders.keySet()) {
             CompoundTag uuidTag = new CompoundTag();
             uuidTag.putUUID("UUID", uuid);
             raiderList.add(uuidTag);
@@ -236,13 +198,6 @@ public class WaveRaidState {
         tag.putDouble("SpawnZ", this.spawnCenter.z);
         tag.putString("WaveRaidData", this.waveRaidData.id());
         tag.putInt("CurrentWave", this.currentWave);
-
-        if (this.targetPlayerUUID != null) {
-            tag.putUUID("TargetPlayer", this.targetPlayerUUID);
-        }
-
-        tag.putBoolean("Active", this.active);
-        tag.putInt("NextWaveDelay", this.nextWaveDelay);
         tag.putInt("TotalWaveSpawned", this.totalWaveSpawned);
 
         return tag;
@@ -272,17 +227,11 @@ public class WaveRaidState {
         }
 
         int currentWave = tag.getInt("CurrentWave");
-        UUID targetPlayer = tag.contains("TargetPlayer") ? tag.getUUID("TargetPlayer") : null;
-        boolean active = tag.getBoolean("Active");
-        int nextWaveDelay = tag.getInt("NextWaveDelay");
         int totalWaveSpawned = tag.getInt("TotalWaveSpawned");
 
         WaveRaidState state = new WaveRaidState(level, raidId, waveRaidData, startTime, spawnCenter);
-        state.raiderUUIDs.addAll(raiders);
+        raiders.forEach(raiderId -> state.raiders.put(raiderId, null));
         state.currentWave = currentWave;
-        state.targetPlayerUUID = targetPlayer;
-        state.active = active;
-        state.nextWaveDelay = nextWaveDelay;
         state.totalWaveSpawned = totalWaveSpawned;
         return state;
     }
