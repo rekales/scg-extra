@@ -136,9 +136,9 @@ public class NeutralEntities {
         "end_dweller", 
         () -> EntityType.Builder.of(
             EndDwellerEntity::new, 
-            MobCategory.CREATURE
+            MobCategory.MONSTER
         )
-        .sized(1.2F, 1.5F)
+        .sized(1.6F, 1.5F)
         .build("end_dweller")
     );
     
@@ -248,11 +248,11 @@ public class NeutralEntities {
             true
         ));
         BoundingBoxManager.registerHeadshotBox(NeutralEntities.END_DWELLER.get(), new OffsetRotatedHeadshotBox<>(
-            4, 
-            3, 
-            1.5, 
+            6, 
+            8, 
+            10.5, 
             0.0F, 
-            3.5,
+            10.5,
             false, 
             true
         ));
@@ -297,15 +297,15 @@ public class NeutralEntities {
         event.register(
             NeutralEntities.END_POD.get(),
             SpawnPlacements.Type.ON_GROUND,
-            Heightmap.Types.WORLD_SURFACE,
-            EndPodEntity::checkMobSpawnRules,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            EndPodEntity::checkAnimalSpawnRules,
             SpawnPlacementRegisterEvent.Operation.OR
         );
         event.register(
             NeutralEntities.END_DWELLER.get(),
             SpawnPlacements.Type.ON_GROUND,
             Heightmap.Types.WORLD_SURFACE,
-            EndDwellerEntity::checkMobSpawnRules,
+            EndDwellerEntity::checkMonsterSpawnRules,
             SpawnPlacementRegisterEvent.Operation.OR
         );
     }

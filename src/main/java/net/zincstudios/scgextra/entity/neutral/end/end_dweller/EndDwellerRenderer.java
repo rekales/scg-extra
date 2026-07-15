@@ -23,24 +23,42 @@ public class EndDwellerRenderer extends GeoEntityRenderer<EndDwellerEntity> {
         this.addRenderLayer(new AutoGlowingGeoLayer<>(this){
             @Override
             public void render(PoseStack poseStack, EndDwellerEntity animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
-                RenderType emissiveRenderType = getRenderType(animatable);
-		        getRenderer().reRender(
-                    bakedModel,
-                    poseStack,
-                    bufferSource,
-                    animatable,
-                    emissiveRenderType,
-					bufferSource.getBuffer(emissiveRenderType),
-                    partialTick,
-                    LightTexture.FULL_BRIGHT,
-                    OverlayTexture.NO_OVERLAY,
-                    1,
-                    1,
-                    1,
-                    1
-                );
+                if(animatable.isCharging()){
+                    RenderType emissiveRenderType = getRenderType(animatable);
+                    getRenderer().reRender(
+                        bakedModel,
+                        poseStack,
+                        bufferSource,
+                        animatable,
+                        emissiveRenderType,
+                        bufferSource.getBuffer(emissiveRenderType),
+                        partialTick,
+                        LightTexture.FULL_BRIGHT,
+                        OverlayTexture.NO_OVERLAY,
+                        1,
+                        0,
+                        0,
+                        1
+                    );
+                }else{
+                    RenderType emissiveRenderType = getRenderType(animatable);
+                    getRenderer().reRender(
+                        bakedModel,
+                        poseStack,
+                        bufferSource,
+                        animatable,
+                        emissiveRenderType,
+                        bufferSource.getBuffer(emissiveRenderType),
+                        partialTick,
+                        LightTexture.FULL_BRIGHT,
+                        OverlayTexture.NO_OVERLAY,
+                        1,
+                        1,
+                        1,
+                        1
+                    );
+                }
             }
-            
         });
         this.shadowRadius = 0.3F;
     }
