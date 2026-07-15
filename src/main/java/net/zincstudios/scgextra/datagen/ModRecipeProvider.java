@@ -55,6 +55,16 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_ingredient", has(top.ribs.scguns.init.ModItems.BASIC_POULTICE.get()))
                 .showNotification(false)
                 .save(writer);
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.CAVALRY_SABER.get())
+                .pattern("I ")
+                .pattern("IN")
+                .pattern("BN")
+                .define('I', top.ribs.scguns.init.ModItems.ANTHRALITE_INGOT.get())
+                .define('N', top.ribs.scguns.init.ModItems.ANTHRALITE_NUGGET.get())
+                .define('B', top.ribs.scguns.init.ModItems.IRON_BAYONET.get())
+                .unlockedBy("has_ingredient", has(top.ribs.scguns.init.ModItems.ANTHRALITE_INGOT.get()))
+                .showNotification(false)
+                .save(writer);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.OPPRESSOR_HELMET.get())
                 .pattern(" C ")
