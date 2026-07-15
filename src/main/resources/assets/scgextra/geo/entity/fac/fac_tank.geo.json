@@ -138,11 +138,6 @@
 					]
 				},
 				{
-					"name": "cannon_flash",
-					"parent": "cannon",
-					"pivot": [-11.5, 37.5, -30]
-				},
-				{
 					"name": "left_exhaust",
 					"parent": "inner_root",
 					"pivot": [9.72918, 23.94454, 19.82322],
@@ -156,6 +151,12 @@
 					]
 				},
 				{
+					"name": "left_smoke",
+					"parent": "left_exhaust",
+					"pivot": [-9.9, 47.94454, 36.82322],
+					"rotation": [-54.7356, 30, -35.2644]
+				},
+				{
 					"name": "right_exhaust",
 					"parent": "inner_root",
 					"pivot": [-9.72918, 23.94454, 19.82322],
@@ -167,6 +168,12 @@
 						{"origin": [-21.18934, 23.61307, 35.32322], "size": [8, 8, 2], "pivot": [-9.72918, 36.94454, 30.82322], "rotation": [-90, 22.5, -90], "uv": [160, 0], "mirror": true},
 						{"origin": [-5.96357, 36.53338, 24.46751], "size": [4, 11, 4], "pivot": [-9.72918, 31.94454, 32.32322], "rotation": [-54.73561, 30, -35.26439], "uv": [70, 156], "mirror": true}
 					]
+				},
+				{
+					"name": "right_smoke",
+					"parent": "right_exhaust",
+					"pivot": [9.9, 47.94454, 36.82322],
+					"rotation": [-54.7356, 30, -35.2644]
 				},
 				{
 					"name": "left_turret",

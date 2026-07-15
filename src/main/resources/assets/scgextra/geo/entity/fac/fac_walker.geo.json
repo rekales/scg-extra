@@ -171,6 +171,11 @@
 					]
 				},
 				{
+					"name": "left_smoke",
+					"parent": "left_exhaust",
+					"pivot": [8.25, 65, 12]
+				},
+				{
 					"name": "right_exhaust",
 					"parent": "upper_body",
 					"pivot": [-8.25, 44, 12],
@@ -179,6 +184,11 @@
 						{"origin": [-9.75, 43, 10.5], "size": [3, 24, 3], "inflate": 0.1, "pivot": [-8.25, 58, 12], "rotation": [0, -45, 0], "uv": [102, 16], "mirror": true},
 						{"origin": [-10.75, 47, 9.5], "size": [5, 16, 5], "pivot": [-8.25, 55, 12], "rotation": [0, -45, 0], "uv": [98, 50], "mirror": true}
 					]
+				},
+				{
+					"name": "right_smoke",
+					"parent": "right_exhaust",
+					"pivot": [-8.25, 65, 12]
 				},
 				{
 					"name": "latch",
