@@ -31,6 +31,7 @@ import top.ribs.scguns.init.ModBlocks;
 import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.interfaces.IProjectileFactory;
 import top.ribs.scguns.item.GunItem;
+import top.ribs.scguns.item.attachment.IAttachment;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.S2CMessageBulletTrail;
 import top.ribs.scguns.network.message.S2CMessageEntityCasingEject;
@@ -45,6 +46,26 @@ public class MobUtil {
 
     // Common Constants
     public static final int DEFAULT_STUN_DURATION = 60;
+
+    public static void addGunAttachment(ItemStack gunStack, ItemStack attachmentStack) {
+        if (gunStack.getItem() instanceof GunItem gunItem
+                && attachmentStack.getItem() instanceof IAttachment<?> attachment
+                && gunItem.getGun().canAttachType(attachment.getType())
+                && attachment.canAttachTo(gunStack)) {
+
+            CompoundTag tag = gunStack.getOrCreateTag();
+            CompoundTag attachments;
+            if (tag.contains("Attachments")) {
+                attachments = tag.getCompound("Attachments");
+            } else {
+                attachments = new CompoundTag();
+            }
+
+            attachments.put(attachment.getType().getTagKey(), attachmentStack.save(new CompoundTag()));
+
+            tag.put("Attachments", attachments);
+        }
+    }
 
     public static Vec3 lerpVec(Vec3 a, Vec3 b, double t) {
         return new Vec3(

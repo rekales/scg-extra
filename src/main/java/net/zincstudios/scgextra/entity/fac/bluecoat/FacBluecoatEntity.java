@@ -2,26 +2,36 @@ package net.zincstudios.scgextra.entity.fac.bluecoat;
 
 import com.mojang.serialization.Dynamic;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.EquippedEntity;
 import net.zincstudios.scgextra.entity.common.Gunner;
+import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
 import net.zincstudios.scgextra.sounds.FACSounds;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import top.ribs.scguns.init.ModItems;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -48,15 +58,18 @@ public class FacBluecoatEntity extends EquippedEntity implements GeoEntity, Gunn
                 .add(Attributes.MAX_HEALTH, 20.0D);
     }
 
+    @Override
     protected Brain<?> makeBrain(Dynamic<?> dynamic) {
         return BrainCommons.BasicGunner.makeBrain(this, this.brainProvider().makeBrain(dynamic));
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public Brain<FacBluecoatEntity> getBrain() {
         return (Brain<FacBluecoatEntity>) super.getBrain();
     }
 
+    @Override
     protected Brain.Provider<FacBluecoatEntity> brainProvider() {
         return BrainCommons.BasicGunner.brainProvider();
     }
@@ -72,6 +85,15 @@ public class FacBluecoatEntity extends EquippedEntity implements GeoEntity, Gunn
         }
         this.level().getProfiler().pop();
         super.customServerAiStep();
+    }
+
+    @Override
+    public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
+        SpawnGroupData ret = super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
+        if (this.getRandom().nextFloat() < 0.8) {
+            MobUtil.addGunAttachment(this.getItemInHand(InteractionHand.MAIN_HAND), new ItemStack(ModItems.IRON_BAYONET.get()));
+        }
+        return ret;
     }
 
     @Override
