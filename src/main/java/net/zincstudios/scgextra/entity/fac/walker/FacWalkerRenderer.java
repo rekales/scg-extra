@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.common.client.BaseEntityRenderer;
@@ -37,10 +38,10 @@ public class FacWalkerRenderer extends BaseEntityRenderer<FacWalkerEntity> {
     public void render(FacWalkerEntity entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
 
-        this.addExhaustSmoke(entity);
+        this.addExhaustSmoke(entity, entityYaw);
     }
 
-    private void addExhaustSmoke(FacWalkerEntity entity) {
+    private void addExhaustSmoke(FacWalkerEntity entity, float yaw) {
         Level level = entity.level();
         if (this.lastTime == level.getGameTime()) return;
         this.lastTime = level.getGameTime();
@@ -57,6 +58,7 @@ public class FacWalkerRenderer extends BaseEntityRenderer<FacWalkerEntity> {
 
             Vec3 pos = new Vec3(bonePos.x, bonePos.y, bonePos.z);
             Vec3 dir = new Vec3(up.x, up.y, up.z).normalize().scale(0.14);
+            dir = dir.yRot((180-yaw) * Mth.DEG_TO_RAD);
 
             double posRand = 0.15;
             double dirRand = 0.1;
