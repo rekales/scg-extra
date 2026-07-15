@@ -166,13 +166,13 @@ public class ModItems {
                     new ArmorSetPartItem(ModArmorMaterials.LEVIATHAN, ArmorItem.Type.BOOTS, ArmorSets.LEVIATHAN)),
 
             GOLDEN_IDOL_HELMET = ITEMS.register("golden_idol_helmet", () ->
-                    new ArmorSetPartItem(ModArmorMaterials.GOLDEN_IDOL, ArmorItem.Type.HELMET, ArmorSets.GOLDEN_IDOL)),
+                    new GeoArmorSetPartItem(ModArmorMaterials.GOLDEN_IDOL, ArmorItem.Type.HELMET, ArmorSets.GOLDEN_IDOL)),
             GOLDEN_IDOL_CHESTPLATE = ITEMS.register("golden_idol_chestplate", () ->
-                    new ArmorSetPartItem(ModArmorMaterials.GOLDEN_IDOL, ArmorItem.Type.CHESTPLATE, ArmorSets.GOLDEN_IDOL)),
+                    new GeoArmorSetPartItem(ModArmorMaterials.GOLDEN_IDOL, ArmorItem.Type.CHESTPLATE, ArmorSets.GOLDEN_IDOL)),
             GOLDEN_IDOL_LEGGINGS = ITEMS.register("golden_idol_leggings", () ->
-                    new ArmorSetPartItem(ModArmorMaterials.GOLDEN_IDOL, ArmorItem.Type.LEGGINGS, ArmorSets.GOLDEN_IDOL)),
+                    new GeoArmorSetPartItem(ModArmorMaterials.GOLDEN_IDOL, ArmorItem.Type.LEGGINGS, ArmorSets.GOLDEN_IDOL)),
             GOLDEN_IDOL_BOOTS = ITEMS.register("golden_idol_boots", () ->
-                    new ArmorSetPartItem(ModArmorMaterials.GOLDEN_IDOL, ArmorItem.Type.BOOTS, ArmorSets.GOLDEN_IDOL)),
+                    new GeoArmorSetPartItem(ModArmorMaterials.GOLDEN_IDOL, ArmorItem.Type.BOOTS, ArmorSets.GOLDEN_IDOL)),
 
             ENLIGHTENED_HELMET = ITEMS.register("enlightened_helmet", () ->
                     new GeoArmorSetPartItem(ModArmorMaterials.ENLIGHTENED, ArmorItem.Type.HELMET, ArmorSets.ENLIGHTENED)),
@@ -202,13 +202,13 @@ public class ModItems {
                     new ArmorSetPartItem(ModArmorMaterials.RITUAL, ArmorItem.Type.BOOTS, ArmorSets.RITUAL)),
 
             PIONEER_HELMET = ITEMS.register("pioneer_helmet", () ->
-                    new ArmorSetPartItem(ModArmorMaterials.PIONEER, ArmorItem.Type.HELMET, ArmorSets.PIONEER)),
+                    new GeoArmorSetPartItem(ModArmorMaterials.PIONEER, ArmorItem.Type.HELMET, ArmorSets.PIONEER)),
             PIONEER_CHESTPLATE = ITEMS.register("pioneer_chestplate", () ->
                     new PioneerChestplateItem(ModArmorMaterials.PIONEER, ArmorItem.Type.CHESTPLATE, ArmorSets.PIONEER)),
             PIONEER_LEGGINGS = ITEMS.register("pioneer_leggings", () ->
-                    new ArmorSetPartItem(ModArmorMaterials.PIONEER, ArmorItem.Type.LEGGINGS, ArmorSets.PIONEER)),
+                    new GeoArmorSetPartItem(ModArmorMaterials.PIONEER, ArmorItem.Type.LEGGINGS, ArmorSets.PIONEER)),
             PIONEER_BOOTS = ITEMS.register("pioneer_boots", () ->
-                    new ArmorSetPartItem(ModArmorMaterials.PIONEER, ArmorItem.Type.BOOTS, ArmorSets.PIONEER));
+                    new GeoArmorSetPartItem(ModArmorMaterials.PIONEER, ArmorItem.Type.BOOTS, ArmorSets.PIONEER));
 
     public static final RegistryObject<SpawnEggItem>
             // Whaler

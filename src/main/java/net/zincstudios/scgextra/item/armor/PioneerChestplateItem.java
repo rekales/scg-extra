@@ -4,7 +4,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 
-public class PioneerChestplateItem extends ArmorSetPartItem {
+public class PioneerChestplateItem extends GeoArmorSetPartItem {
 
     public PioneerChestplateItem(ArmorMaterial material, Type type, ArmorSet armorSet) {
         super(material, type, armorSet);
