@@ -44,14 +44,14 @@ public class ModRecipeProvider extends RecipeProvider {
                 .showNotification(false)
                 .save(writer);
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.MEDKIT.get())
-                .pattern("BSE")
-                .pattern("BSE")
+                .pattern("PSB")
+                .pattern("PSB")
                 .pattern("LCL")
                 .define('L', Items.LEATHER)
                 .define('C', Tags.Items.CHESTS)
-                .define('B', top.ribs.scguns.init.ModItems.BASIC_POULTICE.get())
+                .define('P', top.ribs.scguns.init.ModItems.BASIC_POULTICE.get())
                 .define('S', top.ribs.scguns.init.ModItems.HONEY_SULFUR_POULTICE.get())
-                .define('E', top.ribs.scguns.init.ModItems.ENCHANTED_BANDAGE.get())
+                .define('B', ModItems.BANDAGE.get())
                 .unlockedBy("has_ingredient", has(top.ribs.scguns.init.ModItems.BASIC_POULTICE.get()))
                 .showNotification(false)
                 .save(writer);

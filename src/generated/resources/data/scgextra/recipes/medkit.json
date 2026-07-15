@@ -3,24 +3,24 @@
   "category": "equipment",
   "key": {
     "B": {
-      "item": "scguns:basic_poultice"
+      "item": "scgextra:bandage"
     },
     "C": {
       "tag": "forge:chests"
     },
-    "E": {
-      "item": "scguns:enchanted_bandage"
-    },
     "L": {
       "item": "minecraft:leather"
+    },
+    "P": {
+      "item": "scguns:basic_poultice"
     },
     "S": {
       "item": "scguns:honey_sulfur_poultice"
     }
   },
   "pattern": [
-    "BSE",
-    "BSE",
+    "PSB",
+    "PSB",
     "LCL"
   ],
   "result": {
