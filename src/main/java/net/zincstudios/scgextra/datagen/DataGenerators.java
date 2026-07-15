@@ -32,7 +32,8 @@ public class DataGenerators {
 
         generator.addProvider(event.includeClient(),
                 new LootTableProvider(output, Collections.emptySet(), List.of(
-                        new LootTableProvider.SubProviderEntry(ModEntityLootTableProvider::new, LootContextParamSets.ENTITY)
+                        new LootTableProvider.SubProviderEntry(ModEntityLootTableProvider::new, LootContextParamSets.ENTITY),
+                        new LootTableProvider.SubProviderEntry(RaidLootSubProvider::new, LootContextParamSets.EMPTY)
                 )));
     }
 }

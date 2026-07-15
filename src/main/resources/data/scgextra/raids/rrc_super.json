@@ -1,6 +1,7 @@
 {
   "raid_id" : "rrc_super",
   "flare_raid_id" : "copper_super",
+  "finish_loot" : "scgextra:raid/rrc_super",
 
   "waves" : [
     {

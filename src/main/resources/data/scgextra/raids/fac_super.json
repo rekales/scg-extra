@@ -1,6 +1,7 @@
 {
   "raid_id" : "fac_super",
   "flare_raid_id" : "iron_super",
+  "finish_loot" : "scgextra:raid/fac_super",
 
   "waves" : [
     {
