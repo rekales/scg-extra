@@ -40,7 +40,7 @@ import static net.zincstudios.scgextra.entity.common.brain.AvoidTargetIfClose.AV
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CogVenatorEntity extends GunnerEntity implements GeoEntity, CustomGunHolder, Gunner, BulletSpawnOffset {
+public class CogVenatorEntity extends Monster implements GeoEntity, CustomGunHolder, Gunner, BulletSpawnOffset {
 
     private static final Vec3 GUN_OFFSET = new Vec3(0, 1.1, 2.1);
 
