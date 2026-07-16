@@ -198,6 +198,11 @@
 					]
 				},
 				{
+					"name": "gun_flash",
+					"parent": "gun",
+					"pivot": [0, 32, -39]
+				},
+				{
 					"name": "group11",
 					"parent": "group",
 					"pivot": [21, 19.13397, -19.2],

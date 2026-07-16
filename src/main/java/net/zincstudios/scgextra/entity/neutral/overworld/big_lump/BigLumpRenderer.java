@@ -1,9 +1,12 @@
 package net.zincstudios.scgextra.entity.neutral.overworld.big_lump;
 
+import java.util.Map;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 
+import net.zincstudios.scgextra.entity.common.client.BoneGunFlashGeoLayer;
 import net.zincstudios.scgextra.SCGExtra;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -42,6 +45,9 @@ public class BigLumpRenderer extends GeoEntityRenderer<BigLumpEntity> {
             }
         });
         this.shadowRadius = 1F;
+        this.addRenderLayer(new BoneGunFlashGeoLayer<>(this, Map.of(
+                0, "gun_flash"
+        )));
     }
 
     @Override

@@ -1,6 +1,7 @@
 package net.zincstudios.scgextra.entity.neutral.overworld.big_lump;
 
 import net.zincstudios.scgextra.entity.projectile.BigLumpProjectileEntity;
+import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -68,9 +69,7 @@ public class BigLumpGunAttackGoal extends Goal{
             this.mob.setYBodyRot(yaw);
             this.mob.setYRot(yaw);
             if (this.tick%2==0) {
-                fireGun(target);
-                fireGun(target, true);
-                fireGun(target, true);
+                this.mob.getCustomGun().tickFire(this.mob, SimulatedGun.getCenterMassPos(target), this.mob.getInaccuracy(), true);
             }
             if(tick == 0){
                 this.mob.triggerAnim("controller", "shoot_attack");
@@ -84,31 +83,5 @@ public class BigLumpGunAttackGoal extends Goal{
 
     public Vec3 getProjectileSpawnPos() {
         return new Vec3(0,1.5,2).yRot(-this.mob.getYRot() * Mth.DEG_TO_RAD).add(this.mob.position());
-    }
-
-    private void fireGun(LivingEntity target) {
-        Vec3 spawnVec = this.getProjectileSpawnPos();
-        EnemyProjectileEntity bolt = new BigLumpProjectileEntity(this.mob.level(), this.mob);
-        bolt.setPos(spawnVec);
-        double dx = target.getX() - spawnVec.x;
-        double dy = target.getEyeY() - spawnVec.y;
-        double dz = target.getZ() - spawnVec.z;
-        bolt.shoot(dx, dy, dz, 3.0F, this.mob.getInaccuracy());
-        this.mob.level().addFreshEntity(bolt);
-        this.mob.level().playSound(null, spawnVec.x, spawnVec.y, spawnVec.z, ModSounds.BRUISER_SILENCED_FIRE.get(), SoundSource.HOSTILE, 0.8F, 1.2F);
-        this.triggerGunFlash();
-    }
-
-    private void fireGun(LivingEntity target, boolean spray) {
-        Vec3 spawnVec = this.getProjectileSpawnPos();
-        EnemyProjectileEntity bolt = new BigLumpProjectileEntity(this.mob.level(), this.mob);
-        bolt.setPos(spawnVec);
-        double dx = target.getX() - spawnVec.x;
-        double dy = target.getEyeY() - spawnVec.y;
-        double dz = target.getZ() - spawnVec.z;
-        bolt.shoot(dx, dy, dz, 3.0F, 20);
-        this.mob.level().addFreshEntity(bolt);
-        this.mob.level().playSound(null, spawnVec.x, spawnVec.y, spawnVec.z, ModSounds.BRUISER_SILENCED_FIRE.get(), SoundSource.HOSTILE, 0.8F, 1.2F);
-        this.triggerGunFlash();
     }
 }
