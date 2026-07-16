@@ -294,11 +294,11 @@ public class NeutralEntities {
             true
         ));
         BoundingBoxManager.registerHeadshotBox(NeutralEntities.END_SCORPION.get(), new OffsetRotatedHeadshotBox<>(
-            10, 
-            5,
+            12, 
+            8,
             0, 
             0.0F, 
-            10,
+            6,
             false, 
             true
         ));

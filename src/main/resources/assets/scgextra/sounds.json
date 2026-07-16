@@ -1527,5 +1527,32 @@
     "sounds": [
       "scgextra:neutral/end_stone_crab/attack"
     ]
+  },
+  "end_scorpion.death": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_scorpion/death"
+    ]
+  },
+  "end_scorpion.idle": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_scorpion/idle_01",
+      "scgextra:neutral/end_scorpion/idle_02",
+      "scgextra:neutral/end_scorpion/idle_03"
+    ]
+  },
+  "end_scorpion.hurt": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_scorpion/hurt_01",
+      "scgextra:neutral/end_scorpion/hurt_02"
+    ]
+  },
+  "end_scorpion.sting": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_scorpion/sting"
+    ]
   }
 }

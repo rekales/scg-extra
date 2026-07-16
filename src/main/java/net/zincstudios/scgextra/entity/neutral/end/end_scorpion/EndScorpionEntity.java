@@ -13,7 +13,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -46,10 +45,12 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import top.ribs.scguns.init.ModEffects;
 
 public class EndScorpionEntity extends Monster implements GeoEntity, FlyingAnimal{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private static final int MELEE_DAMAGE_DELAY = 10;
+    private static final int STING_DAMAGE_DELAY = 30;
     private int hurtDelay = -1;
     private static final EntityDataAccessor<Boolean> IS_STINGING = SynchedEntityData.defineId(EndScorpionEntity.class, EntityDataSerializers.BOOLEAN);
 
@@ -64,12 +65,32 @@ public class EndScorpionEntity extends Monster implements GeoEntity, FlyingAnima
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, false,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0.4, true));
-        this.goalSelector.addGoal(3, new EndScorpionWanderGoal());
-        this.goalSelector.addGoal(3, new MoveTowardsTargetGoal(this, 0.4, 10));
-        this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 6.0F));
-        this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(4, new BreakBlocksGoal(this, 60));
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0.6, true){
+            @Override
+            protected double getAttackReachSqr(LivingEntity attackTarget) {
+                return 10;
+            }
+            @Override
+            public boolean canUse() {
+                if(this.mob instanceof EndScorpionEntity ese){
+                    if(ese.isStinging())return false;
+                }
+                return super.canUse();
+            }
+            @Override
+            public boolean canContinueToUse() {
+                if(this.mob instanceof EndScorpionEntity ese){
+                    if(ese.isStinging())return false;
+                }
+                return super.canContinueToUse();
+            }
+        });
+        this.goalSelector.addGoal(3, new EndScorpionStingAttackGoal(this));
+        this.goalSelector.addGoal(4, new EndScorpionWanderGoal());
+        this.goalSelector.addGoal(5, new MoveTowardsTargetGoal(this, 0.6, 10));
+        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 6.0F));
+        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(8, new BreakBlocksGoal(this, 60));
     }
     @Override
     public void registerControllers(ControllerRegistrar controllers) {
@@ -102,13 +123,13 @@ public class EndScorpionEntity extends Monster implements GeoEntity, FlyingAnima
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
         .add(Attributes.MAX_HEALTH, 200.0)
-        .add(Attributes.MOVEMENT_SPEED, 0.4)
-        .add(Attributes.KNOCKBACK_RESISTANCE, 0.2)
+        .add(Attributes.MOVEMENT_SPEED, 0.6)
+        .add(Attributes.KNOCKBACK_RESISTANCE, 0.8)
         .add(Attributes.ATTACK_KNOCKBACK, 0.5)
         .add(Attributes.ATTACK_DAMAGE, 15)
         .add(Attributes.ARMOR, 8)
         .add(Attributes.FOLLOW_RANGE, 20)
-        .add(Attributes.FLYING_SPEED, 0.4);
+        .add(Attributes.FLYING_SPEED, 0.6);
     }
     @Override
     public void tick() {
@@ -120,42 +141,53 @@ public class EndScorpionEntity extends Monster implements GeoEntity, FlyingAnima
             LivingEntity target = this.getTarget();
             if (target != null) {
                 double distToEnemySqr = this.getPerceivedTargetDistanceSquareForMeleeAttack(target);
-                double reach = this.getAttackReachSqr(target) * 1.3;
+                double reach = this.getAttackReachSqr(target);
                 if (distToEnemySqr <= reach) {
-                    super.doHurtTarget(target);
-                    target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 120, 3));
+                    target.hurt(this.damageSources().generic(), 10);
+                    if(this.isStinging()){
+                        target.addEffect(new MobEffectInstance(MobEffects.POISON, 120));
+                        target.addEffect(new MobEffectInstance(MobEffects.WITHER, 120));
+                        target.addEffect(new MobEffectInstance(ModEffects.LACERATED.get(), 120));
+                    }else{
+                        target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 120, 3));
+                    }
+                    this.setStinging(false);
+                }else{
+                    this.getNavigation().moveTo(target.getX(), target.getY()+2, target.getZ(), 0.6);
+                    this.getLookControl().setLookAt(target);
                 }
             }
         }
     }
-    private double getAttackReachSqr(LivingEntity attackTarget) {
-        return 12;
+    public double getAttackReachSqr(LivingEntity attackTarget) {
+        return 10;
     }
     @Override
     public boolean doHurtTarget(Entity entity) {
         if (!this.level().isClientSide) {
             if (this.hurtDelay > 0) return false;
-
-            this.triggerAnim("controller", "attack_claw");
-            this.hurtDelay = MELEE_DAMAGE_DELAY;
-            this.playSound(NeutralSounds.END_STONE_CRAB_ATTACK.get());
+            if(!this.isStinging()){
+                this.triggerAnim("controller", "attack_claw");
+                this.hurtDelay = MELEE_DAMAGE_DELAY;
+            }else{
+                this.triggerAnim("controller", "attack_sting");
+                this.hurtDelay = STING_DAMAGE_DELAY;
+                this.playSound(NeutralSounds.END_SCORPION_STING.get());
+            }
         }
         return true;
     }
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return NeutralSounds.END_STONE_CRAB_HURT.get();
+        return NeutralSounds.END_SCORPION_HURT.get();
     };
     protected SoundEvent getAmbientSound() {
-        return NeutralSounds.END_STONE_CRAB_IDLE.get();
+        return NeutralSounds.END_SCORPION_IDLE.get();
     };
     protected SoundEvent getDeathSound() {
-        return NeutralSounds.END_STONE_CRAB_DEATH.get();
+        return NeutralSounds.END_SCORPION_DEATH.get();
     };
     protected float getSoundVolume() {
         return 0.8F;
-    };
-    protected void playStepSound(net.minecraft.core.BlockPos pPos, net.minecraft.world.level.block.state.BlockState pState) {
-        this.playSound(SoundEvents.IRON_GOLEM_STEP, this.getSoundVolume(), 1);
     };
     @Override
     public boolean isFlying() {
@@ -210,5 +242,8 @@ public class EndScorpionEntity extends Monster implements GeoEntity, FlyingAnima
             Vec3 vec32 = HoverRandomPos.getPos(EndScorpionEntity.this, 8, 7, vec3.x, vec3.z, ((float)Math.PI / 2F), 3, 1);
             return vec32 != null ? vec32 : AirAndWaterRandomPos.getPos(EndScorpionEntity.this, 8, 4, -2, vec3.x, vec3.z, (double)((float)Math.PI / 2F));
         }
+    }
+    public boolean hurtTarget(LivingEntity target){
+        return super.doHurtTarget(target);
     }
 }

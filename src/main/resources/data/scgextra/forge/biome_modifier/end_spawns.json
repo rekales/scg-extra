@@ -19,6 +19,12 @@
       "weight": 1,
       "minCount": 1,
       "maxCount": 1
+    },
+    {
+      "type": "scgextra:end_scorpion",
+      "weight": 1,
+      "minCount": 1,
+      "maxCount": 1
     }
   ]
 }

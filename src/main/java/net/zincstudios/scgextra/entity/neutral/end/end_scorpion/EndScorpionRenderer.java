@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 
@@ -83,5 +84,17 @@ public class EndScorpionRenderer extends GeoEntityRenderer<EndScorpionEntity> {
             poseStack.scale(0.5f, 0.5f, 0.5f);
         }
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
+    }
+    @Override
+    public void renderRecursively(PoseStack poseStack, EndScorpionEntity animatable, GeoBone bone,
+            RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender,
+            float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+        if(!animatable.isStinging()){
+            if(bone.getName().equals("eye_flash_1") || bone.getName().equals("eye_flash_2")){
+                return;
+            }
+        }
+        super.renderRecursively(poseStack, animatable, bone, renderType, bufferSource, buffer, isReRender, partialTick,
+                packedLight, packedOverlay, red, green, blue, alpha);
     }
 }
