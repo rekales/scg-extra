@@ -341,13 +341,6 @@ public class NeutralEntities {
             SpawnPlacementRegisterEvent.Operation.OR
         );
         event.register(
-            NeutralEntities.END_POD.get(),
-            SpawnPlacements.Type.ON_GROUND,
-            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-            EndPodEntity::checkAnimalSpawnRules,
-            SpawnPlacementRegisterEvent.Operation.OR
-        );
-        event.register(
             NeutralEntities.END_DWELLER.get(),
             SpawnPlacements.Type.ON_GROUND,
             Heightmap.Types.WORLD_SURFACE,
@@ -367,6 +360,13 @@ public class NeutralEntities {
             Heightmap.Types.WORLD_SURFACE,
             EndScorpionEntity::checkMonsterSpawnRules,
             SpawnPlacementRegisterEvent.Operation.OR
+        );
+        event.register(
+            NeutralEntities.END_POD.get(),
+            SpawnPlacements.Type.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            (entityType, level, spawnType, pos, random) -> true,
+            SpawnPlacementRegisterEvent.Operation.REPLACE
         );
     }
     @OnlyIn(value = Dist.CLIENT)

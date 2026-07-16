@@ -6,11 +6,11 @@
       "type": "scgextra:end_pod",
       "weight": 150,
       "minCount": 1,
-      "maxCount": 1
+      "maxCount": 5
     },
     {
       "type": "scgextra:end_dweller",
-      "weight": 150,
+      "weight": 10,
       "minCount": 1,
       "maxCount": 1
     },
