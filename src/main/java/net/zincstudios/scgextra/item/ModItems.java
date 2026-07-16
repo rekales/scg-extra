@@ -286,6 +286,8 @@ public class ModItems {
         MinecraftForge.EVENT_BUS.addListener(ArmorSet::onPlayerTick);
         MinecraftForge.EVENT_BUS.addListener(ArmorSet::onMobEffectApplicable);
         MinecraftForge.EVENT_BUS.addListener(ArmorSets::onEntityHurt);
+        MinecraftForge.EVENT_BUS.addListener(CavalrySaberItem::onPlayerTick);
+        MinecraftForge.EVENT_BUS.addListener(CavalrySaberItem::onEntityHurt);
     }
 
     private static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister
