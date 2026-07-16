@@ -2,6 +2,8 @@ package net.zincstudios.scgextra.raid;
 
 import net.minecraft.FieldsAreNonnullByDefault;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
@@ -9,39 +11,70 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.zincstudios.scgextra.SCGExtra;
 import top.ribs.scguns.entity.monster.DissidentEntity;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 
-// Should entries be a Set instead?
-@SuppressWarnings("unused")
+/**
+ * Holds the parsed raid data and provides methods for querying and generating data such as WaveRaidData#generateRaiders
+ * <br/>
+ * Deprecated fields are not intended to be accessed directly outside the class unless actually needed.
+ */
+@SuppressWarnings({"unused", "deprecation"})
 @ParametersAreNonnullByDefault
 @FieldsAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public record WaveRaidData(String id, String originalId, Profile profile, List<RaiderEntry> infantry, List<RaiderEntry> elite,
-                           List<RaiderEntry> miniboss, List<RaiderEntry> boss) {
+public record WaveRaidData(
+        String id,
+        String flare_raid_id,
+        @Deprecated List<Wave> waves,
+        @Deprecated List<RaiderEntry> infantry,
+        @Deprecated List<RaiderEntry> elite,
+        @Deprecated List<RaiderEntry> miniboss,
+        @Deprecated List<RaiderEntry> boss,
+        @Deprecated @Nullable ResourceLocation loot
+) {
 
     private static final Map<String, WaveRaidData> RAIDS = new HashMap<>();  // Key: raid id
-    private static final Map<String, WaveRaidData> REPLACED_RAIDS = new HashMap<>();  // Key: original raid id
+    private static final Map<String, WaveRaidData> FLARE_RAIDS = new HashMap<>();  // Key: original raid id
 
     public static void addWaveRaid(WaveRaidData raid) {
         RAIDS.put(raid.id, raid);
-        if (!raid.originalId.isEmpty()) {
-            REPLACED_RAIDS.put(raid.originalId, raid);
+        if (!raid.flare_raid_id.isEmpty()) {
+            FLARE_RAIDS.put(raid.flare_raid_id, raid);
         }
     }
 
     public static void clearWaveRaids() {
         RAIDS.clear();
-        REPLACED_RAIDS.clear();
+        FLARE_RAIDS.clear();
     }
 
     public WaveRaidData {
         if (infantry.isEmpty() || elite.isEmpty() || miniboss.isEmpty() || boss.isEmpty()) {
             throw new IllegalArgumentException("entries cannot be empty");
         }
+        for (Wave wave : waves) {
+            if (wave.getTotal() == 0) {
+                throw new IllegalArgumentException("waves cannot be empty");
+            }
+        }
+        // TODO: complex check if there's enough max_spawns for the wave.
+    }
+
+    public static @Nullable WaveRaidData getWaveRaidFromFlareRaid(String flareRaidId) {
+        return FLARE_RAIDS.get(flareRaidId);
+    }
+
+    public static @Nullable WaveRaidData getWaveRaid(String id) {
+        return RAIDS.get(id);
     }
 
     public enum Rank {
@@ -57,16 +90,9 @@ public record WaveRaidData(String id, String originalId, Profile profile, List<R
         };
     }
 
-    public static @Nullable WaveRaidData getWaveRaidFromOriginal(String originalId) {
-        return REPLACED_RAIDS.get(originalId);
-    }
 
-    public static @Nullable WaveRaidData getWaveRaid(String id) {
-        return RAIDS.get(id);
-    }
-
-    public List<RaiderEntry> generateRaiders(int currentWave, RandomSource random) {
-        return this.generateRaiders(this.profile.getWave(currentWave), random);
+    public List<RaiderEntry> generateRaiders(int waveIndex, RandomSource random) {
+        return this.generateRaiders(this.waves.get(waveIndex), random);
     }
 
     public List<RaiderEntry> generateRaiders(Wave wave, RandomSource random) {
@@ -74,10 +100,7 @@ public record WaveRaidData(String id, String originalId, Profile profile, List<R
         spawnList.addAll(sampleRandomRaiders(this.getRaiderEntries(Rank.INFANTRY), wave.infantry, random));
         spawnList.addAll(sampleRandomRaiders(this.getRaiderEntries(Rank.ELITE), wave.elite, random));
         spawnList.addAll(sampleRandomRaiders(this.getRaiderEntries(Rank.MINIBOSS), wave.miniboss, random));
-
-        if (wave == this.profile.boss) {
-            spawnList.addAll(sampleRandomRaiders(this.getRaiderEntries(Rank.BOSS), 1, random));
-        }
+        spawnList.addAll(sampleRandomRaiders(this.getRaiderEntries(Rank.BOSS), wave.boss, random));
 
         return spawnList;
     }
@@ -120,10 +143,10 @@ public record WaveRaidData(String id, String originalId, Profile profile, List<R
 
         public RaiderEntry {
             if (weight <= 0) {
-                throw new IllegalArgumentException("weight cannot zero or lower");
+                throw new IllegalArgumentException("weight cannot be zero or lower");
             }
             if (value <= 0) {
-                throw new IllegalArgumentException("value cannot zero or lower");
+                throw new IllegalArgumentException("value cannot be zero or lower");
             }
             if (maxCount <= 0) {
                 maxCount = DEFAULT_MAX_SPAWNS;
@@ -147,32 +170,18 @@ public record WaveRaidData(String id, String originalId, Profile profile, List<R
         }
     }
 
-    public record Profile(Wave first, Wave second, Wave third, Wave boss) {
-        public Profile {
-            if (first.getTotal() == 0 || second.getTotal() == 0 || third.getTotal() == 0) {
-                throw new IllegalArgumentException("non-boss waves cannot be empty");
-            }
-            // TODO: complex check if there's enough max_spawns for the wave.
-        }
-
-        public Wave getWave(int currentWave) {
-            return switch (currentWave) {
-                case 2 -> second;
-                case 3 -> third;
-                case 4 -> boss;
-                default -> first;
-            };
-        }
-
-        public static boolean isFinalWave(int currentWave) {
-            return currentWave == 4;
+    public record Wave(int infantry, int elite, int miniboss, int boss) {
+        public int getTotal() {
+            return this.infantry + this.elite + this.miniboss + this.boss;
         }
     }
 
-    public record Wave(int infantry, int elite, int miniboss) {
-        public int getTotal() {
-            return this.infantry + this.elite + this.miniboss;
-        }
+    public boolean isFinalWave(int waveIndex) {
+        return this.waves.size()-1 == waveIndex;
+    }
+
+    public Component getAnnouncement() {
+        return Component.translatable(SCGExtra.MOD_ID+".raid.announcement."+this.id);
     }
 
     @SuppressWarnings("RedundantIfStatement")
@@ -182,5 +191,14 @@ public record WaveRaidData(String id, String originalId, Profile profile, List<R
         }
 
         return true;
+    }
+
+    public List<ItemStack> rollLoot(ServerLevel level) {
+        if (this.loot == null) return List.of();
+        LootTable table = level.getServer().getLootData().getLootTable(this.loot);
+        LootParams params = new LootParams.Builder(level)
+//                .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(blockPos))
+                .create(LootContextParamSets.EMPTY);
+        return table.getRandomItems(params);
     }
 }

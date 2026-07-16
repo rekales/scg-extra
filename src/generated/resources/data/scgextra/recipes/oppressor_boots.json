@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": {
+      "item": "minecraft:oxidized_copper"
+    },
+    "L": {
+      "item": "minecraft:leather"
+    },
+    "M": {
+      "item": "scguns:rusty_medal"
+    }
+  },
+  "pattern": [
+    "LML",
+    "C C"
+  ],
+  "result": {
+    "item": "scgextra:oppressor_boots"
+  },
+  "show_notification": false
+}

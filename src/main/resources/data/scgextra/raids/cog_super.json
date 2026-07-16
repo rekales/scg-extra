@@ -1,0 +1,72 @@
+{
+  "raid_id" : "cog_super",
+  "flare_raid_id": "treated_brass_super",
+  "finish_loot" : "scgextra:raid/treated_brass_super",
+
+  "waves" : [
+    {
+      "infantry": 10
+    },
+    {
+      "infantry": 10,
+      "elite": 3
+    },
+    {
+      "infantry": 12,
+      "elite": 4,
+      "miniboss": 1
+    },
+    {
+      "infantry": 10,
+      "elite": 6,
+      "miniboss": 3
+    },
+    {
+      "infantry": 6,
+      "elite": 2,
+      "boss": 2
+    }
+  ],
+
+  "infantry" : [
+    {
+      "entity_id": "scgextra:cog_vulture"
+    },
+    {
+      "entity_id": "scgextra:cog_venator"
+    },
+    {
+      "entity_id": "scguns:cog_minion"
+    },
+    {
+      "entity_id": "scguns:sky_carrier"
+    },
+    {
+      "entity_id": "scguns:trauma_unit"
+    }
+  ],
+  "elite" : [
+    {
+      "entity_id": "scgextra:cog_bombardier"
+    },
+    {
+      "entity_id": "scguns:cog_knight"
+    }
+  ],
+  "miniboss" : [
+    {
+      "entity_id": "scgextra:cog_devastator"
+    },
+    {
+      "entity_id": "scgextra:cog_gigantes"
+    },
+    {
+      "entity_id": "scgextra:cog_centipede"
+    }
+  ],
+  "boss" : [
+    {
+      "entity_id": "scgextra:cog_juggernaut"
+    }
+  ]
+}

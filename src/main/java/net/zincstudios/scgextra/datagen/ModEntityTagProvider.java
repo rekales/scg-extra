@@ -8,6 +8,7 @@ import net.zincstudios.scgextra.entity.EntityTypeTags;
 import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
 import net.zincstudios.scgextra.entity.cog.COGEntities;
 import net.zincstudios.scgextra.entity.fac.FACEntities;
+import net.zincstudios.scgextra.entity.neutral.NeutralEntities;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
 import org.jetbrains.annotations.Nullable;
@@ -114,6 +115,8 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
         tag(ModTags.Entities.HEAVY)
                 .add(WhalerEntities.TURTLEMAN.get())
                 .add(WhalerEntities.SALMONSAUR.get())
+                .add(FACEntities.FAC_LION.get())
+                .add(FACEntities.FAC_WALKER.get())
                 .add(COGEntities.DEVASTATOR.get())
                 .add(COGEntities.BOMBARDIER.get())
                 .add(COGEntities.GIGANTES.get())
@@ -123,10 +126,13 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
 
         tag(ModTags.Entities.VERY_HEAVY)
                 .add(WhalerEntities.GUARDIAN_STATUE.get())
-                .add(WhalerEntities.ARMORED_WHALE.get());
+                .add(WhalerEntities.ARMORED_WHALE.get())
+                .add(FACEntities.FAC_TANK.get());
 
         tag(ModTags.Entities.BOT)
                 .add(AsgharianEntities.ASGHAR_WORKER.get())
+                .add(FACEntities.FAC_WALKER.get())
+                .add(FACEntities.FAC_TANK.get())
                 .add(COGEntities.VULTURE.get())
                 .add(COGEntities.DEVASTATOR.get())
                 .add(COGEntities.BOMBARDIER.get())
@@ -139,6 +145,9 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
                 .add(WhalerEntities.GUARDIAN_STATUE.get());
 
         tag(ModTags.Entities.BLACK_BLOOD)
+                .add(NeutralEntities.HEAD_HUNTER.get())
+                .add(FACEntities.FAC_WALKER.get())
+                .add(FACEntities.FAC_TANK.get())
                 .add(COGEntities.VULTURE.get())
                 .add(COGEntities.DEVASTATOR.get())
                 .add(COGEntities.BOMBARDIER.get())

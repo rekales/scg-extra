@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "B": {
+      "item": "minecraft:iron_block"
+    },
+    "D": {
+      "item": "minecraft:blue_dye"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "T": {
+      "item": "scguns:labor_trophy"
+    }
+  },
+  "pattern": [
+    "ADA",
+    "ITI",
+    "IBI"
+  ],
+  "result": {
+    "item": "scgextra:commissar_chestplate"
+  },
+  "show_notification": false
+}

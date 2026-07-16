@@ -1,5 +1,8 @@
 {
   "values": [
+    "scgextra:head_hunter",
+    "scgextra:fac_walker",
+    "scgextra:fac_tank",
     "scgextra:cog_vulture",
     "scgextra:cog_devastator",
     "scgextra:cog_bombardier",

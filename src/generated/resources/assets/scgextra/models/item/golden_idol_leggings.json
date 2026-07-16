@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "scgextra:item/armor/golden_idol_leggings"
+  }
+}
