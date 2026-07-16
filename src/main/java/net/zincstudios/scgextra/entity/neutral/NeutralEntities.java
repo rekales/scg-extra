@@ -22,6 +22,8 @@ import net.zincstudios.scgextra.entity.neutral.end.end_dweller.EndDwellerEntity;
 import net.zincstudios.scgextra.entity.neutral.end.end_dweller.EndDwellerRenderer;
 import net.zincstudios.scgextra.entity.neutral.end.end_pod.EndPodEntity;
 import net.zincstudios.scgextra.entity.neutral.end.end_pod.EndPodRenderer;
+import net.zincstudios.scgextra.entity.neutral.end.end_scorpion.EndScorpionEntity;
+import net.zincstudios.scgextra.entity.neutral.end.end_scorpion.EndScorpionRenderer;
 import net.zincstudios.scgextra.entity.neutral.nether.head_hunter.HeadHunterEntity;
 import net.zincstudios.scgextra.entity.neutral.nether.head_hunter.HeadHunterRenderer;
 import net.zincstudios.scgextra.entity.neutral.nether.netherite_eater.NetheriteEaterEntity;
@@ -153,6 +155,16 @@ public class NeutralEntities {
         .sized(3F, 3F)
         .build("end_stone_crab")
     );
+
+    public static final RegistryObject<EntityType<EndScorpionEntity>> END_SCORPION = ENTITY_TYPES.register(
+        "end_scorpion", 
+        () -> EntityType.Builder.of(
+            EndScorpionEntity::new, 
+            MobCategory.MONSTER
+        )
+        .sized(3.5F, 0.5F)
+        .build("end_scorpion")
+    );
     
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(NeutralEntities::registerAttributes);
@@ -174,6 +186,7 @@ public class NeutralEntities {
         event.put(NeutralEntities.END_POD.get(), EndPodEntity.createAttributes().build());
         event.put(NeutralEntities.END_DWELLER.get(), EndDwellerEntity.createAttributes().build());
         event.put(NeutralEntities.END_STONE_CRAB.get(), EndStoneCrabEntity.createAttributes().build());
+        event.put(NeutralEntities.END_SCORPION.get(), EndScorpionEntity.createAttributes().build());
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
@@ -280,6 +293,15 @@ public class NeutralEntities {
             true, 
             true
         ));
+        BoundingBoxManager.registerHeadshotBox(NeutralEntities.END_SCORPION.get(), new OffsetRotatedHeadshotBox<>(
+            10, 
+            5,
+            0, 
+            0.0F, 
+            10,
+            false, 
+            true
+        ));
     }
     //mostly to stop them from spawning in water
     public static void registerSpawnPlacements(SpawnPlacementRegisterEvent event) {
@@ -339,6 +361,13 @@ public class NeutralEntities {
             EndStoneCrabEntity::checkMonsterSpawnRules,
             SpawnPlacementRegisterEvent.Operation.OR
         );
+        event.register(
+            NeutralEntities.END_SCORPION.get(),
+            SpawnPlacements.Type.ON_GROUND,
+            Heightmap.Types.WORLD_SURFACE,
+            EndScorpionEntity::checkMonsterSpawnRules,
+            SpawnPlacementRegisterEvent.Operation.OR
+        );
     }
     @OnlyIn(value = Dist.CLIENT)
     private static void onClientSetup(FMLClientSetupEvent event) {
@@ -353,5 +382,6 @@ public class NeutralEntities {
         EntityRenderers.register(NeutralEntities.END_POD.get(), EndPodRenderer::new);
         EntityRenderers.register(NeutralEntities.END_DWELLER.get(), EndDwellerRenderer::new);
         EntityRenderers.register(NeutralEntities.END_STONE_CRAB.get(), EndStoneCrabRenderer::new);
+        EntityRenderers.register(NeutralEntities.END_SCORPION.get(), EndScorpionRenderer::new);
     }
 }

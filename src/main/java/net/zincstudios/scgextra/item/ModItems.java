@@ -115,7 +115,8 @@ public class ModItems {
             NETHERITE_EATER_SPAWN_EGG = basicSpawnEgg(NeutralEntities.NETHERITE_EATER),
             END_POD_SPAWN_EGG = basicSpawnEgg(NeutralEntities.END_POD),
             END_DWELLER_SPAWN_EGG = basicSpawnEgg(NeutralEntities.END_DWELLER),
-            END_STONE_CRAB_SPAWN_EGG = basicSpawnEgg(NeutralEntities.END_STONE_CRAB)
+            END_STONE_CRAB_SPAWN_EGG = basicSpawnEgg(NeutralEntities.END_STONE_CRAB),
+            END_SCORPION_SPAWN_EGG = basicSpawnEgg(NeutralEntities.END_SCORPION)
             ;
 
     public static void register(IEventBus modEventBus) {
