@@ -58,7 +58,7 @@ public class FacTankEntity extends Monster implements GeoEntity, Gunner, CustomG
     private static final RawAnimation DEATH = RawAnimation.begin().thenPlayAndHold("death");
     private static final RawAnimation STUN_START = RawAnimation.begin().thenPlayAndHold("stun_start");
     private static final RawAnimation STUN_END = RawAnimation.begin().thenPlay("stun_end");
-    private static final RawAnimation CANNON = RawAnimation.begin().thenPlay("canon");
+    private static final RawAnimation CANNON = RawAnimation.begin().thenPlay("cannon");
     private static final RawAnimation RIGHT_GUN_FIRE = RawAnimation.begin().thenPlay("right_gun_fire");
     private static final RawAnimation LEFT_GUN_FIRE = RawAnimation.begin().thenPlay("left_gun_fire");
     private static final RawAnimation EXHAUST = RawAnimation.begin().thenLoop("exhaust");
@@ -220,13 +220,14 @@ public class FacTankEntity extends Monster implements GeoEntity, Gunner, CustomG
         this.bulletSpawnLeft = !this.bulletSpawnLeft;
 
         if (gun == this.mainCannon) {
-            Gun.Display.Flash flash = ModItems.HULLBREAKER.get().getGun().getDisplay().getFlash();
-            if (flash == null) return;
             this.triggerAnim("cannon", "fire");
-            ResourceLocation flashTexture = ResourceLocation.fromNamespaceAndPath(ScorchedGuns.MODID,
-                    "textures/effect/" + flash.getTextureLocation() + ".png");
-            SCGEPacketHandler.sendToNearbyPlayers(() -> MobUtil.levelLocationFromEntity(this),
-                    new GunFlashMessage(this.getId(), this.bulletSpawnLeft ? 0 : 1, flashTexture, false, 1.2F));
+
+//            Gun.Display.Flash flash = ModItems.HULLBREAKER.get().getGun().getDisplay().getFlash();
+//            if (flash == null) return;
+//            ResourceLocation flashTexture = ResourceLocation.fromNamespaceAndPath(ScorchedGuns.MODID,
+//                    "textures/effect/" + flash.getTextureLocation() + ".png");
+//            SCGEPacketHandler.sendToNearbyPlayers(() -> MobUtil.levelLocationFromEntity(this),
+//                    new GunFlashMessage(this.getId(), 2, flashTexture, false, 1.2F));
             return;
         }
 
