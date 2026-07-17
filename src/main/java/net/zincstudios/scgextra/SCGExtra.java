@@ -28,6 +28,7 @@ import net.zincstudios.scgextra.particle.ModParticleTypes;
 import net.zincstudios.scgextra.raid.WaveRaidManager;
 import net.zincstudios.scgextra.sounds.ModSounds;
 import net.zincstudios.scgextra.worldgen.biome.ModTerrablender;
+import net.zincstudios.scgextra.worldgen.structure.ModStructureProcessors;
 import net.zincstudios.scgextra.worldgen.structure.ModStructures;
 
 import org.slf4j.Logger;
@@ -51,7 +52,8 @@ public class SCGExtra
         ModParticleTypes.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModTerrablender.registerBiomes();
-        ModStructures.STRUCTURE_TYPES.register(modEventBus);
+        ModStructures.register(modEventBus);
+        ModStructureProcessors.register(modEventBus);
 
         SCGEAttributes.register(modEventBus);
 

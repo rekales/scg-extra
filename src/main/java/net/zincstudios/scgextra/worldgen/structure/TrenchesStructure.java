@@ -43,7 +43,7 @@ public class TrenchesStructure extends Structure{
             Heightmap.Types.WORLD_SURFACE_WG,
             context.heightAccessor(),
             context.randomState()
-        )-10;
+        )-4;
 
         BlockPos pos = new BlockPos(x, y, z);
         return JigsawPlacement.addPieces(

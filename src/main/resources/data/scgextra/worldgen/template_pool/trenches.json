@@ -6,7 +6,7 @@
       "weight": 1,
       "element": {
         "location": "scgextra:trenches/trench_0",
-        "processors": "minecraft:empty",
+        "processors": "scgextra:trenches_processor",
 	    	"projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -15,7 +15,7 @@
       "weight": 1,
       "element": {
         "location": "scgextra:trenches/trench_1",
-        "processors": "minecraft:empty",
+        "processors": "scgextra:trenches_processor",
 	    	"projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -24,7 +24,7 @@
       "weight": 1,
       "element": {
         "location": "scgextra:trenches/trench_2",
-        "processors": "minecraft:empty",
+        "processors": "scgextra:trenches_processor",
 	    	"projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -33,7 +33,7 @@
       "weight": 1,
       "element": {
         "location": "scgextra:trenches/trench_3",
-        "processors": "minecraft:empty",
+        "processors": "scgextra:trenches_processor",
 	    	"projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -42,7 +42,7 @@
       "weight": 1,
       "element": {
         "location": "scgextra:trenches/trench_4",
-        "processors": "minecraft:empty",
+        "processors": "scgextra:trenches_processor",
 	    	"projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -51,7 +51,7 @@
       "weight": 1,
       "element": {
         "location": "scgextra:trenches/trench_5",
-        "processors": "minecraft:empty",
+        "processors": "scgextra:trenches_processor",
 	    	"projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -60,7 +60,7 @@
       "weight": 1,
       "element": {
         "location": "scgextra:trenches/trench_6",
-        "processors": "minecraft:empty",
+        "processors": "scgextra:trenches_processor",
 	    	"projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -69,7 +69,7 @@
       "weight": 1,
       "element": {
         "location": "scgextra:trenches/trench_7",
-        "processors": "minecraft:empty",
+        "processors": "scgextra:trenches_processor",
 	    	"projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -78,7 +78,7 @@
       "weight": 1,
       "element": {
         "location": "scgextra:trenches/trench_8",
-        "processors": "minecraft:empty",
+        "processors": "scgextra:trenches_processor",
 	    	"projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -87,7 +87,7 @@
       "weight": 1,
       "element": {
         "location": "scgextra:trenches/trench_9",
-        "processors": "minecraft:empty",
+        "processors": "scgextra:trenches_processor",
 	    	"projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -96,7 +96,7 @@
       "weight": 1,
       "element": {
         "location": "scgextra:trenches/trench_10",
-        "processors": "minecraft:empty",
+        "processors": "scgextra:trenches_processor",
 	    	"projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -105,7 +105,7 @@
       "weight": 1,
       "element": {
         "location": "scgextra:trenches/trench_11",
-        "processors": "minecraft:empty",
+        "processors": "scgextra:trenches_processor",
 	    	"projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -114,7 +114,7 @@
       "weight": 1,
       "element": {
         "location": "scgextra:trenches/trench_12",
-        "processors": "minecraft:empty",
+        "processors": "scgextra:trenches_processor",
 	    	"projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -123,7 +123,7 @@
       "weight": 1,
       "element": {
         "location": "scgextra:trenches/trench_13",
-        "processors": "minecraft:empty",
+        "processors": "scgextra:trenches_processor",
 	    	"projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -132,7 +132,7 @@
       "weight": 1,
       "element": {
         "location": "scgextra:trenches/trench_14",
-        "processors": "minecraft:empty",
+        "processors": "scgextra:trenches_processor",
 	    	"projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -141,7 +141,7 @@
       "weight": 1,
       "element": {
         "location": "scgextra:trenches/trench_15",
-        "processors": "minecraft:empty",
+        "processors": "scgextra:trenches_processor",
 	    	"projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
