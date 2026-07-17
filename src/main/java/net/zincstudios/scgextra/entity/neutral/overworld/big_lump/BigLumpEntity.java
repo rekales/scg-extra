@@ -123,7 +123,7 @@ public class BigLumpEntity extends Monster implements GeoEntity, Gunner, CustomG
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(INACCURACY, 10F);
+        this.entityData.define(INACCURACY, 0.1F);
     }
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
@@ -158,12 +158,12 @@ public class BigLumpEntity extends Monster implements GeoEntity, Gunner, CustomG
         return true;
     }
     public void lowerInaccuracy(){
-        float inaccuracy = getInaccuracy();
+        float inaccuracy = getAccuracy();
         if(inaccuracy>0){
-            this.entityData.set(INACCURACY, getInaccuracy()-0.2F);
+            this.entityData.set(INACCURACY, getAccuracy()+0.2F);
         }
     }
-    public float getInaccuracy(){
+    public float getAccuracy(){
         return this.entityData.get(INACCURACY);
     }
     @Override

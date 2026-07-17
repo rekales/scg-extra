@@ -1,14 +1,10 @@
 package net.zincstudios.scgextra.entity.neutral.overworld.big_lump;
 
-import net.zincstudios.scgextra.entity.projectile.BigLumpProjectileEntity;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
-import top.ribs.scguns.entity.projectile.EnemyProjectileEntity;
-import top.ribs.scguns.init.ModSounds;
 
 public class BigLumpGunAttackGoal extends Goal{
     protected final int range;
@@ -69,7 +65,7 @@ public class BigLumpGunAttackGoal extends Goal{
             this.mob.setYBodyRot(yaw);
             this.mob.setYRot(yaw);
             if (this.tick%2==0) {
-                this.mob.getCustomGun().tickFire(this.mob, SimulatedGun.getCenterMassPos(target), this.mob.getInaccuracy(), true);
+                this.mob.getCustomGun().tickFire(this.mob, SimulatedGun.getCenterMassPos(target), this.mob.getAccuracy(), true);
             }
             if(tick == 0){
                 this.mob.triggerAnim("controller", "shoot_attack");
