@@ -109,7 +109,6 @@ public class JetBootsCheckRelocate extends Behavior<CogJuggernautEntity> {
     @Override
     protected void start(ServerLevel level, CogJuggernautEntity entity, long gameTime) {
         this.oldDist = -1;
-
     }
 
     private static boolean isLookingAwayFrom(LivingEntity entity, Vec3 targetPos) {

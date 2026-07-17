@@ -115,6 +115,11 @@
 					]
 				},
 				{
+					"name": "barrel_end",
+					"parent": "barrel",
+					"pivot": [0, 40.5, -23.5]
+				},
+				{
 					"name": "wheel",
 					"parent": "gun_body",
 					"pivot": [0, 41.24, 31.13],

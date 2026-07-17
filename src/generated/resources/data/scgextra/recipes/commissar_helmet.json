@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "D": {
+      "item": "minecraft:blue_dye"
+    },
+    "H": {
+      "item": "minecraft:hopper"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "T": {
+      "item": "scguns:labor_trophy"
+    }
+  },
+  "pattern": [
+    " H ",
+    "ITI",
+    "ADA"
+  ],
+  "result": {
+    "item": "scgextra:commissar_helmet"
+  },
+  "show_notification": false
+}

@@ -20,11 +20,12 @@ import java.util.UUID;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class RotatedSegmentPartEntity <T extends LivingEntity> extends PartEntity<T> {
+public class RotatedSegmentPartEntity<T extends LivingEntity> extends PartEntity<T> {
 
     private final EntityDimensions size;
-    private final Vec3 offset;
     private final boolean collision;
+
+    private Vec3 offset;
 
     public RotatedSegmentPartEntity(T parent, Vec3 offset, float width, float height) {
         this(parent, offset, width, height, true);
@@ -36,6 +37,10 @@ public class RotatedSegmentPartEntity <T extends LivingEntity> extends PartEntit
         this.refreshDimensions();
         this.offset = offset;
         this.collision = collision;
+    }
+
+    public void setOffset(Vec3 offset) {
+        this.offset = offset;
     }
 
     @Override

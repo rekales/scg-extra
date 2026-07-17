@@ -17,7 +17,7 @@ import net.minecraftforge.entity.PartEntity;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.gun.CustomGunHolder;
-import net.zincstudios.scgextra.entity.common.gun.CustomSimulatedGun;
+import net.zincstudios.scgextra.entity.common.gun.CustomScorchedSimGun;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
 import net.zincstudios.scgextra.entity.common.part.RotatedSegmentPartEntity;
 import net.zincstudios.scgextra.entity.common.part.RotatedWeakPointPartEntity;
@@ -55,7 +55,7 @@ public class CogCentipedeEntity extends Monster implements GeoEntity, CustomGunH
                 new RotatedSegmentPartEntity<>(this, new Vec3(0, 0, -28/16f - 24/16f), 22/16f, 24/16f),
                 new RotatedWeakPointPartEntity<>(this, new Vec3(0, 11/16f, 2.2), 9/16f, 9/16f)
         };
-        this.customGun = new CustomSimulatedGun.Builder(ModItems.LIBERTAS.get().getGun())
+        this.customGun = new CustomScorchedSimGun.Builder(ModItems.LIBERTAS.get().getGun())
                 .projectileDamage(15)
                 .fireRate(80)
                 .maxRange(10)

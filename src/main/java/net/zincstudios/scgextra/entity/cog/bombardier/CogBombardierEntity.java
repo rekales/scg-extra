@@ -18,7 +18,7 @@ import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.gun.CustomGunHolder;
-import net.zincstudios.scgextra.entity.common.gun.CustomSimulatedGun;
+import net.zincstudios.scgextra.entity.common.gun.CustomScorchedSimGun;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
 import net.zincstudios.scgextra.sounds.COGSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -45,13 +45,15 @@ public class CogBombardierEntity extends Monster implements GeoEntity, CustomGun
 
     public CogBombardierEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
-        this.customGun = new CustomSimulatedGun.Builder(ModItems.ROCKET_RIFLE.get().getGun())
+        this.customGun = new CustomScorchedSimGun.Builder(ModItems.ROCKET_RIFLE.get().getGun())
                 .projectileDamage(10)
                 .fireRate(10)
                 .maxRange(25)
                 .idealRange(20)
                 .ammoCapacity(6)
                 .reloadTime(120)
+                .reloads()
+                .noGunFlash()
                 .velocityModifier(vec -> new Vec3(vec.x/4, (vec.y/4) * 1.2 + 0.1, vec.z/4))
                 .build();
     }

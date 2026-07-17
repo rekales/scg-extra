@@ -25,8 +25,12 @@ public class CheckShouldAlert extends Behavior<LivingEntity> {
     private long cooldownEnd = 0;  // I highly doubt other behaviors needs this, turn to a memory if so.
     private boolean firstAlert = true;
 
+    public CheckShouldAlert() {
+        this(10);
+    }
+
     public CheckShouldAlert(int alertDuration) {
-        this(alertDuration, 20, 64);
+        this(alertDuration, 100, 64);
     }
 
     public CheckShouldAlert(int alertDuration, int alertCooldown, float radius) {

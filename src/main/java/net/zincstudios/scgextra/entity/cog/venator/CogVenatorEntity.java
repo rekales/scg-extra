@@ -20,7 +20,7 @@ import net.zincstudios.scgextra.entity.asgharian.BulletSpawnOffset;
 import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.gun.CustomGunHolder;
-import net.zincstudios.scgextra.entity.common.gun.CustomSimulatedGun;
+import net.zincstudios.scgextra.entity.common.gun.CustomScorchedSimGun;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
 import net.zincstudios.scgextra.entity.common.part.RotatedSegmentPartEntity;
 import net.zincstudios.scgextra.sounds.COGSounds;
@@ -40,7 +40,7 @@ import static net.zincstudios.scgextra.entity.common.brain.AvoidTargetIfClose.AV
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CogVenatorEntity extends GunnerEntity implements GeoEntity, CustomGunHolder, Gunner, BulletSpawnOffset {
+public class CogVenatorEntity extends Monster implements GeoEntity, CustomGunHolder, Gunner, BulletSpawnOffset {
 
     private static final Vec3 GUN_OFFSET = new Vec3(0, 1.1, 2.1);
 
@@ -50,7 +50,7 @@ public class CogVenatorEntity extends GunnerEntity implements GeoEntity, CustomG
 
     public CogVenatorEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
-        this.customGun = new CustomSimulatedGun.Builder(ModItems.HOWLER.get().getGun())
+        this.customGun = new CustomScorchedSimGun.Builder(ModItems.HOWLER.get().getGun())
                 .projectileDamage(15)
                 .fireRate(80)
                 .maxRange(25)

@@ -92,6 +92,11 @@
 					]
 				},
 				{
+					"name": "barrel_end",
+					"parent": "gun",
+					"pivot": [0, 4, -12.5]
+				},
+				{
 					"name": "br1",
 					"parent": "gun",
 					"pivot": [2, 6, -9.75],

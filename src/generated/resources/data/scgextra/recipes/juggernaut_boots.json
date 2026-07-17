@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "B": {
+      "item": "scguns:treated_brass_ingot"
+    },
+    "H": {
+      "item": "scguns:cog_heart"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    " R ",
+    "BHB",
+    "A A"
+  ],
+  "result": {
+    "item": "scgextra:juggernaut_boots"
+  },
+  "show_notification": false
+}

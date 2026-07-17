@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "B": {
+      "item": "minecraft:gold_block"
+    },
+    "I": {
+      "item": "scguns:gold_idol"
+    }
+  },
+  "pattern": [
+    " B ",
+    "BIB",
+    "A A"
+  ],
+  "result": {
+    "item": "scgextra:golden_idol_helmet"
+  },
+  "show_notification": false
+}

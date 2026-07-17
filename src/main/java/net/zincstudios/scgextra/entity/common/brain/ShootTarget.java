@@ -20,7 +20,7 @@ import java.util.function.Predicate;
 
 public class ShootTarget extends Behavior<LivingEntity> {
 
-    public static final float DEFAULT_ACCURACY = 3.2F;
+    public static final float DEFAULT_ACCURACY = 1.6F;
     private final int aimThreshold;
     private final BiFunction<LivingEntity, Boolean, Float> accuracyFunc;
     private final Predicate<LivingEntity> canShoot;

@@ -8,6 +8,7 @@ import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.behavior.*;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.memory.NearestVisibleLivingEntities;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
@@ -80,5 +81,21 @@ public class BrainUtils {
     private static boolean isWithinRange(LivingEntity entity, LivingEntity target) {
         double range = Math.max(entity.getAttributeValue(Attributes.FOLLOW_RANGE), 2.0D);
         return entity.closerThan(target, range);
+    }
+
+    public static void setTarget(LivingEntity entity, LivingEntity target) {
+        if (entity.getBrain().checkMemory(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_ABSENT)) {
+            entity.getBrain().setMemory(MemoryModuleType.ATTACK_TARGET, target);
+        } else if (entity instanceof Mob mob && mob.getTarget() == null) {
+            mob.setTarget(target);
+        }
+    }
+
+    public static void setTargetForced(LivingEntity entity, LivingEntity target) {
+        if (entity.getBrain().checkMemory(MemoryModuleType.ATTACK_TARGET, MemoryStatus.REGISTERED)) {
+            entity.getBrain().setMemory(MemoryModuleType.ATTACK_TARGET, target);
+        } else if (entity instanceof Mob mob) {
+            mob.setTarget(target);
+        }
     }
 }

@@ -2,23 +2,33 @@ package net.zincstudios.scgextra.item;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.*;
 import net.minecraftforge.common.ForgeSpawnEggItem;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.SCGExtra;
+import net.zincstudios.scgextra.attributes.SCGEAttributes;
+import net.zincstudios.scgextra.effects.ModEffects;
 import net.zincstudios.scgextra.entity.cog.COGEntities;
 import net.zincstudios.scgextra.entity.neutral.NeutralEntities;
 import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
 import net.zincstudios.scgextra.entity.fac.FACEntities;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
+import net.zincstudios.scgextra.item.armor.*;
+import top.ribs.scguns.attributes.SCAttributes;
 import top.ribs.scguns.item.GunItem;
+import top.ribs.scguns.item.HealingBandageItem;
 
 import java.util.Set;
 
@@ -45,12 +55,160 @@ public class ModItems {
             () -> new SpearShovelItem(Tiers.IRON, 2.5F, -2.8F, new Item.Properties())
     );
 
-    public static final RegistryObject<Item> WALKER_MG = ITEMS.register("walker_mg",
-            () -> new Item(new Item.Properties().stacksTo(1))
-    );
+    public static final RegistryObject<HealingBandageItem> BANDAGE = ITEMS.register("bandage", () -> new HealingBandageItem(
+            (new Item.Properties()).stacksTo(16), 4,
+            new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 200, 0)
+    ));
+
+    public static final RegistryObject<MultiUseHealingItem> MEDKIT = ITEMS.register("medkit", () -> new MultiUseHealingItem(
+            (new Item.Properties()).stacksTo(1).durability(12), 4,
+            new MobEffectInstance(MobEffects.REGENERATION, 100, 0),
+            new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 400, 0)
+    ));
+
     public static final RegistryObject<Item> END_SHELL = ITEMS.register("end_shell",
             () -> new Item(new Item.Properties())
     );
+
+    public static final RegistryObject<Item>
+//            ANTIQUE_SUPER_FLARE = ITEMS.register("antique_super_flare", () ->
+//                    new SuperRaidFlareItem(new Item.Properties().stacksTo(16), "antique_super", "antique")),
+//            FRONTIER_SUPER_FLARE = ITEMS.register("frontier_super_flare", () ->
+//                    new SuperRaidFlareItem(new Item.Properties().stacksTo(16), "frontier_super", "frontier")),
+            COPPER_SUPER_FLARE = ITEMS.register("copper_super_flare", () ->
+                    new SuperRaidFlareItem(new Item.Properties().stacksTo(16), "copper_super", "copper")),
+            IRON_SUPER_FLARE = ITEMS.register("iron_super_flare", () ->
+                    new SuperRaidFlareItem(new Item.Properties().stacksTo(16), "iron_super", "iron")),
+            WRECKER_SUPER_FLARE = ITEMS.register("wrecker_super_flare", () ->
+                    new SuperRaidFlareItem(new Item.Properties().stacksTo(16), "wrecker_super", "wrecker")),
+            DIAMOND_STEEL_SUPER_FLARE = ITEMS.register("diamond_steel_super_flare", () ->
+                    new SuperRaidFlareItem(new Item.Properties().stacksTo(16), "diamond_steel_super", "diamond_steel")),
+            TREATED_BRASS_SUPER_FLARE = ITEMS.register("treated_brass_super_flare", () ->
+                    new SuperRaidFlareItem(new Item.Properties().stacksTo(16), "treated_brass_super", "treated_brass")),
+            GOLD_SUPER_FLARE = ITEMS.register("gold_super_flare", () ->
+                    new SuperRaidFlareItem(new Item.Properties().stacksTo(16), "piglin_super", "piglin")),
+            SCULK_SUPER_FLARE = ITEMS.register("sculk_super_flare", () ->
+                    new SuperRaidFlareItem(new Item.Properties().stacksTo(16), "sculk_super", "sculk")),
+            OCEAN_SUPER_FLARE = ITEMS.register("ocean_super_flare", () ->
+                    new SuperRaidFlareItem(new Item.Properties().stacksTo(16), "ocean_super", "ocean"));
+
+
+    public static final RegistryObject<MedalItem>
+            MEDAL_OF_SURVIVOR = ITEMS.register("medal_of_survivor", () -> new MedalItem(new MedalItem.Traits()
+                    .modifier(Attributes.ARMOR, new AttributeModifier("survivor_medal_armor", 5, AttributeModifier.Operation.ADDITION))
+            )),
+            MEDAL_OF_IRON_WILL = ITEMS.register("medal_of_iron_will", () -> new MedalItem(new MedalItem.Traits()
+                    .modifier(SCGEAttributes.BULLET_DAMAGE_TAKEN_MULT.get(), new AttributeModifier("iron_will_medal_bullet_damage_taken", -0.2, AttributeModifier.Operation.ADDITION))
+            )),
+            MEDAL_OF_DEFIANCE = ITEMS.register("medal_of_defiance", () -> new MedalItem(new MedalItem.Traits()
+                    .modifier(Attributes.MOVEMENT_SPEED, new AttributeModifier("defiance_medal_movement_speed", 0.2, AttributeModifier.Operation.MULTIPLY_TOTAL))
+                    .modifier(SCAttributes.RELOAD_SPEED.get(), new AttributeModifier("defiance_medal_reload_speed", 0.2, AttributeModifier.Operation.MULTIPLY_TOTAL))
+            )),
+            MEDAL_OF_WONDER = ITEMS.register("medal_of_wonder", () -> new MedalItem(new MedalItem.Traits()
+                    .effect(MobEffects.DAMAGE_RESISTANCE, 0)
+                    .resistance(MobEffects.POISON)
+                    .resistance(top.ribs.scguns.init.ModEffects.SULFUR_POISONING.get())
+            )),
+            MEDAL_OF_FIERY_RAGE = ITEMS.register("medal_of_fiery_rage", () -> new MedalItem(new MedalItem.Traits()
+                    .effect(MobEffects.DAMAGE_BOOST, 1)
+                    .effect(MobEffects.REGENERATION, 0)
+            )),
+            MEDAL_OF_OBEDIENCE = ITEMS.register("medal_of_obedience", () -> new MedalItem(new MedalItem.Traits()
+                    .modifier(Attributes.ARMOR_TOUGHNESS, new AttributeModifier("obedience_medal_armor_toughness", 3, AttributeModifier.Operation.ADDITION))
+                    .modifier(SCGEAttributes.RECOIL_MULT.get(), new AttributeModifier("obedience_medal_recoil", -0.3, AttributeModifier.Operation.MULTIPLY_TOTAL))
+            )),
+            MEDAL_OF_CRUELTY = ITEMS.register("medal_of_cruelty", () -> new MedalItem(new MedalItem.Traits()
+                    .modifier(SCAttributes.BULLET_DAMAGE_MULTIPLIER.get(), new AttributeModifier("cruelty_medal_bullet_damage", 0.1, AttributeModifier.Operation.MULTIPLY_TOTAL))
+            )),
+            MEDAL_OF_ENLIGHTENMENT = ITEMS.register("medal_of_enlightenment", () -> new MedalItem(new MedalItem.Traits()
+                    .effect(ModEffects.ENLIGHTENMENT.get(), 0)
+            )),
+            MEDAL_OF_CONQUEROR = ITEMS.register("medal_of_conqueror", () -> new MedalItem(new MedalItem.Traits()
+                    .modifier(SCGEAttributes.BULLET_ADDITIONAL_CRIT_CHANCE.get(), new AttributeModifier("conqueror_medal_crit_chance", 0.2, AttributeModifier.Operation.ADDITION))
+                    .modifier(SCGEAttributes.BULLET_GRAVITY_MULT.get(), new AttributeModifier("conqueror_medal_gravity", -0.2, AttributeModifier.Operation.MULTIPLY_TOTAL))
+            ));
+
+    public static final RegistryObject<ArmorSetPartItem>
+            OPPRESSOR_HELMET = ITEMS.register("oppressor_helmet", () ->
+                    new GeoArmorSetPartItem(ModArmorMaterials.OPPRESSOR, ArmorItem.Type.HELMET, ArmorSets.OPPRESSOR)),
+            OPPRESSOR_CHESTPLATE = ITEMS.register("oppressor_chestplate", () ->
+                    new GeoArmorSetPartItem(ModArmorMaterials.OPPRESSOR, ArmorItem.Type.CHESTPLATE, ArmorSets.OPPRESSOR)),
+            OPPRESSOR_LEGGINGS = ITEMS.register("oppressor_leggings", () ->
+                    new GeoArmorSetPartItem(ModArmorMaterials.OPPRESSOR, ArmorItem.Type.LEGGINGS, ArmorSets.OPPRESSOR)),
+            OPPRESSOR_BOOTS = ITEMS.register("oppressor_boots", () ->
+                    new GeoArmorSetPartItem(ModArmorMaterials.OPPRESSOR, ArmorItem.Type.BOOTS, ArmorSets.OPPRESSOR)),
+
+            COMMISSAR_HELMET = ITEMS.register("commissar_helmet", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.COMMISSAR, ArmorItem.Type.HELMET, ArmorSets.COMMISSAR)),
+            COMMISSAR_CHESTPLATE = ITEMS.register("commissar_chestplate", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.COMMISSAR, ArmorItem.Type.CHESTPLATE, ArmorSets.COMMISSAR)),
+            COMMISSAR_LEGGINGS = ITEMS.register("commissar_leggings", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.COMMISSAR, ArmorItem.Type.LEGGINGS, ArmorSets.COMMISSAR)),
+            COMMISSAR_BOOTS = ITEMS.register("commissar_boots", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.COMMISSAR, ArmorItem.Type.BOOTS, ArmorSets.COMMISSAR)),
+
+            WRECKER_HELMET = ITEMS.register("wrecker_helmet", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.WRECKER, ArmorItem.Type.HELMET, ArmorSets.WRECKER)),
+            WRECKER_CHESTPLATE = ITEMS.register("wrecker_chestplate", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.WRECKER, ArmorItem.Type.CHESTPLATE, ArmorSets.WRECKER)),
+            WRECKER_LEGGINGS = ITEMS.register("wrecker_leggings", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.WRECKER, ArmorItem.Type.LEGGINGS, ArmorSets.WRECKER)),
+            WRECKER_BOOTS = ITEMS.register("wrecker_boots", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.WRECKER, ArmorItem.Type.BOOTS, ArmorSets.WRECKER)),
+
+            LEVIATHAN_HELMET = ITEMS.register("leviathan_helmet", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.LEVIATHAN, ArmorItem.Type.HELMET, ArmorSets.LEVIATHAN)),
+            LEVIATHAN_CHESTPLATE = ITEMS.register("leviathan_chestplate", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.LEVIATHAN, ArmorItem.Type.CHESTPLATE, ArmorSets.LEVIATHAN)),
+            LEVIATHAN_LEGGINGS = ITEMS.register("leviathan_leggings", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.LEVIATHAN, ArmorItem.Type.LEGGINGS, ArmorSets.LEVIATHAN)),
+            LEVIATHAN_BOOTS = ITEMS.register("leviathan_boots", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.LEVIATHAN, ArmorItem.Type.BOOTS, ArmorSets.LEVIATHAN)),
+
+            GOLDEN_IDOL_HELMET = ITEMS.register("golden_idol_helmet", () ->
+                    new GeoArmorSetPartItem(ModArmorMaterials.GOLDEN_IDOL, ArmorItem.Type.HELMET, ArmorSets.GOLDEN_IDOL)),
+            GOLDEN_IDOL_CHESTPLATE = ITEMS.register("golden_idol_chestplate", () ->
+                    new GeoArmorSetPartItem(ModArmorMaterials.GOLDEN_IDOL, ArmorItem.Type.CHESTPLATE, ArmorSets.GOLDEN_IDOL)),
+            GOLDEN_IDOL_LEGGINGS = ITEMS.register("golden_idol_leggings", () ->
+                    new GeoArmorSetPartItem(ModArmorMaterials.GOLDEN_IDOL, ArmorItem.Type.LEGGINGS, ArmorSets.GOLDEN_IDOL)),
+            GOLDEN_IDOL_BOOTS = ITEMS.register("golden_idol_boots", () ->
+                    new GeoArmorSetPartItem(ModArmorMaterials.GOLDEN_IDOL, ArmorItem.Type.BOOTS, ArmorSets.GOLDEN_IDOL)),
+
+            ENLIGHTENED_HELMET = ITEMS.register("enlightened_helmet", () ->
+                    new GeoArmorSetPartItem(ModArmorMaterials.ENLIGHTENED, ArmorItem.Type.HELMET, ArmorSets.ENLIGHTENED)),
+            ENLIGHTENED_CHESTPLATE = ITEMS.register("enlightened_chestplate", () ->
+                    new GeoArmorSetPartItem(ModArmorMaterials.ENLIGHTENED, ArmorItem.Type.CHESTPLATE, ArmorSets.ENLIGHTENED)),
+            ENLIGHTENED_LEGGINGS = ITEMS.register("enlightened_leggings", () ->
+                    new GeoArmorSetPartItem(ModArmorMaterials.ENLIGHTENED, ArmorItem.Type.LEGGINGS, ArmorSets.ENLIGHTENED)),
+            ENLIGHTENED_BOOTS = ITEMS.register("enlightened_boots", () ->
+                    new GeoArmorSetPartItem(ModArmorMaterials.ENLIGHTENED, ArmorItem.Type.BOOTS, ArmorSets.ENLIGHTENED)),
+
+            JUGGERNAUT_HELMET = ITEMS.register("juggernaut_helmet", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.JUGGERNAUT, ArmorItem.Type.HELMET, ArmorSets.JUGGERNAUT)),
+            JUGGERNAUT_CHESTPLATE = ITEMS.register("juggernaut_chestplate", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.JUGGERNAUT, ArmorItem.Type.CHESTPLATE, ArmorSets.JUGGERNAUT)),
+            JUGGERNAUT_LEGGINGS = ITEMS.register("juggernaut_leggings", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.JUGGERNAUT, ArmorItem.Type.LEGGINGS, ArmorSets.JUGGERNAUT)),
+            JUGGERNAUT_BOOTS = ITEMS.register("juggernaut_boots", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.JUGGERNAUT, ArmorItem.Type.BOOTS, ArmorSets.JUGGERNAUT)),
+
+            RITUAL_HELMET = ITEMS.register("ritual_helmet", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.RITUAL, ArmorItem.Type.HELMET, ArmorSets.RITUAL)),
+            RITUAL_CHESTPLATE = ITEMS.register("ritual_chestplate", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.RITUAL, ArmorItem.Type.CHESTPLATE, ArmorSets.RITUAL)),
+            RITUAL_LEGGINGS = ITEMS.register("ritual_leggings", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.RITUAL, ArmorItem.Type.LEGGINGS, ArmorSets.RITUAL)),
+            RITUAL_BOOTS = ITEMS.register("ritual_boots", () ->
+                    new ArmorSetPartItem(ModArmorMaterials.RITUAL, ArmorItem.Type.BOOTS, ArmorSets.RITUAL)),
+
+            PIONEER_HELMET = ITEMS.register("pioneer_helmet", () ->
+                    new GeoArmorSetPartItem(ModArmorMaterials.PIONEER, ArmorItem.Type.HELMET, ArmorSets.PIONEER)),
+            PIONEER_CHESTPLATE = ITEMS.register("pioneer_chestplate", () ->
+                    new PioneerChestplateItem(ModArmorMaterials.PIONEER, ArmorItem.Type.CHESTPLATE, ArmorSets.PIONEER)),
+            PIONEER_LEGGINGS = ITEMS.register("pioneer_leggings", () ->
+                    new GeoArmorSetPartItem(ModArmorMaterials.PIONEER, ArmorItem.Type.LEGGINGS, ArmorSets.PIONEER)),
+            PIONEER_BOOTS = ITEMS.register("pioneer_boots", () ->
+                    new GeoArmorSetPartItem(ModArmorMaterials.PIONEER, ArmorItem.Type.BOOTS, ArmorSets.PIONEER));
 
     public static final RegistryObject<SpawnEggItem>
             // Whaler
@@ -122,6 +280,14 @@ public class ModItems {
         ITEMS.register(modEventBus);
         CREATIVE_TABS.register(modEventBus);
         modEventBus.addListener(ModItems::buildContents);
+
+        MinecraftForge.EVENT_BUS.addListener(MedalItem::onPlayerTick);
+        MinecraftForge.EVENT_BUS.addListener(MedalItem::onMobEffectApplicable);
+        MinecraftForge.EVENT_BUS.addListener(ArmorSet::onPlayerTick);
+        MinecraftForge.EVENT_BUS.addListener(ArmorSet::onMobEffectApplicable);
+        MinecraftForge.EVENT_BUS.addListener(ArmorSets::onEntityHurt);
+        MinecraftForge.EVENT_BUS.addListener(CavalrySaberItem::onPlayerTick);
+        MinecraftForge.EVENT_BUS.addListener(CavalrySaberItem::onEntityHurt);
     }
 
     private static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister

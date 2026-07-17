@@ -31,6 +31,7 @@ import top.ribs.scguns.init.ModBlocks;
 import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.interfaces.IProjectileFactory;
 import top.ribs.scguns.item.GunItem;
+import top.ribs.scguns.item.attachment.IAttachment;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.S2CMessageBulletTrail;
 import top.ribs.scguns.network.message.S2CMessageEntityCasingEject;
@@ -46,12 +47,49 @@ public class MobUtil {
     // Common Constants
     public static final int DEFAULT_STUN_DURATION = 60;
 
+    public static void addGunAttachment(ItemStack gunStack, ItemStack attachmentStack) {
+        if (gunStack.getItem() instanceof GunItem gunItem
+                && attachmentStack.getItem() instanceof IAttachment<?> attachment
+                && gunItem.getGun().canAttachType(attachment.getType())
+                && attachment.canAttachTo(gunStack)) {
+
+            CompoundTag tag = gunStack.getOrCreateTag();
+            CompoundTag attachments;
+            if (tag.contains("Attachments")) {
+                attachments = tag.getCompound("Attachments");
+            } else {
+                attachments = new CompoundTag();
+            }
+
+            attachments.put(attachment.getType().getTagKey(), attachmentStack.save(new CompoundTag()));
+
+            tag.put("Attachments", attachments);
+        }
+    }
+
+    public static Vec3 lerpVec(Vec3 a, Vec3 b, double t) {
+        return new Vec3(
+                Mth.lerp(t, a.x, b.x),
+                Mth.lerp(t, a.y, b.y),
+                Mth.lerp(t, a.z, b.z)
+        );
+    }
 
     public static SoundEvent getSound(RandomSource random, SoundEvent... sounds){
         if(sounds.length<=0){
             return SoundEvents.ALLAY_HURT;//cause why not
         }
         return sounds[random.nextInt(sounds.length)];
+    }
+
+    public static LevelLocation levelLocationFromEntity(LivingEntity entity) {
+        return LevelLocation.create(
+                entity.level(),
+                entity.getX(),
+                entity.getY(),
+                entity.getZ(),
+                Config.COMMON.network.projectileTrackingRange.get()
+        );
     }
 
     /**

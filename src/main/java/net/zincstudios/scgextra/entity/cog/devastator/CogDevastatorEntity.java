@@ -23,7 +23,7 @@ import net.zincstudios.scgextra.entity.asgharian.BulletSpawnOffset;
 import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.brain.BrainUtils;
-import net.zincstudios.scgextra.entity.common.gun.CustomSimulatedGun;
+import net.zincstudios.scgextra.entity.common.gun.CustomScorchedSimGun;
 import net.zincstudios.scgextra.entity.common.gun.HeadAttachedMountedGun;
 import net.zincstudios.scgextra.entity.common.gun.MountedGun;
 import net.zincstudios.scgextra.sounds.COGSounds;
@@ -41,7 +41,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CogDevastatorEntity extends GunnerEntity implements GeoEntity, Gunner, BulletSpawnOffset {
+public class CogDevastatorEntity extends Monster implements GeoEntity, Gunner, BulletSpawnOffset {
 
     public static final Vec3 MACHINE_GUN_OFFSET = new Vec3(-0.7,2.1,0.4);
     public static final Vec3 SHOTGUN_OFFSET = new Vec3(-0.7,2.6,0.5);
@@ -61,7 +61,7 @@ public class CogDevastatorEntity extends GunnerEntity implements GeoEntity, Gunn
     public CogDevastatorEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
         this.mountedMachineGun = new HeadAttachedMountedGun(this,
-                new CustomSimulatedGun.Builder(ModItems.GREASER_SMG.get().getGun())
+                new CustomScorchedSimGun.Builder(ModItems.GREASER_SMG.get().getGun())
                         .burstAmount(16)
                         .burstInterval(2)
                         .fireRate(70)
@@ -73,7 +73,7 @@ public class CogDevastatorEntity extends GunnerEntity implements GeoEntity, Gunn
                 BrainUtils::isNotStunned
         );
         this.mountedShotgun = new HeadAttachedMountedGun(this,
-                new CustomSimulatedGun.Builder(ModItems.JACKHAMMER.get().getGun())
+                new CustomScorchedSimGun.Builder(ModItems.JACKHAMMER.get().getGun())
                         .burstAmount(3)
                         .burstInterval(10)
                         .maxRange(6)
@@ -85,7 +85,7 @@ public class CogDevastatorEntity extends GunnerEntity implements GeoEntity, Gunn
                 BrainUtils::isNotStunned
         );
         this.mountedGatlingGun = new HeadAttachedMountedGun(this,
-                new CustomSimulatedGun.Builder(ModItems.GATTALER.get().getGun())
+                new CustomScorchedSimGun.Builder(ModItems.GATTALER.get().getGun())
                         .burstAmount(32)
                         .burstInterval(1)
                         .fireRate(80)

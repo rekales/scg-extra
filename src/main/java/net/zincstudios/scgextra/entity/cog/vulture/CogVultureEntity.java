@@ -3,6 +3,7 @@ package net.zincstudios.scgextra.entity.cog.vulture;
 
 import com.mojang.serialization.Dynamic;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
@@ -18,11 +19,14 @@ import net.minecraftforge.entity.PartEntity;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.asgharian.BulletSpawnOffset;
 import net.zincstudios.scgextra.entity.common.Gunner;
+import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
 import net.zincstudios.scgextra.entity.common.gun.CustomGunHolder;
-import net.zincstudios.scgextra.entity.common.gun.CustomSimulatedGun;
+import net.zincstudios.scgextra.entity.common.gun.CustomScorchedSimGun;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
 import net.zincstudios.scgextra.entity.common.part.RotatedSegmentPartEntity;
+import net.zincstudios.scgextra.network.GunFlashMessage;
+import net.zincstudios.scgextra.network.SCGEPacketHandler;
 import net.zincstudios.scgextra.sounds.COGSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -31,6 +35,8 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import top.ribs.scguns.ScorchedGuns;
+import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.init.ModItems;
 
 import javax.annotation.Nullable;
@@ -56,11 +62,12 @@ public class CogVultureEntity extends Monster implements GeoEntity, Gunner, Bull
                 new RotatedSegmentPartEntity<>(this, new Vec3(0, 0, 0.65), 0.8f, 1f),
                 new RotatedSegmentPartEntity<>(this, new Vec3(0, 0,  1.3), 0.8f, 1f)
         };
-        this.customGun = new CustomSimulatedGun.Builder(ModItems.VALORA.get().getGun())
+        this.customGun = new CustomScorchedSimGun.Builder(ModItems.VALORA.get().getGun())
                 .projectileDamage(1.5f)
                 .fireRate(2)
                 .maxRange(10)
                 .idealRange(8)
+                .noGunFlash() // handled on onGunFire instead
                 .velocityModifier(vec -> vec.scale(1/3f))
                 .build();
     }
@@ -156,6 +163,13 @@ public class CogVultureEntity extends Monster implements GeoEntity, Gunner, Bull
     @Override
     public void onGunFire(SimulatedGun gun, Vec3 targetPos) {
         this.bulletSpawnLeft = !this.bulletSpawnLeft;
+
+        Gun.Display.Flash flash = ModItems.VALORA.get().getGun().getDisplay().getFlash();
+        if (flash == null) return;
+        ResourceLocation flashTexture = ResourceLocation.fromNamespaceAndPath(ScorchedGuns.MODID,
+                "textures/effect/" + flash.getTextureLocation() + ".png");
+        SCGEPacketHandler.sendToNearbyPlayers(() -> MobUtil.levelLocationFromEntity(this),
+                new GunFlashMessage(this.getId(), this.bulletSpawnLeft ? 0 : 1, flashTexture, false, 0.5F));
     }
 
     @Override

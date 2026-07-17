@@ -1,46 +1,44 @@
 package net.zincstudios.scgextra.raid;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.BossEvent;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.ai.behavior.EntityTracker;
-import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.world.entity.ai.memory.MemoryStatus;
-import net.minecraft.world.entity.ai.memory.WalkTarget;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.level.LevelEvent;
-import net.zincstudios.scgextra.SCGExtra;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 
 
-// TODO: persistence
+// TODO: bossbar per boss
+// TODO: maybe multiple active raids
+// TODO: check nearby players
 @SuppressWarnings("unused")
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class WaveRaidManager extends SavedData {
 
     public static final String SAVED_DATA_NAME = "SCGEWaveRaidData";
-    public static final double RAID_SPAWN_RADIUS = 15;  // NOTE: turned constant from data, make dynamic if needed
-    public static final double RAID_BOSS_BAR_RADIUS = 128;  // NOTE: turned constant from data, make dynamic if needed
+    public static final int RAID_TIMEOUT_TICKS = 12000;  // 10 minutes, TODO: config
+    public static final float WAVE_SPAWN_RADIUS = 15;  // NOTE: turned constant from data, make dynamic if needed
+    public static final float RAID_RADIUS = 128;  // NOTE: turned constant from data, make dynamic if needed
+    private static final int NEXT_WAVE_DELAY = 30;
 
     private static final Map<ResourceLocation, WaveRaidManager> INSTANCES = new HashMap<>();
 
     @Nullable private WaveRaidState raidState = null;
     @Nullable private ServerBossEvent bossBar = null;
+    private int nextWaveDelay = NEXT_WAVE_DELAY;
 
     // NOTE: doesn't check the saved data and might cause inconsistencies, unlikely but possible
     public static WaveRaidManager get(ResourceLocation key) {
@@ -66,68 +64,76 @@ public class WaveRaidManager extends SavedData {
         return INSTANCES.values().stream().toList();
     }
 
-    public void startRaid(WaveRaidData raidData, ServerLevel level, Vec3 spawnCenter) {
-        ServerPlayer targetPlayer = WaveRaidUtil.findNearestPlayer(level, spawnCenter);
+    public void startRaid(WaveRaidData raidData, ServerLevel level, ServerPlayer player) {
+        if (hasActiveRaid()) return;
 
-        WaveRaidState raid = new WaveRaidState(raidData, level, spawnCenter);
-        if (targetPlayer != null) {
-            raid.setTargetPlayer(targetPlayer);
-        }
+        Vec3 raidCenter = player.position();
+        Vec3 waveCenter = WaveRaidUtil.findWaveSpawnLocation(level, raidCenter, raidCenter);
+        if (waveCenter == null) return;
 
-        this.raidState = raid;
-        spawnCurrentWaveMobs(raid, level);
-        for(ServerPlayer player : level.getPlayers((player) -> player.position().distanceTo(spawnCenter) <= RAID_BOSS_BAR_RADIUS)) {
-            player.sendSystemMessage(raid.getAnnouncement());
-        }
-    }
-
-    public void surrenderRaid(ServerLevel level) {
-        WaveRaidState raid = this.getCurrentRaidState();
-        if (raid == null || raid.hasEnded()) return;
-        raid.endRaid();
-        this.raidState = null;
+        this.raidState = new WaveRaidState(raidData, level, raidCenter);
+        this.raidState.spawnCurrentWaveMobs(waveCenter, WAVE_SPAWN_RADIUS, player);
+        WaveRaidUtil.announceToNearbyPlayers(level, raidData.getAnnouncement(), raidCenter, RAID_RADIUS);
+        this.nextWaveDelay = NEXT_WAVE_DELAY;
     }
 
     public void tick(ServerLevel level) {
-        if (this.raidState != null) {
-            this.raidState.tick();
-
-            if (this.raidState.hasEnded()) {
-                this.raidState = null;
-            } else if (this.raidState.isNextWaveReady()) {
-                this.raidState.advanceWave();
-                spawnCurrentWaveMobs(this.raidState, level);
-            }
-        }
-
-        updateBossBar(this.raidState, level);
+        this.tickRaid(level);
+        this.tickBossBar(level);
         this.setDirty();
     }
 
-    private void updateBossBar(@Nullable WaveRaidState raid, ServerLevel level) {
-        if (raid == null) {
+    private void tickRaid(ServerLevel level) {
+        if (this.raidState == null) return;
+
+        if (level.getGameTime() > this.raidState.getStartTime() + RAID_TIMEOUT_TICKS) {
+            this.endRaid(level, false);
+        }
+        else if (this.raidState.raidersLeft() > 0) {
+            this.raidState.updateRaiders();
+        }
+        else if (this.raidState.isFinalWave()) {
+            this.endRaid(level, true);
+        }
+        else {
+            if (this.nextWaveDelay-- < 0) {
+                this.nextWaveDelay = NEXT_WAVE_DELAY;
+                this.raidState.advanceWave();
+
+                ServerPlayer player = WaveRaidUtil.findNearestPlayer(level, this.raidState.getCenter(), RAID_RADIUS);
+                Vec3 waveCenter = WaveRaidUtil.findWaveSpawnLocation(level, raidState.getCenter(),
+                        player == null ? null : player.position());
+                if (waveCenter == null) return;  // TODO: crash or something
+                this.raidState.spawnCurrentWaveMobs(this.raidState.getCenter(), WAVE_SPAWN_RADIUS, player);
+            }
+        }
+    }
+
+    private void tickBossBar(ServerLevel level) {
+        if (this.raidState == null) {
             if (this.bossBar != null) {
                 this.bossBar.setProgress(0);
                 this.bossBar.setVisible(false);
                 this.bossBar = null;
             }
         } else {
+            Component bossBarLabel = WaveRaidUtil.getBossBarLabel(this.raidState.getWaveRaidData(), this.raidState.getCurrentWave());
             if (this.bossBar == null) {
-                this.bossBar = new ServerBossEvent(raid.getBossBarLabel(), BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.NOTCHED_10);
+                this.bossBar = new ServerBossEvent(bossBarLabel, BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.NOTCHED_10);
                 this.bossBar.setProgress(1);
                 this.bossBar.setVisible(true);
             }
-            if (!this.bossBar.getName().getString().equals(raid.getBossBarLabel().getString())) {
-                this.bossBar.setName(raid.getBossBarLabel());
-            }
 
-            this.bossBar.setProgress(raid.getBossBarProgress());
+            if (!this.bossBar.getName().getString().equals(bossBarLabel.getString())) {
+                this.bossBar.setName(bossBarLabel);
+            }
+            this.bossBar.setProgress((float)this.raidState.raidersLeft() /this.raidState.getTotalWaveSpawned());
 
             if (level.getGameTime() % 10 == 1) {
                 List<ServerPlayer> nearbyPlayers = level.getPlayers((player) -> {
                     if (player.isAlive() && !player.isRemoved() && !player.isSpectator()) {
-                        double distance = player.position().distanceTo(raid.getCenter());
-                        return distance <= RAID_BOSS_BAR_RADIUS;
+                        double distance = player.position().distanceTo(this.raidState.getCenter());
+                        return distance <= RAID_RADIUS;
                     } else {
                         return false;
                     }
@@ -147,6 +153,37 @@ public class WaveRaidManager extends SavedData {
         }
     }
 
+    public void endRaid(ServerLevel level, boolean success) {
+        if (this.raidState == null) return;
+
+        if (success) {
+            WaveRaidUtil.announceToNearbyPlayers(level,
+                    Component.translatable("raid.scguns.defeated"), this.raidState.getCenter(), 64);
+            giveOrDropLoot(level, this.raidState);
+        } else {
+            this.raidState.discardRaiders();
+            WaveRaidUtil.announceToNearbyPlayers(level,
+                    Component.translatable("raid.scguns.failed"), this.raidState.getCenter(), 64);
+        }
+        this.raidState = null;
+    }
+
+    public static void giveOrDropLoot(ServerLevel level, WaveRaidState raidState) {
+        List<ItemStack> loot = raidState.getWaveRaidData().rollLoot(level);
+        ServerPlayer player = WaveRaidUtil.findNearestPlayer(level, raidState.getCenter(), RAID_RADIUS);
+        if (player != null) {
+            for (ItemStack stack : loot) {
+                player.getInventory().placeItemBackInInventory(stack);
+            }
+        } else {
+            for (ItemStack stack : loot) {
+                Vec3 dropPos = raidState.getLootDropPos();
+                ItemEntity entity = new ItemEntity(level, dropPos.x, dropPos.y, dropPos.z, stack);
+                level.addFreshEntity(entity);
+            }
+        }
+    }
+
     public static void onLevelTick(TickEvent.LevelTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
             if (event.level instanceof ServerLevel level) {
@@ -158,55 +195,6 @@ public class WaveRaidManager extends SavedData {
 
     public static void onLevelLoad(LevelEvent.Load event) {
         INSTANCES.clear();
-    }
-
-    private static void spawnCurrentWaveMobs(WaveRaidState raid, ServerLevel level) {
-        Player player = raid.getTargetPlayer();
-        Vec3 waveCenter = WaveRaidUtil.findWaveSpawnLocation(level, raid.getCenter(), player == null ? null : player.position());
-        if (waveCenter == null) return;  // TODO: crash or something
-        WaveRaidData raidData = raid.getWaveRaidData();
-        List<WaveRaidData.RaiderEntry> spawnList = raidData.generateRaiders(raid.getCurrentWave(), level.getRandom());
-
-        int failedAttemptsLeft = spawnList.size()/2 + 5;
-        while (!spawnList.isEmpty() && failedAttemptsLeft > 0) {
-            for (WaveRaidData.RaiderEntry entry : List.copyOf(spawnList)) {
-                Mob mob = entry.createEntity(level);
-                if (mob == null) {
-                    failedAttemptsLeft--;
-                    continue;
-                }
-                Vec3 pos = WaveRaidUtil.findMobSpawnPos(level, waveCenter, RAID_SPAWN_RADIUS);
-                mob.setPos(pos);
-
-                if (mob.getBrain().checkMemory(MemoryModuleType.ATTACK_TARGET, MemoryStatus.REGISTERED) && player != null) {
-                    mob.getBrain().setMemory(MemoryModuleType.ATTACK_TARGET, player);
-                    if (mob.getBrain().checkMemory(MemoryModuleType.WALK_TARGET, MemoryStatus.REGISTERED)) {
-                        mob.getBrain().setMemoryWithExpiry(MemoryModuleType.WALK_TARGET, new WalkTarget(
-                                new EntityTracker(player, false), 1.2f, 16
-                        ), 200);
-                    }
-                } else {
-                    mob.setTarget(player);
-                }
-                boolean finalize = raidData.handleRaiderEdgeCase(mob);
-                if (finalize) {
-                    ForgeEventFactory.onFinalizeSpawn(
-                            mob, level,
-                            level.getCurrentDifficultyAt(BlockPos.containing(pos)),
-                            MobSpawnType.EVENT, null, null
-                    );
-                }
-                level.addFreshEntity(mob);
-                raid.addRaider(mob);
-                spawnList.remove(entry);
-            }
-        }
-
-        if (!spawnList.isEmpty()) {
-            for (WaveRaidData.RaiderEntry entry : spawnList) {
-                SCGExtra.LOGGER.warn("Failed to spawn {}", entry.entityType());
-            }
-        }
     }
 
     public boolean hasActiveRaid() {

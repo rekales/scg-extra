@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "C": {
+      "item": "scguns:snapped_cogwheel"
+    },
+    "T": {
+      "item": "scguns:treated_iron_ingot"
+    }
+  },
+  "pattern": [
+    "TCT",
+    "T T",
+    "A A"
+  ],
+  "result": {
+    "item": "scgextra:wrecker_leggings"
+  },
+  "show_notification": false
+}
