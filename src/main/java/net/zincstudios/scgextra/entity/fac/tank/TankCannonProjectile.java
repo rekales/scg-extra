@@ -6,6 +6,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,6 +21,7 @@ import net.zincstudios.scgextra.entity.fac.FACEntities;
 import net.zincstudios.scgextra.item.ModItems;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.entity.projectile.ProjectileEntity;
+import top.ribs.scguns.init.ModDamageTypes;
 import top.ribs.scguns.init.ModParticleTypes;
 
 import java.util.ArrayList;
@@ -112,11 +114,13 @@ public class TankCannonProjectile extends ProjectileEntity {
 
         if (blockDistance < entityDistance && blockResult.getType() != HitResult.Type.MISS) {
             this.setDeltaMovement(Vec3.ZERO);
-//            this.life = 30 + this.tickCount;
             this.setHit(true);
         } else if (closestEntity != null) {
             this.setDeltaMovement(Vec3.ZERO);
-//            this.life = 30 + this.tickCount;
+            DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, this.shooter);
+            if (this.getDamage() > 0.0F) {
+                closestEntity.getEntity().hurt(source, this.getDamage()/2);
+            }
         }
 
     }
