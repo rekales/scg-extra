@@ -103,7 +103,12 @@
           "type": "minecraft:item",
           "name": "scguns:iron_spear",
           "weight": 1,
-          "conditions": [],
+          "conditions": [
+            {
+              "chance": 0.2,
+              "condition": "minecraft:random_chance"
+            }
+          ],
           "functions": [
             {
               "function": "minecraft:enchant_randomly",

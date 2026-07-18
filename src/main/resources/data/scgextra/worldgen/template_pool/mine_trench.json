@@ -7,7 +7,7 @@
       "element": {
         "location": "scgextra:trenches/mine_trench",
         "processors": "minecraft:empty",
-	    "projection": "rigid",
+	      "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
     }

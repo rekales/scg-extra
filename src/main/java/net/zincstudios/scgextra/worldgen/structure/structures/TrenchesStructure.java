@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.worldgen.structure;
+package net.zincstudios.scgextra.worldgen.structure.structures;
 
 import java.util.Optional;
 
@@ -13,6 +13,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
+import net.zincstudios.scgextra.worldgen.structure.ModStructures;
 
 public class TrenchesStructure extends Structure{
     public static final Codec<TrenchesStructure> CODEC = RecordCodecBuilder.<TrenchesStructure>mapCodec((codex) -> codex.group(
@@ -45,6 +46,10 @@ public class TrenchesStructure extends Structure{
             context.randomState()
         )-4;
 
+        if(y>72){
+            return Optional.empty();
+        }
+
         BlockPos pos = new BlockPos(x, y, z);
         return JigsawPlacement.addPieces(
             context, 
@@ -54,7 +59,7 @@ public class TrenchesStructure extends Structure{
             pos, 
             false, 
             this.heightmap, 
-            128
+            64
         );
     }
 

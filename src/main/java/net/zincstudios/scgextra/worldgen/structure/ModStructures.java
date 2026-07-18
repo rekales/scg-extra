@@ -1,6 +1,7 @@
 package net.zincstudios.scgextra.worldgen.structure;
 
 import net.zincstudios.scgextra.SCGExtra;
+import net.zincstudios.scgextra.worldgen.structure.structures.TrenchesStructure;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraftforge.eventbus.api.IEventBus;

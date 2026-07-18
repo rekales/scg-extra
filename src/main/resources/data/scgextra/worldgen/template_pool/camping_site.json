@@ -7,7 +7,7 @@
       "element": {
         "location": "scgextra:camping_site/camping_site",
         "processors": "minecraft:empty",
-	    "projection": "terrain_matching",
+	      "projection": "terrain_matching",
         "element_type": "minecraft:single_pool_element"
       }
     }

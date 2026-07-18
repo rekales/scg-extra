@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.worldgen.structure;
+package net.zincstudios.scgextra.worldgen.structure.processors;
 
 import com.mojang.serialization.Codec;
 
@@ -9,18 +9,17 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
+import net.zincstudios.scgextra.worldgen.structure.ModStructureProcessors;
 
 public class TrenchesStructureProcessor extends StructureProcessor{
     public static final Codec<TrenchesStructureProcessor> CODEC = Codec.unit(TrenchesStructureProcessor::new);
     public TrenchesStructureProcessor(){
     }
     @Override
-    public StructureBlockInfo process(LevelReader level, BlockPos offset, BlockPos pos,
-            StructureBlockInfo blockInfo, StructureBlockInfo relativeBlockInfo, StructurePlaceSettings settings,
-            StructureTemplate template) {
+    public StructureBlockInfo process(LevelReader level, BlockPos offset, BlockPos pos, StructureBlockInfo blockInfo, StructureBlockInfo relativeBlockInfo, StructurePlaceSettings settings, StructureTemplate template) {
         return new StructureBlockInfo(
-            relativeBlockInfo.pos().below(4), 
-            relativeBlockInfo.state(), 
+            relativeBlockInfo.pos(), 
+            relativeBlockInfo.state(),
             relativeBlockInfo.nbt()
         );
     }
