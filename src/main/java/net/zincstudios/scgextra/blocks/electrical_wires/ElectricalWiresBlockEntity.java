@@ -3,70 +3,139 @@ package net.zincstudios.scgextra.blocks.electrical_wires;
 import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.zincstudios.scgextra.blocks.ModBlockEntities;
-import top.ribs.scguns.init.ModBlocks;
+import top.ribs.scguns.Config;
 
 public class ElectricalWiresBlockEntity extends BlockEntity{
+    // public static BlockEntity powerSource = null;
+    private final ContainerData data;
+    private final EnergyStorage energyStorage = new EnergyStorage(2000) {
+        @Override
+        public int receiveEnergy(int maxReceive, boolean simulate) {
+            int received = super.receiveEnergy(maxReceive, simulate);
+            if (!simulate && received > 0) {
+                setChanged();
+                sync();
+            }
+            return received;
+        }
+
+        @Override
+        public int extractEnergy(int maxExtract, boolean simulate) {
+            int extracted = super.extractEnergy(maxExtract, simulate);
+            if (!simulate && extracted > 0) {
+                setChanged();
+                sync();
+            }
+            return extracted;
+        }
+    };
+    private final LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
     public ElectricalWiresBlockEntity(BlockPos pos, BlockState blockState) {
         super(ModBlockEntities.ELECTRICAL_WIRES.get(), pos, blockState);
+        this.data = new ContainerData() {
+            @Override
+            public int get(int index) {
+                return switch (index) {
+                    case 0 -> energyStorage.getEnergyStored();
+                    case 1 -> energyStorage.getMaxEnergyStored();
+                    default -> 0;
+                };
+            }
+
+            @Override
+            public void set(int index, int value) {
+            }
+
+            @Override
+            public int getCount() {
+                return 2;
+            }
+        };
+    }
+    @Override
+    protected void saveAdditional(CompoundTag tag) {
+        super.saveAdditional(tag);
+        tag.put("Energy", energyStorage.serializeNBT());
+    }
+    @Override
+    public void load(CompoundTag tag) {
+        super.load(tag);
+        energyStorage.deserializeNBT(tag.get("Energy"));
+    }
+    private void sync() {
+        if (this.level != null && !this.level.isClientSide) {
+            this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), Block.UPDATE_CLIENTS);
+        }
+    }
+    @Override
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
+        if (cap == ForgeCapabilities.ENERGY) {
+            return energy.cast();
+        }
+        return super.getCapability(cap, side);
     }
     public static void tick(Level level, BlockPos pos, BlockState state, ElectricalWiresBlockEntity blockEntity) {
-        if(!level.isClientSide()){
-            if(level.players().size()>0){
-                BlockEntity en = getPowerSource(level, pos, state, blockEntity);
-                if(en!=null){
-                    if(level.players().size()>0){
-                        level.players().get(0).sendSystemMessage(Component.literal("FOUND SOURCE, ENERGY: "+getEnergy(en)));
-                    }
-                }else{
-                    if(level.players().size()>0){
-                        level.players().get(0).sendSystemMessage(Component.literal("NO SOURCE"));
-                    }
+        boolean wasLit = state.getValue(ElectricalWiresBlock.LIT);
+        boolean isLit = false;
+        if (!level.isClientSide) {
+            if (blockEntity.hasEnoughEnergy(200)) {
+                isLit = true;
+            }
+
+            if (wasLit != isLit) {
+                level.setBlock(pos, state.setValue(ElectricalWiresBlock.LIT, isLit), 3);
+            }
+            for (Direction direction : Direction.values()) {
+                BlockEntity adjacentEntity = level.getBlockEntity(pos.relative(direction));
+                if (adjacentEntity != null) {
+                    adjacentEntity.getCapability(ForgeCapabilities.ENERGY, direction.getOpposite()).ifPresent(handler -> {
+                        if (handler.canReceive()) {
+                            int extracted = blockEntity.energyStorage.extractEnergy(200, true);
+                            int accepted = handler.receiveEnergy(extracted, false);
+                            blockEntity.energyStorage.extractEnergy(accepted, false);
+                            blockEntity.setChanged();
+                            blockEntity.sync();
+                        }
+                    });
                 }
             }
+
         }
     }
-    //just for testing, TODO: make a better system
-    @Nullable
-    private static BlockEntity getPowerSource(Level level, BlockPos pos, BlockState state, ElectricalWiresBlockEntity blockEntity){
-        BlockPos eastPos = pos.east();
-        BlockState eastState = level.getBlockState(eastPos);
-        BlockPos westPos = pos.west();
-        BlockState westState = level.getBlockState(westPos);
-        BlockPos northPos = pos.north();
-        BlockState northState = level.getBlockState(northPos);
-        BlockPos southPos = pos.south();
-        BlockState southState = level.getBlockState(southPos);
-        BlockEntity be = null;
-        if(eastState.is(ModBlocks.POLAR_GENERATOR.get())){
-            if(getEnergy(level.getBlockEntity(eastPos))>0){
-                be = level.getBlockEntity(eastPos);
-            }
-        }
-        if(westState.is(ModBlocks.POLAR_GENERATOR.get())){
-            if(getEnergy(level.getBlockEntity(westPos))>0){
-                be = level.getBlockEntity(westPos);
-            }
-        }
-        if(northState.is(ModBlocks.POLAR_GENERATOR.get())){
-            if(getEnergy(level.getBlockEntity(northPos))>0){
-                be = level.getBlockEntity(northPos);
-            }
-        }
-        if(southState.is(ModBlocks.POLAR_GENERATOR.get())){
-            if(getEnergy(level.getBlockEntity(southPos))>0){
-                be = level.getBlockEntity(southPos);
-            }
-        }
-        return be;
+    private boolean hasEnoughEnergy(int amount) {
+        return energyStorage.getEnergyStored() >= amount;
     }
-    private static int getEnergy(BlockEntity be){
-        CompoundTag tag = be.saveWithoutMetadata();
-        return tag.getInt("Energy");
+
+    public void consumeEnergy(int amount) {
+        energyStorage.extractEnergy(amount, false);
+        setChanged();
+        sync();
+    }
+
+    public void addEnergy(int amount) {
+        energyStorage.receiveEnergy(amount, false);
+        setChanged();
+        sync();
+    }
+    public int getEnergy(){
+        return energyStorage.getEnergyStored();
+    }
+    @Override
+    public void invalidateCaps() {
+        super.invalidateCaps();
+        energy.invalidate();
     }
 }

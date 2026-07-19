@@ -1,18 +1,33 @@
 {
   "variants": {
-    "facing=east": {
-      "model": "scgextra:block/barbed_wires",
+    "facing=east,lit=true": {
+      "model": "scgextra:block/electrical_wire_on",
       "y": 90
     },
-    "facing=north": {
-      "model": "scgextra:block/barbed_wires"
+    "facing=north,lit=true": {
+      "model": "scgextra:block/electrical_wire_on"
     },
-    "facing=south": {
-      "model": "scgextra:block/barbed_wires",
+    "facing=south,lit=true": {
+      "model": "scgextra:block/electrical_wire_on",
       "y": 180
     },
-    "facing=west": {
-      "model": "scgextra:block/barbed_wires",
+    "facing=west,lit=true": {
+      "model": "scgextra:block/electrical_wire_on",
+      "y": 270
+    },
+    "facing=east,lit=false": {
+      "model": "scgextra:block/electrical_wire_off",
+      "y": 90
+    },
+    "facing=north,lit=false": {
+      "model": "scgextra:block/electrical_wire_off"
+    },
+    "facing=south,lit=false": {
+      "model": "scgextra:block/electrical_wire_off",
+      "y": 180
+    },
+    "facing=west,lit=false": {
+      "model": "scgextra:block/electrical_wire_off",
       "y": 270
     }
   }
