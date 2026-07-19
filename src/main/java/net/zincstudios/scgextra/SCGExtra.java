@@ -16,6 +16,7 @@ import net.zincstudios.scgextra.entity.neutral.head_hunter.HeadHunterSpawnReplac
 
 import com.mojang.logging.LogUtils;
 
+import net.zincstudios.scgextra.worldgen.structure.ModPieces;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -56,6 +57,7 @@ public class SCGExtra
         ModTerrablender.registerBiomes();
         ModStructures.register(modEventBus);
         ModStructureProcessors.register(modEventBus);
+        ModPieces.register(modEventBus);
 
         SCGEAttributes.register(modEventBus);
 
