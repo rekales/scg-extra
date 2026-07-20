@@ -39,6 +39,18 @@
     {
       "structure": "scgextra:rrc_warship",
       "weight": 1
+    },
+    {
+      "structure": "scgextra:cog_charge_station",
+      "weight": 1
+    },
+    {
+      "structure": "scgextra:cog_factory",
+      "weight": 1
+    },
+    {
+      "structure": "scgextra:cog_sky_carrier_fabricator",
+      "weight": 1
     }
   ],
   "placement": {

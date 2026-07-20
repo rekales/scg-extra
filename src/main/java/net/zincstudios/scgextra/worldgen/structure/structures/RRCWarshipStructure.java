@@ -23,18 +23,20 @@ public class RRCWarshipStructure extends Structure{
 
         BlockPos pos = new BlockPos(x, 61, z);
         BlockPos frontPos = new BlockPos(pos.getX(), pos.getY(), pos.getZ()+48);
-        return Optional.of(new GenerationStub(pos, builder -> {
-            builder.addPiece(new RRCWarshipPiece(
-                    context.structureTemplateManager(),
-                    pos,
-                    RRCWarshipPiece.TEMPLATE_BACK
-            ));
-            builder.addPiece(new RRCWarshipPiece(
-                    context.structureTemplateManager(),
-                    frontPos,
-                    RRCWarshipPiece.TEMPLATE_FRONT
-            ));
-        }));
+        return Optional.of(
+            new GenerationStub(pos, builder -> {
+                builder.addPiece(new RRCWarshipPiece(
+                        context.structureTemplateManager(),
+                        pos,
+                        RRCWarshipPiece.TEMPLATE_BACK
+                ));
+                builder.addPiece(new RRCWarshipPiece(
+                        context.structureTemplateManager(),
+                        frontPos,
+                        RRCWarshipPiece.TEMPLATE_FRONT
+                ));
+            })
+        );
     }
 
     @Override
