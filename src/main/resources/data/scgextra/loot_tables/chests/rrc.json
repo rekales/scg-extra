@@ -84,7 +84,7 @@
           "name": "scguns:makeshift_rifle",
           "conditions": [
             {
-              "chance": 0.1,
+              "chance": 0.05,
               "condition": "minecraft:random_chance"
             }
           ],
@@ -118,7 +118,7 @@
           "name": "scguns:iron_bayonet",
           "conditions": [
             {
-              "chance": 0.1,
+              "chance": 0.05,
               "condition": "minecraft:random_chance"
             }
           ],
@@ -152,7 +152,7 @@
           "name": "scguns:blooper",
           "conditions": [
             {
-              "chance": 0.1,
+              "chance": 0.05,
               "condition": "minecraft:random_chance"
             }
           ],
@@ -186,7 +186,7 @@
           "name": "scguns:boomstick",
           "conditions": [
             {
-              "chance": 0.1,
+              "chance": 0.05,
               "condition": "minecraft:random_chance"
             }
           ],

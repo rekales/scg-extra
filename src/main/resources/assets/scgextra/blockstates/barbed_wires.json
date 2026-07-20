@@ -2,18 +2,18 @@
   "variants": {
     "facing=east": {
       "model": "scgextra:block/barbed_wires",
-      "y": 90
+      "y": 180
     },
     "facing=north": {
-      "model": "scgextra:block/barbed_wires"
+      "model": "scgextra:block/barbed_wires",
+      "y": 90
     },
     "facing=south": {
       "model": "scgextra:block/barbed_wires",
-      "y": 180
+      "y": 270
     },
     "facing=west": {
-      "model": "scgextra:block/barbed_wires",
-      "y": 270
+      "model": "scgextra:block/barbed_wires"
     }
   }
 }

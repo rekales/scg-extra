@@ -2,15 +2,15 @@
   "structures": [
     {
       "structure": "scgextra:camping_site",
-      "weight": 3
+      "weight": 5
     },
     {
       "structure": "scgextra:destroyed_mine",
-      "weight": 2
+      "weight": 1
     },
     {
       "structure": "scgextra:fac_blimp",
-      "weight": 3
+      "weight": 1
     },
     {
       "structure": "scgextra:fac_castle",
@@ -22,15 +22,11 @@
     },
     {
       "structure": "scgextra:fac_warship",
-      "weight": 3
+      "weight": 1
     },
     {
       "structure": "scgextra:mine_trench",
-      "weight": 2
-    },
-    {
-      "structure": "scgextra:trenches",
-      "weight": 2
+      "weight": 1
     },
     {
       "structure": "scgextra:rrc_bunker",
@@ -47,8 +43,8 @@
   ],
   "placement": {
     "type": "minecraft:random_spread",
-    "spacing": 10,
-    "separation": 7,
+    "spacing": 40,
+    "separation": 15,
     "spread_type": "linear",
     "salt": 3726558,
     "frequency_reduction_method": "default",

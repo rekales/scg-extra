@@ -77,6 +77,8 @@
     ],
     [
       "minecraft:glow_lichen",
+      "minecraft:patch_tall_grass_2",
+      "minecraft:patch_grass_plain",
       "minecraft:patch_large_fern",
       "minecraft:patch_dead_bush_2",
       "minecraft:brown_mushroom_normal",
@@ -91,16 +93,16 @@
   "spawners": {
     "ambient": [],
     "axolotls": [],
-    "creature": [
+    "creature": [],
+    "misc": [],
+    "monster": [
       {
-        "type": "minecraft:allay",
-        "maxCount": 5,
-        "minCount": 3,
-        "weight": 2
+        "type": "scgextra:fac_trench_sniper",
+        "maxCount": 3,
+        "minCount": 1,
+        "weight": 1
       }
     ],
-    "misc": [],
-    "monster": [],
     "underground_water_creature": [],
     "water_ambient": [],
     "water_creature": []

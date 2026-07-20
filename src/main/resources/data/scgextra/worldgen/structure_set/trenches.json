@@ -1,16 +1,16 @@
 {
   "structures": [
     {
-      "structure": "scgextra:tree",
-      "weight": 5
+      "structure": "scgextra:trenches",
+      "weight": 1
     }
   ],
   "placement": {
     "type": "minecraft:random_spread",
-    "spacing": 2,
-    "separation": 1,
+    "spacing": 8,
+    "separation": 6,
     "spread_type": "linear",
-    "salt": 6548723,
+    "salt": 453534,
     "frequency_reduction_method": "default",
     "frequency": 1
   }

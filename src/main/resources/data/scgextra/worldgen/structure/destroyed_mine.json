@@ -1,15 +1,9 @@
 {
-    "type": "minecraft:jigsaw",
-    "start_pool": "scgextra:destroyed_mine",
-    "size": 1,
-    "max_distance_from_center": 64,
-    "spawn_overrides": {},
+    "type": "scgextra:destroyed_mine_structure",
     "start_height": {
-        "absolute": -8
+        "absolute": 0
     },
-    "project_start_to_heightmap": "MOTION_BLOCKING_NO_LEAVES",
-    "step": "surface_structures",
-    "terrain_adaptation": "beard_thin",
+    "start_pool": "scgextra:destroyed_mine",
     "biomes": [
         "scgextra:warzone_biome",
         "minecraft:plains",
@@ -24,5 +18,7 @@
         "minecraft:snowy_taiga",
         "minecraft:grove"
     ],
-    "use_expansion_hack": false
+    "step": "surface_structures",
+    "terrain_adaptation": "beard_thin",
+    "spawn_overrides": {}
 }
