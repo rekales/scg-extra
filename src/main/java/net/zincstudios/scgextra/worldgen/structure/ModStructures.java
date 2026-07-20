@@ -3,6 +3,7 @@ package net.zincstudios.scgextra.worldgen.structure;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.worldgen.structure.structures.TrenchesStructure;
 import net.zincstudios.scgextra.worldgen.structure.structures.WarshipStructure;
+import net.zincstudios.scgextra.worldgen.structure.structures.RRCWarshipStructure;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -19,10 +20,16 @@ public class ModStructures {
             () -> () -> TrenchesStructure.CODEC
         );
 
-    public static final RegistryObject<StructureType<WarshipStructure>> WARSHIP_STRUCTURE =
+    public static final RegistryObject<StructureType<WarshipStructure>> FAC_WARSHIP_STRUCTURE =
         STRUCTURE_TYPES.register(
-            "warship_structure",
+            "fac_warship_structure",
             () -> () -> WarshipStructure.CODEC
+        );
+
+    public static final RegistryObject<StructureType<RRCWarshipStructure>> RRC_WARSHIP_STRUCTURE =
+        STRUCTURE_TYPES.register(
+            "rrc_warship_structure",
+            () -> () -> RRCWarshipStructure.CODEC
         );
 
     public static void register(IEventBus modEventBus) {

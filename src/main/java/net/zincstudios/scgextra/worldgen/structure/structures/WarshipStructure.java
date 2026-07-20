@@ -34,7 +34,7 @@ public class WarshipStructure extends Structure{
 
     @Override
     public StructureType<?> type() {
-        return ModStructures.WARSHIP_STRUCTURE.get();
+        return ModStructures.FAC_WARSHIP_STRUCTURE.get();
     }
 
 }

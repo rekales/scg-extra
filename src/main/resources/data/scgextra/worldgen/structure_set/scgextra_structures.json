@@ -31,6 +31,18 @@
     {
       "structure": "scgextra:trenches",
       "weight": 2
+    },
+    {
+      "structure": "scgextra:rrc_bunker",
+      "weight": 1
+    },
+    {
+      "structure": "scgextra:rrc_turret",
+      "weight": 1
+    },
+    {
+      "structure": "scgextra:rrc_warship",
+      "weight": 1
     }
   ],
   "placement": {
