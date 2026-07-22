@@ -44,7 +44,7 @@ public class MineTrenchStructure extends Structure{
             Heightmap.Types.WORLD_SURFACE_WG,
             context.heightAccessor(),
             context.randomState()
-        )-11;
+        );
 
         if(y>72){
             return Optional.empty();

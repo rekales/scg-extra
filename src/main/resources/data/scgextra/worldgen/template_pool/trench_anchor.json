@@ -1,16 +1,16 @@
 {
-  "name": "scgextra:mine_trench",
+  "name": "scgextra:trench_anchor",
   "fallback": "minecraft:empty",
   "elements": [
     {
       "weight": 1,
       "element": {
-        "location": "scgextra:trenches/mine_trench",
+        "location": "scgextra:trench_anchor/trench_anchor",
         "processors": [
           {
             "processor_type": "minecraft:gravity",
             "heightmap": "WORLD_SURFACE_WG",
-            "offset": -11
+            "offset": -2
           }
         ],
         "projection": "rigid",

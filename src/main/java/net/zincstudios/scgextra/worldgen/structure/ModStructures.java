@@ -1,7 +1,6 @@
 package net.zincstudios.scgextra.worldgen.structure;
 
 import net.zincstudios.scgextra.SCGExtra;
-import net.zincstudios.scgextra.worldgen.structure.structures.TrenchesStructure;
 import net.zincstudios.scgextra.worldgen.structure.structures.WarshipStructure;
 import net.zincstudios.scgextra.worldgen.structure.structures.RRCWarshipStructure;
 import net.zincstudios.scgextra.worldgen.structure.structures.MineTrenchStructure;
@@ -14,12 +13,6 @@ import net.minecraftforge.registries.RegistryObject;
 public class ModStructures {
     public static final DeferredRegister<StructureType<?>> STRUCTURE_TYPES = DeferredRegister
             .create(Registries.STRUCTURE_TYPE, SCGExtra.MOD_ID);
-
-    public static final RegistryObject<StructureType<TrenchesStructure>> TRENCHES_STRUCTURE =
-        STRUCTURE_TYPES.register(
-            "trenches",
-            () -> () -> TrenchesStructure.CODEC
-        );
 
     public static final RegistryObject<StructureType<WarshipStructure>> FAC_WARSHIP_STRUCTURE =
         STRUCTURE_TYPES.register(

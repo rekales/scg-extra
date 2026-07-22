@@ -1,7 +1,4 @@
 {
   "processors": [
-    {
-      "processor_type": "scgextra:trenches_processor"
-    }
   ]
 }
