@@ -38,6 +38,18 @@
         {
           "type": "minecraft:item",
           "name": "scguns:choke_bomb"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:basic_poultice"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:honey_sulfur_poultice"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scgextra:bandage"
         }
       ],
       "rolls": 4,
@@ -84,7 +96,7 @@
           "name": "scguns:jackhammer",
           "conditions": [
             {
-              "chance": 0.1,
+              "chance": 0.05,
               "condition": "minecraft:random_chance"
             }
           ],
@@ -133,7 +145,7 @@
           "name": "scguns:grandle",
           "conditions": [
             {
-              "chance": 0.1,
+              "chance": 0.05,
               "condition": "minecraft:random_chance"
             }
           ],
@@ -167,7 +179,7 @@
           "name": "scguns:cogloader",
           "conditions": [
             {
-              "chance": 0.1,
+              "chance": 0.05,
               "condition": "minecraft:random_chance"
             }
           ],

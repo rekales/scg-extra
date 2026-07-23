@@ -13,5 +13,6 @@
   ],
   "step": "surface_structures",
   "terrain_adaptation": "none",
-  "spawn_overrides": {}
+  "spawn_overrides": {},
+  "use_expansion_hack": false
 }

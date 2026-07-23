@@ -220,7 +220,12 @@
           "type": "minecraft:item",
           "name": "scguns:iron_javelin",
           "weight": 1,
-          "conditions": [],
+          "conditions": [
+            {
+              "chance": 0.05,
+              "condition": "minecraft:random_chance"
+            }
+          ],
           "functions": [
             {
               "function": "minecraft:limit_count",
@@ -279,7 +284,12 @@
           "type": "minecraft:item",
           "name": "scguns:trenchur",
           "weight": 1,
-          "conditions": [],
+          "conditions": [
+            {
+              "chance": 0.05,
+              "condition": "minecraft:random_chance"
+            }
+          ],
           "functions": [
             {
               "function": "minecraft:limit_count",

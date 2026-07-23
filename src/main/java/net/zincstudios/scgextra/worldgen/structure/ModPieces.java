@@ -1,7 +1,6 @@
 package net.zincstudios.scgextra.worldgen.structure;
 
 import net.zincstudios.scgextra.SCGExtra;
-import net.zincstudios.scgextra.worldgen.structure.pieces.DestroyedMinesPiece;
 import net.zincstudios.scgextra.worldgen.structure.pieces.RRCWarshipPiece;
 import net.zincstudios.scgextra.worldgen.structure.pieces.WarshipPiece;
 import net.minecraft.core.registries.Registries;
@@ -19,9 +18,6 @@ public class ModPieces {
 
     public static final RegistryObject<StructurePieceType> RRC_WARSHIP =
         STRUCTURE_PIECES.register("rrc_warship", ()->RRCWarshipPiece::new);
-
-    public static final RegistryObject<StructurePieceType> DESTROYED_MINE =
-        STRUCTURE_PIECES.register("fac_destroyed_mine", ()->DestroyedMinesPiece::new);
 
     public static void register(IEventBus modEventBus) {
         STRUCTURE_PIECES.register(modEventBus);

@@ -7,7 +7,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.WorldGenerationContext;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
@@ -20,7 +23,7 @@ public class MineTrenchStructure extends Structure{
             settingsCodec(codex),
             StructureTemplatePool.CODEC.fieldOf("start_pool").forGetter(structure -> structure.startPool),
             HeightProvider.CODEC.fieldOf("start_height").forGetter(structure -> structure.startHeight),
-            Heightmap.Types.CODEC.optionalFieldOf("heightmap").forGetter(structure -> structure.heightmap)
+            Heightmap.Types.CODEC.optionalFieldOf("project_start_to_heightmap").forGetter(structure -> structure.heightmap)
     ).apply(codex, MineTrenchStructure::new)).codec();
 
     public final Holder<StructureTemplatePool> startPool;
@@ -36,30 +39,21 @@ public class MineTrenchStructure extends Structure{
 
     @Override
     protected Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
-        int x = context.chunkPos().getMiddleBlockX();
-        int z = context.chunkPos().getMiddleBlockZ();
-        int y = context.chunkGenerator().getFirstOccupiedHeight(
-            x,
-            z,
-            Heightmap.Types.WORLD_SURFACE_WG,
-            context.heightAccessor(),
-            context.randomState()
-        );
-
-        if(y>72){
-            return Optional.empty();
+        ChunkPos chunkpos = context.chunkPos();
+        int i = this.startHeight.sample(context.random(), new WorldGenerationContext(context.chunkGenerator(), context.heightAccessor()));
+        BlockPos blockpos = new BlockPos(chunkpos.getMinBlockX(), i, chunkpos.getMinBlockZ());
+        if(context.chunkGenerator().getBaseColumn(context.chunkPos().getMinBlockX(), context.chunkPos().getMinBlockZ(), context.heightAccessor(), context.randomState()).getBlock(blockpos.getY()).is(Blocks.WATER)){
+                return Optional.empty();
         }
-
-        BlockPos pos = new BlockPos(x, y, z);
         return JigsawPlacement.addPieces(
-            context, 
-            this.startPool, 
-            Optional.empty(), 
-            4, 
-            pos, 
-            false, 
-            this.heightmap, 
-            64
+                context, 
+                startPool, 
+                Optional.empty(), 
+                7, 
+                blockpos, 
+                false, 
+                heightmap, 
+                64
         );
     }
 

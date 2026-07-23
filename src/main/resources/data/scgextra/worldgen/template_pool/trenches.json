@@ -9,8 +9,8 @@
         "processors": [
           {
             "processor_type": "minecraft:gravity",
-            "heightmap": "WORLD_SURFACE_WG",
-            "offset": -3
+            "heightmap": "WORLD_SURFACE",
+            "offset": -4
           }
         ],
         "projection": "rigid",
@@ -24,8 +24,8 @@
         "processors": [
           {
             "processor_type": "minecraft:gravity",
-            "heightmap": "WORLD_SURFACE_WG",
-            "offset": -3
+            "heightmap": "WORLD_SURFACE",
+            "offset": -4
           }
         ],
         "projection": "rigid",
@@ -39,8 +39,8 @@
         "processors": [
           {
             "processor_type": "minecraft:gravity",
-            "heightmap": "WORLD_SURFACE_WG",
-            "offset": -3
+            "heightmap": "WORLD_SURFACE",
+            "offset": -4
           }
         ],
         "projection": "rigid",
@@ -54,8 +54,8 @@
         "processors": [
           {
             "processor_type": "minecraft:gravity",
-            "heightmap": "WORLD_SURFACE_WG",
-            "offset": -3
+            "heightmap": "WORLD_SURFACE",
+            "offset": -4
           }
         ],
         "projection": "rigid",
@@ -69,8 +69,8 @@
         "processors": [
           {
             "processor_type": "minecraft:gravity",
-            "heightmap": "WORLD_SURFACE_WG",
-            "offset": -3
+            "heightmap": "WORLD_SURFACE",
+            "offset": -4
           }
         ],
         "projection": "rigid",
@@ -84,8 +84,8 @@
         "processors": [
           {
             "processor_type": "minecraft:gravity",
-            "heightmap": "WORLD_SURFACE_WG",
-            "offset": -3
+            "heightmap": "WORLD_SURFACE",
+            "offset": -4
           }
         ],
         "projection": "rigid",
@@ -99,8 +99,8 @@
         "processors": [
           {
             "processor_type": "minecraft:gravity",
-            "heightmap": "WORLD_SURFACE_WG",
-            "offset": -3
+            "heightmap": "WORLD_SURFACE",
+            "offset": -4
           }
         ],
         "projection": "rigid",
@@ -114,8 +114,8 @@
         "processors": [
           {
             "processor_type": "minecraft:gravity",
-            "heightmap": "WORLD_SURFACE_WG",
-            "offset": -3
+            "heightmap": "WORLD_SURFACE",
+            "offset": -4
           }
         ],
         "projection": "rigid",
@@ -129,8 +129,8 @@
         "processors": [
           {
             "processor_type": "minecraft:gravity",
-            "heightmap": "WORLD_SURFACE_WG",
-            "offset": -3
+            "heightmap": "WORLD_SURFACE",
+            "offset": -4
           }
         ],
         "projection": "rigid",
@@ -144,8 +144,8 @@
         "processors": [
           {
             "processor_type": "minecraft:gravity",
-            "heightmap": "WORLD_SURFACE_WG",
-            "offset": -3
+            "heightmap": "WORLD_SURFACE",
+            "offset": -4
           }
         ],
         "projection": "rigid",
@@ -159,8 +159,8 @@
         "processors": [
           {
             "processor_type": "minecraft:gravity",
-            "heightmap": "WORLD_SURFACE_WG",
-            "offset": -3
+            "heightmap": "WORLD_SURFACE",
+            "offset": -4
           }
         ],
         "projection": "rigid",
@@ -174,8 +174,8 @@
         "processors": [
           {
             "processor_type": "minecraft:gravity",
-            "heightmap": "WORLD_SURFACE_WG",
-            "offset": -3
+            "heightmap": "WORLD_SURFACE",
+            "offset": -4
           }
         ],
         "projection": "rigid",
@@ -189,8 +189,8 @@
         "processors": [
           {
             "processor_type": "minecraft:gravity",
-            "heightmap": "WORLD_SURFACE_WG",
-            "offset": -3
+            "heightmap": "WORLD_SURFACE",
+            "offset": -4
           }
         ],
         "projection": "rigid",
@@ -204,8 +204,8 @@
         "processors": [
           {
             "processor_type": "minecraft:gravity",
-            "heightmap": "WORLD_SURFACE_WG",
-            "offset": -3
+            "heightmap": "WORLD_SURFACE",
+            "offset": -4
           }
         ],
         "projection": "rigid",
@@ -219,8 +219,8 @@
         "processors": [
           {
             "processor_type": "minecraft:gravity",
-            "heightmap": "WORLD_SURFACE_WG",
-            "offset": -3
+            "heightmap": "WORLD_SURFACE",
+            "offset": -4
           }
         ],
         "projection": "rigid",

@@ -3,7 +3,9 @@ package net.zincstudios.scgextra.worldgen.structure;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.worldgen.structure.structures.WarshipStructure;
 import net.zincstudios.scgextra.worldgen.structure.structures.RRCWarshipStructure;
+import net.zincstudios.scgextra.worldgen.structure.structures.DestroyedMinesStructure;
 import net.zincstudios.scgextra.worldgen.structure.structures.MineTrenchStructure;
+import net.zincstudios.scgextra.worldgen.structure.structures.TrenchesAnchorStructure;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -32,10 +34,16 @@ public class ModStructures {
             () -> () -> MineTrenchStructure.CODEC
         );
 
-    public static final RegistryObject<StructureType<MineTrenchStructure>> DESTROYED_MINE_STRUCTURE =
+    public static final RegistryObject<StructureType<DestroyedMinesStructure>> DESTROYED_MINE_STRUCTURE =
         STRUCTURE_TYPES.register(
             "destroyed_mine_structure",
-            () -> () -> MineTrenchStructure.CODEC
+            () -> () -> DestroyedMinesStructure.CODEC
+        );
+
+    public static final RegistryObject<StructureType<TrenchesAnchorStructure>> TRENCHES_ANCHOR_STRUCTURE =
+        STRUCTURE_TYPES.register(
+            "trenches_anchor_structure",
+            () -> () -> TrenchesAnchorStructure.CODEC
         );
 
     public static void register(IEventBus modEventBus) {
