@@ -1,11 +1,6 @@
 {
   "type": "scgextra:rrc_warship_structure",
   "biomes": [
-    "minecraft:cold_ocean",
-    "minecraft:frozen_ocean",
-    "minecraft:lukewarm_ocean",
-    "minecraft:ocean",
-    "minecraft:warm_ocean",
     "minecraft:deep_cold_ocean",
     "minecraft:deep_frozen_ocean",
     "minecraft:deep_lukewarm_ocean",

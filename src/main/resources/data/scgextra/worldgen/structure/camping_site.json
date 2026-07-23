@@ -1,5 +1,5 @@
 {
-  "type": "minecraft:jigsaw",
+  "type": "scgextra:camping_site_structure",
   "start_pool": "scgextra:camping_site",
   "size": 1,
   "max_distance_from_center": 64,
@@ -7,7 +7,7 @@
   "start_height": {
     "absolute": -2
   },
-  "project_start_to_heightmap": "WORLD_SURFACE_WG",
+  "project_start_to_heightmap": "MOTION_BLOCKING_NO_LEAVES",
   "step": "surface_structures",
   "terrain_adaptation": "beard_thin",
   "biomes": "scgextra:warzone_biome",

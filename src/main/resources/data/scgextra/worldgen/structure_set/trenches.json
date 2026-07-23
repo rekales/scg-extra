@@ -12,6 +12,10 @@
     "spread_type": "linear",
     "salt": 4723675,
     "frequency_reduction_method": "default",
-    "frequency": 1
+    "frequency": 1,
+    "exclusion_zone": {
+      "other_set": "scgextra:scgextra_structures",
+      "chunk_count": 1
+    }
   }
 }

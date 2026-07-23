@@ -3,6 +3,7 @@ package net.zincstudios.scgextra.worldgen.structure;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.worldgen.structure.structures.WarshipStructure;
 import net.zincstudios.scgextra.worldgen.structure.structures.RRCWarshipStructure;
+import net.zincstudios.scgextra.worldgen.structure.structures.CampingSiteStructure;
 import net.zincstudios.scgextra.worldgen.structure.structures.DestroyedMinesStructure;
 import net.zincstudios.scgextra.worldgen.structure.structures.MineTrenchStructure;
 import net.zincstudios.scgextra.worldgen.structure.structures.TrenchesAnchorStructure;
@@ -44,6 +45,12 @@ public class ModStructures {
         STRUCTURE_TYPES.register(
             "trenches_anchor_structure",
             () -> () -> TrenchesAnchorStructure.CODEC
+        );
+
+    public static final RegistryObject<StructureType<CampingSiteStructure>> CAMPING_SITE_STRUCTURE =
+        STRUCTURE_TYPES.register(
+            "camping_site_structure",
+            () -> () -> CampingSiteStructure.CODEC
         );
 
     public static void register(IEventBus modEventBus) {
