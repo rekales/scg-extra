@@ -18,8 +18,11 @@ import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.goal.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.sounds.InterruptibleVoice;
 import net.zincstudios.scgextra.sounds.WreckersSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
+
+import java.util.List;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -27,7 +30,7 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class WreckerBlueEntity extends GunnerEntity implements GeoEntity {
+public class WreckerBlueEntity extends GunnerEntity implements GeoEntity, InterruptibleVoice {
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
@@ -109,11 +112,11 @@ public class WreckerBlueEntity extends GunnerEntity implements GeoEntity {
     public boolean doHurtTarget(Entity target) {
         boolean hit = super.doHurtTarget(target);
         if (hit) {
+
             this.playSound(MobUtil.getSound(this.random,
                     WreckersSounds.BLUE_ATTACK_1.get(),
                     WreckersSounds.BLUE_ATTACK_2.get(),
-                    WreckersSounds.BLUE_ATTACK_3.get(),
-                    WreckersSounds.BLUE_ATTACK_4.get()
+                    WreckersSounds.BLUE_ATTACK_3.get()
             ), 0.5F, 1.0F);
         }
         return hit;
@@ -169,5 +172,10 @@ public class WreckerBlueEntity extends GunnerEntity implements GeoEntity {
     protected SoundEvent getDeathSound() {
         return MobUtil.getSound(this.random,
                 WreckersSounds.BLUE_DEATH_1.get(), WreckersSounds.BLUE_DEATH_2.get());
+    }
+
+    @Override
+    public List<SoundEvent> voiceLinesToSilenceOnDeath() {
+        return WreckersSounds.blueVoiceLines();
     }
 }

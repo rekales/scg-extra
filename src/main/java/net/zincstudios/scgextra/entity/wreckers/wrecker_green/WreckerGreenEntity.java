@@ -21,8 +21,11 @@ import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.goal.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.sounds.InterruptibleVoice;
 import net.zincstudios.scgextra.sounds.WreckersSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
+
+import java.util.List;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -32,7 +35,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-public class WreckerGreenEntity extends GunnerEntity implements GeoEntity {
+public class WreckerGreenEntity extends GunnerEntity implements GeoEntity, InterruptibleVoice {
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
@@ -116,7 +119,7 @@ public class WreckerGreenEntity extends GunnerEntity implements GeoEntity {
     public void die(DamageSource cause) {
         if (!this.level().isClientSide() && !this.exploded) {
             this.exploded = true;
-            // No block damage; loot is dropped by super.die() right after the blast.
+
             this.level().explode(this, this.getX(), this.getY() + 0.5D, this.getZ(),
                     EXPLOSION_RADIUS, Level.ExplosionInteraction.NONE);
         }
@@ -173,5 +176,10 @@ public class WreckerGreenEntity extends GunnerEntity implements GeoEntity {
                 WreckersSounds.GANG_DEATH_1.get(), WreckersSounds.GANG_DEATH_2.get(),
                 WreckersSounds.GANG_DEATH_3.get(), WreckersSounds.GANG_DEATH_4.get(),
                 WreckersSounds.GANG_DEATH_5.get());
+    }
+
+    @Override
+    public List<SoundEvent> voiceLinesToSilenceOnDeath() {
+        return WreckersSounds.gangVoiceLines();
     }
 }

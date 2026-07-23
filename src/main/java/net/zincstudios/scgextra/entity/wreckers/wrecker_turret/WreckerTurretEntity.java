@@ -23,8 +23,11 @@ import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.goal.AlertFactionGoal;
 import net.zincstudios.scgextra.entity.common.goal.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.sounds.InterruptibleVoice;
 import net.zincstudios.scgextra.sounds.WreckersSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
+
+import java.util.List;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -33,7 +36,7 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import top.ribs.scguns.item.GunItem;
 
-public class WreckerTurretEntity extends GunnerEntity implements GeoEntity {
+public class WreckerTurretEntity extends GunnerEntity implements GeoEntity, InterruptibleVoice {
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation ATTACK = RawAnimation.begin().thenLoop("attack");
@@ -52,7 +55,7 @@ public class WreckerTurretEntity extends GunnerEntity implements GeoEntity {
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
                 .add(Attributes.FOLLOW_RANGE, 32.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.0D)   // stationary
+                .add(Attributes.MOVEMENT_SPEED, 0.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
                 .add(Attributes.ATTACK_DAMAGE, 2.0D)
                 .add(Attributes.ARMOR, 10.0D)
@@ -156,5 +159,10 @@ public class WreckerTurretEntity extends GunnerEntity implements GeoEntity {
         return MobUtil.getSound(this.random,
                 WreckersSounds.GANG_DEATH_1.get(), WreckersSounds.GANG_DEATH_2.get(),
                 WreckersSounds.GANG_DEATH_3.get());
+    }
+
+    @Override
+    public List<SoundEvent> voiceLinesToSilenceOnDeath() {
+        return WreckersSounds.gangVoiceLines();
     }
 }

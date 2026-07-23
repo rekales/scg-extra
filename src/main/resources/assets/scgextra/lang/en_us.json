@@ -139,11 +139,15 @@
   "item.scgextra.wrecker_turret_spawn_egg": "Wrecker Turret Spawn Egg",
   "entity.scgextra.wrecker_dozer": "Wrecker Dozer",
   "item.scgextra.wrecker_dozer_spawn_egg": "Wrecker Dozer Spawn Egg",
-  "entity.scgextra.wrecker_rocket": "Wrecker Rocket",
   "item.scgextra.wrecking_tool": "Wrecking Tool",
   "item.scgextra.wrecker_sledge_hammer": "Wrecker Sledge Hammer",
   "item.scgextra.wrecker_rpg": "Wrecker RPG",
-  "item.scgextra.wrecker_rocket": "Wrecker Rocket",
+  "block.scgextra.wrecker_turret": "Stationary Turret",
+  "block.scgextra.wrecker_turret.ammo": "Ammo: %s",
+  "block.scgextra.wrecker_turret.ammo_type": "Ammo: %s",
+  "block.scgextra.wrecker_turret.desc": "Right-click empty-handed to man it: you are locked in at the back, aim with your view and hold attack to fire. Sneak to dismount. Right-click with ammo to load.",
+  "block.scgextra.wrecker_turret.occupied": "Someone else is already manning this turret.",
+  "entity.scgextra.turret_seat": "Turret Seat",
   "scgextra.raid.label.wreckers": "Wreckers",
   "scgextra.raid.announcement.wreckers": "The Wreckers are tearing through!"
 }

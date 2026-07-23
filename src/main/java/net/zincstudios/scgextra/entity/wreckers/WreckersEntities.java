@@ -96,9 +96,9 @@ public class WreckersEntities {
                 new OffsetRotatedHeadshotBox<>(10.0, 28.0, 1.0, 0.0F, false, true));
         BoundingBoxManager.registerHeadshotBox(WRECKER_GREEN.get(), new BasicHeadshotBox<>(10.0, 10.0, 28.0));
         BoundingBoxManager.registerHeadshotBox(WRECKER_JUMBO.get(),
-                new OffsetRotatedHeadshotBox<>(13.0, 12.0, 53.0, 0.0F, 8.5, false, true));
+                new OffsetRotatedHeadshotBox<>(16.0, 14.0, 52.0, 0.0F, 4.25, false, true));
         BoundingBoxManager.registerHeadshotBox(WRECKER_TURRET.get(),
-                new OffsetRotatedHeadshotBox<>(10.0, 9.0, 23.5, 0.0F, -12.5, false, true));
+                new OffsetRotatedHeadshotBox<>(10.0, 9.0, 23.5, 0.0F, -6.0, false, true));
         BoundingBoxManager.registerHeadshotBox(WRECKER_DOZER.get(),
                 new OffsetRotatedHeadshotBox<>(13.0, 16.0, 9.0, 0.0F, false, true));
         WeakPointBoxManager.registerWeakPointBox(WRECKER_DOZER.get(),

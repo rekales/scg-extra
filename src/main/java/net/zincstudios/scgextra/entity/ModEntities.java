@@ -1,6 +1,7 @@
 package net.zincstudios.scgextra.entity;
 
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.Level;
@@ -25,13 +26,13 @@ import net.zincstudios.scgextra.entity.projectile.ArmoredWhaleProjectileEntity;
 import net.zincstudios.scgextra.entity.projectile.FireProjectile;
 import net.zincstudios.scgextra.entity.projectile.SoulFireBallRenderer;
 import net.zincstudios.scgextra.entity.projectile.SoulFireball;
-import net.zincstudios.scgextra.entity.projectile.WreckerRocketEntity;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntity;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntityRenderer;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
+import net.zincstudios.scgextra.entity.turret.TurretManningHandler;
+import net.zincstudios.scgextra.entity.turret.TurretSeatEntity;
 import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
 import net.zincstudios.scgextra.entity.wreckers.WreckersEntities;
-import top.ribs.scguns.client.render.entity.RocketRenderer;
 import top.ribs.scguns.entity.client.EnemyProjectileRenderer;
 
 public class ModEntities {
@@ -65,6 +66,15 @@ public class ModEntities {
                     .setShouldReceiveVelocityUpdates(true)
                     .build("fire_projectile"));
 
+    public static final RegistryObject<EntityType<TurretSeatEntity>> TURRET_SEAT = ENTITY_TYPES
+            .register("turret_seat", () -> EntityType.Builder.<TurretSeatEntity>of(TurretSeatEntity::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .noSummon()
+                    .fireImmune()
+                    .clientTrackingRange(8)
+                    .updateInterval(20)
+                    .build("turret_seat"));
+
     public static final RegistryObject<EntityType<SoulFireball>> LARGE_SOUL_FIREBALL = ENTITY_TYPES
             .register("soul_fireball", () -> EntityType.Builder.of(
                     (EntityType<SoulFireball> type, Level level) -> new SoulFireball(type, level), MobCategory.MISC)
@@ -72,18 +82,6 @@ public class ModEntities {
                     .clientTrackingRange(4)
                     .updateInterval(3)
                     .build("soul_fireball"));
-
-    public static final RegistryObject<EntityType<WreckerRocketEntity>> WRECKER_ROCKET = ENTITY_TYPES
-            .register("wrecker_rocket", () -> EntityType.Builder.of(
-                    (EntityType<WreckerRocketEntity> type, Level level) -> new WreckerRocketEntity(type, level), MobCategory.MISC)
-                    .sized(0.25F, 0.25F)
-                    .setTrackingRange(100)
-                    .setUpdateInterval(1)
-                    .noSummon()
-                    .fireImmune()
-                    .noSave()
-                    .setShouldReceiveVelocityUpdates(true)
-                    .build("wrecker_rocket"));
 
     public static void register(IEventBus modEventBus) {
         WhalerEntities.register(modEventBus);
@@ -102,6 +100,8 @@ public class ModEntities {
 
         modEventBus.addListener(ModEntities::registerAttributes);
         MinecraftForge.EVENT_BUS.addListener(EntityAdjustments::onEntityJoin);
+        MinecraftForge.EVENT_BUS.addListener(TurretManningHandler::onLeftClickBlock);
+        MinecraftForge.EVENT_BUS.addListener(TurretManningHandler::onAttackEntity);
         if (FMLEnvironment.dist == Dist.CLIENT) {
             modEventBus.addListener(ModEntities::onClientSetup);
         }
@@ -118,6 +118,6 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.FIRE_PROJECTILE.get(), EnemyProjectileRenderer::new);
         EntityRenderers.register(ModEntities.RAID_SUMMONER.get(), RaidSummonerRenderer::new);
         EntityRenderers.register(ModEntities.LARGE_SOUL_FIREBALL.get(), SoulFireBallRenderer::new);
-        EntityRenderers.register(ModEntities.WRECKER_ROCKET.get(), RocketRenderer::new);
+        EntityRenderers.register(ModEntities.TURRET_SEAT.get(), NoopRenderer::new);
     }
 }

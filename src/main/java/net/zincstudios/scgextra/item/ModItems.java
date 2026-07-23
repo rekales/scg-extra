@@ -12,6 +12,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.SCGExtra;
+import net.zincstudios.scgextra.block.ModBlocks;
 import net.zincstudios.scgextra.entity.cog.COGEntities;
 import net.zincstudios.scgextra.entity.neutral.NeutralEntities;
 import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
@@ -19,7 +20,6 @@ import net.zincstudios.scgextra.entity.fac.FACEntities;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
 import net.zincstudios.scgextra.entity.wreckers.WreckersEntities;
-import top.ribs.scguns.item.AmmoItem;
 import top.ribs.scguns.item.GunItem;
 
 @SuppressWarnings("unused")
@@ -53,8 +53,8 @@ public class ModItems {
             () -> new GunItem(new Item.Properties().stacksTo(1).durability(100))
     );
 
-    public static final RegistryObject<Item> WRECKER_ROCKET = ITEMS.register("wrecker_rocket",
-            () -> new AmmoItem(new Item.Properties().stacksTo(16))
+    public static final RegistryObject<Item> WRECKER_TURRET = ITEMS.register("wrecker_turret",
+            () -> new net.zincstudios.scgextra.item.custom.WreckerTurretItem(ModBlocks.WRECKER_TURRET.get(), new Item.Properties())
     );
 
     public static final RegistryObject<Item> WALKER_MG = ITEMS.register("walker_mg",

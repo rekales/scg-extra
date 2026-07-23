@@ -2,6 +2,8 @@ package net.zincstudios.scgextra;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.config.ModConfig;
+import net.zincstudios.scgextra.block.ModBlockEntities;
+import net.zincstudios.scgextra.block.ModBlocks;
 import net.zincstudios.scgextra.data.RaidDataLoader;
 import net.zincstudios.scgextra.datagen.DataGenerators;
 import net.zincstudios.scgextra.debug.DevTestCommands;
@@ -16,18 +18,17 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import net.zincstudios.scgextra.entity.projectile.WreckerRocketEntity;
 import net.zincstudios.scgextra.item.ArmorPiercingHandler;
 import net.zincstudios.scgextra.item.ModItems;
+import net.zincstudios.scgextra.network.ModNetwork;
 import net.zincstudios.scgextra.particle.ModParticleTypes;
 import net.zincstudios.scgextra.raid.WaveRaidManager;
 import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.sounds.WreckerDeathSounds;
 
 import org.slf4j.Logger;
-import top.ribs.scguns.common.ProjectileManager;
 
 @SuppressWarnings("unused")
 @Mod(SCGExtra.MOD_ID)
@@ -40,12 +41,15 @@ public class SCGExtra
     {
         IEventBus modEventBus = context.getModEventBus();
 
-        modEventBus.addListener(this::commonSetup);
         ModEntities.register(modEventBus);
         ModEffects.register(modEventBus);
+        ModBlocks.register(modEventBus);
+        ModBlockEntities.register(modEventBus);
         ModItems.register(modEventBus);
         ModSounds.register(modEventBus);
         ModParticleTypes.register(modEventBus);
+
+        ModNetwork.register();
 
         modEventBus.addListener(this::addCreative);
 
@@ -61,15 +65,9 @@ public class SCGExtra
         MinecraftForge.EVENT_BUS.addListener(DevTestCommands::registerCommands);
         MinecraftForge.EVENT_BUS.addListener(ArmorPiercingHandler::onLivingHurt);
         MinecraftForge.EVENT_BUS.addListener(ArmorPiercingHandler::onLivingDamage);
+        MinecraftForge.EVENT_BUS.addListener(WreckerDeathSounds::onLivingDeath);
 
         modEventBus.addListener(DataGenerators::gatherData);
-    }
-
-    private void commonSetup(final FMLCommonSetupEvent event)
-    {
-        event.enqueueWork(() -> ProjectileManager.getInstance().registerFactory(ModItems.WRECKER_ROCKET.get(),
-                (level, shooter, weapon, item, modifiedGun) ->
-                        new WreckerRocketEntity(ModEntities.WRECKER_ROCKET.get(), level, shooter, weapon, item, modifiedGun)));
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event)

@@ -2,34 +2,39 @@ package net.zincstudios.scgextra.entity.wreckers.wrecker_dozer;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.CommonConfig;
+import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.sounds.WreckersSounds;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
 public class WreckerDozerChargeGoal extends Goal {
 
-    private static final int WARNING_TICKS = 10;
-    private static final int RECOVER_TICKS = 6;
+    private static final int WARNING_TICKS = 20;
+    private static final int CHARGE_TICKS = 30;
+    private static final double SPEED_MULTIPLIER = 6.0D;
+    private static final double MIN_TRIGGER_DISTANCE = 4.0D;
+    private static final double MAX_TRIGGER_DISTANCE = 20.0D;
 
     private final WreckerDozerEntity dozer;
     private final int cooldownTicks;
-    private final float range;
     private final float damage;
+    private final List<LivingEntity> affectedEntities = new ArrayList<>();
 
     private long cooldownEnd;
-    private int warningTimer = -1;
-    private int recoverTimer = 0;
+    private Vec3 ramDirection = Vec3.ZERO;
+    private int duration;
 
-    public WreckerDozerChargeGoal(WreckerDozerEntity dozer, int cooldownTicks, float range, float damage) {
+    public WreckerDozerChargeGoal(WreckerDozerEntity dozer, int cooldownTicks, float damage) {
         this.dozer = dozer;
         this.cooldownTicks = cooldownTicks;
-        this.range = range;
         this.damage = damage;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
@@ -46,12 +51,13 @@ public class WreckerDozerChargeGoal extends Goal {
         if (this.dozer.level().getGameTime() < this.cooldownEnd) {
             return false;
         }
-        return this.dozer.distanceTo(target) <= this.range;
+        double dist = this.dozer.distanceTo(target);
+        return dist >= MIN_TRIGGER_DISTANCE && dist <= MAX_TRIGGER_DISTANCE;
     }
 
     @Override
     public boolean canContinueToUse() {
-        return this.warningTimer >= 0 || this.recoverTimer > 0;
+        return this.duration < WARNING_TICKS + CHARGE_TICKS && !this.dozer.isStunned();
     }
 
     @Override
@@ -61,41 +67,67 @@ public class WreckerDozerChargeGoal extends Goal {
 
     @Override
     public void start() {
-        this.warningTimer = WARNING_TICKS;
+        this.duration = 0;
+        this.affectedEntities.clear();
+        this.affectedEntities.add(this.dozer);
         this.dozer.getNavigation().stop();
         this.dozer.setChargeWarning(true);
         this.dozer.playSound(WreckersSounds.DOZER_CHARGE.get(), 1.2F, 1.0F);
+        LivingEntity target = this.dozer.getTarget();
+        if (target != null) {
+            Vec3 direction = target.position().subtract(this.dozer.position());
+            this.ramDirection = new Vec3(direction.x, 0.0D, direction.z).normalize();
+        }
     }
 
     @Override
     public void stop() {
-        this.warningTimer = -1;
-        this.recoverTimer = 0;
         this.dozer.setChargeWarning(false);
         this.cooldownEnd = this.dozer.level().getGameTime() + this.cooldownTicks;
     }
 
     @Override
     public void tick() {
-        this.dozer.getNavigation().stop();
-        LivingEntity target = this.dozer.getTarget();
-        if (target != null) {
-            this.dozer.getLookControl().setLookAt(target, 30.0F, 30.0F);
+        this.duration++;
+
+        if (this.duration <= WARNING_TICKS) {
+            this.dozer.getNavigation().stop();
+            LivingEntity target = this.dozer.getTarget();
+            if (target != null) {
+                this.dozer.getLookControl().setLookAt(target, 30.0F, 30.0F);
+                Vec3 direction = target.position().subtract(this.dozer.position());
+                this.ramDirection = new Vec3(direction.x, 0.0D, direction.z).normalize();
+            }
+            this.spawnWarningParticles();
+            return;
         }
 
-        if (this.warningTimer > 0) {
-            this.spawnWarningParticles();
-            this.warningTimer--;
-            return;
+        if (this.duration == WARNING_TICKS + 1) {
+            this.dozer.setChargeWarning(false);
         }
-        if (this.warningTimer == 0) {
-            this.warningTimer = -1;
-            this.detonate();
-            this.recoverTimer = RECOVER_TICKS;
-            return;
-        }
-        if (this.recoverTimer > 0) {
-            this.recoverTimer--;
+
+        float ramYaw = (float) Mth.wrapDegrees(Math.toDegrees(Mth.atan2(this.ramDirection.z, this.ramDirection.x)) - 90.0D);
+        this.dozer.setYRot(ramYaw);
+        this.dozer.yBodyRot = ramYaw;
+        this.dozer.yHeadRot = ramYaw;
+
+        double speed = this.dozer.getAttributeValue(Attributes.MOVEMENT_SPEED) * SPEED_MULTIPLIER;
+        this.dozer.setDeltaMovement(
+                this.ramDirection.x * speed,
+                this.dozer.getDeltaMovement().y,
+                this.ramDirection.z * speed);
+
+        List<LivingEntity> victims = this.dozer.level().getEntitiesOfClass(LivingEntity.class,
+                this.dozer.getBoundingBox().inflate(0.5D));
+        for (LivingEntity victim : victims) {
+            if (this.affectedEntities.contains(victim)) {
+                continue;
+            }
+            if (!Faction.isFriendlies(this.dozer, victim)) {
+                victim.hurt(this.dozer.damageSources().mobAttack(this.dozer), this.damage);
+                victim.knockback(1.0D, this.dozer.getX() - victim.getX(), this.dozer.getZ() - victim.getZ());
+            }
+            this.affectedEntities.add(victim);
         }
     }
 
@@ -103,31 +135,16 @@ public class WreckerDozerChargeGoal extends Goal {
         if (!(this.dozer.level() instanceof ServerLevel level)) {
             return;
         }
-        Vec3 vent = this.dozer.position().add(0.0D, this.dozer.getBbHeight() * 0.85D, 0.0D);
-        level.sendParticles(ParticleTypes.LARGE_SMOKE, vent.x, vent.y, vent.z, 6, 0.4D, 0.2D, 0.4D, 0.02D);
-        if (CommonConfig.enableAbilityWarning) {
-            Vec3 front = this.dozer.position()
-                    .add(this.dozer.getForward().scale(this.range * 0.5D))
-                    .add(0.0D, 1.0D, 0.0D);
-            level.sendParticles(ParticleTypes.FLASH, front.x, front.y, front.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
-        }
-    }
 
-    private void detonate() {
-        if (!(this.dozer.level() instanceof ServerLevel level)) {
-            return;
+        float yaw = this.dozer.yBodyRot * Mth.DEG_TO_RAD;
+        Vec3 base = this.dozer.position();
+        for (double side : new double[]{1.2D, -1.2D}) {
+            Vec3 pipe = base.add(new Vec3(side, 2.7D, -2.0D).yRot(-yaw));
+            level.sendParticles(ParticleTypes.LARGE_SMOKE, pipe.x, pipe.y, pipe.z, 4, 0.1D, 0.15D, 0.1D, 0.02D);
         }
-        Vec3 center = this.dozer.position().add(this.dozer.getForward().scale(this.range * 0.4D));
-        AABB area = new AABB(center, center).inflate(this.range);
-        List<LivingEntity> victims = level.getEntitiesOfClass(LivingEntity.class, area,
-                e -> e != this.dozer && e.isAlive() && !this.dozer.isAlliedTo(e));
-        for (LivingEntity victim : victims) {
-            if (victim.distanceToSqr(center) <= this.range * this.range) {
-                victim.hurt(this.dozer.damageSources().mobAttack(this.dozer), this.damage);
-                Vec3 push = victim.position().subtract(this.dozer.position()).normalize().scale(0.8D);
-                victim.push(push.x, 0.4D, push.z);
-            }
+        if (CommonConfig.enableAbilityWarning) {
+            Vec3 stacks = base.add(new Vec3(0.0D, 3.0D, -2.0D).yRot(-yaw));
+            level.sendParticles(ParticleTypes.FLASH, stacks.x, stacks.y, stacks.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
         }
-        level.sendParticles(ParticleTypes.EXPLOSION, center.x, center.y + 1.0D, center.z, 4, 1.0D, 0.5D, 1.0D, 0.0D);
     }
 }

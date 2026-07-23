@@ -1634,31 +1634,54 @@
   "wrecker_jumbo.idle":{
     "category":"hostile",
     "sounds":[
-      "scgextra:wreckers/jumbo/jumbowrecker_jumbo_idle"
+      "scgextra:wreckers/jumbo/wrecker_jumbo_idle_01",
+      "scgextra:wreckers/jumbo/wrecker_jumbo_idle_02",
+      "scgextra:wreckers/jumbo/wrecker_jumbo_idle_03",
+      "scgextra:wreckers/jumbo/wrecker_jumbo_idle_04",
+      "scgextra:wreckers/jumbo/wrecker_jumbo_idle_05",
+      "scgextra:wreckers/jumbo/wrecker_jumbo_idle_06",
+      "scgextra:wreckers/jumbo/wrecker_jumbo_idle_07",
+      "scgextra:wreckers/jumbo/wrecker_jumbo_idle_08"
     ]
   },
   "wrecker_jumbo.hurt":{
     "category":"hostile",
     "sounds":[
-      "scgextra:wreckers/jumbo/jumbowrecker_jumbo_hurt"
+      "scgextra:wreckers/jumbo/wrecker_jumbo_hurt_01",
+      "scgextra:wreckers/jumbo/wrecker_jumbo_hurt_02",
+      "scgextra:wreckers/jumbo/wrecker_jumbo_hurt_03",
+      "scgextra:wreckers/jumbo/wrecker_jumbo_hurt_04",
+      "scgextra:wreckers/jumbo/wrecker_jumbo_hurt_05"
     ]
   },
   "wrecker_jumbo.attack":{
     "category":"hostile",
     "sounds":[
-      "scgextra:wreckers/jumbo/jumbowrecker_jumbo_attack"
+      "scgextra:wreckers/jumbo/wrecker_jumbo_attack_01",
+      "scgextra:wreckers/jumbo/wrecker_jumbo_attack_02",
+      "scgextra:wreckers/jumbo/wrecker_jumbo_attack_03"
     ]
   },
   "wrecker_jumbo.death":{
     "category":"hostile",
     "sounds":[
-      "scgextra:wreckers/jumbo/jumbowrecker_jumbo_death"
+      "scgextra:wreckers/jumbo/wrecker_jumbo_death_01",
+      "scgextra:wreckers/jumbo/wrecker_jumbo_death_02"
     ]
   },
   "wrecker_jumbo.line":{
     "category":"hostile",
     "sounds":[
-      "scgextra:wreckers/jumbo/jumbojumbo-darkk_mane"
+      "scgextra:wreckers/jumbo/wrecker_jumbo_idle_01",
+      "scgextra:wreckers/jumbo/wrecker_jumbo_idle_02",
+      "scgextra:wreckers/jumbo/wrecker_jumbo_idle_03"
+    ]
+  },
+  "wrecking_tool.use":{
+    "category":"player",
+    "sounds":[
+      "scgextra:wreckers/tools/jackhammer_construction_01",
+      "scgextra:wreckers/tools/jackhammer_construction_02"
     ]
   },
   "wrecker_helicube.idle":{

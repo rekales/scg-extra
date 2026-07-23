@@ -4,6 +4,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.SCGExtra;
 
+import java.util.List;
+
 import static net.zincstudios.scgextra.sounds.ModSounds.SOUND_EVENTS;
 
 public class WreckersSounds {
@@ -50,6 +52,8 @@ public class WreckersSounds {
     public static final RegistryObject<SoundEvent> JUMBO_DEATH = register("wrecker_jumbo.death");
     public static final RegistryObject<SoundEvent> JUMBO_LINE = register("wrecker_jumbo.line");
 
+    public static final RegistryObject<SoundEvent> TOOL_USE = register("wrecking_tool.use");
+
     // HELICUBE
     public static final RegistryObject<SoundEvent> HELICUBE_IDLE = register("wrecker_helicube.idle");
     public static final RegistryObject<SoundEvent> HELICUBE_HURT_1 = register("wrecker_helicube.hurt1");
@@ -68,6 +72,22 @@ public class WreckersSounds {
     public static final RegistryObject<SoundEvent> DOZER_CHARGE = register("wrecker_dozer.charge");
     public static final RegistryObject<SoundEvent> DOZER_MOVE = register("wrecker_dozer.move");
     public static final RegistryObject<SoundEvent> DOZER_STUN_DEATH = register("wrecker_dozer.stun_death");
+
+    public static List<SoundEvent> gangVoiceLines() {
+        return List.of(GANG_IDLE_1.get(), GANG_IDLE_2.get(), GANG_IDLE_3.get(), GANG_IDLE_4.get(),
+                GANG_HURT_1.get(), GANG_HURT_2.get(), GANG_HURT_3.get(),
+                GANG_ATTACK_1.get(), GANG_ATTACK_2.get(), GANG_ATTACK_3.get());
+    }
+
+    public static List<SoundEvent> blueVoiceLines() {
+        return List.of(BLUE_IDLE_1.get(), BLUE_IDLE_2.get(), BLUE_IDLE_3.get(),
+                BLUE_HURT_1.get(), BLUE_HURT_2.get(), BLUE_HURT_3.get(),
+                BLUE_ATTACK_1.get(), BLUE_ATTACK_2.get(), BLUE_ATTACK_3.get(), BLUE_ATTACK_4.get());
+    }
+
+    public static List<SoundEvent> jumboVoiceLines() {
+        return List.of(JUMBO_IDLE.get(), JUMBO_HURT.get(), JUMBO_ATTACK.get(), JUMBO_LINE.get());
+    }
 
     public static void init() {}
 }

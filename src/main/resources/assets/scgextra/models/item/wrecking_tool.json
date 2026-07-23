@@ -1,6 +1,30 @@
 {
-  "parent": "item/handheld",
-  "textures": {
-    "layer0": "scgextra:item/wrecking_tool"
+  "parent": "minecraft:item/handheld",
+  "loader": "forge:separate_transforms",
+  "base": {
+    "parent": "scgextra:item/wrecking_tool_3d"
+  },
+  "perspectives": {
+    "firstperson_righthand": {
+      "parent": "scgextra:item/wrecking_tool_3d"
+    },
+    "firstperson_lefthand": {
+      "parent": "scgextra:item/wrecking_tool_3d"
+    },
+    "thirdperson_righthand": {
+      "parent": "scgextra:item/wrecking_tool_3d"
+    },
+    "fixed": {
+      "parent": "scgextra:item/wrecking_tool_3d"
+    },
+    "thirdperson_lefthand": {
+      "parent": "scgextra:item/wrecking_tool_3d"
+    },
+    "gui": {
+      "parent": "scgextra:item/wrecking_tool_2d"
+    },
+    "ground": {
+      "parent": "scgextra:item/wrecking_tool_2d"
+    }
   }
 }

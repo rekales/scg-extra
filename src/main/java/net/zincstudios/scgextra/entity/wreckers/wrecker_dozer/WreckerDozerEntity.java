@@ -47,7 +47,7 @@ import top.ribs.scguns.item.GunItem;
 
 public class WreckerDozerEntity extends Monster implements GeoEntity, Stunnable, HeadShotHandler {
 
-    private static final int DEATH_ANIMATION_TICKS = 53; // about 2 seconds?
+    private static final int DEATH_ANIMATION_TICKS = 53;
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
     private static final RawAnimation DEATH = RawAnimation.begin().thenPlayAndHold("death");
@@ -89,7 +89,7 @@ public class WreckerDozerEntity extends Monster implements GeoEntity, Stunnable,
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new StunnedWithVisualGoal<>(this).smoking(true));
-        this.goalSelector.addGoal(2, new WreckerDozerChargeGoal(this, 200, 5.0F, 20.0F));
+        this.goalSelector.addGoal(2, new WreckerDozerChargeGoal(this, 200, 20.0F));
         this.goalSelector.addGoal(3, new WreckerDozerSummonGoal(this, 100, 3));
         this.goalSelector.addGoal(4, new ApproachTargetGoal(this, 5.0, 3.5, 1.0) {
             @Override
@@ -193,8 +193,8 @@ public class WreckerDozerEntity extends Monster implements GeoEntity, Stunnable,
             return;
         }
         EntityType<?>[] types = {
-                WreckersEntities.WRECKER_RED.get(), WreckersEntities.WRECKER_RED.get(),
-                WreckersEntities.WRECKER_BLUE.get(), WreckersEntities.WRECKER_BLUE.get(),
+                WreckersEntities.WRECKER_RED.get(),
+                WreckersEntities.WRECKER_BLUE.get(),
                 WreckersEntities.WRECKER_GREEN.get()
         };
         for (EntityType<?> type : types) {

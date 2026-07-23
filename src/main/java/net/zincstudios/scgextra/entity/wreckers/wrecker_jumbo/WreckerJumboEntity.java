@@ -22,8 +22,11 @@ import net.zincstudios.scgextra.entity.common.BulletProofParts;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.goal.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.sounds.InterruptibleVoice;
 import net.zincstudios.scgextra.sounds.WreckersSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
+
+import java.util.List;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -31,18 +34,18 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class WreckerJumboEntity extends GunnerEntity implements GeoEntity, BulletProofParts {
+public class WreckerJumboEntity extends GunnerEntity implements GeoEntity, BulletProofParts, InterruptibleVoice {
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
     private static final RawAnimation ATTACK = RawAnimation.begin().thenPlay("attack");
     private static final RawAnimation DEATH = RawAnimation.begin().thenPlayAndHold("death");
 
-    private static final double BELLY_HALF_WIDTH = 0.95D;
-    private static final double BELLY_MIN_Y = 1.2D;
-    private static final double BELLY_MAX_Y = 2.2D;
-    private static final double BELLY_MIN_FORWARD = 0.5D;
-    private static final double BELLY_MAX_FORWARD = 1.6D;
+    private static final double BELLY_HALF_WIDTH = 1.1D;
+    private static final double BELLY_MIN_Y = 0.9D;
+    private static final double BELLY_MAX_Y = 2.15D;
+    private static final double BELLY_MIN_FORWARD = 0.3D;
+    private static final double BELLY_MAX_FORWARD = 2.0D;
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private LivingEntity delayedHitTarget;
@@ -56,10 +59,10 @@ public class WreckerJumboEntity extends GunnerEntity implements GeoEntity, Bulle
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
                 .add(Attributes.FOLLOW_RANGE, 32.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.18F)
+                .add(Attributes.MOVEMENT_SPEED, 0.24F)
                 .add(Attributes.ATTACK_DAMAGE, 5.0D)
                 .add(Attributes.ARMOR, 6.0D)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 0.5D)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 0.9D)
                 .add(Attributes.MAX_HEALTH, 300.0D);
     }
 
@@ -182,7 +185,7 @@ public class WreckerJumboEntity extends GunnerEntity implements GeoEntity, Bulle
 
     @Override
     protected SoundEvent getAmbientSound() {
-        if (this.random.nextInt(4) == 0) {
+        if (this.isAggressive() && this.random.nextInt(4) == 0) {
             return WreckersSounds.JUMBO_LINE.get();
         }
         return WreckersSounds.JUMBO_IDLE.get();
@@ -196,5 +199,10 @@ public class WreckerJumboEntity extends GunnerEntity implements GeoEntity, Bulle
     @Override
     protected SoundEvent getDeathSound() {
         return WreckersSounds.JUMBO_DEATH.get();
+    }
+
+    @Override
+    public List<SoundEvent> voiceLinesToSilenceOnDeath() {
+        return WreckersSounds.jumboVoiceLines();
     }
 }

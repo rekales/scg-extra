@@ -5,6 +5,8 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -20,7 +22,6 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
@@ -61,14 +62,16 @@ public class WreckerHelicubeEntity extends FlyingMob implements GeoEntity, Enemy
     private static final float EXPLOSION_RADIUS = 1.5F;
     private static final double CLAW_REACH = 2.4D;
     private static final int CLAW_COOLDOWN_TICKS = 20;
+    private static final int CLAW_ANIMATION_TICKS = 12;
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private int clawCooldown = 0;
+    private int clawAnimTicks = 0;
     private boolean exploded = false;
 
     public WreckerHelicubeEntity(EntityType<? extends FlyingMob> entityType, Level level) {
         super(entityType, level);
-        this.moveControl = new FlyingMoveControl(this, 20, true);
+        this.moveControl = new HelicubeMoveControl(this);
         this.xpReward = 5;
     }
 
@@ -99,13 +102,25 @@ public class WreckerHelicubeEntity extends FlyingMob implements GeoEntity, Enemy
                 .maxRange(16)
                 .attackInterval(200)
                 .spread(12.0F));
-        this.goalSelector.addGoal(4, new FlyCloseToTargetGoal(this, 1.0F, 16.0F, 6.0F) {
+        this.goalSelector.addGoal(4, new FlyCloseToTargetGoal(this, 1.4F, 16.0F, 6.0F) {
             @Override
             public boolean canUse() {
                 return !WreckerHelicubeEntity.this.isArmVariant() && super.canUse();
             }
+
+            @Override
+            public void tick() {
+                super.tick();
+                if (!this.mob.getMoveControl().hasWanted() && this.mob.getRandom().nextInt(20) == 0) {
+                    RandomSource random = this.mob.getRandom();
+                    double x = this.mob.getX() + (random.nextFloat() * 2.0F - 1.0F) * 4.0F;
+                    double y = this.mob.getY() + (random.nextFloat() * 2.0F - 1.0F) * 2.0F;
+                    double z = this.mob.getZ() + (random.nextFloat() * 2.0F - 1.0F) * 4.0F;
+                    this.mob.getMoveControl().setWantedPosition(x, y, z, 1.1D);
+                }
+            }
         });
-        this.goalSelector.addGoal(4, new FlyCloseToTargetGoal(this, 1.2F, 1.8F, 0.0F) {
+        this.goalSelector.addGoal(4, new FlyCloseToTargetGoal(this, 2.2F, 1.8F, 0.0F) {
             @Override
             public boolean canUse() {
                 return WreckerHelicubeEntity.this.isArmVariant() && super.canUse();
@@ -169,16 +184,22 @@ public class WreckerHelicubeEntity extends FlyingMob implements GeoEntity, Enemy
         if (this.level().isClientSide()) {
             return;
         }
+        this.setDeltaMovement(this.getDeltaMovement().add(0.0D, Mth.sin(this.tickCount * 0.2F) * 0.008D, 0.0D));
         if (this.clawCooldown > 0) {
             this.clawCooldown--;
         }
         if (!this.isArmVariant()) {
             return;
         }
+        if (this.clawAnimTicks > 0 && --this.clawAnimTicks == 0) {
+            this.setFiring(false);
+        }
         LivingEntity target = this.getTarget();
         if (target != null && target.isAlive() && this.clawCooldown <= 0
                 && this.distanceToSqr(target) <= CLAW_REACH * CLAW_REACH) {
             this.clawCooldown = CLAW_COOLDOWN_TICKS;
+            this.clawAnimTicks = CLAW_ANIMATION_TICKS;
+            this.setFiring(true);
             this.doHurtTarget(target);
         }
     }
@@ -271,7 +292,44 @@ public class WreckerHelicubeEntity extends FlyingMob implements GeoEntity, Enemy
             double x = this.helicube.getX() + (random.nextFloat() * 2.0F - 1.0F) * 10.0F;
             double y = this.helicube.getY() + (random.nextFloat() * 2.0F - 1.0F) * 4.0F;
             double z = this.helicube.getZ() + (random.nextFloat() * 2.0F - 1.0F) * 10.0F;
-            this.helicube.getMoveControl().setWantedPosition(x, y, z, 0.9D);
+            this.helicube.getMoveControl().setWantedPosition(x, y, z, 1.1D);
+        }
+    }
+
+    static class HelicubeMoveControl extends MoveControl {
+
+        private final WreckerHelicubeEntity helicube;
+
+        HelicubeMoveControl(WreckerHelicubeEntity helicube) {
+            super(helicube);
+            this.helicube = helicube;
+        }
+
+        @Override
+        public void tick() {
+            if (this.operation != Operation.MOVE_TO) {
+                return;
+            }
+            Vec3 delta = new Vec3(this.wantedX - this.helicube.getX(),
+                    this.wantedY - this.helicube.getY(), this.wantedZ - this.helicube.getZ());
+            double dist = delta.length();
+            if (dist < this.helicube.getBoundingBox().getSize()) {
+                this.operation = Operation.WAIT;
+                this.helicube.setDeltaMovement(this.helicube.getDeltaMovement().scale(0.5D));
+            } else {
+                this.helicube.setDeltaMovement(this.helicube.getDeltaMovement()
+                        .add(delta.scale(this.speedModifier * 0.05D / dist)));
+                LivingEntity target = this.helicube.getTarget();
+                if (target == null) {
+                    Vec3 motion = this.helicube.getDeltaMovement();
+                    this.helicube.setYRot(-((float) Mth.atan2(motion.x, motion.z)) * Mth.RAD_TO_DEG);
+                } else {
+                    double dx = target.getX() - this.helicube.getX();
+                    double dz = target.getZ() - this.helicube.getZ();
+                    this.helicube.setYRot(-((float) Mth.atan2(dx, dz)) * Mth.RAD_TO_DEG);
+                }
+                this.helicube.yBodyRot = this.helicube.getYRot();
+            }
         }
     }
 }

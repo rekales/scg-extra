@@ -10,8 +10,8 @@
   "general": {
     "weaponType": "heavy",
     "fireMode": "scguns:semi_automatic",
-    "gripType": "scguns:two_handed",
-    "baseGripType": "scguns:two_handed",
+    "gripType": "scguns:bazooka",
+    "baseGripType": "scguns:bazooka",
     "rate": 12,
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 20,
@@ -22,35 +22,29 @@
       "stock": {
         "scale": 0.0
       }
-    },
-    "zoom": {
-      "fovModifier": 0.6,
-      "yOffset": 5.9,
-      "zOffset": 0.75
     }
   },
   "projectile": {
     "recoilAngle": 6.7,
     "recoilKick": 2.22,
-    "spread": 2.5,
+    "alwaysSpread": true,
+    "spread": 7.0,
     "criticalChance": 0.05,
-    "playerKnockBack": true,
-    "playerKnockBackStrength": 0.2,
     "visible": true,
-    "advantage": "scguns:none",
+    "advantage": "scguns:bot",
     "damage": 15.0,
     "ejectsCasing": false,
     "gravity": true,
-    "item": "scgextra:wrecker_rocket",
-    "life": 70,
+    "item": "scguns:rocket",
+    "life": 100,
     "size": 0.05,
-    "speed": 4.0,
+    "speed": 2.5,
     "trailLengthMultiplier": 2.0
   },
   "reloads": {
     "emptyMagTimer": 30,
     "maxAmmo": 1,
-    "reloadItem": "scgextra:wrecker_rocket",
+    "reloadItem": "scguns:rocket",
     "reloadTimer": 40,
     "reloadType": "scguns:mag_fed"
   },

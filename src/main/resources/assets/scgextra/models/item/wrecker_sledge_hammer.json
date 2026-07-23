@@ -1,6 +1,30 @@
 {
-  "parent": "item/handheld",
-  "textures": {
-    "layer0": "scgextra:item/wrecker_sledge_hammer"
+  "parent": "minecraft:item/handheld",
+  "loader": "forge:separate_transforms",
+  "base": {
+    "parent": "scgextra:item/wrecking_hammer_3d"
+  },
+  "perspectives": {
+    "firstperson_righthand": {
+      "parent": "scgextra:item/wrecking_hammer_3d"
+    },
+    "firstperson_lefthand": {
+      "parent": "scgextra:item/wrecking_hammer_3d"
+    },
+    "thirdperson_righthand": {
+      "parent": "scgextra:item/wrecking_hammer_3d"
+    },
+    "fixed": {
+      "parent": "scgextra:item/wrecking_hammer_3d"
+    },
+    "thirdperson_lefthand": {
+      "parent": "scgextra:item/wrecking_hammer_3d"
+    },
+    "gui": {
+      "parent": "scgextra:item/wrecking_hammer_2d"
+    },
+    "ground": {
+      "parent": "scgextra:item/wrecking_hammer_2d"
+    }
   }
 }

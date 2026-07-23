@@ -18,11 +18,15 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.zincstudios.scgextra.entity.Faction;
+import net.zincstudios.scgextra.entity.asgharian.SimpleBurstGunAttackGoal;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.goal.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.sounds.InterruptibleVoice;
 import net.zincstudios.scgextra.sounds.WreckersSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
+
+import java.util.List;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -30,7 +34,7 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class WreckerRedEntity extends GunnerEntity implements GeoEntity {
+public class WreckerRedEntity extends GunnerEntity implements GeoEntity, InterruptibleVoice {
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
@@ -66,6 +70,18 @@ public class WreckerRedEntity extends GunnerEntity implements GeoEntity {
 
     @Override
     protected void registerGoals() {
+        this.goalSelector.addGoal(2, new SimpleBurstGunAttackGoal<>(this) {
+            @Override
+            protected float getAccuracyModifier() {
+                return 1.2F;
+            }
+        }
+                .burstAmount(5)
+                .burstIntervalTicks(2)
+                .runAndGun()
+                .approachDist(6)
+                .maxRange(14)
+                .attackInterval(25));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
@@ -100,7 +116,7 @@ public class WreckerRedEntity extends GunnerEntity implements GeoEntity {
             if (this.entityData.get(SHOOT_TICKS) > 0) {
                 return state.setAndContinue(moving ? WALK_SHOOT : IDLE_SHOOT);
             }
-            if (this.isAiming()) {
+            if (this.isAggressive()) {
                 return state.setAndContinue(moving ? WALK_AIM : IDLE_AIM);
             }
             return state.setAndContinue(moving ? WALK : IDLE);
@@ -144,5 +160,10 @@ public class WreckerRedEntity extends GunnerEntity implements GeoEntity {
                 WreckersSounds.GANG_DEATH_1.get(), WreckersSounds.GANG_DEATH_2.get(),
                 WreckersSounds.GANG_DEATH_3.get(), WreckersSounds.GANG_DEATH_4.get(),
                 WreckersSounds.GANG_DEATH_5.get());
+    }
+
+    @Override
+    public List<SoundEvent> voiceLinesToSilenceOnDeath() {
+        return WreckersSounds.gangVoiceLines();
     }
 }

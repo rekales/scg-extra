@@ -6,7 +6,7 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 
 public class WreckerJumboMeleeGoal extends MeleeAttackGoal {
-    private static final int ATTACK_INTERVAL_TICKS = 34;
+    private static final int ATTACK_INTERVAL_TICKS = 68;
     private static final int HIT_DELAY_TICKS = 12;
 
     private final PathfinderMob mob;
