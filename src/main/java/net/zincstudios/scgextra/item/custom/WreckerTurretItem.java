@@ -28,7 +28,7 @@ public class WreckerTurretItem extends BlockItem implements GeoItem {
             @Override
             public BlockEntityWithoutLevelRenderer getCustomRenderer() {
                 if (this.renderer == null) {
-                    this.renderer = new GeoItemRenderer<>(new WreckerTurretItemModel());
+                    this.renderer = new GeoItemRenderer<WreckerTurretItem>(new WreckerTurretItemModel()).withScale(0.6F);
                 }
                 return this.renderer;
             }
