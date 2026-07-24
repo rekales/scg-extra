@@ -1,7 +1,7 @@
 {
   "type": "minecraft:jigsaw",
-  "start_pool": "scgextra:trench_anchor",
-  "start_jigsaw_name": "scgextra:trench_anchor",
+  "start_pool": "scgextra:trench_anchor_top",
+  "start_jigsaw_name": "scgextra:trench_anchor_top",
   "size": 6,
   "max_distance_from_center": 64,
   "spawn_overrides": {},

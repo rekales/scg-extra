@@ -21,6 +21,7 @@ import top.ribs.scguns.Config;
 public class ElectricalWiresBlockEntity extends BlockEntity{
     private final ContainerData data;
     private ElectricalWiresBlockEntity powersource = null;
+    private BlockPos powersourcePos = null;
     private int lvl = 0;
     private final EnergyStorage energyStorage = new EnergyStorage(2000) {
         @Override
@@ -79,9 +80,9 @@ public class ElectricalWiresBlockEntity extends BlockEntity{
         tag.put("Energy", energyStorage.serializeNBT());
         tag.putInt("lvl", this.lvl);
         if(this.getPowerSource()!=null){
-            tag.putInt("PowerSourceX", this.getPowerSource().getBlockPos().getX());
-            tag.putInt("PowerSourceY", this.getPowerSource().getBlockPos().getY());
-            tag.putInt("PowerSourceZ", this.getPowerSource().getBlockPos().getZ());
+            tag.putInt("PowerSourceX", this.getPowerSourcePos().getX());
+            tag.putInt("PowerSourceY", this.getPowerSourcePos().getY());
+            tag.putInt("PowerSourceZ", this.getPowerSourcePos().getZ());
         }
     }
     @Override
@@ -94,12 +95,7 @@ public class ElectricalWiresBlockEntity extends BlockEntity{
             tag.contains("PowerSourceY") &&
             tag.contains("PowerSourceZ")
         ){
-            BlockEntity be = level.getBlockEntity(new BlockPos(tag.getInt("PowerSourceX"), tag.getInt("PowerSourceY"), tag.getInt("PowerSourceZ")));
-            if((be != null) && be instanceof ElectricalWiresBlockEntity ewbe){
-                this.setPowerSource(ewbe);
-            }else{
-                this.setPowerSource(null);
-            }
+            this.setPowerSourcePos(new BlockPos(tag.getInt("PowerSourceX"), tag.getInt("PowerSourceY"), tag.getInt("PowerSourceZ")));
         }
     }
     private void sync() {
@@ -118,6 +114,12 @@ public class ElectricalWiresBlockEntity extends BlockEntity{
         boolean wasLit = state.getValue(ElectricalWiresBlock.LIT);
         boolean isLit = false;
         if (!level.isClientSide) {
+            if(blockEntity.getPowerSource() == null && blockEntity.getPowerSourcePos()!=null){
+                BlockEntity be = level.getBlockEntity(blockEntity.getPowerSourcePos());
+                if(be != null && be instanceof ElectricalWiresBlockEntity ewbe){
+                    blockEntity.setPowerSource(ewbe);
+                }
+            }
             if (blockEntity.hasEnoughEnergy(200)) {
                 isLit = true;
             }
@@ -133,14 +135,18 @@ public class ElectricalWiresBlockEntity extends BlockEntity{
                     }
                     if(!(blockEntity.getPowerSource() == ewbe)){
                         ewbe.getCapability(ForgeCapabilities.ENERGY, direction.getOpposite()).ifPresent(handler -> {
-                            if (handler.canReceive() && blockEntity.lvl < 15) {
+                            if (handler.canReceive() && blockEntity.getLvl() < 15) {
                                 int extracted = blockEntity.energyStorage.extractEnergy(200, true);
                                 int accepted = handler.receiveEnergy(extracted, false);
                                 blockEntity.energyStorage.extractEnergy(accepted, false);
                                 if(ewbe.getPowerSource() == null){
-                                    ewbe.setLvl(blockEntity.lvl+1);
+                                    ewbe.setLvl(blockEntity.getLvl()+1);
+                                }
+                                if(ewbe.getLvl()!=blockEntity.getLvl()+1){
+                                    ewbe.setLvl(blockEntity.getLvl()+1);
                                 }
                                 ewbe.setPowerSource(blockEntity);
+                                ewbe.setPowerSourcePos(blockEntity.getBlockPos());
                                 blockEntity.setChanged();
                                 blockEntity.sync();
                             }
@@ -180,6 +186,12 @@ public class ElectricalWiresBlockEntity extends BlockEntity{
     }
     public ElectricalWiresBlockEntity getPowerSource(){
         return this.powersource;
+    }
+    public void setPowerSourcePos(BlockPos pos){
+        this.powersourcePos = pos;
+    }
+    public BlockPos getPowerSourcePos(){
+        return this.powersourcePos;
     }
     public void setLvl(int l){
         this.lvl = l;

@@ -17,8 +17,12 @@ import com.mojang.logging.LogUtils;
 
 import net.zincstudios.scgextra.worldgen.structure.ModPieces;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -28,6 +32,7 @@ import net.zincstudios.scgextra.network.SCGEPacketHandler;
 import net.zincstudios.scgextra.particle.ModParticleTypes;
 import net.zincstudios.scgextra.raid.WaveRaidManager;
 import net.zincstudios.scgextra.sounds.ModSounds;
+import net.zincstudios.scgextra.worldgen.biome.ModBiomes;
 import net.zincstudios.scgextra.worldgen.biome.ModTerrablender;
 import net.zincstudios.scgextra.worldgen.structure.ModStructureProcessors;
 import net.zincstudios.scgextra.worldgen.structure.ModStructures;
@@ -81,5 +86,16 @@ public class SCGExtra
     @SuppressWarnings("removal")
     public static ResourceLocation asResource(String path) {
         return new ResourceLocation(MOD_ID, path);
+    }
+    @Mod.EventBusSubscriber(modid = SCGExtra.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+    public class SpawnEvent {
+        @SubscribeEvent
+        public static void onCheckSpawn(MobSpawnEvent.PositionCheck event) {
+            if (event.getLevel().getBiome(event.getEntity().blockPosition()).is(ModBiomes.WARZONE_BIOME)) {
+                if (event.getEntity() instanceof Animal) {
+                    event.setResult(Result.DENY);
+                }
+            }
+        }
     }
 }

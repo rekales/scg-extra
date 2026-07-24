@@ -99,7 +99,25 @@
     "monster": [
       {
         "type": "scgextra:fac_trench_sniper",
-        "maxCount": 3,
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 1
+      },
+      {
+        "type": "scgextra:fac_trencher",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 1
+      },
+      {
+        "type": "scgextra:fac_trench_goblin",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 1
+      },
+      {
+        "type": "scgextra:fac_shovel_knight",
+        "maxCount": 1,
         "minCount": 1,
         "weight": 1
       }
