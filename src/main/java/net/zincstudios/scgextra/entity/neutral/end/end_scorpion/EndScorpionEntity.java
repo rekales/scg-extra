@@ -50,7 +50,7 @@ import top.ribs.scguns.init.ModEffects;
 public class EndScorpionEntity extends Monster implements GeoEntity, FlyingAnimal{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private static final int MELEE_DAMAGE_DELAY = 10;
-    private static final int STING_DAMAGE_DELAY = 30;
+    public static final int STING_DAMAGE_DELAY = 30;
     private int hurtDelay = -1;
     private static final EntityDataAccessor<Boolean> IS_STINGING = SynchedEntityData.defineId(EndScorpionEntity.class, EntityDataSerializers.BOOLEAN);
 
@@ -68,7 +68,7 @@ public class EndScorpionEntity extends Monster implements GeoEntity, FlyingAnima
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0.6, true){
             @Override
             protected double getAttackReachSqr(LivingEntity attackTarget) {
-                return 10;
+                return 16;
             }
             @Override
             public boolean canUse() {
@@ -160,7 +160,7 @@ public class EndScorpionEntity extends Monster implements GeoEntity, FlyingAnima
         }
     }
     public double getAttackReachSqr(LivingEntity attackTarget) {
-        return 10;
+        return 25;
     }
     @Override
     public boolean doHurtTarget(Entity entity) {
@@ -245,5 +245,9 @@ public class EndScorpionEntity extends Monster implements GeoEntity, FlyingAnima
     }
     public boolean hurtTarget(LivingEntity target){
         return super.doHurtTarget(target);
+    }
+    @Override
+    public double getPerceivedTargetDistanceSquareForMeleeAttack(LivingEntity entity) {
+        return this.distanceToSqr(entity);
     }
 }
