@@ -186,7 +186,7 @@ public class ModItems {
             JUGGERNAUT_HELMET = ITEMS.register("juggernaut_helmet", () ->
                     new GeoArmorSetPartItem(ModArmorMaterials.JUGGERNAUT, ArmorItem.Type.HELMET, ArmorSets.JUGGERNAUT)),
             JUGGERNAUT_CHESTPLATE = ITEMS.register("juggernaut_chestplate", () ->
-                    new GeoArmorSetPartItem(ModArmorMaterials.JUGGERNAUT, ArmorItem.Type.CHESTPLATE, ArmorSets.JUGGERNAUT)),
+                    new JuggernautChestplateItem(ModArmorMaterials.JUGGERNAUT, ArmorItem.Type.CHESTPLATE, ArmorSets.JUGGERNAUT)),
             JUGGERNAUT_LEGGINGS = ITEMS.register("juggernaut_leggings", () ->
                     new GeoArmorSetPartItem(ModArmorMaterials.JUGGERNAUT, ArmorItem.Type.LEGGINGS, ArmorSets.JUGGERNAUT)),
             JUGGERNAUT_BOOTS = ITEMS.register("juggernaut_boots", () ->
