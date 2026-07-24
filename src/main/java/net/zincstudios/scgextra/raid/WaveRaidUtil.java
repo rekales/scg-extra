@@ -1,12 +1,15 @@
 package net.zincstudios.scgextra.raid;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.SupportType;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -91,8 +94,6 @@ public final class WaveRaidUtil {
         return null;
     }
 
-    // Copied from RaidManager#findRaidSpawnLocation
-    @SuppressWarnings("deprecation")
     static @Nullable Vec3 findWaveSpawnLocation(ServerLevel level, Vec3 center, @Nullable Vec3 playerPos) {
         RandomSource random = level.getRandom();
 
@@ -122,10 +123,10 @@ public final class WaveRaidUtil {
             if (groundPos == null) continue;
             groundPos = groundPos.above();
 
-            if (level.getBlockState(groundPos.below()).isSolid()
-                    && level.getBlockState(groundPos).isAir()
-                    && level.getBlockState(groundPos.above()).isAir()
-                    && level.getBlockState(groundPos.above(2)).isAir()) {
+            if (level.getBlockState(groundPos.below()).isFaceSturdy(level, groundPos.below(), Direction.UP, SupportType.FULL)
+                    && level.getBlockState(groundPos).isPathfindable(level, groundPos, PathComputationType.LAND)
+                    && level.getBlockState(groundPos.above()).isPathfindable(level, groundPos.above(), PathComputationType.LAND)
+                    && level.getBlockState(groundPos.above(2)).isPathfindable(level, groundPos.above(2), PathComputationType.LAND)) {
                 return Vec3.atBottomCenterOf(groundPos);
             }
         }

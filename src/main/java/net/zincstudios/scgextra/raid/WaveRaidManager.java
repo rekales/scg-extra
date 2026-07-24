@@ -104,7 +104,7 @@ public class WaveRaidManager extends SavedData {
                 Vec3 waveCenter = WaveRaidUtil.findWaveSpawnLocation(level, raidState.getCenter(),
                         player == null ? null : player.position());
                 if (waveCenter == null) return;  // TODO: crash or something
-                this.raidState.spawnCurrentWaveMobs(this.raidState.getCenter(), WAVE_SPAWN_RADIUS, player);
+                this.raidState.spawnCurrentWaveMobs(waveCenter, WAVE_SPAWN_RADIUS, player);
             }
         }
     }
