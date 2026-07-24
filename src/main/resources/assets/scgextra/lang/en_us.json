@@ -230,14 +230,26 @@
   "scgextra.raid.label.wave_8":  "Wave 8",
   "scgextra.raid.label.wave_9":  "Wave 9",
   "scgextra.raid.label.last_wave":  "Final Wave",
-  "scgextra.raid.label.whaler":  "Whaler",
-  "scgextra.raid.label.rrc":  "RRC",
-  "scgextra.raid.label.fac":  "FAC",
-  "scgextra.raid.label.asgharian":  "Asgharian",
-  "scgextra.raid.label.cog":  "COG",
+
+  "scgextra.raid.label.whaler":  "Whaler Raid",
+  "scgextra.raid.label.rrc":  "RRC Raid",
+  "scgextra.raid.label.fac":  "FAC Raid",
+  "scgextra.raid.label.asgharian":  "Asgharian Raid",
+  "scgextra.raid.label.cog":  "COG Raid",
   "scgextra.raid.announcement.whaler":  "The Leviathan Syndicate is attacking from the depths!",
   "scgextra.raid.announcement.rrc":  "The Remnants of Rust Ridge are raiding!",
   "scgextra.raid.announcement.fac":  "The Remnants of Federal Armaments Consortium is launching an assault!",
   "scgextra.raid.announcement.asgharian":  "The Asgharian Legion is marching!",
-  "scgextra.raid.announcement.cog":  "The COG Battalion is advancing!"
+  "scgextra.raid.announcement.cog":  "The COG Battalion is advancing!",
+
+  "scgextra.raid.label.whaler_super":  "Whaler Raid",
+  "scgextra.raid.label.rrc_super":  "RRC Raid",
+  "scgextra.raid.label.fac_super":  "FAC Raid",
+  "scgextra.raid.label.asgharian_super":  "Asgharian Raid",
+  "scgextra.raid.label.cog_super":  "COG Raid",
+  "scgextra.raid.announcement.whaler_super":  "The Leviathan Syndicate is attacking from the depths!",
+  "scgextra.raid.announcement.rrc_super":  "The Remnants of Rust Ridge are raiding!",
+  "scgextra.raid.announcement.fac_super":  "The Remnants of Federal Armaments Consortium is launching an assault!",
+  "scgextra.raid.announcement.asgharian_super":  "The Asgharian Legion is marching!",
+  "scgextra.raid.announcement.cog_super":  "The COG Battalion is advancing!"
 }
