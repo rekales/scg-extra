@@ -20,9 +20,9 @@ import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.attributes.SCGEAttributes;
 import net.zincstudios.scgextra.effects.ModEffects;
 import net.zincstudios.scgextra.entity.cog.COGEntities;
-import net.zincstudios.scgextra.entity.neutral.NeutralEntities;
 import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
 import net.zincstudios.scgextra.entity.fac.FACEntities;
+import net.zincstudios.scgextra.entity.neutral.NeutralEntities;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
 import net.zincstudios.scgextra.item.armor.*;
@@ -67,7 +67,7 @@ public class ModItems {
     ));
 
     public static final RegistryObject<Item> END_SHELL = ITEMS.register("end_shell",
-            () -> new Item(new Item.Properties())
+            () -> new Item(new Item.Properties().stacksTo(64))
     );
 
     public static final RegistryObject<Item>
@@ -252,6 +252,15 @@ public class ModItems {
             CANDLE_FIEND_SPAWN_EGG = basicSpawnEgg(AsgharianEntities.CANDLE_FIEND),
             SOUL_RIPPER_SPAWN_EGG = basicSpawnEgg(AsgharianEntities.SOUL_RIPPER),
 
+            // COG
+            COG_VULTURE_SPAWN_EGG = basicSpawnEgg(COGEntities.VULTURE),
+            COG_DEVASTATOR_SPAWN_EGG = basicSpawnEgg(COGEntities.DEVASTATOR),
+            COG_BOMBARDIER_SPAWN_EGG = basicSpawnEgg(COGEntities.BOMBARDIER),
+            COG_GIGANTES_SPAWN_EGG = basicSpawnEgg(COGEntities.GIGANTES),
+            COG_VENATOR_SPAWN_EGG = basicSpawnEgg(COGEntities.VENATOR),
+            COG_CENTIPEDE_SPAWN_EGG = basicSpawnEgg(COGEntities.CENTIPEDE),
+            COG_JUGGERNAUT_SPAWN_EGG = basicSpawnEgg(COGEntities.JUGGERNAUT),
+            
             // Neutral
             INFLICTED_BOAR_SPAWN_EGG = basicSpawnEgg(NeutralEntities.INFLICTED_BOAR),
             INFLICTED_WOLF_SPAWN_EGG = basicSpawnEgg(NeutralEntities.INFLICTED_WOLF),
@@ -264,17 +273,8 @@ public class ModItems {
             END_POD_SPAWN_EGG = basicSpawnEgg(NeutralEntities.END_POD),
             END_DWELLER_SPAWN_EGG = basicSpawnEgg(NeutralEntities.END_DWELLER),
             END_STONE_CRAB_SPAWN_EGG = basicSpawnEgg(NeutralEntities.END_STONE_CRAB),
-            END_SCORPION_SPAWN_EGG = basicSpawnEgg(NeutralEntities.END_SCORPION),
-
-            // Neutral
-            COG_VULTURE_SPAWN_EGG = basicSpawnEgg(COGEntities.VULTURE),
-            COG_DEVASTATOR_SPAWN_EGG = basicSpawnEgg(COGEntities.DEVASTATOR),
-            COG_BOMBARDIER_SPAWN_EGG = basicSpawnEgg(COGEntities.BOMBARDIER),
-            COG_GIGANTES_SPAWN_EGG = basicSpawnEgg(COGEntities.GIGANTES),
-            COG_VENATOR_SPAWN_EGG = basicSpawnEgg(COGEntities.VENATOR),
-            COG_CENTIPEDE_SPAWN_EGG = basicSpawnEgg(COGEntities.CENTIPEDE),
-            COG_JUGGERNAUT_SPAWN_EGG = basicSpawnEgg(COGEntities.JUGGERNAUT);
-
+            END_SCORPION_SPAWN_EGG = basicSpawnEgg(NeutralEntities.END_SCORPION)
+            ;
 
     public static void register(IEventBus modEventBus) {
         ITEMS.register(modEventBus);
@@ -293,7 +293,7 @@ public class ModItems {
     private static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister
             .create(Registries.CREATIVE_MODE_TAB, SCGExtra.MOD_ID);
 
-    public static final RegistryObject<CreativeModeTab> CREATIVE_TAB = CREATIVE_TABS.register("your_tab",
+    public static final RegistryObject<CreativeModeTab> CREATIVE_TAB = CREATIVE_TABS.register("scgextra_tab",//pretty sure this shouldn't be 'your_tab'
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup."+SCGExtra.MOD_ID+".tab"))
                     .icon(() -> new ItemStack(FISH_FOLK_SPAWN_EGG.get()))

@@ -125,19 +125,6 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.CANDLE_FIEND_SPAWN_EGG.get());
         basicItem(ModItems.SOUL_RIPPER_SPAWN_EGG.get());
 
-        basicItem(ModItems.INFLICTED_BOAR_SPAWN_EGG.get());
-        basicItem(ModItems.INFLICTED_WOLF_SPAWN_EGG.get());
-        basicItem(ModItems.AMMO_GOBLIN_SPAWN_EGG.get());
-        basicItem(ModItems.BIG_LUMP_SPAWN_EGG.get());
-        basicItem(ModItems.MUTANT_BAT_SPAWN_EGG.get());
-        basicItem(ModItems.NITRO_BEETLE_SPAWN_EGG.get());
-        basicItem(ModItems.HEAD_HUNTER_SPAWN_EGG.get());
-        basicItem(ModItems.NETHERITE_EATER_SPAWN_EGG.get());
-        basicItem(ModItems.END_POD_SPAWN_EGG.get());
-        basicItem(ModItems.END_DWELLER_SPAWN_EGG.get());
-        basicItem(ModItems.END_STONE_CRAB_SPAWN_EGG.get());
-        basicItem(ModItems.END_SCORPION_SPAWN_EGG.get());
-
         basicItem(ModItems.COG_VULTURE_SPAWN_EGG.get());
         basicItem(ModItems.COG_DEVASTATOR_SPAWN_EGG.get());
         basicItem(ModItems.COG_BOMBARDIER_SPAWN_EGG.get());

@@ -36,6 +36,14 @@
   "entity.scgextra.candle_fiend":  "Candle Fiend",
   "entity.scgextra.soul_ripper":  "Soul Ripper",
 
+  "entity.scgextra.cog_vulture":  "COG Vulture",
+  "entity.scgextra.cog_devastator": "COG Devastator",
+  "entity.scgextra.cog_bombardier": "COG Bombardier",
+  "entity.scgextra.cog_gigantes": "COG Gigantes",
+  "entity.scgextra.cog_venator": "COG Venator",
+  "entity.scgextra.cog_centipede": "COG Centipede",
+  "entity.scgextra.cog_juggernaut": "COG Juggernaut",
+
   "entity.scgextra.inflicted_boar":  "Inflicted Boar",
   "entity.scgextra.inflicted_wolf":  "Inflicted Wolf",
   "entity.scgextra.ammo_goblin":  "Ammo Goblin",
@@ -48,15 +56,6 @@
   "entity.scgextra.end_dweller":  "End Dweller",
   "entity.scgextra.end_stone_crab":  "End Stone Crab",
   "entity.scgextra.end_scorpion":  "End Scorpion",
-
-  "entity.scgextra.cog_vulture":  "COG Vulture",
-  "entity.scgextra.cog_devastator": "COG Devastator",
-  "entity.scgextra.cog_bombardier": "COG Bombardier",
-  "entity.scgextra.cog_gigantes": "COG Gigantes",
-  "entity.scgextra.cog_venator": "COG Venator",
-  "entity.scgextra.cog_centipede": "COG Centipede",
-  "entity.scgextra.cog_juggernaut": "COG Juggernaut",
-
 
   "item.scgextra.fish_folk_spawn_egg":  "Fish Folk Spawn Egg",
   "item.scgextra.turtleman_spawn_egg":  "Turtleman Spawn Egg",
@@ -107,6 +106,7 @@
   "item.scgextra.end_dweller_spawn_egg":  "End Dweller Spawn Egg",
   "item.scgextra.end_stone_crab_spawn_egg":  "End Stone Crab Spawn Egg",
   "item.scgextra.end_scorpion_spawn_egg":  "End Scorpion Spawn Egg",
+  "item.scgextra.end_shell":  "End Shell",
 
   "item.scgextra.cog_vulture_spawn_egg":  "COG Vulture Spawn Egg",
   "item.scgextra.cog_devastator_spawn_egg": "COG Devastator Spawn Egg",
@@ -121,7 +121,6 @@
   "item.scgextra.spear_shovel":  "Spear Shovel",
   "item.scgextra.bandage":  "Bandage",
   "item.scgextra.medkit":  "Medkit",
-  "item.scgextra.end_shell":  "End Shell",
 
   "item.scgextra.medal_of_survivor":  "Medal of Survivor",
   "item.scgextra.medal_of_iron_will":  "Medal of Iron Will",

@@ -6,9 +6,9 @@
 				"identifier": "geometry.unknown",
 				"texture_width": 256,
 				"texture_height": 256,
-				"visible_bounds_width": 6,
-				"visible_bounds_height": 4.5,
-				"visible_bounds_offset": [0, 1.75, 0]
+				"visible_bounds_width": 7,
+				"visible_bounds_height": 5.5,
+				"visible_bounds_offset": [0, 2.25, 0]
 			},
 			"bones": [
 				{
@@ -196,6 +196,11 @@
 						{"origin": [0, 25, -29.7], "size": [0, 5, 10], "uv": [176, 32]},
 						{"origin": [-1, 31, -37.7], "size": [2, 2, 8], "uv": [88, 182]}
 					]
+				},
+				{
+					"name": "gun_flash",
+					"parent": "gun",
+					"pivot": [0, 32, -39]
 				},
 				{
 					"name": "group11",

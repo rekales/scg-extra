@@ -89,12 +89,7 @@ public class ScoutEntity extends GunnerEntity implements GeoEntity{
 
     @Override
     protected void tickDeath() {
-        // Override to only extend death time
-        ++this.deathTime;
-        if (this.deathTime >= 20 && !this.level().isClientSide() && !this.isRemoved()) {
-            this.level().broadcastEntityEvent(this, (byte)60);
-            this.remove(RemovalReason.KILLED);
-        }
+        MobUtil.tickDeath(this, 20);
     }
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
         return MobUtil.getSound(
