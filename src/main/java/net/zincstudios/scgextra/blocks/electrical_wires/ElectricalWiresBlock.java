@@ -96,7 +96,7 @@ public class ElectricalWiresBlock extends BaseEntityBlock{
         if(!level.isClientSide()){
             ElectricalWiresBlockEntity ewbe = (ElectricalWiresBlockEntity)level.getBlockEntity(pos);
             if(level.getGameTime() % 20 == 0){
-                if(ewbe.getEnergy()>=200){
+                if(ewbe.getEnergy()>=20){
                     entity.hurt(entity.damageSources().generic(), 4);
                 }else{
                     entity.hurt(entity.damageSources().generic(), 2);
@@ -107,7 +107,7 @@ public class ElectricalWiresBlock extends BaseEntityBlock{
                 entity.getPersistentData().putInt(tag, entity.getPersistentData().getInt(tag)+1);
             }
             if(entity.getPersistentData().getInt(tag) ==3){
-                if(ewbe.getEnergy()>=200){
+                if(ewbe.getEnergy()>=20){
                     if(entity instanceof LivingEntity le){
                         le.addEffect(new MobEffectInstance(ModEffects.LACERATED.get(), 60));
                         le.setSecondsOnFire(3);
@@ -115,8 +115,8 @@ public class ElectricalWiresBlock extends BaseEntityBlock{
                 }
                 entity.getPersistentData().putInt(tag, 0);
             }
-            if(ewbe.getEnergy()>=200){
-                ewbe.consumeEnergy(200);
+            if(ewbe.getEnergy()>=20){
+                ewbe.consumeEnergy(20);
             }
         }
         entity.makeStuckInBlock(state, new Vec3((double)0.25F, (double)0.05F, (double)0.25F));

@@ -19,8 +19,9 @@ import net.zincstudios.scgextra.blocks.ModBlockEntities;
 import top.ribs.scguns.Config;
 
 public class ElectricalWiresBlockEntity extends BlockEntity{
-    // public static BlockEntity powerSource = null;
     private final ContainerData data;
+    private ElectricalWiresBlockEntity powersource = null;
+    private int lvl = 0;
     private final EnergyStorage energyStorage = new EnergyStorage(2000) {
         @Override
         public int receiveEnergy(int maxReceive, boolean simulate) {
@@ -41,6 +42,13 @@ public class ElectricalWiresBlockEntity extends BlockEntity{
             }
             return extracted;
         }
+        @Override
+        public boolean canReceive() {
+            if(this.getEnergyStored() < 2000){
+                return true;
+            }
+            return false;
+        };
     };
     private final LazyOptional<IEnergyStorage> energy = LazyOptional.of(() -> energyStorage);
     public ElectricalWiresBlockEntity(BlockPos pos, BlockState blockState) {
@@ -69,11 +77,30 @@ public class ElectricalWiresBlockEntity extends BlockEntity{
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
         tag.put("Energy", energyStorage.serializeNBT());
+        tag.putInt("lvl", this.lvl);
+        if(this.getPowerSource()!=null){
+            tag.putInt("PowerSourceX", this.getPowerSource().getBlockPos().getX());
+            tag.putInt("PowerSourceY", this.getPowerSource().getBlockPos().getY());
+            tag.putInt("PowerSourceZ", this.getPowerSource().getBlockPos().getZ());
+        }
     }
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
         energyStorage.deserializeNBT(tag.get("Energy"));
+        this.lvl = tag.getInt("lvl");
+        if(
+            tag.contains("PowerSourceX") &&
+            tag.contains("PowerSourceY") &&
+            tag.contains("PowerSourceZ")
+        ){
+            BlockEntity be = level.getBlockEntity(new BlockPos(tag.getInt("PowerSourceX"), tag.getInt("PowerSourceY"), tag.getInt("PowerSourceZ")));
+            if((be != null) && be instanceof ElectricalWiresBlockEntity ewbe){
+                this.setPowerSource(ewbe);
+            }else{
+                this.setPowerSource(null);
+            }
+        }
     }
     private void sync() {
         if (this.level != null && !this.level.isClientSide) {
@@ -101,18 +128,26 @@ public class ElectricalWiresBlockEntity extends BlockEntity{
             for (Direction direction : Direction.values()) {
                 BlockEntity adjacentEntity = level.getBlockEntity(pos.relative(direction));
                 if (adjacentEntity != null) {
-                    adjacentEntity.getCapability(ForgeCapabilities.ENERGY, direction.getOpposite()).ifPresent(handler -> {
-                        if (handler.canReceive()) {
-                            int extracted = blockEntity.energyStorage.extractEnergy(200, true);
-                            int accepted = handler.receiveEnergy(extracted, false);
-                            blockEntity.energyStorage.extractEnergy(accepted, false);
-                            blockEntity.setChanged();
-                            blockEntity.sync();
-                        }
-                    });
+                    if(!(adjacentEntity instanceof ElectricalWiresBlockEntity ewbe)){
+                        continue;
+                    }
+                    if(!(blockEntity.getPowerSource() == ewbe)){
+                        ewbe.getCapability(ForgeCapabilities.ENERGY, direction.getOpposite()).ifPresent(handler -> {
+                            if (handler.canReceive() && blockEntity.lvl < 15) {
+                                int extracted = blockEntity.energyStorage.extractEnergy(200, true);
+                                int accepted = handler.receiveEnergy(extracted, false);
+                                blockEntity.energyStorage.extractEnergy(accepted, false);
+                                if(ewbe.getPowerSource() == null){
+                                    ewbe.setLvl(blockEntity.lvl+1);
+                                }
+                                ewbe.setPowerSource(blockEntity);
+                                blockEntity.setChanged();
+                                blockEntity.sync();
+                            }
+                        });
+                    }
                 }
             }
-
         }
     }
     private boolean hasEnoughEnergy(int amount) {
@@ -138,4 +173,16 @@ public class ElectricalWiresBlockEntity extends BlockEntity{
         super.invalidateCaps();
         energy.invalidate();
     }
+    public void setPowerSource(ElectricalWiresBlockEntity ewbe){
+        if(this.powersource!=ewbe){
+            this.powersource = ewbe;
+        }
+    }
+    public ElectricalWiresBlockEntity getPowerSource(){
+        return this.powersource;
+    }
+    public void setLvl(int l){
+        this.lvl = l;
+    }
+    public int getLvl(){return this.lvl;}
 }
