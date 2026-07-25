@@ -1,7 +1,6 @@
 package net.zincstudios.scgextra.entity.neutral.overworld.big_lump;
 
 import net.zincstudios.scgextra.entity.common.MobUtil;
-import net.zincstudios.scgextra.entity.common.part.RotatedWeakPointPartEntity;
 
 import javax.annotation.Nullable;
 
@@ -21,7 +20,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -34,7 +35,6 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.entity.PartEntity;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar;
@@ -50,17 +50,13 @@ public class BigLumpEntity extends Monster implements GeoEntity, Gunner, CustomG
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private static final Vec3 GUN_OFFSET = new Vec3(0,2,2.5);
     private final SimulatedGun customGun;
-
-    private final PartEntity<?>[] subEntities;
+    private static final int MELEE_DAMAGE_DELAY = 12;
+    private int hurtDelay = -1;
 
     private static final EntityDataAccessor<Float> INACCURACY = SynchedEntityData.defineId(BigLumpEntity.class, EntityDataSerializers.FLOAT);
 
     public BigLumpEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
-        this.subEntities = new PartEntity[] {
-                new RotatedWeakPointPartEntity<>(this, new Vec3(-0.6, 2.3, 1.5), 0.5f, 0.5f),
-                new RotatedWeakPointPartEntity<>(this, new Vec3(0.6, 2.3, 1.5), 0.5f, 0.5f),
-        };
         this.customGun = new CustomScorchedSimGun.Builder(ModItems.BIRDFEEDER.get().getGun())
                 .projectileDamage(4f)
                 .fireRate(2)
@@ -80,7 +76,7 @@ public class BigLumpEntity extends Monster implements GeoEntity, Gunner, CustomG
         this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 0.5));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.goalSelector.addGoal(2, new BigLumpMeleeAttackGoal(this, 0.5, true));
+        this.goalSelector.addGoal(2, new BigLumpMeleeAttackGoal(this));
         this.goalSelector.addGoal(2, new BigLumpGunAttackGoal(this, 8));
         this.goalSelector.addGoal(3, new MoveTowardsTargetGoal(this, 0.5, 20));
     }
@@ -138,24 +134,28 @@ public class BigLumpEntity extends Monster implements GeoEntity, Gunner, CustomG
     protected void tickDeath() {
         MobUtil.tickDeath(this, 30);
     }
-    protected void tickSubEntities() {
-        for(PartEntity<?> partEntity : this.getParts()) {
-            partEntity.tick();
-        }
-    }
     @Override
     public void tick() {
         super.tick();
-        this.tickSubEntities();
-    }
-    @Override
-    public PartEntity<?>[] getParts() {
-        return this.subEntities;
-    }
+        if (this.level().isClientSide) return;
 
-    @Override
-    public boolean isMultipartEntity() {
-        return true;
+        this.hurtDelay--;
+        if (this.hurtDelay == 0) {
+            LivingEntity target = this.getTarget();
+            if (target != null) {
+                double distToEnemySqr = this.getPerceivedTargetDistanceSquareForMeleeAttack(target);
+                double reach = this.getAttackReachSqr(target);
+                if (distToEnemySqr <= reach) {
+                    target.hurt(this.damageSources().generic(), 10);
+                }else{
+                    this.getNavigation().moveTo(target.getX(), target.getY()+2, target.getZ(), 0.6);
+                    this.getLookControl().setLookAt(target);
+                }
+            }
+        }
+    }
+    public double getAttackReachSqr(LivingEntity attackTarget) {
+        return 25;
     }
     public void lowerInaccuracy(){
         float inaccuracy = getAccuracy();
@@ -200,5 +200,18 @@ public class BigLumpEntity extends Monster implements GeoEntity, Gunner, CustomG
     @Override
     public Vec3 getBulletSpawnOffset(int gunIndex) {
         return GUN_OFFSET.yRot(-this.yHeadRot * Mth.DEG_TO_RAD);
+    }
+    @Override
+    public double getPerceivedTargetDistanceSquareForMeleeAttack(LivingEntity entity) {
+        return distanceToSqr(entity);
+    }
+    @Override
+    public boolean doHurtTarget(Entity entity) {
+        if (!this.level().isClientSide) {
+            if (this.hurtDelay > 0) return false;
+            this.triggerAnim("controller", "melee_attack");
+            this.hurtDelay = MELEE_DAMAGE_DELAY;
+        }
+        return true;
     }
 }

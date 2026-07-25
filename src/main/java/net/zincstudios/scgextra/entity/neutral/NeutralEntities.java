@@ -2,6 +2,7 @@ package net.zincstudios.scgextra.entity.neutral;
 
 import static net.zincstudios.scgextra.entity.ModEntities.ENTITY_TYPES;
 
+import net.zincstudios.scgextra.entity.common.WeakPointBox;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -41,6 +42,7 @@ import net.zincstudios.scgextra.entity.neutral.overworld.inflicted_wolf.Inflicte
 import net.zincstudios.scgextra.entity.neutral.overworld.mutant_bat.MutantBatEntity;
 import net.zincstudios.scgextra.entity.neutral.overworld.mutant_bat.MutantBatRenderer;
 import net.zincstudios.scgextra.entity.common.OffsetRotatedHeadshotBox;
+import net.zincstudios.scgextra.entity.common.WeakPointBoxManager;
 import top.ribs.scguns.common.BoundingBoxManager;
 
 public class NeutralEntities {
@@ -176,7 +178,7 @@ public class NeutralEntities {
     }
     private static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(NeutralEntities.INFLICTED_BOAR.get(), InflictedBoarEntity.createAttributes().build());
-        event.put(NeutralEntities.INFLICTED_WOLF.get(), InflictedBoarEntity.createAttributes().build());
+        event.put(NeutralEntities.INFLICTED_WOLF.get(), InflictedWolfEntity.createAttributes().build());
         event.put(NeutralEntities.AMMO_GOBLIN.get(), AmmoGoblinEntity.createAttributes().build());
         event.put(NeutralEntities.BIG_LUMP.get(), BigLumpEntity.createAttributes().build());
         event.put(NeutralEntities.MUTANT_BAT.get(), MutantBatEntity.createAttributes().build());
@@ -226,6 +228,32 @@ public class NeutralEntities {
             false, 
             true
         ));
+        WeakPointBoxManager.registerWeakPointBox(NeutralEntities.BIG_LUMP.get(), 
+            new WeakPointBox<>(
+                new OffsetRotatedHeadshotBox<>(
+                    12.0, 
+                    12.0, 
+                    37.0, 
+                    42.0F, 
+                    18.0, 
+                    false, 
+                    true, 
+                    true
+                )
+            ),
+            new WeakPointBox<>(
+                new OffsetRotatedHeadshotBox<>(
+                    12.0, 
+                    12.0, 
+                    37.0, 
+                    -55.0F, 
+                    18.0, 
+                    false, 
+                    true, 
+                    true
+                )
+            )
+        );
         BoundingBoxManager.registerHeadshotBox(NeutralEntities.MUTANT_BAT.get(), new OffsetRotatedHeadshotBox<>(
             11, 
             12.5, 

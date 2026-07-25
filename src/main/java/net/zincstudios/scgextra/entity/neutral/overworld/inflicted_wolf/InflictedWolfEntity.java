@@ -5,6 +5,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -96,5 +97,9 @@ public class InflictedWolfEntity extends Monster implements GeoEntity{
     @Override
     protected void tickDeath() {
         MobUtil.tickDeath(this, 30);
+    }
+    @Override
+    public double getPerceivedTargetDistanceSquareForMeleeAttack(LivingEntity entity) {
+        return distanceToSqr(entity);
     }
 }
