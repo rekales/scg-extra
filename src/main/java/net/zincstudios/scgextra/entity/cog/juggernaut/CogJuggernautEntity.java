@@ -1,6 +1,8 @@
 package net.zincstudios.scgextra.entity.cog.juggernaut;
 
 import com.mojang.serialization.Dynamic;
+
+import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
@@ -222,12 +224,7 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity, Gu
 
     @Override
     protected void tickDeath() {
-        // Override to only extend death time
-        ++this.deathTime;
-        if (this.deathTime >= 35 && !this.level().isClientSide() && !this.isRemoved()) {
-            this.level().broadcastEntityEvent(this, (byte)60);
-            this.remove(Entity.RemovalReason.KILLED);
-        }
+        MobUtil.tickDeath(this, 35);
     }
 
     @Override

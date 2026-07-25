@@ -1132,5 +1132,198 @@
       "scgextra:cog/cog_juggernaut/hurt2",
       "scgextra:cog/cog_juggernaut/hurt3"
     ]
+  },
+  "ammo_goblin.dead": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/ammo_goblin/dead"
+    ]
+  },
+  "ammo_goblin.hurt": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/ammo_goblin/hurt_01",
+      "scgextra:neutral/ammo_goblin/hurt_02",
+      "scgextra:neutral/ammo_goblin/hurt_03"
+    ]
+  },
+  "ammo_goblin.idle": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/ammo_goblin/idle_01",
+      "scgextra:neutral/ammo_goblin/idle_02"
+    ]
+  },
+  "big_lump.dead": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/big_lump/death"
+    ]
+  },
+  "big_lump.hurt": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/big_lump/hurt_01",
+      "scgextra:neutral/big_lump/hurt_02"
+    ]
+  },
+  "big_lump.idle": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/big_lump/idle_01",
+      "scgextra:neutral/big_lump/idle_02",
+      "scgextra:neutral/big_lump/idle_03"
+    ]
+  },
+  "mutant_bat.dead": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/mutant_bat/death"
+    ]
+  },
+  "mutant_bat.hurt": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/mutant_bat/hurt"
+    ]
+  },
+  "mutant_bat.idle": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/mutant_bat/idle_01",
+      "scgextra:neutral/mutant_bat/idle_02",
+      "scgextra:neutral/mutant_bat/idle_03"
+    ]
+  },
+  "mutant_bat.scream": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/mutant_bat/scream"
+    ]
+  },
+  "netherite_eater.dead": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/netherite_eater/death"
+    ]
+  },
+  "netherite_eater.hurt": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/netherite_eater/hurt_01",
+      "scgextra:neutral/netherite_eater/hurt_02"
+    ]
+  },
+  "netherite_eater.idle": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/netherite_eater/idle_01",
+      "scgextra:neutral/netherite_eater/idle_02",
+      "scgextra:neutral/netherite_eater/idle_03",
+      "scgextra:neutral/netherite_eater/idle_04"
+    ]
+  },
+  "netherite_eater.breath": {
+    "category": "hostile",
+    "sounds": [
+      "scgextra:neutral/netherite_eater/breath"
+    ]
+  },
+  "end_pod.idle": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_pod/idle_01",
+      "scgextra:neutral/end_pod/idle_02",
+      "scgextra:neutral/end_pod/idle_03",
+      "scgextra:neutral/end_pod/idle_04",
+      "scgextra:neutral/end_pod/idle_05"
+    ]
+  },
+  "end_pod.breed": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_pod/breed"
+    ]
+  },
+  "end_pod.death": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_pod/death_01",
+      "scgextra:neutral/end_pod/death_02"
+    ]
+  },
+  "end_dweller.idle": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_dweller/idle_01",
+      "scgextra:neutral/end_dweller/idle_02",
+      "scgextra:neutral/end_dweller/idle_03"
+    ]
+  },
+  "end_dweller.hurt": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_dweller/hurt_01",
+      "scgextra:neutral/end_dweller/hurt_02"
+    ]
+  },
+  "end_dweller.charging": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_dweller/charging"
+    ]
+  },
+  "end_stone_crab.death": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_stone_crab/death"
+    ]
+  },
+  "end_stone_crab.idle": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_stone_crab/idle_01",
+      "scgextra:neutral/end_stone_crab/idle_02"
+    ]
+  },
+  "end_stone_crab.hurt": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_stone_crab/hurt_01",
+      "scgextra:neutral/end_stone_crab/hurt_02"
+    ]
+  },
+  "end_stone_crab.attack": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_stone_crab/attack"
+    ]
+  },
+  "end_scorpion.death": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_scorpion/death"
+    ]
+  },
+  "end_scorpion.idle": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_scorpion/idle_01",
+      "scgextra:neutral/end_scorpion/idle_02",
+      "scgextra:neutral/end_scorpion/idle_03"
+    ]
+  },
+  "end_scorpion.hurt": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_scorpion/hurt_01",
+      "scgextra:neutral/end_scorpion/hurt_02"
+    ]
+  },
+  "end_scorpion.sting": {
+    "category": "neutral",
+    "sounds": [
+      "scgextra:neutral/end_scorpion/sting"
+    ]
   }
 }

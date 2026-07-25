@@ -289,10 +289,6 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable, HeadSh
     }
 
     protected void tickDeath() {
-        ++this.deathTime;
-        if (this.deathTime >= 18 && !this.level().isClientSide() && !this.isRemoved()) {
-            this.level().broadcastEntityEvent(this, (byte)60);
-            this.remove(RemovalReason.KILLED);
-        }
+        MobUtil.tickDeath(this, 18);
     }
 }

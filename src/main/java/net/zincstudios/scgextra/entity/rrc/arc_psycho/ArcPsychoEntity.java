@@ -89,11 +89,7 @@ public class ArcPsychoEntity extends Monster implements GeoEntity{
     }
     @Override
     protected void tickDeath() {
-        ++this.deathTime;
-        if (this.deathTime >= 12 && !this.level().isClientSide() && !this.isRemoved()) {
-            this.level().broadcastEntityEvent(this, (byte)60);
-            this.remove(RemovalReason.KILLED);
-        }
+        MobUtil.tickDeath(this, 12);
     }
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
         return MobUtil.getSound(

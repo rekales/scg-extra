@@ -117,12 +117,7 @@ public class AsgharFlamerEntity extends GunnerEntity implements GeoEntity, GoalS
 
     @Override
     protected void tickDeath() {
-        // Override to only extend death time
-        ++this.deathTime;
-        if (this.deathTime >= 55 && !this.level().isClientSide() && !this.isRemoved()) {
-            this.level().broadcastEntityEvent(this, (byte)60);
-            this.remove(Entity.RemovalReason.KILLED);
-        }
+        MobUtil.tickDeath(this, 55);
     }
 
     @Override
