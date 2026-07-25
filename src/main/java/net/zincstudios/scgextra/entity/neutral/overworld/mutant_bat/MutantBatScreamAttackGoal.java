@@ -87,7 +87,7 @@ public class MutantBatScreamAttackGoal extends Goal{
         if(ticks == 20){
             if(this.entity.getTarget()!=null){
                 this.entity.getTarget().hurt(this.entity.damageSources().generic(), 3);
-                this.entity.getTarget().addEffect(new MobEffectInstance(MobEffects.CONFUSION, 120));
+                this.entity.getTarget().addEffect(new MobEffectInstance(MobEffects.CONFUSION, 240, 255));
                 this.entity.getTarget().addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 120));
             }
         }
