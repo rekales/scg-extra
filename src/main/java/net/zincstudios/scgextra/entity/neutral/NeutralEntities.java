@@ -274,6 +274,20 @@ public class NeutralEntities {
             true, 
             true
         ));
+        WeakPointBoxManager.registerWeakPointBox(NeutralEntities.HEAD_HUNTER.get(), 
+        new WeakPointBox<>(
+            new OffsetRotatedHeadshotBox<>(
+                8, 
+                8, 
+                30, 
+                0, 
+                0, 
+                -8, 
+                false, 
+                true, 
+                true
+            )
+        ));
         BoundingBoxManager.registerHeadshotBox(NeutralEntities.NETHERITE_EATER.get(), new OffsetRotatedHeadshotBox<>(
             12, 
             13.5, 
