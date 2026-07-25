@@ -38,7 +38,7 @@ public class BigLumpMeleeAttackGoal extends Goal{
         super.tick();
         LivingEntity target = this.mob.getTarget();
         if(target==null)return;
-        this.mob.lookAt(target, 10, 10);
+        this.mob.getLookControl().setLookAt(target);
         if(this.mob.distanceToSqr(target)>=25){
             this.mob.getNavigation().moveTo(target, 0.5);
         }else{

@@ -11,7 +11,9 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -39,6 +41,8 @@ public class MutantBatEntity extends Monster implements GeoEntity{
 
     private static final EntityDataAccessor<Boolean> IS_SCREAMING = SynchedEntityData.defineId(MutantBatEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> IS_RUNNING = SynchedEntityData.defineId(MutantBatEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final int MELEE_DAMAGE_DELAY = 15;
+    private int hurtDelay = -1;
 
     public MutantBatEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
@@ -50,10 +54,10 @@ public class MutantBatEntity extends Monster implements GeoEntity{
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 0.5));
+        this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 0.5));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.goalSelector.addGoal(2, new MutantBatMeleeAttackGoal(this, 0.5, true));
+        this.goalSelector.addGoal(2, new MutantBatMeleeAttackGoal(this));
         this.goalSelector.addGoal(2, new MutantBatScreamAttackGoal(this));
         this.goalSelector.addGoal(3, new MoveTowardsTargetGoal(this, 0.5, 10));
         this.goalSelector.addGoal(3, new MutantBatRunGoal(this, 0.7f));
@@ -127,6 +131,25 @@ public class MutantBatEntity extends Monster implements GeoEntity{
     @Override
     public void tick() {
         super.tick();
+        if (this.level().isClientSide) return;
+
+        this.hurtDelay--;
+        if (this.hurtDelay == 0) {
+            LivingEntity target = this.getTarget();
+            if (target != null) {
+                double distToEnemySqr = this.getPerceivedTargetDistanceSquareForMeleeAttack(target);
+                double reach = this.getAttackReachSqr(target);
+                if (distToEnemySqr <= reach) {
+                    target.hurt(this.damageSources().generic(), 10);
+                }else{
+                    this.getNavigation().moveTo(target.getX(), target.getY()+2, target.getZ(), 0.6);
+                    this.getLookControl().setLookAt(target);
+                }
+            }
+        }
+    }
+    public double getAttackReachSqr(LivingEntity attackTarget) {
+        return 16;
     }
     @Override
     protected float getSoundVolume() {
@@ -155,5 +178,18 @@ public class MutantBatEntity extends Monster implements GeoEntity{
             }
             return checkMonsterSpawnRules(NeutralEntities.MUTANT_BAT.get(), (ServerLevelAccessor)level, spawnReason, this.blockPosition(), random);
         }
+    }
+    @Override
+    public double getPerceivedTargetDistanceSquareForMeleeAttack(LivingEntity entity) {
+        return distanceToSqr(entity);
+    }
+    @Override
+    public boolean doHurtTarget(Entity entity) {
+        if (!this.level().isClientSide) {
+            if (this.hurtDelay > 0) return false;
+            this.triggerAnim("controller", "melee_attack");
+            this.hurtDelay = MELEE_DAMAGE_DELAY;
+        }
+        return true;
     }
 }
