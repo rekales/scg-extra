@@ -214,4 +214,16 @@ public class BigLumpEntity extends Monster implements GeoEntity, Gunner, CustomG
         }
         return true;
     }
+    protected boolean isSunSensitive() {
+        return true;
+    }
+    public void aiStep() {
+        if (this.isAlive()) {
+            boolean flag = this.isSunSensitive() && this.isSunBurnTick();
+            if (flag) {
+                this.setSecondsOnFire(8);
+            }
+        }
+        super.aiStep();
+    }
 }
