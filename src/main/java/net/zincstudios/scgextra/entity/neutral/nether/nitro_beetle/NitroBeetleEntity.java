@@ -20,7 +20,6 @@ import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
@@ -72,7 +71,7 @@ public class NitroBeetleEntity extends Monster implements GeoEntity, FlyingAnima
         this.goalSelector.addGoal(2, new NitroBeetleWanderGoal());
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0.4, true));
+        this.goalSelector.addGoal(2, new NitroBeetleMeleeAttackGoal(this, 0.4, true));
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 5));
     }
@@ -174,7 +173,7 @@ public class NitroBeetleEntity extends Monster implements GeoEntity, FlyingAnima
     }
     public float getWalkTargetValue(BlockPos pos, LevelReader level) {
       return level.getBlockState(pos).isAir() ? 10.0F : 0.0F;
-   }
+    }
     class NitroBeetleWanderGoal extends Goal {
         NitroBeetleWanderGoal() {
             this.setFlags(EnumSet.of(Flag.MOVE));
@@ -202,9 +201,13 @@ public class NitroBeetleEntity extends Monster implements GeoEntity, FlyingAnima
             Vec3 vec32 = HoverRandomPos.getPos(NitroBeetleEntity.this, 8, 7, vec3.x, vec3.z, ((float)Math.PI / 2F), 3, 1);
             return vec32 != null ? vec32 : AirAndWaterRandomPos.getPos(NitroBeetleEntity.this, 8, 4, -2, vec3.x, vec3.z, (double)((float)Math.PI / 2F));
         }
-   }
+    }
     @Override
     public boolean isFlying() {
         return !this.onGround();
+    }
+    @Override
+    public double getPerceivedTargetDistanceSquareForMeleeAttack(LivingEntity entity) {
+        return distanceToSqr(entity);
     }
 }
