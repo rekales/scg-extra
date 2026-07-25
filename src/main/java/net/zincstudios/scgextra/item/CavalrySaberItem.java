@@ -31,6 +31,7 @@ public class CavalrySaberItem extends SwordItem implements HurtEffects {
 
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        attacker.resetFallDistance();
         this.hurtEffect(stack, target, attacker);
         return super.hurtEnemy(stack, target, attacker);
     }
