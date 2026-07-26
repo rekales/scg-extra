@@ -109,6 +109,7 @@
 						{
 							"origin": [-4.5, 11.925, -3],
 							"size": [9, 12.15, 6],
+							"inflate": 0.05,
 							"uv": {
 								"north": {"uv": [51, 18], "uv_size": [9, 12]},
 								"east": {"uv": [61, 57], "uv_size": [6, 12]},
@@ -293,7 +294,7 @@
 				{
 					"name": "armorRightArm",
 					"parent": "bipedRightArm",
-					"pivot": [5, 22, 0]
+					"pivot": [-5, 22, 0]
 				},
 				{
 					"name": "bone5",

@@ -553,7 +553,7 @@
 				{
 					"name": "armorRightArm",
 					"parent": "bipedRightArm",
-					"pivot": [5, 22, 0]
+					"pivot": [-5, 22, 0]
 				},
 				{
 					"name": "bone8",

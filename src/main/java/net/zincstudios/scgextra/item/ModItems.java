@@ -195,7 +195,7 @@ public class ModItems {
             RITUAL_HELMET = ITEMS.register("ritual_helmet", () ->
                     new GeoArmorSetPartItem(ModArmorMaterials.RITUAL, ArmorItem.Type.HELMET, ArmorSets.RITUAL)),
             RITUAL_CHESTPLATE = ITEMS.register("ritual_chestplate", () ->
-                    new GeoArmorSetPartItem(ModArmorMaterials.RITUAL, ArmorItem.Type.CHESTPLATE, ArmorSets.RITUAL)),
+                    new RitualChestplateItem(ModArmorMaterials.RITUAL, ArmorItem.Type.CHESTPLATE, ArmorSets.RITUAL)),
             RITUAL_LEGGINGS = ITEMS.register("ritual_leggings", () ->
                     new GeoArmorSetPartItem(ModArmorMaterials.RITUAL, ArmorItem.Type.LEGGINGS, ArmorSets.RITUAL)),
             RITUAL_BOOTS = ITEMS.register("ritual_boots", () ->
