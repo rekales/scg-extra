@@ -57,10 +57,10 @@ public class EndStoneCrabEntity extends Monster implements GeoEntity{
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, false,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0.4, true));
-        this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 0.4));
+        this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 0.4));
         this.goalSelector.addGoal(3, new MoveTowardsTargetGoal(this, 0.4, 10));
-        this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 6.0F));
-        this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 6.0F));
+        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(4, new BreakBlocksGoal(this, 60));
     }
     @Override
@@ -186,4 +186,8 @@ public class EndStoneCrabEntity extends Monster implements GeoEntity{
     protected void playStepSound(net.minecraft.core.BlockPos pPos, net.minecraft.world.level.block.state.BlockState pState) {
         this.playSound(SoundEvents.IRON_GOLEM_STEP, this.getSoundVolume(), 1);
     };
+    @Override
+    public double getPerceivedTargetDistanceSquareForMeleeAttack(LivingEntity entity) {
+        return distanceToSqr(entity);
+    }
 }
