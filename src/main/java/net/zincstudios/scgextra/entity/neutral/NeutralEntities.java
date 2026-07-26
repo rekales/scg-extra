@@ -164,7 +164,7 @@ public class NeutralEntities {
             EndScorpionEntity::new, 
             MobCategory.MONSTER
         )
-        .sized(3.5F, 0.5F)
+        .sized(3F, 0.5F)
         .build("end_scorpion")
     );
     

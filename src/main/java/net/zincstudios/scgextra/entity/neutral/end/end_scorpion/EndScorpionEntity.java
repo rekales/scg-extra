@@ -25,7 +25,6 @@ import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.MoveTowardsTargetGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -45,7 +44,6 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import top.ribs.scguns.init.ModEffects;
 
 public class EndScorpionEntity extends Monster implements GeoEntity, FlyingAnimal{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
@@ -65,26 +63,7 @@ public class EndScorpionEntity extends Monster implements GeoEntity, FlyingAnima
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, false,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0.6, true){
-            @Override
-            protected double getAttackReachSqr(LivingEntity attackTarget) {
-                return 16;
-            }
-            @Override
-            public boolean canUse() {
-                if(this.mob instanceof EndScorpionEntity ese){
-                    if(ese.isStinging())return false;
-                }
-                return super.canUse();
-            }
-            @Override
-            public boolean canContinueToUse() {
-                if(this.mob instanceof EndScorpionEntity ese){
-                    if(ese.isStinging())return false;
-                }
-                return super.canContinueToUse();
-            }
-        });
+        this.goalSelector.addGoal(2, new EndScorpionMeleeAttackGoal(this, 0.6, true));
         this.goalSelector.addGoal(3, new EndScorpionStingAttackGoal(this));
         this.goalSelector.addGoal(4, new EndScorpionWanderGoal());
         this.goalSelector.addGoal(5, new MoveTowardsTargetGoal(this, 0.6, 10));
@@ -144,14 +123,7 @@ public class EndScorpionEntity extends Monster implements GeoEntity, FlyingAnima
                 double reach = this.getAttackReachSqr(target);
                 if (distToEnemySqr <= reach) {
                     target.hurt(this.damageSources().generic(), 10);
-                    if(this.isStinging()){
-                        target.addEffect(new MobEffectInstance(MobEffects.POISON, 120));
-                        target.addEffect(new MobEffectInstance(MobEffects.WITHER, 120));
-                        target.addEffect(new MobEffectInstance(ModEffects.LACERATED.get(), 120));
-                    }else{
-                        target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 120, 3));
-                    }
-                    this.setStinging(false);
+                    target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 120, 3));
                 }else{
                     this.getNavigation().moveTo(target.getX(), target.getY()+2, target.getZ(), 0.6);
                     this.getLookControl().setLookAt(target);
@@ -160,20 +132,14 @@ public class EndScorpionEntity extends Monster implements GeoEntity, FlyingAnima
         }
     }
     public double getAttackReachSqr(LivingEntity attackTarget) {
-        return 25;
+        return 20;
     }
     @Override
     public boolean doHurtTarget(Entity entity) {
         if (!this.level().isClientSide) {
             if (this.hurtDelay > 0) return false;
-            if(!this.isStinging()){
-                this.triggerAnim("controller", "attack_claw");
-                this.hurtDelay = MELEE_DAMAGE_DELAY;
-            }else{
-                this.triggerAnim("controller", "attack_sting");
-                this.hurtDelay = STING_DAMAGE_DELAY;
-                this.playSound(NeutralSounds.END_SCORPION_STING.get());
-            }
+            this.triggerAnim("controller", "attack_claw");
+            this.hurtDelay = MELEE_DAMAGE_DELAY;
         }
         return true;
     }
