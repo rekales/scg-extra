@@ -104,7 +104,7 @@ public class EndScorpionEntity extends Monster implements GeoEntity, FlyingAnima
         .add(Attributes.MAX_HEALTH, 200.0)
         .add(Attributes.MOVEMENT_SPEED, 1.0)
         .add(Attributes.KNOCKBACK_RESISTANCE, 0.8)
-        .add(Attributes.ATTACK_KNOCKBACK, 0.5)
+        .add(Attributes.ATTACK_KNOCKBACK, 0.7)
         .add(Attributes.ATTACK_DAMAGE, 15)
         .add(Attributes.ARMOR, 8)
         .add(Attributes.FOLLOW_RANGE, 20)
