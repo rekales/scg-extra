@@ -7,6 +7,9 @@ import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -20,6 +23,7 @@ import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
@@ -46,6 +50,7 @@ import net.minecraft.world.entity.animal.FlyingAnimal;
 
 public class NitroBeetleEntity extends Monster implements GeoEntity, FlyingAnimal{
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+    private static final EntityDataAccessor<Boolean> IS_ATTACKING = SynchedEntityData.defineId(NitroBeetleEntity.class, EntityDataSerializers.BOOLEAN);
     public NitroBeetleEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new FlyingMoveControl(this, 20, true);
@@ -59,21 +64,21 @@ public class NitroBeetleEntity extends Monster implements GeoEntity, FlyingAnima
         .add(Attributes.ARMOR, 12)
         .add(Attributes.ATTACK_DAMAGE, 3)
         .add(Attributes.ATTACK_KNOCKBACK, 0.1)
-        .add(Attributes.FLYING_SPEED, 0.6)
-        
+        .add(Attributes.FLYING_SPEED, 0.8)
+        .add(Attributes.FOLLOW_RANGE, 20)
         ;
     }
 
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(5, new FloatGoal(this));
-        this.goalSelector.addGoal(2, new NitroBeetleWanderGoal());
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true,
-                player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.goalSelector.addGoal(2, new NitroBeetleMeleeAttackGoal(this, 0.4, true));
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true,
+            player -> !((Player) player).isCreative() && !player.isSpectator()));
+        this.goalSelector.addGoal(2, new NitroBeetleMeleeAttackGoal(this, 0.8F, true));
+        this.goalSelector.addGoal(3, new NitroBeetleWanderGoal());
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 5));
+        this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 5));
+        this.goalSelector.addGoal(6, new FloatGoal(this));
     }
 
     @Override
@@ -174,23 +179,34 @@ public class NitroBeetleEntity extends Monster implements GeoEntity, FlyingAnima
     public float getWalkTargetValue(BlockPos pos, LevelReader level) {
       return level.getBlockState(pos).isAir() ? 10.0F : 0.0F;
     }
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(IS_ATTACKING, false);
+    }
+    public void setAttacking(boolean bool){
+        this.entityData.set(IS_ATTACKING, bool);
+    }
+    public boolean isAttacking(){
+        return this.entityData.get(IS_ATTACKING);
+    }
     class NitroBeetleWanderGoal extends Goal {
         NitroBeetleWanderGoal() {
             this.setFlags(EnumSet.of(Flag.MOVE));
         }
 
         public boolean canUse() {
-            return NitroBeetleEntity.this.navigation.isDone() && NitroBeetleEntity.this.random.nextInt(10) == 0;
+            return NitroBeetleEntity.this.navigation.isDone() && NitroBeetleEntity.this.random.nextInt(10) == 0 && !NitroBeetleEntity.this.isAttacking();
         }
 
         public boolean canContinueToUse() {
-            return NitroBeetleEntity.this.navigation.isInProgress();
+            return NitroBeetleEntity.this.navigation.isInProgress() && !NitroBeetleEntity.this.isAttacking();
         }
 
         public void start() {
             Vec3 vec3 = this.findPos();
             if (vec3 != null) {
-                NitroBeetleEntity.this.navigation.moveTo(NitroBeetleEntity.this.navigation.createPath(BlockPos.containing(vec3), 1), (double)1.0F);
+                NitroBeetleEntity.this.navigation.moveTo(NitroBeetleEntity.this.navigation.createPath(BlockPos.containing(vec3), 1), (double)1.3F);
             }
 
         }
