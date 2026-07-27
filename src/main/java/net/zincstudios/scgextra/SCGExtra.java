@@ -34,8 +34,10 @@ import net.zincstudios.scgextra.raid.WaveRaidManager;
 import net.zincstudios.scgextra.sounds.ModSounds;
 import net.zincstudios.scgextra.worldgen.biome.ModBiomes;
 import net.zincstudios.scgextra.worldgen.biome.ModTerrablender;
+import net.zincstudios.scgextra.worldgen.biome.surface.ModSurfaceRules;
 import net.zincstudios.scgextra.worldgen.structure.ModStructureProcessors;
 import net.zincstudios.scgextra.worldgen.structure.ModStructures;
+import terrablender.api.SurfaceRuleManager;
 
 import org.slf4j.Logger;
 
@@ -81,6 +83,9 @@ public class SCGExtra
 
     private void commonSetup(final FMLCommonSetupEvent event) {
         SCGEPacketHandler.init();
+        event.enqueueWork(()->{
+            SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MOD_ID, ModSurfaceRules.makeRules());
+        });
     }
 
     @SuppressWarnings("removal")
