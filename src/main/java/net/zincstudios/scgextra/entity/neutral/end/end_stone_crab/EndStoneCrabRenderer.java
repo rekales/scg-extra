@@ -41,7 +41,7 @@ public class EndStoneCrabRenderer extends GeoEntityRenderer<EndStoneCrabEntity> 
                 );
             }
         });
-        this.shadowRadius = 0.3F;
+        this.shadowRadius = 2F;
     }
 
     @Override

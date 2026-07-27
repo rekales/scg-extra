@@ -63,9 +63,9 @@ public class EndStoneCrabEntity extends Monster implements GeoEntity{
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, false,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.goalSelector.addGoal(2, new EndStoneCrabMeleeAttackGoal(this, 0.4, true));
-        this.goalSelector.addGoal(3, new MoveTowardsTargetGoal(this, 0.4, 10));
-        this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 0.4));
+        this.goalSelector.addGoal(2, new EndStoneCrabMeleeAttackGoal(this, 0.5, true));
+        this.goalSelector.addGoal(3, new MoveTowardsTargetGoal(this, 0.5, 10));
+        this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 0.5));
         this.goalSelector.addGoal(4, new BreakBlocksGoal(this, 60));
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
@@ -103,7 +103,7 @@ public class EndStoneCrabEntity extends Monster implements GeoEntity{
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
         .add(Attributes.MAX_HEALTH, 150.0)
-        .add(Attributes.MOVEMENT_SPEED, 0.4)
+        .add(Attributes.MOVEMENT_SPEED, 0.5)
         .add(Attributes.KNOCKBACK_RESISTANCE, 100)
         .add(Attributes.ATTACK_KNOCKBACK, 0.5)
         .add(Attributes.ATTACK_DAMAGE, 15)
@@ -207,7 +207,7 @@ public class EndStoneCrabEntity extends Monster implements GeoEntity{
     }
     public static boolean checkMonsterSpawnRules(EntityType<? extends Monster> type, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
         List<EndStoneCrabEntity> list = level.getEntitiesOfClass(EndStoneCrabEntity.class, type.getAABB(pos.getX(), pos.getY(), pos.getZ()).inflate(300));
-        if(list.size()>1){
+        if(list.size()>2){
             return false;
         }
         return level.getDifficulty() != Difficulty.PEACEFUL && isDarkEnoughToSpawn(level, pos, random) && checkMobSpawnRules(type, level, spawnType, pos, random);
