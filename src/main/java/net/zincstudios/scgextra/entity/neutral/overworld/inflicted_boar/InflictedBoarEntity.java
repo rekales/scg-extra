@@ -33,7 +33,7 @@ public class InflictedBoarEntity extends Monster implements GeoEntity{
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
         .add(Attributes.MAX_HEALTH, 40.0)
-        .add(Attributes.MOVEMENT_SPEED, 0.3)
+        .add(Attributes.MOVEMENT_SPEED, 0.5)
         .add(Attributes.KNOCKBACK_RESISTANCE, 0.6)
         .add(Attributes.ATTACK_KNOCKBACK, 2)
         .add(Attributes.ATTACK_DAMAGE, 6)
@@ -46,10 +46,10 @@ public class InflictedBoarEntity extends Monster implements GeoEntity{
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 0.3));
+        this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 0.5));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.goalSelector.addGoal(2, new InflictedBoarAttackGoal(this, 0.4, true));
+        this.goalSelector.addGoal(2, new InflictedBoarAttackGoal(this, 0.6, true));
     }
 
     @Override

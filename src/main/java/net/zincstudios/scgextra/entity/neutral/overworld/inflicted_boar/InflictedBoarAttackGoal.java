@@ -36,7 +36,7 @@ public class InflictedBoarAttackGoal extends MeleeAttackGoal{
             this.resetAttackCooldown();
             this.mob.swing(InteractionHand.MAIN_HAND);
             this.mob.doHurtTarget(enemy);
-            enemy.addEffect(new MobEffectInstance(ModEffects.LACERATED.get(), 40));
+            enemy.addEffect(new MobEffectInstance(ModEffects.LACERATED.get(), 120));
         }
     }
     @Override
