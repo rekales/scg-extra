@@ -18,7 +18,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.MoveTowardsTargetGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
@@ -56,12 +55,12 @@ public class EndStoneCrabEntity extends Monster implements GeoEntity{
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, false,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0.4, true));
-        this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 0.4));
+        this.goalSelector.addGoal(2, new EndStoneCrabMeleeAttackGoal(this, 0.4, true));
         this.goalSelector.addGoal(3, new MoveTowardsTargetGoal(this, 0.4, 10));
+        this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 0.4));
+        this.goalSelector.addGoal(4, new BreakBlocksGoal(this, 60));
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
-        this.goalSelector.addGoal(4, new BreakBlocksGoal(this, 60));
     }
     @Override
     public void registerControllers(ControllerRegistrar controllers) {
@@ -69,7 +68,7 @@ public class EndStoneCrabEntity extends Monster implements GeoEntity{
             if (state.isMoving()) {
                 state.setAndContinue(RawAnimation.begin().thenLoop("walk"));
             } else {
-                if(state.getAnimatable().isEating()){
+                if(!state.getAnimatable().isEating()){
                     state.setAndContinue(RawAnimation.begin().thenLoop("idle"));
                 }else{
                     state.setAndContinue(RawAnimation.begin().thenLoop("idle_eating"));
@@ -101,7 +100,7 @@ public class EndStoneCrabEntity extends Monster implements GeoEntity{
         .add(Attributes.ATTACK_KNOCKBACK, 0.5)
         .add(Attributes.ATTACK_DAMAGE, 15)
         .add(Attributes.ARMOR, 16)
-        .add(Attributes.FOLLOW_RANGE, 20);
+        .add(Attributes.FOLLOW_RANGE, 50);
     }
     @Override
     protected void defineSynchedData() {
@@ -118,7 +117,7 @@ public class EndStoneCrabEntity extends Monster implements GeoEntity{
     @Override
     public void tick() {
         super.tick();
-        if(this.getDeltaMovement().length() == Vec3.ZERO.length()){
+        if(this.getDeltaMovement().length() == Vec3.ZERO.length() && this.getTarget()==null){
             if(this.tickCount%40==0){
                 this.setEating(this.getRandom().nextBoolean());
             }
@@ -189,5 +188,13 @@ public class EndStoneCrabEntity extends Monster implements GeoEntity{
     @Override
     public double getPerceivedTargetDistanceSquareForMeleeAttack(LivingEntity entity) {
         return distanceToSqr(entity);
+    }
+    @Override
+    public void setMaxUpStep(float maxUpStep) {
+        super.setMaxUpStep(1F);
+    }
+    @Override
+    public float getStepHeight() {
+        return 1F;
     }
 }

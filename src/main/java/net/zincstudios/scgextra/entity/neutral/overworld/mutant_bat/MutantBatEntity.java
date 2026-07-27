@@ -23,6 +23,8 @@ import net.minecraft.world.entity.ai.goal.MoveTowardsTargetGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -41,6 +43,7 @@ public class MutantBatEntity extends Monster implements GeoEntity{
 
     private static final EntityDataAccessor<Boolean> IS_SCREAMING = SynchedEntityData.defineId(MutantBatEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> IS_RUNNING = SynchedEntityData.defineId(MutantBatEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Byte> DATA_FLAGS_ID  = SynchedEntityData.defineId(MutantBatEntity.class, EntityDataSerializers.BYTE);
     private static final int MELEE_DAMAGE_DELAY = 15;
     private int hurtDelay = -1;
 
@@ -55,7 +58,7 @@ public class MutantBatEntity extends Monster implements GeoEntity{
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 0.5));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true,
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
         this.goalSelector.addGoal(2, new MutantBatMeleeAttackGoal(this));
         this.goalSelector.addGoal(2, new MutantBatScreamAttackGoal(this));
@@ -71,7 +74,12 @@ public class MutantBatEntity extends Monster implements GeoEntity{
         .add(Attributes.ATTACK_KNOCKBACK, 0.5)
         .add(Attributes.ATTACK_DAMAGE, 8)
         .add(Attributes.ARMOR, 2)
-        .add(Attributes.FOLLOW_RANGE, 20);
+        .add(Attributes.FOLLOW_RANGE, 50);
+    }
+
+    @Override
+    protected PathNavigation createNavigation(Level level) {
+        return new WallClimberNavigation(this, level);
     }
 
     @Override
@@ -102,6 +110,11 @@ public class MutantBatEntity extends Monster implements GeoEntity{
         super.defineSynchedData();
         this.entityData.define(IS_SCREAMING, false);
         this.entityData.define(IS_RUNNING, false);
+        this.entityData.define(DATA_FLAGS_ID, (byte)0);
+    }
+
+    public boolean onClimbable() {
+        return this.isClimbing();
     }
 
     public boolean isScreaming(){
@@ -147,6 +160,21 @@ public class MutantBatEntity extends Monster implements GeoEntity{
                 }
             }
         }
+        this.setClimbing(this.horizontalCollision);
+    }
+    public boolean isClimbing() {
+        return ((Byte)this.entityData.get(DATA_FLAGS_ID) & 1) != 0;
+    }
+
+    public void setClimbing(boolean climbing) {
+        byte b0 = (Byte)this.entityData.get(DATA_FLAGS_ID);
+        if (climbing) {
+            b0 = (byte)(b0 | 1);
+        } else {
+            b0 = (byte)(b0 & -2);
+        }
+
+        this.entityData.set(DATA_FLAGS_ID, b0);
     }
     public double getAttackReachSqr(LivingEntity attackTarget) {
         return 16;
@@ -191,5 +219,9 @@ public class MutantBatEntity extends Monster implements GeoEntity{
             this.hurtDelay = MELEE_DAMAGE_DELAY;
         }
         return true;
+    }
+    @Override
+    public void setMaxUpStep(float maxUpStep) {
+        super.setMaxUpStep(1F);
     }
 }
