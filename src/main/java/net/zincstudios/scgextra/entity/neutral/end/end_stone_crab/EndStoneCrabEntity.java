@@ -3,17 +3,24 @@ package net.zincstudios.scgextra.entity.neutral.end.end_stone_crab;
 import net.zincstudios.scgextra.entity.common.part.RotatedWeakPointPartEntity;
 import net.zincstudios.scgextra.entity.common.goal.BreakBlocksGoal;
 import net.zincstudios.scgextra.sounds.NeutralSounds;
+
+import java.util.List;
+
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -25,6 +32,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.PartEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
@@ -196,5 +204,12 @@ public class EndStoneCrabEntity extends Monster implements GeoEntity{
     @Override
     public float getStepHeight() {
         return 1F;
+    }
+    public static boolean checkMonsterSpawnRules(EntityType<? extends Monster> type, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+        List<EndStoneCrabEntity> list = level.getEntitiesOfClass(EndStoneCrabEntity.class, type.getAABB(pos.getX(), pos.getY(), pos.getZ()).inflate(300));
+        if(list.size()>1){
+            return false;
+        }
+        return level.getDifficulty() != Difficulty.PEACEFUL && isDarkEnoughToSpawn(level, pos, random) && checkMobSpawnRules(type, level, spawnType, pos, random);
     }
 }

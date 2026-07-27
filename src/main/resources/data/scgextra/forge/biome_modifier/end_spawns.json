@@ -4,13 +4,13 @@
   "spawners": [
     {
       "type": "scgextra:end_pod",
-      "weight": 150,
+      "weight": 1000,
       "minCount": 1,
       "maxCount": 5
     },
     {
       "type": "scgextra:end_dweller",
-      "weight": 10,
+      "weight": 30,
       "minCount": 1,
       "maxCount": 1
     },
