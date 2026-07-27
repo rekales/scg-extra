@@ -138,7 +138,12 @@
           "type": "minecraft:item",
           "name": "scguns:iron_spear",
           "weight": 1,
-          "conditions": [],
+          "conditions": [
+            {
+              "chance": 0.05,
+              "condition": "minecraft:random_chance"
+            }
+          ],
           "functions": [
             {
               "function": "minecraft:limit_count",
