@@ -63,10 +63,10 @@ public class EndScorpionEntity extends Monster implements GeoEntity, FlyingAnima
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, false,
                 player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.goalSelector.addGoal(2, new EndScorpionMeleeAttackGoal(this, 0.6, true));
+        this.goalSelector.addGoal(2, new EndScorpionMeleeAttackGoal(this, 1.0, true));
         this.goalSelector.addGoal(3, new EndScorpionStingAttackGoal(this));
         this.goalSelector.addGoal(4, new EndScorpionWanderGoal());
-        this.goalSelector.addGoal(5, new MoveTowardsTargetGoal(this, 0.6, 10));
+        this.goalSelector.addGoal(5, new MoveTowardsTargetGoal(this, 1.0, 20));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(8, new BreakBlocksGoal(this, 60));
@@ -102,13 +102,13 @@ public class EndScorpionEntity extends Monster implements GeoEntity, FlyingAnima
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
         .add(Attributes.MAX_HEALTH, 200.0)
-        .add(Attributes.MOVEMENT_SPEED, 0.6)
+        .add(Attributes.MOVEMENT_SPEED, 1.0)
         .add(Attributes.KNOCKBACK_RESISTANCE, 0.8)
         .add(Attributes.ATTACK_KNOCKBACK, 0.5)
         .add(Attributes.ATTACK_DAMAGE, 15)
         .add(Attributes.ARMOR, 8)
         .add(Attributes.FOLLOW_RANGE, 20)
-        .add(Attributes.FLYING_SPEED, 0.6);
+        .add(Attributes.FLYING_SPEED, 1.0);
     }
     @Override
     public void tick() {
@@ -197,7 +197,7 @@ public class EndScorpionEntity extends Monster implements GeoEntity, FlyingAnima
         public void start() {
             Vec3 vec3 = this.findPos();
             if (vec3 != null) {
-                EndScorpionEntity.this.navigation.moveTo(EndScorpionEntity.this.navigation.createPath(BlockPos.containing(vec3), 1), (double)1.0F);
+                EndScorpionEntity.this.navigation.moveTo(EndScorpionEntity.this.navigation.createPath(BlockPos.containing(vec3), 1), (double)1.5F);
             }
 
         }
