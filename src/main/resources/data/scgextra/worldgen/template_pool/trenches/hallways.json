@@ -3,22 +3,7 @@
   "fallback": "minecraft:empty",
   "elements": [
     {
-      "weight": 1,
-      "element": {
-        "location": "scgextra:trenches/trench_0",
-        "processors": [
-          {
-            "processor_type": "minecraft:gravity",
-            "heightmap": "WORLD_SURFACE",
-            "offset": -4
-          }
-        ],
-        "projection": "rigid",
-        "element_type": "minecraft:single_pool_element"
-      }
-    },
-    {
-      "weight": 1,
+      "weight": 5,
       "element": {
         "location": "scgextra:trenches/trench_1",
         "processors": [
@@ -33,22 +18,7 @@
       }
     },
     {
-      "weight": 1,
-      "element": {
-        "location": "scgextra:trenches/trench_2",
-        "processors": [
-          {
-            "processor_type": "minecraft:gravity",
-            "heightmap": "WORLD_SURFACE",
-            "offset": -4
-          }
-        ],
-        "projection": "rigid",
-        "element_type": "minecraft:single_pool_element"
-      }
-    },
-    {
-      "weight": 1,
+      "weight": 5,
       "element": {
         "location": "scgextra:trenches/trench_3",
         "processors": [
@@ -78,7 +48,7 @@
       }
     },
     {
-      "weight": 1,
+      "weight": 5,
       "element": {
         "location": "scgextra:trenches/trench_5",
         "processors": [
@@ -93,7 +63,7 @@
       }
     },
     {
-      "weight": 1,
+      "weight": 5,
       "element": {
         "location": "scgextra:trenches/trench_6",
         "processors": [
@@ -108,7 +78,7 @@
       }
     },
     {
-      "weight": 1,
+      "weight": 5,
       "element": {
         "location": "scgextra:trenches/trench_7",
         "processors": [
@@ -138,7 +108,7 @@
       }
     },
     {
-      "weight": 1,
+      "weight": 5,
       "element": {
         "location": "scgextra:trenches/trench_10",
         "processors": [
@@ -153,69 +123,9 @@
       }
     },
     {
-      "weight": 1,
-      "element": {
-        "location": "scgextra:trenches/trench_11",
-        "processors": [
-          {
-            "processor_type": "minecraft:gravity",
-            "heightmap": "WORLD_SURFACE",
-            "offset": -4
-          }
-        ],
-        "projection": "rigid",
-        "element_type": "minecraft:single_pool_element"
-      }
-    },
-    {
-      "weight": 1,
-      "element": {
-        "location": "scgextra:trenches/trench_12",
-        "processors": [
-          {
-            "processor_type": "minecraft:gravity",
-            "heightmap": "WORLD_SURFACE",
-            "offset": -4
-          }
-        ],
-        "projection": "rigid",
-        "element_type": "minecraft:single_pool_element"
-      }
-    },
-    {
-      "weight": 1,
-      "element": {
-        "location": "scgextra:trenches/trench_13",
-        "processors": [
-          {
-            "processor_type": "minecraft:gravity",
-            "heightmap": "WORLD_SURFACE",
-            "offset": -4
-          }
-        ],
-        "projection": "rigid",
-        "element_type": "minecraft:single_pool_element"
-      }
-    },
-    {
-      "weight": 1,
+      "weight": 5,
       "element": {
         "location": "scgextra:trenches/trench_14",
-        "processors": [
-          {
-            "processor_type": "minecraft:gravity",
-            "heightmap": "WORLD_SURFACE",
-            "offset": -4
-          }
-        ],
-        "projection": "rigid",
-        "element_type": "minecraft:single_pool_element"
-      }
-    },
-    {
-      "weight": 1,
-      "element": {
-        "location": "scgextra:trenches/trench_15",
         "processors": [
           {
             "processor_type": "minecraft:gravity",
