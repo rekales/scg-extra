@@ -45,11 +45,14 @@ public static final Codec<TrenchesAnchorStructure> CODEC = RecordCodecBuilder.<T
         if(context.chunkGenerator().getBaseColumn(context.chunkPos().getMiddleBlockX(), context.chunkPos().getMiddleBlockZ(), context.heightAccessor(), context.randomState()).getBlock(blockpos.getY()).is(Blocks.WATER)){
             return Optional.empty();
         }
+        if(blockpos.getY()>70){
+            return Optional.empty();
+        }
         return JigsawPlacement.addPieces(
             context, 
             this.startPool, 
             Optional.empty(), 
-            4, 
+            6, 
             blockpos, 
             false, 
             this.heightmap, 
