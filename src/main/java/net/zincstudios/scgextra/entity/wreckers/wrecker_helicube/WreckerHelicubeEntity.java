@@ -245,9 +245,22 @@ public class WreckerHelicubeEntity extends FlyingMob implements GeoEntity, Enemy
         return 0.7F;
     }
 
+    // @Override
+    // protected @Nullable SoundEvent getAmbientSound() {
+    //     return WreckersSounds.HELICUBE_IDLE.get();
+    // }
+
+    // @Override
+    // public int getAmbientSoundInterval() {
+    //     return 100;
+    // }
+
     @Override
-    protected @Nullable SoundEvent getAmbientSound() {
-        return WreckersSounds.HELICUBE_IDLE.get();
+    public void tick() {
+        super.tick();
+        if(this.tickCount%100==0){
+            this.playSound(WreckersSounds.HELICUBE_IDLE.get(), this.getSoundVolume(), this.getVoicePitch());
+        }
     }
 
     @Override
