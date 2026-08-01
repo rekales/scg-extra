@@ -1,7 +1,6 @@
 package net.zincstudios.scgextra.entity.wreckers.wrecker_dozer;
 
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -132,47 +131,14 @@ public class WreckerDozerChargeGoal extends Goal {
     }
 
     private void spawnWarningParticles() {
-        if (!(this.dozer.level() instanceof ServerLevel level)) {
-            return;
-        }
-        if (CommonConfig.enableAbilityWarning) {
-            Vec3 ex_pos_1 = this.dozer.position().add(WreckerDozerEntity.EXHAUST_1.yRot(-this.dozer.yBodyRot * Mth.DEG_TO_RAD));
-            Vec3 ex_pos_2 = this.dozer.position().add(WreckerDozerEntity.EXHAUST_2.yRot(-this.dozer.yBodyRot * Mth.DEG_TO_RAD));
-            Vec3 ex_pos_3 = this.dozer.position().add(WreckerDozerEntity.EXHAUST_3.yRot(-this.dozer.yBodyRot * Mth.DEG_TO_RAD));
-            for(double y = 0; y < 2; y+=0.5){
-                level.sendParticles(
-                    ParticleTypes.SMOKE, 
-                    ex_pos_1.x, 
-                    ex_pos_1.y+y, 
-                    ex_pos_1.z, 
-                    5, 
-                    0.0D, 
-                    0.0D, 
-                    0.0D, 
-                    0.04D
-                );
-                level.sendParticles(
-                    ParticleTypes.SMOKE, 
-                    ex_pos_2.x, 
-                    ex_pos_1.y+y, 
-                    ex_pos_2.z, 
-                    5, 
-                    0.0D, 
-                    0.0D, 
-                    0.0D, 
-                    0.04D
-                );
-                level.sendParticles(
-                    ParticleTypes.LARGE_SMOKE, 
-                    ex_pos_3.x, 
-                    ex_pos_1.y+y, 
-                    ex_pos_3.z, 
-                    3, 
-                    0.0D, 
-                    0.0D, 
-                    0.0D, 
-                    0.04D
-                );
+        if(this.dozer.level().isClientSide()){
+            if (CommonConfig.enableAbilityWarning) {
+                Vec3 ex_pos_1 = this.dozer.position().add(WreckerDozerEntity.EXHAUST_1.yRot(-this.dozer.yBodyRot * Mth.DEG_TO_RAD));
+                Vec3 ex_pos_2 = this.dozer.position().add(WreckerDozerEntity.EXHAUST_2.yRot(-this.dozer.yBodyRot * Mth.DEG_TO_RAD));
+                Vec3 ex_pos_3 = this.dozer.position().add(WreckerDozerEntity.EXHAUST_3.yRot(-this.dozer.yBodyRot * Mth.DEG_TO_RAD));
+                this.dozer.level().addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, ex_pos_1.x, ex_pos_1.y, ex_pos_1.z, 0, 0.04, 0);
+                this.dozer.level().addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, ex_pos_2.x, ex_pos_2.y, ex_pos_2.z, 0, 0.04, 0);
+                this.dozer.level().addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, ex_pos_3.x, ex_pos_3.y, ex_pos_3.z, 0, 0.04, 0);
             }
         }
     }

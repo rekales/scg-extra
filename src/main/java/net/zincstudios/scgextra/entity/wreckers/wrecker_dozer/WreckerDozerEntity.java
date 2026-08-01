@@ -1,12 +1,14 @@
 package net.zincstudios.scgextra.entity.wreckers.wrecker_dozer;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -132,6 +134,16 @@ public class WreckerDozerEntity extends Monster implements GeoEntity, Stunnable,
         super.tick();
         if (!this.level().isClientSide()) {
             this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
+        }
+        if(this.level().isClientSide()){
+            if (CommonConfig.enableAbilityWarning) {
+                Vec3 ex_pos_1 = this.position().add(WreckerDozerEntity.EXHAUST_1.yRot(-this.yBodyRot * Mth.DEG_TO_RAD));
+                Vec3 ex_pos_2 = this.position().add(WreckerDozerEntity.EXHAUST_2.yRot(-this.yBodyRot * Mth.DEG_TO_RAD));
+                Vec3 ex_pos_3 = this.position().add(WreckerDozerEntity.EXHAUST_3.yRot(-this.yBodyRot * Mth.DEG_TO_RAD));
+                this.level().addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, ex_pos_1.x, ex_pos_1.y, ex_pos_1.z, 0, 0.04, 0);
+                this.level().addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, ex_pos_2.x, ex_pos_2.y, ex_pos_2.z, 0, 0.04, 0);
+                this.level().addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, ex_pos_3.x, ex_pos_3.y, ex_pos_3.z, 0, 0.04, 0);
+            }
         }
     }
 
