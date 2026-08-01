@@ -59,6 +59,8 @@ public class WreckerHelicubeEntity extends FlyingMob implements GeoEntity, Enemy
     private static final EntityDataAccessor<Boolean> ARM_VARIANT =
             SynchedEntityData.defineId(WreckerHelicubeEntity.class, EntityDataSerializers.BOOLEAN);
 
+    public int soundTime = 0;
+
     private static final float EXPLOSION_RADIUS = 1.5F;
     private static final double CLAW_REACH = 2.4D;
     private static final int CLAW_COOLDOWN_TICKS = 20;
@@ -245,22 +247,34 @@ public class WreckerHelicubeEntity extends FlyingMob implements GeoEntity, Enemy
         return 0.7F;
     }
 
-    // @Override
-    // protected @Nullable SoundEvent getAmbientSound() {
-    //     return WreckersSounds.HELICUBE_IDLE.get();
-    // }
+    @Override
+    protected @Nullable SoundEvent getAmbientSound() {
+        return WreckersSounds.HELICUBE_IDLE.get();
+    }
+
+    @Override
+    public int getAmbientSoundInterval() {
+        return 110;
+    }
 
     // @Override
-    // public int getAmbientSoundInterval() {
-    //     return 100;
+    // public void playAmbientSound() {
+    //     super.playAmbientSound();
     // }
 
     @Override
-    public void tick() {
-        super.tick();
-        if(this.tickCount%100==0){
+    public void baseTick() {
+        super.baseTick();
+        if(this.soundTime>0){
+            this.soundTime--;
+        }else if(this.soundTime==0){
+            this.resetSoundTime();
             this.playSound(WreckersSounds.HELICUBE_IDLE.get(), this.getSoundVolume(), this.getVoicePitch());
         }
+    }
+
+    private void resetSoundTime(){
+        this.soundTime = this.getAmbientSoundInterval(); 
     }
 
     @Override
