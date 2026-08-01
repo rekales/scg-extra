@@ -142,9 +142,10 @@ public class WreckerDozerChargeGoal extends Goal {
             Vec3 pipe = base.add(new Vec3(side, 2.7D, -2.0D).yRot(-yaw));
             level.sendParticles(ParticleTypes.LARGE_SMOKE, pipe.x, pipe.y, pipe.z, 4, 0.1D, 0.15D, 0.1D, 0.02D);
         }
-        if (CommonConfig.enableAbilityWarning) {
-            Vec3 stacks = base.add(new Vec3(0.0D, 3.0D, -2.0D).yRot(-yaw));
-            level.sendParticles(ParticleTypes.FLASH, stacks.x, stacks.y, stacks.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
-        }
+        //TODO: ADD SMOKE PARTICLES FROM VENTS
+        // if (CommonConfig.enableAbilityWarning) {
+        //     Vec3 stacks = base.add(new Vec3(0.0D, 3.0D, -2.0D).yRot(-yaw));
+        //     level.sendParticles(ParticleTypes.FLASH, stacks.x, stacks.y, stacks.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+        // }
     }
 }
