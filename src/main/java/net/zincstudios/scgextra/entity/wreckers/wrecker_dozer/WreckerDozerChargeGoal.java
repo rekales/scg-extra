@@ -135,17 +135,45 @@ public class WreckerDozerChargeGoal extends Goal {
         if (!(this.dozer.level() instanceof ServerLevel level)) {
             return;
         }
-
-        float yaw = this.dozer.yBodyRot * Mth.DEG_TO_RAD;
-        Vec3 base = this.dozer.position();
-        for (double side : new double[]{1.2D, -1.2D}) {
-            Vec3 pipe = base.add(new Vec3(side, 2.7D, -2.0D).yRot(-yaw));
-            level.sendParticles(ParticleTypes.LARGE_SMOKE, pipe.x, pipe.y, pipe.z, 4, 0.1D, 0.15D, 0.1D, 0.02D);
+        if (CommonConfig.enableAbilityWarning) {
+            Vec3 ex_pos_1 = this.dozer.position().add(WreckerDozerEntity.EXHAUST_1.yRot(-this.dozer.yBodyRot * Mth.DEG_TO_RAD));
+            Vec3 ex_pos_2 = this.dozer.position().add(WreckerDozerEntity.EXHAUST_2.yRot(-this.dozer.yBodyRot * Mth.DEG_TO_RAD));
+            Vec3 ex_pos_3 = this.dozer.position().add(WreckerDozerEntity.EXHAUST_3.yRot(-this.dozer.yBodyRot * Mth.DEG_TO_RAD));
+            for(double y = 0; y < 2; y+=0.5){
+                level.sendParticles(
+                    ParticleTypes.SMOKE, 
+                    ex_pos_1.x, 
+                    ex_pos_1.y+y, 
+                    ex_pos_1.z, 
+                    10, 
+                    0.0D, 
+                    0.0D, 
+                    0.0D, 
+                    0.04D
+                );
+                level.sendParticles(
+                    ParticleTypes.SMOKE, 
+                    ex_pos_2.x, 
+                    ex_pos_1.y+y, 
+                    ex_pos_2.z, 
+                    10, 
+                    0.0D, 
+                    0.0D, 
+                    0.0D, 
+                    0.04D
+                );
+                level.sendParticles(
+                    ParticleTypes.LARGE_SMOKE, 
+                    ex_pos_3.x, 
+                    ex_pos_1.y+y, 
+                    ex_pos_3.z, 
+                    3, 
+                    0.0D, 
+                    0.0D, 
+                    0.0D, 
+                    0.04D
+                );
+            }
         }
-        //TODO: ADD SMOKE PARTICLES FROM VENTS
-        // if (CommonConfig.enableAbilityWarning) {
-        //     Vec3 stacks = base.add(new Vec3(0.0D, 3.0D, -2.0D).yRot(-yaw));
-        //     level.sendParticles(ParticleTypes.FLASH, stacks.x, stacks.y, stacks.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
-        // }
     }
 }

@@ -52,6 +52,10 @@ public class WreckerDozerEntity extends Monster implements GeoEntity, Stunnable,
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
     private static final RawAnimation DEATH = RawAnimation.begin().thenPlayAndHold("death");
 
+    public static final Vec3 EXHAUST_1 = new Vec3(19.5D / 16.0D, 45.8024D / 16.0D, -38.5339D / 16.0D);
+    public static final Vec3 EXHAUST_2 = new Vec3(-19.5D / 16.0D, 45.8024D / 16.0D, -38.5339D / 16.0D);
+    public static final Vec3 EXHAUST_3 = new Vec3(-0.5D / 16.0D, 48.8024D / 16.0D, 15.4661D / 16.0D);
+
     private static final EntityDataAccessor<Boolean> CHARGE_WARNING =
             SynchedEntityData.defineId(WreckerDozerEntity.class, EntityDataSerializers.BOOLEAN);
 
