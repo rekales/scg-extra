@@ -1,12 +1,10 @@
 package net.zincstudios.scgextra.entity.wreckers.wrecker_dozer;
 
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
-import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.sounds.WreckersSounds;
 
@@ -16,7 +14,7 @@ import java.util.List;
 
 public class WreckerDozerChargeGoal extends Goal {
 
-    private static final int WARNING_TICKS = 20;
+    private static final int WARNING_TICKS = 100;
     private static final int CHARGE_TICKS = 30;
     private static final double SPEED_MULTIPLIER = 6.0D;
     private static final double MIN_TRIGGER_DISTANCE = 4.0D;
@@ -97,7 +95,6 @@ public class WreckerDozerChargeGoal extends Goal {
                 Vec3 direction = target.position().subtract(this.dozer.position());
                 this.ramDirection = new Vec3(direction.x, 0.0D, direction.z).normalize();
             }
-            this.spawnWarningParticles();
             return;
         }
 
@@ -127,19 +124,6 @@ public class WreckerDozerChargeGoal extends Goal {
                 victim.knockback(1.0D, this.dozer.getX() - victim.getX(), this.dozer.getZ() - victim.getZ());
             }
             this.affectedEntities.add(victim);
-        }
-    }
-
-    private void spawnWarningParticles() {
-        if(this.dozer.level().isClientSide()){
-            if (CommonConfig.enableAbilityWarning) {
-                Vec3 ex_pos_1 = this.dozer.position().add(WreckerDozerEntity.EXHAUST_1.yRot(-this.dozer.yBodyRot * Mth.DEG_TO_RAD));
-                Vec3 ex_pos_2 = this.dozer.position().add(WreckerDozerEntity.EXHAUST_2.yRot(-this.dozer.yBodyRot * Mth.DEG_TO_RAD));
-                Vec3 ex_pos_3 = this.dozer.position().add(WreckerDozerEntity.EXHAUST_3.yRot(-this.dozer.yBodyRot * Mth.DEG_TO_RAD));
-                this.dozer.level().addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, ex_pos_1.x, ex_pos_1.y, ex_pos_1.z, 0, 0.04, 0);
-                this.dozer.level().addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, ex_pos_2.x, ex_pos_2.y, ex_pos_2.z, 0, 0.04, 0);
-                this.dozer.level().addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, ex_pos_3.x, ex_pos_3.y, ex_pos_3.z, 0, 0.04, 0);
-            }
         }
     }
 }
