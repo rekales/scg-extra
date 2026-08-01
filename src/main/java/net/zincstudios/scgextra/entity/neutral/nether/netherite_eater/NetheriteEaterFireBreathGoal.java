@@ -6,8 +6,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
-import net.zincstudios.scgextra.particle.ModParticleTypes;
 import net.zincstudios.scgextra.sounds.NeutralSounds;
+import top.ribs.scguns.init.ModParticleTypes;
 
 public class NetheriteEaterFireBreathGoal extends Goal{
     private final NetheriteEaterEntity mob;
@@ -72,7 +72,7 @@ public class NetheriteEaterFireBreathGoal extends Goal{
                 double px = startX + stepX * i;
                 double py = startY + stepY * i;
                 double pz = startZ + stepZ * i;
-                if (this.mob.level() instanceof ServerLevel serverLevel)serverLevel.sendParticles(ModParticleTypes.LARGE_FLAME.get(), px, py, pz,1,0.3,0.3,0.3,0.1);
+                if (this.mob.level() instanceof ServerLevel serverLevel)serverLevel.sendParticles(ModParticleTypes.SOUL_FIREBALL.get(), px, py, pz,1,0.3,0.3,0.3,0.1);
             }
             if(this.ticks%10==0){
                 this.mob.getTarget().hurt(this.mob.damageSources().generic(), 5);
