@@ -1,6 +1,5 @@
 package net.zincstudios.scgextra.client;
 
-import net.zincstudios.scgextra.client.particle.LargeFlameParticle;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
@@ -40,7 +39,6 @@ public final class ModClientEventHandler {
     public static void registerParticleFactories(RegisterParticleProvidersEvent event) {
         event.registerSpriteSet(ModParticleTypes.COPPER_FIRE_BALL.get(), CopperFireBallParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.COPPER_FLAME.get(), CopperFlameParticle.Provider::new);
-        event.registerSpriteSet(ModParticleTypes.LARGE_FLAME.get(), LargeFlameParticle.Provider::new);
     }
 }
 
