@@ -1,13 +1,10 @@
 package net.zincstudios.scgextra.entity.wreckers.wrecker_dozer;
 
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.phys.Vec3;
-import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.sounds.WreckersSounds;
 
@@ -17,7 +14,7 @@ import java.util.List;
 
 public class WreckerDozerChargeGoal extends Goal {
 
-    private static final int WARNING_TICKS = 20;
+    private static final int WARNING_TICKS = 100;
     private static final int CHARGE_TICKS = 30;
     private static final double SPEED_MULTIPLIER = 6.0D;
     private static final double MIN_TRIGGER_DISTANCE = 4.0D;
@@ -98,7 +95,6 @@ public class WreckerDozerChargeGoal extends Goal {
                 Vec3 direction = target.position().subtract(this.dozer.position());
                 this.ramDirection = new Vec3(direction.x, 0.0D, direction.z).normalize();
             }
-            this.spawnWarningParticles();
             return;
         }
 
@@ -129,23 +125,5 @@ public class WreckerDozerChargeGoal extends Goal {
             }
             this.affectedEntities.add(victim);
         }
-    }
-
-    private void spawnWarningParticles() {
-        if (!(this.dozer.level() instanceof ServerLevel level)) {
-            return;
-        }
-
-        float yaw = this.dozer.yBodyRot * Mth.DEG_TO_RAD;
-        Vec3 base = this.dozer.position();
-        for (double side : new double[]{1.2D, -1.2D}) {
-            Vec3 pipe = base.add(new Vec3(side, 2.7D, -2.0D).yRot(-yaw));
-            level.sendParticles(ParticleTypes.LARGE_SMOKE, pipe.x, pipe.y, pipe.z, 4, 0.1D, 0.15D, 0.1D, 0.02D);
-        }
-        //TODO: ADD SMOKE PARTICLES FROM VENTS
-        // if (CommonConfig.enableAbilityWarning) {
-        //     Vec3 stacks = base.add(new Vec3(0.0D, 3.0D, -2.0D).yRot(-yaw));
-        //     level.sendParticles(ParticleTypes.FLASH, stacks.x, stacks.y, stacks.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
-        // }
     }
 }

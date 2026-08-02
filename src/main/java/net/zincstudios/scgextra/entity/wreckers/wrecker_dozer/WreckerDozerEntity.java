@@ -1,12 +1,14 @@
 package net.zincstudios.scgextra.entity.wreckers.wrecker_dozer;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -51,6 +53,10 @@ public class WreckerDozerEntity extends Monster implements GeoEntity, Stunnable,
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
     private static final RawAnimation DEATH = RawAnimation.begin().thenPlayAndHold("death");
+
+    public static final Vec3 EXHAUST_1 = new Vec3(19.5D / 16.0D, 45.8024D / 16.0D, -38.5339D / 16.0D);
+    public static final Vec3 EXHAUST_2 = new Vec3(-19.5D / 16.0D, 45.8024D / 16.0D, -38.5339D / 16.0D);
+    public static final Vec3 EXHAUST_3 = new Vec3(-0.5D / 16.0D, 48.8024D / 16.0D, 15.4661D / 16.0D);
 
     private static final EntityDataAccessor<Boolean> CHARGE_WARNING =
             SynchedEntityData.defineId(WreckerDozerEntity.class, EntityDataSerializers.BOOLEAN);
@@ -128,6 +134,18 @@ public class WreckerDozerEntity extends Monster implements GeoEntity, Stunnable,
         super.tick();
         if (!this.level().isClientSide()) {
             this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
+        }
+        if(this.isChargeWarning()){
+            if(this.level().isClientSide()){
+                if (CommonConfig.enableAbilityWarning) {
+                    Vec3 ex_pos_1 = this.position().add(WreckerDozerEntity.EXHAUST_1.yRot(-this.yBodyRot * Mth.DEG_TO_RAD));
+                    Vec3 ex_pos_2 = this.position().add(WreckerDozerEntity.EXHAUST_2.yRot(-this.yBodyRot * Mth.DEG_TO_RAD));
+                    Vec3 ex_pos_3 = this.position().add(WreckerDozerEntity.EXHAUST_3.yRot(-this.yBodyRot * Mth.DEG_TO_RAD));
+                    this.level().addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, ex_pos_1.x, ex_pos_1.y, ex_pos_1.z, 0, 0.04, 0);
+                    this.level().addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, ex_pos_2.x, ex_pos_2.y, ex_pos_2.z, 0, 0.04, 0);
+                    this.level().addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, ex_pos_3.x, ex_pos_3.y, ex_pos_3.z, 0, 0.04, 0);
+                }
+            }
         }
     }
 
