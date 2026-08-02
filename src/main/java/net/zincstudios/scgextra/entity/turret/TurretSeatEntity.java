@@ -10,7 +10,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
-import net.zincstudios.scgextra.block.WreckerTurretBlockEntity;
+import net.zincstudios.scgextra.block.wreckerturret.WreckerTurretBlockEntity;
 import net.zincstudios.scgextra.entity.ModEntities;
 
 import javax.annotation.ParametersAreNonnullByDefault;

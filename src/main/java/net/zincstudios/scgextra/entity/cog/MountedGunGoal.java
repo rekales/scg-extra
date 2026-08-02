@@ -11,6 +11,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.common.MobUtil;
+import net.zincstudios.scgextra.entity.common.gun.ScorchedSimGun;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.common.Gun;
@@ -140,7 +141,7 @@ public class MountedGunGoal<T extends Mob> extends Goal {
         double timeToHit = targetPos.distanceTo(muzzle) / speed;
         Vec3 predicted = targetPos.add(target.getDeltaMovement().scale(timeToHit));
         Vec3 dir = predicted.subtract(muzzle).normalize();
-        return SimulatedGun.addWeaponSpread(this.mob, dir, this.spreadDegrees);
+        return ScorchedSimGun.addWeaponSpread(this.mob, dir, this.spreadDegrees);
     }
 
     protected Vec3 getSpawnOffset() {

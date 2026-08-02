@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.blocks.barbed_wires;
+package net.zincstudios.scgextra.block.barbed_wires;
 
 import java.util.Random;
 

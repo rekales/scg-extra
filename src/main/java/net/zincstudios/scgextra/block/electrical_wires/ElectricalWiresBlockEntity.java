@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.blocks.electrical_wires;
+package net.zincstudios.scgextra.block.electrical_wires;
 
 import javax.annotation.Nullable;
 
@@ -15,8 +15,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.zincstudios.scgextra.blocks.ModBlockEntities;
-import top.ribs.scguns.Config;
+import net.zincstudios.scgextra.block.ModBlockEntities;
 
 public class ElectricalWiresBlockEntity extends BlockEntity{
     private final ContainerData data;

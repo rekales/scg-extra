@@ -77,13 +77,10 @@
     ],
     [
       "minecraft:glow_lichen",
-      "minecraft:patch_tall_grass_2",
-      "minecraft:patch_grass_plain",
       "minecraft:patch_large_fern",
       "minecraft:patch_dead_bush_2",
       "minecraft:brown_mushroom_normal",
-      "minecraft:red_mushroom_normal",
-      "scgextra:warzone_spruce_placed"
+      "minecraft:red_mushroom_normal"
     ],
     [
       "minecraft:freeze_top_layer"
@@ -94,34 +91,16 @@
   "spawners": {
     "ambient": [],
     "axolotls": [],
-    "creature": [],
-    "misc": [],
-    "monster": [
+    "creature": [
       {
-        "type": "scgextra:fac_trench_sniper",
-        "maxCount": 1,
-        "minCount": 1,
-        "weight": 1
-      },
-      {
-        "type": "scgextra:fac_trencher",
-        "maxCount": 1,
-        "minCount": 1,
-        "weight": 1
-      },
-      {
-        "type": "scgextra:fac_trench_goblin",
-        "maxCount": 1,
-        "minCount": 1,
-        "weight": 1
-      },
-      {
-        "type": "scgextra:fac_shovel_knight",
-        "maxCount": 1,
-        "minCount": 1,
-        "weight": 1
+        "type": "minecraft:allay",
+        "maxCount": 5,
+        "minCount": 3,
+        "weight": 2
       }
     ],
+    "misc": [],
+    "monster": [],
     "underground_water_creature": [],
     "water_ambient": [],
     "water_creature": []

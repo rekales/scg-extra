@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.blocks.electrical_wires;
+package net.zincstudios.scgextra.block.electrical_wires;
 
 import javax.annotation.Nullable;
 
@@ -26,7 +26,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.zincstudios.scgextra.blocks.ModBlockEntities;
+import net.zincstudios.scgextra.block.ModBlockEntities;
 import top.ribs.scguns.init.ModEffects;
 import net.minecraft.world.level.block.Rotation;
 

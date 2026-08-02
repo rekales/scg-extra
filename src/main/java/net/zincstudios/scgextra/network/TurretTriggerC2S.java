@@ -3,7 +3,7 @@ package net.zincstudios.scgextra.network;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
-import net.zincstudios.scgextra.block.WreckerTurretBlockEntity;
+import net.zincstudios.scgextra.block.wreckerturret.WreckerTurretBlockEntity;
 import net.zincstudios.scgextra.entity.turret.TurretSeatEntity;
 
 import java.util.function.Supplier;

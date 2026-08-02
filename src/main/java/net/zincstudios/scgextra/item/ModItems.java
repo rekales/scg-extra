@@ -37,7 +37,7 @@ import java.util.Set;
 @SuppressWarnings("unused")
 public class ModItems {
 
-    private static final DeferredRegister<Item> ITEMS = DeferredRegister
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister
             .create(ForgeRegistries.ITEMS, SCGExtra.MOD_ID);
 
     public static final RegistryObject<GunItem> PLACEHOLDER_GUN = ITEMS.register("placeholder_gun",
@@ -316,6 +316,8 @@ public class ModItems {
         MinecraftForge.EVENT_BUS.addListener(CavalrySaberItem::onPlayerTick);
         MinecraftForge.EVENT_BUS.addListener(CavalrySaberItem::onEntityHurt);
         MinecraftForge.EVENT_BUS.addListener(BaseArmorSetPartRenderer::hideHeadWithCommissarHelmet);
+        MinecraftForge.EVENT_BUS.addListener(ArmorPiercingHandler::onLivingHurt);
+        MinecraftForge.EVENT_BUS.addListener(ArmorPiercingHandler::onLivingDamage);
     }
 
     private static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister

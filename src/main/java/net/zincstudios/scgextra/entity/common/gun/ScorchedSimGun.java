@@ -309,7 +309,7 @@ public abstract class ScorchedSimGun implements SimulatedGun {
     /**
      * @param dir expects a direction unit vector
      */
-    private static Vec3 addWeaponSpread(LivingEntity shooter, Vec3 dir, float spread) {
+    public static Vec3 addWeaponSpread(LivingEntity shooter, Vec3 dir, float spread) {
         spread = Math.min(spread, 170F) * 0.5F * Mth.DEG_TO_RAD;
         Vec3 spreadUpwards = SimulatedGun.getVectorFromRotation(shooter.getViewXRot(1F) + 90F, shooter.getViewYRot(1F));
         Vec3 spreadSideways = dir.cross(spreadUpwards);

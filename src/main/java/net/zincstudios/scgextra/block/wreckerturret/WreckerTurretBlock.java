@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.block;
+package net.zincstudios.scgextra.block.wreckerturret;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -28,6 +28,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.zincstudios.scgextra.block.ModBlockEntities;
 import top.ribs.scguns.init.ModItems;
 
 import javax.annotation.Nullable;

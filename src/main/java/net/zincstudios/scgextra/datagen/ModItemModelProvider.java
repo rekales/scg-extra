@@ -108,6 +108,14 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.FAC_WALKER_SPAWN_EGG.get());
         basicItem(ModItems.FAC_TANK_SPAWN_EGG.get());
 
+        basicItem(ModItems.WRECKER_RED_SPAWN_EGG.get());
+        basicItem(ModItems.WRECKER_BLUE_SPAWN_EGG.get());
+        basicItem(ModItems.WRECKER_GREEN_SPAWN_EGG.get());
+        basicItem(ModItems.WRECKER_JUMBO_SPAWN_EGG.get());
+        basicItem(ModItems.WRECKER_HELICUBE_SPAWN_EGG.get());
+        basicItem(ModItems.WRECKER_TURRET_SPAWN_EGG.get());
+        basicItem(ModItems.WRECKER_DOZER_SPAWN_EGG.get());
+
         basicItem(ModItems.COPPER_KNIGHT_SPAWN_EGG.get());
         basicItem(ModItems.DRONE_SPAWN_EGG.get());
         basicItem(ModItems.TALLMAN_SPAWN_EGG.get());
@@ -133,13 +141,18 @@ public class ModItemModelProvider extends ItemModelProvider {
         basicItem(ModItems.COG_CENTIPEDE_SPAWN_EGG.get());
         basicItem(ModItems.COG_JUGGERNAUT_SPAWN_EGG.get());
 
-        basicItem(ModItems.WRECKER_RED_SPAWN_EGG.get());
-        basicItem(ModItems.WRECKER_BLUE_SPAWN_EGG.get());
-        basicItem(ModItems.WRECKER_GREEN_SPAWN_EGG.get());
-        basicItem(ModItems.WRECKER_JUMBO_SPAWN_EGG.get());
-        basicItem(ModItems.WRECKER_HELICUBE_SPAWN_EGG.get());
-        basicItem(ModItems.WRECKER_TURRET_SPAWN_EGG.get());
-        basicItem(ModItems.WRECKER_DOZER_SPAWN_EGG.get());
+        basicItem(ModItems.INFLICTED_BOAR_SPAWN_EGG.get());
+        basicItem(ModItems.INFLICTED_WOLF_SPAWN_EGG.get());
+        basicItem(ModItems.AMMO_GOBLIN_SPAWN_EGG.get());
+        basicItem(ModItems.BIG_LUMP_SPAWN_EGG.get());
+        basicItem(ModItems.MUTANT_BAT_SPAWN_EGG.get());
+        basicItem(ModItems.NITRO_BEETLE_SPAWN_EGG.get());
+        basicItem(ModItems.HEAD_HUNTER_SPAWN_EGG.get());
+        basicItem(ModItems.NETHERITE_EATER_SPAWN_EGG.get());
+        basicItem(ModItems.END_POD_SPAWN_EGG.get());
+        basicItem(ModItems.END_DWELLER_SPAWN_EGG.get());
+        basicItem(ModItems.END_STONE_CRAB_SPAWN_EGG.get());
+        basicItem(ModItems.END_SCORPION_SPAWN_EGG.get());
     }
 
     public ItemModelBuilder basicItem(RegistryObject<? extends Item> item) {

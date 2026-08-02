@@ -14,7 +14,7 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.zincstudios.scgextra.SCGExtra;
-import net.zincstudios.scgextra.blocks.ModBlocks;
+import net.zincstudios.scgextra.block.ModBlocks;
 
 public class ModPlacedFeatures {
     public static final ResourceKey<PlacedFeature> WARZONE_SPRUCE_PLACED_KEY = registerKey("warzone_spruce_placed");

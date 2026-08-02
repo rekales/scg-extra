@@ -5,6 +5,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -27,6 +28,7 @@ import net.zincstudios.scgextra.entity.wreckers.wrecker_jumbo.WreckerJumboEntity
 import net.zincstudios.scgextra.entity.wreckers.wrecker_red.WreckerRedEntity;
 import net.zincstudios.scgextra.entity.wreckers.wrecker_turret.WreckerTurretEntity;
 import net.zincstudios.scgextra.entity.wreckers.wrecker_turret.WreckerTurretRenderer;
+import net.zincstudios.scgextra.sounds.WreckerDeathSounds;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import top.ribs.scguns.common.BoundingBoxManager;
 import top.ribs.scguns.common.headshot.BasicHeadshotBox;
@@ -75,6 +77,9 @@ public class WreckersEntities {
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(WreckersEntities::registerAttributes);
         modEventBus.addListener(WreckersEntities::onCommonSetup);
+
+        MinecraftForge.EVENT_BUS.addListener(WreckerDeathSounds::onLivingDeath);
+
         if (FMLEnvironment.dist == Dist.CLIENT) {
             modEventBus.addListener(WreckersEntities::onClientSetup);
         }

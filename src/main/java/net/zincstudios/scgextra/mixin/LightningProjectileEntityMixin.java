@@ -5,7 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.entity.PartEntity;
-import net.zincstudios.scgextra.block.WreckerTurretBlockEntity;
+import net.zincstudios.scgextra.block.wreckerturret.WreckerTurretBlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

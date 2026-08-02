@@ -2,8 +2,8 @@ package net.zincstudios.scgextra;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.config.ModConfig;
-import net.zincstudios.scgextra.blocks.ModBlockEntities;
-import net.zincstudios.scgextra.blocks.ModBlocks;
+import net.zincstudios.scgextra.block.ModBlockEntities;
+import net.zincstudios.scgextra.block.ModBlocks;
 import net.zincstudios.scgextra.attributes.SCGEAttributes;
 import net.zincstudios.scgextra.data.RaidDataLoader;
 import net.zincstudios.scgextra.datagen.DataGenerators;
@@ -18,7 +18,6 @@ import com.mojang.logging.LogUtils;
 import net.zincstudios.scgextra.worldgen.structure.ModPieces;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -27,13 +26,11 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import net.zincstudios.scgextra.item.ArmorPiercingHandler;
 import net.zincstudios.scgextra.item.ModItems;
 import net.zincstudios.scgextra.network.SCGEPacketHandler;
 import net.zincstudios.scgextra.particle.ModParticleTypes;
 import net.zincstudios.scgextra.raid.WaveRaidManager;
 import net.zincstudios.scgextra.sounds.ModSounds;
-import net.zincstudios.scgextra.sounds.WreckerDeathSounds;
 import net.zincstudios.scgextra.worldgen.biome.ModBiomes;
 import net.zincstudios.scgextra.worldgen.biome.ModTerrablender;
 import net.zincstudios.scgextra.worldgen.biome.surface.ModSurfaceRules;
@@ -54,7 +51,6 @@ public class SCGExtra
     {
         IEventBus modEventBus = context.getModEventBus();
 
-        modEventBus.addListener(this::commonSetup);
         ModEntities.register(modEventBus);
         ModEffects.register(modEventBus);
         ModItems.register(modEventBus);
@@ -72,6 +68,7 @@ public class SCGExtra
         context.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
         modEventBus.addListener(CommonConfig::onLoad);
         modEventBus.addListener(CommonConfig::onReload);
+        modEventBus.addListener(this::commonSetup);
 
         MinecraftForge.EVENT_BUS.addListener(GunFlashHandler::onTick);
         MinecraftForge.EVENT_BUS.addListener(WaveRaidManager::onLevelTick);
@@ -79,9 +76,6 @@ public class SCGExtra
         MinecraftForge.EVENT_BUS.addListener(Faction::onTagsUpdated);
         MinecraftForge.EVENT_BUS.addListener(RaidDataLoader::onAddReloadListeners);
         MinecraftForge.EVENT_BUS.addListener(DevTestCommands::registerCommands);
-        MinecraftForge.EVENT_BUS.addListener(ArmorPiercingHandler::onLivingHurt);
-        MinecraftForge.EVENT_BUS.addListener(ArmorPiercingHandler::onLivingDamage);
-        MinecraftForge.EVENT_BUS.addListener(WreckerDeathSounds::onLivingDeath);
 
         modEventBus.addListener(DataGenerators::gatherData);
     }
@@ -93,12 +87,12 @@ public class SCGExtra
         });
     }
 
-    @SuppressWarnings("removal")
     public static ResourceLocation asResource(String path) {
-        return new ResourceLocation(MOD_ID, path);
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
+
     @Mod.EventBusSubscriber(modid = SCGExtra.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-    public class SpawnEvent {
+    public static class SpawnEvent {
         @SubscribeEvent
         public static void onCheckSpawn(MobSpawnEvent.PositionCheck event) {
             if (event.getLevel().getBiome(event.getEntity().blockPosition()).is(ModBiomes.WARZONE_BIOME)) {

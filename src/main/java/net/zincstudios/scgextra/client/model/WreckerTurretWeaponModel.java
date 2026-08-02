@@ -2,7 +2,7 @@ package net.zincstudios.scgextra.client.model;
 
 import net.minecraft.resources.ResourceLocation;
 import net.zincstudios.scgextra.SCGExtra;
-import net.zincstudios.scgextra.block.WreckerTurretBlockEntity;
+import net.zincstudios.scgextra.block.wreckerturret.WreckerTurretBlockEntity;
 import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.model.GeoModel;
