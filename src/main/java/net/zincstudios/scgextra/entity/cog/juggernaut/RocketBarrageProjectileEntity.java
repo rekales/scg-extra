@@ -16,6 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.cog.COGEntities;
+import net.zincstudios.scgextra.item.ModItems;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.entity.projectile.ProjectileEntity;
 import top.ribs.scguns.entity.projectile.RocketEntity;
@@ -36,6 +37,10 @@ public class RocketBarrageProjectileEntity extends RocketEntity {
 
     public RocketBarrageProjectileEntity(Level worldIn, LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun) {
         this(COGEntities.ROCKET_BARRAGE_PROJECTILE.get(), worldIn, shooter, weapon, item, modifiedGun);
+    }
+
+    public RocketBarrageProjectileEntity(Level worldIn, LivingEntity shooter, Gun gun) {
+        this(COGEntities.ROCKET_BARRAGE_PROJECTILE.get(), worldIn, shooter, ItemStack.EMPTY, ModItems.PLACEHOLDER_GUN.get(), gun);
     }
 
     @Override

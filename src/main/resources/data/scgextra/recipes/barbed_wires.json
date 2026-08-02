@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "pattern":[
+        "NIN",
+        "CCC",
+        "F F"
+    ],
+    "key":{
+        "F":{"tag": "minecraft:wooden_fences"},
+        "C":{"item": "minecraft:chain"},
+        "I":{"item": "scguns:anthralite_ingot"},
+        "N":{"item": "scguns:anthralite_nugget"}
+    },
+    "result":{
+        "item": "scgextra:barbed_wires",
+        "count": 3
+    }
+}

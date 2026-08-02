@@ -4,14 +4,21 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
+import net.minecraft.util.Mth;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.Brain;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.PartEntity;
+import net.zincstudios.scgextra.attributes.SCGEAttributes;
+import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.entity.asgharian.WeakPointPart;
 import net.zincstudios.scgextra.entity.common.BulletProofParts;
@@ -19,6 +26,7 @@ import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.WeakPointBox;
 import net.zincstudios.scgextra.entity.common.WeakPointBoxManager;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -36,6 +44,37 @@ import java.util.Optional;
 public class ProjectileEntityMixin {
 
     @WrapOperation(
+            method = "<init>(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Ltop/ribs/scguns/item/GunItem;Ltop/ribs/scguns/common/Gun;)V",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Ltop/ribs/scguns/util/GunModifierHelper;getModifiedProjectileGravity(Lnet/minecraft/world/item/ItemStack;D)D"
+            )
+    )
+    private double atGetModifiedGravity(ItemStack weapon, double gravity, Operation<Double> original, @Local(argsOnly = true) LivingEntity shooter) {
+        double modifiedGravity = original.call(weapon, gravity);
+        if (shooter instanceof Player player) {
+            modifiedGravity *= (float) player.getAttributeValue(SCGEAttributes.BULLET_GRAVITY_MULT.get());
+        }
+        return modifiedGravity;
+    }
+
+    @WrapOperation(
+            method = "getCriticalDamage",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Ltop/ribs/scguns/util/GunModifierHelper;getCriticalChance(Lnet/minecraft/world/item/ItemStack;)F"
+            ))
+    private float atGetCriticalChance(ItemStack weapon, Operation<Float> original) {
+        ProjectileEntity self = (ProjectileEntity) (Object) this;
+        float chance = original.call(weapon);
+        if (self.getShooter() instanceof Player player) {
+             chance += (float) player.getAttributeValue(SCGEAttributes.BULLET_ADDITIONAL_CRIT_CHANCE.get());
+             return Mth.clamp(chance, 0, 1);
+        }
+        return chance;
+    }
+
+    @WrapOperation(
             method = "onHit",
             at = @At(
                     value = "INVOKE",
@@ -44,8 +83,8 @@ public class ProjectileEntityMixin {
     private void atOnHit(ProjectileEntity instance, Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot,
                          Operation<Void> original, @Local(name = "entityHitResult") ExtendedEntityRayTraceResult entityHitResult) {
         ProjectileEntity self = (ProjectileEntity) (Object) this;
-        DamageSource source = ModDamageTypes.Sources.projectile(self.level().registryAccess(), self, self.getShooter());
 
+        // TODO: remove after wrecker reimplementation
         if (CommonConfig.enableAbilityBulletproof && !headshot
                 && !(self instanceof RocketEntity)
                 && entityHitResult.getEntity() instanceof BulletProofParts bulletProofParts
@@ -58,14 +97,27 @@ public class ProjectileEntityMixin {
 
         if (entityHitResult.getEntity() instanceof PartEntity<?> partEntity && partEntity instanceof WeakPointPart) {
             headshot = true;
-            if (partEntity.getParent() instanceof HeadShotHandler headShotHandler) {
-                headShotHandler.headshot(source, self.getDamage());
-            }
-        } else if (headshot && entityHitResult.getEntity() instanceof HeadShotHandler headShotHandler) {
-            headShotHandler.headshot(source, self.getDamage());
+            SCGE$handleHeadshot(partEntity.getParent(), self);
+        } else if (headshot) {
+            SCGE$handleHeadshot(entityHitResult.getEntity(), self);
         }
 
         original.call(instance, entity, hitVec, startVec, endVec, headshot);
+    }
+
+    @Unique
+    private static void SCGE$handleHeadshot(Entity hitEntity, ProjectileEntity projectile) {
+        DamageSource source = ModDamageTypes.Sources.projectile(projectile.level().registryAccess(), projectile, projectile.getShooter());
+        if (hitEntity instanceof HeadShotHandler headShotHandler) {
+            headShotHandler.headshot(source, projectile.getDamage());
+        }
+        if (hitEntity instanceof LivingEntity livingEntity) {
+            Brain<?> brain = livingEntity.getBrain();
+            if (brain.checkMemory(ModBrainMemories.HEADSHOT_COUNT.get(), MemoryStatus.REGISTERED)) {
+                int headshotCount = brain.getMemory(ModBrainMemories.HEADSHOT_COUNT.get()).orElse(0);
+                brain.setMemory(ModBrainMemories.HEADSHOT_COUNT.get(), ++headshotCount);
+            }
+        }
     }
 
         // TODO: Requires fix on ScorchedGuns to use this proper method

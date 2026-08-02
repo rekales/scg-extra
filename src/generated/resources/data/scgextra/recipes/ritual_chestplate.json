@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "B": {
+      "item": "minecraft:lapis_block"
+    },
+    "C": {
+      "item": "scguns:ceremonial_cod"
+    },
+    "L": {
+      "item": "scguns:diamond_steel_lamp"
+    },
+    "S": {
+      "item": "scguns:diamond_steel_ingot"
+    }
+  },
+  "pattern": [
+    "ABA",
+    "SCS",
+    "SLS"
+  ],
+  "result": {
+    "item": "scgextra:ritual_chestplate"
+  },
+  "show_notification": false
+}

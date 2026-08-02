@@ -1,9 +1,8 @@
 {
   "values": [
     "scgextra:asghar_worker",
-    "scgextra:wrecker_helicube",
-    "scgextra:wrecker_turret",
-    "scgextra:wrecker_dozer",
+    "scgextra:fac_walker",
+    "scgextra:fac_tank",
     "scgextra:cog_vulture",
     "scgextra:cog_devastator",
     "scgextra:cog_bombardier",

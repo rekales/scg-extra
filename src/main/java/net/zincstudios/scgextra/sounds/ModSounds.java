@@ -13,10 +13,10 @@ public class ModSounds {
         WhalerSounds.init();
         RRCSounds.init();
         FACSounds.init();
-        AsgharianSounds.init();
-        NeutralSounds.init();
-        CogSounds.init();
         WreckersSounds.init();
+        AsgharianSounds.init();
+        COGSounds.init();
+        NeutralSounds.init();
 
         SOUND_EVENTS.register(eventbus);
     }

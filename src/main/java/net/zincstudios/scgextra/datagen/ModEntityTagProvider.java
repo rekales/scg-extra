@@ -129,6 +129,8 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
         tag(ModTags.Entities.HEAVY)
                 .add(WhalerEntities.TURTLEMAN.get())
                 .add(WhalerEntities.SALMONSAUR.get())
+                .add(FACEntities.FAC_LION.get())
+                .add(FACEntities.FAC_WALKER.get())
                 .add(WreckersEntities.WRECKER_JUMBO.get())
                 .add(WreckersEntities.WRECKER_DOZER.get())
                 .add(COGEntities.DEVASTATOR.get())
@@ -140,10 +142,13 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
 
         tag(ModTags.Entities.VERY_HEAVY)
                 .add(WhalerEntities.GUARDIAN_STATUE.get())
-                .add(WhalerEntities.ARMORED_WHALE.get());
+                .add(WhalerEntities.ARMORED_WHALE.get())
+                .add(FACEntities.FAC_TANK.get());
 
         tag(ModTags.Entities.BOT)
                 .add(AsgharianEntities.ASGHAR_WORKER.get())
+                .add(FACEntities.FAC_WALKER.get())
+                .add(FACEntities.FAC_TANK.get())
                 .add(WreckersEntities.WRECKER_HELICUBE.get())
                 .add(WreckersEntities.WRECKER_TURRET.get())
                 .add(WreckersEntities.WRECKER_DOZER.get())
@@ -155,24 +160,13 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
                 .add(COGEntities.CENTIPEDE.get())
                 .add(COGEntities.JUGGERNAUT.get());
 
-        tag(ModTags.Entities.FIRE)
-                .add(NeutralEntities.HEAD_HUNTER.get())
-                .add(NeutralEntities.NETHERITE_EATER.get())
-                .add(NeutralEntities.NITRO_BEETLE.get());
-
-        tag(ModTags.Entities.UNDEAD)
-                .add(NeutralEntities.BIG_LUMP.get())
-                .add(NeutralEntities.INFLICTED_BOAR.get())
-                .add(NeutralEntities.INFLICTED_WOLF.get());
-
-        tag(ModTags.Entities.WITHER)
-                .add(NeutralEntities.HEAD_HUNTER.get());
-
         tag(ModTags.Entities.WHITE_BLOOD)
                 .add(WhalerEntities.GUARDIAN_STATUE.get());
 
         tag(ModTags.Entities.BLACK_BLOOD)
                 .add(NeutralEntities.HEAD_HUNTER.get())
+                .add(FACEntities.FAC_WALKER.get())
+                .add(FACEntities.FAC_TANK.get())
                 .add(COGEntities.VULTURE.get())
                 .add(COGEntities.DEVASTATOR.get())
                 .add(COGEntities.BOMBARDIER.get())

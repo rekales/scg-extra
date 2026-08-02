@@ -11,7 +11,9 @@ import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.zincstudios.scgextra.entity.AbilityState;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.brain.PatchedEntityTracker;
+import net.zincstudios.scgextra.entity.common.gun.CustomScorchedSimGun;
 import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
+import top.ribs.scguns.init.ModItems;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -25,9 +27,8 @@ public class RocketBarrageAbility extends Behavior<CogJuggernautEntity> {
     private final int cooldownDuration;
     private final SimulatedGun gun;
 
-    private int rocketsLeft = 0;
-    private long startTime = 0;
-    private int recoveryTimer = 0;
+    private long startTime = 0;  // gameTime timestamp
+    private long cooldownEnd = 0;  // gameTime timestamp
 
     public RocketBarrageAbility() {
         this(DEFAULT_COOLDOWN_DURATION_TICKS);
@@ -38,33 +39,38 @@ public class RocketBarrageAbility extends Behavior<CogJuggernautEntity> {
                 MemoryModuleType.LOOK_TARGET, MemoryStatus.REGISTERED,
                 MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT,
                 ModBrainMemories.AIM_TICKS.get(), MemoryStatus.REGISTERED,
-                ModBrainMemories.ABILITY_COOLING_DOWN.get(), MemoryStatus.VALUE_ABSENT,
                 ModBrainMemories.ABILITY_STATE.get(), MemoryStatus.REGISTERED
-        ), 40);
+        ), 80);
         this.cooldownDuration = cooldownDuration;
-        this.gun = new RocketBarrageSimGun();
+        this.gun = new CustomScorchedSimGun.Builder(ModItems.ROCKET_RIFLE.get().getGun())
+                .projectileFactory(RocketBarrageProjectileEntity::new)
+                .velocityModifier(vec -> vec.scale(1/3f).add(0, 0.2F, 0))
+                .fireRate(5)
+                .reloadTime(10000)
+                .ammoCapacity(5)
+                .reloads()
+                .noGunFlash()
+                .build();
     }
 
     @Override
     protected boolean checkExtraStartConditions(ServerLevel level, CogJuggernautEntity mob) {
         int aimTicks = mob.getBrain().getMemory(ModBrainMemories.AIM_TICKS.get()).orElse(0);
-        return aimTicks >= 40;
+        return aimTicks >= 40 && this.cooldownEnd < level.getGameTime();
     }
 
     @Override
     protected boolean canStillUse(ServerLevel level, CogJuggernautEntity mob, long gameTime) {
         Brain<?> brain = mob.getBrain();
         return brain.hasMemoryValue(MemoryModuleType.ATTACK_TARGET)
-                && !brain.hasMemoryValue(ModBrainMemories.ABILITY_COOLING_DOWN.get())
                 && brain.hasMemoryValue(ModBrainMemories.ABILITY_STATE.get())
-                && this.recoveryTimer > 0;
+                && this.gun.getAmmoCount() > 0;
     }
 
     @Override
     protected void start(ServerLevel level, CogJuggernautEntity mob, long gameTime) {
-        this.rocketsLeft = 5;
         this.startTime = gameTime;
-        this.recoveryTimer = 20;
+        this.gun.reloadAmmo();
         mob.getBrain().setMemoryWithExpiry(
                 ModBrainMemories.ABILITY_STATE.get(),
                 new AbilityState(ABILITY_ID, gameTime, gameTime + Behavior.DEFAULT_DURATION),
@@ -75,8 +81,9 @@ public class RocketBarrageAbility extends Behavior<CogJuggernautEntity> {
     @Override
     protected void stop(ServerLevel level, CogJuggernautEntity mob, long gameTime) {
         Brain<?> brain = mob.getBrain();
-        brain.setMemoryWithExpiry(ModBrainMemories.ABILITY_COOLING_DOWN.get(), true, this.cooldownDuration);
+        this.cooldownEnd = gameTime + this.cooldownDuration;
         brain.eraseMemory(ModBrainMemories.ABILITY_STATE.get());
+        brain.setMemory(ModBrainMemories.AIM_TICKS.get(), 0);
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent") // because already handled on canStillUse
@@ -91,12 +98,6 @@ public class RocketBarrageAbility extends Behavior<CogJuggernautEntity> {
             brain.setMemory(MemoryModuleType.LOOK_TARGET, new PatchedEntityTracker(target, true));
         }
 
-        if (this.rocketsLeft > 0) {
-            if (gun.tickFire(mob, target, 2F, true)) {
-                this.rocketsLeft--;
-            }
-        } else {
-            this.recoveryTimer--;
-        }
+        this.gun.tickFire(mob, SimulatedGun.getCenterMassPos(target), 2F, true);
     }
 }

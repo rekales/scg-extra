@@ -19,13 +19,15 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.entity.PartEntity;
 import net.zincstudios.scgextra.CommonConfig;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.HeadShotHandler;
 import net.zincstudios.scgextra.entity.common.Stunnable;
 import net.zincstudios.scgextra.entity.common.goal.MobHurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.goal.StunnedWithVisualGoal;
-import net.zincstudios.scgextra.sounds.CogSounds;
+import net.zincstudios.scgextra.entity.common.part.RotatedSegmentPartEntity;
+import net.zincstudios.scgextra.sounds.COGSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -49,6 +51,8 @@ public class CogGigantesEntity extends FlyingMob implements GeoEntity, Stunnable
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
 
+    private final PartEntity<?>[] subEntities;
+
     // Server-side only for stunnable handling
     private int headshotCounter = 0;
     private boolean stunCooldown = false;
@@ -58,6 +62,10 @@ public class CogGigantesEntity extends FlyingMob implements GeoEntity, Stunnable
         super(entityType, level);
         this.moveControl = new CogGigantesMoveControl(this, 5.0F, 8.0F, 2.0F, 0.3, 0.08);
 //        this.moveControl = new FlyingMoveControl(this, 20, true);
+        this.subEntities = new PartEntity[] {
+                new RotatedSegmentPartEntity<>(this, new Vec3(1.5, 1.4, -0.5), 20/16f, 0.5f),
+                new RotatedSegmentPartEntity<>(this, new Vec3(-1.5, 1.4, -0.5), 20/16f, 0.5f)
+        };
     }
 
     @Override
@@ -86,12 +94,34 @@ public class CogGigantesEntity extends FlyingMob implements GeoEntity, Stunnable
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.FOLLOW_RANGE, 35.0D)
+                .add(Attributes.FOLLOW_RANGE, 48.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25F)
                 .add(Attributes.FLYING_SPEED, 2F)
                 .add(Attributes.ARMOR, 4.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.8)
                 .add(Attributes.MAX_HEALTH, 400.0D);
+    }
+
+    @Override
+    public PartEntity<?>[] getParts() {
+        return this.subEntities;
+    }
+
+    @Override
+    public boolean isMultipartEntity() {
+        return true;
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        this.tickSubEntities();
+    }
+
+    protected void tickSubEntities() {
+        for(PartEntity<?> partEntity : this.getParts()) {
+            partEntity.tick();
+        }
     }
 
     @Override
@@ -189,16 +219,16 @@ public class CogGigantesEntity extends FlyingMob implements GeoEntity, Stunnable
 
     @Override
     protected @Nullable SoundEvent getAmbientSound() {
-        return CogSounds.COG_GIGANTES_IDLE.get();
+        return COGSounds.COG_GIGANTES_IDLE.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return CogSounds.GENERAL_HEAVY_HURT.get();
+        return COGSounds.GENERAL_HEAVY_HURT.get();
     }
 
     protected SoundEvent getStepSound() {
-        return CogSounds.COG_GIGANTES_FLY.get();
+        return COGSounds.COG_GIGANTES_FLY.get();
     }
 
     @Override

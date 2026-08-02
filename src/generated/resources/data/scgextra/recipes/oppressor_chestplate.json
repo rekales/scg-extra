@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": {
+      "item": "minecraft:oxidized_copper"
+    },
+    "L": {
+      "item": "minecraft:leather"
+    },
+    "M": {
+      "item": "scguns:rusty_medal"
+    }
+  },
+  "pattern": [
+    "C C",
+    "CMC",
+    "LLL"
+  ],
+  "result": {
+    "item": "scgextra:oppressor_chestplate"
+  },
+  "show_notification": false
+}

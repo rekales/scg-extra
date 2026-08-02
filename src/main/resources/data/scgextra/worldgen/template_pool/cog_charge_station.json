@@ -1,0 +1,15 @@
+{
+  "name": "scgextra:cog_charge_station",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "scgextra:cog_charge_station/cog_charge_station",
+        "processors": "scgextra:cog_factory_processor",
+	      "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

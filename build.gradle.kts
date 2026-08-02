@@ -10,10 +10,10 @@ group = project.properties["mod_group"]!!
 
 repositories {
     mavenLocal()
-
     maven("https://maven.neoforged.net/#/releases/")
     maven("https://www.cursemaven.com")
     maven("https://api.modrinth.com/maven")
+    maven("https://maven.minecraftforge.net/")  // TerraBlender
     maven("https://modmaven.dev") // JEI
     maven("https://maven.theillusivec4.top/") // Curios
     maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/") // GeckoLib
@@ -37,6 +37,7 @@ dependencies {
     modImplementation("software.bernie.geckolib:geckolib-forge-${property("minecraft_version")}:${property("geckolib_version")}")
     modCompileOnly("top.theillusivec4.curios:curios-forge:${property("curios_version")}:api")
     modRuntimeOnly("top.theillusivec4.curios:curios-forge:${property("curios_version")}")
+    modImplementation("com.github.glitchfiend:TerraBlender-forge:${property("minecraft_version")}-${property("terrablender_version")}")
 
     // Fallback
 //    modImplementation("curse.maven:curios-309927:5367944")

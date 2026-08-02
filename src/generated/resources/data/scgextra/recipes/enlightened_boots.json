@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "C": {
+      "item": "minecraft:sculk_catalyst"
+    },
+    "T": {
+      "item": "scguns:sculk_tome"
+    }
+  },
+  "pattern": [
+    "CTC",
+    "A A"
+  ],
+  "result": {
+    "item": "scgextra:enlightened_boots"
+  },
+  "show_notification": false
+}

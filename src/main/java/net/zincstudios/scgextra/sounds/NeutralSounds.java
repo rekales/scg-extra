@@ -7,70 +7,91 @@ import net.zincstudios.scgextra.SCGExtra;
 import static net.zincstudios.scgextra.sounds.ModSounds.SOUND_EVENTS;
 
 public class NeutralSounds {
-    private static RegistryObject<SoundEvent> reg(String id) {
-        return SOUND_EVENTS.register(id, () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource(id)));
-    }
 
-    public static final RegistryObject<SoundEvent> NEUTRAL_AMMO_GOBLIN_IDLE_01 = reg("neutral.ammo_goblin.idle_01");
-    public static final RegistryObject<SoundEvent> NEUTRAL_AMMO_GOBLIN_IDLE_02 = reg("neutral.ammo_goblin.idle_02");
-    public static final RegistryObject<SoundEvent> NEUTRAL_AMMO_GOBLIN_HURT_01 = reg("neutral.ammo_goblin.hurt_01");
-    public static final RegistryObject<SoundEvent> NEUTRAL_AMMO_GOBLIN_HURT_02 = reg("neutral.ammo_goblin.hurt_02");
-    public static final RegistryObject<SoundEvent> NEUTRAL_AMMO_GOBLIN_HURT_03 = reg("neutral.ammo_goblin.hurt_03");
-    public static final RegistryObject<SoundEvent> NEUTRAL_AMMO_GOBLIN_DEAD = reg("neutral.ammo_goblin.dead");
+    public static final RegistryObject<SoundEvent> AMMO_GOBLIN_IDLE = SOUND_EVENTS.register("ammo_goblin.idle",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("ammo_goblin.idle")));
 
-    public static final RegistryObject<SoundEvent> NEUTRAL_BIG_LUMP_IDLE_01 = reg("neutral.big_lump.idle_01");
-    public static final RegistryObject<SoundEvent> NEUTRAL_BIG_LUMP_IDLE_02 = reg("neutral.big_lump.idle_02");
-    public static final RegistryObject<SoundEvent> NEUTRAL_BIG_LUMP_IDLE_03 = reg("neutral.big_lump.idle_03");
-    public static final RegistryObject<SoundEvent> NEUTRAL_BIG_LUMP_HURT_01 = reg("neutral.big_lump.hurt_01");
-    public static final RegistryObject<SoundEvent> NEUTRAL_BIG_LUMP_HURT_02 = reg("neutral.big_lump.hurt_02");
-    public static final RegistryObject<SoundEvent> NEUTRAL_BIG_LUMP_DEATH = reg("neutral.big_lump.death");
+    public static final RegistryObject<SoundEvent> AMMO_GOBLIN_HURT = SOUND_EVENTS.register("ammo_goblin.hurt",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("ammo_goblin.hurt")));
 
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_CRAB_ATTACK_01 = reg("neutral.end_crab.attack_01");
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_CRAB_IDLE_01 = reg("neutral.end_crab.idle_01");
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_CRAB_IDLE_02 = reg("neutral.end_crab.idle_02");
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_CRAB_HURT_01 = reg("neutral.end_crab.hurt_01");
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_CRAB_HURT_02 = reg("neutral.end_crab.hurt_02");
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_CRAB_DEATH = reg("neutral.end_crab.death");
+    public static final RegistryObject<SoundEvent> AMMO_GOBLIN_DEAD = SOUND_EVENTS.register("ammo_goblin.dead",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("ammo_goblin.dead")));
 
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_DWELLER_CHARGING = reg("neutral.end_dweller.charging");
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_DWELLER_IDLE_01 = reg("neutral.end_dweller.idle_01");
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_DWELLER_IDLE_02 = reg("neutral.end_dweller.idle_02");
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_DWELLER_IDLE_03 = reg("neutral.end_dweller.idle_03");
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_DWELLER_HURT_01 = reg("neutral.end_dweller.hurt_01");
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_DWELLER_HURT_02 = reg("neutral.end_dweller.hurt_02");
+    public static final RegistryObject<SoundEvent> BIG_LUMP_IDLE = SOUND_EVENTS.register("big_lump.idle",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("big_lump.idle")));
 
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_POD_BREED = reg("neutral.end_pod.breed");
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_POD_IDLE_01 = reg("neutral.end_pod.idle_01");
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_POD_IDLE_02 = reg("neutral.end_pod.idle_02");
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_POD_IDLE_03 = reg("neutral.end_pod.idle_03");
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_POD_IDLE_04 = reg("neutral.end_pod.idle_04");
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_POD_IDLE_05 = reg("neutral.end_pod.idle_05");
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_POD_DEATH_01 = reg("neutral.end_pod.death_01");
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_POD_DEATH_02 = reg("neutral.end_pod.death_02");
+    public static final RegistryObject<SoundEvent> BIG_LUMP_HURT = SOUND_EVENTS.register("big_lump.hurt",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("big_lump.hurt")));
 
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_SCORPION_IDLE_01 = reg("neutral.end_scorpion.idle_01");
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_SCORPION_IDLE_02 = reg("neutral.end_scorpion.idle_02");
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_SCORPION_IDLE_03 = reg("neutral.end_scorpion.idle_03");
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_SCORPION_HURT_01 = reg("neutral.end_scorpion.hurt_01");
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_SCORPION_HURT_02 = reg("neutral.end_scorpion.hurt_02");
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_SCORPION_STING = reg("neutral.end_scorpion.sting");
-    public static final RegistryObject<SoundEvent> NEUTRAL_END_SCORPION_DEATH = reg("neutral.end_scorpion.death");
+    public static final RegistryObject<SoundEvent> BIG_LUMP_DEAD = SOUND_EVENTS.register("big_lump.dead",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("big_lump.dead")));
+    
+    public static final RegistryObject<SoundEvent> MUTANT_BAT_IDLE = SOUND_EVENTS.register("mutant_bat.idle",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("mutant_bat.idle")));
 
-    public static final RegistryObject<SoundEvent> NEUTRAL_MUTANT_BAT_IDLE_01 = reg("neutral.mutant_bat.idle_01");
-    public static final RegistryObject<SoundEvent> NEUTRAL_MUTANT_BAT_IDLE_02 = reg("neutral.mutant_bat.idle_02");
-    public static final RegistryObject<SoundEvent> NEUTRAL_MUTANT_BAT_IDLE_03 = reg("neutral.mutant_bat.idle_03");
-    public static final RegistryObject<SoundEvent> NEUTRAL_MUTANT_BAT_HURT = reg("neutral.mutant_bat.hurt");
-    public static final RegistryObject<SoundEvent> NEUTRAL_MUTANT_BAT_SCREAM = reg("neutral.mutant_bat.scream");
-    public static final RegistryObject<SoundEvent> NEUTRAL_MUTANT_BAT_DEATH = reg("neutral.mutant_bat.death");
+    public static final RegistryObject<SoundEvent> MUTANT_BAT_HURT = SOUND_EVENTS.register("mutant_bat.hurt",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("mutant_bat.hurt")));
 
-    public static final RegistryObject<SoundEvent> NEUTRAL_NETHERITE_EATER_BREATH = reg("neutral.netherite_eater.breath");
-    public static final RegistryObject<SoundEvent> NEUTRAL_NETHERITE_EATER_IDLE_01 = reg("neutral.netherite_eater.idle_01");
-    public static final RegistryObject<SoundEvent> NEUTRAL_NETHERITE_EATER_IDLE_02 = reg("neutral.netherite_eater.idle_02");
-    public static final RegistryObject<SoundEvent> NEUTRAL_NETHERITE_EATER_IDLE_03 = reg("neutral.netherite_eater.idle_03");
-    public static final RegistryObject<SoundEvent> NEUTRAL_NETHERITE_EATER_IDLE_04 = reg("neutral.netherite_eater.idle_04");
-    public static final RegistryObject<SoundEvent> NEUTRAL_NETHERITE_EATER_HURT_01 = reg("neutral.netherite_eater.hurt_01");
-    public static final RegistryObject<SoundEvent> NEUTRAL_NETHERITE_EATER_HURT_02 = reg("neutral.netherite_eater.hurt_02");
-    public static final RegistryObject<SoundEvent> NEUTRAL_NETHERITE_EATER_DEATH = reg("neutral.netherite_eater.death");
+    public static final RegistryObject<SoundEvent> MUTANT_BAT_DEAD = SOUND_EVENTS.register("mutant_bat.dead",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("mutant_bat.dead")));
+
+    public static final RegistryObject<SoundEvent> MUTANT_BAT_SCREAM = SOUND_EVENTS.register("mutant_bat.scream",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("mutant_bat.scream")));
+    
+    public static final RegistryObject<SoundEvent> NETHERITE_EATER_IDLE = SOUND_EVENTS.register("netherite_eater.idle",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("netherite_eater.idle")));
+
+    public static final RegistryObject<SoundEvent> NETHERITE_EATER_HURT = SOUND_EVENTS.register("netherite_eater.hurt",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("netherite_eater.hurt")));
+
+    public static final RegistryObject<SoundEvent> NETHERITE_EATER_DEAD = SOUND_EVENTS.register("netherite_eater.dead",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("netherite_eater.dead")));
+
+    public static final RegistryObject<SoundEvent> NETHERITE_EATER_BREATH = SOUND_EVENTS.register("netherite_eater.breath",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("netherite_eater.breath")));
+
+    public static final RegistryObject<SoundEvent> END_POD_IDLE = SOUND_EVENTS.register("end_pod.idle",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_pod.idle")));
+
+    public static final RegistryObject<SoundEvent> END_POD_DEAD = SOUND_EVENTS.register("end_pod.death",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_pod.death")));
+
+    public static final RegistryObject<SoundEvent> END_POD_BREED = SOUND_EVENTS.register("end_pod.breed",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_pod.breed")));
+
+    public static final RegistryObject<SoundEvent> END_DWELLER_IDLE = SOUND_EVENTS.register("end_dweller.idle",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_dweller.idle")));
+
+    public static final RegistryObject<SoundEvent> END_DWELLER_CHARGING = SOUND_EVENTS.register("end_dweller.charging",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_dweller.charging")));
+
+    public static final RegistryObject<SoundEvent> END_DWELLER_HURT = SOUND_EVENTS.register("end_dweller.hurt",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_dweller.hurt")));
+
+    public static final RegistryObject<SoundEvent> END_STONE_CRAB_IDLE= SOUND_EVENTS.register("end_stone_crab.idle",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_stone_crab.idle")));
+
+    public static final RegistryObject<SoundEvent> END_STONE_CRAB_HURT = SOUND_EVENTS.register("end_stone_crab.hurt",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_stone_crab.hurt")));
+
+    public static final RegistryObject<SoundEvent> END_STONE_CRAB_DEATH = SOUND_EVENTS.register("end_stone_crab.death",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_stone_crab.death")));
+
+    public static final RegistryObject<SoundEvent> END_STONE_CRAB_ATTACK = SOUND_EVENTS.register("end_stone_crab.attack",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_stone_crab.attack")));
+
+    public static final RegistryObject<SoundEvent> END_SCORPION_IDLE= SOUND_EVENTS.register("end_scorpion.idle",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_scorpion.idle")));
+
+    public static final RegistryObject<SoundEvent> END_SCORPION_HURT = SOUND_EVENTS.register("end_scorpion.hurt",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_scorpion.hurt")));
+
+    public static final RegistryObject<SoundEvent> END_SCORPION_DEATH = SOUND_EVENTS.register("end_scorpion.death",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_scorpion.death")));
+
+    public static final RegistryObject<SoundEvent> END_SCORPION_STING = SOUND_EVENTS.register("end_scorpion.sting",
+            () -> SoundEvent.createVariableRangeEvent(SCGExtra.asResource("end_scorpion.sting")));
 
     public static void init() {}
+
 }

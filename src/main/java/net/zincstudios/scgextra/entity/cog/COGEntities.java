@@ -13,14 +13,19 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegistryObject;
 import net.zincstudios.scgextra.SCGExtra;
-import net.zincstudios.scgextra.entity.asgharian.BaseEntityRenderer;
+import net.zincstudios.scgextra.entity.cog.centipede.CogCentipedeRenderer;
+import net.zincstudios.scgextra.entity.cog.devastator.CogDevastatorRenderer;
+import net.zincstudios.scgextra.entity.cog.gigantes.CogGigantesRenderer;
+import net.zincstudios.scgextra.entity.cog.juggernaut.CogJuggernautRenderer;
+import net.zincstudios.scgextra.entity.cog.venator.CogVenatorRenderer;
+import net.zincstudios.scgextra.entity.cog.vulture.CogVultureRenderer;
+import net.zincstudios.scgextra.entity.common.client.BaseEntityRenderer;
 import net.zincstudios.scgextra.entity.cog.bombardier.CogBombardierEntity;
 import net.zincstudios.scgextra.entity.cog.centipede.CogCentipedeEntity;
 import net.zincstudios.scgextra.entity.cog.centipede.PlasmaCannonProjectileEntity;
 import net.zincstudios.scgextra.entity.cog.devastator.CogDevastatorEntity;
 import net.zincstudios.scgextra.entity.cog.gigantes.CogGigantesEntity;
 import net.zincstudios.scgextra.entity.cog.juggernaut.CogJuggernautEntity;
-import net.zincstudios.scgextra.entity.cog.juggernaut.CogJuggernautRenderer;
 import net.zincstudios.scgextra.entity.cog.juggernaut.RocketBarrageProjectileEntity;
 import net.zincstudios.scgextra.entity.cog.venator.CogVenatorEntity;
 import net.zincstudios.scgextra.entity.cog.vulture.CogVultureEntity;
@@ -39,37 +44,37 @@ public class COGEntities {
 
     public static final RegistryObject<EntityType<CogVultureEntity>> VULTURE = ENTITY_TYPES
             .register("cog_vulture", () -> EntityType.Builder.of(CogVultureEntity::new, MobCategory.MONSTER)
-                    .sized(0.75F, 1.7F)
+                    .sized(0.85F, 1.7F)
                     .build("cog_vulture"));
 
     public static final RegistryObject<EntityType<CogDevastatorEntity>> DEVASTATOR = ENTITY_TYPES
             .register("cog_devastator", () -> EntityType.Builder.of(CogDevastatorEntity::new, MobCategory.MONSTER)
-                    .sized(1.6F, 3.25F)
+                    .sized(1.9F, 3.25F)
                     .build("cog_devastator"));
 
     public static final RegistryObject<EntityType<CogBombardierEntity>> BOMBARDIER = ENTITY_TYPES
             .register("cog_bombardier", () -> EntityType.Builder.of(CogBombardierEntity::new, MobCategory.MONSTER)
-                    .sized(1.6F, 2.8F)
+                    .sized(2.5F, 2.9F)
                     .build("cog_bombardier"));
 
     public static final RegistryObject<EntityType<CogGigantesEntity>> GIGANTES = ENTITY_TYPES
             .register("cog_gigantes", () -> EntityType.Builder.of(CogGigantesEntity::new, MobCategory.MONSTER)
-                    .sized(1.8F, 3F)
+                    .sized(1.95F, 3F)
                     .build("cog_gigantes"));
 
     public static final RegistryObject<EntityType<CogVenatorEntity>> VENATOR = ENTITY_TYPES
             .register("cog_venator", () -> EntityType.Builder.of(CogVenatorEntity::new, MobCategory.MONSTER)
-                    .sized(0.75F, 1.5F)
+                    .sized(0.92F, 1.5F)
                     .build("cog_venator"));
 
     public static final RegistryObject<EntityType<CogCentipedeEntity>> CENTIPEDE = ENTITY_TYPES
             .register("cog_centipede", () -> EntityType.Builder.of(CogCentipedeEntity::new, MobCategory.MONSTER)
-                    .sized(2F, 2.2F)
+                    .sized(2F, 2.9F)
                     .build("cog_centipede"));
 
     public static final RegistryObject<EntityType<CogJuggernautEntity>> JUGGERNAUT = ENTITY_TYPES
             .register("cog_juggernaut", () -> EntityType.Builder.of(CogJuggernautEntity::new, MobCategory.MONSTER)
-                    .sized(1.6F, 3.0F)
+                    .sized(1.9F, 3.0F)
                     .setUpdateInterval(1)
                     .build("cog_juggernaut"));
 
@@ -112,26 +117,27 @@ public class COGEntities {
     }
 
     private static void onCommonSetup(FMLCommonSetupEvent event) {
-//        BoundingBoxManager.registerHeadshotBox(COGEntities.BOMBARDIER.get(), new BasicHeadshotBox<>(8, 36));
         BoundingBoxManager.registerHeadshotBox(COGEntities.BOMBARDIER.get(), new RotatedHeadshotBox<>(8, 36, 6, false, true));
         WeakPointBoxManager.registerWeakPointBox(COGEntities.BOMBARDIER.get(), new WeakPointBox<>(new RotatedHeadshotBox<>(8, 36, -6, false, true)));
         BoundingBoxManager.registerHeadshotBox(COGEntities.GIGANTES.get(), new RotatedHeadshotBox<>(8, 18, 18, false, true));
         BoundingBoxManager.registerHeadshotBox(COGEntities.CENTIPEDE.get(), new BasicHeadshotBox<>(1,0));
+        BoundingBoxManager.registerHeadshotBox(COGEntities.VENATOR.get(), new BasicHeadshotBox<>(0,0));
+        BoundingBoxManager.registerHeadshotBox(COGEntities.VULTURE.get(), new BasicHeadshotBox<>(10,16));
     }
 
     @OnlyIn(value = Dist.CLIENT)
     private static void onClientSetup(FMLClientSetupEvent event) {
-        EntityRenderers.register(COGEntities.VULTURE.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
+        EntityRenderers.register(COGEntities.VULTURE.get(), (ctx) -> new CogVultureRenderer(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_vulture"))).noDeathTilt());
-        EntityRenderers.register(COGEntities.DEVASTATOR.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
+        EntityRenderers.register(COGEntities.DEVASTATOR.get(), (ctx) -> new CogDevastatorRenderer(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_devastator"), "chest")).noDeathTilt());
         EntityRenderers.register(COGEntities.BOMBARDIER.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_bombardier"))).noDeathTilt());
-        EntityRenderers.register(COGEntities.GIGANTES.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
+        EntityRenderers.register(COGEntities.GIGANTES.get(), (ctx) -> new CogGigantesRenderer(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_gigantes"))).noDeathTilt());
-        EntityRenderers.register(COGEntities.VENATOR.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
+        EntityRenderers.register(COGEntities.VENATOR.get(), (ctx) -> new CogVenatorRenderer(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_venator"))).noDeathTilt());
-        EntityRenderers.register(COGEntities.CENTIPEDE.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
+        EntityRenderers.register(COGEntities.CENTIPEDE.get(), (ctx) -> new CogCentipedeRenderer(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_centipede"))).noDeathTilt());
         EntityRenderers.register(COGEntities.JUGGERNAUT.get(), (ctx) -> new CogJuggernautRenderer(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("cog/cog_juggernaut"), "chest")).noDeathTilt());

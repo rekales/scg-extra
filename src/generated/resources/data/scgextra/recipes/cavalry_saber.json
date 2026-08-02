@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "scguns:iron_bayonet"
+    },
+    "I": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "N": {
+      "item": "scguns:anthralite_nugget"
+    }
+  },
+  "pattern": [
+    "I ",
+    "IN",
+    "BN"
+  ],
+  "result": {
+    "item": "scgextra:cavalry_saber"
+  },
+  "show_notification": false
+}

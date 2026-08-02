@@ -57,32 +57,34 @@ public class RaidDataLoader extends SimpleJsonResourceReloadListener {
         @Override
         public WaveRaidData deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
             JsonObject obj = jsonElement.getAsJsonObject();
-            String originalId = obj.get("raid_original_id").getAsString();
+            String originalId = obj.get("flare_raid_id").getAsString();
             String id = obj.get("raid_id").getAsString();
+            ResourceLocation lootLoc = ResourceLocation.tryBySeparator(
+                    obj.has("finish_loot") ? obj.get("finish_loot").getAsString() : "", ':');
 
-            WaveRaidData.Profile profile = parseProfile(obj.getAsJsonObject("raid_profile"));
+            List<WaveRaidData.Wave> waves = parseWaves(obj.getAsJsonArray("waves"));
 
             List<WaveRaidData.RaiderEntry> infantry = parseRaiders(obj.getAsJsonArray("infantry"));
             List<WaveRaidData.RaiderEntry> elite = parseRaiders(obj.getAsJsonArray("elite"));
             List<WaveRaidData.RaiderEntry> miniboss = parseRaiders(obj.getAsJsonArray("miniboss"));
             List<WaveRaidData.RaiderEntry> boss = parseRaiders(obj.getAsJsonArray("boss"));
 
-            return new WaveRaidData(id, originalId, profile, infantry, elite, miniboss, boss);
+            return new WaveRaidData(id, originalId, waves, infantry, elite, miniboss, boss, lootLoc);
         }
 
-        private WaveRaidData.Profile parseProfile(JsonObject profileObj) {
-            WaveRaidData.Wave first = parseWave(profileObj.getAsJsonObject("first_wave"));
-            WaveRaidData.Wave second = parseWave(profileObj.getAsJsonObject("second_wave"));
-            WaveRaidData.Wave third = parseWave(profileObj.getAsJsonObject("third_wave"));
-            WaveRaidData.Wave boss = parseWave(profileObj.getAsJsonObject("boss_wave"));
+        private List<WaveRaidData.Wave> parseWaves(com.google.gson.JsonArray array) {
+            List<WaveRaidData.Wave> waves = new ArrayList<>();
 
-            return new WaveRaidData.Profile(first, second, third, boss);
-        }
-        private WaveRaidData.Wave parseWave(JsonObject waveObj) {
-            int infantry = waveObj.has("infantry") ? waveObj.get("infantry").getAsInt() : 0;
-            int elite = waveObj.has("elite") ? waveObj.get("elite").getAsInt() : 0;
-            int miniboss = waveObj.has("miniboss") ? waveObj.get("miniboss").getAsInt() : 0;
-            return new WaveRaidData.Wave(infantry, elite, miniboss);
+            array.forEach(element -> {
+                JsonObject waveObj = element.getAsJsonObject();
+                int infantry = waveObj.has("infantry") ? waveObj.get("infantry").getAsInt() : 0;
+                int elite = waveObj.has("elite") ? waveObj.get("elite").getAsInt() : 0;
+                int miniboss = waveObj.has("miniboss") ? waveObj.get("miniboss").getAsInt() : 0;
+                int boss = waveObj.has("boss") ? waveObj.get("boss").getAsInt() : 0;
+                waves.add(new WaveRaidData.Wave(infantry, elite, miniboss, boss));
+            });
+
+            return waves;
         }
 
         private List<WaveRaidData.RaiderEntry> parseRaiders(com.google.gson.JsonArray array) {

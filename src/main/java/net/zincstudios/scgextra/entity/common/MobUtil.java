@@ -11,14 +11,13 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.Entity.RemovalReason;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -33,6 +32,7 @@ import top.ribs.scguns.init.ModBlocks;
 import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.interfaces.IProjectileFactory;
 import top.ribs.scguns.item.GunItem;
+import top.ribs.scguns.item.attachment.IAttachment;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.S2CMessageBulletTrail;
 import top.ribs.scguns.network.message.S2CMessageEntityCasingEject;
@@ -46,11 +46,52 @@ import java.util.function.Supplier;
 
 public class MobUtil {
 
+    // Common Constants
+    public static final int DEFAULT_STUN_DURATION = 60;
+
+    public static void addGunAttachment(ItemStack gunStack, ItemStack attachmentStack) {
+        if (gunStack.getItem() instanceof GunItem gunItem
+                && attachmentStack.getItem() instanceof IAttachment<?> attachment
+                && gunItem.getGun().canAttachType(attachment.getType())
+                && attachment.canAttachTo(gunStack)) {
+
+            CompoundTag tag = gunStack.getOrCreateTag();
+            CompoundTag attachments;
+            if (tag.contains("Attachments")) {
+                attachments = tag.getCompound("Attachments");
+            } else {
+                attachments = new CompoundTag();
+            }
+
+            attachments.put(attachment.getType().getTagKey(), attachmentStack.save(new CompoundTag()));
+
+            tag.put("Attachments", attachments);
+        }
+    }
+
+    public static Vec3 lerpVec(Vec3 a, Vec3 b, double t) {
+        return new Vec3(
+                Mth.lerp(t, a.x, b.x),
+                Mth.lerp(t, a.y, b.y),
+                Mth.lerp(t, a.z, b.z)
+        );
+    }
+
     public static SoundEvent getSound(RandomSource random, SoundEvent... sounds){
         if(sounds.length<=0){
             return SoundEvents.ALLAY_HURT;//cause why not
         }
         return sounds[random.nextInt(sounds.length)];
+    }
+
+    public static LevelLocation levelLocationFromEntity(LivingEntity entity) {
+        return LevelLocation.create(
+                entity.level(),
+                entity.getX(),
+                entity.getY(),
+                entity.getZ(),
+                Config.COMMON.network.projectileTrackingRange.get()
+        );
     }
 
     /**
@@ -84,6 +125,16 @@ public class MobUtil {
 
     public static float rotFromVec(Vec3 vec) {
         return (float) Mth.atan2(-vec.x, vec.z) * Mth.RAD_TO_DEG;
+    }
+
+    public static Vec3 toVec(float yaw, float pitch) {
+        double yawRad   = Math.toRadians(yaw);
+        double pitchRad = Math.toRadians(pitch);
+        double x = -Math.sin(yawRad) * Math.cos(pitchRad);
+        double y = -Math.sin(pitchRad);
+        double z =  Math.cos(yawRad) * Math.cos(pitchRad);
+
+        return new Vec3(x, y, z);
     }
 
     // NOTE: Copied and edited from AIGunEvent, check for when scguns does a major update
@@ -200,7 +251,12 @@ public class MobUtil {
 
         return var10000;
     }
-
-
-
+    public static void tickDeath(LivingEntity entity, int tick) {
+        // Override to only extend death time
+        ++entity.deathTime;
+        if (entity.deathTime >= tick && !entity.level().isClientSide() && !entity.isRemoved()) {
+            entity.level().broadcastEntityEvent(entity, (byte)60);
+            entity.remove(RemovalReason.KILLED);
+        }
+    }
 }

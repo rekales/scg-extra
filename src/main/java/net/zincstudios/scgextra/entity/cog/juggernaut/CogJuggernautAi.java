@@ -1,7 +1,6 @@
 package net.zincstudios.scgextra.entity.cog.juggernaut;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,38 +14,37 @@ import net.minecraft.world.entity.ai.sensing.SensorType;
 import net.minecraft.world.entity.schedule.Activity;
 import net.zincstudios.scgextra.entity.*;
 import net.zincstudios.scgextra.entity.common.brain.*;
+import net.zincstudios.scgextra.entity.common.gun.MarkovTriggerSampler;
 
 public class CogJuggernautAi {
 
     protected static final ImmutableList<? extends SensorType<? extends Sensor<? super CogJuggernautEntity>>> SENSOR_TYPES = ImmutableList.of(
             SensorType.NEAREST_LIVING_ENTITIES,
-            SensorType.NEAREST_PLAYERS,
+            ModBrainSensors.LONG_RANGE_PLAYER.get(),
             SensorType.HURT_BY,
-            ModBrainSensors.HELD_GUN.get()
+            ModBrainSensors.HELD_GUN_RAPID.get()
     );
     protected static final ImmutableList<? extends MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(
             MemoryModuleType.ATTACK_TARGET,
             MemoryModuleType.NEAREST_LIVING_ENTITIES,
             MemoryModuleType.NEAREST_VISIBLE_LIVING_ENTITIES,
-            MemoryModuleType.NEAREST_VISIBLE_PLAYER,
             MemoryModuleType.NEAREST_VISIBLE_ATTACKABLE_PLAYER,
             MemoryModuleType.LOOK_TARGET,
             MemoryModuleType.WALK_TARGET,
             MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE,
             MemoryModuleType.PATH,
-            MemoryModuleType.ATTACK_COOLING_DOWN,
             ModBrainMemories.AIM_TICKS.get(),
+            ModBrainMemories.SIMULATED_GUN.get(),
             ModBrainMemories.WEAPON_IDEAL_RANGE.get(),
             ModBrainMemories.WEAPON_MAX_RANGE.get(),
             ModBrainMemories.ABILITY_STATE.get(),
-            ModBrainMemories.ABILITY_COOLING_DOWN.get(),
             ModBrainMemories.RELOCATE_TARGET.get(),
             ModBrainMemories.JET_BOOTS_COOLING_DOWN.get()
     );
 
     protected static Brain<?> makeBrain(CogJuggernautEntity mob, Brain<CogJuggernautEntity> brain) {
-        BrainUtils.Standard.initCoreActivity(brain);
-        BrainUtils.Standard.initIdleActivity(brain);
+        BrainCommons.initCoreActivity(brain);
+        BrainCommons.initIdleActivity(brain);
         initFightActivity(mob, brain);
         initRelocateActivity(brain);
         brain.setCoreActivities(ImmutableSet.of(Activity.CORE));
@@ -57,16 +55,18 @@ public class CogJuggernautAi {
 
     private static void initFightActivity(CogJuggernautEntity mob, Brain<CogJuggernautEntity> brain) {
         brain.addActivityAndRemoveMemoriesWhenStopped(Activity.FIGHT, BrainUtils.createPriorityPairs(10, ImmutableList.of(
-                StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValid(mob, target, false)),
+                StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValidNonFriendlies(mob, target, false)),
                 AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), true),
+                new DynamicWeaponSwitching(),
                 GetCloseToTarget.create(5, 1.0F),
-                new AutoAimWhenTargetVisible(),
-                JetBootsRelocate.create(),
+                new AimWhenTargetVisible(),
+                new JetBootsCheckRelocate(),
                 new RocketBarrageAbility(),
-                new ConditionalBehavior<>(
-                        ImmutableMap.of(ModBrainMemories.ABILITY_STATE.get(), MemoryStatus.VALUE_ABSENT),
-                        ImmutableList.of(new ShootTarget(20))
-                ))), ImmutableSet.of(
+                new ShootTarget(20,
+                        (entity, firing) -> 2.4f,
+                        entity -> !entity.getBrain().hasMemoryValue(ModBrainMemories.ABILITY_STATE.get()),
+                        new MarkovTriggerSampler(0.93f, 0.94f, 15, 80))
+                )), ImmutableSet.of(
                         Pair.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.VALUE_PRESENT)
                 ), ImmutableSet.of(
                         ModBrainMemories.AIM_TICKS.get()

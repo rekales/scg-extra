@@ -1,6 +1,8 @@
 package net.zincstudios.scgextra.entity.cog.juggernaut;
 
 import com.mojang.serialization.Dynamic;
+
+import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
@@ -31,7 +33,7 @@ import net.zincstudios.scgextra.entity.AbilityState;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.EquippedEntity;
 import net.zincstudios.scgextra.entity.common.Gunner;
-import net.zincstudios.scgextra.sounds.CogSounds;
+import net.zincstudios.scgextra.sounds.COGSounds;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -163,11 +165,11 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity, Gu
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.FOLLOW_RANGE, 35.0D)
+                .add(Attributes.FOLLOW_RANGE, 64.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.20F)
-                .add(Attributes.ARMOR, 16.0D)
+                .add(Attributes.ARMOR, 6.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0)
-                .add(Attributes.MAX_HEALTH, 1200.0D);
+                .add(Attributes.MAX_HEALTH, 1000.0D);
     }
 
     protected Brain<?> makeBrain(Dynamic<?> dynamic) {
@@ -201,7 +203,7 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity, Gu
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (source.is(DamageTypes.FALL) && this.isJetActive()) return false;
+        if (source.is(DamageTypes.FALL) && source.is(DamageTypes.ON_FIRE) && this.isJetActive()) return false;
         return super.hurt(source, amount);
     }
 
@@ -213,6 +215,16 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity, Gu
     @Override
     public boolean canBeAffected(MobEffectInstance effectInstance) {
         return super.canBeAffected(effectInstance) && !IMMUNE_EFFECTS.contains(effectInstance.getEffect());
+    }
+
+    @Override
+    public boolean isOnFire() {
+        return false;
+    }
+
+    @Override
+    protected void tickDeath() {
+        MobUtil.tickDeath(this, 35);
     }
 
     @Override
@@ -290,16 +302,16 @@ public class CogJuggernautEntity extends EquippedEntity implements GeoEntity, Gu
 
     @Override
     protected @Nullable SoundEvent getAmbientSound() {
-        return CogSounds.GENERAL_IDLE.get();
+        return COGSounds.GENERAL_IDLE.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return CogSounds.COG_JUGGERNAUT_HURT.get();
+        return COGSounds.COG_JUGGERNAUT_HURT.get();
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return CogSounds.COG_JUGGERNAUT_DEAD.get();
+        return COGSounds.COG_JUGGERNAUT_DEAD.get();
     }
 }

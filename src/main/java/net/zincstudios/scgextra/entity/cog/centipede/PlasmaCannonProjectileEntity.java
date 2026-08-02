@@ -13,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.zincstudios.scgextra.entity.cog.COGEntities;
+import net.zincstudios.scgextra.item.ModItems;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.entity.projectile.ProjectileEntity;
 import top.ribs.scguns.init.ModDamageTypes;
@@ -37,6 +38,11 @@ public class PlasmaCannonProjectileEntity extends ProjectileEntity {
 
     public PlasmaCannonProjectileEntity(Level worldIn, LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun) {
         this(COGEntities.PLASMA_CANNON_PROJECTILE.get(), worldIn, shooter, weapon, item, modifiedGun);
+    }
+
+    public PlasmaCannonProjectileEntity(Level worldIn, LivingEntity shooter, Gun gun) {
+        this(COGEntities.PLASMA_CANNON_PROJECTILE.get(), worldIn, shooter, ItemStack.EMPTY, ModItems.PLACEHOLDER_GUN.get(), gun);
+
     }
 
     @Override

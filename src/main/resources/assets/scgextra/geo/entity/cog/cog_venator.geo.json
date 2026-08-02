@@ -79,6 +79,11 @@
 					]
 				},
 				{
+					"name": "barrel_end",
+					"parent": "br",
+					"pivot": [0, 19.3, -32.5]
+				},
+				{
 					"name": "leftLeg",
 					"parent": "pelvis",
 					"pivot": [4, 13.9, 0.2],

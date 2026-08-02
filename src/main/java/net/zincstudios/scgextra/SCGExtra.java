@@ -2,31 +2,44 @@ package net.zincstudios.scgextra;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.config.ModConfig;
-import net.zincstudios.scgextra.block.ModBlockEntities;
-import net.zincstudios.scgextra.block.ModBlocks;
+import net.zincstudios.scgextra.blocks.ModBlockEntities;
+import net.zincstudios.scgextra.blocks.ModBlocks;
+import net.zincstudios.scgextra.attributes.SCGEAttributes;
 import net.zincstudios.scgextra.data.RaidDataLoader;
 import net.zincstudios.scgextra.datagen.DataGenerators;
 import net.zincstudios.scgextra.debug.DevTestCommands;
 import net.zincstudios.scgextra.effects.ModEffects;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.ModEntities;
-import net.zincstudios.scgextra.entity.neutral.head_hunter.HeadHunterSpawnReplacement;
+import net.zincstudios.scgextra.entity.common.client.GunFlashHandler;
 
 import com.mojang.logging.LogUtils;
 
+import net.zincstudios.scgextra.worldgen.structure.ModPieces;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import net.zincstudios.scgextra.item.ArmorPiercingHandler;
 import net.zincstudios.scgextra.item.ModItems;
-import net.zincstudios.scgextra.network.ModNetwork;
+import net.zincstudios.scgextra.network.SCGEPacketHandler;
 import net.zincstudios.scgextra.particle.ModParticleTypes;
 import net.zincstudios.scgextra.raid.WaveRaidManager;
 import net.zincstudios.scgextra.sounds.ModSounds;
 import net.zincstudios.scgextra.sounds.WreckerDeathSounds;
+import net.zincstudios.scgextra.worldgen.biome.ModBiomes;
+import net.zincstudios.scgextra.worldgen.biome.ModTerrablender;
+import net.zincstudios.scgextra.worldgen.biome.surface.ModSurfaceRules;
+import net.zincstudios.scgextra.worldgen.structure.ModStructureProcessors;
+import net.zincstudios.scgextra.worldgen.structure.ModStructures;
+import terrablender.api.SurfaceRuleManager;
 
 import org.slf4j.Logger;
 
@@ -41,26 +54,29 @@ public class SCGExtra
     {
         IEventBus modEventBus = context.getModEventBus();
 
+        modEventBus.addListener(this::commonSetup);
         ModEntities.register(modEventBus);
         ModEffects.register(modEventBus);
-        ModBlocks.register(modEventBus);
-        ModBlockEntities.register(modEventBus);
         ModItems.register(modEventBus);
         ModSounds.register(modEventBus);
         ModParticleTypes.register(modEventBus);
+        ModBlocks.register(modEventBus);
+        ModBlockEntities.register(modEventBus);
+        ModTerrablender.registerBiomes();
+        ModStructures.register(modEventBus);
+        ModStructureProcessors.register(modEventBus);
+        ModPieces.register(modEventBus);
 
-        ModNetwork.register();
-
-        modEventBus.addListener(this::addCreative);
+        SCGEAttributes.register(modEventBus);
 
         context.registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
         modEventBus.addListener(CommonConfig::onLoad);
         modEventBus.addListener(CommonConfig::onReload);
 
+        MinecraftForge.EVENT_BUS.addListener(GunFlashHandler::onTick);
         MinecraftForge.EVENT_BUS.addListener(WaveRaidManager::onLevelTick);
         MinecraftForge.EVENT_BUS.addListener(WaveRaidManager::onLevelLoad);
         MinecraftForge.EVENT_BUS.addListener(Faction::onTagsUpdated);
-        MinecraftForge.EVENT_BUS.addListener(HeadHunterSpawnReplacement::onFinalizeSpawn);
         MinecraftForge.EVENT_BUS.addListener(RaidDataLoader::onAddReloadListeners);
         MinecraftForge.EVENT_BUS.addListener(DevTestCommands::registerCommands);
         MinecraftForge.EVENT_BUS.addListener(ArmorPiercingHandler::onLivingHurt);
@@ -70,12 +86,26 @@ public class SCGExtra
         modEventBus.addListener(DataGenerators::gatherData);
     }
 
-    private void addCreative(BuildCreativeModeTabContentsEvent event)
-    {
+    private void commonSetup(final FMLCommonSetupEvent event) {
+        SCGEPacketHandler.init();
+        event.enqueueWork(()->{
+            SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MOD_ID, ModSurfaceRules.makeRules());
+        });
     }
 
     @SuppressWarnings("removal")
     public static ResourceLocation asResource(String path) {
         return new ResourceLocation(MOD_ID, path);
+    }
+    @Mod.EventBusSubscriber(modid = SCGExtra.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+    public class SpawnEvent {
+        @SubscribeEvent
+        public static void onCheckSpawn(MobSpawnEvent.PositionCheck event) {
+            if (event.getLevel().getBiome(event.getEntity().blockPosition()).is(ModBiomes.WARZONE_BIOME)) {
+                if (event.getEntity() instanceof Animal) {
+                    event.setResult(Result.DENY);
+                }
+            }
+        }
     }
 }

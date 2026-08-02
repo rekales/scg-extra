@@ -26,12 +26,16 @@ public class DataGenerators {
                 new ModEntityTagProvider(output, lookupProvider, SCGExtra.MOD_ID, existingFileHelper));
         generator.addProvider(event.includeServer(),
                 new ModItemModelProvider(output, SCGExtra.MOD_ID, existingFileHelper));
+        generator.addProvider(event.includeServer(), new ModRecipeProvider(output));
         generator.addProvider(event.includeClient(),
                 new ModItemTagProvider(output, lookupProvider, CompletableFuture.completedFuture(TagsProvider.TagLookup.empty()), SCGExtra.MOD_ID, existingFileHelper));
 
         generator.addProvider(event.includeClient(),
                 new LootTableProvider(output, Collections.emptySet(), List.of(
-                        new LootTableProvider.SubProviderEntry(ModEntityLootTableProvider::new, LootContextParamSets.ENTITY)
+                        new LootTableProvider.SubProviderEntry(ModEntityLootTableProvider::new, LootContextParamSets.ENTITY),
+                        new LootTableProvider.SubProviderEntry(RaidLootSubProvider::new, LootContextParamSets.EMPTY)
                 )));
+
+        generator.addProvider(event.includeServer(), new ModWorldGenProvider(output, lookupProvider));
     }
 }

@@ -1,31 +1,26 @@
 package net.zincstudios.scgextra.entity.cog.bombardier;
 
+import com.mojang.serialization.Dynamic;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.zincstudios.scgextra.CommonConfig;
-import net.zincstudios.scgextra.SCGExtra;
-import net.zincstudios.scgextra.entity.Faction;
-import net.zincstudios.scgextra.entity.cog.venator.FleeTargetGoal;
-import net.zincstudios.scgextra.entity.common.GunnerEntity;
-import net.zincstudios.scgextra.entity.common.HeadShotHandler;
-import net.zincstudios.scgextra.entity.common.Stunnable;
-import net.zincstudios.scgextra.entity.common.goal.HurtByNonFactionGoal;
-import net.zincstudios.scgextra.entity.common.goal.StunnedWithVisualGoal;
-import net.zincstudios.scgextra.sounds.CogSounds;
+import net.minecraft.world.phys.Vec3;
+import net.zincstudios.scgextra.entity.ModBrainMemories;
+import net.zincstudios.scgextra.entity.common.Gunner;
+import net.zincstudios.scgextra.entity.common.gun.CustomGunHolder;
+import net.zincstudios.scgextra.entity.common.gun.CustomScorchedSimGun;
+import net.zincstudios.scgextra.entity.common.gun.SimulatedGun;
+import net.zincstudios.scgextra.sounds.COGSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -33,56 +28,55 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import top.ribs.scguns.init.ModItems;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CogBombardierEntity extends GunnerEntity implements GeoEntity, Stunnable, HeadShotHandler {
+public class CogBombardierEntity extends Monster implements GeoEntity, CustomGunHolder, Gunner {
 
-    private static final int STUN_DURATION = 60;
+    static final int STUN_RECOVERY_TICKS = 12;
+    static final int ALERT_ANIM_TICKS = 38;
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
-
-    // Server-side only for stunnable handling
-    private int headshotCounter = 0;
-    private boolean stunCooldown = false;
-    private boolean stunned = false;
+    private final SimulatedGun customGun;
 
     public CogBombardierEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
-    }
-
-    @Override
-    protected void registerGoals() {
-        this.goalSelector.addGoal(1, new StunnedWithVisualGoal<>(this));
-        this.goalSelector.addGoal(2, new FleeTargetGoal(this, 10));
-        this.goalSelector.addGoal(3, new CogBombardierAlertFactionGoal(this)
-                .cooldown(600)
-                .recovery(35)
-        );
-        this.goalSelector.addGoal(4, new CogBombardierAttackGoal(this, 120, 6)
+        this.customGun = new CustomScorchedSimGun.Builder(ModItems.ROCKET_RIFLE.get().getGun())
+                .projectileDamage(10)
+                .fireRate(10)
                 .maxRange(25)
-                .approachDist(20)
-                .attackInterval(10)
-        );
-        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
-
-        this.targetSelector.addGoal(2, new HurtByNonFactionGoal(this));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, true,
-                player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
-                entity -> Faction.isEnemies(this, entity)));
+                .idealRange(20)
+                .ammoCapacity(6)
+                .reloadTime(120)
+                .reloads()
+                .noGunFlash()
+                .velocityModifier(vec -> new Vec3(vec.x/4, (vec.y/4) * 1.2 + 0.1, vec.z/4))
+                .build();
     }
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.FOLLOW_RANGE, 35.0D)
+                .add(Attributes.FOLLOW_RANGE, 48.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25F)
                 .add(Attributes.MAX_HEALTH, 40.0D);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        Brain<?> brain = this.getBrain();
+        if (brain.getTimeUntilExpiry(ModBrainMemories.TO_ALERT.get()) == ALERT_ANIM_TICKS) {
+            this.triggerAnim("behavior", "alert");
+            this.playSound(COGSounds.COG_BOMBARDIER_SCAN.get(), 1.2f, 1.0f);
+        }
+        if (brain.getTimeUntilExpiry(ModBrainMemories.STUNNED.get()) == STUN_RECOVERY_TICKS) {
+            this.triggerAnim("behavior", "end_stun");
+        }
     }
 
     @Override
@@ -90,13 +84,38 @@ public class CogBombardierEntity extends GunnerEntity implements GeoEntity, Stun
         if (source.getEntity() == this) {
             return super.hurt(source, amount * 0.2f);
         }
-
         return super.hurt(source, amount);
+    }
+
+    protected Brain<?> makeBrain(Dynamic<?> dynamic) {
+        return CogBombardierAi.makeBrain(this, this.brainProvider().makeBrain(dynamic));
+    }
+
+    @SuppressWarnings("unchecked")
+    public Brain<CogBombardierEntity> getBrain() {
+        return (Brain<CogBombardierEntity>) super.getBrain();
+    }
+
+    protected Brain.Provider<CogBombardierEntity> brainProvider() {
+        return Brain.provider(CogBombardierAi.MEMORY_TYPES, CogBombardierAi.SENSOR_TYPES);
+    }
+
+    @Override
+    protected void customServerAiStep() {
+        this.level().getProfiler().push("cogBombardierBrain");
+        this.getBrain().tick((ServerLevel)this.level(), this);
+        CogBombardierAi.updateActivity(this);
+        this.setAggressive(this.getBrain().hasMemoryValue(MemoryModuleType.ATTACK_TARGET) && this.customGun.getAmmoCount() > 0);
+        if (this.isAggressive()) {
+            this.setYBodyRot(this.getYHeadRot());
+        }
+        this.level().getProfiler().pop();
+        super.customServerAiStep();
     }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "main", 2, state -> {
+        controllers.add(new AnimationController<>(this, "main", 4, state -> {
                     if (state.getAnimatable().isSprinting()) {
                         state.setAnimation(RawAnimation.begin().thenLoop("run"));
                     } else if (state.isMoving()) {
@@ -114,7 +133,7 @@ public class CogBombardierEntity extends GunnerEntity implements GeoEntity, Stun
                 .triggerableAnim("fire", RawAnimation.begin().thenPlay("fire"))
         );
 
-        controllers.add(new AnimationController<>(this, "behaviour", 0, state -> PlayState.STOP)
+        controllers.add(new AnimationController<>(this, "behavior", 0, state -> PlayState.STOP)
                 .triggerableAnim("stun", RawAnimation.begin().thenPlayAndHold("stun_start"))
                 .triggerableAnim("end_stun", RawAnimation.begin().thenPlay("stun_end"))
                 .triggerableAnim("alert", RawAnimation.begin().thenPlay("alert"))
@@ -134,67 +153,27 @@ public class CogBombardierEntity extends GunnerEntity implements GeoEntity, Stun
     }
 
     @Override
-    public boolean headshot(DamageSource source, float amount) {
-        if (this.headshotCounter < CommonConfig.abilityWeaknessHeadshots-1 || !this.stunCooldown) {
-            this.headshotCounter++;
-        }
-
-        SCGExtra.LOGGER.debug(this.headshotCounter + "");
-
-        return false;
+    public SimulatedGun getCustomGun() {
+        return this.customGun;
     }
 
     @Override
-    public int shouldStun() {
-        if (!CommonConfig.enableAbilityWeakness) return 0;
-
-        if (this.headshotCounter >= CommonConfig.abilityWeaknessHeadshots) {
-            return STUN_DURATION;
-        }
-
-        return 0;
-    }
-
-    @Override
-    public void setStunned(boolean stunned) {
-        this.stunned = stunned;
-        if (stunned) {
-            this.triggerAnim("behaviour", "stun");
-        } else {
-            this.headshotCounter = 0;
-        }
-    }
-
-    @Override
-    public void setStunCooldown(boolean stunCooldown) {
-        this.stunCooldown = stunCooldown;
-    }
-
-    @Override
-    public boolean isStunned() {
-        return this.stunned;
-    }
-
-    @Override
-    public boolean tickStunned(int ticksLeft) {
-        if (ticksLeft == 10) {
-            this.triggerAnim("behaviour", "end_stun");
-        }
-        return false;
+    public void onGunFire(SimulatedGun gun, Vec3 targetPos) {
+        this.triggerAnim("gun", "fire");
     }
 
     @Override
     protected @Nullable SoundEvent getAmbientSound() {
-        return CogSounds.COG_DEVASTATOR_IDLE.get();
+        return COGSounds.COG_DEVASTATOR_IDLE.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return CogSounds.GENERAL_LIGHT_HURT.get();
+        return COGSounds.GENERAL_LIGHT_HURT.get();
     }
 
     protected SoundEvent getStepSound() {
-        return CogSounds.COG_BOMBARDIER_WALK.get();
+        return COGSounds.COG_BOMBARDIER_WALK.get();
     }
 
     @Override

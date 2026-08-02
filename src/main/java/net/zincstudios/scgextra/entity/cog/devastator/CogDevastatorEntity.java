@@ -1,33 +1,32 @@
 package net.zincstudios.scgextra.entity.cog.devastator;
 
+import com.mojang.serialization.Dynamic;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.zincstudios.scgextra.CommonConfig;
-import net.zincstudios.scgextra.entity.Faction;
-import net.zincstudios.scgextra.entity.cog.ApproachTargetGoal;
+import net.zincstudios.scgextra.entity.asgharian.BulletSpawnOffset;
+import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
-import net.zincstudios.scgextra.entity.common.HeadShotHandler;
-import net.zincstudios.scgextra.entity.common.Stunnable;
-import net.zincstudios.scgextra.entity.common.goal.HurtByNonFactionGoal;
-import net.zincstudios.scgextra.entity.common.goal.StunnedWithVisualGoal;
-import net.zincstudios.scgextra.sounds.CogSounds;
+import net.zincstudios.scgextra.entity.common.brain.BrainUtils;
+import net.zincstudios.scgextra.entity.common.gun.CustomScorchedSimGun;
+import net.zincstudios.scgextra.entity.common.gun.HeadAttachedMountedGun;
+import net.zincstudios.scgextra.entity.common.gun.MountedGun;
+import net.zincstudios.scgextra.sounds.COGSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -42,75 +41,93 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class CogDevastatorEntity extends GunnerEntity implements GeoEntity, Stunnable, HeadShotHandler {
+public class CogDevastatorEntity extends Monster implements GeoEntity, Gunner, BulletSpawnOffset {
 
     public static final Vec3 MACHINE_GUN_OFFSET = new Vec3(-0.7,2.1,0.4);
     public static final Vec3 SHOTGUN_OFFSET = new Vec3(-0.7,2.6,0.5);
     public static final Vec3 GATLING_GUN_OFFSET = new Vec3(0.7,2.6,0.3);
 
-    private static final int STUN_DURATION = 60;
     private static final EntityDataAccessor<Integer> TARGET_ID =
             SynchedEntityData.defineId(CogDevastatorEntity.class, EntityDataSerializers.INT);
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
-
-    // Server-side only for stunnable handling
-    private int headshotCounter = 0;
-    private boolean stunCooldown = false;
-    private boolean stunned = false;
+    private final MountedGun mountedMachineGun;
+    private final MountedGun mountedShotgun;
+    private final MountedGun mountedGatlingGun;
 
     @Nullable
     private LivingEntity clientSideCachedTarget;
 
     public CogDevastatorEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
-    }
-
-    @Override
-    protected void registerGoals() {
-        this.goalSelector.addGoal(1, new StunnedWithVisualGoal<>(this));
-        this.goalSelector.addGoal(2, new ApproachTargetGoal(this, 4, 4, 1.0));
-        this.goalSelector.addGoal(4, new CogDevastatorMountedGunGoal(this, ModItems.PRUSH_GUN.get())
-                .burstAmount(16)
-                .burstIntervalTicks(2)
-                .maxRange(15)
-                .attackInterval(60)
-                .accuracyModifier(1.5F)
-                .spawnOffset(MACHINE_GUN_OFFSET)
+        this.mountedMachineGun = new HeadAttachedMountedGun(this,
+                new CustomScorchedSimGun.Builder(ModItems.GREASER_SMG.get().getGun())
+                        .burstAmount(16)
+                        .burstInterval(2)
+                        .fireRate(70)
+                        .maxRange(15)
+                        .idealRange(10)
+                        .gunIndex(0)
+                        .build(),
+                MACHINE_GUN_OFFSET,
+                BrainUtils::isNotStunned
         );
-        this.goalSelector.addGoal(4, new CogDevastatorMountedGunGoal(this, ModItems.JACKHAMMER.get())
-                .burstAmount(3)
-                .burstIntervalTicks(6)
-                .maxRange(6)
-                .attackInterval(120)
-                .spawnOffset(SHOTGUN_OFFSET)
+        this.mountedShotgun = new HeadAttachedMountedGun(this,
+                new CustomScorchedSimGun.Builder(ModItems.JACKHAMMER.get().getGun())
+                        .burstAmount(3)
+                        .burstInterval(10)
+                        .maxRange(6)
+                        .idealRange(5)
+                        .fireRate(120)
+                        .gunIndex(1)
+                        .build(),
+                SHOTGUN_OFFSET,
+                BrainUtils::isNotStunned
         );
-        this.goalSelector.addGoal(4, new CogDevastatorMountedGunGoal(this, ModItems.GATTALER.get())
-                .burstAmount(32)
-                .burstIntervalTicks(1)
-                .maxRange(10)
-                .accuracyModifier(1F)
-                .attackInterval(80)
-                .spawnOffset(GATLING_GUN_OFFSET)
+        this.mountedGatlingGun = new HeadAttachedMountedGun(this,
+                new CustomScorchedSimGun.Builder(ModItems.GATTALER.get().getGun())
+                        .burstAmount(32)
+                        .burstInterval(1)
+                        .fireRate(80)
+                        .maxRange(10)
+                        .idealRange(8)
+                        .gunIndex(2)
+                        .build(),
+                GATLING_GUN_OFFSET,
+                BrainUtils::isNotStunned
         );
-        this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
-        this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
-
-        this.targetSelector.addGoal(2, new HurtByNonFactionGoal(this));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, true,
-                player -> !((Player) player).isCreative() && !player.isSpectator()));
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, LivingEntity.class, true,
-                entity -> Faction.isEnemies(this, entity)));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.FOLLOW_RANGE, 35.0D)
+                .add(Attributes.FOLLOW_RANGE, 48.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.2F)
                 .add(Attributes.ARMOR, 4.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.8)
                 .add(Attributes.MAX_HEALTH, 400.0D);
+    }
+
+    protected Brain<?> makeBrain(Dynamic<?> dynamic) {
+        return CogDevastatorAi.makeBrain(this, this.brainProvider().makeBrain(dynamic));
+    }
+
+    @SuppressWarnings("unchecked")
+    public Brain<CogDevastatorEntity> getBrain() {
+        return (Brain<CogDevastatorEntity>) super.getBrain();
+    }
+
+    protected Brain.Provider<CogDevastatorEntity> brainProvider() {
+        return Brain.provider(CogDevastatorAi.MEMORY_TYPES, CogDevastatorAi.SENSOR_TYPES);
+    }
+
+    @Override
+    protected void customServerAiStep() {
+        this.level().getProfiler().push("cogDevastatorBrain");
+        this.getBrain().tick((ServerLevel)this.level(), this);
+        CogDevastatorAi.updateActivity(this);
+        this.setTarget(this.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET).orElse(null));
+        this.level().getProfiler().pop();
+        super.customServerAiStep();
     }
 
     @Override
@@ -118,16 +135,23 @@ public class CogDevastatorEntity extends GunnerEntity implements GeoEntity, Stun
         super.tick();
 
         LivingEntity target = this.getTarget();
-        if (target != null) {
-            this.getLookControl().setLookAt(target, 90.0F, 90.0F);
+
+        if (!this.level().isClientSide) {
+            if (target != null) {
+                this.mountedMachineGun.tick(target, 2f);
+                this.mountedShotgun.tick(target, 2.4f);
+                this.mountedGatlingGun.tick(target, 1.6f);
+            }
+        } else {
+            if (target != null) {
+                this.getLookControl().setLookAt(target, 90.0F, 90.0F);
+            }
         }
     }
 
     @Override
     public void setTarget(@Nullable LivingEntity target) {
-        if (target instanceof Player player && (player.isCreative() || player.isSpectator())) {
-            target = null;
-        }
+        if (this.getTarget() == target) return;
         super.setTarget(target);
         this.entityData.set(TARGET_ID, target == null ? 0 : target.getId());
     }
@@ -194,59 +218,22 @@ public class CogDevastatorEntity extends GunnerEntity implements GeoEntity, Stun
     }
 
     @Override
-    public boolean headshot(DamageSource source, float amount) {
-        if (this.headshotCounter < CommonConfig.abilityWeaknessHeadshots-1 || !this.stunCooldown) {
-            this.headshotCounter++;
-        }
-        return false;
-    }
-
-    @Override
-    public int shouldStun() {
-        if (!CommonConfig.enableAbilityWeakness) return 0;
-
-        if (this.headshotCounter >= CommonConfig.abilityWeaknessHeadshots) {
-            return STUN_DURATION;
-        }
-
-        return 0;
-    }
-
-    @Override
-    public void setStunned(boolean stunned) {
-        this.stunned = stunned;
-        if (stunned) {
-            this.triggerAnim("behaviour", "stun");
-        } else {
-            this.headshotCounter = 0;
-        }
-    }
-
-    @Override
-    public void setStunCooldown(boolean stunCooldown) {
-        this.stunCooldown = stunCooldown;
-    }
-
-    @Override
-    public boolean isStunned() {
-        return this.stunned;
-    }
-
-    @Override
-    public boolean tickStunned(int ticksLeft) {
-        if (ticksLeft == 10) {
-            this.triggerAnim("behaviour", "end_stun");
-        }
-        return false;
-    }
-
-    @Override
     protected @Nullable SoundEvent getAmbientSound() {
-        return CogSounds.COG_DEVASTATOR_IDLE.get();
+        return COGSounds.COG_DEVASTATOR_IDLE.get();
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSource) {
-        return CogSounds.GENERAL_HEAVY_HURT.get();
+        return COGSounds.GENERAL_HEAVY_HURT.get();
+    }
+
+    @Override
+    public Vec3 getBulletSpawnOffset(int gunIndex) {
+        return switch (gunIndex) {
+            case 0 -> MACHINE_GUN_OFFSET.yRot(-this.yHeadRot * Mth.DEG_TO_RAD);
+            case 1 -> SHOTGUN_OFFSET.yRot(-this.yHeadRot * Mth.DEG_TO_RAD);
+            case 2 -> GATLING_GUN_OFFSET.yRot(-this.yHeadRot * Mth.DEG_TO_RAD);
+            default -> throw new IllegalArgumentException();
+        };
     }
 }
