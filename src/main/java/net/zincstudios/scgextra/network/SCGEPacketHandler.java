@@ -16,6 +16,7 @@ public class SCGEPacketHandler {
     public static void init() {
         playChannel = FrameworkAPI.createNetworkBuilder(SCGExtra.asResource("play"), 1)
                 .registerPlayMessage(GunFlashMessage.class, MessageDirection.PLAY_CLIENT_BOUND)
+                .registerPlayMessage(TurretTriggerMessage.class, MessageDirection.PLAY_SERVER_BOUND)
                 .build();
     }
 
@@ -26,5 +27,9 @@ public class SCGEPacketHandler {
     // For convenience and to minimize code footprint
     public static void sendToNearbyPlayers(Supplier<LevelLocation> levelLocation, IMessage<?> message) {
         playChannel.sendToNearbyPlayers(levelLocation, message);
+    }
+
+    public static void sendToServer(IMessage<?> message) {
+        playChannel.sendToServer(message);
     }
 }

@@ -8,8 +8,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.turret.TurretSeatEntity;
-import net.zincstudios.scgextra.network.ModNetwork;
-import net.zincstudios.scgextra.network.TurretTriggerC2S;
+import net.zincstudios.scgextra.network.SCGEPacketHandler;
+import net.zincstudios.scgextra.network.TurretTriggerMessage;
 
 @Mod.EventBusSubscriber(modid = SCGExtra.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public final class TurretInputHandler {
@@ -38,7 +38,8 @@ public final class TurretInputHandler {
                 && mc.options.keyAttack.isDown();
         if (held != sentHeld) {
             sentHeld = held;
-            ModNetwork.CHANNEL.sendToServer(new TurretTriggerC2S(held));
+            SCGExtra.LOGGER.debug("message sent");
+            SCGEPacketHandler.sendToServer(new TurretTriggerMessage(held));
         }
     }
 
