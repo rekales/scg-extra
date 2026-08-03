@@ -1,14 +1,15 @@
 package net.zincstudios.scgextra.block.wreckerturret;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -25,6 +26,8 @@ import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import top.ribs.scguns.common.AmmoContext;
+import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.entity.projectile.turret.TurretProjectileEntity;
 import top.ribs.scguns.init.ModItems;
 import top.ribs.scguns.init.ModParticleTypes;
@@ -32,11 +35,13 @@ import top.ribs.scguns.init.ModSounds;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+// TODO: ammo type defined in constructor
+// TODO: replace gun implementation with SimulatedGun
+// TODO: muzzle flash position
 @ParametersAreNonnullByDefault
 public class WreckerTurretBlockEntity extends BlockEntity implements GeoBlockEntity {
 
     private static final int DISABLE_TICKS = 200;
-    private static final int AMMO_CAPACITY = 512;
     private static final int FIRE_COOLDOWN_TICKS = 3;
     private static final float DAMAGE = 10.0F;
     private static final float ARMOR_PENETRATION = 2.5F;
@@ -47,7 +52,6 @@ public class WreckerTurretBlockEntity extends BlockEntity implements GeoBlockEnt
     private static final double CONVERGENCE_RANGE = 48.0D;
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
-    private int ammo;
     private int disabledTicks;
     private int fireCooldown;
     private int manningPlayerId = -1;
@@ -138,9 +142,19 @@ public class WreckerTurretBlockEntity extends BlockEntity implements GeoBlockEnt
     }
 
     private void fire(ServerPlayer player, BlockPos pos) {
-        if (this.level == null || this.disabledTicks > 0 || this.fireCooldown > 0 || this.ammo <= 0) {
+        if (this.level == null || this.disabledTicks > 0 || this.fireCooldown > 0) {
             return;
         }
+
+        AmmoContext ammoContext = Gun.findAmmo(player, ModItems.COMPACT_ADVANCED_ROUND.get());
+        ItemStack ammoStack = ammoContext.stack();
+        if (ammoStack.isEmpty()) {
+            player.displayClientMessage(Component.translatable("block.scgextra.wrecker_turret.no_ammo")
+                    .withStyle(style -> style.withColor(ChatFormatting.RED)), true);
+            return;
+        }
+        ammoStack.shrink(1);
+
         Vec3 look = this.clampToArc(player.getLookAngle());
         Vec3 muzzle = new Vec3(pos.getX() + 0.5D, pos.getY() + MUZZLE_HEIGHT, pos.getZ() + 0.5D)
                 .add(look.scale(MUZZLE_REACH));
@@ -155,7 +169,6 @@ public class WreckerTurretBlockEntity extends BlockEntity implements GeoBlockEnt
         projectile.shoot(aim.x, aim.y, aim.z, PROJECTILE_SPEED, INACCURACY);
         this.level.addFreshEntity(projectile);
 
-        this.ammo--;
         this.fireCooldown = FIRE_COOLDOWN_TICKS;
         this.setChanged();
         this.level.playSound(null, muzzle.x, muzzle.y, muzzle.z, ModSounds.GREASER_SMG_FIRE.get(),
@@ -225,45 +238,20 @@ public class WreckerTurretBlockEntity extends BlockEntity implements GeoBlockEnt
         }
     }
 
-    public int insertAmmo(int count) {
-        int accepted = Math.min(count, AMMO_CAPACITY - this.ammo);
-        if (accepted > 0) {
-            this.ammo += accepted;
-            this.setChanged();
-        }
-        return accepted;
-    }
-
-    public int getAmmo() {
-        return this.ammo;
-    }
-
-    public void dropAmmo() {
-        if (this.ammo <= 0 || this.level == null || this.level.isClientSide()) {
-            return;
-        }
-        BlockPos pos = this.getBlockPos();
-        while (this.ammo > 0) {
-            int count = Math.min(this.ammo, 64);
-            this.ammo -= count;
-            ItemEntity drop = new ItemEntity(this.level, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D,
-                    new ItemStack(ModItems.COMPACT_ADVANCED_ROUND.get(), count));
-            drop.setDefaultPickUpDelay();
-            this.level.addFreshEntity(drop);
-        }
+    @Override
+    public AABB getRenderBoundingBox() {
+        return super.getRenderBoundingBox().inflate(5);
     }
 
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
-        this.ammo = tag.getInt("Ammo");
         this.disabledTicks = tag.getInt("DisabledTicks");
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
-        tag.putInt("Ammo", this.ammo);
         tag.putInt("DisabledTicks", this.disabledTicks);
     }
 }

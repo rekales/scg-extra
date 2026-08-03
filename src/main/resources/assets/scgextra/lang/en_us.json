@@ -225,9 +225,9 @@
   "block.scgextra.electrical_wires":  "Electrical Wires",
 
   "block.scgextra.wrecker_turret": "Stationary Turret",
-  "block.scgextra.wrecker_turret.ammo": "Ammo: %s",
+  "block.scgextra.wrecker_turret.no_ammo": "No Ammo",
   "block.scgextra.wrecker_turret.ammo_type": "Ammo: %s",
-  "block.scgextra.wrecker_turret.desc": "Right-click empty-handed to man it: you are locked in at the back, aim with your view and hold attack to fire. Sneak to dismount. Right-click with ammo to load.",
+  "block.scgextra.wrecker_turret.desc": "Interact to mount",
   "block.scgextra.wrecker_turret.occupied": "Someone else is already manning this turret.",
 
 

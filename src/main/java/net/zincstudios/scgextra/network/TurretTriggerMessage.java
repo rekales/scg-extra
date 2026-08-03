@@ -4,7 +4,6 @@ import com.mrcrayfish.framework.api.network.MessageContext;
 import com.mrcrayfish.framework.api.network.message.PlayMessage;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
-import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.block.wreckerturret.WreckerTurretBlockEntity;
 import net.zincstudios.scgextra.entity.turret.TurretSeatEntity;
 

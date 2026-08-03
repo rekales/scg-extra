@@ -62,22 +62,6 @@ public class WreckerTurretBlock extends BaseEntityBlock {
         if (!(level.getBlockEntity(pos) instanceof WreckerTurretBlockEntity turret)) {
             return InteractionResult.PASS;
         }
-        ItemStack held = player.getItemInHand(hand);
-
-        if (held.is(ModItems.COMPACT_ADVANCED_ROUND.get())) {
-            if (level.isClientSide()) {
-                return InteractionResult.SUCCESS;
-            }
-            int accepted = turret.insertAmmo(held.getCount());
-            if (accepted > 0) {
-                if (!player.getAbilities().instabuild) {
-                    held.shrink(accepted);
-                }
-                level.playSound(null, pos, SoundEvents.IRON_DOOR_OPEN, SoundSource.BLOCKS, 0.4F, 1.4F);
-            }
-            player.displayClientMessage(Component.translatable("block.scgextra.wrecker_turret.ammo", turret.getAmmo()), true);
-            return InteractionResult.CONSUME;
-        }
 
         if (level.isClientSide()) {
             return InteractionResult.SUCCESS;
@@ -103,14 +87,6 @@ public class WreckerTurretBlock extends BaseEntityBlock {
                 Component.translatable(ModItems.COMPACT_ADVANCED_ROUND.get().getDescriptionId())
                         .withStyle(ChatFormatting.WHITE)).withStyle(ChatFormatting.DARK_GRAY));
         super.appendHoverText(stack, level, tooltip, flag);
-    }
-
-    @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof WreckerTurretBlockEntity turret) {
-            turret.dropAmmo();
-        }
-        super.onRemove(state, level, pos, newState, isMoving);
     }
 
     @Nullable

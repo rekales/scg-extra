@@ -38,7 +38,6 @@ public final class TurretInputHandler {
                 && mc.options.keyAttack.isDown();
         if (held != sentHeld) {
             sentHeld = held;
-            SCGExtra.LOGGER.debug("message sent");
             SCGEPacketHandler.sendToServer(new TurretTriggerMessage(held));
         }
     }

@@ -1,26 +1,24 @@
 package net.zincstudios.scgextra.entity.turret;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
-import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.block.wreckerturret.WreckerTurretBlockEntity;
 import net.zincstudios.scgextra.entity.ModEntities;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class TurretSeatEntity extends Entity implements IEntityAdditionalSpawnData {
 
     private BlockPos turretPos = BlockPos.ZERO;
@@ -49,7 +47,6 @@ public class TurretSeatEntity extends Entity implements IEntityAdditionalSpawnDa
         if (!this.getPassengers().isEmpty() && this.getPassengers().get(0) instanceof LivingEntity entity) {
             Vec3 offset = new Vec3(0, 0, -0.75);
             Vec3 pos = Vec3.atBottomCenterOf(this.getTurretPos());
-
             this.setPos(pos.add(offset.yRot(-entity.yHeadRot * Mth.DEG_TO_RAD)));
         } else {
             this.discard();
@@ -82,21 +79,6 @@ public class TurretSeatEntity extends Entity implements IEntityAdditionalSpawnDa
 
     @Override
     public boolean shouldRiderSit() {
-        return false;
-    }
-
-    @Override
-    public boolean isPickable() {
-        return false;
-    }
-
-    @Override
-    public boolean canBeCollidedWith() {
-        return false;
-    }
-
-    @Override
-    public boolean isPushable() {
         return false;
     }
 
