@@ -5,11 +5,16 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
+import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.block.wreckerturret.WreckerTurretBlockEntity;
 import net.zincstudios.scgextra.entity.ModEntities;
 
@@ -41,13 +46,18 @@ public class TurretSeatEntity extends Entity implements IEntityAdditionalSpawnDa
 
     @Override
     public void tick() {
-        if (this.level().isClientSide()) {
-            return;
-        }
-        if (this.getPassengers().isEmpty()) {
+        if (!this.getPassengers().isEmpty() && this.getPassengers().get(0) instanceof LivingEntity entity) {
+            Vec3 offset = new Vec3(0, 0, -0.75);
+            Vec3 pos = Vec3.atBottomCenterOf(this.getTurretPos());
+
+            this.setPos(pos.add(offset.yRot(-entity.yHeadRot * Mth.DEG_TO_RAD)));
+        } else {
             this.discard();
             return;
         }
+
+        if (this.level().isClientSide()) return;
+
         if (!(this.level().getBlockEntity(this.turretPos) instanceof WreckerTurretBlockEntity)) {
             this.ejectPassengers();
             this.discard();
