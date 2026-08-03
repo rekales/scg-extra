@@ -318,6 +318,8 @@ public class ModItems {
         MinecraftForge.EVENT_BUS.addListener(BaseArmorSetPartRenderer::hideHeadWithCommissarHelmet);
         MinecraftForge.EVENT_BUS.addListener(ArmorPiercingHandler::onLivingHurt);
         MinecraftForge.EVENT_BUS.addListener(ArmorPiercingHandler::onLivingDamage);
+        MinecraftForge.EVENT_BUS.addListener(HoldAttackHandler::onClientTick);
+        MinecraftForge.EVENT_BUS.addListener(HoldAttackHandler::onPlayerTick);
     }
 
     private static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister

@@ -6,6 +6,7 @@ import com.mrcrayfish.framework.api.network.LevelLocation;
 import com.mrcrayfish.framework.api.network.MessageDirection;
 import com.mrcrayfish.framework.network.message.IMessage;
 import net.zincstudios.scgextra.SCGExtra;
+import net.zincstudios.scgextra.item.HoldAttackHandler;
 
 import java.util.function.Supplier;
 
@@ -16,6 +17,7 @@ public class SCGEPacketHandler {
     public static void init() {
         playChannel = FrameworkAPI.createNetworkBuilder(SCGExtra.asResource("play"), 1)
                 .registerPlayMessage(GunFlashMessage.class, MessageDirection.PLAY_CLIENT_BOUND)
+                .registerPlayMessage(HoldAttackMessage.class, MessageDirection.PLAY_SERVER_BOUND)
                 .registerPlayMessage(TurretTriggerMessage.class, MessageDirection.PLAY_SERVER_BOUND)
                 .build();
     }

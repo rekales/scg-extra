@@ -8,9 +8,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.Tier;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
@@ -29,7 +31,7 @@ import java.util.function.Consumer;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class WreckingToolItem extends PickaxeItem implements ArmorPiercing, GeoItem {
+public class WreckingToolItem extends PickaxeItem implements ArmorPiercing, GeoItem, HoldAttack {
 
     private static final UUID REACH_MODIFIER_UUID = UUID.fromString("8c8028fd-3f5d-4a65-9711-6b70c4c2c081");
 
@@ -73,5 +75,14 @@ public class WreckingToolItem extends PickaxeItem implements ArmorPiercing, GeoI
         consumer.accept(new SimpleCustomRenderer(new GeoItemRenderer<>(
                 new DefaultedItemGeoModel<>(SCGExtra.asResource("wrecking_tool"))
         )));
+    }
+
+    @Override
+    public void onPlayerAttackTick(ItemStack stack, Level level, Player player) {
+//        if (level.isClientSide) return;
+        if (level.getGameTime()%5 != 1) return;
+
+        SCGExtra.LOGGER.debug("attack tick");
+
     }
 }
