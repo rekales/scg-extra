@@ -22,6 +22,18 @@ public class HoldAttackHandler {
         SERVER_HELD_ATTACK.put(player, held);
     }
 
+    /**
+     * Different implementation in server and client
+     */
+    public static boolean isHeldAttack(Player player) {
+        if (player.level().isClientSide) {
+            return sentHeld;
+        } else {
+            return player instanceof ServerPlayer serverPlayer
+                    && SERVER_HELD_ATTACK.getOrDefault(serverPlayer, false);
+        }
+    }
+
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END) return;
 

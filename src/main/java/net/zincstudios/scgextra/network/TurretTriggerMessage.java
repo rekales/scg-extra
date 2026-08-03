@@ -31,7 +31,6 @@ public final class TurretTriggerMessage extends PlayMessage<TurretTriggerMessage
     public void handle(TurretTriggerMessage msg, MessageContext ctx) {
         ctx.execute(() -> {
             ServerPlayer player = ctx.getPlayer();
-            SCGExtra.LOGGER.debug("message handled");
             if (player == null || !(player.getVehicle() instanceof TurretSeatEntity seat)) {
                 return;
             }

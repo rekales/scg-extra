@@ -320,6 +320,7 @@ public class ModItems {
         MinecraftForge.EVENT_BUS.addListener(ArmorPiercingHandler::onLivingDamage);
         MinecraftForge.EVENT_BUS.addListener(HoldAttackHandler::onClientTick);
         MinecraftForge.EVENT_BUS.addListener(HoldAttackHandler::onPlayerTick);
+        MinecraftForge.EVENT_BUS.addListener(WreckingToolItem::onKnockback);
     }
 
     private static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister

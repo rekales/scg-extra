@@ -6,6 +6,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 import java.util.WeakHashMap;
 
+// TODO: redo to only pierce armor and not through resistance effect
 public class ArmorPiercingHandler {
 
     private static final WeakHashMap<LivingEntity, Float> PENDING_DAMAGE = new WeakHashMap<>();
