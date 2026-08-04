@@ -69,7 +69,7 @@ public class FacShovelKnightEntity extends Monster implements GeoEntity {
 
     @Override
     protected void customServerAiStep() {
-        this.level().getProfiler().push("cogShovelKnightBrain");
+        this.level().getProfiler().push("facShovelKnightBrain");
         this.getBrain().tick((ServerLevel)this.level(), this);
         BrainCommons.updateActivity(this);
         BrainCommons.updateHasTargetAggressive(this);

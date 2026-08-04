@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.fac.shovel_knight;
+package net.zincstudios.scgextra.entity.wreckers.wrecker_jumbo;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -21,8 +21,9 @@ import net.zincstudios.scgextra.entity.common.brain.AttackLastHurtIfNear;
 import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
 import net.zincstudios.scgextra.entity.common.brain.BrainUtils;
 import net.zincstudios.scgextra.entity.common.brain.DelayedMeleeAttack;
+import net.zincstudios.scgextra.entity.fac.shovel_knight.BreakBlocksToTarget;
 
-public final class FacShovelKnightAi {
+public class WreckerJumboAi {
     static final ImmutableList<? extends SensorType<? extends Sensor<? super PathfinderMob>>> SENSOR_TYPES = ImmutableList.of(
             SensorType.NEAREST_LIVING_ENTITIES,
             ModBrainSensors.MEDIUM_RANGE_PLAYER.get(),
@@ -70,13 +71,13 @@ public final class FacShovelKnightAi {
         brain.addActivityAndRemoveMemoryWhenStopped(Activity.FIGHT, 10, ImmutableList.of(
                 StopAttackingIfTargetInvalid.create(target -> !BrainUtils.isTargetStillValidNonFriendlies(mob, target, false)),
                 AttackLastHurtIfNear.create((self, target) -> !Faction.isFriendlies(self, target), false),
-                new BreakBlocksToTarget(FacShovelKnightAi::canBreakWithShovel, 20),
+                new BreakBlocksToTarget(WreckerJumboAi::canBreakWithHammer, 20),
                 SetWalkTargetFromAttackTargetIfTargetOutOfReach.create(1.0F),
-                new DelayedMeleeAttack(FacShovelKnightEntity.MELEE_DAMAGE_DELAY, FacShovelKnightEntity.MELEE_DURATION, 2.0f, 10)
+                new DelayedMeleeAttack(WreckerJumboEntity.MELEE_DAMAGE_DELAY, WreckerJumboEntity.MELEE_DURATION, 4.0f, 10)
         ), MemoryModuleType.ATTACK_TARGET);
     }
 
-    private static boolean canBreakWithShovel(Level level, BlockPos pos) {
+    private static boolean canBreakWithHammer(Level level, BlockPos pos) {
         BlockState state = level.getBlockState(pos);
         if (state.isAir()) return false;
 
@@ -84,7 +85,7 @@ public final class FacShovelKnightAi {
         if (hardness < 0) return false;  // Unbreakable
         if (hardness >= 5) return false;  // Ex. Iron Block: 5, Stone: 1.5
 
-        return state.is(BlockTags.MINEABLE_WITH_SHOVEL)
+        return (state.is(BlockTags.MINEABLE_WITH_SHOVEL) || state.is(BlockTags.MINEABLE_WITH_PICKAXE))
                 && !state.is(BlockTags.NEEDS_DIAMOND_TOOL);
     }
 }

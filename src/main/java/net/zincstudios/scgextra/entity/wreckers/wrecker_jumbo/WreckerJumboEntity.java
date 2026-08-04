@@ -1,15 +1,20 @@
 package net.zincstudios.scgextra.entity.wreckers.wrecker_jumbo;
 
+import com.mojang.serialization.Dynamic;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
+import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
+import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
 import net.zincstudios.scgextra.sounds.InterruptibleVoice;
 import net.zincstudios.scgextra.sounds.WreckersSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -27,6 +32,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class WreckerJumboEntity extends GunnerEntity implements GeoEntity, InterruptibleVoice {
+
+    static final int MELEE_DAMAGE_DELAY = 15;
+    static final int MELEE_DURATION = 32;
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
@@ -50,17 +58,49 @@ public class WreckerJumboEntity extends GunnerEntity implements GeoEntity, Inter
                 .add(Attributes.MAX_HEALTH, 300.0D);
     }
 
+    protected Brain<?> makeBrain(Dynamic<?> dynamic) {
+        return WreckerJumboAi.makeBrain(this, this.brainProvider().makeBrain(dynamic));
+    }
+
+    @SuppressWarnings("unchecked")
+    public Brain<WreckerJumboEntity> getBrain() {
+        return (Brain<WreckerJumboEntity>) super.getBrain();
+    }
+
+    protected Brain.Provider<WreckerJumboEntity> brainProvider() {
+        return Brain.provider(WreckerJumboAi.MEMORY_TYPES, WreckerJumboAi.SENSOR_TYPES);
+    }
+
+    @Override
+    protected void customServerAiStep() {
+        this.level().getProfiler().push("wreckerJumboBrain");
+        this.getBrain().tick((ServerLevel)this.level(), this);
+        BrainCommons.updateActivity(this);
+        BrainCommons.updateHasTargetAggressive(this);
+        this.level().getProfiler().pop();
+        super.customServerAiStep();
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (!this.level().isClientSide && brain.getTimeUntilExpiry(ModBrainMemories.DELAYED_MELEE.get()) == MELEE_DURATION) {
+            this.triggerAnim("attack", "melee");
+        }
+    }
+
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "main", 2, state -> {
             boolean moving = state.isMoving() || this.getNavigation().isInProgress();
             return state.setAndContinue(moving ? WALK : IDLE);
-        }).setAnimationSpeed(0.9));
+        }));
 
-        controllers.add(new AnimationController<>(this, "attack", 0, state -> PlayState.STOP)
-                .triggerableAnim("attack", ATTACK));
+        controllers.add(new AnimationController<>(this, "attack", 2, state -> PlayState.STOP)
+                .triggerableAnim("melee", ATTACK));
 
-        controllers.add(new AnimationController<>(this, "death", 0, state -> {
+        controllers.add(new AnimationController<>(this, "death", 2, state -> {
             if (this.isDeadOrDying()) {
                 return state.setAndContinue(DEATH);
             }
