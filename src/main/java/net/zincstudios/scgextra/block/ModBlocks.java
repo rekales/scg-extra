@@ -10,7 +10,10 @@ import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -18,6 +21,8 @@ import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.block.barbed_wires.BarbedWireBlock;
 import net.zincstudios.scgextra.block.electrical_wires.ElectricalWiresBlock;
 import net.zincstudios.scgextra.block.wreckerturret.WreckerTurretBlock;
+import net.zincstudios.scgextra.block.wreckerturret.WreckerTurretBlockModel;
+import net.zincstudios.scgextra.block.wreckerturret.WreckerTurretBlockRenderer;
 import net.zincstudios.scgextra.item.ModItems;
 import net.zincstudios.scgextra.worldgen.tree.WarzoneSpruceTreeGrower;
 
@@ -48,7 +53,16 @@ public class ModBlocks {
         return ModItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
     }
 
-    public static void register(IEventBus eventBus){
-        BLOCKS.register(eventBus);
+    public static void register(IEventBus modEventBus){
+        BLOCKS.register(modEventBus);
+
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            modEventBus.addListener(ModBlocks::registerRenderers);
+        }
+    }
+
+    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerBlockEntityRenderer(ModBlockEntities.WRECKER_TURRET.get(), (ctx) -> new WreckerTurretBlockRenderer<>(
+                new WreckerTurretBlockModel<>(SCGExtra.asResource("wrecker_turret"))));
     }
 }

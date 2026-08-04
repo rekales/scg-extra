@@ -7,10 +7,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.zincstudios.scgextra.SCGExtra;
-import net.zincstudios.scgextra.block.ModBlockEntities;
 import net.zincstudios.scgextra.client.particle.CopperFireBallParticle;
 import net.zincstudios.scgextra.client.particle.CopperFlameParticle;
-import net.zincstudios.scgextra.client.renderer.WreckerTurretBlockRenderer;
 import net.zincstudios.scgextra.debug.EntityHeadBoxDebug;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntityModel;
 import net.zincstudios.scgextra.particle.ModParticleTypes;
@@ -22,21 +20,19 @@ public final class ModClientEventHandler {
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
+        // TODO: move to main entrypoint class
         EntityHeadBoxDebug.register();
     }
 
     @SubscribeEvent
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        // TODO: replace with geomodel
         event.registerLayerDefinition(NetEntityModel.LAYER_LOCATION, NetEntityModel::createBodyLayer);
     }
 
     @SubscribeEvent
-    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(ModBlockEntities.WRECKER_TURRET.get(), WreckerTurretBlockRenderer::new);
-    }
-
-    @SubscribeEvent
     public static void registerParticleFactories(RegisterParticleProvidersEvent event) {
+        // TODO: move to particle registration class
         event.registerSpriteSet(ModParticleTypes.COPPER_FIRE_BALL.get(), CopperFireBallParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.COPPER_FLAME.get(), CopperFlameParticle.Provider::new);
     }

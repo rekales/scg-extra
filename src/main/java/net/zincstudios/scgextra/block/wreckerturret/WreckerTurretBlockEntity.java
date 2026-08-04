@@ -18,19 +18,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.AABB;
 import net.zincstudios.scgextra.block.ModBlockEntities;
+import net.zincstudios.scgextra.entity.common.client.ExpandedAnimationController;
 import net.zincstudios.scgextra.entity.turret.TurretAim;
 import net.zincstudios.scgextra.entity.turret.TurretSeatEntity;
 import software.bernie.geckolib.animatable.GeoBlockEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import top.ribs.scguns.common.AmmoContext;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.entity.projectile.turret.TurretProjectileEntity;
 import top.ribs.scguns.init.ModItems;
-import top.ribs.scguns.init.ModParticleTypes;
 import top.ribs.scguns.init.ModSounds;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -51,11 +50,21 @@ public class WreckerTurretBlockEntity extends BlockEntity implements GeoBlockEnt
     private static final double MUZZLE_REACH = 0.8D;
     private static final double CONVERGENCE_RANGE = 48.0D;
 
+    private static final RawAnimation IDLE = RawAnimation.begin().thenPlayAndHold("idle");
+    private static final RawAnimation FIRE_LEFT = RawAnimation.begin().thenPlay("fire_left");
+    private static final RawAnimation FIRE_RIGHT = RawAnimation.begin().thenPlay("fire_right");
+
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private int disabledTicks;
     private int fireCooldown;
     private int manningPlayerId = -1;
     private boolean triggerHeld;
+    boolean firingLeft = false;
+
+    // Client-side only, for use in renderer
+    // made public cuz can't be assed to make getters
+    public long leftFlashTick = 0;
+    public long rightFlashTick = 0;
 
     public WreckerTurretBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.WRECKER_TURRET.get(), pos, state);
@@ -155,6 +164,9 @@ public class WreckerTurretBlockEntity extends BlockEntity implements GeoBlockEnt
         }
         ammoStack.shrink(1);
 
+        this.triggerAnim("main", this.firingLeft ? "left_fire" : "right_fire");
+        this.firingLeft = !this.firingLeft;
+
         Vec3 look = this.clampToArc(player.getLookAngle());
         Vec3 muzzle = new Vec3(pos.getX() + 0.5D, pos.getY() + MUZZLE_HEIGHT, pos.getZ() + 0.5D)
                 .add(look.scale(MUZZLE_REACH));
@@ -174,8 +186,6 @@ public class WreckerTurretBlockEntity extends BlockEntity implements GeoBlockEnt
         this.level.playSound(null, muzzle.x, muzzle.y, muzzle.z, ModSounds.GREASER_SMG_FIRE.get(),
                 SoundSource.BLOCKS, 0.5F, 0.9F + this.level.getRandom().nextFloat() * 0.2F);
         if (this.level instanceof ServerLevel serverLevel) {
-            serverLevel.sendParticles(ModParticleTypes.TURRET_MUZZLE_FLASH.get(),
-                    muzzle.x, muzzle.y, muzzle.z, 1, 0.0D, 0.0D, 0.0D, 0.0D);
             serverLevel.sendParticles(ParticleTypes.SMOKE,
                     muzzle.x, muzzle.y, muzzle.z, 2, 0.05D, 0.05D, 0.05D, 0.01D);
         }
@@ -213,7 +223,23 @@ public class WreckerTurretBlockEntity extends BlockEntity implements GeoBlockEnt
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "aim", 0, state -> PlayState.STOP));
+        controllers.add(new ExpandedAnimationController<>(this, "main", 0,
+                state -> state.setAndContinue(IDLE))
+                .triggerableAnim("left_fire", (ctr) -> {
+                    WreckerTurretBlockEntity be = (WreckerTurretBlockEntity) ctr.getAnimatable();
+                    if (be.getLevel() != null) {
+                        be.leftFlashTick = be.getLevel().getGameTime()+1;
+                    }
+                    return FIRE_LEFT;
+                })
+                .triggerableAnim("right_fire", (ctr) -> {
+                    WreckerTurretBlockEntity be = (WreckerTurretBlockEntity) ctr.getAnimatable();
+                    if (be.getLevel() != null) {
+                        be.rightFlashTick = be.getLevel().getGameTime()+1;
+                    }
+                    return FIRE_RIGHT;
+                })
+        );
     }
 
     @Override
