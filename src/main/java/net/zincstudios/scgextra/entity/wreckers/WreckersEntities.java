@@ -16,7 +16,9 @@ import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.entity.common.OffsetRotatedHeadshotBox;
 import net.zincstudios.scgextra.entity.common.WeakPointBox;
 import net.zincstudios.scgextra.entity.common.WeakPointBoxManager;
+import net.zincstudios.scgextra.entity.common.client.BaseEntityRenderer;
 import net.zincstudios.scgextra.entity.common.client.GunnerRenderer;
+import net.zincstudios.scgextra.entity.common.client.ItemHoldingMobRenderer;
 import net.zincstudios.scgextra.entity.wreckers.wrecker_blue.WreckerBlueEntity;
 import net.zincstudios.scgextra.entity.wreckers.wrecker_dozer.WreckerDozerEntity;
 import net.zincstudios.scgextra.entity.wreckers.wrecker_dozer.WreckerDozerRenderer;
@@ -118,7 +120,7 @@ public class WreckersEntities {
         EntityRenderers.register(WRECKER_BLUE.get(), (ctx) -> new GunnerRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("wreckers/wrecker_blue"))).noDeathTilt());
         EntityRenderers.register(WRECKER_GREEN.get(), WreckerGreenRenderer::new);
-        EntityRenderers.register(WRECKER_JUMBO.get(), (ctx) -> new GunnerRenderer<>(ctx,
+        EntityRenderers.register(WRECKER_JUMBO.get(), (ctx) -> new BaseEntityRenderer<>(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("wreckers/wrecker_jumbo"))).noDeathTilt());
         EntityRenderers.register(WRECKER_TURRET.get(), WreckerTurretRenderer::new);
         EntityRenderers.register(WRECKER_HELICUBE.get(), WreckerHelicubeRenderer::new);

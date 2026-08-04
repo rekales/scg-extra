@@ -18,6 +18,9 @@ public class RotatedBulletProofPartEntity<T extends LivingEntity> extends Rotate
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
+        // TODO: add sounds
+//          self.level().playSound(null, hitVec.x, hitVec.y, hitVec.z,
+//          SoundEvents.ANVIL_LAND, SoundSource.HOSTILE, 0.3F, 1.5F + self.level().random.nextFloat() * 0.4F);
         return false;
     }
 }
