@@ -103,9 +103,7 @@ public class BreakBlocksGoal extends Goal{
         if (hardness < 0) return false;
         if (hardness >= 10) return false;
 
-        
-
-        return (state.is(BlockTags.MINEABLE_WITH_PICKAXE) || state.is(BlockTags.MINEABLE_WITH_SHOVEL) || state.is(BlockTags.MINEABLE_WITH_AXE))
+        return (state.is(BlockTags.MINEABLE_WITH_PICKAXE) || state.is(BlockTags.MINEABLE_WITH_SHOVEL) || state.is(BlockTags.MINEABLE_WITH_AXE) || state.is(BlockTags.MINEABLE_WITH_HOE) || state.is(BlockTags.LEAVES) || state.is(BlockTags.WOOL))
                 && !state.is(BlockTags.NEEDS_DIAMOND_TOOL);
     }
 }
