@@ -22,6 +22,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.zincstudios.scgextra.SCGExtra;
+import net.zincstudios.scgextra.sounds.WreckersSounds;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -95,6 +96,8 @@ public class WreckingToolItem extends PickaxeItem implements ArmorPiercing, GeoI
     public void onPlayerAttackTick(ItemStack stack, Level level, Player player) {
         if (level.isClientSide) return;
         if (level.getGameTime()%5 != 1) return;
+
+        player.playSound(WreckersSounds.TOOL_USE.get());
 
         var reach = player.getAttributeValue(net.minecraftforge.common.ForgeMod.ENTITY_REACH.get());
         reach *= 1.2F;
