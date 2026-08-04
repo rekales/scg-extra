@@ -18,7 +18,6 @@ import net.zincstudios.scgextra.entity.common.WeakPointBox;
 import net.zincstudios.scgextra.entity.common.WeakPointBoxManager;
 import net.zincstudios.scgextra.entity.common.client.BaseEntityRenderer;
 import net.zincstudios.scgextra.entity.common.client.GunnerRenderer;
-import net.zincstudios.scgextra.entity.common.client.ItemHoldingMobRenderer;
 import net.zincstudios.scgextra.entity.wreckers.wrecker_blue.WreckerBlueEntity;
 import net.zincstudios.scgextra.entity.wreckers.wrecker_dozer.WreckerDozerEntity;
 import net.zincstudios.scgextra.entity.wreckers.wrecker_dozer.WreckerDozerRenderer;
@@ -56,7 +55,7 @@ public class WreckersEntities {
 
     public static final RegistryObject<EntityType<WreckerJumboEntity>> WRECKER_JUMBO = ENTITY_TYPES
             .register("wrecker_jumbo", () -> EntityType.Builder.of(WreckerJumboEntity::new, MobCategory.MONSTER)
-                    .sized(2.2F, 4.1F)
+                    .sized(1.9F, 4.1F)
                     .build("wrecker_jumbo"));
 
     public static final RegistryObject<EntityType<WreckerHelicubeEntity>> WRECKER_HELICUBE = ENTITY_TYPES

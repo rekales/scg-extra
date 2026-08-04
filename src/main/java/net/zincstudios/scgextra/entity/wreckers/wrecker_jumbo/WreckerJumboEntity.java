@@ -12,9 +12,12 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.entity.PartEntity;
 import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
+import net.zincstudios.scgextra.entity.common.part.RotatedBulletProofPartEntity;
 import net.zincstudios.scgextra.sounds.InterruptibleVoice;
 import net.zincstudios.scgextra.sounds.WreckersSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -42,10 +45,15 @@ public class WreckerJumboEntity extends GunnerEntity implements GeoEntity, Inter
     private static final RawAnimation DEATH = RawAnimation.begin().thenPlayAndHold("death");
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+    private final RotatedBulletProofPartEntity<?>[] subEntities;
 
     public WreckerJumboEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
         this.setMaxUpStep(1.0F);
+
+        this.subEntities = new RotatedBulletProofPartEntity[] {
+                new RotatedBulletProofPartEntity<>(this, new Vec3(0, 1, 0.3), this.getBbWidth(), 1.1F),
+        };
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -82,11 +90,28 @@ public class WreckerJumboEntity extends GunnerEntity implements GeoEntity, Inter
     }
 
     @Override
+    public PartEntity<?>[] getParts() {
+        return this.subEntities;
+    }
+
+    @Override
+    public boolean isMultipartEntity() {
+        return true;
+    }
+
+    @Override
     public void tick() {
         super.tick();
+        this.tickSubEntities();
 
         if (!this.level().isClientSide && brain.getTimeUntilExpiry(ModBrainMemories.DELAYED_MELEE.get()) == MELEE_DURATION) {
             this.triggerAnim("attack", "melee");
+        }
+    }
+
+    protected void tickSubEntities() {
+        for(PartEntity<?> partEntity : this.getParts()) {
+            partEntity.tick();
         }
     }
 
