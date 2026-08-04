@@ -143,7 +143,8 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
         tag(ModTags.Entities.VERY_HEAVY)
                 .add(WhalerEntities.GUARDIAN_STATUE.get())
                 .add(WhalerEntities.ARMORED_WHALE.get())
-                .add(FACEntities.FAC_TANK.get());
+                .add(FACEntities.FAC_TANK.get())
+                .add(NeutralEntities.END_STONE_CRAB.get());
 
         tag(ModTags.Entities.BOT)
                 .add(AsgharianEntities.ASGHAR_WORKER.get())
@@ -185,5 +186,18 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
 
         tag(ModTags.Entities.YELLOW_BLOOD)
                 .add(NeutralEntities.NITRO_BEETLE.get());
-    }
+
+         tag(ModTags.Entities.FIRE)
+                .add(NeutralEntities.HEAD_HUNTER.get())
+                .add(NeutralEntities.NETHERITE_EATER.get())
+                .add(NeutralEntities.NITRO_BEETLE.get());
+
+        tag(ModTags.Entities.UNDEAD)
+                .add(NeutralEntities.BIG_LUMP.get())
+                .add(NeutralEntities.INFLICTED_BOAR.get())
+                .add(NeutralEntities.INFLICTED_WOLF.get());
+
+        tag(ModTags.Entities.WITHER)
+                .add(NeutralEntities.HEAD_HUNTER.get());
+        }
 }
