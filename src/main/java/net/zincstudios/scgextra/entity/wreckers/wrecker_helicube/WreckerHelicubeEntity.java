@@ -84,7 +84,7 @@ public class WreckerHelicubeEntity extends FlyingMob implements GeoEntity, Enemy
                 .add(Attributes.FLYING_SPEED, 1.2D)
                 .add(Attributes.ATTACK_DAMAGE, 7.0D)
                 .add(Attributes.ARMOR, 0.0D)
-                .add(Attributes.MAX_HEALTH, 15.0D);
+                .add(Attributes.MAX_HEALTH, 5.0D);
     }
 
     @Override

@@ -78,7 +78,7 @@ public class WreckerDozerEntity extends Monster implements GeoEntity, Stunnable,
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 1200.0D)
+                .add(Attributes.MAX_HEALTH, 600.0D)
                 .add(Attributes.ARMOR, 6.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
                 .add(Attributes.FOLLOW_RANGE, 48.0D)
@@ -141,9 +141,9 @@ public class WreckerDozerEntity extends Monster implements GeoEntity, Stunnable,
                     Vec3 ex_pos_1 = this.position().add(WreckerDozerEntity.EXHAUST_1.yRot(-this.yBodyRot * Mth.DEG_TO_RAD));
                     Vec3 ex_pos_2 = this.position().add(WreckerDozerEntity.EXHAUST_2.yRot(-this.yBodyRot * Mth.DEG_TO_RAD));
                     Vec3 ex_pos_3 = this.position().add(WreckerDozerEntity.EXHAUST_3.yRot(-this.yBodyRot * Mth.DEG_TO_RAD));
-                    this.level().addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, ex_pos_1.x, ex_pos_1.y, ex_pos_1.z, 0, 0.04, 0);
-                    this.level().addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, ex_pos_2.x, ex_pos_2.y, ex_pos_2.z, 0, 0.04, 0);
-                    this.level().addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, ex_pos_3.x, ex_pos_3.y, ex_pos_3.z, 0, 0.04, 0);
+                    this.level().addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, ex_pos_1.x, ex_pos_1.y, ex_pos_1.z, 0, 0.2, 0);
+                    this.level().addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, ex_pos_2.x, ex_pos_2.y, ex_pos_2.z, 0, 0.2, 0);
+                    this.level().addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, ex_pos_3.x, ex_pos_3.y, ex_pos_3.z, 0, 0.2, 0);
                 }
             }
         }
