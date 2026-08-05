@@ -42,6 +42,7 @@ public class WreckingToolItem extends PickaxeItem implements ArmorPiercing, GeoI
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenPlayAndHold("idle");
     private static final RawAnimation ATTACK = RawAnimation.begin().thenLoop("attack");
+    private int soundTick = -1;
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private final Multimap<Attribute, AttributeModifier> attributeModifiers;
@@ -120,7 +121,7 @@ public class WreckingToolItem extends PickaxeItem implements ArmorPiercing, GeoI
         }
 
         if (nearest != null) {
-            player.attack(nearest);
+            nearest.hurt(player.damageSources().playerAttack(player), 4);
             nearest.invulnerableTime /= 5;
             nearest.hurtTime /= 3;
         }
@@ -136,5 +137,22 @@ public class WreckingToolItem extends PickaxeItem implements ArmorPiercing, GeoI
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return false;
+    }
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+        if(entity instanceof Player p){
+            if(HoldAttackHandler.isHeldAttack((p))){
+                if(this.soundTick==-1){
+                    p.playSound(WreckersSounds.TOOL_USE.get());
+                    this.soundTick = 0;
+                }
+                else if(this.soundTick==20){
+                    p.playSound(WreckersSounds.TOOL_USE.get());
+                    this.soundTick = 0;
+                }
+                this.soundTick++;
+            }
+        }
+        super.inventoryTick(stack, level, entity, slotId, isSelected);
     }
 }
