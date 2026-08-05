@@ -1,23 +1,24 @@
 {
-  "raid_id" : "wreckers",
-  "raid_original_id" : "wrecker",
+  "raid_id" : "wrecker",
+  "flare_raid_id" : "wrecker",
 
-  "raid_profile" : {
-    "first_wave" : {
+  "waves" : [
+    {
       "infantry": 10
     },
-    "second_wave" : {
+    {
       "infantry": 12,
       "elite": 3
     },
-    "third_wave" : {
+    {
       "infantry": 10,
       "elite": 5,
       "miniboss": 1
     },
-    "boss_wave" : {
+    {
+      "boss": 1
     }
-  },
+  ],
 
   "infantry" : [
     {

@@ -31,6 +31,10 @@ public class RaidLootSubProvider implements LootTableSubProvider {
                 single(ModItems.MEDAL_OF_IRON_WILL.get())
         );
         output.accept(
+                SCGExtra.asResource("raid/wrecker_super"),
+                single(ModItems.MEDAL_OF_DEFIANCE.get())
+        );
+        output.accept(
                 SCGExtra.asResource("raid/cog_super"),
                 single(ModItems.MEDAL_OF_OBEDIENCE.get())
         );
