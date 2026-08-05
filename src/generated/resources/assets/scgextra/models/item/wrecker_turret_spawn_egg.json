@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "scgextra:item/wrecker_turret_spawn_egg"
-  }
-}

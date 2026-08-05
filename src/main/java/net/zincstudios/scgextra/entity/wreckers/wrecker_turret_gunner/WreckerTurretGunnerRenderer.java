@@ -1,4 +1,4 @@
-package net.zincstudios.scgextra.entity.wreckers.wrecker_turret;
+package net.zincstudios.scgextra.entity.wreckers.wrecker_turret_gunner;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -14,15 +14,15 @@ import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 
-public class WreckerTurretRenderer extends GunnerRenderer<WreckerTurretEntity> {
+public class WreckerTurretGunnerRenderer extends GunnerRenderer<WreckerTurretGunnerEntity> {
     private static final double PILLAR_OFFSET_Z = 12.5D / 16D;
 
-    public WreckerTurretRenderer(EntityRendererProvider.Context context) {
-        super(context, new DefaultedEntityGeoModel<>(SCGExtra.asResource("wreckers/wrecker_turret")));
+    public WreckerTurretGunnerRenderer(EntityRendererProvider.Context context) {
+        super(context, new DefaultedEntityGeoModel<>(SCGExtra.asResource("wreckers/wrecker_turret_gunner")));
         this.noDeathTilt();
         this.addRenderLayer(new AutoGlowingGeoLayer<>(this){
             @Override
-            public void render(PoseStack poseStack, WreckerTurretEntity animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
+            public void render(PoseStack poseStack, WreckerTurretGunnerEntity animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
                 RenderType emissiveRenderType = getRenderType(animatable);
 		        getRenderer().reRender(
                     bakedModel,
@@ -44,7 +44,7 @@ public class WreckerTurretRenderer extends GunnerRenderer<WreckerTurretEntity> {
     }
 
     @Override
-    protected void applyRotations(WreckerTurretEntity animatable, PoseStack poseStack, float ageInTicks,
+    protected void applyRotations(WreckerTurretGunnerEntity animatable, PoseStack poseStack, float ageInTicks,
                                   float rotationYaw, float partialTick) {
         super.applyRotations(animatable, poseStack, ageInTicks, rotationYaw, partialTick);
         poseStack.translate(0.0D, 0.0D, PILLAR_OFFSET_Z);

@@ -85,7 +85,7 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
                 .add(WreckersEntities.WRECKER_GREEN.get())
                 .add(WreckersEntities.WRECKER_JUMBO.get())
                 .add(WreckersEntities.WRECKER_HELICUBE.get())
-                .add(WreckersEntities.WRECKER_TURRET.get())
+                .add(WreckersEntities.WRECKER_TURRET_GUNNER.get())
                 .add(WreckersEntities.WRECKER_DOZER.get());
 
         tag(EntityTypeTags.RRC)
@@ -106,7 +106,7 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
                 .add(FACEntities.FAC_WALKER.get())
                 .add(NeutralEntities.HEAD_HUNTER.get())
                 .add(WreckersEntities.WRECKER_HELICUBE.get())
-                .add(WreckersEntities.WRECKER_TURRET.get())
+                .add(WreckersEntities.WRECKER_TURRET_GUNNER.get())
                 .add(WreckersEntities.WRECKER_DOZER.get())
                 .add(COGEntities.VULTURE.get())
                 .add(COGEntities.DEVASTATOR.get())
@@ -151,7 +151,7 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
                 .add(FACEntities.FAC_WALKER.get())
                 .add(FACEntities.FAC_TANK.get())
                 .add(WreckersEntities.WRECKER_HELICUBE.get())
-                .add(WreckersEntities.WRECKER_TURRET.get())
+                .add(WreckersEntities.WRECKER_TURRET_GUNNER.get())
                 .add(WreckersEntities.WRECKER_DOZER.get())
                 .add(COGEntities.VULTURE.get())
                 .add(COGEntities.DEVASTATOR.get())

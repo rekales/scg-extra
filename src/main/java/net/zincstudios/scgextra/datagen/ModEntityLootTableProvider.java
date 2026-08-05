@@ -136,7 +136,7 @@ public class ModEntityLootTableProvider extends EntityLootSubProvider {
                 .range(Items.IRON_INGOT, 1, 3);
         basicLoot(WreckersEntities.WRECKER_HELICUBE.get())
                 .range(Items.IRON_NUGGET, 1, 3);
-        basicLoot(WreckersEntities.WRECKER_TURRET.get())
+        basicLoot(WreckersEntities.WRECKER_TURRET_GUNNER.get())
                 .range(Items.IRON_NUGGET, 1, 3)
                 .range(Items.GUNPOWDER, 1, 3)
                 .chance(net.zincstudios.scgextra.item.ModItems.WRECKER_TURRET.get(), 0.5f);

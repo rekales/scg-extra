@@ -1,14 +1,16 @@
-package net.zincstudios.scgextra.entity.wreckers.wrecker_turret;
+package net.zincstudios.scgextra.entity.wreckers.wrecker_turret_gunner;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.zincstudios.scgextra.entity.cog.FixedMountedGunGoal;
 import top.ribs.scguns.item.GunItem;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.EnumSet;
 
-public class WreckerTurretGunGoal extends FixedMountedGunGoal<WreckerTurretEntity> {
+@ParametersAreNonnullByDefault
+public class WreckerTurretGunnerGunGoal extends FixedMountedGunGoal<WreckerTurretGunnerEntity> {
 
-    public WreckerTurretGunGoal(WreckerTurretEntity mob, GunItem gunItem) {
+    public WreckerTurretGunnerGunGoal(WreckerTurretGunnerEntity mob, GunItem gunItem) {
         super(mob, gunItem);
         this.setFlags(EnumSet.of(Flag.LOOK));
     }

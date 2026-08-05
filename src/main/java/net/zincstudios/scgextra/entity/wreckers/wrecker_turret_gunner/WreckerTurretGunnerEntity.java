@@ -1,5 +1,6 @@
-package net.zincstudios.scgextra.entity.wreckers.wrecker_turret;
+package net.zincstudios.scgextra.entity.wreckers.wrecker_turret_gunner;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -34,9 +35,12 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import top.ribs.scguns.item.GunItem;
 
-public class WreckerTurretEntity extends GunnerEntity implements GeoEntity, InterruptibleVoice {
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class WreckerTurretGunnerEntity extends GunnerEntity implements GeoEntity, InterruptibleVoice {
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation ATTACK = RawAnimation.begin().thenLoop("attack");
@@ -44,11 +48,11 @@ public class WreckerTurretEntity extends GunnerEntity implements GeoEntity, Inte
     private static final RawAnimation DEATH = RawAnimation.begin().thenPlayAndHold("death");
 
     private static final EntityDataAccessor<Integer> SHOOT_TICKS =
-            SynchedEntityData.defineId(WreckerTurretEntity.class, EntityDataSerializers.INT);
+            SynchedEntityData.defineId(WreckerTurretGunnerEntity.class, EntityDataSerializers.INT);
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
-    public WreckerTurretEntity(EntityType<? extends GunnerEntity> entityType, Level level) {
+    public WreckerTurretGunnerEntity(EntityType<? extends GunnerEntity> entityType, Level level) {
         super(entityType, level);
     }
 
@@ -73,7 +77,7 @@ public class WreckerTurretEntity extends GunnerEntity implements GeoEntity, Inte
         if (CommonConfig.enableAbilityAlert) {
             this.goalSelector.addGoal(2, new AlertFactionGoal(this, CommonConfig.abilityAlertCooldown * 20));
         }
-        this.goalSelector.addGoal(3, new WreckerTurretGunGoal(this, (GunItem) top.ribs.scguns.init.ModItems.GREASER_SMG.get())
+        this.goalSelector.addGoal(3, new WreckerTurretGunnerGunGoal(this, top.ribs.scguns.init.ModItems.GREASER_SMG.get())
                 .maxRange(16)
                 .burstAmount(12)
                 .burstIntervalTicks(1)

@@ -268,7 +268,7 @@ public class ModItems {
             WRECKER_GREEN_SPAWN_EGG = basicSpawnEgg(WreckersEntities.WRECKER_GREEN),
             WRECKER_JUMBO_SPAWN_EGG = basicSpawnEgg(WreckersEntities.WRECKER_JUMBO),
             WRECKER_HELICUBE_SPAWN_EGG = basicSpawnEgg(WreckersEntities.WRECKER_HELICUBE),
-            WRECKER_TURRET_SPAWN_EGG = basicSpawnEgg(WreckersEntities.WRECKER_TURRET),
+            WRECKER_TURRET_SPAWN_EGG = basicSpawnEgg(WreckersEntities.WRECKER_TURRET_GUNNER),
             WRECKER_DOZER_SPAWN_EGG = basicSpawnEgg(WreckersEntities.WRECKER_DOZER),
 
             // Asgharian
