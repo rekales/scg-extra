@@ -1019,7 +1019,6 @@
   "wrecking_tool.use":{
     "category":"player",
     "sounds":[
-      "scgextra:wreckers/tools/jackhammer_construction_01",
       "scgextra:wreckers/tools/jackhammer_construction_02"
     ]
   },

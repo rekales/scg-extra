@@ -4,6 +4,9 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -42,7 +45,8 @@ public class WreckingToolItem extends PickaxeItem implements ArmorPiercing, GeoI
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenPlayAndHold("idle");
     private static final RawAnimation ATTACK = RawAnimation.begin().thenLoop("attack");
-    private int soundTick = -1;
+    private SoundInstance sound = SimpleSoundInstance.forUI(WreckersSounds.TOOL_USE.get(), 1.0F, 1.0F);
+    private int soundTick = 0;
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private final Multimap<Attribute, AttributeModifier> attributeModifiers;
@@ -92,13 +96,29 @@ public class WreckingToolItem extends PickaxeItem implements ArmorPiercing, GeoI
                 new DefaultedItemGeoModel<>(SCGExtra.asResource("wrecking_tool"))
         )));
     }
-
+    
     @Override
     public void onPlayerAttackTick(ItemStack stack, Level level, Player player) {
+        if(level.isClientSide()){
+            SoundManager manager = Minecraft.getInstance().getSoundManager();
+            if(HoldAttackHandler.isHeldAttack(player)){
+                soundTick--;
+                if (soundTick <= 0) {
+                    if(manager.isActive(sound)){
+                        manager.stop();
+                    }
+                    manager.play(sound);
+                    soundTick = 20;
+                }
+            }else{
+                if(manager.isActive(sound)){
+                    manager.stop();
+                }
+                this.soundTick = -1;
+            }
+        }
         if (level.isClientSide) return;
         if (level.getGameTime()%5 != 1) return;
-
-        player.playSound(WreckersSounds.TOOL_USE.get());
 
         var reach = player.getAttributeValue(net.minecraftforge.common.ForgeMod.ENTITY_REACH.get());
         reach *= 1.2F;
@@ -121,7 +141,7 @@ public class WreckingToolItem extends PickaxeItem implements ArmorPiercing, GeoI
         }
 
         if (nearest != null) {
-            nearest.hurt(player.damageSources().playerAttack(player), 4);
+            player.attack(nearest);
             nearest.invulnerableTime /= 5;
             nearest.hurtTime /= 3;
         }
@@ -137,22 +157,5 @@ public class WreckingToolItem extends PickaxeItem implements ArmorPiercing, GeoI
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return false;
-    }
-    @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
-        if(entity instanceof Player p){
-            if(HoldAttackHandler.isHeldAttack((p))){
-                if(this.soundTick==-1){
-                    p.playSound(WreckersSounds.TOOL_USE.get());
-                    this.soundTick = 0;
-                }
-                else if(this.soundTick==20){
-                    p.playSound(WreckersSounds.TOOL_USE.get());
-                    this.soundTick = 0;
-                }
-                this.soundTick++;
-            }
-        }
-        super.inventoryTick(stack, level, entity, slotId, isSelected);
     }
 }

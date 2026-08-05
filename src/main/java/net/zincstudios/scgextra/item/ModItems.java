@@ -58,7 +58,7 @@ public class ModItems {
     );
 
     public static final RegistryObject<WreckingToolItem> WRECKING_TOOL = ITEMS.register("wrecking_tool",
-            () -> new WreckingToolItem(Tiers.IRON, -1, 0.0F, -0.5D, new Item.Properties().durability(50))
+            () -> new WreckingToolItem(Tiers.IRON, 1, 0.0F, -0.5D, new Item.Properties().durability(50))
     );
 
     public static final RegistryObject<WreckerSledgeHammerItem> WRECKER_SLEDGE_HAMMER = ITEMS.register("wrecker_sledge_hammer",
