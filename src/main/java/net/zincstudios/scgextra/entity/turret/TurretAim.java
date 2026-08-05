@@ -4,9 +4,9 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
 public final class TurretAim {
-    public static final float MAX_TRAVERSE = 70.0F;
-    public static final float MAX_UP = 20.0F;
-    public static final float MAX_DOWN = 15.0F;
+    public static final float MAX_TRAVERSE = 180.0F;
+    public static final float MAX_UP = 40.0F;
+    public static final float MAX_DOWN = 30.0F;
 
     private static final float DEG_PER_RAD = 57.2957763671875F;
     private static final float RAD_PER_DEG = (float) (Math.PI / 180.0);
