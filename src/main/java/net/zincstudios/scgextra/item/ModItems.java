@@ -65,8 +65,8 @@ public class ModItems {
             () -> new WreckerSledgeHammerItem(Tiers.IRON, 5, -3.4F, 1.0D, new Item.Properties().durability(50))
     );
 
-    public static final RegistryObject<GunItem> WRECKER_RPG = ITEMS.register("wrecker_rpg",
-            () -> new GunItem(new Item.Properties().stacksTo(1).durability(100))
+    public static final RegistryObject<WreckerRpgItem> WRECKER_RPG = ITEMS.register("wrecker_rpg",
+            () -> new WreckerRpgItem(new Item.Properties().stacksTo(1).durability(100))
     );
 
     public static final RegistryObject<Item> WRECKER_TURRET = ITEMS.register("wrecker_turret",
