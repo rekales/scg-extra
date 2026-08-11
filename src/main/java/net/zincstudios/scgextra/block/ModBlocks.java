@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.loading.FMLEnvironment;
@@ -61,6 +62,7 @@ public class ModBlocks {
         }
     }
 
+    @OnlyIn(value = Dist.CLIENT)
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ModBlockEntities.WRECKER_TURRET.get(), (ctx) -> new WreckerTurretBlockRenderer<>(
                 new WreckerTurretBlockModel<>(SCGExtra.asResource("wrecker_turret"))));

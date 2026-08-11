@@ -321,7 +321,7 @@ public class ModItems {
         MinecraftForge.EVENT_BUS.addListener(ArmorPiercingHandler::onLivingDamage);
         MinecraftForge.EVENT_BUS.addListener(HoldAttackHandler::onClientTick);
         MinecraftForge.EVENT_BUS.addListener(HoldAttackHandler::onPlayerTick);
-        MinecraftForge.EVENT_BUS.addListener(WreckingToolItem::onKnockback);
+        MinecraftForge.EVENT_BUS.addListener(WreckingToolItemHandler::onKnockback);
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
             MinecraftForge.EVENT_BUS.addListener(BaseArmorSetPartRenderer::hideHeadWithCommissarHelmet);

@@ -23,7 +23,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.zincstudios.scgextra.SCGExtra;
 import net.zincstudios.scgextra.sounds.WreckersSounds;
 import software.bernie.geckolib.animatable.GeoItem;
@@ -45,8 +44,9 @@ public class WreckingToolItem extends PickaxeItem implements ArmorPiercing, GeoI
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenPlayAndHold("idle");
     private static final RawAnimation ATTACK = RawAnimation.begin().thenLoop("attack");
-    private SoundInstance sound = SimpleSoundInstance.forUI(WreckersSounds.TOOL_USE.get(), 1.0F, 1.0F);
     private int soundTick = 0;
+
+    private SoundInstance sound = SimpleSoundInstance.forUI(WreckersSounds.TOOL_USE.get(), 1.0F, 1.0F);
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private final Multimap<Attribute, AttributeModifier> attributeModifiers;
@@ -99,7 +99,7 @@ public class WreckingToolItem extends PickaxeItem implements ArmorPiercing, GeoI
     
     @Override
     public void onPlayerAttackTick(ItemStack stack, Level level, Player player) {
-        if(level.isClientSide()){
+        if(level.isClientSide()) {
             SoundManager manager = Minecraft.getInstance().getSoundManager();
             if(HoldAttackHandler.isHeldAttack(player)){
                 soundTick--;
@@ -144,13 +144,6 @@ public class WreckingToolItem extends PickaxeItem implements ArmorPiercing, GeoI
             player.attack(nearest);
             nearest.invulnerableTime /= 5;
             nearest.hurtTime /= 3;
-        }
-    }
-
-    public static void onKnockback(LivingKnockBackEvent event) {
-        if (event.getEntity().getLastHurtByMob() instanceof Player p
-                && p.getMainHandItem().getItem() instanceof WreckingToolItem) {
-            event.setStrength(event.getStrength()*0.8F);
         }
     }
 
