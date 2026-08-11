@@ -4,9 +4,7 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
-import net.minecraft.client.resources.sounds.SoundInstance;
-import net.minecraft.client.sounds.SoundManager;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -44,9 +42,7 @@ public class WreckingToolItem extends PickaxeItem implements ArmorPiercing, GeoI
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenPlayAndHold("idle");
     private static final RawAnimation ATTACK = RawAnimation.begin().thenLoop("attack");
-    private int soundTick = 0;
-
-    private SoundInstance sound = SimpleSoundInstance.forUI(WreckersSounds.TOOL_USE.get(), 1.0F, 1.0F);
+    private int soundTick = -2;
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private final Multimap<Attribute, AttributeModifier> attributeModifiers;
@@ -96,27 +92,26 @@ public class WreckingToolItem extends PickaxeItem implements ArmorPiercing, GeoI
                 new DefaultedItemGeoModel<>(SCGExtra.asResource("wrecking_tool"))
         )));
     }
+
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+        if(entity instanceof Player player){
+            if(!HoldAttackHandler.isHeldAttack(player)){
+                this.soundTick = -2;
+            }
+        }
+        super.inventoryTick(stack, level, entity, slotId, isSelected);
+    }
     
     @Override
     public void onPlayerAttackTick(ItemStack stack, Level level, Player player) {
-        if(level.isClientSide()) {
-            SoundManager manager = Minecraft.getInstance().getSoundManager();
-            if(HoldAttackHandler.isHeldAttack(player)){
-                soundTick--;
-                if (soundTick <= 0) {
-                    if(manager.isActive(sound)){
-                        manager.stop();
-                    }
-                    manager.play(sound);
-                    soundTick = 20;
-                }
-            }else{
-                if(manager.isActive(sound)){
-                    manager.stop();
-                }
-                this.soundTick = -1;
-            }
+        if(this.soundTick==-1){
+            level.playSound((Player)null, player.getX(), player.getY(), player.getZ(), WreckersSounds.TOOL_USE.get(), SoundSource.NEUTRAL, 0.5F, 1.0F);
+        }else if(this.soundTick==40){
+            level.playSound((Player)null, player.getX(), player.getY(), player.getZ(), WreckersSounds.TOOL_USE.get(), SoundSource.NEUTRAL, 0.5F, 1.0F);
+            this.soundTick = 0;
         }
+        this.soundTick++;
         if (level.isClientSide) return;
         if (level.getGameTime()%5 != 1) return;
 

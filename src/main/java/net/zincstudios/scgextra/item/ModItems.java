@@ -345,7 +345,7 @@ public class ModItems {
             );
 
             ITEMS.getEntries().stream()
-                    .filter(item -> !notInTab.contains(item))
+                    .filter(item -> !notInTab.contains(item) && !(item.get() instanceof WreckerRpgItem))
                     .map(RegistryObject::get)
                     .forEach(event::accept);
         }
