@@ -155,14 +155,14 @@
   "item.scgextra.medal_of_enlightenment":  "Medal of Enlightenment",
   "item.scgextra.medal_of_conqueror":  "Medal of Conqueror",
 
-  "item.scgextra.medal_of_survivor.description":  "Provides 2.5 armor",
+  "item.scgextra.medal_of_survivor.description":  "Provides 5 armor",
   "item.scgextra.medal_of_iron_will.description":  "Provides 20% bullet damage resistance",
   "item.scgextra.medal_of_defiance.description":  "Increases reload speed and movement speed by 20%",
   "item.scgextra.medal_of_wonder.description":  "Gives Resistance 1 and immunity to poison and sulfur poison effect",
   "item.scgextra.medal_of_fiery_rage.description":  "Gives Strength 2 and Regeneration 1",
   "item.scgextra.medal_of_obedience.description":  "Provides 3 armor toughness and 30% recoil reduction",
   "item.scgextra.medal_of_cruelty.description":  "Increases bullet damage by 10%",
-  "item.scgextra.medal_of_enlightenment.description":  "Increases max health by 4 hearts",
+  "item.scgextra.medal_of_enlightenment.description":  "Increases max health by 8 HP",
   "item.scgextra.medal_of_conqueror.description":  "Increases bullet crit chance by 20% and decreases bullet gravity by 20%",
 
   "item.scgextra.oppressor_helmet" : "Oppressor Helmet",
