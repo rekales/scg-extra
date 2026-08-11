@@ -37,8 +37,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         copyTexture(ModItems.WRECKER_SUPER_FLARE, top.ribs.scguns.init.ModItems.WRECKER_FLARE);
         copyTexture(ModItems.DIAMOND_STEEL_SUPER_FLARE, top.ribs.scguns.init.ModItems.DIAMOND_STEEL_FLARE);
         copyTexture(ModItems.TREATED_BRASS_SUPER_FLARE, top.ribs.scguns.init.ModItems.TREATED_BRASS_FLARE);
-        copyTexture(ModItems.GOLD_SUPER_FLARE, top.ribs.scguns.init.ModItems.GOLD_FLARE);
-        copyTexture(ModItems.SCULK_SUPER_FLARE, top.ribs.scguns.init.ModItems.SCULK_FLARE);
+        // copyTexture(ModItems.GOLD_SUPER_FLARE, top.ribs.scguns.init.ModItems.GOLD_FLARE);
+        // copyTexture(ModItems.SCULK_SUPER_FLARE, top.ribs.scguns.init.ModItems.SCULK_FLARE);
         copyTexture(ModItems.OCEAN_SUPER_FLARE, top.ribs.scguns.init.ModItems.OCEAN_FLARE);
 
         basicItem("medal/", ModItems.MEDAL_OF_SURVIVOR);

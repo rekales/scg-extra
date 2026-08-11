@@ -31,8 +31,8 @@ public class ModRecipeProvider extends RecipeProvider {
         superFlare(writer, ModItems.WRECKER_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.WRECKER_FLARE.get());
         superFlare(writer, ModItems.DIAMOND_STEEL_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.DIAMOND_STEEL_FLARE.get());
         superFlare(writer, ModItems.TREATED_BRASS_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.TREATED_BRASS_FLARE.get());
-        superFlare(writer, ModItems.GOLD_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.GOLD_FLARE.get());
-        superFlare(writer, ModItems.SCULK_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.SCULK_FLARE.get());
+        // superFlare(writer, ModItems.GOLD_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.GOLD_FLARE.get());
+        // superFlare(writer, ModItems.SCULK_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.SCULK_FLARE.get());
         superFlare(writer, ModItems.OCEAN_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.OCEAN_FLARE.get());
 
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.BANDAGE.get())
