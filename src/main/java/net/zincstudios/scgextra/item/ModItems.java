@@ -9,10 +9,12 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.*;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -315,12 +317,15 @@ public class ModItems {
         MinecraftForge.EVENT_BUS.addListener(ArmorSets::onEntityHurt);
         MinecraftForge.EVENT_BUS.addListener(CavalrySaberItem::onPlayerTick);
         MinecraftForge.EVENT_BUS.addListener(CavalrySaberItem::onEntityHurt);
-        MinecraftForge.EVENT_BUS.addListener(BaseArmorSetPartRenderer::hideHeadWithCommissarHelmet);
         MinecraftForge.EVENT_BUS.addListener(ArmorPiercingHandler::onLivingHurt);
         MinecraftForge.EVENT_BUS.addListener(ArmorPiercingHandler::onLivingDamage);
         MinecraftForge.EVENT_BUS.addListener(HoldAttackHandler::onClientTick);
         MinecraftForge.EVENT_BUS.addListener(HoldAttackHandler::onPlayerTick);
         MinecraftForge.EVENT_BUS.addListener(WreckingToolItem::onKnockback);
+
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            MinecraftForge.EVENT_BUS.addListener(BaseArmorSetPartRenderer::hideHeadWithCommissarHelmet);
+        }
     }
 
     private static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister
