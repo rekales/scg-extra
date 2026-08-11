@@ -139,8 +139,11 @@
   "item.scgextra.wrecking_tool": "Wrecking Tool",
   "item.scgextra.wrecker_sledge_hammer": "Wrecker Sledge Hammer",
   "item.scgextra.wrecker_rpg": "Wrecker RPG",
+
   "item.scgextra.bandage":  "Bandage",
   "item.scgextra.medkit":  "Medkit",
+
+  "item.scgextra.single_use_desc":  "Single Use Only",
 
   "item.scgextra.medal_of_survivor":  "Medal of Survivor",
   "item.scgextra.medal_of_iron_will":  "Medal of Iron Will",
