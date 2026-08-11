@@ -1,10 +1,10 @@
 package net.zincstudios.scgextra.item;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
@@ -24,6 +24,8 @@ import top.ribs.scguns.item.GunItem;
 
 import java.util.function.Consumer;
 
+// TODO: proper
+@MethodsReturnNonnullByDefault
 public class WreckerRpgItem extends GunItem implements GeoItem {
 
     private static final RawAnimation NO_AMMO = RawAnimation.begin().thenPlayAndHold("no_ammo");
@@ -31,6 +33,18 @@ public class WreckerRpgItem extends GunItem implements GeoItem {
 
     public WreckerRpgItem(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public void onInventoryTick(ItemStack stack, Level level, Player player, int slotIndex, int selectedIndex) {
+        CompoundTag tag = stack.getOrCreateTag();
+        if (!tag.contains("SingleUseFired")) {
+            tag.putBoolean("SingleUseFired", true);
+            tag.putInt("AmmoCount", 1);
+            stack.setDamageValue(0);
+        }
+
+        super.onInventoryTick(stack, level, player, slotIndex, selectedIndex);
     }
 
     @Override
