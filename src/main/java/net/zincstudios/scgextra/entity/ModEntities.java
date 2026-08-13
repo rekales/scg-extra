@@ -1,5 +1,6 @@
 package net.zincstudios.scgextra.entity;
 
+import net.zincstudios.scgextra.item.curios.MedKitRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.world.entity.EntityType;
@@ -34,7 +35,9 @@ import net.zincstudios.scgextra.entity.turret.TurretManningHandler;
 import net.zincstudios.scgextra.entity.turret.TurretSeatEntity;
 import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
 import net.zincstudios.scgextra.entity.wreckers.WreckersEntities;
+import net.zincstudios.scgextra.item.ModItems;
 import top.ribs.scguns.entity.client.EnemyProjectileRenderer;
+import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
 public class ModEntities {
 
@@ -129,5 +132,6 @@ public class ModEntities {
         EntityRenderers.register(ModEntities.RAID_SUMMONER.get(), RaidSummonerRenderer::new);
         EntityRenderers.register(ModEntities.LARGE_SOUL_FIREBALL.get(), SoulFireBallRenderer::new);
         EntityRenderers.register(ModEntities.TURRET_SEAT.get(), NoopRenderer::new);
+        CuriosRendererRegistry.register(ModItems.MEDKIT.get(), MedKitRenderer::new);
     }
 }
