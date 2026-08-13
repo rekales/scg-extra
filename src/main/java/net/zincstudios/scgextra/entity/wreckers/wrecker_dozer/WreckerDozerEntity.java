@@ -212,8 +212,7 @@ public class WreckerDozerEntity extends Monster implements GeoEntity, Stunnable,
         }
         EntityType<?>[] types = {
                 WreckersEntities.WRECKER_RED.get(),
-                WreckersEntities.WRECKER_BLUE.get(),
-                WreckersEntities.WRECKER_GREEN.get()
+                WreckersEntities.WRECKER_BLUE.get()
         };
         for (EntityType<?> type : types) {
             BlockPos pos = this.blockPosition().offset(
