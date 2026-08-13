@@ -23,9 +23,11 @@ public class MedKitRenderer implements ICurioRenderer {
         if (slotContext.index() == 0) {
             matrixStack.translate(-0.18D, 0.65D, 0.17D);
             matrixStack.mulPose(new Quaternionf().rotationZ((float) Math.toRadians(180)));
+            matrixStack.mulPose(new Quaternionf().rotationX((float) Math.toRadians(90)));
         } else if (slotContext.index() == 1) {
             matrixStack.translate(0.18D, 0.65D, 0.17D);
             matrixStack.mulPose(new Quaternionf().rotationZ((float) Math.toRadians(180)));
+            matrixStack.mulPose(new Quaternionf().rotationX((float) Math.toRadians(90)));
         }
 
         matrixStack.scale(0.8f, 0.8f, 0.8f);

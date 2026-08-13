@@ -21,7 +21,7 @@
       "max_delay": 24000,
       "min_delay": 12000,
       "replace_current_music": false,
-      "sound": "minecraft:music.nether.nether_wastes"
+      "sound": "minecraft:ambient.nether_wastes.loop"
     },
     "sky_color": 4145211,
     "water_color": 6838083,
@@ -78,13 +78,13 @@
     ],
     [
       "minecraft:glow_lichen",
-      "minecraft:patch_tall_grass_2",
-      "minecraft:patch_grass_plain",
       "minecraft:patch_large_fern",
       "minecraft:patch_dead_bush_2",
       "minecraft:brown_mushroom_normal",
       "minecraft:red_mushroom_normal",
-      "scgextra:warzone_spruce_placed"
+      "scgextra:warzone_spruce_placed",
+      "scgextra:grass_patch",
+      "scgextra:grass_patch_tall"
     ],
     [
       "minecraft:freeze_top_layer"
@@ -99,12 +99,6 @@
     "misc": [],
     "monster": [
       {
-        "type": "scgextra:fac_trench_sniper",
-        "maxCount": 2,
-        "minCount": 1,
-        "weight": 6
-      },
-      {
         "type": "scgextra:fac_trencher",
         "maxCount": 2,
         "minCount": 1,
@@ -112,6 +106,12 @@
       },
       {
         "type": "scgextra:fac_trench_goblin",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 6
+      },
+      {
+        "type": "scgextra:fac_trench_sniper",
         "maxCount": 2,
         "minCount": 1,
         "weight": 6
