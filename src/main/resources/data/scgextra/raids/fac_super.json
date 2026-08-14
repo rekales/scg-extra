@@ -36,15 +36,15 @@
       "entity_id": "scgextra:fac_bluecoat"
     },
     {
-      "entity_id": "scgextra:trench_goblin"
+      "entity_id": "scgextra:fac_trench_goblin"
     }
   ],
   "elite" : [
     {
-      "entity_id": "scgextra:trench_sniper"
+      "entity_id": "scgextra:fac_trench_sniper"
     },
     {
-      "entity_id": "scgextra:shovel_knight"
+      "entity_id": "scgextra:fac_shovel_knight"
     },
     {
       "entity_id": "scgextra:fac_tank_buster"
