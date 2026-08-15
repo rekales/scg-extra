@@ -6,10 +6,12 @@ import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.zincstudios.scgextra.entity.EntityTypeTags;
 import net.zincstudios.scgextra.entity.asgharian.AsgharianEntities;
+import net.zincstudios.scgextra.entity.cog.COGEntities;
 import net.zincstudios.scgextra.entity.fac.FACEntities;
 import net.zincstudios.scgextra.entity.neutral.NeutralEntities;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 import net.zincstudios.scgextra.entity.whaler.WhalerEntities;
+import net.zincstudios.scgextra.entity.wreckers.WreckersEntities;
 import org.jetbrains.annotations.Nullable;
 import top.ribs.scguns.init.ModTags;
 
@@ -45,7 +47,14 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
                 .add(top.ribs.scguns.init.ModEntities.COG_KNIGHT.get())
                 .add(top.ribs.scguns.init.ModEntities.SIGNAL_BEACON.get())
                 .add(top.ribs.scguns.init.ModEntities.SCAMPLER.get())
-                .add(top.ribs.scguns.init.ModEntities.SCAMP_TANK.get());
+                .add(top.ribs.scguns.init.ModEntities.SCAMP_TANK.get())
+                .add(COGEntities.VULTURE.get())
+                .add(COGEntities.DEVASTATOR.get())
+                .add(COGEntities.BOMBARDIER.get())
+                .add(COGEntities.GIGANTES.get())
+                .add(COGEntities.VENATOR.get())
+                .add(COGEntities.CENTIPEDE.get())
+                .add(COGEntities.JUGGERNAUT.get());
 
         tag(EntityTypeTags.FAC)
                 .add(FACEntities.FAC_TRENCHER.get())
@@ -70,6 +79,15 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
                 .add(WhalerEntities.ARMORED_WHALE.get())
                 .add(top.ribs.scguns.init.ModEntities.FINFORCER.get());
 
+        tag(EntityTypeTags.WRECKERS)
+                .add(WreckersEntities.WRECKER_RED.get())
+                .add(WreckersEntities.WRECKER_BLUE.get())
+                .add(WreckersEntities.WRECKER_GREEN.get())
+                .add(WreckersEntities.WRECKER_JUMBO.get())
+                .add(WreckersEntities.WRECKER_HELICUBE.get())
+                .add(WreckersEntities.WRECKER_TURRET_GUNNER.get())
+                .add(WreckersEntities.WRECKER_DOZER.get());
+
         tag(EntityTypeTags.RRC)
                 .add(RRCEntities.DRONE.get())
                 .add(RRCEntities.TALLMAN.get())
@@ -86,7 +104,17 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
                 .add(AsgharianEntities.ASGHAR_WORKER.get())
                 .add(FACEntities.FAC_TANK.get())
                 .add(FACEntities.FAC_WALKER.get())
-                .add(NeutralEntities.HEAD_HUNTER.get());
+                .add(NeutralEntities.HEAD_HUNTER.get())
+                .add(WreckersEntities.WRECKER_HELICUBE.get())
+                .add(WreckersEntities.WRECKER_TURRET_GUNNER.get())
+                .add(WreckersEntities.WRECKER_DOZER.get())
+                .add(COGEntities.VULTURE.get())
+                .add(COGEntities.DEVASTATOR.get())
+                .add(COGEntities.BOMBARDIER.get())
+                .add(COGEntities.GIGANTES.get())
+                .add(COGEntities.VENATOR.get())
+                .add(COGEntities.CENTIPEDE.get())
+                .add(COGEntities.JUGGERNAUT.get());
 
         tag(ModTags.Entities.WATER)
                 .add(WhalerEntities.FISH_FOLK.get())
@@ -100,33 +128,53 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
 
         tag(ModTags.Entities.HEAVY)
                 .add(WhalerEntities.TURTLEMAN.get())
-                .add(WhalerEntities.SALMONSAUR.get());
+                .add(WhalerEntities.SALMONSAUR.get())
+                .add(FACEntities.FAC_LION.get())
+                .add(FACEntities.FAC_WALKER.get())
+                .add(WreckersEntities.WRECKER_JUMBO.get())
+                .add(WreckersEntities.WRECKER_DOZER.get())
+                .add(COGEntities.DEVASTATOR.get())
+                .add(COGEntities.BOMBARDIER.get())
+                .add(COGEntities.GIGANTES.get())
+                .add(COGEntities.VENATOR.get())
+                .add(COGEntities.CENTIPEDE.get())
+                .add(COGEntities.JUGGERNAUT.get());
 
         tag(ModTags.Entities.VERY_HEAVY)
                 .add(WhalerEntities.GUARDIAN_STATUE.get())
-                .add(WhalerEntities.ARMORED_WHALE.get());
+                .add(WhalerEntities.ARMORED_WHALE.get())
+                .add(FACEntities.FAC_TANK.get())
+                .add(NeutralEntities.END_STONE_CRAB.get());
 
         tag(ModTags.Entities.BOT)
-                .add(AsgharianEntities.ASGHAR_WORKER.get());
-
-        tag(ModTags.Entities.FIRE)
-                .add(NeutralEntities.HEAD_HUNTER.get())
-                .add(NeutralEntities.NETHERITE_EATER.get())
-                .add(NeutralEntities.NITRO_BEETLE.get());
-
-        tag(ModTags.Entities.UNDEAD)
-                .add(NeutralEntities.BIG_LUMP.get())
-                .add(NeutralEntities.INFLICTED_BOAR.get())
-                .add(NeutralEntities.INFLICTED_WOLF.get());
-
-        tag(ModTags.Entities.WITHER)
-                .add(NeutralEntities.HEAD_HUNTER.get());
+                .add(AsgharianEntities.ASGHAR_WORKER.get())
+                .add(FACEntities.FAC_WALKER.get())
+                .add(FACEntities.FAC_TANK.get())
+                .add(WreckersEntities.WRECKER_HELICUBE.get())
+                .add(WreckersEntities.WRECKER_TURRET_GUNNER.get())
+                .add(WreckersEntities.WRECKER_DOZER.get())
+                .add(COGEntities.VULTURE.get())
+                .add(COGEntities.DEVASTATOR.get())
+                .add(COGEntities.BOMBARDIER.get())
+                .add(COGEntities.GIGANTES.get())
+                .add(COGEntities.VENATOR.get())
+                .add(COGEntities.CENTIPEDE.get())
+                .add(COGEntities.JUGGERNAUT.get());
 
         tag(ModTags.Entities.WHITE_BLOOD)
                 .add(WhalerEntities.GUARDIAN_STATUE.get());
 
         tag(ModTags.Entities.BLACK_BLOOD)
-                .add(NeutralEntities.HEAD_HUNTER.get());
+                .add(NeutralEntities.HEAD_HUNTER.get())
+                .add(FACEntities.FAC_WALKER.get())
+                .add(FACEntities.FAC_TANK.get())
+                .add(COGEntities.VULTURE.get())
+                .add(COGEntities.DEVASTATOR.get())
+                .add(COGEntities.BOMBARDIER.get())
+                .add(COGEntities.GIGANTES.get())
+                .add(COGEntities.VENATOR.get())
+                .add(COGEntities.CENTIPEDE.get())
+                .add(COGEntities.JUGGERNAUT.get());
 
         tag(ModTags.Entities.GREEN_BLOOD)
                 .add(NeutralEntities.END_STONE_CRAB.get())
@@ -139,5 +187,17 @@ public class ModEntityTagProvider extends EntityTypeTagsProvider {
         tag(ModTags.Entities.YELLOW_BLOOD)
                 .add(NeutralEntities.NITRO_BEETLE.get());
 
-    }
+         tag(ModTags.Entities.FIRE)
+                .add(NeutralEntities.HEAD_HUNTER.get())
+                .add(NeutralEntities.NETHERITE_EATER.get())
+                .add(NeutralEntities.NITRO_BEETLE.get());
+
+        tag(ModTags.Entities.UNDEAD)
+                .add(NeutralEntities.BIG_LUMP.get())
+                .add(NeutralEntities.INFLICTED_BOAR.get())
+                .add(NeutralEntities.INFLICTED_WOLF.get());
+
+        tag(ModTags.Entities.WITHER)
+                .add(NeutralEntities.HEAD_HUNTER.get());
+        }
 }

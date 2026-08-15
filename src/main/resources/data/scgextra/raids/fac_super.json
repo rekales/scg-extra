@@ -1,0 +1,69 @@
+{
+  "raid_id" : "fac_super",
+  "flare_raid_id" : "iron_super",
+  "finish_loot" : "scgextra:raid/fac_super",
+
+  "waves" : [
+    {
+      "infantry": 10
+    },
+    {
+      "infantry": 10,
+      "elite": 3
+    },
+    {
+      "infantry": 12,
+      "elite": 4,
+      "miniboss": 1
+    },
+    {
+      "infantry": 10,
+      "elite": 6,
+      "miniboss": 3
+    },
+    {
+      "infantry": 6,
+      "elite": 2,
+      "boss": 2
+    }
+  ],
+
+  "infantry" : [
+    {
+      "entity_id": "scgextra:fac_trencher"
+    },
+    {
+      "entity_id": "scgextra:fac_bluecoat"
+    },
+    {
+      "entity_id": "scgextra:fac_trench_goblin"
+    }
+  ],
+  "elite" : [
+    {
+      "entity_id": "scgextra:fac_trench_sniper"
+    },
+    {
+      "entity_id": "scgextra:fac_shovel_knight"
+    },
+    {
+      "entity_id": "scgextra:fac_tank_buster"
+    }
+  ],
+  "miniboss" : [
+    {
+      "entity_id": "scgextra:fac_lion"
+    },
+    {
+      "entity_id": "scgextra:fac_commissar"
+    },
+    {
+      "entity_id": "scgextra:fac_walker"
+    }
+  ],
+  "boss" : [
+    {
+      "entity_id": "scgextra:fac_tank"
+    }
+  ]
+}

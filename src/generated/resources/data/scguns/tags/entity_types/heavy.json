@@ -1,6 +1,16 @@
 {
   "values": [
     "scgextra:turtleman",
-    "scgextra:salmonsaur"
+    "scgextra:salmonsaur",
+    "scgextra:fac_lion",
+    "scgextra:fac_walker",
+    "scgextra:wrecker_jumbo",
+    "scgextra:wrecker_dozer",
+    "scgextra:cog_devastator",
+    "scgextra:cog_bombardier",
+    "scgextra:cog_gigantes",
+    "scgextra:cog_venator",
+    "scgextra:cog_centipede",
+    "scgextra:cog_juggernaut"
   ]
 }

@@ -28,8 +28,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.zincstudios.scgextra.entity.common.MobUtil;
 import net.zincstudios.scgextra.entity.common.Stunnable;
-import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
-import net.zincstudios.scgextra.entity.common.ai.StunnedWithVisualGoal;
+import net.zincstudios.scgextra.entity.common.goal.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.entity.common.goal.StunnedWithVisualGoal;
 import net.zincstudios.scgextra.sounds.RRCSounds;
 import net.minecraftforge.entity.PartEntity;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -289,10 +289,6 @@ public class DroneEntity extends Monster implements GeoEntity, Stunnable, HeadSh
     }
 
     protected void tickDeath() {
-        ++this.deathTime;
-        if (this.deathTime >= 18 && !this.level().isClientSide() && !this.isRemoved()) {
-            this.level().broadcastEntityEvent(this, (byte)60);
-            this.remove(RemovalReason.KILLED);
-        }
+        MobUtil.tickDeath(this, 18);
     }
 }

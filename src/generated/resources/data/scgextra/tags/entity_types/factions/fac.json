@@ -2,9 +2,9 @@
   "values": [
     "scgextra:fac_trencher",
     "scgextra:fac_bluecoat",
-    "scgextra:trench_goblin",
-    "scgextra:trench_sniper",
-    "scgextra:shovel_knight",
+    "scgextra:fac_trench_goblin",
+    "scgextra:fac_trench_sniper",
+    "scgextra:fac_shovel_knight",
     "scgextra:fac_tank_buster",
     "scgextra:fac_lion",
     "scgextra:fac_commissar",

@@ -30,9 +30,9 @@ import net.zincstudios.scgextra.entity.asgharian.AbilityGoal;
 import net.zincstudios.scgextra.entity.asgharian.GoalState;
 import net.zincstudios.scgextra.entity.asgharian.GoalStateHandler;
 import net.zincstudios.scgextra.entity.common.MobUtil;
-import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.entity.common.goal.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.entity.common.part.RotatedWeakPointPartEntity;
 import net.zincstudios.scgextra.sounds.AsgharianSounds;
-import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -72,7 +72,7 @@ public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHan
     private static final int REVIVE_DURATION_TICKS = 50;
 
     private final AnimatableInstanceCache geocache = GeckoLibUtil.createInstanceCache(this);
-    private final LanternPartEntity[] subEntities;
+    private final PartEntity<?>[] subEntities;
 
     // Serverside only
     private BehaviourState behaviourState = BehaviourState.NONE;
@@ -81,10 +81,10 @@ public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHan
 
     public SoulRipperEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
-        this.subEntities = new LanternPartEntity[] {
-                new LanternPartEntity(this, new Vec3(-1.1, 2.3, -0.15), 5/16f, 8/16f),
-                new LanternPartEntity(this, new Vec3(0.6, 2.15, -0.25), 5/16f, 8/16f),
-                new LanternPartEntity(this, new Vec3(0.075, 2.575, -0.275), 5/16f, 8/16f)
+        this.subEntities = new PartEntity[] {
+                new RotatedWeakPointPartEntity<>(this, new Vec3(-1.1, 2.3, -0.15), 5/16f, 8/16f),
+                new RotatedWeakPointPartEntity<>(this, new Vec3(0.6, 2.15, -0.25), 5/16f, 8/16f),
+                new RotatedWeakPointPartEntity<>(this, new Vec3(0.075, 2.575, -0.275), 5/16f, 8/16f)
         };
         this.moveControl = new SoulRipperMoveControl(this);
 
@@ -98,11 +98,15 @@ public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHan
         super.tick();
         this.noPhysics = false;
         this.setNoGravity(true);
-        for (LanternPartEntity subEntity : this.subEntities) {
-            subEntity.updatePos();
-        }
+        this.tickSubEntities();
         if (this.tickCount % 10 == 0) {
             this.updateBoundOrigin();
+        }
+    }
+
+    protected void tickSubEntities() {
+        for(PartEntity<?> partEntity : this.getParts()) {
+            partEntity.tick();
         }
     }
 
@@ -160,7 +164,7 @@ public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHan
     }
 
     @Override
-    public @Nullable PartEntity<?>[] getParts() {
+    public PartEntity<?>[] getParts() {
         return this.subEntities;
     }
 
@@ -228,11 +232,11 @@ public class SoulRipperEntity extends Monster implements GeoEntity, GoalStateHan
     }
 
     public boolean isMovingForward() {
-        Vec3 oldPos = new Vec3(this.xOld, this.yOld, this.zOld);
+//        Vec3 oldPos = new Vec3(this.xOld, this.yOld, this.zOld);
         Vec3 dir = this.position().subtract(new Vec3(this.xOld, this.yOld, this.zOld));
 
 //        SCGExtra.LOGGER.debug("dev: " + dir.length());
-        float deltaRot = MobUtil.rotFromVec(this.getDeltaMovement());
+//        float deltaRot = MobUtil.rotFromVec(this.getDeltaMovement());
 
         float oldRot = MobUtil.rotFromVec(dir);
 

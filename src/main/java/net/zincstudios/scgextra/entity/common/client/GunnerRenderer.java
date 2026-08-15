@@ -1,12 +1,19 @@
 package net.zincstudios.scgextra.entity.common.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -22,6 +29,27 @@ public class GunnerRenderer <T extends GunnerEntity & GeoEntity> extends GeoEnti
         this.shadowRadius = 0;  // no way to get the entity type on construction
 
         addRenderLayer(new GunGeoLayer<>(this));
+        this.addRenderLayer(new AutoGlowingGeoLayer<>(this){
+            @Override
+            public void render(PoseStack poseStack, T animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
+                RenderType emissiveRenderType = getRenderType(animatable);
+		        getRenderer().reRender(
+                    bakedModel,
+                    poseStack,
+                    bufferSource,
+                    animatable,
+                    emissiveRenderType,
+					bufferSource.getBuffer(emissiveRenderType),
+                    partialTick,
+                    LightTexture.FULL_BRIGHT,
+                    OverlayTexture.NO_OVERLAY,
+                    1,
+                    1,
+                    1,
+                    1
+                );
+            }
+        });
     }
 
     public GunnerRenderer(EntityRendererProvider.Context renderManager, GeoModel<T> model, float gunTilt) {
@@ -29,6 +57,27 @@ public class GunnerRenderer <T extends GunnerEntity & GeoEntity> extends GeoEnti
         this.shadowRadius = 0;
 
         addRenderLayer(new GunGeoLayer<>(this, gunTilt));
+        this.addRenderLayer(new AutoGlowingGeoLayer<>(this){
+            @Override
+            public void render(PoseStack poseStack, T animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
+                RenderType emissiveRenderType = getRenderType(animatable);
+		        getRenderer().reRender(
+                    bakedModel,
+                    poseStack,
+                    bufferSource,
+                    animatable,
+                    emissiveRenderType,
+					bufferSource.getBuffer(emissiveRenderType),
+                    partialTick,
+                    LightTexture.FULL_BRIGHT,
+                    OverlayTexture.NO_OVERLAY,
+                    1,
+                    1,
+                    1,
+                    1
+                );
+            }
+        });
     }
 
     /**
@@ -37,6 +86,27 @@ public class GunnerRenderer <T extends GunnerEntity & GeoEntity> extends GeoEnti
     protected GunnerRenderer(EntityRendererProvider.Context renderManager, GeoModel<T> model, boolean ignored) {
         super(renderManager, model);
         this.shadowRadius = 0;
+        this.addRenderLayer(new AutoGlowingGeoLayer<>(this){
+            @Override
+            public void render(PoseStack poseStack, T animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
+                RenderType emissiveRenderType = getRenderType(animatable);
+		        getRenderer().reRender(
+                    bakedModel,
+                    poseStack,
+                    bufferSource,
+                    animatable,
+                    emissiveRenderType,
+					bufferSource.getBuffer(emissiveRenderType),
+                    partialTick,
+                    LightTexture.FULL_BRIGHT,
+                    OverlayTexture.NO_OVERLAY,
+                    1,
+                    1,
+                    1,
+                    1
+                );
+            }
+        });
     }
 
     @Override

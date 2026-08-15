@@ -35,7 +35,7 @@ public class ScreenRenderer {
 
         // int x = (screenW - imgW) / 2;
         // int y = (screenH - imgH) / 2;
-        
+
         if(mc.player.hasEffect(ModEffects.INK_EFFECT.get())){
             if(mc.player.getEffect(ModEffects.INK_EFFECT.get()).getDuration() <= 20){
                 alpha = Math.min(1f, alpha - 0.01f);
@@ -48,35 +48,35 @@ public class ScreenRenderer {
 
         RenderSystem.enableBlend();
         RenderSystem.setShaderColor(1f, 1f, 1f, alpha);
-        
+
         if(mc.player.hasEffect(ModEffects.INK_EFFECT.get())){
             g.blit(
-                INK, 
-                0, 
-                0, 
+                INK,
                 0,
-                0, 
-                screenW, 
-                screenH, 
-                screenW, 
+                0,
+                0,
+                0,
+                screenW,
+                screenH,
+                screenW,
                 screenH
             );
         }else{
             g.blit(
                 INK_GLOWING,
-                0, 
-                0, 
                 0,
-                0, 
-                screenW, 
-                screenH, 
-                screenW, 
+                0,
+                0,
+                0,
+                screenW,
+                screenH,
+                screenW,
                 screenH
             );
         }
-        
+
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-        
+
         RenderSystem.disableBlend();
     }
 }

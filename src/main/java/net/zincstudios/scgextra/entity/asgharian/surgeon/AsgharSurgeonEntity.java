@@ -29,7 +29,7 @@ import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.asgharian.*;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
-import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.entity.common.goal.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.sounds.AsgharianSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -122,12 +122,7 @@ public class AsgharSurgeonEntity extends GunnerEntity implements GeoEntity, Goal
 
     @Override
     protected void tickDeath() {
-        // Override to only extend death time
-        ++this.deathTime;
-        if (this.deathTime >= 30 && !this.level().isClientSide() && !this.isRemoved()) {
-            this.level().broadcastEntityEvent(this, (byte)60);
-            this.remove(Entity.RemovalReason.KILLED);
-        }
+        MobUtil.tickDeath(this, 30);
     }
 
     @Override
@@ -169,7 +164,7 @@ public class AsgharSurgeonEntity extends GunnerEntity implements GeoEntity, Goal
     }
 
     @Override
-    public Vec3 getBulletSpawnOffset() {
+    public Vec3 getBulletSpawnOffset(int gunIndex) {
         return new Vec3(1.25,2,0.75).yRot(-this.yBodyRot * Mth.DEG_TO_RAD);
     }
 

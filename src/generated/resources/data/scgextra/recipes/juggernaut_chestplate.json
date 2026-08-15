@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "B": {
+      "item": "scguns:treated_brass_ingot"
+    },
+    "H": {
+      "item": "scguns:cog_heart"
+    },
+    "L": {
+      "item": "scguns:treated_brass_block"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "ARA",
+    "BHB",
+    "BLB"
+  ],
+  "result": {
+    "item": "scgextra:juggernaut_chestplate"
+  },
+  "show_notification": false
+}

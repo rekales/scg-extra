@@ -23,7 +23,7 @@ import net.zincstudios.scgextra.entity.asgharian.GoalStateHandler;
 import net.zincstudios.scgextra.entity.asgharian.SimpleBurstGunAttackGoal;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
-import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.entity.common.goal.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.sounds.AsgharianSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -57,7 +57,9 @@ public class AsgharFlamerEntity extends GunnerEntity implements GeoEntity, GoalS
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new SimpleBurstGunAttackGoal<>(this, 3, 4)
+        this.goalSelector.addGoal(1, new SimpleBurstGunAttackGoal<>(this)
+                .burstAmount(3)
+                .burstIntervalTicks(4)
                 .runAndGun()
                 .approachDist(4)
                 .attackInterval(60)
@@ -115,12 +117,7 @@ public class AsgharFlamerEntity extends GunnerEntity implements GeoEntity, GoalS
 
     @Override
     protected void tickDeath() {
-        // Override to only extend death time
-        ++this.deathTime;
-        if (this.deathTime >= 55 && !this.level().isClientSide() && !this.isRemoved()) {
-            this.level().broadcastEntityEvent(this, (byte)60);
-            this.remove(Entity.RemovalReason.KILLED);
-        }
+        MobUtil.tickDeath(this, 55);
     }
 
     @Override

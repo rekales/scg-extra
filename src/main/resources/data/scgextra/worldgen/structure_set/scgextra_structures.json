@@ -1,0 +1,81 @@
+{
+  "structures": [
+    {
+      "structure": "scgextra:camping_site",
+      "weight": 5
+    },
+    {
+      "structure": "scgextra:destroyed_mine",
+      "weight": 2
+    },
+    {
+      "structure": "scgextra:fac_blimp",
+      "weight": 2
+    },
+    {
+      "structure": "scgextra:fac_castle",
+      "weight": 2
+    },
+    {
+      "structure": "scgextra:fac_tower",
+      "weight": 2
+    },
+    {
+      "structure": "scgextra:fac_warship",
+      "weight": 2
+    },
+    {
+      "structure": "scgextra:mine_trench",
+      "weight": 2
+    },
+    {
+      "structure": "scgextra:rrc_bunker",
+      "weight": 2
+    },
+    {
+      "structure": "scgextra:rrc_turret",
+      "weight": 2
+    },
+    {
+      "structure": "scgextra:rrc_warship",
+      "weight": 2
+    },
+    {
+      "structure": "scgextra:cog_charge_station",
+      "weight": 2
+    },
+    {
+      "structure": "scgextra:cog_factory",
+      "weight": 2
+    },
+    {
+      "structure": "scgextra:cog_sky_carrier_fabricator",
+      "weight": 2
+    },
+    {
+      "structure": "scgextra:wreckers_digging_station",
+      "weight": 2
+    },
+    {
+      "structure": "scgextra:wreckers_outpost",
+      "weight": 2
+    },
+    {
+      "structure": "scgextra:asghar_soul_forge",
+      "weight": 2
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 32,
+    "separation": 16,
+    "spread_type": "linear",
+    "salt": 3726558,
+    "frequency_reduction_method": "default",
+    "frequency": 1,
+    "exclusion_zone": {
+      "other_set": "scgextra:trenches",
+      "chunk_count": 4
+    }
+  }
+}

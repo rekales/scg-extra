@@ -1,0 +1,115 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "builtin/entity",
+  "texture_size": [
+    32,
+    32
+  ],
+  "gui_light": "front",
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        123,
+        0,
+        0
+      ],
+      "translation": [
+        -6,
+        9.75,
+        -15.75
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        123,
+        0,
+        0
+      ],
+      "translation": [
+        -6,
+        9.75,
+        -15.75
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        110.84999999999991,
+        -2.599999999999909,
+        -6.7800000000002
+      ],
+      "translation": [
+        -7.25,
+        1.5,
+        -17.75
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        110.84999999999991,
+        -2.599999999999909,
+        -6.7800000000002
+      ],
+      "translation": [
+        -7.25,
+        1.5,
+        -17.75
+      ]
+    },
+    "ground": {
+      "translation": [
+        0,
+        -1.5,
+        0
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "gui": {
+      "rotation": [
+        0,
+        23.25,
+        -48.75
+      ],
+      "translation": [
+        -5.25,
+        -5.25,
+        0
+      ],
+      "scale": [
+        0.6,
+        0.6,
+        0.6
+      ]
+    },
+    "head": {
+      "scale": [
+        0,
+        0,
+        0
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        0,
+        46.5
+      ],
+      "translation": [
+        8.5,
+        -8.5,
+        0
+      ],
+      "scale": [
+        0.8,
+        0.8,
+        0.8
+      ]
+    }
+  },
+  "textures": {
+    "particle": "scgextra:item/wrecking_tool"
+  }
+}

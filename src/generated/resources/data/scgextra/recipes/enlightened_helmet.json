@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "C": {
+      "item": "minecraft:sculk_catalyst"
+    },
+    "E": {
+      "item": "minecraft:calibrated_sculk_sensor"
+    },
+    "T": {
+      "item": "scguns:sculk_tome"
+    }
+  },
+  "pattern": [
+    "ECE",
+    "CTC",
+    "A A"
+  ],
+  "result": {
+    "item": "scgextra:enlightened_helmet"
+  },
+  "show_notification": false
+}

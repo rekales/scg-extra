@@ -19,6 +19,9 @@ public class ModParticleTypes {
     public static final RegistryObject<SimpleParticleType> COPPER_FLAME = PARTICLE_TYPES
             .register("copper_flame", () -> new SimpleParticleType(true));
 
+    public static final RegistryObject<SimpleParticleType> LARGE_FLAME = PARTICLE_TYPES
+            .register("large_flame", () -> new SimpleParticleType(true));
+
 
     public static void register(IEventBus modEventBus) {
         PARTICLE_TYPES.register(modEventBus);

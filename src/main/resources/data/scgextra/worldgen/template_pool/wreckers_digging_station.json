@@ -1,0 +1,15 @@
+{
+  "name": "scgextra:wreckers_digging_station",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "scgextra:wreckers_digging_station/wreckers_digging_station",
+        "processors": "minecraft:empty",
+	      "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

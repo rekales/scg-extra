@@ -3,10 +3,10 @@
 	"minecraft:geometry": [
 		{
 			"description": {
-				"identifier": "geometry.unknown",
+				"identifier": "geometry.fac_bluecoat",
 				"texture_width": 64,
 				"texture_height": 64,
-				"visible_bounds_width": 3,
+				"visible_bounds_width": 2,
 				"visible_bounds_height": 3.5,
 				"visible_bounds_offset": [0, 1.25, 0]
 			},
@@ -73,9 +73,9 @@
 					]
 				},
 				{
-					"name": "weapon",
+					"name": "right_hand",
 					"parent": "right_arm",
-					"pivot": [-5.75, 9.75, 0]
+					"pivot": [-5.5, 9.5, -2]
 				},
 				{
 					"name": "left_arm",

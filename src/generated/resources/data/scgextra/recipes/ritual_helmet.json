@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "B": {
+      "item": "minecraft:lapis_block"
+    },
+    "C": {
+      "item": "scguns:ceremonial_cod"
+    },
+    "S": {
+      "item": "scguns:diamond_steel_ingot"
+    }
+  },
+  "pattern": [
+    "BSB",
+    "SCS",
+    "A A"
+  ],
+  "result": {
+    "item": "scgextra:ritual_helmet"
+  },
+  "show_notification": false
+}

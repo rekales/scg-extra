@@ -73,4 +73,7 @@ public class ExpandedAnimationController<T extends GeoAnimatable> extends Animat
     public interface AnimationSupplier {
         RawAnimation get(ExpandedAnimationController<?> controller);
     }
+
+    // TODO: triggered sequence animations via triggerAnim
+    // Example: stun_start anim -> wait for trigger -> stun_end anim
 }

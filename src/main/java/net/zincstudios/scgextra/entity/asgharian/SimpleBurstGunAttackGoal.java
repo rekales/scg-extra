@@ -4,17 +4,18 @@ import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 
+/**
+ * @see SimpleGunAttackGoal for docs.
+ */
 public class SimpleBurstGunAttackGoal<T extends PathfinderMob> extends SimpleGunAttackGoal<T> {
 
-    protected final int burstAmount;
-    protected final int burstInterval;
+    protected int burstAmount = 3;
+    protected int burstInterval = 4;
     protected int burstCooldown = 0;
     protected int burstLeft = 0;
 
-    public SimpleBurstGunAttackGoal(T mob, int burstAmount, int burstIntervalTicks) {
+    public SimpleBurstGunAttackGoal(T mob) {
         super(mob);
-        this.burstAmount = burstAmount;
-        this.burstInterval = Math.max(burstIntervalTicks, 1);
     }
 
     @Override
@@ -38,5 +39,18 @@ public class SimpleBurstGunAttackGoal<T extends PathfinderMob> extends SimpleGun
         }
 
         return this.burstLeft > 0;
+    }
+
+    // Factory methods
+    public SimpleBurstGunAttackGoal<T> burstAmount(int burstAmount) {
+        this.burstAmount = burstAmount;
+
+        return this;
+    }
+
+    public SimpleBurstGunAttackGoal<T> burstIntervalTicks(int burstIntervalTicks) {
+        this.burstInterval = Math.max(burstIntervalTicks, 1);
+
+        return this;
     }
 }

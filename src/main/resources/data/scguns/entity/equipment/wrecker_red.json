@@ -1,0 +1,30 @@
+{
+  "id": "scgextra:wrecker_red",
+  "equipment_chance": 1.0,
+  "items": [
+    {
+      "item": "scguns:greaser_smg",
+      "weight": 5.0,
+      "drop_chance": 0.0,
+      "min_durability": 0.2,
+      "max_durability": 0.5,
+      "slot": "mainhand"
+    },
+    {
+      "item": "scguns:mak_mkii",
+      "weight": 3.0,
+      "drop_chance": 0.0,
+      "min_durability": 0.2,
+      "max_durability": 0.5,
+      "slot": "mainhand"
+    },
+    {
+      "item": "scguns:gattaler",
+      "weight": 2.0,
+      "drop_chance": 0.0,
+      "min_durability": 0.2,
+      "max_durability": 0.5,
+      "slot": "mainhand"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "scgextra:item/wrecking_tool_2d"
+  }
+}

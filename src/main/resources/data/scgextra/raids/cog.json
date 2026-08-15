@@ -1,0 +1,64 @@
+{
+  "raid_id" : "cog",
+  "flare_raid_id" : "treated_brass",
+
+  "waves" : [
+    {
+      "infantry": 10
+    },
+    {
+      "infantry": 6,
+      "elite": 4
+    },
+    {
+      "infantry": 4,
+      "elite": 3,
+      "miniboss": 1
+    },
+    {
+      "boss": 1
+    }
+  ],
+
+  "infantry" : [
+    {
+      "entity_id": "scgextra:cog_vulture"
+    },
+    {
+      "entity_id": "scgextra:cog_venator"
+    },
+    {
+      "entity_id": "scguns:cog_minion"
+    },
+    {
+      "entity_id": "scguns:sky_carrier"
+    },
+    {
+      "entity_id": "scguns:trauma_unit"
+    }
+  ],
+  "elite" : [
+    {
+      "entity_id": "scgextra:cog_bombardier"
+    },
+    {
+      "entity_id": "scguns:cog_knight"
+    }
+  ],
+  "miniboss" : [
+    {
+      "entity_id": "scgextra:cog_devastator"
+    },
+    {
+      "entity_id": "scgextra:cog_gigantes"
+    },
+    {
+      "entity_id": "scgextra:cog_centipede"
+    }
+  ],
+  "boss" : [
+    {
+      "entity_id": "scgextra:cog_juggernaut"
+    }
+  ]
+}

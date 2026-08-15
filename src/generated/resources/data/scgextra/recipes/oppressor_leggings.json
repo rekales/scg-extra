@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": {
+      "item": "minecraft:copper_ingot"
+    },
+    "L": {
+      "item": "minecraft:leather"
+    },
+    "M": {
+      "item": "scguns:rusty_medal"
+    }
+  },
+  "pattern": [
+    "LML",
+    "L L",
+    "C C"
+  ],
+  "result": {
+    "item": "scgextra:oppressor_leggings"
+  },
+  "show_notification": false
+}

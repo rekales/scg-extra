@@ -1,0 +1,57 @@
+{
+  "raid_id" : "wrecker",
+  "flare_raid_id" : "wrecker_super",
+  "finish_loot" : "scgextra:raid/wrecker_super",
+
+  "waves" : [
+    {
+      "infantry": 10
+    },
+    {
+      "infantry": 10,
+      "elite": 3
+    },
+    {
+      "infantry": 12,
+      "elite": 4,
+      "miniboss": 1
+    },
+    {
+      "infantry": 10,
+      "elite": 6,
+      "miniboss": 3
+    },
+    {
+      "infantry": 6,
+      "elite": 2,
+      "boss": 2
+    }
+  ],
+
+  "infantry" : [
+    {
+      "entity_id": "scgextra:wrecker_red"
+    },
+    {
+      "entity_id": "scgextra:wrecker_blue"
+    },
+    {
+      "entity_id": "scgextra:wrecker_green"
+    }
+  ],
+  "elite" : [
+    {
+      "entity_id": "scgextra:wrecker_helicube"
+    }
+  ],
+  "miniboss" : [
+    {
+      "entity_id": "scgextra:wrecker_jumbo"
+    }
+  ],
+  "boss" : [
+    {
+      "entity_id": "scgextra:wrecker_dozer"
+    }
+  ]
+}

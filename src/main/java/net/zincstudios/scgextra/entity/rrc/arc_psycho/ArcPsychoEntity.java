@@ -25,7 +25,7 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.entity.common.goal.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.sounds.RRCSounds;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.MobUtil;
@@ -89,11 +89,7 @@ public class ArcPsychoEntity extends Monster implements GeoEntity{
     }
     @Override
     protected void tickDeath() {
-        ++this.deathTime;
-        if (this.deathTime >= 12 && !this.level().isClientSide() && !this.isRemoved()) {
-            this.level().broadcastEntityEvent(this, (byte)60);
-            this.remove(RemovalReason.KILLED);
-        }
+        MobUtil.tickDeath(this, 12);
     }
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
         return MobUtil.getSound(

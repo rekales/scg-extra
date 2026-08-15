@@ -1410,7 +1410,7 @@
 			}
 		},
 		"attack_claw": {
-			"animation_length": 3,
+			"animation_length": 1,
 			"bones": {
 				"arm_left": {
 					"rotation": {
@@ -1691,7 +1691,6 @@
 			}
 		},
 		"attack_sting": {
-			"loop": true,
 			"animation_length": 3,
 			"bones": {
 				"arm_left": {

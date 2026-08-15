@@ -1,5 +1,7 @@
 package net.zincstudios.scgextra.entity.rrc.drone;
 
+import java.util.UUID;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -104,5 +106,14 @@ public class DronePart extends PartEntity<DroneEntity>{
     @Override
     public PushReaction getPistonPushReaction() {
         return PushReaction.IGNORE;
+    }
+    //giving the parent's UUID makes it so any commands that target this always get's the parent
+    @Override
+    public UUID getUUID() {
+        return this.parentMob.getUUID();
+    }
+    @Override
+    public String getStringUUID() {
+        return this.parentMob.getStringUUID();
     }
 }

@@ -2,8 +2,8 @@ package net.zincstudios.scgextra.entity.whaler.pufficus;
 
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.EquippedEntity;
-import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
-import net.zincstudios.scgextra.entity.common.ai.ItemEffectMeleeAttackGoal;
+import net.zincstudios.scgextra.entity.common.goal.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.entity.common.goal.ItemEffectMeleeAttackGoal;
 import net.zincstudios.scgextra.entity.projectile.net.NetEntity;
 
 import net.minecraft.core.BlockPos;

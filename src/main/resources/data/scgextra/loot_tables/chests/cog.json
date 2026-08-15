@@ -1,0 +1,215 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "scguns:advanced_round"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:compact_advanced_round"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:ancient_brass"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:copper_ingot"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:gunpowder"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "create:zinc_ingot"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:grenade"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:gunpowder_dust"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:choke_bomb"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:basic_poultice"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:honey_sulfur_poultice"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scgextra:bandage"
+        }
+      ],
+      "rolls": 4,
+      "functions": [
+        {
+          "function": "minecraft:set_count",
+          "count": 4,
+          "add": true
+        }
+      ],
+      "conditions": []
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "scguns:treated_brass_flare",
+          "functions": [
+            {
+              "function": "minecraft:limit_count",
+              "limit": {
+                "min": 0,
+                "max": 1
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:blueprint_scrap",
+          "functions": [
+            {
+              "function": "minecraft:limit_count",
+              "limit": {
+                "min": 0,
+                "max": 1
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:jackhammer",
+          "conditions": [
+            {
+              "chance": 0.05,
+              "condition": "minecraft:random_chance"
+            }
+          ],
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly",
+              "enchantments": [
+                "scguns:gun_rust"
+              ]
+            },
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "type": "uniform",
+                "min": 0.5,
+                "max": 1.0
+              }
+            },
+            {
+              "function": "minecraft:limit_count",
+              "limit": {
+                "min": 0,
+                "max": 1
+              },
+              "conditions": []
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:iron_bayonet",
+          "conditions": [],
+          "functions": [
+            {
+              "function": "minecraft:limit_count",
+              "limit": {
+                "min": 0,
+                "max": 1
+              },
+              "conditions": []
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:grandle",
+          "conditions": [
+            {
+              "chance": 0.05,
+              "condition": "minecraft:random_chance"
+            }
+          ],
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly",
+              "enchantments": [
+                "scguns:gun_rust"
+              ]
+            },
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "type": "uniform",
+                "min": 0.5,
+                "max": 1.0
+              }
+            },
+            {
+              "function": "minecraft:limit_count",
+              "limit": {
+                "min": 0,
+                "max": 1
+              },
+              "conditions": []
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:cogloader",
+          "conditions": [
+            {
+              "chance": 0.05,
+              "condition": "minecraft:random_chance"
+            }
+          ],
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly",
+              "enchantments": [
+                "scguns:gun_rust"
+              ]
+            },
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "type": "uniform",
+                "min": 0.5,
+                "max": 1.0
+              }
+            },
+            {
+              "function": "minecraft:limit_count",
+              "limit": {
+                "min": 0,
+                "max": 1
+              },
+              "conditions": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "functions": []
+}

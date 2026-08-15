@@ -1,0 +1,30 @@
+{
+  "parent": "minecraft:item/handheld",
+  "loader": "forge:separate_transforms",
+  "base": {
+    "parent": "scgextra:item/wrecker_rpg_3d"
+  },
+  "perspectives": {
+    "firstperson_righthand": {
+      "parent": "scgextra:item/wrecker_rpg_3d"
+    },
+    "firstperson_lefthand": {
+      "parent": "scgextra:item/wrecker_rpg_3d"
+    },
+    "thirdperson_righthand": {
+      "parent": "scgextra:item/wrecker_rpg_3d"
+    },
+    "thirdperson_lefthand": {
+      "parent": "scgextra:item/wrecker_rpg_3d"
+    },
+    "fixed": {
+      "parent": "scgextra:item/wrecker_rpg_2d"
+    },
+    "gui": {
+      "parent": "scgextra:item/wrecker_rpg_2d"
+    },
+    "ground": {
+      "parent": "scgextra:item/wrecker_rpg_2d"
+    }
+  }
+}

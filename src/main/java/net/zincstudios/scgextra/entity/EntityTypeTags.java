@@ -13,6 +13,7 @@ public class EntityTypeTags {
     public static final TagKey<EntityType<?>> FAC = tag("factions/fac");
     public static final TagKey<EntityType<?>> RRC = tag("factions/rrc");
     public static final TagKey<EntityType<?>> WHALER = tag("factions/whaler");
+    public static final TagKey<EntityType<?>> WRECKERS = tag("factions/wreckers");
 
     public static TagKey<EntityType<?>> tag(String name) {
         return TagKey.create(Registries.ENTITY_TYPE, SCGExtra.asResource(name));

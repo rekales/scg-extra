@@ -22,8 +22,10 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.EquippedEntity;
-import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.entity.common.goal.HurtByNonFactionGoal;
 import org.jetbrains.annotations.Nullable;
+
+import net.zincstudios.scgextra.entity.common.MobUtil;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -145,12 +147,7 @@ public class FailedOneEntity extends EquippedEntity implements GeoEntity {
 
     @Override
     protected void tickDeath() {
-        // Override to only extend death time
-        ++this.deathTime;
-        if (this.deathTime >= 30 && !this.level().isClientSide() && !this.isRemoved()) {
-            this.level().broadcastEntityEvent(this, (byte)60);
-            this.remove(Entity.RemovalReason.KILLED);
-        }
+        MobUtil.tickDeath(this, 30);
     }
 
     protected SoundEvent getAmbientSound() {

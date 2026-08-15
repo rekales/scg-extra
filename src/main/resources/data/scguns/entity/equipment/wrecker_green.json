@@ -1,0 +1,14 @@
+{
+  "id": "scgextra:wrecker_green",
+  "equipment_chance": 1.0,
+  "items": [
+    {
+      "item": "scgextra:wrecker_rpg",
+      "weight": 10.0,
+      "drop_chance": 0.0,
+      "min_durability": 0.2,
+      "max_durability": 0.5,
+      "slot": "mainhand"
+    }
+  ]
+}

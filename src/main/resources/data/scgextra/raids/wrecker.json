@@ -1,0 +1,49 @@
+{
+  "raid_id" : "wrecker",
+  "flare_raid_id" : "wrecker",
+
+  "waves" : [
+    {
+      "infantry": 10
+    },
+    {
+      "infantry": 12,
+      "elite": 3
+    },
+    {
+      "infantry": 10,
+      "elite": 5,
+      "miniboss": 1
+    },
+    {
+      "boss": 1
+    }
+  ],
+
+  "infantry" : [
+    {
+      "entity_id": "scgextra:wrecker_red"
+    },
+    {
+      "entity_id": "scgextra:wrecker_blue"
+    },
+    {
+      "entity_id": "scgextra:wrecker_green"
+    }
+  ],
+  "elite" : [
+    {
+      "entity_id": "scgextra:wrecker_helicube"
+    }
+  ],
+  "miniboss" : [
+    {
+      "entity_id": "scgextra:wrecker_jumbo"
+    }
+  ],
+  "boss" : [
+    {
+      "entity_id": "scgextra:wrecker_dozer"
+    }
+  ]
+}

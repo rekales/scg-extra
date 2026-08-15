@@ -1,0 +1,8 @@
+{
+  "type": "scgextra:asghar_soul_forge_structure",
+  "spawn_overrides": {},
+  "step": "surface_structures",
+  "terrain_adaptation": "none",
+  "biomes": "#minecraft:is_overworld",
+  "use_expansion_hack": false
+}

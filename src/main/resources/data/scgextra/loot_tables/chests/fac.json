@@ -1,0 +1,321 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "scguns:gas_grenade"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:grenade"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:gunpowder_dust"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:gunpowder"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_ingot"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:anthralite_ingot"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:compact_advanced_round"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:advanced_round"
+        }
+      ],
+      "rolls": 4,
+      "functions": [
+        {
+          "function": "minecraft:set_count",
+          "count": 4,
+          "add": true
+        }
+      ],
+      "conditions": []
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "scguns:iron_flare",
+          "functions": [
+            {
+              "function": "minecraft:limit_count",
+              "limit": {
+                "min": 0,
+                "max": 1
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:blueprint_scrap",
+          "functions": [
+            {
+              "function": "minecraft:limit_count",
+              "limit": {
+                "min": 0,
+                "max": 1
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:anthralite_shovel",
+          "weight": 1,
+          "conditions": [],
+          "functions": [
+            {
+              "function": "minecraft:limit_count",
+              "limit": {
+                "min": 0,
+                "max": 1
+              },
+              "conditions": []
+            },
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "type": "uniform",
+                "min": 0.5,
+                "max": 1.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:iron_spear",
+          "weight": 1,
+          "conditions": [
+            {
+              "chance": 0.05,
+              "condition": "minecraft:random_chance"
+            }
+          ],
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly",
+              "enchantments": [
+                "scguns:gun_rust"
+              ]
+            },
+            {
+              "function": "minecraft:limit_count",
+              "limit": {
+                "min": 0,
+                "max": 1
+              },
+              "conditions": []
+            },
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "type": "uniform",
+                "min": 0.5,
+                "max": 1.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:iron_spear",
+          "weight": 1,
+          "conditions": [
+            {
+              "chance": 0.05,
+              "condition": "minecraft:random_chance"
+            }
+          ],
+          "functions": [
+            {
+              "function": "minecraft:limit_count",
+              "limit": {
+                "min": 0,
+                "max": 1
+              },
+              "conditions": []
+            },
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "type": "uniform",
+                "min": 0.5,
+                "max": 1.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:iron_bayonet",
+          "conditions": [],
+          "functions": [
+            {
+              "function": "minecraft:limit_count",
+              "limit": {
+                "min": 0,
+                "max": 1
+              },
+              "conditions": []
+            },
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "type": "uniform",
+                "min": 0.5,
+                "max": 1.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:iron_javelin",
+          "weight": 1,
+          "conditions": [
+            {
+              "chance": 0.05,
+              "condition": "minecraft:random_chance"
+            }
+          ],
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly",
+              "enchantments": [
+                "scguns:gun_rust"
+              ]
+            },
+            {
+              "function": "minecraft:limit_count",
+              "limit": {
+                "min": 0,
+                "max": 1
+              },
+              "conditions": []
+            },
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "type": "uniform",
+                "min": 0.5,
+                "max": 1.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:iron_javelin",
+          "weight": 1,
+          "conditions": [
+            {
+              "chance": 0.05,
+              "condition": "minecraft:random_chance"
+            }
+          ],
+          "functions": [
+            {
+              "function": "minecraft:limit_count",
+              "limit": {
+                "min": 0,
+                "max": 1
+              },
+              "conditions": []
+            },
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "type": "uniform",
+                "min": 0.5,
+                "max": 1.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:trenchur",
+          "weight": 1,
+          "conditions": [
+            {
+              "chance": 0.05,
+              "condition": "minecraft:random_chance"
+            }
+          ],
+          "functions": [
+            {
+              "function": "minecraft:enchant_randomly",
+              "enchantments": [
+                "scguns:gun_rust"
+              ]
+            },
+            {
+              "function": "minecraft:limit_count",
+              "limit": {
+                "min": 0,
+                "max": 1
+              },
+              "conditions": []
+            },
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "type": "uniform",
+                "min": 0.5,
+                "max": 1.0
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:trenchur",
+          "weight": 1,
+          "conditions": [
+            {
+              "chance": 0.05,
+              "condition": "minecraft:random_chance"
+            }
+          ],
+          "functions": [
+            {
+              "function": "minecraft:limit_count",
+              "limit": {
+                "min": 0,
+                "max": 1
+              },
+              "conditions": []
+            },
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "type": "uniform",
+                "min": 0.5,
+                "max": 1.0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "functions": []
+}

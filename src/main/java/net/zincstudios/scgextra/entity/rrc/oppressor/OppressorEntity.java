@@ -24,9 +24,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.common.GunnerEntity;
 import net.zincstudios.scgextra.entity.common.MobUtil;
-import net.zincstudios.scgextra.entity.common.ai.AlertFactionGoal;
-import net.zincstudios.scgextra.entity.common.ai.FlareSummonGoal;
-import net.zincstudios.scgextra.entity.common.ai.HurtByNonFactionGoal;
+import net.zincstudios.scgextra.entity.common.goal.AlertFactionGoal;
+import net.zincstudios.scgextra.entity.common.goal.FlareSummonGoal;
+import net.zincstudios.scgextra.entity.common.goal.HurtByNonFactionGoal;
 import net.zincstudios.scgextra.entity.common.client.ExpandedAnimationController;
 import net.zincstudios.scgextra.entity.rrc.RRCEntities;
 import net.zincstudios.scgextra.sounds.RRCSounds;
@@ -194,12 +194,7 @@ public class OppressorEntity extends GunnerEntity implements GeoEntity {
 
     @Override
     protected void tickDeath() {
-        // Override to only extend death time
-        ++this.deathTime;
-        if (this.deathTime >= 30 && !this.level().isClientSide() && !this.isRemoved()) {
-            this.level().broadcastEntityEvent(this, (byte)60);
-            this.remove(Entity.RemovalReason.KILLED);
-        }
+        MobUtil.tickDeath(this, 30);
     }
 
     @Override
