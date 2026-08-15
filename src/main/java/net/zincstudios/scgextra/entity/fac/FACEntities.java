@@ -3,10 +3,13 @@ package net.zincstudios.scgextra.entity.fac;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -107,6 +110,7 @@ public class FACEntities {
     public static void register(IEventBus modEventBus) {
         modEventBus.addListener(FACEntities::registerAttributes);
         modEventBus.addListener(FACEntities::onCommonSetup);
+        modEventBus.addListener(FACEntities::registerSpawnPlacements);
         if (FMLEnvironment.dist == Dist.CLIENT) {
             modEventBus.addListener(FACEntities::onClientSetup);
         }
@@ -161,5 +165,77 @@ public class FACEntities {
         EntityRenderers.register(FACEntities.FAC_TANK.get(), (ctx) -> new FacTankRenderer(ctx,
                 new DefaultedEntityGeoModel<>(SCGExtra.asResource("fac/fac_tank"))).noDeathTilt());
         EntityRenderers.register(FACEntities.TANK_CANNON_PROJECTILE.get(), TankCannonProjectileRenderer::new);
+    }
+    public static void registerSpawnPlacements(SpawnPlacementRegisterEvent event) {
+        event.register(
+            FACEntities.FAC_TRENCHER.get(),
+            SpawnPlacements.Type.ON_GROUND,
+            Heightmap.Types.WORLD_SURFACE,
+            FacTrencherEntity::checkMonsterSpawnRules,
+            SpawnPlacementRegisterEvent.Operation.REPLACE
+        );
+        event.register(
+            FACEntities.FAC_BLUECOAT.get(),
+            SpawnPlacements.Type.ON_GROUND,
+            Heightmap.Types.WORLD_SURFACE,
+            FacBluecoatEntity::checkMonsterSpawnRules,
+            SpawnPlacementRegisterEvent.Operation.REPLACE
+        );
+        event.register(
+            FACEntities.TRENCH_GOBLIN.get(),
+            SpawnPlacements.Type.ON_GROUND,
+            Heightmap.Types.WORLD_SURFACE,
+            FacTrenchGoblinEntity::checkMonsterSpawnRules,
+            SpawnPlacementRegisterEvent.Operation.REPLACE
+        );
+        event.register(
+            FACEntities.TRENCH_SNIPER.get(),
+            SpawnPlacements.Type.ON_GROUND,
+            Heightmap.Types.WORLD_SURFACE,
+            FacTrenchSniperEntity::checkMonsterSpawnRules,
+            SpawnPlacementRegisterEvent.Operation.REPLACE
+        );
+        event.register(
+            FACEntities.SHOVEL_KNIGHT.get(),
+            SpawnPlacements.Type.ON_GROUND,
+            Heightmap.Types.WORLD_SURFACE,
+            FacShovelKnightEntity::checkMonsterSpawnRules,
+            SpawnPlacementRegisterEvent.Operation.REPLACE
+        );
+        event.register(
+            FACEntities.FAC_COMMISSAR.get(),
+            SpawnPlacements.Type.ON_GROUND,
+            Heightmap.Types.WORLD_SURFACE,
+            FacCommissarEntity::checkMonsterSpawnRules,
+            SpawnPlacementRegisterEvent.Operation.REPLACE
+        );
+        event.register(
+            FACEntities.FAC_TANK_BUSTER.get(),
+            SpawnPlacements.Type.ON_GROUND,
+            Heightmap.Types.WORLD_SURFACE,
+            FacTankBusterEntity::checkMonsterSpawnRules,
+            SpawnPlacementRegisterEvent.Operation.REPLACE
+        );
+        event.register(
+            FACEntities.FAC_LION.get(),
+            SpawnPlacements.Type.ON_GROUND,
+            Heightmap.Types.WORLD_SURFACE,
+            FacLionEntity::checkMonsterSpawnRules,
+            SpawnPlacementRegisterEvent.Operation.REPLACE
+        );
+        event.register(
+            FACEntities.FAC_WALKER.get(),
+            SpawnPlacements.Type.ON_GROUND,
+            Heightmap.Types.WORLD_SURFACE,
+            FacWalkerEntity::checkMonsterSpawnRules,
+            SpawnPlacementRegisterEvent.Operation.REPLACE
+        );
+        event.register(
+            FACEntities.FAC_TANK.get(),
+            SpawnPlacements.Type.ON_GROUND,
+            Heightmap.Types.WORLD_SURFACE,
+            FacTankEntity::checkMonsterSpawnRules,
+            SpawnPlacementRegisterEvent.Operation.REPLACE
+        );
     }
 }

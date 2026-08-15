@@ -352,56 +352,56 @@ public class NeutralEntities {
             SpawnPlacements.Type.ON_GROUND,
             Heightmap.Types.WORLD_SURFACE,
             AmmoGoblinEntity::checkMonsterSpawnRules,
-            SpawnPlacementRegisterEvent.Operation.OR
+            SpawnPlacementRegisterEvent.Operation.REPLACE
         );
         event.register(
             NeutralEntities.BIG_LUMP.get(),
             SpawnPlacements.Type.ON_GROUND,
             Heightmap.Types.WORLD_SURFACE,
             BigLumpEntity::checkMonsterSpawnRules,
-            SpawnPlacementRegisterEvent.Operation.OR
+            SpawnPlacementRegisterEvent.Operation.REPLACE
         );
         event.register(
             NeutralEntities.NITRO_BEETLE.get(),
             SpawnPlacements.Type.ON_GROUND,
             Heightmap.Types.WORLD_SURFACE,
             NitroBeetleEntity::checkMonsterSpawnRules,
-            SpawnPlacementRegisterEvent.Operation.OR
+            SpawnPlacementRegisterEvent.Operation.REPLACE
         );
         event.register(
             NeutralEntities.HEAD_HUNTER.get(),
             SpawnPlacements.Type.ON_GROUND,
             Heightmap.Types.WORLD_SURFACE,
             HeadHunterEntity::checkMonsterSpawnRules,
-            SpawnPlacementRegisterEvent.Operation.OR
+            SpawnPlacementRegisterEvent.Operation.REPLACE
         );
         event.register(
             NeutralEntities.NETHERITE_EATER.get(),
             SpawnPlacements.Type.ON_GROUND,
             Heightmap.Types.WORLD_SURFACE,
             NetheriteEaterEntity::checkMonsterSpawnRules,
-            SpawnPlacementRegisterEvent.Operation.OR
+            SpawnPlacementRegisterEvent.Operation.REPLACE
         );
         event.register(
             NeutralEntities.END_DWELLER.get(),
             SpawnPlacements.Type.ON_GROUND,
             Heightmap.Types.WORLD_SURFACE,
             EndDwellerEntity::checkMonsterSpawnRules,
-            SpawnPlacementRegisterEvent.Operation.OR
+            SpawnPlacementRegisterEvent.Operation.REPLACE
         );
         event.register(
             NeutralEntities.END_STONE_CRAB.get(),
             SpawnPlacements.Type.ON_GROUND,
             Heightmap.Types.WORLD_SURFACE,
             EndStoneCrabEntity::checkMonsterSpawnRules,
-            SpawnPlacementRegisterEvent.Operation.OR
+            SpawnPlacementRegisterEvent.Operation.REPLACE
         );
         event.register(
             NeutralEntities.END_SCORPION.get(),
             SpawnPlacements.Type.ON_GROUND,
             Heightmap.Types.WORLD_SURFACE,
             EndScorpionEntity::checkMonsterSpawnRules,
-            SpawnPlacementRegisterEvent.Operation.OR
+            SpawnPlacementRegisterEvent.Operation.REPLACE
         );
         event.register(
             NeutralEntities.END_POD.get(),

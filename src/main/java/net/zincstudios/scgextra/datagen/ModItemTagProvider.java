@@ -33,5 +33,7 @@ public class ModItemTagProvider extends ItemTagsProvider {
                 .add(ModItems.MEDAL_OF_CRUELTY.get())
                 .add(ModItems.MEDAL_OF_ENLIGHTENMENT.get())
                 .add(ModItems.MEDAL_OF_CONQUEROR.get());
+        tag(ItemTags.create(ResourceLocation.fromNamespaceAndPath("curios", "belt")))
+                .add(ModItems.MEDKIT.get());
     }
 }

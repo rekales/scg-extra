@@ -67,14 +67,14 @@ public class WreckingToolItem extends PickaxeItem implements ArmorPiercing, GeoI
         return true;
     }
 
+    @OnlyIn(value = Dist.CLIENT)
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "main", 4,
                 state -> {
                     Minecraft mc = Minecraft.getInstance();
-                    Player player = mc.player;
-                    if (player == null) return state.setAndContinue(IDLE);
-                    if (HoldAttackHandler.isHeldAttack(player)) return state.setAndContinue(ATTACK);
+                    if (mc.player == null) return state.setAndContinue(IDLE);
+                    if (HoldAttackHandler.isHeldAttack(mc.player)) return state.setAndContinue(ATTACK);
                     return state.setAndContinue(IDLE);
                 })
         );

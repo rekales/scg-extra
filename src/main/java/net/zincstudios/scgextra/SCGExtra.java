@@ -12,13 +12,16 @@ import net.zincstudios.scgextra.effects.ModEffects;
 import net.zincstudios.scgextra.entity.Faction;
 import net.zincstudios.scgextra.entity.ModEntities;
 import net.zincstudios.scgextra.entity.common.client.GunFlashHandler;
+import net.zincstudios.scgextra.entity.wreckers.wrecker_green.WreckerGreenEntity;
 
 import com.mojang.logging.LogUtils;
 
 import net.zincstudios.scgextra.worldgen.structure.ModPieces;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
+import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.eventbus.api.Event.Result;
@@ -37,6 +40,7 @@ import net.zincstudios.scgextra.worldgen.biome.surface.ModSurfaceRules;
 import net.zincstudios.scgextra.worldgen.structure.ModStructureProcessors;
 import net.zincstudios.scgextra.worldgen.structure.ModStructures;
 import terrablender.api.SurfaceRuleManager;
+import top.ribs.scguns.entity.projectile.RocketEntity;
 
 import org.slf4j.Logger;
 
@@ -99,6 +103,17 @@ public class SCGExtra
                 if (event.getEntity() instanceof Animal) {
                     event.setResult(Result.DENY);
                 }
+            }
+        }
+        @SubscribeEvent
+        public static void onExplosionDetonate(ExplosionEvent.Detonate event) {
+            if(event.getExplosion().getDirectSourceEntity() instanceof RocketEntity re){
+                if(re.getShooter().getMainHandItem().is(ModItems.WRECKER_RPG.get())){
+                    event.getAffectedEntities().removeIf(entity -> entity instanceof ItemEntity);
+                }
+            }
+            if(event.getExplosion().getDirectSourceEntity() instanceof WreckerGreenEntity){
+                event.getAffectedEntities().removeIf(entity -> entity instanceof ItemEntity);
             }
         }
     }

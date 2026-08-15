@@ -7,14 +7,17 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.Musics;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.AmbientMoodSettings;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.biome.BiomeSpecialEffects;
 import net.minecraft.world.level.biome.MobSpawnSettings;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import net.zincstudios.scgextra.SCGExtra;
+import net.zincstudios.scgextra.entity.fac.FACEntities;
+import net.zincstudios.scgextra.entity.neutral.NeutralEntities;
+import net.zincstudios.scgextra.worldgen.ModPlacedFeatures;
 
 public class ModBiomes {
     public static final ResourceKey<Biome> WARZONE_BIOME = ResourceKey.create(Registries.BIOME,
@@ -35,7 +38,12 @@ public class ModBiomes {
 
     public static Biome warzoneBiome(BootstapContext<Biome> context) {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
-        spawnBuilder.addSpawn(MobCategory.CREATURE, new MobSpawnSettings.SpawnerData(EntityType.ALLAY, 2, 3, 5));
+        spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(FACEntities.FAC_TRENCHER.get(), 6, 1, 2));
+        spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(FACEntities.TRENCH_GOBLIN.get(), 6, 1, 2));
+        spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(FACEntities.TRENCH_SNIPER.get(), 6, 1, 2));
+        spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(FACEntities.SHOVEL_KNIGHT.get(), 6, 1, 2));
+        spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(NeutralEntities.INFLICTED_BOAR.get(), 1, 1, 1));
+        spawnBuilder.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(NeutralEntities.INFLICTED_WOLF.get(), 1, 1, 2));
 
         BiomeGenerationSettings.Builder biomeBuilder =
                 new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
@@ -44,9 +52,13 @@ public class ModBiomes {
         BiomeDefaultFeatures.addFerns(biomeBuilder);
         BiomeDefaultFeatures.addDefaultOres(biomeBuilder);
         BiomeDefaultFeatures.addExtraGold(biomeBuilder);
+        biomeBuilder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, ModPlacedFeatures.GRAVEL_PATCH_PLACED_KEY);
         BiomeDefaultFeatures.addDesertVegetation(biomeBuilder);
-
+        
         BiomeDefaultFeatures.addDefaultMushrooms(biomeBuilder);
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.WARZONE_SPRUCE_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.GRASS_PATCH_PLACED_KEY);
+        biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.GRASS_PATCH_TALL_PLACED_KEY);
 
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
@@ -57,12 +69,12 @@ public class ModBiomes {
                 .specialEffects((new BiomeSpecialEffects.Builder())
                         .waterColor(0x685743)
                         .waterFogColor(0x685743)
-                        .skyColor(0x3f403b)
-                        .grassColorOverride(0x2c3025)
-                        .foliageColorOverride(0x2c3025)
-                        .fogColor(0x72736c)
+                        .skyColor(0x3F403B)
+                        .grassColorOverride(0x2C3025)
+                        .foliageColorOverride(0x2C3025)
+                        .fogColor(0x72736C)
                         .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS)
-                        .backgroundMusic(Musics.createGameMusic(SoundEvents.MUSIC_BIOME_NETHER_WASTES)).build())
+                        .backgroundMusic(Musics.createGameMusic(SoundEvents.AMBIENT_NETHER_WASTES_LOOP)).build())
                 .build();
     }
 }

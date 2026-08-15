@@ -21,7 +21,7 @@
       "max_delay": 24000,
       "min_delay": 12000,
       "replace_current_music": false,
-      "sound": "minecraft:music.nether.nether_wastes"
+      "sound": "minecraft:ambient.nether_wastes.loop"
     },
     "sky_color": 4145211,
     "water_color": 6838083,
@@ -68,7 +68,8 @@
       "minecraft:ore_lapis_buried",
       "minecraft:ore_copper",
       "minecraft:underwater_magma",
-      "minecraft:ore_gold_extra"
+      "minecraft:ore_gold_extra",
+      "scgextra:gravel_patch"
     ],
     [],
     [
@@ -80,7 +81,10 @@
       "minecraft:patch_large_fern",
       "minecraft:patch_dead_bush_2",
       "minecraft:brown_mushroom_normal",
-      "minecraft:red_mushroom_normal"
+      "minecraft:red_mushroom_normal",
+      "scgextra:warzone_spruce_placed",
+      "scgextra:grass_patch",
+      "scgextra:grass_patch_tall"
     ],
     [
       "minecraft:freeze_top_layer"
@@ -91,16 +95,46 @@
   "spawners": {
     "ambient": [],
     "axolotls": [],
-    "creature": [
+    "creature": [],
+    "misc": [],
+    "monster": [
       {
-        "type": "minecraft:allay",
-        "maxCount": 5,
-        "minCount": 3,
-        "weight": 2
+        "type": "scgextra:fac_trencher",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 6
+      },
+      {
+        "type": "scgextra:fac_trench_goblin",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 6
+      },
+      {
+        "type": "scgextra:fac_trench_sniper",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 6
+      },
+      {
+        "type": "scgextra:fac_shovel_knight",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 6
+      },
+      {
+        "type": "scgextra:inflicted_boar",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 1
+      },
+      {
+        "type": "scgextra:inflicted_wolf",
+        "maxCount": 2,
+        "minCount": 1,
+        "weight": 1
       }
     ],
-    "misc": [],
-    "monster": [],
     "underground_water_creature": [],
     "water_ambient": [],
     "water_creature": []
