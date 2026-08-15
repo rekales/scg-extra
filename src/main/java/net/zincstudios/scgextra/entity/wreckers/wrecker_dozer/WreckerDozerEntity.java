@@ -96,7 +96,7 @@ public class WreckerDozerEntity extends Monster implements GeoEntity, Stunnable,
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new StunnedWithVisualGoal<>(this).smoking(true));
         this.goalSelector.addGoal(2, new WreckerDozerChargeGoal(this, 200, 20.0F));
-        this.goalSelector.addGoal(3, new WreckerDozerSummonGoal(this, 100, 3));
+        this.goalSelector.addGoal(3, new WreckerDozerSummonGoal(this, 300, 3));
         this.goalSelector.addGoal(4, new ApproachTargetGoal(this, 5.0, 3.5, 1.0) {
             @Override
             public boolean canUse() {
