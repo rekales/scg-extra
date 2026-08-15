@@ -1,0 +1,74 @@
+{
+    "type": "minecraft:chest",
+    "pools": [
+        {
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "scguns:wooden_stock"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "scguns:extended_barrel"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "scguns:light_grip"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "scguns:speed_mag"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "scguns:heavy_gun_parts"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "scguns:firing_unit"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "scguns:rapid_firing_unit"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "scguns:gun_barrel"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "scguns:heavy_gun_barrel"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "scguns:gun_magazine"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "scguns:gun_grip"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "scguns:empty_tank"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "scguns:gun_parts"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "scguns:repair_kit"
+                }
+            ],
+            "rolls": 4,
+            "functions": [
+                {
+                    "function": "minecraft:set_count",
+                    "count": 4
+                }
+            ],
+            "conditions": []
+        }
+    ],
+    "functions": []
+}

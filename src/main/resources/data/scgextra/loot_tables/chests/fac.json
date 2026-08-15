@@ -315,6 +315,17 @@
           ]
         }
       ]
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "name": "scgextra:chests/scgextra_default"
+        }
+      ],
+      "rolls": 1,
+      "functions": [],
+      "conditions": []
     }
   ],
   "functions": []

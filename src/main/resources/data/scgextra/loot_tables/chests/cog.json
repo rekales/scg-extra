@@ -25,7 +25,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "create:zinc_ingot"
+          "name": "scguns:ancient_brass"
         },
         {
           "type": "minecraft:item",
@@ -209,6 +209,17 @@
           ]
         }
       ]
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:loot_table",
+          "name": "scgextra:chests/scgextra_default"
+        }
+      ],
+      "rolls": 1,
+      "functions": [],
+      "conditions": []
     }
   ],
   "functions": []
