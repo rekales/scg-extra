@@ -98,7 +98,7 @@ public final class WaveRaidUtil {
         RandomSource random = level.getRandom();
 
         Vec3 checkStart = center.add(0, CHECK_ELEVATION, 0);
-        if (clipBlock(level, center, checkStart) != null) return null;
+        if (!level.getBlockState(BlockPos.containing(checkStart)).isAir()) return null;
 
         for(int attempt = 0; attempt < FIND_SPAWN_LOCATION_ATTEMPTS; attempt++) {
             double angle = random.nextDouble() * Math.PI * 2.0F;
