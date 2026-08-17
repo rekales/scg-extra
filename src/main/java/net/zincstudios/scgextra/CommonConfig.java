@@ -117,6 +117,9 @@ public class CommonConfig {
     private static final ForgeConfigSpec.IntValue SPAWN_CHANCE_HEAD_HUNTER_FORTRESS_REPLACE = BUILDER
             .comment("chance to replace wither skeleton with HeadHunter in fortress, in percent")
             .defineInRange("spawnChanceHeadHunterFortressReplace", 10, 0, 100);
+    public static final ForgeConfigSpec.IntValue WARZONE_SPAWN_WEIGHT = BUILDER
+            .comment("spawn weight for the warzone biome")
+            .defineInRange("warzoneSpawnWeight", 10, 1, 1000);
 
 
     // Might not be possible actually
@@ -159,6 +162,7 @@ public class CommonConfig {
     public static int spawnChanceEndStoneCrab;
     public static int spawnChanceEndScorpion;
     public static int spawnChanceHeadHunterFortressReplace;
+    public static int warzoneSpawnWeight;
 
     private static void updateConfigs() {
         enableAbilityAlert = ENABLE_ABILITY_ALERT.get();
@@ -194,6 +198,7 @@ public class CommonConfig {
         spawnChanceEndStoneCrab = SPAWN_CHANCE_END_STONE_CRAB.get();
         spawnChanceEndScorpion = SPAWN_CHANCE_END_SCORPION.get();
         spawnChanceHeadHunterFortressReplace = SPAWN_CHANCE_HEAD_HUNTER_FORTRESS_REPLACE.get();
+        warzoneSpawnWeight = WARZONE_SPAWN_WEIGHT.get();
     }
 
     static void onLoad(final ModConfigEvent.Loading event) {

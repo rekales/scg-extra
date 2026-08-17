@@ -62,7 +62,6 @@ public class SCGExtra
         ModParticleTypes.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModBlockEntities.register(modEventBus);
-        ModTerrablender.registerBiomes();
         ModStructures.register(modEventBus);
         ModStructureProcessors.register(modEventBus);
         ModPieces.register(modEventBus);
@@ -87,6 +86,7 @@ public class SCGExtra
     private void commonSetup(final FMLCommonSetupEvent event) {
         SCGEPacketHandler.init();
         event.enqueueWork(()->{
+            ModTerrablender.registerBiomes();
             SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.OVERWORLD, MOD_ID, ModSurfaceRules.makeRules());
         });
     }
