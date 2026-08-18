@@ -1,8 +1,6 @@
 package net.zincstudios.scgextra.worldgen.structure;
 
 import net.zincstudios.scgextra.SCGExtra;
-import net.zincstudios.scgextra.worldgen.structure.structures.WarshipStructure;
-import net.zincstudios.scgextra.worldgen.structure.structures.RRCWarshipStructure;
 import net.zincstudios.scgextra.worldgen.structure.structures.AsgharSoulForgeStructure;
 import net.zincstudios.scgextra.worldgen.structure.structures.CampingSiteStructure;
 import net.zincstudios.scgextra.worldgen.structure.structures.DestroyedMinesStructure;
@@ -17,18 +15,6 @@ import net.minecraftforge.registries.RegistryObject;
 public class ModStructures {
     public static final DeferredRegister<StructureType<?>> STRUCTURE_TYPES = DeferredRegister
             .create(Registries.STRUCTURE_TYPE, SCGExtra.MOD_ID);
-
-    public static final RegistryObject<StructureType<WarshipStructure>> FAC_WARSHIP_STRUCTURE =
-        STRUCTURE_TYPES.register(
-            "fac_warship_structure",
-            () -> () -> WarshipStructure.CODEC
-        );
-
-    public static final RegistryObject<StructureType<RRCWarshipStructure>> RRC_WARSHIP_STRUCTURE =
-        STRUCTURE_TYPES.register(
-            "rrc_warship_structure",
-            () -> () -> RRCWarshipStructure.CODEC
-        );
 
     public static final RegistryObject<StructureType<MineTrenchStructure>> MINE_TRENCH_STRUCTURE =
         STRUCTURE_TYPES.register(

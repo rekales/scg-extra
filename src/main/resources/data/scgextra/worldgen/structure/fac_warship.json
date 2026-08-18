@@ -1,13 +1,19 @@
 {
-  "type": "scgextra:fac_warship_structure",
+  "type": "minecraft:jigsaw",
   "biomes": [
     "minecraft:deep_cold_ocean",
     "minecraft:deep_frozen_ocean",
     "minecraft:deep_lukewarm_ocean",
     "minecraft:deep_ocean"
   ],
-  "step": "surface_structures",
+  "step": "raw_generation",
   "terrain_adaptation": "none",
   "spawn_overrides": {},
+  "start_pool": "scgextra:fac_warship",
+  "size": 1,
+  "start_height": {
+    "absolute": 62
+  },
+  "max_distance_from_center": 64,
   "use_expansion_hack": false
 }

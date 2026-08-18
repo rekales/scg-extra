@@ -1,0 +1,24 @@
+{
+  "name": "scgextra:fac_warship",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "scgextra:rrc_warship/rrc_warship_back",
+        "processors": "scgextra:warship_processor"
+      }
+    },
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "projection": "rigid",
+        "location": "scgextra:rrc_warship/rrc_warship_front",
+        "processors": "scgextra:warship_processor"
+      }
+    }
+  ]
+}
