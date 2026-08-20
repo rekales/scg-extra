@@ -35,7 +35,7 @@ public class ModRecipeProvider extends RecipeProvider {
         // superFlare(writer, ModItems.SCULK_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.SCULK_FLARE.get());
         superFlare(writer, ModItems.OCEAN_SUPER_FLARE.get(), top.ribs.scguns.init.ModItems.OCEAN_FLARE.get());
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.BANDAGE.get())
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.BANDAGE.get(), 3)
                 .pattern("BP")
                 .pattern("PP")
                 .define('P', Items.PAPER)
@@ -46,8 +46,9 @@ public class ModRecipeProvider extends RecipeProvider {
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.MEDKIT.get())
                 .pattern("PSB")
                 .pattern("PSB")
-                .pattern("LCL")
+                .pattern("HCL")
                 .define('L', Items.LEATHER)
+                .define('H', Items.SHEARS)
                 .define('C', Tags.Items.CHESTS)
                 .define('P', top.ribs.scguns.init.ModItems.BASIC_POULTICE.get())
                 .define('S', top.ribs.scguns.init.ModItems.HONEY_SULFUR_POULTICE.get())

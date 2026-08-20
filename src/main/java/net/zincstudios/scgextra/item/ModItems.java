@@ -76,14 +76,14 @@ public class ModItems {
     );
 
     public static final RegistryObject<HealingBandageItem> BANDAGE = ITEMS.register("bandage", () -> new HealingBandageItem(
-            (new Item.Properties()).stacksTo(16), 4,
-            new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 200, 0)
+            (new Item.Properties()).stacksTo(16), 3,
+            new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 300, 1)
     ));
 
     public static final RegistryObject<MultiUseHealingItem> MEDKIT = ITEMS.register("medkit", () -> new MultiUseHealingItem(
-            (new Item.Properties()).stacksTo(1).durability(12), 4,
-            new MobEffectInstance(MobEffects.REGENERATION, 100, 0),
-            new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 400, 0)
+            (new Item.Properties()).stacksTo(1).durability(32), 6, 100,
+            new MobEffectInstance(MobEffects.REGENERATION, 200, 0),
+            new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 300, 1)
     ));
 
     public static final RegistryObject<Item> END_SHELL = ITEMS.register("end_shell",
