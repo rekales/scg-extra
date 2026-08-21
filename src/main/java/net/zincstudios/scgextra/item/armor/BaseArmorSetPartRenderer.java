@@ -10,11 +10,13 @@ import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.zincstudios.scgextra.item.ModItems;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
+import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 
 public class BaseArmorSetPartRenderer extends GeoArmorRenderer<GeoArmorSetPartItem> {
 
     public BaseArmorSetPartRenderer(GeoModel<GeoArmorSetPartItem> model) {
         super(model);
+        this.addRenderLayer(new AutoGlowingGeoLayer<>(this));
     }
 
     @OnlyIn(value = Dist.CLIENT)
