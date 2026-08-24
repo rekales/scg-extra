@@ -99,11 +99,13 @@ public class WaveRaidManager extends SavedData {
             if (this.nextWaveDelay-- < 0) {
                 this.nextWaveDelay = NEXT_WAVE_DELAY;
                 this.raidState.advanceWave();
-
+                
                 ServerPlayer player = WaveRaidUtil.findNearestPlayer(level, this.raidState.getCenter(), RAID_RADIUS);
                 Vec3 waveCenter = WaveRaidUtil.findWaveSpawnLocation(level, raidState.getCenter(),
                         player == null ? null : player.position());
-                if (waveCenter == null) return;  // TODO: crash or something
+                if (waveCenter == null){
+                    waveCenter = player.position();// seems to not skip the raid
+                }
                 this.raidState.spawnCurrentWaveMobs(waveCenter, WAVE_SPAWN_RADIUS, player);
             }
         }
