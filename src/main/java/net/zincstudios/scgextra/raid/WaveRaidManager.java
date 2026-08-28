@@ -31,7 +31,7 @@ public class WaveRaidManager extends SavedData {
     public static final String SAVED_DATA_NAME = "SCGEWaveRaidData";
     public static final int RAID_TIMEOUT_TICKS = 12000;  // 10 minutes, TODO: config
     public static final float WAVE_SPAWN_RADIUS = 15;  // NOTE: turned constant from data, make dynamic if needed
-    public static final float RAID_RADIUS = 128;  // NOTE: turned constant from data, make dynamic if needed
+    public static final float RAID_RADIUS = 512;  // NOTE: turned constant from data, make dynamic if needed
     private static final int NEXT_WAVE_DELAY = 30;
 
     private static final Map<ResourceLocation, WaveRaidManager> INSTANCES = new HashMap<>();
@@ -104,7 +104,7 @@ public class WaveRaidManager extends SavedData {
                 Vec3 waveCenter = WaveRaidUtil.findWaveSpawnLocation(level, raidState.getCenter(),
                         player == null ? null : player.position());
                 if (waveCenter == null){
-                    waveCenter = player.position();// seems to not skip the raid
+                    return;
                 }
                 this.raidState.spawnCurrentWaveMobs(waveCenter, WAVE_SPAWN_RADIUS, player);
             }
