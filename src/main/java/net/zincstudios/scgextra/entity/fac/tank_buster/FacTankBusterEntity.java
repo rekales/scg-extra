@@ -17,6 +17,7 @@ import net.zincstudios.scgextra.entity.ModBrainMemories;
 import net.zincstudios.scgextra.entity.common.EquippedEntity;
 import net.zincstudios.scgextra.entity.common.Gunner;
 import net.zincstudios.scgextra.entity.common.brain.BrainCommons;
+import net.zincstudios.scgextra.entity.common.gun.GunDamageMult;
 import net.zincstudios.scgextra.entity.common.part.RotatedDamageMultPartEntity;
 import net.zincstudios.scgextra.sounds.FACSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -30,7 +31,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class FacTankBusterEntity extends EquippedEntity implements GeoEntity, Gunner {
+public class FacTankBusterEntity extends EquippedEntity implements GeoEntity, Gunner, GunDamageMult {
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
@@ -104,6 +105,11 @@ public class FacTankBusterEntity extends EquippedEntity implements GeoEntity, Gu
         for(PartEntity<?> partEntity : this.getParts()) {
             partEntity.tick();
         }
+    }
+
+    @Override
+    public float getGunDamageMult() {
+        return 0.8f;
     }
 
     @Override
