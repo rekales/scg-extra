@@ -46,7 +46,8 @@ public class FacTankBusterEntity extends EquippedEntity implements GeoEntity, Gu
     public FacTankBusterEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);
         this.subEntities = new PartEntity[] {
-                new RotatedDamageMultPartEntity<>(this, 0.5F, new Vec3(0,1.35,0), 1.05F, 0.85f, false),
+                new RotatedDamageMultPartEntity<>(this, 0.5F, new Vec3(0,1.35,0), 1.03F, 0.85f, false),
+                new FacTankBusterEyeSlitPartEntity<>(this, new Vec3(0,1.62,0.25), 0.8F, 0.12f),
         };
     }
 
